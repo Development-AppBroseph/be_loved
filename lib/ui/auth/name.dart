@@ -3,17 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../widgets/custom_button.dart';
+import '../../widgets/custom_button.dart';
 
-class InputName extends StatefulWidget {
-  const InputName({Key? key}) : super(key: key);
+class InputNamePage extends StatefulWidget {
+  const InputNamePage({Key? key}) : super(key: key);
 
   @override
-  State<InputName> createState() => _InputNameState();
+  State<InputNamePage> createState() => _InputNamePageState();
 }
 
-class _InputNameState extends State<InputName> {
-
+class _InputNamePageState extends State<InputNamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +25,7 @@ class _InputNameState extends State<InputName> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:   [
+                children: [
                   RichText(
                     text: TextSpan(
                       children: <TextSpan>[
@@ -36,16 +35,13 @@ class _InputNameState extends State<InputName> {
                               fontSize: 35.sp,
                               fontWeight: FontWeight.bold,
                               color: const Color.fromRGBO(23, 23, 23, 1.0),
-                            )
-                        ),
+                            )),
                         TextSpan(
                             text: 'зовут?',
                             style: GoogleFonts.inter(
                                 fontSize: 35.sp,
                                 fontWeight: FontWeight.bold,
-                                color: const Color.fromRGBO(255, 29, 29, 1.0)
-                            )
-                        ),
+                                color: const Color.fromRGBO(255, 29, 29, 1.0))),
                       ],
                     ),
                   ),
@@ -54,8 +50,7 @@ class _InputNameState extends State<InputName> {
                     style: GoogleFonts.inter(
                         fontSize: 15.sp,
                         color: const Color.fromRGBO(137, 137, 137, 1.0),
-                        fontWeight: FontWeight.w600
-                    ),
+                        fontWeight: FontWeight.w600),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 44.sp),
@@ -76,20 +71,21 @@ class _InputNameState extends State<InputName> {
                               style: GoogleFonts.inter(
                                   fontSize: 25.sp,
                                   fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(150, 150, 150, 1.0)
-                              ),
+                                  color:
+                                      const Color.fromRGBO(150, 150, 150, 1.0)),
                               autofocus: true,
                               decoration: const InputDecoration(
                                   border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 20)
-                              ),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 20)),
                             ),
                           ),
                           GestureDetector(
-                            child: Image.asset('assets/nick_name_busy.png', height: 21.sp,),
-                            onTap: () {
-
-                            },
+                            child: Image.asset(
+                              'assets/nick_name_busy.png',
+                              height: 21.sp,
+                            ),
+                            onTap: () {},
                           )
                         ],
                       ),
@@ -99,30 +95,32 @@ class _InputNameState extends State<InputName> {
                     color: const Color.fromRGBO(32, 203, 131, 1.0),
                     text: 'Продолжить',
                     textColor: Colors.white,
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   CustomButton(
                     color: const Color.fromRGBO(0, 0, 0, 0.0),
                     text: 'Отправить код снова',
                     textColor: const Color.fromRGBO(23, 23, 23, 1.0),
-                    border: Border.all(color: const Color.fromRGBO(23, 23, 23, 1.0), width: 2.sp),
-                    onPressed: () {
-                    },
+                    border: Border.all(
+                        color: const Color.fromRGBO(23, 23, 23, 1.0),
+                        width: 2.sp),
+                    onPressed: () {},
                   ),
                 ],
               ),
             ),
-          )
-      ),
+          )),
     );
   }
 }
 
 class CustomInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     var text = newValue.text;
 
     print(newValue.text);
@@ -139,7 +137,6 @@ class CustomInputFormatter extends TextInputFormatter {
     var string = buffer.toString();
     return newValue.copyWith(
         text: string,
-        selection: TextSelection.collapsed(offset: string.length)
-    );
+        selection: TextSelection.collapsed(offset: string.length));
   }
 }

@@ -3,17 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../widgets/custom_button.dart';
+import '../../widgets/custom_button.dart';
 
-class SetAvatar extends StatefulWidget {
-  const SetAvatar({Key? key}) : super(key: key);
+class AvatarPage extends StatefulWidget {
+  const AvatarPage({Key? key}) : super(key: key);
 
   @override
-  State<SetAvatar> createState() => _SetAvatarState();
+  State<AvatarPage> createState() => _AvatarPageState();
 }
 
-class _SetAvatarState extends State<SetAvatar> {
-
+class _AvatarPageState extends State<AvatarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,25 +25,25 @@ class _SetAvatarState extends State<SetAvatar> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:   [
+                children: [
                   RichText(
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                            text: 'Поставь ',
-                            style: GoogleFonts.inter(
-                              fontSize: 35.sp,
-                              fontWeight: FontWeight.bold,
-                              color: const Color.fromRGBO(23, 23, 23, 1.0),
-                            )
+                          text: 'Поставь ',
+                          style: GoogleFonts.inter(
+                            fontSize: 35.sp,
+                            fontWeight: FontWeight.bold,
+                            color: const Color.fromRGBO(23, 23, 23, 1.0),
+                          ),
                         ),
                         TextSpan(
-                            text: 'аватарку',
-                            style: GoogleFonts.inter(
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.bold,
-                                color: const Color.fromRGBO(255, 29, 29, 1.0)
-                            )
+                          text: 'аватарку',
+                          style: GoogleFonts.inter(
+                            fontSize: 35.sp,
+                            fontWeight: FontWeight.bold,
+                            color: const Color.fromRGBO(255, 29, 29, 1.0),
+                          ),
                         ),
                       ],
                     ),
@@ -52,9 +51,9 @@ class _SetAvatarState extends State<SetAvatar> {
                   Text(
                     'Выбери из предложенных вариантов, или\nпоставь свою ',
                     style: GoogleFonts.inter(
-                        fontSize: 15.sp,
-                        color: const Color.fromRGBO(137, 137, 137, 1.0),
-                        fontWeight: FontWeight.w600
+                      fontSize: 15.sp,
+                      color: const Color.fromRGBO(137, 137, 137, 1.0),
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   Align(
@@ -68,7 +67,7 @@ class _SetAvatarState extends State<SetAvatar> {
                         width: 135.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(35.sp),
-                          color: const Color.fromRGBO(150, 150, 150, 1.0)
+                          color: const Color.fromRGBO(150, 150, 150, 1.0),
                         ),
                         child: Image.asset('assets/default_avatar.png'),
                       ),
@@ -78,7 +77,7 @@ class _SetAvatarState extends State<SetAvatar> {
                     height: 312.h,
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(216, 216, 216, 1.0),
-                      borderRadius: BorderRadius.circular(10)
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Container(),
                   ),
@@ -89,21 +88,20 @@ class _SetAvatarState extends State<SetAvatar> {
                     color: const Color.fromRGBO(32, 203, 131, 1.0),
                     text: 'Продолжить',
                     textColor: Colors.white,
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
             ),
-          )
-      ),
+          )),
     );
   }
 }
 
 class CustomInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     var text = newValue.text;
 
     print(newValue.text);
@@ -120,7 +118,6 @@ class CustomInputFormatter extends TextInputFormatter {
     var string = buffer.toString();
     return newValue.copyWith(
         text: string,
-        selection: TextSelection.collapsed(offset: string.length)
-    );
+        selection: TextSelection.collapsed(offset: string.length));
   }
 }

@@ -7,15 +7,14 @@ import 'package:pinput/pinput.dart';
 import '../../widgets/custom_button.dart';
 import 'create_account_info.dart';
 
-class InputCode extends StatefulWidget {
-  const InputCode({Key? key}) : super(key: key);
+class CodePage extends StatefulWidget {
+  const CodePage({Key? key}) : super(key: key);
 
   @override
-  State<InputCode> createState() => _InputCodeState();
+  State<CodePage> createState() => _CodePageState();
 }
 
-class _InputCodeState extends State<InputCode> {
-
+class _CodePageState extends State<CodePage> {
   final FocusNode focusNode = FocusNode();
 
   @override
@@ -27,11 +26,17 @@ class _InputCodeState extends State<InputCode> {
         backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
         title: Padding(
           padding: EdgeInsets.only(left: 20.sp, top: 40.sp, right: 6.sp),
-          child: GestureDetector(
-            child: Image.asset('assets/back.png', width: 15.sp,),
-            onTap: () {
-              Navigator.pop(context);
-            },
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              child: Image.asset(
+                'assets/back.png',
+                width: 15.sp,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
         ),
         automaticallyImplyLeading: false,
@@ -57,38 +62,36 @@ class _InputCodeState extends State<InputCode> {
                     style: GoogleFonts.inter(
                         fontSize: 15.sp,
                         color: const Color.fromRGBO(137, 137, 137, 1.0),
-                        fontWeight: FontWeight.w600
-                    ),
+                        fontWeight: FontWeight.w600),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 44.sp),
                     child: SizedBox(
-                        height: 70.sp,
-                        child: Pinput(
-                          autofocus: true,
-                          showCursor: false,
-                          length: 5,
-                          focusNode: focusNode,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          onChanged: (value) {
-                            if (value.length == 5) {
-                              focusNode.unfocus();
-                            }
-                          },
-                          defaultPinTheme: PinTheme(
-                            width: 60.sp,
-                            height: 80.sp,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            textStyle: GoogleFonts.inter(
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.bold,
-                                color: const Color.fromRGBO(23, 23, 23, 1.0)
-                            ),
+                      height: 70.sp,
+                      child: Pinput(
+                        autofocus: true,
+                        showCursor: false,
+                        length: 5,
+                        focusNode: focusNode,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        onChanged: (value) {
+                          if (value.length == 5) {
+                            focusNode.unfocus();
+                          }
+                        },
+                        defaultPinTheme: PinTheme(
+                          width: 60.sp,
+                          height: 80.sp,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          textStyle: GoogleFonts.inter(
+                            fontSize: 35.sp,
+                            fontWeight: FontWeight.bold,
+                            color: const Color.fromRGBO(23, 23, 23, 1.0),
                           ),
-                        )
+                        ),
+                      ),
                     ),
                   ),
                   CustomButton(
@@ -96,24 +99,28 @@ class _InputCodeState extends State<InputCode> {
                     text: 'Продолжить',
                     textColor: Colors.white,
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccountInfo()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CreateAccountInfo()));
                     },
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   CustomButton(
                     color: const Color.fromRGBO(0, 0, 0, 0.0),
                     text: 'Отправить код снова',
                     textColor: const Color.fromRGBO(23, 23, 23, 1.0),
-                    border: Border.all(color: const Color.fromRGBO(23, 23, 23, 1.0), width: 2.sp),
-                    onPressed: () {
-                    },
+                    border: Border.all(
+                        color: const Color.fromRGBO(23, 23, 23, 1.0),
+                        width: 2.sp),
+                    onPressed: () {},
                   ),
                 ],
               ),
             ),
-          )
-      ),
+          )),
     );
   }
 }
-

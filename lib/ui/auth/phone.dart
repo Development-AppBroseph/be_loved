@@ -1,19 +1,18 @@
-import 'package:be_loved/pages/registration/input_code.dart';
+import 'package:be_loved/ui/auth/code.dart';
 import 'package:be_loved/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class InputPhoneNumber extends StatefulWidget {
-  const InputPhoneNumber({Key? key}) : super(key: key);
+class PhonePage extends StatefulWidget {
+  const PhonePage({Key? key}) : super(key: key);
 
   @override
-  State<InputPhoneNumber> createState() => _InputPhoneNumberState();
+  State<PhonePage> createState() => _PhonePageState();
 }
 
-class _InputPhoneNumberState extends State<InputPhoneNumber> {
-
+class _PhonePageState extends State<PhonePage> {
   FocusNode focusNode = FocusNode();
 
   @override
@@ -30,16 +29,6 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
         elevation: 0,
         toolbarHeight: 80.sp,
         backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-        title: Padding(
-          padding: EdgeInsets.only(left: 20.sp, top: 40.sp, right: 6.sp),
-          child: GestureDetector(
-            child: Image.asset('assets/back.png', width: 15.sp,),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        automaticallyImplyLeading: false,
       ),
       body: SafeArea(
           bottom: true,
@@ -63,8 +52,7 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
                     style: GoogleFonts.inter(
                         fontSize: 15.sp,
                         color: const Color.fromRGBO(137, 137, 137, 1.0),
-                        fontWeight: FontWeight.w600
-                    ),
+                        fontWeight: FontWeight.w600),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 44.sp),
@@ -74,13 +62,13 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
                           color: Colors.white,
                           borderRadius: BorderRadius.horizontal(
                               left: Radius.circular(0),
-                              right: Radius.circular(10)
-                          )
-                      ),
+                              right: Radius.circular(10))),
                       child: Row(
                         children: [
                           Image.asset('assets/code_region.png'),
-                          SizedBox(width: 12.w,),
+                          SizedBox(
+                            width: 12.w,
+                          ),
                           Text(
                             '+7',
                             style: GoogleFonts.inter(
@@ -88,13 +76,17 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(width: 12.w,),
+                          SizedBox(
+                            width: 12.w,
+                          ),
                           Container(
                             height: 37.h,
                             width: 1.w,
                             color: const Color.fromRGBO(224, 224, 224, 1.0),
                           ),
-                          SizedBox(width: 12.w,),
+                          SizedBox(
+                            width: 12.w,
+                          ),
                           Container(
                             width: 0.6.sw,
                             alignment: Alignment.center,
@@ -129,21 +121,24 @@ class _InputPhoneNumberState extends State<InputPhoneNumber> {
                     text: 'Продолжить',
                     textColor: Colors.white,
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const InputCode()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CodePage()));
                     },
                   )
                 ],
               ),
             ),
-          )
-      ),
+          )),
     );
   }
 }
 
 class CustomInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -160,8 +155,11 @@ class CustomInputFormatter extends TextInputFormatter {
         buffer.write(text[i]);
         var nonZeroIndex = i + 1;
         if (nonZeroIndex % 3 == 0 && nonZeroIndex != text.length && i < 5) {
-          buffer.write(' '); // Replace this with anything you want to put after each 4 numbers
-        } else if (nonZeroIndex % 2 == 0 && nonZeroIndex != text.length && i >= 5) {
+          buffer.write(
+              ' '); // Replace this with anything you want to put after each 4 numbers
+        } else if (nonZeroIndex % 2 == 0 &&
+            nonZeroIndex != text.length &&
+            i >= 5) {
           buffer.write(' ');
         }
       }
@@ -170,7 +168,6 @@ class CustomInputFormatter extends TextInputFormatter {
     var string = buffer.toString();
     return newValue.copyWith(
         text: string,
-        selection: TextSelection.collapsed(offset: string.length)
-    );
+        selection: TextSelection.collapsed(offset: string.length));
   }
 }
