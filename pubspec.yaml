@@ -19,6 +19,7 @@ dependencies:
   pinput: ^2.2.12
   smooth_page_indicator: ^1.0.0+2
   flutter_native_splash: ^2.2.10+1
+  scroll_date_picker: ^3.6.0
 
 dev_dependencies:
   flutter_test:

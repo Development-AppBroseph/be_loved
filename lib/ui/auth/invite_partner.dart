@@ -18,7 +18,7 @@ class InvitePartner extends StatelessWidget {
       body: SafeArea(
           bottom: true,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.sp),
+            padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
             child: SingleChildScrollView(
               padding: EdgeInsets.only(top: 0.sh),
               child: Column(
@@ -77,7 +77,7 @@ class InvitePartner extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Text('Никита Белых', 
+                          Text('Никита Белых',
                             style: GoogleFonts.inter(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,

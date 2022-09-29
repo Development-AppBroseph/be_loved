@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class RelationShips extends StatelessWidget {
   const RelationShips({Key? key, required this.previewPage, required this.prevPage}) : super(key: key);
@@ -18,7 +19,7 @@ class RelationShips extends StatelessWidget {
       body: SafeArea(
           bottom: true,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.sp),
+            padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
             child: SingleChildScrollView(
               padding: EdgeInsets.only(top: 0.sh),
               child: Column(
@@ -78,7 +79,7 @@ class RelationShips extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Text('Никита Белых', 
+                          Text('Никита Белых',
                             style: GoogleFonts.inter(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
@@ -107,7 +108,7 @@ class RelationShips extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Text('Аня Пешкова', 
+                          Text('Аня Пешкова',
                             style: GoogleFonts.inter(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
@@ -117,21 +118,15 @@ class RelationShips extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 60.sp,
-                    width: 0.78.sw,
-                    child: TextField(
-                      style: GoogleFonts.inter(
-                        fontSize: 25.sp,
-                        fontWeight: FontWeight.bold,
-                        color:const Color.fromRGBO(150, 150, 150, 1.0)),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20)),
+                  SizedBox(
+                    height: 206.h,
+                    child: ScrollDatePicker(
+                      locale: const Locale('en'),
+                      onDateTimeChanged: (DateTime value) {
+                        print(value);
+                      }, selectedDate: DateTime(0),
                     ),
                   ),
-                  SizedBox(height: 40.h),
                   CustomButton(
                     color: const Color.fromRGBO(32, 203, 131, 1.0),
                     text: 'Готово',

@@ -10,7 +10,7 @@ class AvatarPage extends StatelessWidget {
 
   final VoidCallback nextPage;
   final VoidCallback previousPage;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +19,7 @@ class AvatarPage extends StatelessWidget {
       body: SafeArea(
           bottom: true,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.sp),
+            padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
             child: SingleChildScrollView(
               padding: EdgeInsets.only(top: 0.sh),
               child: Column(
@@ -166,8 +166,7 @@ class AvatarMenu extends StatelessWidget {
         Expanded(
           child: PageView(
             controller: pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: const [
+            children: [
               PageTest(),
               PageTest(),
               PageTest(),
@@ -191,25 +190,25 @@ class AvatarMenu extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        pageController.jumpToPage(0);
+                        pageController.animateToPage(0, duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
                         streamController.add(0);
                       },
                       child: SvgPicture.asset('assets/icons/men.svg', color: page.data == 0 ? Colors.black : Colors.grey)),
                     GestureDetector(
                       onTap: () {
-                        pageController.jumpToPage(1);
+                        pageController.animateToPage(1, duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
                         streamController.add(1);
                       },
                       child: SvgPicture.asset('assets/icons/women.svg', color: page.data == 1 ? Colors.black : Colors.grey)),
                     GestureDetector(
                       onTap: () {
-                        pageController.jumpToPage(2);
+                        pageController.animateToPage(2, duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
                         streamController.add(2);
                       },
                       child: SvgPicture.asset('assets/icons/paw.svg', color: page.data == 2 ? Colors.black : Colors.grey)),
                     GestureDetector(
                       onTap: () {
-                        pageController.jumpToPage(3);
+                        pageController.animateToPage(3, duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
                         streamController.add(3);
                       },
                       child: SvgPicture.asset('assets/icons/rects.svg', color: page.data == 3 ? Colors.black : Colors.grey)),

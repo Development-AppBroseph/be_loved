@@ -310,6 +310,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
+  scroll_date_picker:
+    dependency: "direct main"
+    description:
+      name: scroll_date_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.6.0"
   sky_engine:
     dependency: transitive
     description: flutter
