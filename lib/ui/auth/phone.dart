@@ -18,7 +18,6 @@ class _PhonePageState extends State<PhonePage> {
   @override
   void dispose() {
     focusNode.dispose();
-
     super.dispose();
   }
 
@@ -65,7 +64,7 @@ class _PhonePageState extends State<PhonePage> {
                               right: Radius.circular(10))),
                       child: Row(
                         children: [
-                          Image.asset('assets/code_region.png'),
+                          Image.asset('assets/images/code_region.png'),
                           SizedBox(
                             width: 12.w,
                           ),
@@ -124,7 +123,7 @@ class _PhonePageState extends State<PhonePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CodePage()));
+                              builder: (context) => CodePage()));
                     },
                   )
                 ],

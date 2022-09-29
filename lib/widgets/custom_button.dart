@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomButton extends StatefulWidget {
-
   final Color color;
   final Color textColor;
   final Border? border;
@@ -20,11 +19,10 @@ class CustomButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomButtonState createState() => _CustomButtonState();
+  CustomButtonState createState() => CustomButtonState();
 }
 
-class _CustomButtonState extends State<CustomButton> {
-
+class CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

@@ -1,20 +1,14 @@
+import 'package:be_loved/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
-
-import '../../widgets/custom_button.dart';
 import 'create_account_info.dart';
 
-class CodePage extends StatefulWidget {
-  const CodePage({Key? key}) : super(key: key);
-
-  @override
-  State<CodePage> createState() => _CodePageState();
-}
-
-class _CodePageState extends State<CodePage> {
+class CodePage extends StatelessWidget {
+  CodePage({Key? key}) : super(key: key);
+  
   final FocusNode focusNode = FocusNode();
 
   @override
@@ -29,8 +23,8 @@ class _CodePageState extends State<CodePage> {
           child: Align(
             alignment: Alignment.centerLeft,
             child: GestureDetector(
-              child: Image.asset(
-                'assets/back.png',
+              child: SvgPicture.asset(
+                'assets/icons/back.svg',
                 width: 15.sp,
               ),
               onTap: () {
@@ -102,7 +96,7 @@ class _CodePageState extends State<CodePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CreateAccountInfo()));
+                              builder: (context) => CreateAccountInfo()));
                     },
                   ),
                   const SizedBox(

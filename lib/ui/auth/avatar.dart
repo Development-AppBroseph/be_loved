@@ -1,21 +1,19 @@
+import 'dart:async';
+import 'package:be_loved/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../widgets/custom_button.dart';
+class AvatarPage extends StatelessWidget {
+  const AvatarPage({Key? key, required this.onTap}) : super(key: key);
 
-class AvatarPage extends StatefulWidget {
-  const AvatarPage({Key? key}) : super(key: key);
-
-  @override
-  State<AvatarPage> createState() => _AvatarPageState();
-}
-
-class _AvatarPageState extends State<AvatarPage> {
+  final VoidCallback onTap;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
       body: SafeArea(
           bottom: true,
           child: Padding(
@@ -69,17 +67,18 @@ class _AvatarPageState extends State<AvatarPage> {
                           borderRadius: BorderRadius.circular(35.sp),
                           color: const Color.fromRGBO(150, 150, 150, 1.0),
                         ),
-                        child: Image.asset('assets/default_avatar.png'),
+                        child: SvgPicture.asset('assets/icons/camera.svg'),
                       ),
                     ),
                   ),
                   Container(
-                    height: 312.h,
+                    height: 267.h,
+                    width: 378.w,
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(216, 216, 216, 1.0),
+                      color: const Color.fromRGBO(228, 228, 228, 1.0),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Container(),
+                    child: AvatarMenu(),
                   ),
                   SizedBox(
                     height: 40.h,
@@ -88,7 +87,7 @@ class _AvatarPageState extends State<AvatarPage> {
                     color: const Color.fromRGBO(32, 203, 131, 1.0),
                     text: 'Продолжить',
                     textColor: Colors.white,
-                    onPressed: () {},
+                    onPressed: () => onTap(),
                   ),
                 ],
               ),
@@ -98,26 +97,97 @@ class _AvatarPageState extends State<AvatarPage> {
   }
 }
 
-class CustomInputFormatter extends TextInputFormatter {
+class AvatarMenu extends StatelessWidget {
+  AvatarMenu({Key? key}) : super(key: key);
+
+  final streamController = StreamController<int>();
+  final pageController = PageController(viewportFraction: 1.0, keepPage: false);
+
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    var text = newValue.text;
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: PageView(
+            controller: pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: const [
+              PageTest(),
+              PageTest(),
+              PageTest(),
+              PageTest(),
+            ],
+          )
+        ),
+        Container(
+          decoration: const BoxDecoration(
+            color: Color.fromRGBO(216, 216, 216, 1.0),
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.sp),
+            child: StreamBuilder<int>(
+              initialData: 0,
+              stream: streamController.stream,
+              builder: (context, page) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        pageController.jumpToPage(0);
+                        streamController.add(0);
+                      },
+                      child: SvgPicture.asset('assets/icons/men.svg', color: page.data == 0 ? Colors.black : Colors.grey)),
+                    GestureDetector(
+                      onTap: () {
+                        pageController.jumpToPage(1);
+                        streamController.add(1);
+                      },
+                      child: SvgPicture.asset('assets/icons/women.svg', color: page.data == 1 ? Colors.black : Colors.grey)),
+                    GestureDetector(
+                      onTap: () {
+                        pageController.jumpToPage(2);
+                        streamController.add(2);
+                      },
+                      child: SvgPicture.asset('assets/icons/paw.svg', color: page.data == 2 ? Colors.black : Colors.grey)),
+                    GestureDetector(
+                      onTap: () {
+                        pageController.jumpToPage(3);
+                        streamController.add(3);
+                      },
+                      child: SvgPicture.asset('assets/icons/rects.svg', color: page.data == 3 ? Colors.black : Colors.grey)),
+                  ],
+                );
+              }
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
 
-    print(newValue.text);
-    print(oldValue.text);
+class PageTest extends StatelessWidget {
+  const PageTest({Key? key}) : super(key: key);
 
-    if (newValue.text.length > 1) {
-      text = oldValue.text;
-    } else {
-      text = newValue.text;
-    }
-    var buffer = StringBuffer();
-    buffer.write(text);
-
-    var string = buffer.toString();
-    return newValue.copyWith(
-        text: string,
-        selection: TextSelection.collapsed(offset: string.length));
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      physics: const BouncingScrollPhysics(),
+      itemCount: 12,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+      itemBuilder: ((context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(150, 150, 150, 1),
+              borderRadius: BorderRadius.circular(18.sp)),
+          ),
+        );
+      })
+    );
   }
 }

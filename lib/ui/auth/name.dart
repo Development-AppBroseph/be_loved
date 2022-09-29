@@ -1,21 +1,17 @@
+import 'package:be_loved/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../widgets/custom_button.dart';
+class InputNamePage extends StatelessWidget {
+  const InputNamePage({Key? key, required this.onTap}) : super(key: key);
 
-class InputNamePage extends StatefulWidget {
-  const InputNamePage({Key? key}) : super(key: key);
+  final VoidCallback onTap;
 
-  @override
-  State<InputNamePage> createState() => _InputNamePageState();
-}
-
-class _InputNamePageState extends State<InputNamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
       body: SafeArea(
           bottom: true,
           child: Padding(
@@ -82,7 +78,7 @@ class _InputNamePageState extends State<InputNamePage> {
                           ),
                           GestureDetector(
                             child: Image.asset(
-                              'assets/nick_name_busy.png',
+                              'assets/images/nick_name_busy.png',
                               height: 21.sp,
                             ),
                             onTap: () {},
@@ -95,48 +91,15 @@ class _InputNamePageState extends State<InputNamePage> {
                     color: const Color.fromRGBO(32, 203, 131, 1.0),
                     text: 'Продолжить',
                     textColor: Colors.white,
-                    onPressed: () {},
+                    onPressed: () => onTap(),
                   ),
                   const SizedBox(
                     height: 20,
-                  ),
-                  CustomButton(
-                    color: const Color.fromRGBO(0, 0, 0, 0.0),
-                    text: 'Отправить код снова',
-                    textColor: const Color.fromRGBO(23, 23, 23, 1.0),
-                    border: Border.all(
-                        color: const Color.fromRGBO(23, 23, 23, 1.0),
-                        width: 2.sp),
-                    onPressed: () {},
                   ),
                 ],
               ),
             ),
           )),
     );
-  }
-}
-
-class CustomInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    var text = newValue.text;
-
-    print(newValue.text);
-    print(oldValue.text);
-
-    if (newValue.text.length > 1) {
-      text = oldValue.text;
-    } else {
-      text = newValue.text;
-    }
-    var buffer = StringBuffer();
-    buffer.write(text);
-
-    var string = buffer.toString();
-    return newValue.copyWith(
-        text: string,
-        selection: TextSelection.collapsed(offset: string.length));
   }
 }
