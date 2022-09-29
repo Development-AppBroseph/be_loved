@@ -1,19 +1,58 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:be_loved/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RelationShips extends StatelessWidget {
-  const RelationShips({Key? key, required this.previewPage, required this.prevPage}) : super(key: key);
+class InviteFor extends StatefulWidget {
+  const InviteFor({Key? key, required this.previewPage, required this.nextPage}) : super(key: key);
 
   final VoidCallback previewPage;
-  final VoidCallback prevPage;
+  final VoidCallback nextPage;
+
+  @override
+  State<InviteFor> createState() => _InviteForState();
+}
+
+class _InviteForState extends State<InviteFor> {
+  final streamController = StreamController<int>();
+
+  int start = 30;
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  @override
+  void dispose() {
+    timer!.cancel();
+    super.dispose();
+  }
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    timer = Timer.periodic(oneSec, (Timer timer) {
+        if (start == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            start--;
+          });
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context),
       backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
       body: SafeArea(
           bottom: true,
@@ -29,7 +68,7 @@ class RelationShips extends StatelessWidget {
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'Когда начались\n',
+                          text: 'Приглашение от\n',
                           style: GoogleFonts.inter(
                             fontSize: 35.sp,
                             fontWeight: FontWeight.bold,
@@ -37,15 +76,7 @@ class RelationShips extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: 'ваши ',
-                          style: GoogleFonts.inter(
-                            fontSize: 35.sp,
-                            fontWeight: FontWeight.bold,
-                            color: const Color.fromRGBO(23, 23, 23, 1.0),
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'отношения?',
+                          text: 'Никнейм12сим...',
                           style: GoogleFonts.inter(
                             fontSize: 35.sp,
                             fontWeight: FontWeight.bold,
@@ -54,6 +85,13 @@ class RelationShips extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
+                  Text(
+                    'Начало истории?',
+                    style: GoogleFonts.inter(
+                        fontSize: 15.sp,
+                        color: const Color.fromRGBO(137, 137, 137, 1.0),
+                        fontWeight: FontWeight.w600),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -86,7 +124,7 @@ class RelationShips extends StatelessWidget {
                           ),)
                         ],
                       ),
-                      SvgPicture.asset('assets/icons/logov2.svg'),
+                      SvgPicture.asset('assets/icons/logov3.svg'),
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -133,11 +171,48 @@ class RelationShips extends StatelessWidget {
                   ),
                   SizedBox(height: 40.h),
                   CustomButton(
-                    color: const Color.fromRGBO(32, 203, 131, 1.0),
-                    text: 'Готово',
-                    textColor: Colors.white,
-                    onPressed: () {},
+                    color: Colors.transparent,
+                    text: 'Принять',
+                    textColor: const Color.fromRGBO(23, 23, 23, 1.0),
+                    border: Border.all(
+                        color: const Color.fromRGBO(23, 23, 23, 1.0),
+                        width: 2.sp),
+                    onPressed: widget.nextPage,
                   ),
+                  SizedBox(height: 40.h),
+                  CustomButton(
+                        color: Colors.red,
+                        text: 'Отменить 0:${start < 10 ? '0$start' : start}',
+                        textColor: Colors.white,
+                        onPressed: () {},
+                      ),
+                  SizedBox(height: 111.h),
+                  Center(
+                    child: GestureDetector(
+                      onHorizontalDragUpdate: (details) => widget.previewPage(),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 150,
+                        color: Colors.transparent,
+                        child: Column(
+                          children: [
+                            Text('Свайп для отмены', style: GoogleFonts.inter(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color:const Color.fromRGBO(150, 150, 150, 1.0)),),
+                            Transform.rotate(
+                              angle: - pi / 2,
+                              child: SvgPicture.asset(
+                                'assets/icons/back.svg',
+                                width: 15.sp,
+                                color: const Color.fromRGBO(150, 150, 150, 1.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -157,7 +232,7 @@ class RelationShips extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
-              onTap: prevPage,
+              onTap: widget.previewPage,
               child: SvgPicture.asset(
                 'assets/icons/back.svg',
                 width: 15.sp,

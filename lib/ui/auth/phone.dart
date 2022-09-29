@@ -99,7 +99,6 @@ class _PhonePageState extends State<PhonePage> {
                                   focusNode.unfocus();
                                 }
                               },
-                              autofocus: true,
                               focusNode: focusNode,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -119,12 +118,7 @@ class _PhonePageState extends State<PhonePage> {
                     color: const Color.fromRGBO(32, 203, 131, 1.0),
                     text: 'Продолжить',
                     textColor: Colors.white,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CodePage()));
-                    },
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CodePage())),
                   )
                 ],
               ),

@@ -63,7 +63,6 @@ class CodePage extends StatelessWidget {
                     child: SizedBox(
                       height: 70.sp,
                       child: Pinput(
-                        autofocus: true,
                         showCursor: false,
                         length: 5,
                         focusNode: focusNode,
@@ -92,12 +91,7 @@ class CodePage extends StatelessWidget {
                     color: const Color.fromRGBO(32, 203, 131, 1.0),
                     text: 'Продолжить',
                     textColor: Colors.white,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateAccountInfo()));
-                    },
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountInfo())),
                   ),
                   const SizedBox(
                     height: 20,
