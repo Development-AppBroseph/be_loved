@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../core/network.dart';
+
 class PhonePage extends StatefulWidget {
   const PhonePage({Key? key}) : super(key: key);
 
@@ -118,7 +120,11 @@ class _PhonePageState extends State<PhonePage> {
                     color: const Color.fromRGBO(32, 203, 131, 1.0),
                     text: 'Продолжить',
                     textColor: Colors.white,
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CodePage())),
+                    onPressed: () {
+                      var net = NetHandler();
+                      net.getProfile();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CodePage()));
+                    },
                   )
                 ],
               ),
