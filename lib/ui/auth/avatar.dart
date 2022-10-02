@@ -60,17 +60,22 @@ class AvatarPage extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Padding(
                       padding: EdgeInsets.only(top: 20.sp, bottom: 36.sp),
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(43.h),
-                        height: 135.h,
-                        width: 135.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(35.sp),
-                          color: const Color.fromRGBO(150, 150, 150, 1.0),
+                      child: GestureDetector(
+                        onTap: () {
+
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(43.h),
+                          height: 135.h,
+                          width: 135.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(35.sp),
+                            color: const Color.fromRGBO(150, 150, 150, 1.0),
+                          ),
+                          child: SvgPicture.asset('assets/icons/camera.svg'),
                         ),
-                        child: SvgPicture.asset('assets/icons/camera.svg'),
-                      ),
+                      )
                     ),
                   ),
                   Container(

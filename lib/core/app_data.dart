@@ -12,8 +12,17 @@ class AppData extends ChangeNotifier {
   final net = NetHandler();
 
 
-  int? _codeNumber;
-  int? get codeNumber => _codeNumber;
+  late int _codeNumber;
+   int get codeNumber => _codeNumber;
+
+  late String _phoneNumber;
+  String get phoneNumber => _phoneNumber;
+
+  bool? _isNickNameBusy;
+  bool? get isNickNameBusy => _isNickNameBusy;
+
+  String? _userToken;
+  String? get userToken => _userToken;
 
 
   String _token;
@@ -24,12 +33,23 @@ class AppData extends ChangeNotifier {
   }
 
   void getRegCode(String number) async {
-    _codeNumber = await net.registration(number);
+    _codeNumber = (await net.registration(number))!;
     notifyListeners();
   }
 
-  Future<Future<bool?>> checkNickName(String name) async {
-    return net.checkNickName(name);
+  void saveNumber(String number) async {
+    _phoneNumber = number;
+    notifyListeners();
+  }
+
+  void checkNickName(String name) async {
+    _isNickNameBusy = await net.checkNickName(name);
+    notifyListeners();
+  }
+
+  void checkIsUserExist(String number, String code) async {
+    _userToken = await net.checkIsUserExist(number, code);
+    notifyListeners();
   }
 
   static Future<String> getUserToken() async {

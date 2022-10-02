@@ -100,7 +100,10 @@ class CodePage extends StatelessWidget {
                         color: const Color.fromRGBO(32, 203, 131, 1.0),
                         text: 'Продолжить',
                         textColor: Colors.white,
-                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountInfo())),
+                        onPressed: () {
+                          value.checkIsUserExist(value.phoneNumber, value.codeNumber.toString());
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountInfo()));
+                        },
                       ),
                       const SizedBox(
                         height: 20,

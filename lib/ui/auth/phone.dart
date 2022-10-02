@@ -7,8 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/network.dart';
-
 class PhonePage extends StatefulWidget {
   const PhonePage({Key? key}) : super(key: key);
 
@@ -128,6 +126,7 @@ class _PhonePageState extends State<PhonePage> {
                     onPressed: () {
                       if (phoneNumber.length == 12) {
                         Provider.of<AppData>(context, listen: false).getRegCode(phoneNumber);
+                        Provider.of<AppData>(context, listen: false).saveNumber(phoneNumber);
                         Navigator.push(context, MaterialPageRoute(builder: (context) => CodePage()));
                       }
                     },

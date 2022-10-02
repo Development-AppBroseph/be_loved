@@ -8,14 +8,22 @@ import 'package:provider/provider.dart';
 import '../../core/app_data.dart';
 
 class InputNamePage extends StatelessWidget {
-  const InputNamePage({Key? key, required this.nextPage}) : super(key: key);
+  InputNamePage({Key? key, required this.nextPage}) : super(key: key);
 
   final VoidCallback nextPage;
+  TextEditingController textEditingController = TextEditingController();
+  TextEditingController textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AppData>(
       builder: (context, value, snapshot) {
+        if (value.isNickNameBusy != null) {
+          print(value.isNickNameBusy);
+          if (value.isNickNameBusy!) {
+            textController.text = 'Никнейм уже занят :(';
+          }
+        }
         return Scaffold(
           appBar: appBar(context),
           backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
@@ -57,50 +65,70 @@ class InputNamePage extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 44.sp),
-                        child: Container(
-                          height: 70.sp,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          alignment: Alignment.center,
-                          child: Row(
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                height: 60.sp,
-                                width: 0.78.sw,
-                                child: TextField(
-                                  onChanged: (value) {
-                                    Provider.of<AppData>(context, listen: false).checkNickName(value);
-                                  },
-                                  style: GoogleFonts.inter(
-                                      fontSize: 25.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                      const Color.fromRGBO(150, 150, 150, 1.0)),
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 20)),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 70.sp,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              alignment: Alignment.center,
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      height: 60.sp,
+                                      width: 0.78.sw,
+                                      child: TextField(
+                                        onChanged: (value) {
+                                          Provider.of<AppData>(context, listen: false).checkNickName(value);
+                                        },
+                                        controller: textEditingController,
+                                        style: GoogleFonts.inter(
+                                            fontSize: 25.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                            const Color.fromRGBO(150, 150, 150, 1.0)),
+                                        decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding:
+                                            EdgeInsets.symmetric(horizontal: 20)),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      child: Image.asset(
+                                        'assets/images/nick_name_busy.png',
+                                        height: 21.sp,
+                                      ),
+                                      onTap: () {
+                                        textEditingController.text = '';
+                                      },
+                                    )
+                                  ],
                                 ),
                               ),
-                              GestureDetector(
-                                child: Image.asset(
-                                  'assets/images/nick_name_busy.png',
-                                  height: 21.sp,
-                                ),
-                                onTap: () {},
-                              )
-                            ],
-                          ),
-                        ),
+                            ),
+                            Text(
+                              textController.text,
+                              style: GoogleFonts.inter(
+                                  fontSize: 15.sp,
+                                  color: const Color.fromRGBO(255, 29, 29, 1.0),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )
                       ),
                       CustomButton(
                         color: const Color.fromRGBO(32, 203, 131, 1.0),
                         text: 'Продолжить',
                         textColor: Colors.white,
-                        onPressed: nextPage,
+                        onPressed: () {
+                          if (!value.isNickNameBusy!) {
+                            nextPage();
+                          }
+                        },
                       ),
                       const SizedBox(
                         height: 20,
