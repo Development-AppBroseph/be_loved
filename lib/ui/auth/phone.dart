@@ -1,9 +1,11 @@
+import 'package:be_loved/core/app_data.dart';
 import 'package:be_loved/ui/auth/code.dart';
 import 'package:be_loved/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/network.dart';
 
@@ -16,6 +18,8 @@ class PhonePage extends StatefulWidget {
 
 class _PhonePageState extends State<PhonePage> {
   FocusNode focusNode = FocusNode();
+  String phoneNumber = '';
+  AppData appData = AppData('');
 
   @override
   void dispose() {
@@ -97,6 +101,7 @@ class _PhonePageState extends State<PhonePage> {
                                 fontWeight: FontWeight.bold,
                               ),
                               onChanged: (value) {
+                                phoneNumber = '+7${value.replaceAll(RegExp(' '), '')}';
                                 if (value.length > 12) {
                                   focusNode.unfocus();
                                 }
@@ -121,9 +126,10 @@ class _PhonePageState extends State<PhonePage> {
                     text: 'Продолжить',
                     textColor: Colors.white,
                     onPressed: () {
-                      var net = NetHandler();
-                      net.getProfile();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CodePage()));
+                      if (phoneNumber.length == 12) {
+                        Provider.of<AppData>(context, listen: false).getRegCode(phoneNumber);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CodePage()));
+                      }
                     },
                   )
                 ],
