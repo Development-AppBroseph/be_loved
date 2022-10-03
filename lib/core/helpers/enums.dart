@@ -1,0 +1,4 @@
+enum ExistUser {
+  exist,
+  notExist,
+}

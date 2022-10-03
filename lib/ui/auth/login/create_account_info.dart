@@ -1,11 +1,11 @@
-import 'package:be_loved/ui/auth/name.dart';
-import 'package:be_loved/ui/auth/avatar.dart';
-import 'package:be_loved/ui/auth/invite_relation.dart';
+import 'package:be_loved/ui/auth/login/name.dart';
+import 'package:be_loved/ui/auth/image/avatar.dart';
+import 'package:be_loved/ui/auth/login/invite_relation.dart';
 import 'package:flutter/material.dart';
 
 class CreateAccountInfo extends StatelessWidget {
   CreateAccountInfo({Key? key}) : super(key: key);
-  
+
   final pageController = PageController(viewportFraction: 1.0, keepPage: false);
 
   @override
@@ -26,7 +26,9 @@ class CreateAccountInfo extends StatelessWidget {
     );
   }
 
-  void nextPage() => pageController.nextPage(duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
+  void nextPage() => pageController.nextPage(
+      duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
 
-  void previousPage() => pageController.previousPage(duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
+  void previousPage() => pageController.previousPage(
+      duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
 }

@@ -1,10 +1,11 @@
-import 'package:be_loved/ui/auth/invite_for.dart';
-import 'package:be_loved/ui/auth/relationships.dart';
+import 'package:be_loved/ui/auth/login/invite_for.dart';
+import 'package:be_loved/ui/auth/login/relationships.dart';
 import 'package:flutter/material.dart';
 
 class InviteForStartRelationship extends StatelessWidget {
-  InviteForStartRelationship({Key? key, required this.nextPage}) : super(key: key);
-  
+  InviteForStartRelationship({Key? key, required this.nextPage})
+      : super(key: key);
+
   final VoidCallback nextPage;
   final pageController = PageController(viewportFraction: 1.0, keepPage: false);
 
@@ -25,7 +26,9 @@ class InviteForStartRelationship extends StatelessWidget {
     );
   }
 
-  void nextPage1() => pageController.nextPage(duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
+  void nextPage1() => pageController.nextPage(
+      duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
 
-  void previousPage() => pageController.previousPage(duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
+  void previousPage() => pageController.previousPage(
+      duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
 }
