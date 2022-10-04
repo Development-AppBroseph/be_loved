@@ -19,13 +19,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   String? token;
   String? secretKey;
   String? nickname;
+  String? phone;
   XFile? image;
   UserAnswer? user;
 
   AuthBloc() : super(AuthStated()) {
     on<SendPhone>((event, emit) => _sendPhone(event, emit));
     on<CheckUser>((event, emit) => _checkUser(event, emit));
-    on<CheckNickname>((event, emit) => _checkNickname(event, emit));
+    on<SetNickname>((event, emit) => _setNickname(event, emit));
     on<PickImage>((event, emit) => _pickImage(event, emit));
     on<InitUser>((event, emit) => _initUser(event, emit));
     on<GetUser>((event, emit) => _getUser(event, emit));
@@ -35,26 +36,40 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<StartRelationships>((event, emit) => _startRelationShips(event, emit));
     on<AcceptReletionships>((event, emit) => _acceptInviteUser(event, emit));
     on<LogOut>((event, emit) => _logOut(event, emit));
+    on<EditUserInfo>((event, emit) => _editUserInfo(event, emit));
   }
 
-  void _sendPhone(SendPhone state, Emitter<AuthState> emit) async {
+  void _sendPhone(SendPhone event, Emitter<AuthState> emit) async {
     user = null;
     token = null;
     secretKey = null;
+    phone = event.phone;
     emit(AuthLoading());
-    var result = await Repository().registration(state.phone);
+    var result = await Repository().registration(event.phone);
 
     if (result != null) {
       code = result;
-      emit(PhoneSuccess(state.phone, result));
+      emit(PhoneSuccess(event.phone, result));
     } else {
       emit(PhoneError());
     }
   }
 
-  void _checkUser(CheckUser state, Emitter<AuthState> emit) async {
+  void _editUserInfo(EditUserInfo event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    var result = await Repository().checkIsUserExist(state.phone, state.code);
+    var result = await Repository().editUser(event.file);
+
+    if (result != true) {
+      // code = result;
+      // emit(PhoneSuccess(state.phone, result));
+    } else {
+      emit(ImageError());
+    }
+  }
+
+  void _checkUser(CheckUser event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    var result = await Repository().checkIsUserExist(event.phone, event.code);
 
     if (result != null) {
       if (result.token != null) {
@@ -74,32 +89,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _checkNickname(CheckNickname state, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    nickname = state.nickname;
-    var result = await Repository().checkNickName(state.nickname);
+  void _setNickname(SetNickname event, Emitter<AuthState> emit) => nickname = event.nickname;
 
-    if (result != null) {
-      // print(result);
-      emit(NicknameSuccess(result));
-    } else {
-      emit(NicknameError());
-    }
-  }
-
-  void _pickImage(PickImage state, Emitter<AuthState> emit) async {
+  void _pickImage(PickImage event, Emitter<AuthState> emit) async {
     var result = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
     if (result != null) {
       emit(ImageSuccess(result));
       image = result;
+      _editUserInfo(EditUserInfo(File(image!.path)), emit);
     } else {
       emit(ImageError());
     }
   }
 
-  void _initUser(InitUser state, Emitter<AuthState> emit) async {
+  void _initUser(InitUser event, Emitter<AuthState> emit) async {
     var file = File(image!.path);
     final filePath = file.absolute.path;
 
@@ -126,7 +131,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _getUser(GetUser state, Emitter<AuthState> emit) async {
+  void _getUser(GetUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     var result = await Repository().getUser();
 
@@ -138,7 +143,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _searchUser(SearchUser state, Emitter<AuthState> emit) async {
+  void _searchUser(SearchUser event, Emitter<AuthState> emit) async {
     // emit(AuthLoading());
     var result = await Repository().getUser();
 
@@ -167,9 +172,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _inviteUser(InviteUser state, Emitter<AuthState> emit) async {
+  void _inviteUser(InviteUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    var result = await Repository().inviteUser(state.nickname);
+    var result = await Repository().inviteUser(event.phone);
 
     if (result != null) {
       user = result;
@@ -180,7 +185,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _deleteInviteUser(
-      DeleteInviteUser state, Emitter<AuthState> emit) async {
+      DeleteInviteUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     var result = await Repository().deleteInviteUser(user!.relationId!);
 
@@ -193,10 +198,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _startRelationShips(
-      StartRelationships state, Emitter<AuthState> emit) async {
+      StartRelationships event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     var result =
-        await Repository().startRelationships(state.date, user!.relationId!);
+        await Repository().startRelationships(event.date, user!.relationId!);
 
     if (result != null) {
       MySharedPrefs().setUser(token!, result);
@@ -208,7 +213,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _acceptInviteUser(
-      AcceptReletionships state, Emitter<AuthState> emit) async {
+      AcceptReletionships event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     var result = await Repository().acceptRelationships(user!.relationId!);
 
@@ -220,12 +225,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _logOut(LogOut state, Emitter<AuthState> emit) async {
+  void _logOut(LogOut event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     await Repository().deleteInviteUser(
         ((await MySharedPrefs().user) as UserAnswer).relationId!);
     // ignore: use_build_context_synchronously
-    MySharedPrefs().logOut(state.context);
+    MySharedPrefs().logOut(event.context);
     emit(AuthStated());
   }
 }

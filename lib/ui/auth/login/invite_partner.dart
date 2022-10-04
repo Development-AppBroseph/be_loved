@@ -5,9 +5,11 @@ import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/auth/login/inviteFor_start_relationship.dart';
 import 'package:be_loved/ui/auth/login/relationships.dart';
+import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,16 +30,16 @@ class InvitePartner extends StatefulWidget {
 class _InvitePartnerState extends State<InvitePartner> {
   late Timer _timer;
 
-  final _nicknameController = TextEditingController();
+  final _phoneController = TextEditingController();
 
   void _inviteUser(BuildContext context) {
-    if (_nicknameController.text.isNotEmpty) {
+    if (_phoneController.text.length == 12) {
       BlocProvider.of<AuthBloc>(context).add(
-        InviteUser(_nicknameController.text),
+        InviteUser(_phoneController.text),
       );
     } else {
       StandartSnackBar.show(
-        'Укажите никнейм пользователя',
+        'Укажите номер пользователя',
         SnackBarStatus(Icons.error, redColor),
       );
       return;
@@ -168,48 +170,37 @@ class _InvitePartnerState extends State<InvitePartner> {
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                           top: 20.h, bottom: 10.h),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(35.sp),
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          height: 135.h,
-                                          width: 135.h,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(35.sp),
-                                            color: const Color.fromRGBO(
-                                                150, 150, 150, 1.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          bloc.add(PickImage());
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(35.sp),
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            height: 135.h,
+                                            width: 135.h,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(35.sp),
+                                              color: const Color.fromRGBO(
+                                                  150, 150, 150, 1.0),
+                                            ),
+                                            child: bloc.user != null
+                                                    ? Image.file(
+                                                        File(bloc.image!.path),
+                                                        width: 135.h,
+                                                        height: 135.h,
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : Padding(
+                                                        padding:
+                                                            EdgeInsets.all(43.h),
+                                                        child: SvgPicture.asset(
+                                                            'assets/icons/camera.svg'),
+                                                      )
                                           ),
-                                          child: bloc.user == null
-                                              ? bloc.image != null
-                                                  ? Image.file(
-                                                      File(bloc.image!.path),
-                                                      width: 135.h,
-                                                      height: 135.h,
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : Padding(
-                                                      padding:
-                                                          EdgeInsets.all(43.h),
-                                                      child: SvgPicture.asset(
-                                                          'assets/icons/camera.svg'),
-                                                    )
-                                              : bloc.user?.me.photo != null
-                                                  ? Image.network(
-                                                      apiUrl +
-                                                          bloc.user!.me.photo,
-                                                      width: 135.h,
-                                                      height: 135.h,
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : Padding(
-                                                      padding:
-                                                          EdgeInsets.all(43.h),
-                                                      child: SvgPicture.asset(
-                                                        'assets/icons/camera.svg',
-                                                      ),
-                                                    ),
                                         ),
                                       ),
                                     ),
@@ -293,18 +284,17 @@ class _InvitePartnerState extends State<InvitePartner> {
                               height: 60.sp,
                               width: 0.78.sw,
                               child: TextField(
-                                onChanged: (value) {
-                                  // _checkNickname(context);
-                                },
-                                controller: _nicknameController,
+                                controller: _phoneController,
                                 style: GoogleFonts.inter(
                                   fontSize: 25.sp,
                                   fontWeight: FontWeight.bold,
                                   color: const Color.fromRGBO(210, 204, 204, 1),
                                 ),
+                                keyboardType: TextInputType.phone,
+                                inputFormatters: [LengthLimitingTextInputFormatter(12)],
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Арбуз',
+                                  hintText: '+79456646786',
                                   hintStyle: GoogleFonts.inter(
                                     fontSize: 25.sp,
                                     fontWeight: FontWeight.bold,
@@ -321,11 +311,11 @@ class _InvitePartnerState extends State<InvitePartner> {
                           SizedBox(
                             height: 40.h,
                           ),
-                          CustomButton(
-                            // visible: state is InitSuccess == false,
-                            color: accentColor,
+                          CustomAnimationButton(
                             text: 'Продолжить',
-                            textColor: Colors.white,
+                            border: Border.all(
+                              color: const Color.fromRGBO(32, 203, 131, 1.0),
+                              width: 2.sp),
                             onPressed: () async {
                               // nextPage();
                               _inviteUser(context);

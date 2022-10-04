@@ -1,6 +1,7 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/auth/login/code.dart';
+import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +106,7 @@ class _PhonePageState extends State<PhonePage> {
                         decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.horizontal(
-                                left: Radius.circular(0),
+                                left: Radius.circular(10),
                                 right: Radius.circular(10))),
                         child: Row(
                           children: [
@@ -161,11 +162,11 @@ class _PhonePageState extends State<PhonePage> {
                         ),
                       ),
                     ),
-                    CustomButton(
-                      visible: state is AuthLoading == false,
-                      color: accentColor,
+                    CustomAnimationButton(
                       text: 'Продолжить',
-                      textColor: Colors.white,
+                      border: Border.all(
+                          color: const Color.fromRGBO(32, 203, 131, 1.0),
+                          width: 2.sp),
                       onPressed: _sendCode,
                     )
                   ],

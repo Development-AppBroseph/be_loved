@@ -36,6 +36,37 @@ class Repository {
   //   }
   // }
 
+  Future<bool?> editUser(File? xFile) async {
+    var options = Options(headers: {
+      'Authorization': 'Token ${await MySharedPrefs().token}',
+    }, validateStatus: (status) => status! <= 500);
+    
+    try {
+      var response = await dio.put('auth/users', options: options, data: {
+        'photo': xFile != null
+                ? MultipartFile.fromFileSync(xFile.path, filename: xFile.path)
+                : null,
+      });
+      print('object here $response');
+      if (response.statusCode == 200) {
+        return true;
+      }
+      if (response.statusCode == 400) {
+        StandartSnackBar.show(
+          DetailsAnswer.fromJson(response.data).details,
+          SnackBarStatus(Icons.error, redColor),
+        );
+      }
+      return false;
+    } catch (e) {
+      StandartSnackBar.show(
+        'Ошибка сервера. Мы это уже исправляем.',
+        SnackBarStatus(Icons.error, redColor),
+      );
+      return false;
+    }
+  }
+
   Future<int?> registration(String number) async {
     try {
       var response =
@@ -150,7 +181,7 @@ class Repository {
     }
   }
 
-  Future<UserAnswer?> inviteUser(String username) async {
+  Future<UserAnswer?> inviteUser(String phone) async {
     var options = Options(headers: {
       'Authorization': 'Token ${await MySharedPrefs().token}',
     }, validateStatus: (status) => status! <= 500);
@@ -158,7 +189,7 @@ class Repository {
       var response = await dio.post(
         '/relations/',
         data: {
-          "to_username": username,
+          "to_phone_number": phone,
         },
         options: options,
       );

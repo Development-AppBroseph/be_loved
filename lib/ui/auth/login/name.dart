@@ -1,4 +1,5 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,12 +13,6 @@ class InputNamePage extends StatelessWidget {
 
   final VoidCallback nextPage;
   final _nicknameController = TextEditingController();
-
-  void _checkNickname(BuildContext context) {
-    BlocProvider.of<AuthBloc>(context, listen: false).add(
-      CheckNickname(_nicknameController.text),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +75,6 @@ class InputNamePage extends StatelessWidget {
                                     height: 60.sp,
                                     width: 0.78.sw,
                                     child: TextField(
-                                      onChanged: (value) {
-                                        _checkNickname(context);
-                                      },
                                       controller: _nicknameController,
                                       style: GoogleFonts.inter(
                                         fontSize: 25.sp,
@@ -102,49 +94,20 @@ class InputNamePage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    child: Image.asset(
-                                      'assets/images/nick_name_busy.png',
-                                      height: 21.sp,
-                                    ),
-                                    onTap: () {
-                                      _nicknameController.text = '';
-                                    },
-                                  )
                                 ],
-                              ),
-                            ),
-                            // if (state is NicknameSuccess && state.exist)
-                            AnimatedContainer(
-                              curve: Curves.fastOutSlowIn,
-                              duration: const Duration(milliseconds: 300),
-                              height: state is NicknameSuccess && state.exist
-                                  ? 30
-                                  : 0,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  'Никнейм уже занят :(',
-                                  style: GoogleFonts.inter(
-                                      fontSize: 15.sp,
-                                      color: const Color.fromRGBO(
-                                          255, 29, 29, 1.0),
-                                      fontWeight: FontWeight.bold),
-                                ),
                               ),
                             ),
                           ],
                         )),
-                    CustomButton(
-                      color: accentColor,
+                    CustomAnimationButton(
                       text: 'Продолжить',
-                      textColor: Colors.white,
+                      border: Border.all(
+                          color: const Color.fromRGBO(32, 203, 131, 1.0),
+                          width: 2.sp),
                       onPressed: () {
-                        if (state is NicknameSuccess &&
-                            _nicknameController.text.isNotEmpty) {
-                          if (!state.exist) {
-                            nextPage();
-                          }
+                        if (_nicknameController.text.isNotEmpty) {
+                          BlocProvider.of<AuthBloc>(context).add(SetNickname(_nicknameController.text));
+                          nextPage();
                         }
                       },
                     ),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
+import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -111,26 +112,28 @@ class AvatarPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      height: 267.h,
-                      width: 378.w,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(228, 228, 228, 1.0),
-                        borderRadius: BorderRadius.circular(10),
+                    AspectRatio(
+                      aspectRatio: 330/267,
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(228, 228, 228, 1.0),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: AvatarMenu(),
                       ),
-                      child: AvatarMenu(),
                     ),
                     SizedBox(
                       height: 40.h,
                     ),
                     if (state is AuthLoading == false)
-                      CustomButton(
-                        color: accentColor,
+                      CustomAnimationButton(
                         text: 'Продолжить',
-                        textColor: Colors.white,
+                        border: Border.all(
+                          color: const Color.fromRGBO(32, 203, 131, 1.0),
+                          width: 2.sp),
                         onPressed: () async {
                           bloc.add(InitUser());
-                          // nextPage
                         },
                       ),
                   ],
@@ -209,6 +212,9 @@ class AvatarMenu extends StatelessWidget {
         Expanded(
             child: PageView(
           controller: pageController,
+          onPageChanged: (value) {
+            streamController.add(value);
+          },
           children: const [
             PageTest(),
             PageTest(),
@@ -219,10 +225,6 @@ class AvatarMenu extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             color: Color.fromRGBO(216, 216, 216, 1.0),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
-            ),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 12.sp),
@@ -240,7 +242,6 @@ class AvatarMenu extends StatelessWidget {
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeInOut,
                         );
-                        streamController.add(0);
                       },
                       child: SvgPicture.asset(
                         'assets/icons/men.svg',
@@ -249,10 +250,10 @@ class AvatarMenu extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        pageController.animateToPage(1,
+                        pageController.animateToPage(
+                            1,
                             duration: const Duration(milliseconds: 400),
                             curve: Curves.easeInOut);
-                        streamController.add(1);
                       },
                       child: SvgPicture.asset(
                         'assets/icons/women.svg',
@@ -266,7 +267,6 @@ class AvatarMenu extends StatelessWidget {
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeInOut,
                         );
-                        streamController.add(2);
                       },
                       child: SvgPicture.asset(
                         'assets/icons/paw.svg',
@@ -275,10 +275,10 @@ class AvatarMenu extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        pageController.animateToPage(3,
+                        pageController.animateToPage(
+                            3,
                             duration: const Duration(milliseconds: 400),
                             curve: Curves.easeInOut);
-                        streamController.add(3);
                       },
                       child: SvgPicture.asset(
                         'assets/icons/rects.svg',
@@ -301,21 +301,21 @@ class PageTest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: 12,
-        gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-        itemBuilder: ((context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(10),
-            child: Container(
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+      child: GridView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: 12,
+          gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 15, crossAxisSpacing: 20),
+          itemBuilder: ((context, index) {
+            return Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: const Color.fromRGBO(150, 150, 150, 1),
-                  borderRadius: BorderRadius.circular(18.sp)),
-            ),
-          );
-        }));
+                  borderRadius: BorderRadius.circular(22)),
+            );
+          })),
+    );
   }
 }

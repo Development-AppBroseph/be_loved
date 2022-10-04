@@ -15,13 +15,19 @@ class CheckUser extends AuthEvent {
   CheckUser(this.phone, this.code);
 }
 
-class CheckNickname extends AuthEvent {
+class SetNickname extends AuthEvent {
   String nickname;
 
-  CheckNickname(this.nickname);
+  SetNickname(this.nickname);
 }
 
 class GetUser extends AuthEvent {}
+
+class EditUserInfo extends AuthEvent {
+  File file;
+
+  EditUserInfo(this.file);
+}
 
 class SearchUser extends AuthEvent {}
 
@@ -30,9 +36,9 @@ class PickImage extends AuthEvent {}
 class InitUser extends AuthEvent {}
 
 class InviteUser extends AuthEvent {
-  String nickname;
+  String phone;
 
-  InviteUser(this.nickname);
+  InviteUser(this.phone);
 }
 
 class DeleteInviteUser extends AuthEvent {}

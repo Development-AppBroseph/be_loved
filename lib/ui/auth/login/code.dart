@@ -149,6 +149,7 @@ class CodePage extends StatelessWidget {
                       child: SizedBox(
                         height: 70.sp,
                         child: Pinput(
+                          pinAnimationType: PinAnimationType.none,
                           showCursor: false,
                           length: 5,
                           controller: textEditingController,
@@ -175,10 +176,11 @@ class CodePage extends StatelessWidget {
                       ),
                     ),
                     // if (state is PhoneSuccess)
-                    CustomButton(
-                      color: accentColor,
+                    CustomAnimationButton(
                       text: 'Продолжить',
-                      textColor: Colors.white,
+                      border: Border.all(
+                          color: const Color.fromRGBO(32, 203, 131, 1.0),
+                          width: 2.sp),
                       onPressed: () => _checkCode(context),
                     ),
                     SizedBox(height: 17.h),
