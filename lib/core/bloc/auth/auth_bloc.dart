@@ -56,12 +56,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _editUserInfo(EditUserInfo event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    var result = await Repository().editUser(event.file);
-
-    if (result != true) {
-      // code = result;
-      // emit(PhoneSuccess(state.phone, result));
+    var result = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (result != null) {
+      // emit(ImageSuccess(result));
+      image = result;
+      var res = await Repository().editUser(image);
+      // _editUserInfo(EditUserInfo()), emit);
     } else {
       emit(ImageError());
     }
@@ -98,7 +100,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (result != null) {
       emit(ImageSuccess(result));
       image = result;
-      _editUserInfo(EditUserInfo(File(image!.path)), emit);
     } else {
       emit(ImageError());
     }

@@ -9,6 +9,7 @@ import 'package:be_loved/models/user/user.dart';
 import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../helpers/constants.dart';
 
 class Repository {
@@ -36,17 +37,15 @@ class Repository {
   //   }
   // }
 
-  Future<bool?> editUser(File? xFile) async {
+  Future<bool?> editUser(XFile? xFile) async {
     var options = Options(headers: {
       'Authorization': 'Token ${await MySharedPrefs().token}',
     }, validateStatus: (status) => status! <= 500);
     
     try {
-      var response = await dio.put('auth/users', options: options, data: {
-        'photo': xFile != null
-                ? MultipartFile.fromFileSync(xFile.path, filename: xFile.path)
-                : null,
-      });
+      var response = await dio.put('auth/users', options: options, data: FormData.fromMap({
+        'photo': MultipartFile.fromFileSync(xFile!.path, filename: xFile.path)
+      }));
       print('object here $response');
       if (response.statusCode == 200) {
         return true;
@@ -59,6 +58,7 @@ class Repository {
       }
       return false;
     } catch (e) {
+      print('object2 ${e}');
       StandartSnackBar.show(
         'Ошибка сервера. Мы это уже исправляем.',
         SnackBarStatus(Icons.error, redColor),

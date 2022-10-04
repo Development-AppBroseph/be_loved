@@ -168,6 +168,7 @@ class _PhonePageState extends State<PhonePage> {
                           color: const Color.fromRGBO(32, 203, 131, 1.0),
                           width: 2.sp),
                       onPressed: _sendCode,
+                      state: phoneNumber.isNotEmpty && phoneNumber.length == 12,
                     )
                   ],
                 ),

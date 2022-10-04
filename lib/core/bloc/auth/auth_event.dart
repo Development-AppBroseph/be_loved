@@ -23,11 +23,7 @@ class SetNickname extends AuthEvent {
 
 class GetUser extends AuthEvent {}
 
-class EditUserInfo extends AuthEvent {
-  File file;
-
-  EditUserInfo(this.file);
-}
+class EditUserInfo extends AuthEvent {}
 
 class SearchUser extends AuthEvent {}
 

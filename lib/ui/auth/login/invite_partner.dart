@@ -172,7 +172,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                           top: 20.h, bottom: 10.h),
                                       child: GestureDetector(
                                         onTap: () {
-                                          bloc.add(PickImage());
+                                          bloc.add(EditUserInfo());
                                         },
                                         child: ClipRRect(
                                           borderRadius:

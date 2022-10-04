@@ -7,6 +7,7 @@ class CustomAnimationButton extends StatefulWidget {
   final String text;
   bool black;
   final VoidCallback onPressed;
+  bool? state;
 
   CustomAnimationButton({
     Key? key,
@@ -14,6 +15,7 @@ class CustomAnimationButton extends StatefulWidget {
     this.black = false,
     required this.onPressed,
     this.border,
+    this.state
   }) : super(key: key);
 
   @override
@@ -92,10 +94,12 @@ class CustomButtonState extends State<CustomAnimationButton>
         ),
       ),
       onTap: () {
-        setState(() {
-          controller.forward();
-          animation = false;
-        });
+        // if(widget.state != null && widget.state!) {
+          setState(() {
+            controller.forward();
+            animation = false;
+          });
+        // }
       },
     );
   }
