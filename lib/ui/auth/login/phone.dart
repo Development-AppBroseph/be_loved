@@ -1,9 +1,6 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/auth/login/code.dart';
-import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
-import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +17,7 @@ class PhonePage extends StatefulWidget {
 class _PhonePageState extends State<PhonePage> {
   FocusNode focusNode = FocusNode();
   String phoneNumber = '';
-  // AppData appData = AppData('');
+  String? error;
 
   @override
   void dispose() {
@@ -28,28 +25,13 @@ class _PhonePageState extends State<PhonePage> {
     super.dispose();
   }
 
-  void _sendCode() {
-    if (phoneNumber.length == 12) {
-      BlocProvider.of<AuthBloc>(context).add(SendPhone(phoneNumber));
-    } else if (phoneNumber.isEmpty) {
-      StandartSnackBar.show(
-        'Номер телефона не заполнен',
-        SnackBarStatus(Icons.error, redColor),
-      );
-      return;
-    } else {
-      StandartSnackBar.show(
-        'Неправильно указан номер телефона',
-        SnackBarStatus(Icons.error, redColor),
-      );
-      return;
-    }
-  }
+  void _sendCode() => BlocProvider.of<AuthBloc>(context).add(SendPhone(phoneNumber));
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
       if (current is PhoneSuccess) {
+        error = null;
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -57,18 +39,9 @@ class _PhonePageState extends State<PhonePage> {
           ),
         );
       }
+      if(current is PhoneError) error = current.error;
       return true;
     }, builder: (context, state) {
-      if (state is PhoneSuccess) {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => CodePage(),
-        //   ),
-        // );
-        // print('success: ${state.code}');
-      }
-      if (state is PhoneError) {}
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -100,7 +73,7 @@ class _PhonePageState extends State<PhonePage> {
                           fontWeight: FontWeight.w600),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 37.h, bottom: 61.h),
+                      padding: EdgeInsets.only(top: 37.h, bottom: 5.h),
                       child: Container(
                         height: 70.h,
                         decoration: const BoxDecoration(
@@ -162,14 +135,24 @@ class _PhonePageState extends State<PhonePage> {
                         ),
                       ),
                     ),
-                    CustomAnimationButton(
-                      text: 'Продолжить',
-                      border: Border.all(
-                          color: const Color.fromRGBO(32, 203, 131, 1.0),
-                          width: 2.sp),
-                      onPressed: _sendCode,
-                      state: phoneNumber.isNotEmpty && phoneNumber.length == 12,
-                    )
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 61.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(error ?? '', style: const TextStyle(color: Colors.red)),
+                        ],
+                      ),
+                    ),
+                    CustomButton(color: const Color.fromRGBO(32, 203, 131, 1.0), text: 'Продолжить', textColor: Colors.white, onPressed: _sendCode)
+                    // CustomAnimationButton(
+                    //   text: 'Продолжить',
+                    //   border: Border.all(
+                    //       color: const Color.fromRGBO(32, 203, 131, 1.0),
+                    //       width: 2.sp),
+                    //   onPressed: _sendCode,
+                    //   state: phoneNumber.isNotEmpty && phoneNumber.length == 12,
+                    // )
                   ],
                 ),
               ),

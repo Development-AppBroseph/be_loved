@@ -1,22 +1,30 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/helpers/constants.dart';
 
 class InputNamePage extends StatelessWidget {
   InputNamePage({Key? key, required this.nextPage}) : super(key: key);
+  String? error;
 
   final VoidCallback nextPage;
   final _nicknameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+    return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
+      if(current is NicknameSuccess) {
+        error = null;
+        nextPage();
+      } else if(current is NicknameError) {
+        error = current.error;
+      }
+      return true;
+    },builder: (context, state) {
       return Scaffold(
         appBar: appBar(context),
         backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
@@ -58,7 +66,7 @@ class InputNamePage extends StatelessWidget {
                           fontWeight: FontWeight.w600),
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(vertical: 44.sp),
+                        padding: EdgeInsets.only(top: 44.h),
                         child: Column(
                           children: [
                             Container(
@@ -75,6 +83,7 @@ class InputNamePage extends StatelessWidget {
                                     height: 60.sp,
                                     width: 0.78.sw,
                                     child: TextField(
+                                      inputFormatters: [LengthLimitingTextInputFormatter(12)],
                                       controller: _nicknameController,
                                       style: GoogleFonts.inter(
                                         fontSize: 25.sp,
@@ -99,18 +108,35 @@ class InputNamePage extends StatelessWidget {
                             ),
                           ],
                         )),
-                    CustomAnimationButton(
-                      text: 'Продолжить',
-                      border: Border.all(
-                          color: const Color.fromRGBO(32, 203, 131, 1.0),
-                          width: 2.sp),
-                      onPressed: () {
-                        if (_nicknameController.text.isNotEmpty) {
-                          BlocProvider.of<AuthBloc>(context).add(SetNickname(_nicknameController.text));
-                          nextPage();
-                        }
-                      },
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.h, bottom: 44.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(error ?? '', style: const TextStyle(color: Colors.red))
+                        ],
+                      ),
                     ),
+                    CustomButton(
+                      color: const Color.fromRGBO(32, 203, 131, 1.0), 
+                      text: 'Продолжить', 
+                      textColor: Colors.white, 
+                      onPressed: (){
+                        BlocProvider.of<AuthBloc>(context).add(SetNickname(_nicknameController.text));
+                      }
+                    ),
+                    // CustomAnimationButton(
+                    //   text: 'Продолжить',
+                    //   border: Border.all(
+                    //       color: const Color.fromRGBO(32, 203, 131, 1.0),
+                    //       width: 2.sp),
+                    //   onPressed: () {
+                    //     if (_nicknameController.text.isNotEmpty) {
+                    //       BlocProvider.of<AuthBloc>(context).add(SetNickname(_nicknameController.text));
+                    //       nextPage();
+                    //     }
+                    //   },
+                    // ),
                     const SizedBox(
                       height: 20,
                     ),

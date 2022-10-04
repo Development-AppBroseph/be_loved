@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/auth/login/inviteFor_start_relationship.dart';
 import 'package:be_loved/ui/auth/login/relationships.dart';
-import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:be_loved/widgets/alerts/snack_bar.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,19 +31,9 @@ class _InvitePartnerState extends State<InvitePartner> {
 
   final _phoneController = TextEditingController();
 
-  void _inviteUser(BuildContext context) {
-    if (_phoneController.text.length == 12) {
-      BlocProvider.of<AuthBloc>(context).add(
-        InviteUser(_phoneController.text),
-      );
-    } else {
-      StandartSnackBar.show(
-        'Укажите номер пользователя',
-        SnackBarStatus(Icons.error, redColor),
-      );
-      return;
-    }
-  }
+  String? error;
+
+  void _inviteUser(BuildContext context) => BlocProvider.of<AuthBloc>(context).add(InviteUser(_phoneController.text));
 
   @override
   void initState() {
@@ -68,12 +57,14 @@ class _InvitePartnerState extends State<InvitePartner> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
       if (current is InviteSuccess) {
-        // StandartSnackBar.show(
-        //   'Приглашение успешно отправлено',
-        //   SnackBarStatus(Icons.done, Colors.green),
-        // );
+        error = null;
+        StandartSnackBar.show(
+          'Приглашение успешно отправлено',
+          SnackBarStatus(Icons.done, Colors.green),
+        );
       }
       if (current is InviteAccepted && current.fromYou) {
+        error = null;
         _timer.cancel();
         Navigator.push(
           context,
@@ -84,12 +75,14 @@ class _InvitePartnerState extends State<InvitePartner> {
         ).then((value) => _startSearch(context));
       }
       if (current is InviteError) {
+        error = current.error;
         StandartSnackBar.show(
           'Приглашение не удалось отправить',
           SnackBarStatus(Icons.error, redColor),
         );
       }
       if (current is ReceiveInvite && previous is ReceiveInvite == false) {
+        error = null;
         _timer.cancel();
         Navigator.push(
           context,
@@ -174,33 +167,27 @@ class _InvitePartnerState extends State<InvitePartner> {
                                         onTap: () {
                                           bloc.add(EditUserInfo());
                                         },
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(35.sp),
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            height: 135.h,
-                                            width: 135.h,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(35.sp),
-                                              color: const Color.fromRGBO(
-                                                  150, 150, 150, 1.0),
+                                        child: Material(
+                                          color: const Color.fromRGBO(150, 150, 150, 1),
+                                          shape: SquircleBorder(
+                                            radius: BorderRadius.all(
+                                              Radius.circular(80.r),
                                             ),
-                                            child: bloc.user != null
-                                                    ? Image.file(
-                                                        File(bloc.image!.path),
-                                                        width: 135.h,
-                                                        height: 135.h,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : Padding(
-                                                        padding:
-                                                            EdgeInsets.all(43.h),
-                                                        child: SvgPicture.asset(
-                                                            'assets/icons/camera.svg'),
-                                                      )
                                           ),
+                                          clipBehavior: Clip.hardEdge,
+                                          child: bloc.user != null
+                                                  ? Image.file(
+                                                      File(bloc.image!.path),
+                                                      width: 135.h,
+                                                      height: 135.h,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Padding(
+                                                      padding:
+                                                          EdgeInsets.all(43.h),
+                                                      child: SvgPicture.asset(
+                                                          'assets/icons/camera.svg'),
+                                                    ),
                                         ),
                                       ),
                                     ),
@@ -226,35 +213,28 @@ class _InvitePartnerState extends State<InvitePartner> {
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                           top: 20.h, bottom: 10.h),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(35.sp),
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          // padding: EdgeInsets.all(43.h),
-                                          height: 135.h,
-                                          width: 135.h,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(35.sp),
-                                            color: const Color.fromRGBO(
-                                                150, 150, 150, 1.0),
+                                      child: Material(
+                                        color: const Color.fromRGBO(150, 150, 150, 1),
+                                        shape: SquircleBorder(
+                                          radius: BorderRadius.all(
+                                            Radius.circular(80.r),
                                           ),
-                                          child: bloc.user?.love?.photo != null
-                                              ? Image.network(
-                                                  apiUrl +
-                                                      bloc.user!.love!.photo,
-                                                  width: 135.h,
-                                                  height: 135.h,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Padding(
-                                                  padding: EdgeInsets.all(43.h),
-                                                  child: SvgPicture.asset(
-                                                    'assets/icons/camera.svg',
-                                                  ),
-                                                ),
                                         ),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: bloc.user?.love?.photo != null
+                                            ? Image.network(
+                                                apiUrl +
+                                                    bloc.user!.love!.photo,
+                                                width: 135.h,
+                                                height: 135.h,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Padding(
+                                                padding: EdgeInsets.all(43.h),
+                                                child: SvgPicture.asset(
+                                                  'assets/icons/camera.svg',
+                                                ),
+                                              ),
                                       ),
                                     ),
                                   ),
@@ -308,19 +288,29 @@ class _InvitePartnerState extends State<InvitePartner> {
                               ),
                             ),
                           ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 5.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(error ?? '', style: const TextStyle(color: Colors.red))
+                              ],
+                            ),
+                          ),
                           SizedBox(
                             height: 40.h,
                           ),
-                          CustomAnimationButton(
-                            text: 'Продолжить',
-                            border: Border.all(
-                              color: const Color.fromRGBO(32, 203, 131, 1.0),
-                              width: 2.sp),
-                            onPressed: () async {
-                              // nextPage();
-                              _inviteUser(context);
-                            },
-                          ),
+                          CustomButton(color: const Color.fromRGBO(32, 203, 131, 1.0), text: 'Продолжить', textColor: Colors.white, onPressed: () => _inviteUser(context)),
+                          // CustomAnimationButton(
+                          //   text: 'Продолжить',
+                          //   border: Border.all(
+                          //     color: const Color.fromRGBO(32, 203, 131, 1.0),
+                          //     width: 2.sp),
+                          //   onPressed: () async {
+                          //     // nextPage();
+                          //     _inviteUser(context);
+                          //   },
+                          // ),
                           SizedBox(height: 17.h),
                           CustomButton(
                             visible: bloc.user?.love != null,

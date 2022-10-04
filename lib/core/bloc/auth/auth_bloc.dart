@@ -1,10 +1,12 @@
 // ignore_for_file: avoid_single_cascade_in_expression_statements
 
 import 'dart:io';
+import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/core/helpers/enums.dart';
 import 'package:be_loved/core/network/repository.dart';
 import 'package:be_loved/core/helpers/shared_prefs.dart';
 import 'package:be_loved/models/user/user.dart';
+import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -45,13 +47,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     secretKey = null;
     phone = event.phone;
     emit(AuthLoading());
-    var result = await Repository().registration(event.phone);
-
-    if (result != null) {
-      code = result;
-      emit(PhoneSuccess(event.phone, result));
-    } else {
-      emit(PhoneError());
+    if(event.phone.length == 12) {
+      var result = await Repository().registration(event.phone);
+      if (result != null) {
+        code = result;
+        emit(PhoneSuccess(event.phone, result));
+      } else {
+        emit(PhoneError('Неверный формат номера'));
+      }
+    }
+    else {
+      emit(PhoneError('Введите номер телефона'));
     }
   }
 
@@ -60,10 +66,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       source: ImageSource.gallery,
     );
     if (result != null) {
-      // emit(ImageSuccess(result));
       image = result;
       var res = await Repository().editUser(image);
-      // _editUserInfo(EditUserInfo()), emit);
     } else {
       emit(ImageError());
     }
@@ -71,27 +75,56 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _checkUser(CheckUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    var result = await Repository().checkIsUserExist(event.phone, event.code);
 
-    if (result != null) {
-      if (result.token != null) {
-        await SharedPreferences.getInstance()
-          ..setString('token', result.token!);
-        token = result.token;
+    if (event.codeUser.length == 5) {
+      if (event.codeUser == code.toString()) {
+        var result = await Repository().checkIsUserExist(event.phone, event.code);
+        if (result != null) {
+          if (result.token != null) {
+            await SharedPreferences.getInstance()
+              ..setString('token', result.token!);
+            token = result.token;
+          }
+          secretKey = result.secretKey;
+          emit(
+            CodeSuccess(
+              result.token != null ? ExistUser.exist : ExistUser.notExist,
+              result.token != null ? result.token! : result.secretKey!,
+            ),
+          );
+          return;
+        } else {
+          emit(CodeError('Ошибка code: $result'));
+          return;
+        }
+      } else {
+        if (code == null) {
+          emit(CodeError('Срок кода истёк'));
+          return;
+        } else {
+          emit(CodeError('Код введён неверно'));
+          return;
+        }
       }
-      secretKey = result.secretKey;
-      emit(
-        CodeSuccess(
-          result.token != null ? ExistUser.exist : ExistUser.notExist,
-          result.token != null ? result.token! : result.secretKey!,
-        ),
-      );
+    } else if (event.codeUser.isEmpty) {
+      emit(CodeError('Введите код'));
     } else {
-      emit(CodeError());
+      emit(CodeError('Код введён неверно'));
     }
   }
 
-  void _setNickname(SetNickname event, Emitter<AuthState> emit) => nickname = event.nickname;
+  void _setNickname(SetNickname event, Emitter<AuthState> emit) {
+    if(event.nickname.isNotEmpty) {
+      if(event.nickname.length > 12) {
+        emit(NicknameError('Максимальное количество символов 12'));
+      } else {
+        nickname = event.nickname;
+        emit(NicknameSuccess(true));
+      }
+    } else {
+      emit(NicknameError('Введите никнейм'));
+    }
+  }
 
   void _pickImage(PickImage event, Emitter<AuthState> emit) async {
     var result = await ImagePicker().pickImage(
@@ -106,29 +139,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _initUser(InitUser event, Emitter<AuthState> emit) async {
-    var file = File(image!.path);
-    final filePath = file.absolute.path;
+    try {
+      var file = File(image!.path);
+      final filePath = file.absolute.path;
 
-    final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
-    final splitted = filePath.substring(0, (lastIndex));
-    final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
-    emit(AuthLoading());
-    var compressedImage = await FlutterImageCompress.compressAndGetFile(
-      file.path,
-      outPath,
-      quality: 30,
-    );
+      final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
+      final splitted = filePath.substring(0, (lastIndex));
+      final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+      emit(AuthLoading());
+      var compressedImage = await FlutterImageCompress.compressAndGetFile(
+        file.path,
+        outPath,
+        quality: 30,
+      );
 
-    var result = await Repository()
-        .initUser(secretKey ?? '', nickname ?? '', compressedImage);
+      var result = await Repository()
+          .initUser(secretKey ?? '', nickname ?? '', compressedImage);
 
-    if (result != null) {
-      token = result;
-      await SharedPreferences.getInstance()
-        ..setString('token', result);
-      emit(InitSuccess());
-    } else {
-      emit(InitError());
+      if (result != null) {
+        token = result;
+        await SharedPreferences.getInstance()
+          ..setString('token', result);
+        emit(InitSuccess());
+      } else {
+        emit(InitError('Выберите аватарку'));
+      }
+    } catch(e) {
+      emit(InitError('Выберите аватарку'));
     }
   }
 
@@ -175,14 +212,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _inviteUser(InviteUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    var result = await Repository().inviteUser(event.phone);
+    if (event.phone.length == 12) {
+      var result = await Repository().inviteUser(event.phone);
 
-    if (result != null) {
-      user = result;
-      emit(InviteSuccess());
+      if (result != null) {
+        user = result;
+        emit(InviteSuccess());
+      } else {
+        StandartSnackBar.show(
+          'Укажите номер пользователя',
+          SnackBarStatus(Icons.error, redColor),
+        );
+      }
     } else {
-      emit(InviteError());
+      // error = 'Укажите номер пользователя';
+      emit(InviteError('Укажите номер пользователя'));
+      return;
     }
+    
   }
 
   void _deleteInviteUser(

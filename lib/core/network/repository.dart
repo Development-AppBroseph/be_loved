@@ -46,7 +46,6 @@ class Repository {
       var response = await dio.put('auth/users', options: options, data: FormData.fromMap({
         'photo': MultipartFile.fromFileSync(xFile!.path, filename: xFile.path)
       }));
-      print('object here $response');
       if (response.statusCode == 200) {
         return true;
       }
@@ -58,7 +57,6 @@ class Repository {
       }
       return false;
     } catch (e) {
-      print('object2 ${e}');
       StandartSnackBar.show(
         'Ошибка сервера. Мы это уже исправляем.',
         SnackBarStatus(Icons.error, redColor),
@@ -82,11 +80,6 @@ class Repository {
       }
       return null;
     } catch (e) {
-      // print(e);
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
       return null;
     }
   }
@@ -101,17 +94,17 @@ class Repository {
         return CheckIsUserExist.fromJson(response.data);
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(response.data).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
       return null;
     } catch (e) {
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
+      // StandartSnackBar.show(
+      //   'Ошибка сервера. Мы это уже исправляем.',
+      //   SnackBarStatus(Icons.error, redColor),
+      // );
       return null;
     }
   }
@@ -205,10 +198,6 @@ class Repository {
 
       return null;
     } catch (e) {
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
       return null;
     }
   }

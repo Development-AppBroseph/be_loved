@@ -5,6 +5,7 @@ import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/home/home.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -95,45 +96,40 @@ class RelationShips extends StatelessWidget {
                               child: Padding(
                                 padding:
                                     EdgeInsets.only(top: 20.h, bottom: 10.h),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(35.sp),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: 135.h,
-                                    width: 135.h,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(35.sp),
-                                      color: const Color.fromRGBO(
-                                          150, 150, 150, 1.0),
-                                    ),
-                                    child: bloc.user == null
-                                        ? bloc.image != null
-                                            ? Image.file(
-                                                File(bloc.image!.path),
-                                                width: 135.h,
-                                                height: 135.h,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Padding(
-                                                padding: EdgeInsets.all(43.h),
-                                                child: SvgPicture.asset(
-                                                    'assets/icons/camera.svg'),
-                                              )
-                                        : bloc.user?.me.photo != null
-                                            ? Image.network(
-                                                apiUrl + bloc.user!.me.photo,
-                                                width: 135.h,
-                                                height: 135.h,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Padding(
-                                                padding: EdgeInsets.all(43.h),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/camera.svg',
-                                                ),
+                                child: Material(
+                                          color: const Color.fromRGBO(150, 150, 150, 1),
+                                          shape: SquircleBorder(
+                                            radius: BorderRadius.all(
+                                              Radius.circular(80.r),
+                                            ),
+                                          ),
+                                          clipBehavior: Clip.hardEdge,
+                                  child: bloc.user == null
+                                      ? bloc.image != null
+                                          ? Image.file(
+                                              File(bloc.image!.path),
+                                              width: 135.h,
+                                              height: 135.h,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Padding(
+                                              padding: EdgeInsets.all(43.h),
+                                              child: SvgPicture.asset(
+                                                  'assets/icons/camera.svg'),
+                                            )
+                                      : bloc.user?.me.photo != null
+                                          ? Image.network(
+                                              apiUrl + bloc.user!.me.photo,
+                                              width: 135.h,
+                                              height: 135.h,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Padding(
+                                              padding: EdgeInsets.all(43.h),
+                                              child: SvgPicture.asset(
+                                                'assets/icons/camera.svg',
                                               ),
-                                  ),
+                                            ),
                                 ),
                               ),
                             ),
@@ -157,33 +153,27 @@ class RelationShips extends StatelessWidget {
                               child: Padding(
                                 padding:
                                     EdgeInsets.only(top: 20.h, bottom: 10.h),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(35.sp),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    // padding: EdgeInsets.all(43.h),
-                                    height: 135.h,
-                                    width: 135.h,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(35.sp),
-                                      color: const Color.fromRGBO(
-                                          150, 150, 150, 1.0),
-                                    ),
-                                    child: bloc.user?.love?.photo != null
-                                        ? Image.network(
-                                            apiUrl + bloc.user!.love!.photo,
-                                            width: 135.h,
-                                            height: 135.h,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Padding(
-                                            padding: EdgeInsets.all(43.h),
-                                            child: SvgPicture.asset(
-                                              'assets/icons/camera.svg',
+                                child: Material(
+                                          color: const Color.fromRGBO(150, 150, 150, 1),
+                                          shape: SquircleBorder(
+                                            radius: BorderRadius.all(
+                                              Radius.circular(80.r),
                                             ),
                                           ),
-                                  ),
+                                          clipBehavior: Clip.hardEdge,
+                                  child: bloc.user?.love?.photo != null
+                                      ? Image.network(
+                                          apiUrl + bloc.user!.love!.photo,
+                                          width: 135.h,
+                                          height: 135.h,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Padding(
+                                          padding: EdgeInsets.all(43.h),
+                                          child: SvgPicture.asset(
+                                            'assets/icons/camera.svg',
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),

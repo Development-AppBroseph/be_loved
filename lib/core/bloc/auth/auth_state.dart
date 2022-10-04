@@ -8,7 +8,11 @@ class AuthLoading extends AuthState {}
 
 class AuthIdle extends AuthState {}
 
-class PhoneError extends AuthState {}
+class PhoneError extends AuthState {
+  String error;
+
+  PhoneError(this.error);
+}
 
 class PhoneSuccess extends AuthState {
   String phone;
@@ -17,7 +21,11 @@ class PhoneSuccess extends AuthState {
   PhoneSuccess(this.phone, this.code);
 }
 
-class CodeError extends AuthState {}
+class CodeError extends AuthState {
+  String error;
+
+  CodeError(this.error);
+}
 
 class CodeSuccess extends AuthState {
   ExistUser existUser;
@@ -26,10 +34,15 @@ class CodeSuccess extends AuthState {
   CodeSuccess(this.existUser, this.token);
 }
 
-class NicknameError extends AuthState {}
+class NicknameError extends AuthState {
+  String error;
+
+  NicknameError(this.error);
+}
 
 class NicknameSuccess extends AuthState {
   bool exist;
+
   NicknameSuccess(this.exist);
 }
 
@@ -43,7 +56,11 @@ class ImageSuccess extends AuthState {
 
 class InitSuccess extends AuthState {}
 
-class InitError extends AuthState {}
+class InitError extends AuthState {
+  String error;
+
+  InitError(this.error);
+}
 
 class GetUserSuccess extends AuthState {
   UserAnswer user;
@@ -55,7 +72,11 @@ class GetUserError extends AuthState {}
 
 class InviteSuccess extends AuthState {}
 
-class InviteError extends AuthState {}
+class InviteError extends AuthState {
+  String error;
+
+  InviteError(this.error);
+}
 
 class DeleteInviteSuccess extends AuthState {}
 

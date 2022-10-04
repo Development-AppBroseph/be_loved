@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  cupertino_rounded_corners: ^2.1.1
   flutter_screenutil: ^5.5.4
   flutter_svg: ^1.1.5
   google_fonts: ^3.0.1

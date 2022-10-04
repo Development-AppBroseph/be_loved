@@ -1,5 +1,4 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/core/helpers/enums.dart';
 import 'package:be_loved/core/helpers/shared_prefs.dart';
 import 'package:be_loved/ui/auth/login/create_account_info.dart';
@@ -7,7 +6,6 @@ import 'package:be_loved/ui/auth/login/invite_relation.dart';
 import 'package:be_loved/ui/home/home.dart';
 import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
-import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,44 +19,16 @@ class CodePage extends StatelessWidget {
   final FocusNode focusNode = FocusNode();
   int? code;
   String? phone;
+  String? error;
   TextEditingController textEditingController = TextEditingController();
 
-  void _checkCode(BuildContext context) {
-    if (textEditingController.text.length == 5) {
-      if (textEditingController.text == code.toString()) {
-        BlocProvider.of<AuthBloc>(context).add(
-          CheckUser(phone ?? '', code ?? 0),
-        );
-      } else {
-        if (code == null) {
-          StandartSnackBar.show(
-            'Срок кода истёк',
-            SnackBarStatus(Icons.error, redColor),
-          );
-        } else {
-          StandartSnackBar.show(
-            'Код введён неверно',
-            SnackBarStatus(Icons.error, redColor),
-          );
-        }
-      }
-    } else if (textEditingController.text.isEmpty) {
-      StandartSnackBar.show(
-        'Введите код',
-        SnackBarStatus(Icons.error, redColor),
-      );
-    } else {
-      StandartSnackBar.show(
-        'Код введён неверно',
-        SnackBarStatus(Icons.error, redColor),
-      );
-    }
-  }
+  void _checkCode(BuildContext context) => BlocProvider.of<AuthBloc>(context).add(CheckUser(phone ?? '', textEditingController.text, code ?? 0));
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
       if (current is CodeSuccess) {
+        error = null;
         if (current.existUser == ExistUser.notExist) {
           Navigator.push(
             context,
@@ -90,9 +60,8 @@ class CodePage extends StatelessWidget {
           });
         }
       }
-      if (current is CodeError) {
-        return false;
-      }
+      if (current is CodeError) error = current.error;
+
       return true;
     }, builder: (context, state) {
       if (state is PhoneSuccess) {
@@ -145,7 +114,7 @@ class CodePage extends StatelessWidget {
                           fontWeight: FontWeight.w600),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 44.h),
+                      padding: EdgeInsets.only(top: 44.h),
                       child: SizedBox(
                         height: 70.sp,
                         child: Pinput(
@@ -175,19 +144,27 @@ class CodePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // if (state is PhoneSuccess)
-                    CustomAnimationButton(
-                      text: 'Продолжить',
-                      border: Border.all(
-                          color: const Color.fromRGBO(32, 203, 131, 1.0),
-                          width: 2.sp),
-                      onPressed: () => _checkCode(context),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.h, bottom: 44.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(error ?? '', style: const TextStyle(color: Colors.red)),
+                        ],
+                      ),
                     ),
+                    CustomButton(color: const Color.fromRGBO(32, 203, 131, 1.0), text: 'Продолжить', textColor: Colors.white, onPressed: () => _checkCode(context)),
+                    // CustomAnimationButton(
+                    //   text: 'Продолжить',
+                    //   border: Border.all(
+                    //       color: 
+                    //       width: 2.sp),
+                    //   onPressed: () => _checkCode(context),
+                    // ),
                     SizedBox(height: 17.h),
                     CustomAnimationButton(
                       black: true,
                       text: 'Отправить код снова',
-                      // textColor: const Color.fromRGBO(23, 23, 23, 1.0),
                       border: Border.all(
                           color: const Color.fromRGBO(23, 23, 23, 1.0),
                           width: 2.sp),

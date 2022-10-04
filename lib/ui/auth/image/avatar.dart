@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-import 'package:be_loved/core/helpers/constants.dart';
-import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 
 class AvatarPage extends StatelessWidget {
   AvatarPage({Key? key, required this.nextPage, required this.previousPage})
@@ -17,19 +16,22 @@ class AvatarPage extends StatelessWidget {
 
   final VoidCallback nextPage;
   XFile? xFile;
+  String? error;
   final VoidCallback previousPage;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
       if (current is ImageSuccess) {
+        error = null;
         xFile = current.image;
         return true;
       }
       if (current is InitSuccess) {
+        error = null;
         nextPage();
       }
-      if (current is InitError) {}
+      if (current is InitError) error = current.error;
       return true;
     }, builder: (context, state) {
       var bloc = BlocProvider.of<AuthBloc>(context);
@@ -84,30 +86,27 @@ class AvatarPage extends StatelessWidget {
                           onTap: () async {
                             bloc.add(PickImage());
                           },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(35.sp),
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 135.h,
-                              width: 135.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(35.sp),
-                                color: const Color.fromRGBO(150, 150, 150, 1.0),
+                          child: Material(
+                            color: const Color.fromRGBO(150, 150, 150, 1),
+                            shape: SquircleBorder(
+                              radius: BorderRadius.all(
+                                Radius.circular(80.r),
                               ),
-                              child: xFile != null
-                                  ? Image.file(
-                                      File(xFile!.path),
-                                      width: 135.h,
-                                      height: 135.h,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Padding(
-                                      padding: EdgeInsets.all(43.h),
-                                      child: SvgPicture.asset(
-                                        'assets/icons/camera.svg',
-                                      ),
-                                    ),
                             ),
+                            clipBehavior: Clip.hardEdge,
+                            child: xFile != null
+                                ? Image.file(
+                                    File(xFile!.path),
+                                    width: 135.h,
+                                    height: 135.h,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.all(43.h),
+                                    child: SvgPicture.asset(
+                                      'assets/icons/camera.svg',
+                                    ),
+                                  ),
                           ),
                         ),
                       ),
@@ -126,16 +125,26 @@ class AvatarPage extends StatelessWidget {
                     SizedBox(
                       height: 40.h,
                     ),
-                    if (state is AuthLoading == false)
-                      CustomAnimationButton(
-                        text: 'Продолжить',
-                        border: Border.all(
-                          color: const Color.fromRGBO(32, 203, 131, 1.0),
-                          width: 2.sp),
-                        onPressed: () async {
-                          bloc.add(InitUser());
-                        },
+                    Padding(
+                      padding: EdgeInsets.only(top: 5.h, bottom: 10.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(error ?? '', style: const TextStyle(color: Colors.red))
+                        ],
                       ),
+                    ),
+                    if (state is AuthLoading == false)
+                      CustomButton(color: const Color.fromRGBO(32, 203, 131, 1.0), text: 'Продолжить', textColor: Colors.white, onPressed: () => bloc.add(InitUser())),
+                      // CustomAnimationButton(
+                      //   text: 'Продолжить',
+                      //   border: Border.all(
+                      //     color: const Color.fromRGBO(32, 203, 131, 1.0),
+                      //     width: 2.sp),
+                      //   onPressed: () async {
+                      //     bloc.add(InitUser());
+                      //   },
+                      // ),
                   ],
                 ),
               ),
@@ -309,12 +318,27 @@ class PageTest extends StatelessWidget {
           gridDelegate:
               const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 15, crossAxisSpacing: 20),
           itemBuilder: ((context, index) {
-            return Container(
+            return Align(
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              child: SizedBox(
+                width: 67,
+                height: 67,
+                child: Material(
                   color: const Color.fromRGBO(150, 150, 150, 1),
-                  borderRadius: BorderRadius.circular(22)),
+                  shape: SquircleBorder(
+                    radius: BorderRadius.all(
+                      Radius.circular(40.r),
+                    ),
+                  ),
+                ),
+              ),
             );
+            // return Container(
+            //   alignment: Alignment.center,
+            //   decoration: BoxDecoration(
+            //       color: const Color.fromRGBO(150, 150, 150, 1),
+            //       borderRadius: BorderRadius.circular(23.r)),
+            // );
           })),
     );
   }

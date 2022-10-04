@@ -10,9 +10,10 @@ class SendPhone extends AuthEvent {
 
 class CheckUser extends AuthEvent {
   String phone;
+  String codeUser;
   int code;
 
-  CheckUser(this.phone, this.code);
+  CheckUser(this.phone, this.codeUser, this.code);
 }
 
 class SetNickname extends AuthEvent {
