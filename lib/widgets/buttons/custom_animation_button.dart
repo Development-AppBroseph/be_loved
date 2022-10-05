@@ -9,14 +9,14 @@ class CustomAnimationButton extends StatefulWidget {
   final VoidCallback onPressed;
   bool? state;
 
-  CustomAnimationButton({
-    Key? key,
-    required this.text,
-    this.black = false,
-    required this.onPressed,
-    this.border,
-    this.state
-  }) : super(key: key);
+  CustomAnimationButton(
+      {Key? key,
+      required this.text,
+      this.black = false,
+      required this.onPressed,
+      this.border,
+      this.state})
+      : super(key: key);
 
   @override
   CustomButtonState createState() => CustomButtonState();
@@ -55,12 +55,13 @@ class CustomButtonState extends State<CustomAnimationButton>
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-              color: animation
-                  ? const Color.fromRGBO(23, 23, 23, 1.0)
-                  : widget.black
-                      ? const Color.fromRGBO(23, 23, 23, 1.0)
-                      : const Color.fromRGBO(32, 230, 131, 1.0),
-              width: 2.sp),
+            color: animation
+                ? const Color.fromRGBO(23, 23, 23, 1.0)
+                : widget.black
+                    ? const Color.fromRGBO(23, 23, 23, 1.0)
+                    : const Color.fromRGBO(32, 230, 131, 1.0),
+            width: 1.sp,
+          ),
         ),
         duration: const Duration(milliseconds: 300),
         child: Stack(
@@ -95,10 +96,10 @@ class CustomButtonState extends State<CustomAnimationButton>
       ),
       onTap: () {
         // if(widget.state != null && widget.state!) {
-          setState(() {
-            controller.forward();
-            animation = false;
-          });
+        setState(() {
+          controller.forward();
+          animation = false;
+        });
         // }
       },
     );

@@ -97,13 +97,13 @@ class RelationShips extends StatelessWidget {
                                 padding:
                                     EdgeInsets.only(top: 20.h, bottom: 10.h),
                                 child: Material(
-                                          color: const Color.fromRGBO(150, 150, 150, 1),
-                                          shape: SquircleBorder(
-                                            radius: BorderRadius.all(
-                                              Radius.circular(80.r),
-                                            ),
-                                          ),
-                                          clipBehavior: Clip.hardEdge,
+                                  color: const Color.fromRGBO(150, 150, 150, 1),
+                                  shape: SquircleBorder(
+                                    radius: BorderRadius.all(
+                                      Radius.circular(80.r),
+                                    ),
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
                                   child: bloc.user == null
                                       ? bloc.image != null
                                           ? Image.file(
@@ -145,7 +145,10 @@ class RelationShips extends StatelessWidget {
                             )
                           ],
                         ),
-                        SvgPicture.asset('assets/icons/logov2.svg'),
+                        Padding(
+                          padding: EdgeInsets.all(18.w),
+                          child: SvgPicture.asset('assets/icons/logov2.svg'),
+                        ),
                         Column(
                           children: [
                             Align(
@@ -154,13 +157,13 @@ class RelationShips extends StatelessWidget {
                                 padding:
                                     EdgeInsets.only(top: 20.h, bottom: 10.h),
                                 child: Material(
-                                          color: const Color.fromRGBO(150, 150, 150, 1),
-                                          shape: SquircleBorder(
-                                            radius: BorderRadius.all(
-                                              Radius.circular(80.r),
-                                            ),
-                                          ),
-                                          clipBehavior: Clip.hardEdge,
+                                  color: const Color.fromRGBO(150, 150, 150, 1),
+                                  shape: SquircleBorder(
+                                    radius: BorderRadius.all(
+                                      Radius.circular(80.r),
+                                    ),
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
                                   child: bloc.user?.love?.photo != null
                                       ? Image.network(
                                           apiUrl + bloc.user!.love!.photo,
@@ -199,6 +202,7 @@ class RelationShips extends StatelessWidget {
                               maximumDate: DateTime.now(),
                               locale: const Locale('ru', 'RU'),
                               onDateTimeChanged: (DateTime value) {
+                                bloc.add(TextFieldFilled(true));
                                 date = value.toString().substring(0, 10);
                                 _streamController.sink.add(value);
                               },

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/enums.dart';
 import 'package:be_loved/core/helpers/shared_prefs.dart';
@@ -13,29 +15,81 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 
-class CodePage extends StatelessWidget {
+class CodePage extends StatefulWidget {
   CodePage({Key? key}) : super(key: key);
 
+  @override
+  State<CodePage> createState() => _CodePageState();
+}
+
+class _CodePageState extends State<CodePage> {
   final FocusNode focusNode = FocusNode();
+
   int? code;
+
+  int start = 10;
+
+  Timer? _timer;
+
   String? phone;
-  String? error;
+
+  bool resendCode = false;
+
   TextEditingController textEditingController = TextEditingController();
 
-  void _checkCode(BuildContext context) => BlocProvider.of<AuthBloc>(context).add(CheckUser(phone ?? '', textEditingController.text, code ?? 0));
+  @override
+  void initState() {
+    startTimer();
+    super.initState();
+  }
+
+  void _checkCode(BuildContext context) => BlocProvider.of<AuthBloc>(context)
+      .add(CheckUser(phone ?? '', textEditingController.text, code ?? 0));
+
+  void startTimer() {
+    start = 10;
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_timer != null) {
+          if (start == 0) {
+            setState(() {
+              timer.cancel();
+            });
+            resendCode = true;
+            //widget.previewPage();
+          } else {
+            setState(() {
+              start--;
+            });
+          }
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
       if (current is CodeSuccess) {
-        error = null;
         if (current.existUser == ExistUser.notExist) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => CreateAccountInfo(),
             ),
-          );
+          ).then((value) {
+            if (textEditingController.text.length == 5) {
+              BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
+            }
+          });
         } else {
           BlocProvider.of<AuthBloc>(context).add(GetUser());
           Future.delayed(const Duration(milliseconds: 500), () {
@@ -45,7 +99,11 @@ class CodePage extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => InviteRelation(previousPage: () {}),
                 ),
-              );
+              ).then((value) {
+                if (textEditingController.text.length == 5) {
+                  BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
+                }
+              });
             } else {
               MySharedPrefs().setUser(current.token,
                   BlocProvider.of<AuthBloc>(context, listen: false).user!);
@@ -60,7 +118,7 @@ class CodePage extends StatelessWidget {
           });
         }
       }
-      if (current is CodeError) error = current.error;
+      // if (current is CodeError) error = current.error;
 
       return true;
     }, builder: (context, state) {
@@ -121,12 +179,20 @@ class CodePage extends StatelessWidget {
                           pinAnimationType: PinAnimationType.none,
                           showCursor: false,
                           length: 5,
+                          androidSmsAutofillMethod:
+                              AndroidSmsAutofillMethod.smsRetrieverApi,
+                          // obscuringCharacter: '0',
                           controller: textEditingController,
                           focusNode: focusNode,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           onChanged: (value) {
-                            if (value.length == 5) {
+                            if (value.length == 5 && value == code.toString()) {
+                              BlocProvider.of<AuthBloc>(context)
+                                  .add(TextFieldFilled(true));
                               focusNode.unfocus();
+                            } else {
+                              BlocProvider.of<AuthBloc>(context)
+                                  .add(TextFieldFilled(false));
                             }
                           },
                           defaultPinTheme: PinTheme(
@@ -144,31 +210,41 @@ class CodePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 5.h, bottom: 44.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(error ?? '', style: const TextStyle(color: Colors.red)),
-                        ],
-                      ),
+                    SizedBox(height: 51.h),
+                    CustomButton(
+                      color: const Color.fromRGBO(32, 203, 131, 1.0),
+                      text: 'Продолжить',
+                      textColor: Colors.white,
+                      onPressed: () => _checkCode(context),
                     ),
-                    CustomButton(color: const Color.fromRGBO(32, 203, 131, 1.0), text: 'Продолжить', textColor: Colors.white, onPressed: () => _checkCode(context)),
                     // CustomAnimationButton(
                     //   text: 'Продолжить',
                     //   border: Border.all(
-                    //       color: 
+                    //       color:
                     //       width: 2.sp),
                     //   onPressed: () => _checkCode(context),
                     // ),
                     SizedBox(height: 17.h),
-                    CustomAnimationButton(
-                      black: true,
-                      text: 'Отправить код снова',
+                    CustomButton(
+                      // black: true,
+                      validate: resendCode,
+                      code: true,
+                      text: resendCode ? 'Отправить код снова' : _getTime(),
                       border: Border.all(
                           color: const Color.fromRGBO(23, 23, 23, 1.0),
                           width: 2.sp),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (textEditingController.text.length == 5) {
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(TextFieldFilled(true));
+                        }
+                        resendCode = false;
+                        if (_timer?.isActive == false) {
+                          startTimer();
+                        }
+                      },
+                      color: Colors.black,
+                      textColor: Colors.white,
                     ),
                   ],
                 ),
@@ -176,5 +252,15 @@ class CodePage extends StatelessWidget {
             )),
       );
     });
+  }
+
+  String _getTime() {
+    if (start <= 60) {
+      return 'Отправить код снова 0:${start < 10 ? '0$start' : start}';
+    } else if (start == 120) {
+      return 'Отправить код снова 2:00';
+    } else {
+      return 'Отправить код снова 1:${start < 10 ? '0${start - 60}' : start - 60}';
+    }
   }
 }

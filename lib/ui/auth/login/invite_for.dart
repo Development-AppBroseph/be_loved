@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 class InviteFor extends StatefulWidget {
   const InviteFor({Key? key, required this.previewPage, required this.nextPage})
@@ -26,6 +27,7 @@ class InviteFor extends StatefulWidget {
 class _InviteForState extends State<InviteFor> {
   final streamController = StreamController<int>();
 
+  bool _accepted = false;
   int start = 30;
   Timer? _timer;
   Timer? timerSecond;
@@ -83,6 +85,7 @@ class _InviteForState extends State<InviteFor> {
       if (current is InviteAccepted) {
         _timer?.cancel();
         _timer = null;
+        _accepted = true;
         return true;
       }
       if (current is ReletionshipsStarted) {
@@ -102,223 +105,289 @@ class _InviteForState extends State<InviteFor> {
       var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-        body: SafeArea(
-            bottom: true,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.sp),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'Приглашение от\n',
-                          style: GoogleFonts.inter(
-                            fontSize: 35.sp,
-                            fontWeight: FontWeight.bold,
-                            color: const Color.fromRGBO(23, 23, 23, 1.0),
-                          ),
-                        ),
-                        TextSpan(
-                          text: bloc.user?.love?.username,
-                          style: GoogleFonts.inter(
-                            fontSize: 35.sp,
-                            fontWeight: FontWeight.bold,
-                            color: const Color.fromRGBO(255, 29, 29, 1.0),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    'Начало истории?',
-                    style: GoogleFonts.inter(
-                        fontSize: 15.sp,
-                        color: const Color.fromRGBO(137, 137, 137, 1.0),
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        body: Stack(
+          children: [
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              opacity: _accepted ? 1 : 0,
+              child: Center(
+                child: Lottie.asset('assets/animations/loading.json'),
+              ),
+            ),
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              opacity: _accepted ? 1 : 0,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 60.h),
+                  height: 80.w,
+                  child: Column(
                     children: [
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(35.sp),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 135.h,
-                                  width: 135.h,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(35.sp),
-                                    color: const Color.fromRGBO(
-                                        150, 150, 150, 1.0),
-                                  ),
-                                  child: bloc.user == null
-                                      ? bloc.image != null
-                                          ? Image.file(
-                                              File(bloc.image!.path),
-                                              width: 135.h,
-                                              height: 135.h,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Padding(
-                                              padding: EdgeInsets.all(43.h),
-                                              child: SvgPicture.asset(
-                                                  'assets/icons/camera.svg'),
-                                            )
-                                      : bloc.user?.me.photo != null
-                                          ? Image.network(
-                                              apiUrl + bloc.user!.me.photo,
-                                              width: 135.h,
-                                              height: 135.h,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Padding(
-                                              padding: EdgeInsets.all(43.h),
-                                              child: SvgPicture.asset(
-                                                'assets/icons/camera.svg',
-                                              ),
-                                            ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            bloc.user != null
-                                ? bloc.user!.me.username
-                                : bloc.nickname.toString(),
-                            style: GoogleFonts.inter(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                              color: const Color.fromRGBO(23, 23, 23, 1.0),
-                            ),
-                          )
-                        ],
+                      Text(
+                        'Ждемс, пока партнер',
+                        style: GoogleFonts.inter(
+                          fontSize: 17.sp,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      SvgPicture.asset('assets/icons/logov3.svg'),
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(35.sp),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  // padding: EdgeInsets.all(43.h),
-                                  height: 135.h,
-                                  width: 135.h,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(35.sp),
-                                    color: const Color.fromRGBO(
-                                        150, 150, 150, 1.0),
-                                  ),
-                                  child: bloc.user?.love?.photo != null
-                                      ? Image.network(
-                                          apiUrl + bloc.user!.love!.photo,
-                                          width: 135.h,
-                                          height: 135.h,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Padding(
-                                          padding: EdgeInsets.all(43.h),
-                                          child: SvgPicture.asset(
-                                            'assets/icons/camera.svg',
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            bloc.user?.love?.username ?? '',
-                            style: GoogleFonts.inter(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                              color: const Color.fromRGBO(23, 23, 23, 1.0),
-                            ),
-                          )
-                        ],
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Text(
+                        'выбирает дату отношений',
+                        style: GoogleFonts.inter(
+                          fontSize: 17.sp,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 60.sp,
-                    width: 0.78.sw,
-                    child: TextField(
-                      style: GoogleFonts.inter(
-                          fontSize: 25.sp,
-                          fontWeight: FontWeight.bold,
-                          color: const Color.fromRGBO(150, 150, 150, 1.0)),
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20)),
-                    ),
-                  ),
-                  SizedBox(height: 40.h),
-                  CustomAnimationButton(
-                    text: 'Принять',
-                    onPressed: () async {
-                      BlocProvider.of<AuthBloc>(context)
-                          .add(AcceptReletionships());
-                    },
-                  ),
-                  SizedBox(height: 40.h),
-                  if (bloc.user?.status != 'Принято')
-                    CustomButton(
-                      color: redColor,
-                      text: 'Отменить 0:${start < 10 ? '0$start' : start}',
-                      textColor: Colors.white,
-                      onPressed: widget.previewPage,
-                    ),
-                  SizedBox(height: 50.h),
-                  if (bloc.user?.status != 'Принято')
-                    Center(
-                      child: GestureDetector(
-                        onHorizontalDragUpdate: (details) {
-                          BlocProvider.of<AuthBloc>(context)
-                              .add(DeleteInviteUser());
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 100,
-                          color: Colors.transparent,
-                          child: Column(
-                            children: [
-                              Text(
-                                'Свайп для отмены',
+                ),
+              ),
+            ),
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              opacity: _accepted ? 0 : 1,
+              child: SafeArea(
+                  bottom: true,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.sp),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Приглашение от\n',
                                 style: GoogleFonts.inter(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color.fromRGBO(
-                                        150, 150, 150, 1.0)),
+                                  fontSize: 35.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromRGBO(23, 23, 23, 1.0),
+                                ),
                               ),
-                              Transform.rotate(
-                                angle: -pi / 2,
-                                child: SvgPicture.asset(
-                                  'assets/icons/back.svg',
-                                  width: 15.sp,
-                                  color:
-                                      const Color.fromRGBO(150, 150, 150, 1.0),
+                              TextSpan(
+                                text: bloc.user?.love?.username,
+                                style: GoogleFonts.inter(
+                                  fontSize: 35.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromRGBO(255, 29, 29, 1.0),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    )
-                ],
-              ),
-            )),
+                        Text(
+                          'Начало истории?',
+                          style: GoogleFonts.inter(
+                              fontSize: 15.sp,
+                              color: const Color.fromRGBO(137, 137, 137, 1.0),
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 20.h, bottom: 10.h),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(35.sp),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        height: 135.h,
+                                        width: 135.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(35.sp),
+                                          color: const Color.fromRGBO(
+                                              150, 150, 150, 1.0),
+                                        ),
+                                        child: bloc.user == null
+                                            ? bloc.image != null
+                                                ? Image.file(
+                                                    File(bloc.image!.path),
+                                                    width: 135.h,
+                                                    height: 135.h,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Padding(
+                                                    padding:
+                                                        EdgeInsets.all(43.h),
+                                                    child: SvgPicture.asset(
+                                                        'assets/icons/camera.svg'),
+                                                  )
+                                            : bloc.user?.me.photo != null
+                                                ? Image.network(
+                                                    apiUrl +
+                                                        bloc.user!.me.photo,
+                                                    width: 135.h,
+                                                    height: 135.h,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Padding(
+                                                    padding:
+                                                        EdgeInsets.all(43.h),
+                                                    child: SvgPicture.asset(
+                                                      'assets/icons/camera.svg',
+                                                    ),
+                                                  ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  bloc.user != null
+                                      ? bloc.user!.me.username
+                                      : bloc.nickname.toString(),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        const Color.fromRGBO(23, 23, 23, 1.0),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(15.w),
+                              child:
+                                  SvgPicture.asset('assets/icons/logov3.svg'),
+                            ),
+                            Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 20.h, bottom: 10.h),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(35.sp),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        // padding: EdgeInsets.all(43.h),
+                                        height: 135.h,
+                                        width: 135.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(35.sp),
+                                          color: const Color.fromRGBO(
+                                              150, 150, 150, 1.0),
+                                        ),
+                                        child: bloc.user?.love?.photo != null
+                                            ? Image.network(
+                                                apiUrl + bloc.user!.love!.photo,
+                                                width: 135.h,
+                                                height: 135.h,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Padding(
+                                                padding: EdgeInsets.all(43.h),
+                                                child: SvgPicture.asset(
+                                                  'assets/icons/camera.svg',
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  bloc.user?.love?.username ?? '',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        const Color.fromRGBO(23, 23, 23, 1.0),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 60.sp,
+                          width: 0.78.sw,
+                          child: TextField(
+                            style: GoogleFonts.inter(
+                              fontSize: 25.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color.fromRGBO(150, 150, 150, 1.0),
+                            ),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 20),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 40.h),
+                        CustomAnimationButton(
+                          text: 'Принять',
+                          onPressed: () async {
+                            BlocProvider.of<AuthBloc>(context)
+                                .add(AcceptReletionships());
+                          },
+                        ),
+                        SizedBox(height: 40.h),
+                        // if (bloc.user?.status != 'Принято')
+                        CustomButton(
+                          color: redColor,
+                          text: 'Отменить 0:${start < 10 ? '0$start' : start}',
+                          textColor: Colors.white,
+                          validate: true,
+                          onPressed: widget.previewPage,
+                        ),
+                        SizedBox(height: 50.h),
+
+                        Center(
+                          child: GestureDetector(
+                            onVerticalDragEnd: (details) {
+                              widget.previewPage();
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 100,
+                              color: Colors.transparent,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Свайп для отмены',
+                                    style: GoogleFonts.inter(
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color.fromRGBO(
+                                            150, 150, 150, 1.0)),
+                                  ),
+                                  Transform.rotate(
+                                    angle: -pi / 2,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/back.svg',
+                                      width: 15.sp,
+                                      color: const Color.fromRGBO(
+                                          150, 150, 150, 1.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+          ],
+        ),
       );
     });
   }

@@ -22,7 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   String? secretKey;
   String? nickname;
   String? phone;
-  XFile? image;
+  File? image;
   UserAnswer? user;
 
   AuthBloc() : super(AuthStated()) {
@@ -39,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AcceptReletionships>((event, emit) => _acceptInviteUser(event, emit));
     on<LogOut>((event, emit) => _logOut(event, emit));
     on<EditUserInfo>((event, emit) => _editUserInfo(event, emit));
+    on<TextFieldFilled>((event, emit) => _textFieldChangeState(event, emit));
   }
 
   void _sendPhone(SendPhone event, Emitter<AuthState> emit) async {
@@ -47,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     secretKey = null;
     phone = event.phone;
     emit(AuthLoading());
-    if(event.phone.length == 12) {
+    if (event.phone.length == 12) {
       var result = await Repository().registration(event.phone);
       if (result != null) {
         code = result;
@@ -55,8 +56,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else {
         emit(PhoneError('Неверный формат номера'));
       }
-    }
-    else {
+    } else {
       emit(PhoneError('Введите номер телефона'));
     }
   }
@@ -65,8 +65,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     var result = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
+    print(result);
     if (result != null) {
-      image = result;
+      var file = File(result.path);
+      final filePath = file.absolute.path;
+
+      final lastIndex = filePath.lastIndexOf(RegExp(r'.'));
+      final splitted = filePath.substring(0, (lastIndex));
+      final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+      emit(AuthLoading());
+      var compressedImage = await FlutterImageCompress.compressAndGetFile(
+        file.path,
+        outPath,
+        quality: 30,
+      );
+      image = compressedImage;
       var res = await Repository().editUser(image);
     } else {
       emit(ImageError());
@@ -78,7 +91,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (event.codeUser.length == 5) {
       if (event.codeUser == code.toString()) {
-        var result = await Repository().checkIsUserExist(event.phone, event.code);
+        var result =
+            await Repository().checkIsUserExist(event.phone, event.code);
         if (result != null) {
           if (result.token != null) {
             await SharedPreferences.getInstance()
@@ -114,8 +128,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _setNickname(SetNickname event, Emitter<AuthState> emit) {
-    if(event.nickname.isNotEmpty) {
-      if(event.nickname.length > 12) {
+    if (event.nickname.isNotEmpty) {
+      if (event.nickname.length > 12) {
         emit(NicknameError('Максимальное количество символов 12'));
       } else {
         nickname = event.nickname;
@@ -130,17 +144,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     var result = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
+    print(result);
     if (result != null) {
-      emit(ImageSuccess(result));
-      image = result;
-    } else {
-      emit(ImageError());
-    }
-  }
-
-  void _initUser(InitUser event, Emitter<AuthState> emit) async {
-    try {
-      var file = File(image!.path);
+      var file = File(result.path);
       final filePath = file.absolute.path;
 
       final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
@@ -152,9 +158,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         outPath,
         quality: 30,
       );
+      emit(ImageSuccess(result));
+      image = compressedImage;
+    } else {
+      emit(ImageError());
+    }
+  }
 
-      var result = await Repository()
-          .initUser(secretKey ?? '', nickname ?? '', compressedImage);
+  void _initUser(InitUser event, Emitter<AuthState> emit) async {
+    try {
+      var result = await Repository().initUser(
+        secretKey ?? '',
+        nickname ?? '',
+        File(image!.path),
+      );
 
       if (result != null) {
         token = result;
@@ -164,7 +181,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else {
         emit(InitError('Выберите аватарку'));
       }
-    } catch(e) {
+    } catch (e) {
       emit(InitError('Выберите аватарку'));
     }
   }
@@ -213,35 +230,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _inviteUser(InviteUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     if (event.phone.length == 12) {
+      print('aboba');
       var result = await Repository().inviteUser(event.phone);
+      print(result);
 
       if (result != null) {
         user = result;
         emit(InviteSuccess());
-      } else {
-        StandartSnackBar.show(
-          'Укажите номер пользователя',
-          SnackBarStatus(Icons.error, redColor),
-        );
       }
     } else {
-      // error = 'Укажите номер пользователя';
       emit(InviteError('Укажите номер пользователя'));
       return;
     }
-    
   }
 
   void _deleteInviteUser(
       DeleteInviteUser event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    var result = await Repository().deleteInviteUser(user!.relationId!);
+    if (user?.relationId != null) {
+      emit(AuthLoading());
+      var result = await Repository().deleteInviteUser(user!.relationId!);
 
-    if (result != null) {
-      user = result;
-      emit(DeleteInviteSuccess());
-    } else {
-      emit(DeleteInviteError());
+      if (result != null) {
+        user = result;
+        emit(DeleteInviteSuccess());
+      } else {
+        emit(DeleteInviteError());
+      }
     }
   }
 
@@ -280,5 +294,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // ignore: use_build_context_synchronously
     MySharedPrefs().logOut(event.context);
     emit(AuthStated());
+  }
+
+  void _textFieldChangeState(
+      TextFieldFilled event, Emitter<AuthState> emit) async {
+    if (event.filled) {
+      emit(TextFieldSuccess());
+    } else {
+      emit(TextFieldError());
+    }
   }
 }

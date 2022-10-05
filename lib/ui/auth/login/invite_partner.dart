@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/auth/login/inviteFor_start_relationship.dart';
+import 'package:be_loved/ui/auth/login/invite_for.dart';
 import 'package:be_loved/ui/auth/login/relationships.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:be_loved/widgets/alerts/snack_bar.dart';
@@ -12,6 +13,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart' as Get;
+import 'package:get/instance_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InvitePartner extends StatefulWidget {
@@ -31,9 +34,8 @@ class _InvitePartnerState extends State<InvitePartner> {
 
   final _phoneController = TextEditingController();
 
-  String? error;
-
-  void _inviteUser(BuildContext context) => BlocProvider.of<AuthBloc>(context).add(InviteUser(_phoneController.text));
+  void _inviteUser(BuildContext context) =>
+      BlocProvider.of<AuthBloc>(context).add(InviteUser(_phoneController.text));
 
   @override
   void initState() {
@@ -57,43 +59,56 @@ class _InvitePartnerState extends State<InvitePartner> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
       if (current is InviteSuccess) {
-        error = null;
         StandartSnackBar.show(
           'Приглашение успешно отправлено',
           SnackBarStatus(Icons.done, Colors.green),
         );
       }
       if (current is InviteAccepted && current.fromYou) {
-        error = null;
         _timer.cancel();
+        // Get.Get.to(
+        //   RelationShips(previewPage: () {}, prevPage: () {}),
+        //   duration: Duration(seconds: 1),
+        //   transition: Get.Transition.upToDown,
+        // );
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                RelationShips(previewPage: () {}, prevPage: () {}),
+            builder: (context) => RelationShips(
+              previewPage: () {},
+              prevPage: () {},
+            ),
           ),
         ).then((value) => _startSearch(context));
       }
       if (current is InviteError) {
-        error = current.error;
         StandartSnackBar.show(
           'Приглашение не удалось отправить',
           SnackBarStatus(Icons.error, redColor),
         );
       }
       if (current is ReceiveInvite && previous is ReceiveInvite == false) {
-        error = null;
         _timer.cancel();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => InviteForStartRelationship(nextPage: () {}),
-            fullscreenDialog: true,
-          ),
-        ).then((value) => _startSearch(context));
+        Get.Get.to(
+          InviteFor(
+              previewPage: () {
+                BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+              },
+              nextPage: () {}),
+          duration: Duration(seconds: 1),
+          transition: Get.Transition.upToDown,
+        )?.then((value) => _startSearch(context));
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => InviteForStartRelationship(nextPage: () {}),
+        //     fullscreenDialog: true,
+        //   ),
+        // ).then((value) => _startSearch(context));
       }
       return true;
     }, builder: (context, state) {
+      print(_phoneController.text.length == 12);
       var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         appBar: appBar(context),
@@ -160,15 +175,18 @@ class _InvitePartnerState extends State<InvitePartner> {
                                 children: [
                                   Align(
                                     alignment: Alignment.center,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
+                                    child: Container(
+                                      width: 135.h,
+                                      height: 135.h,
+                                      margin: EdgeInsets.only(
                                           top: 20.h, bottom: 10.h),
                                       child: GestureDetector(
                                         onTap: () {
-                                          bloc.add(EditUserInfo());
+                                          // bloc.add(EditUserInfo());
                                         },
                                         child: Material(
-                                          color: const Color.fromRGBO(150, 150, 150, 1),
+                                          color: const Color.fromRGBO(
+                                              150, 150, 150, 1),
                                           shape: SquircleBorder(
                                             radius: BorderRadius.all(
                                               Radius.circular(80.r),
@@ -176,17 +194,31 @@ class _InvitePartnerState extends State<InvitePartner> {
                                           ),
                                           clipBehavior: Clip.hardEdge,
                                           child: bloc.user != null
-                                                  ? Image.file(
-                                                      File(bloc.image!.path),
-                                                      width: 135.h,
-                                                      height: 135.h,
+                                              ? bloc.user?.me.photo != null
+                                                  ? Image.network(
+                                                      apiUrl +
+                                                          bloc.user!.me.photo,
                                                       fit: BoxFit.cover,
                                                     )
                                                   : Padding(
                                                       padding:
                                                           EdgeInsets.all(43.h),
                                                       child: SvgPicture.asset(
+                                                        'assets/icons/camera.svg',
+                                                      ),
+                                                    )
+                                              : bloc.image == null
+                                                  ? Padding(
+                                                      padding:
+                                                          EdgeInsets.all(43.h),
+                                                      child: SvgPicture.asset(
                                                           'assets/icons/camera.svg'),
+                                                    )
+                                                  : Image.file(
+                                                      File(bloc.image!.path),
+                                                      width: 135.h,
+                                                      height: 135.h,
+                                                      fit: BoxFit.cover,
                                                     ),
                                         ),
                                       ),
@@ -205,7 +237,11 @@ class _InvitePartnerState extends State<InvitePartner> {
                                   )
                                 ],
                               ),
-                              SvgPicture.asset('assets/icons/logo.svg'),
+                              Padding(
+                                padding: EdgeInsets.all(18.w),
+                                child:
+                                    SvgPicture.asset('assets/icons/logo.svg'),
+                              ),
                               Column(
                                 children: [
                                   Align(
@@ -214,7 +250,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                       padding: EdgeInsets.only(
                                           top: 20.h, bottom: 10.h),
                                       child: Material(
-                                        color: const Color.fromRGBO(150, 150, 150, 1),
+                                        color: const Color.fromRGBO(
+                                            150, 150, 150, 1),
                                         shape: SquircleBorder(
                                           radius: BorderRadius.all(
                                             Radius.circular(80.r),
@@ -223,8 +260,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                         clipBehavior: Clip.hardEdge,
                                         child: bloc.user?.love?.photo != null
                                             ? Image.network(
-                                                apiUrl +
-                                                    bloc.user!.love!.photo,
+                                                apiUrl + bloc.user!.love!.photo,
                                                 width: 135.h,
                                                 height: 135.h,
                                                 fit: BoxFit.cover,
@@ -268,13 +304,35 @@ class _InvitePartnerState extends State<InvitePartner> {
                                 style: GoogleFonts.inter(
                                   fontSize: 25.sp,
                                   fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(210, 204, 204, 1),
+                                  color: Colors.black,
                                 ),
                                 keyboardType: TextInputType.phone,
-                                inputFormatters: [LengthLimitingTextInputFormatter(12)],
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(12),
+                                  // CustomInputFormatter()
+                                ],
+                                onChanged: (text) {
+                                  if (text.length == 1 && text != '+') {
+                                    // setState(() {
+                                    _phoneController.text = '+7$text';
+                                    _phoneController.selection =
+                                        TextSelection.fromPosition(
+                                      TextPosition(
+                                        offset: _phoneController.text.length,
+                                      ),
+                                    );
+                                    // });
+                                  }
+                                  if (text.length == 12) {
+                                    bloc.add(TextFieldFilled(true));
+                                  } else {
+                                    bloc.add(TextFieldFilled(false));
+                                  }
+                                },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: '+79456646786',
+                                  hintText: '+79990009900',
+                                  alignLabelWithHint: true,
                                   hintStyle: GoogleFonts.inter(
                                     fontSize: 25.sp,
                                     fontWeight: FontWeight.bold,
@@ -288,19 +346,17 @@ class _InvitePartnerState extends State<InvitePartner> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 5.h),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(error ?? '', style: const TextStyle(color: Colors.red))
-                              ],
-                            ),
-                          ),
                           SizedBox(
                             height: 40.h,
                           ),
-                          CustomButton(color: const Color.fromRGBO(32, 203, 131, 1.0), text: 'Продолжить', textColor: Colors.white, onPressed: () => _inviteUser(context)),
+                          CustomButton(
+                            color: const Color.fromRGBO(32, 203, 131, 1.0),
+                            text: 'Продолжить',
+                            validate: _phoneController.text.length == 12,
+                            code: false,
+                            textColor: Colors.white,
+                            onPressed: () => _inviteUser(context),
+                          ),
                           // CustomAnimationButton(
                           //   text: 'Продолжить',
                           //   border: Border.all(
@@ -313,10 +369,12 @@ class _InvitePartnerState extends State<InvitePartner> {
                           // ),
                           SizedBox(height: 17.h),
                           CustomButton(
-                            visible: bloc.user?.love != null,
+                            visible:
+                                bloc.user?.love != null && bloc.user!.fromYou!,
                             color: redColor,
                             text: 'Отменить приглашение',
                             textColor: Colors.white,
+                            validate: true,
                             onPressed: () async {
                               // nextPage();
                               BlocProvider.of<AuthBloc>(context)
@@ -388,3 +446,40 @@ class _InvitePartnerState extends State<InvitePartner> {
     );
   }
 }
+
+// class CustomInputFormatter extends TextInputFormatter {
+//   @override
+//   TextEditingValue formatEditUpdate(
+//       TextEditingValue oldValue, TextEditingValue newValue) {
+//     var text = newValue.text;
+
+//     if (newValue.selection.baseOffset == 0) {
+//       return newValue;
+//     }
+
+//     if (text.length == 11) {
+//       return oldValue;
+//     }
+
+//     var buffer = StringBuffer();
+//     if (text.length <= 16) {
+//       for (int i = 0; i < text.length; i++) {
+//         buffer.write(text[i]);
+//         var nonZeroIndex = i + 1;
+//         if (nonZeroIndex % 2 == 0 && nonZeroIndex != text.length && i < 5) {
+//           buffer.write(
+//               ' '); // Replace this with anything you want to put after each 4 numbers
+//         } else if (nonZeroIndex % 2 == 0 &&
+//             nonZeroIndex != text.length &&
+//             i >= 5) {
+//           buffer.write(' ');
+//         }
+//       }
+//     }
+
+//     var string = buffer.toString();
+//     return newValue.copyWith(
+//         text: string,
+//         selection: TextSelection.collapsed(offset: string.length));
+//   }
+// }

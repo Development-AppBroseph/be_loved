@@ -17,14 +17,14 @@ class InputNamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
-      if(current is NicknameSuccess) {
+      if (current is NicknameSuccess) {
         error = null;
         nextPage();
-      } else if(current is NicknameError) {
+      } else if (current is NicknameError) {
         error = current.error;
       }
       return true;
-    },builder: (context, state) {
+    }, builder: (context, state) {
       return Scaffold(
         appBar: appBar(context),
         backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
@@ -66,26 +66,45 @@ class InputNamePage extends StatelessWidget {
                           fontWeight: FontWeight.w600),
                     ),
                     Padding(
-                        padding: EdgeInsets.only(top: 44.h),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 70.sp,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              alignment: Alignment.center,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: 60.sp,
-                                    width: 0.78.sw,
-                                    child: TextField(
-                                      inputFormatters: [LengthLimitingTextInputFormatter(12)],
-                                      controller: _nicknameController,
-                                      style: GoogleFonts.inter(
+                      padding: EdgeInsets.only(top: 44.h),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 70.sp,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 60.sp,
+                                  width: 0.78.sw,
+                                  child: TextField(
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(12)
+                                    ],
+                                    onChanged: (text) {
+                                      if (text.length > 1) {
+                                        BlocProvider.of<AuthBloc>(context)
+                                            .add(TextFieldFilled(true));
+                                      } else {
+                                        BlocProvider.of<AuthBloc>(context)
+                                            .add(TextFieldFilled(false));
+                                      }
+                                    },
+                                    controller: _nicknameController,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 25.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Арбуз',
+                                      hintStyle: GoogleFonts.inter(
                                         fontSize: 25.sp,
                                         fontWeight: FontWeight.bold,
                                         color: const Color.fromRGBO(
@@ -95,36 +114,29 @@ class InputNamePage extends StatelessWidget {
                                           1.0,
                                         ),
                                       ),
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                        ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 20,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        )),
-                    Padding(
-                      padding: EdgeInsets.only(top: 5.h, bottom: 44.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(error ?? '', style: const TextStyle(color: Colors.red))
+                          ),
                         ],
                       ),
                     ),
+                    const SizedBox(height: 61),
                     CustomButton(
-                      color: const Color.fromRGBO(32, 203, 131, 1.0), 
-                      text: 'Продолжить', 
-                      textColor: Colors.white, 
-                      onPressed: (){
-                        BlocProvider.of<AuthBloc>(context).add(SetNickname(_nicknameController.text));
-                      }
-                    ),
+                        color: const Color.fromRGBO(32, 203, 131, 1.0),
+                        text: 'Продолжить',
+                        textColor: Colors.white,
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(SetNickname(_nicknameController.text));
+                        }),
                     // CustomAnimationButton(
                     //   text: 'Продолжить',
                     //   border: Border.all(

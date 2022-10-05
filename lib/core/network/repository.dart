@@ -37,21 +37,29 @@ class Repository {
   //   }
   // }
 
-  Future<bool?> editUser(XFile? xFile) async {
+  Future<bool?> editUser(File? file) async {
     var options = Options(headers: {
       'Authorization': 'Token ${await MySharedPrefs().token}',
     }, validateStatus: (status) => status! <= 500);
-    
+
     try {
-      var response = await dio.put('auth/users', options: options, data: FormData.fromMap({
-        'photo': MultipartFile.fromFileSync(xFile!.path, filename: xFile.path)
-      }));
+      var response = await dio.put('auth/users',
+          options: options,
+          data: FormData.fromMap({
+            'photo': MultipartFile.fromFileSync(file!.path, filename: file.path)
+          }));
       if (response.statusCode == 200) {
         return true;
       }
       if (response.statusCode == 400) {
         StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
+          DetailsAnswer.fromJson(
+            response.data,
+            response.data.toString().split(':').first.substring(
+                  1,
+                  response.data.toString().split(':').length,
+                ),
+          ).details,
           SnackBarStatus(Icons.error, redColor),
         );
       }
@@ -74,7 +82,13 @@ class Repository {
       }
       if (response.statusCode == 400) {
         StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
+          DetailsAnswer.fromJson(
+            response.data,
+            response.data.toString().split(':').first.substring(
+                  1,
+                  response.data.toString().split(':').length,
+                ),
+          ).details,
           SnackBarStatus(Icons.error, redColor),
         );
       }
@@ -122,7 +136,13 @@ class Repository {
       }
       if (response.statusCode == 400) {
         StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
+          DetailsAnswer.fromJson(
+            response.data,
+            response.data.toString().split(':').first.substring(
+                  1,
+                  response.data.toString().split(':').length,
+                ),
+          ).details,
           SnackBarStatus(Icons.error, redColor),
         );
       }
@@ -144,7 +164,7 @@ class Repository {
         data: FormData.fromMap(
           {
             'secret_key': secretKey,
-            'username': nickname.toLowerCase(),
+            'username': nickname,
             'photo': xFile != null
                 ? MultipartFile.fromFileSync(xFile.path, filename: xFile.path)
                 : null,
@@ -160,7 +180,13 @@ class Repository {
       }
       if (response.statusCode == 400) {
         StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
+          DetailsAnswer.fromJson(
+            response.data,
+            response.data.toString().split(':').first.substring(
+                  1,
+                  response.data.toString().split(':').length,
+                ),
+          ).details,
           SnackBarStatus(Icons.error, redColor),
         );
       }
@@ -177,7 +203,8 @@ class Repository {
   Future<UserAnswer?> inviteUser(String phone) async {
     var options = Options(headers: {
       'Authorization': 'Token ${await MySharedPrefs().token}',
-    }, validateStatus: (status) => status! <= 500);
+    }, validateStatus: (status) => status! <= 400);
+    print('phone');
     try {
       var response = await dio.post(
         '/relations/',
@@ -191,13 +218,20 @@ class Repository {
       }
       if (response.statusCode == 400) {
         StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
+          DetailsAnswer.fromJson(
+            response.data,
+            response.data.toString().split(':').first.substring(
+                  1,
+                  response.data.toString().split(':').first.length,
+                ),
+          ).details,
           SnackBarStatus(Icons.error, redColor),
         );
       }
 
       return null;
     } catch (e) {
+      print(e);
       return null;
     }
   }
@@ -218,7 +252,13 @@ class Repository {
       }
       if (response.statusCode == 400) {
         StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
+          DetailsAnswer.fromJson(
+            response.data,
+            response.data.toString().split(':').first.substring(
+                  1,
+                  response.data.toString().split(':').length,
+                ),
+          ).details,
           SnackBarStatus(Icons.error, redColor),
         );
       }
@@ -254,7 +294,13 @@ class Repository {
       }
       if (response.statusCode == 400) {
         StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
+          DetailsAnswer.fromJson(
+            response.data,
+            response.data.toString().split(':').first.substring(
+                  1,
+                  response.data.toString().split(':').length,
+                ),
+          ).details,
           SnackBarStatus(Icons.error, redColor),
         );
       }
@@ -284,13 +330,13 @@ class Repository {
       }
       if (response.statusCode == 400) {
         StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
-      }
-      if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          'Невозможно отправить приглашение',
+          DetailsAnswer.fromJson(
+            response.data,
+            response.data.toString().split(':').first.substring(
+                  1,
+                  response.data.toString().split(':').length,
+                ),
+          ).details,
           SnackBarStatus(Icons.error, redColor),
         );
       }
@@ -321,7 +367,13 @@ class Repository {
       }
       if (response.statusCode == 400) {
         StandartSnackBar.show(
-          DetailsAnswer.fromJson(response.data).details,
+          DetailsAnswer.fromJson(
+            response.data,
+            response.data.toString().split(':').first.substring(
+                  1,
+                  response.data.toString().split(':').length,
+                ),
+          ).details,
           SnackBarStatus(Icons.error, redColor),
         );
       }

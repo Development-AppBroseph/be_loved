@@ -5,8 +5,9 @@ class DetailsAnswer {
 
   String details;
 
-  factory DetailsAnswer.fromJson(Map<String, dynamic> json) => DetailsAnswer(
-        details: json["detail"],
+  factory DetailsAnswer.fromJson(Map<String, dynamic> json, String key) =>
+      DetailsAnswer(
+        details: json[key],
       );
 
   Map<String, dynamic> toJson() => {

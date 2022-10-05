@@ -1,11 +1,16 @@
+import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/helpers/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomButton extends StatefulWidget {
   final Color color;
   bool visible;
+  bool? validate;
   final Color textColor;
+  bool code;
   final Border? border;
   final String text;
   final VoidCallback onPressed;
@@ -14,6 +19,8 @@ class CustomButton extends StatefulWidget {
     Key? key,
     required this.color,
     this.visible = true,
+    this.code = false,
+    this.validate = false,
     required this.text,
     required this.textColor,
     required this.onPressed,
@@ -27,29 +34,98 @@ class CustomButton extends StatefulWidget {
 class CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 300),
-      opacity: widget.visible ? 1 : 0,
-      child: GestureDetector(
-        child: Container(
-          height: 60.h,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: widget.color,
+    print(widget.text + ' ${widget.validate == null}');
+    return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+      return AnimatedOpacity(
+        duration: const Duration(milliseconds: 300),
+        opacity: widget.visible ? 1 : 0,
+        child: Material(
+          color: widget.validate == null
+              ? state is TextFieldSuccess
+                  ? widget.color
+                  : Colors.transparent
+              : widget.code
+                  ? widget.validate!
+                      ? widget.color
+                      : Colors.transparent
+                  : state is TextFieldSuccess || (widget.validate!)
+                      ? widget.color
+                      : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+          child: InkWell(
             borderRadius: BorderRadius.circular(10),
-            border: widget.border,
+            highlightColor: widget.validate == null
+                ? state is TextFieldSuccess
+                    ? const Color.fromRGBO(112, 200, 163, 1)
+                    : Colors.transparent
+                : widget.code
+                    ? widget.validate! || state is TextFieldSuccess
+                        ? widget.color != Colors.black
+                            ? const Color.fromRGBO(112, 200, 163, 1)
+                            : Colors.transparent
+                        : Colors.transparent
+                    : state is TextFieldSuccess || (widget.validate!)
+                        ? widget.color != Colors.black
+                            ? const Color.fromRGBO(112, 200, 163, 1)
+                            : Colors.transparent
+                        : Colors.transparent,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: 60.h,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: widget.validate == null
+                    ? state is TextFieldSuccess
+                        ? widget.border
+                        : Border.all(
+                            width: 1,
+                            color: const Color.fromRGBO(23, 23, 23, 1),
+                          )
+                    : widget.code
+                        ? widget.validate!
+                            ? widget.border
+                            : Border.all(
+                                width: 1,
+                                color: const Color.fromRGBO(23, 23, 23, 1),
+                              )
+                        : state is TextFieldSuccess || (widget.validate!)
+                            ? widget.border
+                            : Border.all(
+                                width: 1,
+                                color: const Color.fromRGBO(23, 23, 23, 1),
+                              ),
+              ),
+              child: Text(
+                widget.text,
+                style: GoogleFonts.inter(
+                  fontSize: 20.sp,
+                  color: widget.validate == null
+                      ? state is TextFieldSuccess
+                          ? widget.textColor
+                          : const Color.fromRGBO(23, 23, 23, 1)
+                      : widget.code
+                          ? widget.validate!
+                              ? widget.textColor
+                              : const Color.fromRGBO(23, 23, 23, 1)
+                          : state is TextFieldSuccess || (widget.validate!)
+                              ? widget.textColor
+                              : const Color.fromRGBO(23, 23, 23, 1),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            onTap: () {
+              if (widget.validate != null) {
+                if ((state is TextFieldSuccess || widget.validate!) ||
+                    widget.color == redColor) {
+                  widget.onPressed();
+                }
+              } else {}
+            },
           ),
-          child: Text(widget.text,
-              style: GoogleFonts.inter(
-                fontSize: 20.sp,
-                color: widget.textColor,
-                fontWeight: FontWeight.bold,
-              )),
         ),
-        onTap: () {
-          widget.onPressed();
-        },
-      ),
-    );
+      );
+    });
   }
 }

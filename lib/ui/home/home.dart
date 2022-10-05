@@ -21,6 +21,7 @@ class HomePage extends StatelessWidget {
               child: CustomButton(
                 color: accentColor,
                 text: 'Выйти',
+                validate: true,
                 textColor: Colors.white,
                 onPressed: () {
                   MySharedPrefs().logOut(context);
@@ -32,6 +33,7 @@ class HomePage extends StatelessWidget {
               child: CustomButton(
                 color: redColor,
                 text: 'Разорвать отношения)',
+                validate: true,
                 textColor: Colors.white,
                 onPressed: () async {
                   BlocProvider.of<AuthBloc>(context).add(LogOut(context));

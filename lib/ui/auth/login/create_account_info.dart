@@ -1,7 +1,9 @@
+import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/ui/auth/login/name.dart';
 import 'package:be_loved/ui/auth/image/avatar.dart';
 import 'package:be_loved/ui/auth/login/invite_relation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateAccountInfo extends StatelessWidget {
   CreateAccountInfo({Key? key}) : super(key: key);
@@ -18,8 +20,13 @@ class CreateAccountInfo extends StatelessWidget {
           controller: pageController,
           children: [
             InputNamePage(nextPage: nextPage),
-            AvatarPage(nextPage: nextPage, previousPage: previousPage),
-            InviteRelation(previousPage: previousPage)
+            AvatarPage(
+              nextPage: nextPage,
+              previousPage: () => previousPage(context),
+            ),
+            InviteRelation(
+              previousPage: () => previousPage(context),
+            )
           ],
         ),
       ),
@@ -27,8 +34,11 @@ class CreateAccountInfo extends StatelessWidget {
   }
 
   void nextPage() => pageController.nextPage(
-      duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
+      duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
 
-  void previousPage() => pageController.previousPage(
-      duration: const Duration(milliseconds: 100), curve: Curves.easeInOut);
+  void previousPage(BuildContext context) {
+    pageController.previousPage(
+        duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+    BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
+  }
 }

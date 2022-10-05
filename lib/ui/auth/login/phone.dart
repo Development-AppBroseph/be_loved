@@ -25,7 +25,8 @@ class _PhonePageState extends State<PhonePage> {
     super.dispose();
   }
 
-  void _sendCode() => BlocProvider.of<AuthBloc>(context).add(SendPhone(phoneNumber));
+  void _sendCode() =>
+      BlocProvider.of<AuthBloc>(context).add(SendPhone(phoneNumber));
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +38,16 @@ class _PhonePageState extends State<PhonePage> {
           MaterialPageRoute(
             builder: (context) => CodePage(),
           ),
-        );
+        ).then((value) {
+          if (phoneNumber.length == 12) {
+            BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
+          }
+        });
       }
-      if(current is PhoneError) error = current.error;
+      if (current is PhoneError) error = current.error;
       return true;
     }, builder: (context, state) {
+      var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -62,31 +68,36 @@ class _PhonePageState extends State<PhonePage> {
                       'Войти по номеру телефона',
                       style: GoogleFonts.inter(
                         fontSize: 35.sp,
-                        fontWeight: FontWeight.bold,
+                        height: 1.1,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                     Text(
                       'Войти в уже существующий аккаунт,\nили создать новый',
                       style: GoogleFonts.inter(
-                          fontSize: 15.sp,
-                          color: const Color.fromRGBO(137, 137, 137, 1.0),
-                          fontWeight: FontWeight.w600),
+                        fontSize: 15.sp,
+                        color: const Color.fromRGBO(137, 137, 137, 1.0),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 37.h, bottom: 5.h),
                       child: Container(
                         height: 70.h,
                         decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.horizontal(
-                                left: Radius.circular(10),
-                                right: Radius.circular(10))),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.horizontal(
+                            left: Radius.circular(10),
+                            right: Radius.circular(10),
+                          ),
+                        ),
                         child: Row(
                           children: [
-                            Image.asset('assets/images/code_region.png'),
-                            SizedBox(
-                              width: 12.w,
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset('assets/images/code.png'),
                             ),
+                            SizedBox(width: 12.w),
                             Text(
                               '+7',
                               style: GoogleFonts.inter(
@@ -94,9 +105,7 @@ class _PhonePageState extends State<PhonePage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
-                              width: 12.w,
-                            ),
+                            SizedBox(width: 12.w),
                             Container(
                               height: 37.h,
                               width: 1.w,
@@ -111,18 +120,34 @@ class _PhonePageState extends State<PhonePage> {
                               child: TextField(
                                 style: GoogleFonts.inter(
                                   fontSize: 25.sp,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w700,
                                 ),
                                 onChanged: (value) {
                                   phoneNumber =
                                       '+7${value.replaceAll(RegExp(' '), '')}';
-                                  if (value.length > 12) {
+                                  if (value.length > 12 &&
+                                      value.substring(0, 1) == '9') {
+                                    BlocProvider.of<AuthBloc>(context)
+                                        .add(TextFieldFilled(true));
                                     focusNode.unfocus();
+                                  } else {
+                                    BlocProvider.of<AuthBloc>(context)
+                                        .add(TextFieldFilled(false));
                                   }
                                 },
                                 focusNode: focusNode,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
+                                  alignLabelWithHint: true,
                                   border: InputBorder.none,
+                                  hintText: '900 000 00 00',
+                                  hintStyle: GoogleFonts.inter(
+                                    fontSize: 25.sp,
+                                    color:
+                                        const Color.fromRGBO(150, 150, 150, 1),
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.never,
                                 ),
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
@@ -135,16 +160,14 @@ class _PhonePageState extends State<PhonePage> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 61.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(error ?? '', style: const TextStyle(color: Colors.red)),
-                        ],
-                      ),
-                    ),
-                    CustomButton(color: const Color.fromRGBO(32, 203, 131, 1.0), text: 'Продолжить', textColor: Colors.white, onPressed: _sendCode)
+                    SizedBox(height: 61.h),
+                    CustomButton(
+                      color: const Color.fromRGBO(32, 203, 131, 1.0),
+                      text: 'Продолжить',
+                      // validate: state is TextFieldSuccess ? true : false,
+                      textColor: Colors.white,
+                      onPressed: _sendCode,
+                    )
                     // CustomAnimationButton(
                     //   text: 'Продолжить',
                     //   border: Border.all(
@@ -177,7 +200,7 @@ class CustomInputFormatter extends TextInputFormatter {
     }
 
     var buffer = StringBuffer();
-    if (text.length <= 10) {
+    if (text.length <= 15) {
       for (int i = 0; i < text.length; i++) {
         buffer.write(text[i]);
         var nonZeroIndex = i + 1;

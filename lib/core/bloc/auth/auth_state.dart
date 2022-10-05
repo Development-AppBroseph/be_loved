@@ -97,3 +97,7 @@ class ReletionshipsError extends AuthState {}
 class ReletionshipsAccepted extends AuthState {}
 
 class ReletionshipsAcceptedError extends AuthState {}
+
+class TextFieldSuccess extends AuthState {}
+
+class TextFieldError extends AuthState {}

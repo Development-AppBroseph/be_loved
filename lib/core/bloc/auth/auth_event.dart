@@ -53,3 +53,8 @@ class LogOut extends AuthEvent {
 
   LogOut(this.context);
 }
+
+class TextFieldFilled extends AuthEvent {
+  bool filled;
+  TextFieldFilled(this.filled);
+}
