@@ -45,14 +45,14 @@ class InputNamePage extends StatelessWidget {
                               text: 'Как тебя ',
                               style: GoogleFonts.inter(
                                 fontSize: 35.sp,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                                 color: const Color.fromRGBO(23, 23, 23, 1.0),
                               )),
                           TextSpan(
                               text: 'зовут?',
                               style: GoogleFonts.inter(
                                   fontSize: 35.sp,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w800,
                                   color:
                                       const Color.fromRGBO(255, 29, 29, 1.0))),
                         ],
@@ -82,7 +82,9 @@ class InputNamePage extends StatelessWidget {
                                   alignment: Alignment.center,
                                   height: 60.sp,
                                   width: 0.78.sw,
+                                  color: Colors.white,
                                   child: TextField(
+                                    textAlignVertical: TextAlignVertical.top,
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(12)
                                     ],
@@ -114,7 +116,7 @@ class InputNamePage extends StatelessWidget {
                                           1.0,
                                         ),
                                       ),
-                                      contentPadding: EdgeInsets.symmetric(
+                                      contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 20,
                                       ),
                                     ),
@@ -164,20 +166,27 @@ class InputNamePage extends StatelessWidget {
     int indexPage = 1;
     return AppBar(
       elevation: 0,
-      toolbarHeight: 80.sp,
+      toolbarHeight: 100,
       backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
-        padding: EdgeInsets.only(left: 20.sp, top: 40.sp, right: 6.sp),
+        padding: EdgeInsets.only(top: 20.h, right: 6.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: SvgPicture.asset(
-                'assets/icons/back.svg',
-                width: 15.sp,
+            IconButton(
+                padding: const EdgeInsets.only(right: 20),
+                icon: SvgPicture.asset(
+                  'assets/icons/back.svg',
+                  width: 15,
+                ),
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-            ),
             SizedBox(
               height: 5.sp,
               width: 55,

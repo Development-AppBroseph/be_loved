@@ -166,7 +166,7 @@ class _InviteForState extends State<InviteFor> {
                                 text: 'Приглашение от\n',
                                 style: GoogleFonts.inter(
                                   fontSize: 35.sp,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w800,
                                   color: const Color.fromRGBO(23, 23, 23, 1.0),
                                 ),
                               ),
@@ -174,7 +174,7 @@ class _InviteForState extends State<InviteFor> {
                                 text: bloc.user?.love?.username,
                                 style: GoogleFonts.inter(
                                   fontSize: 35.sp,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w800,
                                   color: const Color.fromRGBO(255, 29, 29, 1.0),
                                 ),
                               ),

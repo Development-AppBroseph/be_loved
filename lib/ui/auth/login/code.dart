@@ -1,12 +1,10 @@
 import 'dart:async';
-
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/enums.dart';
 import 'package:be_loved/core/helpers/shared_prefs.dart';
 import 'package:be_loved/ui/auth/login/create_account_info.dart';
 import 'package:be_loved/ui/auth/login/invite_relation.dart';
 import 'package:be_loved/ui/home/home.dart';
-import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 
 class CodePage extends StatefulWidget {
-  CodePage({Key? key}) : super(key: key);
+  const CodePage({Key? key}) : super(key: key);
 
   @override
   State<CodePage> createState() => _CodePageState();
@@ -26,28 +24,27 @@ class _CodePageState extends State<CodePage> {
   final FocusNode focusNode = FocusNode();
 
   int? code;
-
-  int start = 10;
-
+  int start = 60;
   Timer? _timer;
-
   String? phone;
-
   bool resendCode = false;
 
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController textEditingControllerUp = TextEditingController();
+  TextEditingController textEditingControllerDown = TextEditingController();
 
   @override
   void initState() {
     startTimer();
+    checkTextField();
+    textEditingControllerUp.addListener((() => checkTextField()));
     super.initState();
   }
 
   void _checkCode(BuildContext context) => BlocProvider.of<AuthBloc>(context)
-      .add(CheckUser(phone ?? '', textEditingController.text, code ?? 0));
+      .add(CheckUser(phone ?? '', textEditingControllerUp.text, code ?? 0));
 
   void startTimer() {
-    start = 10;
+    start = 60;
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
@@ -86,7 +83,7 @@ class _CodePageState extends State<CodePage> {
               builder: (context) => CreateAccountInfo(),
             ),
           ).then((value) {
-            if (textEditingController.text.length == 5) {
+            if (textEditingControllerUp.text.length == 5) {
               BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
             }
           });
@@ -100,7 +97,7 @@ class _CodePageState extends State<CodePage> {
                   builder: (context) => InviteRelation(previousPage: () {}),
                 ),
               ).then((value) {
-                if (textEditingController.text.length == 5) {
+                if (textEditingControllerUp.text.length == 5) {
                   BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
                 }
               });
@@ -129,21 +126,26 @@ class _CodePageState extends State<CodePage> {
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          toolbarHeight: 80.sp,
+          toolbarHeight: 100,
           backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
           title: Padding(
-            padding: EdgeInsets.only(left: 20.w, top: 40.h, right: 6.w),
+            padding: EdgeInsets.only(top: 20.h, right: 6.w),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                child: SvgPicture.asset(
+              child: IconButton(
+                padding: const EdgeInsets.only(right: 20),
+                icon: SvgPicture.asset(
                   'assets/icons/back.svg',
-                  width: 15.sp,
+                  width: 15,
                 ),
-                onTap: () {
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
                   Navigator.pop(context);
                 },
-              ),
+              )
             ),
           ),
           automaticallyImplyLeading: false,
@@ -161,9 +163,10 @@ class _CodePageState extends State<CodePage> {
                       'Введи код подтверждения',
                       style: GoogleFonts.inter(
                         fontSize: 35.sp,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
+                    const SizedBox(height: 3),
                     Text(
                       'В ближайшее время вам придёт sms-\nсообщение с кодом подтверждения',
                       style: GoogleFonts.inter(
@@ -175,38 +178,65 @@ class _CodePageState extends State<CodePage> {
                       padding: EdgeInsets.only(top: 44.h),
                       child: SizedBox(
                         height: 70.sp,
-                        child: Pinput(
-                          pinAnimationType: PinAnimationType.none,
-                          showCursor: false,
-                          length: 5,
-                          androidSmsAutofillMethod:
-                              AndroidSmsAutofillMethod.smsRetrieverApi,
-                          // obscuringCharacter: '0',
-                          controller: textEditingController,
-                          focusNode: focusNode,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          onChanged: (value) {
-                            if (value.length == 5 && value == code.toString()) {
-                              BlocProvider.of<AuthBloc>(context)
-                                  .add(TextFieldFilled(true));
-                              focusNode.unfocus();
-                            } else {
-                              BlocProvider.of<AuthBloc>(context)
-                                  .add(TextFieldFilled(false));
-                            }
-                          },
-                          defaultPinTheme: PinTheme(
-                            width: 60.sp,
-                            height: 80.sp,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
-                            textStyle: GoogleFonts.inter(
-                              fontSize: 35.sp,
-                              fontWeight: FontWeight.bold,
-                              color: const Color.fromRGBO(23, 23, 23, 1.0),
+                        child: Stack(
+                          children: [
+                            Pinput(
+                              enabled: false,
+                              pinAnimationType: PinAnimationType.none,
+                              showCursor: false,
+                              length: 5,
+                              androidSmsAutofillMethod:
+                                  AndroidSmsAutofillMethod.smsRetrieverApi,
+                              controller: textEditingControllerDown,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              defaultPinTheme: PinTheme(
+                                width: 60.sp,
+                                height: 80.sp,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10)),
+                                textStyle: GoogleFonts.inter(
+                                  fontSize: 35.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromRGBO(150, 150, 150, 1),
+                                ),
+                              ),
                             ),
-                          ),
+                            Pinput(
+                              pinAnimationType: PinAnimationType.none,
+                              showCursor: false,
+                              length: 5,
+                              androidSmsAutofillMethod:
+                                  AndroidSmsAutofillMethod.smsRetrieverApi,
+                              // obscuringCharacter: '0',
+                              controller: textEditingControllerUp,
+                              focusNode: focusNode,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              onChanged: (value) {
+                                // checkTextField();
+                                if (value.length == 5 && value == code.toString()) {
+                                  BlocProvider.of<AuthBloc>(context)
+                                      .add(TextFieldFilled(true));
+                                  focusNode.unfocus();
+                                } else {
+                                  BlocProvider.of<AuthBloc>(context)
+                                      .add(TextFieldFilled(false));
+                                }
+                              },
+                              defaultPinTheme: PinTheme(
+                                width: 60.sp,
+                                height: 80.sp,
+                                decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10)),
+                                textStyle: GoogleFonts.inter(
+                                  fontSize: 35.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromRGBO(23, 23, 23, 1.0),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -234,7 +264,7 @@ class _CodePageState extends State<CodePage> {
                           color: const Color.fromRGBO(23, 23, 23, 1.0),
                           width: 2.sp),
                       onPressed: () {
-                        if (textEditingController.text.length == 5) {
+                        if (textEditingControllerUp.text.length == 5) {
                           BlocProvider.of<AuthBloc>(context)
                               .add(TextFieldFilled(true));
                         }
@@ -254,13 +284,28 @@ class _CodePageState extends State<CodePage> {
     });
   }
 
+  void checkTextField() {
+    String helper = '00000';
+    if(textEditingControllerUp.text.isEmpty) {
+      textEditingControllerDown.text = helper;
+    } else {
+      String result = '';
+      int i = 0;
+      for(; i < textEditingControllerUp.text.length; i++) {
+        result += textEditingControllerUp.text[i];
+      }
+      result += helper.substring(i, helper.length);
+      textEditingControllerDown.text = result;
+    }
+  }
+
   String _getTime() {
-    if (start <= 60) {
+    if (start < 60) {
       return 'Отправить код снова 0:${start < 10 ? '0$start' : start}';
     } else if (start == 120) {
       return 'Отправить код снова 2:00';
     } else {
-      return 'Отправить код снова 1:${start < 10 ? '0${start - 60}' : start - 60}';
+      return 'Отправить код снова 01:0${start < 10 ? '0${start - 60}' : start - 60}';
     }
   }
 }

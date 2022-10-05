@@ -18,6 +18,7 @@ class _PhonePageState extends State<PhonePage> {
   FocusNode focusNode = FocusNode();
   String phoneNumber = '';
   String? error;
+  TextEditingController phoneController = TextEditingController();
 
   @override
   void dispose() {
@@ -48,6 +49,7 @@ class _PhonePageState extends State<PhonePage> {
       return true;
     }, builder: (context, state) {
       var bloc = BlocProvider.of<AuthBloc>(context);
+
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -72,6 +74,7 @@ class _PhonePageState extends State<PhonePage> {
                         fontWeight: FontWeight.w800,
                       ),
                     ),
+                    const SizedBox(height: 3),
                     Text(
                       'Войти в уже существующий аккаунт,\nили создать новый',
                       style: GoogleFonts.inter(
@@ -114,47 +117,71 @@ class _PhonePageState extends State<PhonePage> {
                             SizedBox(
                               width: 12.w,
                             ),
-                            Container(
-                              width: 0.6.sw,
-                              alignment: Alignment.center,
-                              child: TextField(
-                                style: GoogleFonts.inter(
-                                  fontSize: 25.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                onChanged: (value) {
-                                  phoneNumber =
-                                      '+7${value.replaceAll(RegExp(' '), '')}';
-                                  if (value.length > 12 &&
-                                      value.substring(0, 1) == '9') {
-                                    BlocProvider.of<AuthBloc>(context)
-                                        .add(TextFieldFilled(true));
-                                    focusNode.unfocus();
-                                  } else {
-                                    BlocProvider.of<AuthBloc>(context)
-                                        .add(TextFieldFilled(false));
-                                  }
-                                },
-                                focusNode: focusNode,
-                                decoration: InputDecoration(
-                                  alignLabelWithHint: true,
-                                  border: InputBorder.none,
-                                  hintText: '900 000 00 00',
-                                  hintStyle: GoogleFonts.inter(
-                                    fontSize: 25.sp,
-                                    color:
-                                        const Color.fromRGBO(150, 150, 150, 1),
-                                    fontWeight: FontWeight.w700,
+                            Stack(
+                              children: [
+                                Container(
+                                  width: 0.6.sw,
+                                  alignment: Alignment.center,
+                                  child: TextField(
+                                    enabled: false,
+                                    decoration: InputDecoration(
+                                      alignLabelWithHint: true,
+                                      border: InputBorder.none,
+                                      hintText: checkTextField(),
+                                      hintStyle: GoogleFonts.inter(
+                                        fontSize: 25.sp,
+                                        color:
+                                            const Color.fromRGBO(150, 150, 150, 1),
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.never,
+                                    ),
                                   ),
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.never,
                                 ),
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  CustomInputFormatter(),
-                                ],
-                                keyboardType: TextInputType.number,
-                              ),
+                                Container(
+                                  width: 0.6.sw,
+                                  alignment: Alignment.center,
+                                  child: TextField(
+                                    controller: phoneController,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 25.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    onChanged: (value) {
+                                      phoneNumber =
+                                          '+7${value.replaceAll(RegExp(' '), '')}';
+                                      if (value.length > 12 &&
+                                          value.substring(0, 1) == '9') {
+                                        BlocProvider.of<AuthBloc>(context)
+                                            .add(TextFieldFilled(true));
+                                        focusNode.unfocus();
+                                      } else {
+                                        BlocProvider.of<AuthBloc>(context)
+                                            .add(TextFieldFilled(false));
+                                      }
+                                    },
+                                    focusNode: focusNode,
+                                    decoration: InputDecoration(
+                                      alignLabelWithHint: true,
+                                      border: InputBorder.none,
+                                      hintStyle: GoogleFonts.inter(
+                                        fontSize: 25.sp,
+                                        color:
+                                            const Color.fromRGBO(150, 150, 150, 1),
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.never,
+                                    ),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CustomInputFormatter(),
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -182,6 +209,21 @@ class _PhonePageState extends State<PhonePage> {
             )),
       );
     });
+  }
+
+  String checkTextField() {
+    String helper = '900 000 00 00';
+    if(phoneController.text.isEmpty) {
+      return helper;
+    }
+    String result = '';
+    int i = 0;
+    for(; i < phoneController.text.length; i++) {
+      result += phoneController.text[i];
+    }
+    result += helper.substring(i, helper.length);
+
+    return result;
   }
 }
 

@@ -59,10 +59,10 @@ class _InvitePartnerState extends State<InvitePartner> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
       if (current is InviteSuccess) {
-        StandartSnackBar.show(
-          'Приглашение успешно отправлено',
-          SnackBarStatus(Icons.done, Colors.green),
-        );
+        // StandartSnackBar.show(
+        //   'Приглашение успешно отправлено',
+        //   SnackBarStatus(Icons.done, Colors.green),
+        // );
       }
       if (current is InviteAccepted && current.fromYou) {
         _timer.cancel();
@@ -82,10 +82,10 @@ class _InvitePartnerState extends State<InvitePartner> {
         ).then((value) => _startSearch(context));
       }
       if (current is InviteError) {
-        StandartSnackBar.show(
-          'Приглашение не удалось отправить',
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   'Приглашение не удалось отправить',
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
       if (current is ReceiveInvite && previous is ReceiveInvite == false) {
         _timer.cancel();
@@ -95,7 +95,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                 BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
               },
               nextPage: () {}),
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
           transition: Get.Transition.upToDown,
         )?.then((value) => _startSearch(context));
         // Navigator.push(
@@ -143,7 +143,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                   text: 'Пригласи ',
                                   style: GoogleFonts.inter(
                                     fontSize: 35.sp,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w800,
                                     color:
                                         const Color.fromRGBO(23, 23, 23, 1.0),
                                   ),
@@ -152,7 +152,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                   text: 'партнёра',
                                   style: GoogleFonts.inter(
                                     fontSize: 35.sp,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w800,
                                     color:
                                         const Color.fromRGBO(255, 29, 29, 1.0),
                                   ),
@@ -161,7 +161,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                             ),
                           ),
                           Text(
-                            'Позови партнёра на этот экран, введи его\nникнейм, и ожидай принятия приглашения',
+                            'Позови партнёра на этот экран, введи его\nномер, и ожидай принятия приглашения',
                             style: GoogleFonts.inter(
                               fontSize: 15.sp,
                               color: const Color.fromRGBO(137, 137, 137, 1.0),
@@ -299,50 +299,63 @@ class _InvitePartnerState extends State<InvitePartner> {
                               alignment: Alignment.center,
                               height: 60.sp,
                               width: 0.78.sw,
-                              child: TextField(
-                                controller: _phoneController,
-                                style: GoogleFonts.inter(
-                                  fontSize: 25.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                                keyboardType: TextInputType.phone,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(12),
-                                  // CustomInputFormatter()
-                                ],
-                                onChanged: (text) {
-                                  if (text.length == 1 && text != '+') {
-                                    // setState(() {
-                                    _phoneController.text = '+7$text';
-                                    _phoneController.selection =
-                                        TextSelection.fromPosition(
-                                      TextPosition(
-                                        offset: _phoneController.text.length,
+                              child: Stack(
+                                children: [
+                                  TextField(
+                                    enabled: false,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: checkTextField(),
+                                      alignLabelWithHint: true,
+                                      hintStyle: GoogleFonts.inter(
+                                        fontSize: 25.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color.fromRGBO(210, 204, 204, 1),
                                       ),
-                                    );
-                                    // });
-                                  }
-                                  if (text.length == 12) {
-                                    bloc.add(TextFieldFilled(true));
-                                  } else {
-                                    bloc.add(TextFieldFilled(false));
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '+79990009900',
-                                  alignLabelWithHint: true,
-                                  hintStyle: GoogleFonts.inter(
-                                    fontSize: 25.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color:
-                                        const Color.fromRGBO(210, 204, 204, 1),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
+                                    ),
                                   ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
+                                  TextField(
+                                    controller: _phoneController,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 25.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                    keyboardType: TextInputType.phone,
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(12),
+                                      // CustomInputFormatter()
+                                    ],
+                                    onChanged: (text) {
+                                      if (text.length == 1 && text != '+') {
+                                        // setState(() {
+                                        _phoneController.text = '+7$text';
+                                        _phoneController.selection =
+                                            TextSelection.fromPosition(
+                                          TextPosition(
+                                            offset: _phoneController.text.length,
+                                          ),
+                                        );
+                                        // });
+                                      }
+                                      if (text.length == 12) {
+                                        bloc.add(TextFieldFilled(true));
+                                      } else {
+                                        bloc.add(TextFieldFilled(false));
+                                      }
+                                    },
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      alignLabelWithHint: true,
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
@@ -396,20 +409,25 @@ class _InvitePartnerState extends State<InvitePartner> {
     int indexPage = 3;
     return AppBar(
       elevation: 0,
-      toolbarHeight: 80.sp,
+      toolbarHeight: 100,
       backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
-        padding: EdgeInsets.only(left: 20.sp, top: 40.sp, right: 6.sp),
+        padding: EdgeInsets.only(top: 20.h, right: 6.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-              onTap: widget.previousPage,
-              child: SvgPicture.asset(
-                'assets/icons/back.svg',
-                width: 15.sp,
+            IconButton(
+                padding: const EdgeInsets.only(right: 20),
+                icon: SvgPicture.asset(
+                  'assets/icons/back.svg',
+                  width: 15,
+                ),
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: widget.previousPage,
               ),
-            ),
             SizedBox(
               height: 5.sp,
               width: 55,
@@ -444,6 +462,21 @@ class _InvitePartnerState extends State<InvitePartner> {
       ),
       automaticallyImplyLeading: false,
     );
+  }
+
+  String checkTextField() {
+    String helper = '+79990009900';
+    if(_phoneController.text.isEmpty) {
+      return helper;
+    }
+    String result = '';
+    int i = 0;
+    for(; i < _phoneController.text.length; i++) {
+      result += _phoneController.text[i];
+    }
+    result += helper.substring(i, helper.length);
+
+    return result;
   }
 }
 

@@ -52,23 +52,23 @@ class Repository {
         return true;
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(
-            response.data,
-            response.data.toString().split(':').first.substring(
-                  1,
-                  response.data.toString().split(':').length,
-                ),
-          ).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(
+        //     response.data,
+        //     response.data.toString().split(':').first.substring(
+        //           1,
+        //           response.data.toString().split(':').length,
+        //         ),
+        //   ).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
       return false;
     } catch (e) {
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
+      // StandartSnackBar.show(
+      //   'Ошибка сервера. Мы это уже исправляем.',
+      //   SnackBarStatus(Icons.error, redColor),
+      // );
       return false;
     }
   }
@@ -81,16 +81,16 @@ class Repository {
         return 12345;
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(
-            response.data,
-            response.data.toString().split(':').first.substring(
-                  1,
-                  response.data.toString().split(':').length,
-                ),
-          ).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(
+        //     response.data,
+        //     response.data.toString().split(':').first.substring(
+        //           1,
+        //           response.data.toString().split(':').length,
+        //         ),
+        //   ).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
       return null;
     } catch (e) {
@@ -135,23 +135,23 @@ class Repository {
         return CheckNickName.fromJson(response.data).exists;
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(
-            response.data,
-            response.data.toString().split(':').first.substring(
-                  1,
-                  response.data.toString().split(':').length,
-                ),
-          ).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(
+        //     response.data,
+        //     response.data.toString().split(':').first.substring(
+        //           1,
+        //           response.data.toString().split(':').length,
+        //         ),
+        //   ).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
       return null;
     } catch (e) {
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
+      // StandartSnackBar.show(
+      //   'Ошибка сервера. Мы это уже исправляем.',
+      //   SnackBarStatus(Icons.error, redColor),
+      // );
       return null;
     }
   }
@@ -179,23 +179,23 @@ class Repository {
         return InitUserAnswer.fromJson(response.data).authToken;
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(
-            response.data,
-            response.data.toString().split(':').first.substring(
-                  1,
-                  response.data.toString().split(':').length,
-                ),
-          ).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(
+        //     response.data,
+        //     response.data.toString().split(':').first.substring(
+        //           1,
+        //           response.data.toString().split(':').length,
+        //         ),
+        //   ).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
       return null;
     } catch (e) {
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
+      // StandartSnackBar.show(
+      //   'Ошибка сервера. Мы это уже исправляем.',
+      //   SnackBarStatus(Icons.error, redColor),
+      // );
       return null;
     }
   }
@@ -217,16 +217,16 @@ class Repository {
         return UserAnswer.fromJson(response.data);
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(
-            response.data,
-            response.data.toString().split(':').first.substring(
-                  1,
-                  response.data.toString().split(':').first.length,
-                ),
-          ).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(
+        //     response.data,
+        //     response.data.toString().split(':').first.substring(
+        //           1,
+        //           response.data.toString().split(':').first.length,
+        //         ),
+        //   ).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
 
       return null;
@@ -251,30 +251,30 @@ class Repository {
         return UserAnswer.fromJson(response.data);
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(
-            response.data,
-            response.data.toString().split(':').first.substring(
-                  1,
-                  response.data.toString().split(':').length,
-                ),
-          ).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(
+        //     response.data,
+        //     response.data.toString().split(':').first.substring(
+        //           1,
+        //           response.data.toString().split(':').length,
+        //         ),
+        //   ).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          'Невозможно отправить приглашение',
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   'Невозможно отправить приглашение',
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
 
       return null;
     } catch (e) {
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
+      // StandartSnackBar.show(
+      //   'Ошибка сервера. Мы это уже исправляем.',
+      //   SnackBarStatus(Icons.error, redColor),
+      // );
       return null;
     }
   }
@@ -293,23 +293,23 @@ class Repository {
         return UserAnswer.fromJson(response.data);
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(
-            response.data,
-            response.data.toString().split(':').first.substring(
-                  1,
-                  response.data.toString().split(':').length,
-                ),
-          ).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(
+        //     response.data,
+        //     response.data.toString().split(':').first.substring(
+        //           1,
+        //           response.data.toString().split(':').length,
+        //         ),
+        //   ).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
       return null;
     } catch (e) {
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
+      // StandartSnackBar.show(
+      //   'Ошибка сервера. Мы это уже исправляем.',
+      //   SnackBarStatus(Icons.error, redColor),
+      // );
       return null;
     }
   }
@@ -329,24 +329,24 @@ class Repository {
         return UserAnswer.fromJson(response.data);
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(
-            response.data,
-            response.data.toString().split(':').first.substring(
-                  1,
-                  response.data.toString().split(':').length,
-                ),
-          ).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(
+        //     response.data,
+        //     response.data.toString().split(':').first.substring(
+        //           1,
+        //           response.data.toString().split(':').length,
+        //         ),
+        //   ).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
 
       return null;
     } catch (e) {
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
+      // StandartSnackBar.show(
+      //   'Ошибка сервера. Мы это уже исправляем.',
+      //   SnackBarStatus(Icons.error, redColor),
+      // );
       return null;
     }
   }
@@ -366,30 +366,30 @@ class Repository {
         return UserAnswer.fromJson(response.data);
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          DetailsAnswer.fromJson(
-            response.data,
-            response.data.toString().split(':').first.substring(
-                  1,
-                  response.data.toString().split(':').length,
-                ),
-          ).details,
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   DetailsAnswer.fromJson(
+        //     response.data,
+        //     response.data.toString().split(':').first.substring(
+        //           1,
+        //           response.data.toString().split(':').length,
+        //         ),
+        //   ).details,
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
       if (response.statusCode == 400) {
-        StandartSnackBar.show(
-          'Невозможно отправить приглашение',
-          SnackBarStatus(Icons.error, redColor),
-        );
+        // StandartSnackBar.show(
+        //   'Невозможно отправить приглашение',
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
       }
 
       return null;
     } catch (e) {
-      StandartSnackBar.show(
-        'Ошибка сервера. Мы это уже исправляем.',
-        SnackBarStatus(Icons.error, redColor),
-      );
+      // StandartSnackBar.show(
+      //   'Ошибка сервера. Мы это уже исправляем.',
+      //   SnackBarStatus(Icons.error, redColor),
+      // );
       return null;
     }
   }

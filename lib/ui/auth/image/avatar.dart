@@ -41,7 +41,7 @@ class AvatarPage extends StatelessWidget {
         body: SafeArea(
             bottom: true,
             child: Padding(
-              padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
+              padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 10),
               child: SingleChildScrollView(
                 padding: EdgeInsets.only(top: 0.sh),
                 child: Column(
@@ -55,7 +55,7 @@ class AvatarPage extends StatelessWidget {
                             text: 'Поставь ',
                             style: GoogleFonts.inter(
                               fontSize: 35.sp,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               color: const Color.fromRGBO(23, 23, 23, 1.0),
                             ),
                           ),
@@ -63,7 +63,7 @@ class AvatarPage extends StatelessWidget {
                             text: 'аватарку',
                             style: GoogleFonts.inter(
                               fontSize: 35.sp,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               color: const Color.fromRGBO(255, 29, 29, 1.0),
                             ),
                           ),
@@ -99,8 +99,8 @@ class AvatarPage extends StatelessWidget {
                             child: xFile != null
                                 ? Image.file(
                                     File(xFile!.path),
-                                    width: 135.h,
-                                    height: 135.h,
+                                    width: 135,
+                                    height: 135,
                                     fit: BoxFit.cover,
                                   )
                                 : Padding(
@@ -115,8 +115,8 @@ class AvatarPage extends StatelessWidget {
                     ),
                     Container(
                       clipBehavior: Clip.hardEdge,
-                      width: 378.w,
-                      height: 320.h,
+                      width: 378,
+                      height: 290,
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(228, 228, 228, 1.0),
                         borderRadius: BorderRadius.circular(10),
@@ -129,7 +129,7 @@ class AvatarPage extends StatelessWidget {
                     if (state is AuthLoading == false)
                       CustomButton(
                         color: const Color.fromRGBO(32, 203, 131, 1.0),
-                        text: 'Продолжить',
+                        text: bloc.image != null ? 'Продолжить' : 'Пропустить',
                         validate: bloc.image != null,
                         textColor: Colors.white,
                         onPressed: () => bloc.add(
@@ -157,20 +157,25 @@ class AvatarPage extends StatelessWidget {
     int indexPage = 2;
     return AppBar(
       elevation: 0,
-      toolbarHeight: 80.sp,
+      toolbarHeight: 100,
       backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
-        padding: EdgeInsets.only(left: 20.sp, top: 40.sp, right: 6.sp),
+        padding: EdgeInsets.only(top: 20.h, right: 6.sp),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-              onTap: previousPage,
-              child: SvgPicture.asset(
-                'assets/icons/back.svg',
-                width: 15.sp,
+            IconButton(
+                padding: const EdgeInsets.only(right: 20),
+                icon: SvgPicture.asset(
+                  'assets/icons/back.svg',
+                  width: 15,
+                ),
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: previousPage,
               ),
-            ),
             SizedBox(
               height: 5.sp,
               width: 55,
@@ -232,11 +237,12 @@ class AvatarMenu extends StatelessWidget {
           ],
         )),
         Container(
+          height: 45,
           decoration: const BoxDecoration(
             color: Color.fromRGBO(216, 216, 216, 1.0),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.sp),
+            padding: EdgeInsets.symmetric(vertical: 14.sp),
             child: StreamBuilder<int>(
               initialData: 0,
               stream: streamController.stream,
@@ -248,23 +254,27 @@ class AvatarMenu extends StatelessWidget {
                       onTap: () {
                         pageController.animateToPage(
                           0,
-                          duration: const Duration(milliseconds: 400),
+                          duration: const Duration(milliseconds: 600),
                           curve: Curves.easeInOut,
                         );
                       },
                       child: SvgPicture.asset(
                         'assets/icons/men.svg',
+                        height: 17,
+                        width: 17,
                         color: page.data == 0 ? Colors.black : Colors.grey,
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
                         pageController.animateToPage(1,
-                            duration: const Duration(milliseconds: 400),
+                            duration: const Duration(milliseconds: 600),
                             curve: Curves.easeInOut);
                       },
                       child: SvgPicture.asset(
                         'assets/icons/women.svg',
+                        height: 17,
+                        width: 17,
                         color: page.data == 1 ? Colors.black : Colors.grey,
                       ),
                     ),
@@ -272,23 +282,27 @@ class AvatarMenu extends StatelessWidget {
                       onTap: () {
                         pageController.animateToPage(
                           2,
-                          duration: const Duration(milliseconds: 400),
+                          duration: const Duration(milliseconds: 600),
                           curve: Curves.easeInOut,
                         );
                       },
                       child: SvgPicture.asset(
                         'assets/icons/paw.svg',
+                        height: 17,
+                        width: 17,
                         color: page.data == 2 ? Colors.black : Colors.grey,
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
                         pageController.animateToPage(3,
-                            duration: const Duration(milliseconds: 400),
+                            duration: const Duration(milliseconds: 600),
                             curve: Curves.easeInOut);
                       },
                       child: SvgPicture.asset(
                         'assets/icons/rects.svg',
+                        height: 17,
+                        width: 17,
                         color: page.data == 3 ? Colors.black : Colors.grey,
                       ),
                     ),
@@ -309,23 +323,23 @@ class PageTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 18.h),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
       child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 12,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4, mainAxisSpacing: 15, crossAxisSpacing: 20),
           itemBuilder: ((context, index) {
-            return Align(
+            return const Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 67.w,
-                height: 67.h,
+                width: 67,
+                height: 67,
                 child: Material(
-                  color: const Color.fromRGBO(150, 150, 150, 1),
+                  color: Color.fromRGBO(150, 150, 150, 1),
                   shape: SquircleBorder(
                     radius: BorderRadius.all(
-                      Radius.circular(35.r),
+                      Radius.circular(40),
                     ),
                   ),
                 ),

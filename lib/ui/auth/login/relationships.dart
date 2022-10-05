@@ -63,7 +63,7 @@ class RelationShips extends StatelessWidget {
                             text: 'Когда начались\n',
                             style: GoogleFonts.inter(
                               fontSize: 35.sp,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               color: const Color.fromRGBO(23, 23, 23, 1.0),
                             ),
                           ),
@@ -71,7 +71,7 @@ class RelationShips extends StatelessWidget {
                             text: 'ваши ',
                             style: GoogleFonts.inter(
                               fontSize: 35.sp,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               color: const Color.fromRGBO(23, 23, 23, 1.0),
                             ),
                           ),
@@ -79,7 +79,7 @@ class RelationShips extends StatelessWidget {
                             text: 'отношения?',
                             style: GoogleFonts.inter(
                               fontSize: 35.sp,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               color: const Color.fromRGBO(255, 29, 29, 1.0),
                             ),
                           ),
