@@ -115,8 +115,8 @@ class AvatarPage extends StatelessWidget {
                     ),
                     Container(
                       clipBehavior: Clip.hardEdge,
-                      width: 378,
-                      height: 290,
+                      width: 378.w,
+                      height: 310.h,
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(228, 228, 228, 1.0),
                         borderRadius: BorderRadius.circular(10),
@@ -165,17 +165,17 @@ class AvatarPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                padding: const EdgeInsets.only(right: 20),
-                icon: SvgPicture.asset(
-                  'assets/icons/back.svg',
-                  width: 15,
-                ),
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: previousPage,
+              padding: const EdgeInsets.only(right: 20),
+              icon: SvgPicture.asset(
+                'assets/icons/back.svg',
+                width: 15,
               ),
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: previousPage,
+            ),
             SizedBox(
               height: 5.sp,
               width: 55,
@@ -258,14 +258,25 @@ class AvatarMenu extends StatelessWidget {
                           curve: Curves.easeInOut,
                         );
                       },
-                      child: AnimatedSwitcher(
-                        duration: const Duration(seconds: 5),
-                        child: SvgPicture.asset(
-                          'assets/icons/men.svg',
-                          height: 17,
-                          width: 17,
-                          color: page.data == 0 ? Colors.black : Colors.grey,
-                        )
+                      child: Stack(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/men.svg',
+                            height: 17,
+                            width: 17,
+                            color: Colors.grey,
+                          ),
+                          AnimatedOpacity(
+                            duration: const Duration(milliseconds: 300),
+                            opacity: page.data == 0 ? 1 : 0,
+                            child: SvgPicture.asset(
+                              'assets/icons/men.svg',
+                              height: 17,
+                              width: 17,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     GestureDetector(
@@ -274,11 +285,25 @@ class AvatarMenu extends StatelessWidget {
                             duration: const Duration(milliseconds: 600),
                             curve: Curves.easeInOut);
                       },
-                      child: SvgPicture.asset(
-                        'assets/icons/women.svg',
-                        height: 17,
-                        width: 17,
-                        color: page.data == 1 ? Colors.black : Colors.grey,
+                      child: Stack(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/women.svg',
+                            height: 17,
+                            width: 17,
+                            color: Colors.grey,
+                          ),
+                          AnimatedOpacity(
+                            duration: const Duration(milliseconds: 300),
+                            opacity: page.data == 1 ? 1 : 0,
+                            child: SvgPicture.asset(
+                              'assets/icons/women.svg',
+                              height: 17,
+                              width: 17,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     GestureDetector(
@@ -289,11 +314,25 @@ class AvatarMenu extends StatelessWidget {
                           curve: Curves.easeInOut,
                         );
                       },
-                      child: SvgPicture.asset(
-                        'assets/icons/paw.svg',
-                        height: 17,
-                        width: 17,
-                        color: page.data == 2 ? Colors.black : Colors.grey,
+                      child: Stack(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/paw.svg',
+                            height: 17,
+                            width: 17,
+                            color: Colors.grey,
+                          ),
+                          AnimatedOpacity(
+                            duration: const Duration(milliseconds: 300),
+                            opacity: page.data == 2 ? 1 : 0,
+                            child: SvgPicture.asset(
+                              'assets/icons/paw.svg',
+                              height: 17,
+                              width: 17,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     GestureDetector(
@@ -302,11 +341,25 @@ class AvatarMenu extends StatelessWidget {
                             duration: const Duration(milliseconds: 600),
                             curve: Curves.easeInOut);
                       },
-                      child: SvgPicture.asset(
-                        'assets/icons/rects.svg',
-                        height: 17,
-                        width: 17,
-                        color: page.data == 3 ? Colors.black : Colors.grey,
+                      child: Stack(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/rects.svg',
+                            height: 17,
+                            width: 17,
+                            color: Colors.grey,
+                          ),
+                          AnimatedOpacity(
+                            duration: const Duration(milliseconds: 300),
+                            opacity: page.data == 3 ? 1 : 0,
+                            child: SvgPicture.asset(
+                              'assets/icons/rects.svg',
+                              height: 17,
+                              width: 17,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -333,11 +386,11 @@ class PageTest extends StatelessWidget {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4, mainAxisSpacing: 15, crossAxisSpacing: 20),
           itemBuilder: ((context, index) {
-            return const Align(
+            return Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 67,
-                height: 67,
+                width: 67.w,
+                height: 67.h,
                 child: Material(
                   color: Color.fromRGBO(150, 150, 150, 1),
                   shape: SquircleBorder(
