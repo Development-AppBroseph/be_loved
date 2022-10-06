@@ -25,7 +25,7 @@ class InviteRelation extends StatelessWidget {
               scrollDirection: Axis.vertical,
               physics: snapshot.data == 2 ? const NeverScrollableScrollPhysics() : null,
               controller: pageController,
-              onPageChanged: (value) => streamController.add(value + 1),
+              onPageChanged: (value) => streamController.add(value),
               children: [
                 InviteForStartRelationship(nextPage: previewPage, streamController: streamController),
                 InvitePartner(nextPage: nextPage, previousPage: previousPage, streamController: streamController),

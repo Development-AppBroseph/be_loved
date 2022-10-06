@@ -39,7 +39,6 @@ class _InvitePartnerState extends State<InvitePartner> {
 
   @override
   void initState() {
-    widget.streamController.add(0);
     _startSearch(context);
     super.initState();
   }
