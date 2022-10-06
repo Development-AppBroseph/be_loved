@@ -258,11 +258,14 @@ class AvatarMenu extends StatelessWidget {
                           curve: Curves.easeInOut,
                         );
                       },
-                      child: SvgPicture.asset(
-                        'assets/icons/men.svg',
-                        height: 17,
-                        width: 17,
-                        color: page.data == 0 ? Colors.black : Colors.grey,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(seconds: 5),
+                        child: SvgPicture.asset(
+                          'assets/icons/men.svg',
+                          height: 17,
+                          width: 17,
+                          color: page.data == 0 ? Colors.black : Colors.grey,
+                        )
                       ),
                     ),
                     GestureDetector(
@@ -323,7 +326,7 @@ class PageTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
       child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 12,

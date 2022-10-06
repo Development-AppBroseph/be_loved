@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
-import 'package:be_loved/ui/auth/login/inviteFor_start_relationship.dart';
+import 'package:be_loved/ui/auth/login/invite_for_start_relationship.dart';
 import 'package:be_loved/ui/auth/login/invite_for.dart';
 import 'package:be_loved/ui/auth/login/relationships.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
@@ -14,14 +14,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart' as Get;
-import 'package:get/instance_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InvitePartner extends StatefulWidget {
   const InvitePartner(
-      {Key? key, required this.nextPage, required this.previousPage})
+      {Key? key, required this.nextPage, required this.previousPage, required this.streamController})
       : super(key: key);
-
+  
+  final streamController;
   final VoidCallback nextPage;
   final VoidCallback previousPage;
 
@@ -39,6 +39,7 @@ class _InvitePartnerState extends State<InvitePartner> {
 
   @override
   void initState() {
+    widget.streamController.add(0);
     _startSearch(context);
     super.initState();
   }
@@ -71,15 +72,16 @@ class _InvitePartnerState extends State<InvitePartner> {
         //   duration: Duration(seconds: 1),
         //   transition: Get.Transition.upToDown,
         // );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RelationShips(
-              previewPage: () {},
-              prevPage: () {},
-            ),
-          ),
-        ).then((value) => _startSearch(context));
+        widget.previousPage();
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => RelationShips(
+        //       previewPage: () {},
+        //       prevPage: () {},
+        //     ),
+        //   ),
+        // ).then((value) => _startSearch(context));
       }
       if (current is InviteError) {
         // StandartSnackBar.show(
@@ -89,15 +91,16 @@ class _InvitePartnerState extends State<InvitePartner> {
       }
       if (current is ReceiveInvite && previous is ReceiveInvite == false) {
         _timer.cancel();
-        Get.Get.to(
-          InviteFor(
-              previewPage: () {
-                BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-              },
-              nextPage: () {}),
-          duration: const Duration(seconds: 1),
-          transition: Get.Transition.upToDown,
-        )?.then((value) => _startSearch(context));
+        widget.nextPage();
+        // Get.Get.to(
+        //   InviteFor(
+        //       previewPage: () {
+        //         BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+        //       },
+        //       nextPage: () {}),
+        //   duration: const Duration(seconds: 1),
+        //   transition: Get.Transition.upToDown,
+        // )?.then((value) => _startSearch(context));
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(
@@ -299,63 +302,50 @@ class _InvitePartnerState extends State<InvitePartner> {
                               alignment: Alignment.center,
                               height: 60.sp,
                               width: 0.78.sw,
-                              child: Stack(
-                                children: [
-                                  TextField(
-                                    enabled: false,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: checkTextField(),
-                                      alignLabelWithHint: true,
-                                      hintStyle: GoogleFonts.inter(
-                                        fontSize: 25.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color.fromRGBO(210, 204, 204, 1),
-                                      ),
-                                      contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                      ),
-                                    ),
-                                  ),
-                                  TextField(
-                                    controller: _phoneController,
-                                    style: GoogleFonts.inter(
-                                      fontSize: 25.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                    keyboardType: TextInputType.phone,
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(12),
-                                      // CustomInputFormatter()
-                                    ],
-                                    onChanged: (text) {
-                                      if (text.length == 1 && text != '+') {
-                                        // setState(() {
-                                        _phoneController.text = '+7$text';
-                                        _phoneController.selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                            offset: _phoneController.text.length,
-                                          ),
-                                        );
-                                        // });
-                                      }
-                                      if (text.length == 12) {
-                                        bloc.add(TextFieldFilled(true));
-                                      } else {
-                                        bloc.add(TextFieldFilled(false));
-                                      }
-                                    },
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      alignLabelWithHint: true,
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                      ),
-                                    ),
-                                  ),
+                              child: TextField(
+                                controller: _phoneController,
+                                style: GoogleFonts.inter(
+                                  fontSize: 25.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                keyboardType: TextInputType.phone,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(12),
+                                  // CustomInputFormatter()
                                 ],
+                                onChanged: (text) {
+                                  if (text.length == 1 && text != '+') {
+                                    // setState(() {
+                                    _phoneController.text = '+7$text';
+                                    _phoneController.selection =
+                                        TextSelection.fromPosition(
+                                      TextPosition(
+                                        offset: _phoneController.text.length,
+                                      ),
+                                    );
+                                    // });
+                                  }
+                                  if (text.length == 12) {
+                                    bloc.add(TextFieldFilled(true));
+                                  } else {
+                                    bloc.add(TextFieldFilled(false));
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                  hintText: '+79990009900',
+                                  hintStyle: GoogleFonts.inter(
+                                    fontSize: 25.sp,
+                                    color:
+                                        const Color.fromRGBO(150, 150, 150, 1),
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  border: InputBorder.none,
+                                  alignLabelWithHint: true,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -462,21 +452,6 @@ class _InvitePartnerState extends State<InvitePartner> {
       ),
       automaticallyImplyLeading: false,
     );
-  }
-
-  String checkTextField() {
-    String helper = '+79990009900';
-    if(_phoneController.text.isEmpty) {
-      return helper;
-    }
-    String result = '';
-    int i = 0;
-    for(; i < _phoneController.text.length; i++) {
-      result += _phoneController.text[i];
-    }
-    result += helper.substring(i, helper.length);
-
-    return result;
   }
 }
 

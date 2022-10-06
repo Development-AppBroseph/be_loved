@@ -63,8 +63,8 @@ class _InviteForState extends State<InviteFor> {
               timer.cancel();
             });
             BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-            Navigator.pop(context);
-            //widget.previewPage();
+            // Navigator.pop(context);
+            widget.previewPage();
           } else {
             setState(() {
               start--;
@@ -79,7 +79,7 @@ class _InviteForState extends State<InviteFor> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
       if (current is GetUserSuccess) {
-        Navigator.pop(context);
+        // Navigator.pop(context);
         return true;
       }
       if (current is InviteAccepted) {
@@ -159,6 +159,7 @@ class _InviteForState extends State<InviteFor> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const Spacer(),
                         RichText(
                           text: TextSpan(
                             children: <TextSpan>[
@@ -347,41 +348,34 @@ class _InviteForState extends State<InviteFor> {
                           validate: true,
                           onPressed: widget.previewPage,
                         ),
-                        SizedBox(height: 50.h),
+                        // SizedBox(height: 50.h),
+                        const Spacer(),
 
                         Center(
-                          child: GestureDetector(
-                            onVerticalDragEnd: (details) {
-                              widget.previewPage();
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 100,
-                              color: Colors.transparent,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Свайп для отмены',
-                                    style: GoogleFonts.inter(
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color.fromRGBO(
-                                            150, 150, 150, 1.0)),
-                                  ),
-                                  Transform.rotate(
-                                    angle: -pi / 2,
-                                    child: SvgPicture.asset(
-                                      'assets/icons/back.svg',
-                                      width: 15.sp,
-                                      color: const Color.fromRGBO(
-                                          150, 150, 150, 1.0),
-                                    ),
-                                  ),
-                                ],
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Свайп для отмены',
+                                style: GoogleFonts.inter(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromRGBO(
+                                        150, 150, 150, 1.0)),
                               ),
-                            ),
+                              Transform.rotate(
+                                angle: -pi / 2,
+                                child: SvgPicture.asset(
+                                  'assets/icons/back.svg',
+                                  width: 15.sp,
+                                  color: const Color.fromRGBO(
+                                      150, 150, 150, 1.0),
+                                ),
+                              ),
+                            ],
                           ),
-                        )
+                        ),
+                        const Spacer(),
                       ],
                     ),
                   )),

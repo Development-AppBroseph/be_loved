@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:be_loved/ui/auth/login/inviteFor_start_relationship.dart';
+import 'package:be_loved/ui/auth/login/invite_for_start_relationship.dart';
 import 'package:be_loved/ui/auth/login/invite_partner.dart';
 import 'package:flutter/material.dart';
 
@@ -17,15 +17,21 @@ class InviteRelation extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         bottom: true,
-        child: PageView(
-          scrollDirection: Axis.vertical,
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          onPageChanged: (value) => streamController.add(value + 1),
-          children: [
-            InviteForStartRelationship(nextPage: previewPage),
-            InvitePartner(nextPage: nextPage, previousPage: previousPage),
-          ],
+        child: StreamBuilder<int>(
+          initialData: 2,
+          stream: streamController.stream,
+          builder: (context, snapshot) {
+            return PageView(
+              scrollDirection: Axis.vertical,
+              physics: snapshot.data == 2 ? const NeverScrollableScrollPhysics() : null,
+              controller: pageController,
+              onPageChanged: (value) => streamController.add(value + 1),
+              children: [
+                InviteForStartRelationship(nextPage: previewPage, streamController: streamController),
+                InvitePartner(nextPage: nextPage, previousPage: previousPage, streamController: streamController),
+              ],
+            );
+          }
         ),
       ),
     );

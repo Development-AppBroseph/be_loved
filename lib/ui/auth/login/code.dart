@@ -35,8 +35,6 @@ class _CodePageState extends State<CodePage> {
   @override
   void initState() {
     startTimer();
-    checkTextField();
-    textEditingControllerUp.addListener((() => checkTextField()));
     super.initState();
   }
 
@@ -178,65 +176,38 @@ class _CodePageState extends State<CodePage> {
                       padding: EdgeInsets.only(top: 44.h),
                       child: SizedBox(
                         height: 70.sp,
-                        child: Stack(
-                          children: [
-                            Pinput(
-                              enabled: false,
-                              pinAnimationType: PinAnimationType.none,
-                              showCursor: false,
-                              length: 5,
-                              androidSmsAutofillMethod:
-                                  AndroidSmsAutofillMethod.smsRetrieverApi,
-                              controller: textEditingControllerDown,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              defaultPinTheme: PinTheme(
-                                width: 60.sp,
-                                height: 80.sp,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)),
-                                textStyle: GoogleFonts.inter(
-                                  fontSize: 35.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(150, 150, 150, 1),
-                                ),
-                              ),
+                        child: Pinput(
+                          pinAnimationType: PinAnimationType.none,
+                          showCursor: false,
+                          length: 5,
+                          autofillHints: ['0','0','0','0','0'],
+                          androidSmsAutofillMethod:
+                              AndroidSmsAutofillMethod.smsRetrieverApi,
+                          controller: textEditingControllerUp,
+                          focusNode: focusNode,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          onChanged: (value) {
+                            if (value.length == 5 && value == code.toString()) {
+                              BlocProvider.of<AuthBloc>(context)
+                                  .add(TextFieldFilled(true));
+                              focusNode.unfocus();
+                            } else {
+                              BlocProvider.of<AuthBloc>(context)
+                                  .add(TextFieldFilled(false));
+                            }
+                          },
+                          defaultPinTheme: PinTheme(
+                            width: 60.sp,
+                            height: 80.sp,
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(10)),
+                            textStyle: GoogleFonts.inter(
+                              fontSize: 35.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color.fromRGBO(23, 23, 23, 1.0),
                             ),
-                            Pinput(
-                              pinAnimationType: PinAnimationType.none,
-                              showCursor: false,
-                              length: 5,
-                              androidSmsAutofillMethod:
-                                  AndroidSmsAutofillMethod.smsRetrieverApi,
-                              // obscuringCharacter: '0',
-                              controller: textEditingControllerUp,
-                              focusNode: focusNode,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              onChanged: (value) {
-                                // checkTextField();
-                                if (value.length == 5 && value == code.toString()) {
-                                  BlocProvider.of<AuthBloc>(context)
-                                      .add(TextFieldFilled(true));
-                                  focusNode.unfocus();
-                                } else {
-                                  BlocProvider.of<AuthBloc>(context)
-                                      .add(TextFieldFilled(false));
-                                }
-                              },
-                              defaultPinTheme: PinTheme(
-                                width: 60.sp,
-                                height: 80.sp,
-                                decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(10)),
-                                textStyle: GoogleFonts.inter(
-                                  fontSize: 35.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(23, 23, 23, 1.0),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -282,21 +253,6 @@ class _CodePageState extends State<CodePage> {
             )),
       );
     });
-  }
-
-  void checkTextField() {
-    String helper = '00000';
-    if(textEditingControllerUp.text.isEmpty) {
-      textEditingControllerDown.text = helper;
-    } else {
-      String result = '';
-      int i = 0;
-      for(; i < textEditingControllerUp.text.length; i++) {
-        result += textEditingControllerUp.text[i];
-      }
-      result += helper.substring(i, helper.length);
-      textEditingControllerDown.text = result;
-    }
   }
 
   String _getTime() {

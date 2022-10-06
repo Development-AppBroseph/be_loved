@@ -34,7 +34,6 @@ class CustomButton extends StatefulWidget {
 class CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
-    print(widget.text + ' ${widget.validate == null}');
     return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
       return AnimatedOpacity(
         duration: const Duration(milliseconds: 300),

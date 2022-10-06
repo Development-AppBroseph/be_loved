@@ -1,12 +1,15 @@
+import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/ui/auth/login/invite_for.dart';
 import 'package:be_loved/ui/auth/login/relationships.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InviteForStartRelationship extends StatelessWidget {
-  InviteForStartRelationship({Key? key, required this.nextPage})
+  InviteForStartRelationship({Key? key, required this.nextPage, required this.streamController})
       : super(key: key);
 
   final VoidCallback nextPage;
+  final streamController;
   final pageController = PageController(viewportFraction: 1.0, keepPage: false);
 
   @override
@@ -18,7 +21,10 @@ class InviteForStartRelationship extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           children: [
-            InviteFor(nextPage: nextPage1, previewPage: nextPage),
+            InviteFor(nextPage: nextPage1, previewPage: (() {
+              BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+              nextPage();
+            })),
             RelationShips(previewPage: nextPage, prevPage: previousPage)
           ],
         ),
