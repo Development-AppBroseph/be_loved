@@ -260,7 +260,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                           ),
                                         ),
                                         clipBehavior: Clip.hardEdge,
-                                        child: bloc.user?.love?.photo != null
+                                        child: bloc.user?.love?.photo != null && bloc.state is InviteAccepted
                                             ? Image.network(
                                                 apiUrl + bloc.user!.love!.photo,
                                                 width: 135.h,
