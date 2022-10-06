@@ -66,12 +66,12 @@ class _InvitePartnerState extends State<InvitePartner> {
       }
       if (current is InviteAccepted && current.fromYou) {
         _timer.cancel();
-        // Get.Get.to(
-        //   RelationShips(previewPage: () {}, prevPage: () {}),
-        //   duration: Duration(seconds: 1),
-        //   transition: Get.Transition.upToDown,
-        // );
-        widget.previousPage();
+        Get.Get.to(
+          RelationShips(previewPage: () {}, prevPage: () {}),
+          duration: const Duration(seconds: 1),
+          transition: Get.Transition.rightToLeft,
+        );
+        // widget.previousPage();
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(
