@@ -40,6 +40,7 @@ class _InvitePartnerState extends State<InvitePartner> {
   @override
   void initState() {
     _startSearch(context);
+    BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
     super.initState();
   }
 

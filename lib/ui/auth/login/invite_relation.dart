@@ -20,7 +20,7 @@ class InviteRelation extends StatelessWidget {
       body: SafeArea(
         bottom: true,
         child: StreamBuilder<int>(
-            initialData: 2,
+            initialData: 1,
             stream: streamController.stream,
             builder: (context, snapshot) {
               return BlocBuilder<AuthBloc, AuthState>(
@@ -28,11 +28,7 @@ class InviteRelation extends StatelessWidget {
                 var bloc = BlocProvider.of<AuthBloc>(context);
                 return PageView(
                   scrollDirection: Axis.vertical,
-                  physics: bloc.user?.love != null
-                      ? snapshot.data == 2
-                          ? const NeverScrollableScrollPhysics()
-                          : null
-                      : const NeverScrollableScrollPhysics(),
+                  physics: snapshot.data == 1 ? const NeverScrollableScrollPhysics() : null,
                   controller: pageController,
                   onPageChanged: (value) => streamController.add(value),
                   children: [

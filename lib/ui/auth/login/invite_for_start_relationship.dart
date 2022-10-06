@@ -24,6 +24,7 @@ class InviteForStartRelationship extends StatelessWidget {
             InviteFor(nextPage: nextPage1, previewPage: (() {
               BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
               nextPage();
+              streamController.add(1);
             })),
             RelationShips(previewPage: nextPage, prevPage: previousPage)
           ],
