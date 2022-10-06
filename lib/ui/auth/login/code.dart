@@ -180,7 +180,6 @@ class _CodePageState extends State<CodePage> {
                           pinAnimationType: PinAnimationType.none,
                           showCursor: false,
                           length: 5,
-                          autofillHints: ['0','0','0','0','0'],
                           androidSmsAutofillMethod:
                               AndroidSmsAutofillMethod.smsRetrieverApi,
                           controller: textEditingControllerUp,
@@ -200,7 +199,7 @@ class _CodePageState extends State<CodePage> {
                             width: 60.sp,
                             height: 80.sp,
                             decoration: BoxDecoration(
-                                color: Colors.transparent,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)),
                             textStyle: GoogleFonts.inter(
                               fontSize: 35.sp,
