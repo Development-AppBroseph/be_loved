@@ -2,11 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
-import 'package:be_loved/ui/auth/login/invite_for_start_relationship.dart';
-import 'package:be_loved/ui/auth/login/invite_for.dart';
 import 'package:be_loved/ui/auth/login/relationships.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
-import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +17,7 @@ class InvitePartner extends StatefulWidget {
   const InvitePartner(
       {Key? key, required this.nextPage, required this.previousPage, required this.streamController})
       : super(key: key);
-  
+
   final streamController;
   final VoidCallback nextPage;
   final VoidCallback previousPage;
@@ -31,6 +28,8 @@ class InvitePartner extends StatefulWidget {
 
 class _InvitePartnerState extends State<InvitePartner> {
   late Timer _timer;
+  int start = 30;
+  bool isValidate = true;
 
   final _phoneController = TextEditingController();
 
@@ -42,6 +41,32 @@ class _InvitePartnerState extends State<InvitePartner> {
     _startSearch(context);
     BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
     super.initState();
+  }
+
+  TextEditingController textEditingControllerUp = TextEditingController();
+  TextEditingController textEditingControllerDown = TextEditingController();
+
+  void startTimer() {
+    start = 30;
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (_timer != null) {
+          if (start == 0) {
+            setState(() {
+              BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+              isValidate = true;
+              timer.cancel();
+            });
+          } else {
+            setState(() {
+              start--;
+            });
+          }
+        }
+      },
+    );
   }
 
   @override
@@ -315,6 +340,11 @@ class _InvitePartnerState extends State<InvitePartner> {
                                   // CustomInputFormatter()
                                 ],
                                 onChanged: (text) {
+                                  if (_phoneController.text == 12) {
+                                    setState(() {
+                                      isValidate = false;
+                                    });
+                                  }
                                   if (text.length == 1 && text != '+') {
                                     // setState(() {
                                     _phoneController.text = '+7$text';
@@ -354,11 +384,17 @@ class _InvitePartnerState extends State<InvitePartner> {
                           ),
                           CustomButton(
                             color: const Color.fromRGBO(32, 203, 131, 1.0),
-                            text: 'Продолжить',
-                            validate: _phoneController.text.length == 12,
+                            text: 'Пригласить',
+                            validate: _phoneController.text.length == 12 && isValidate,
                             code: false,
                             textColor: Colors.white,
-                            onPressed: () => _inviteUser(context),
+                            onPressed: () {
+                              _inviteUser(context);
+                              setState(() {
+                                isValidate = false;
+                              });
+                              startTimer();
+                            },
                           ),
                           // CustomAnimationButton(
                           //   text: 'Продолжить',
@@ -375,11 +411,12 @@ class _InvitePartnerState extends State<InvitePartner> {
                             visible:
                                 bloc.user?.love != null && bloc.user!.fromYou!,
                             color: redColor,
-                            text: 'Отменить приглашение',
+                            text: _timer.isActive ? _getTime() : 'Отменить приглашение',
                             textColor: Colors.white,
                             validate: true,
                             onPressed: () async {
                               // nextPage();
+                              isValidate = true;
                               BlocProvider.of<AuthBloc>(context)
                                   .add(DeleteInviteUser());
                             },
@@ -393,6 +430,14 @@ class _InvitePartnerState extends State<InvitePartner> {
             )),
       );
     });
+  }
+
+  String _getTime() {
+    if (start < 10) {
+      return 'Отменить 0:0$start';
+    } else {
+      return 'Отменить 0:$start';
+    }
   }
 
   AppBar appBar(BuildContext context) {

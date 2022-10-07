@@ -94,7 +94,7 @@ class CustomButtonState extends State<CustomAnimationButton>
           ],
         ),
       ),
-      onTap: () {
+      onLongPress: () {
         // if(widget.state != null && widget.state!) {
         setState(() {
           controller.forward();

@@ -32,6 +32,21 @@ class CustomButton extends StatefulWidget {
 }
 
 class CustomButtonState extends State<CustomButton> {
+
+  late bool wasClicked;
+
+  @override
+  void didChangeDependencies() {
+    wasClicked = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    wasClicked = false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
@@ -115,12 +130,18 @@ class CustomButtonState extends State<CustomButton> {
               ),
             ),
             onTap: () {
-              if (widget.validate != null) {
-                if ((state is TextFieldSuccess || widget.validate!) ||
-                    widget.color == redColor) {
-                  widget.onPressed();
-                }
-              } else {}
+              if (!wasClicked) {
+                if (widget.validate != null) {
+                  if ((state is TextFieldSuccess || widget.validate!) ||
+                      widget.color == redColor) {
+                    widget.onPressed();
+                  }
+                } else {}
+              } else if (!wasClicked) {
+                setState(() {
+                  wasClicked = !wasClicked;
+                });
+              }
             },
           ),
         ),
