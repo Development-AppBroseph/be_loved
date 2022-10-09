@@ -1,12 +1,10 @@
 // ignore_for_file: avoid_single_cascade_in_expression_statements
 
 import 'dart:io';
-import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/core/helpers/enums.dart';
 import 'package:be_loved/core/network/repository.dart';
 import 'package:be_loved/core/helpers/shared_prefs.dart';
 import 'package:be_loved/models/user/user.dart';
-import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -65,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     var result = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    print(result);
+    //print(result);
     if (result != null) {
       var file = File(result.path);
       final filePath = file.absolute.path;
@@ -144,7 +142,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     var result = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    print(result);
+    //print(result);
     if (result != null) {
       var file = File(result.path);
       final filePath = file.absolute.path;
@@ -230,10 +228,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _inviteUser(InviteUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     if (event.phone.length == 12) {
-      print('aboba');
       var result = await Repository().inviteUser(event.phone);
-      print(result);
+      //print(result);
 
+      print('${result?.date} -дата');
+      if (result?.date == null) {
+        emit(InviteError400('Нет такого номера'));
+      }
       if (result != null) {
         user = result;
         emit(InviteSuccess());

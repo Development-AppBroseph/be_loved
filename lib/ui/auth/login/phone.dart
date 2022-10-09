@@ -170,7 +170,10 @@ class _PhonePageState extends State<PhonePage> {
                       text: 'Продолжить',
                       // validate: state is TextFieldSuccess ? true : false,
                       textColor: Colors.white,
-                      onPressed: _sendCode,
+                      onPressed: () {
+                        _sendCode();
+                        focusNode.unfocus();
+                      },
                     )
                     // CustomAnimationButton(
                     //   text: 'Продолжить',

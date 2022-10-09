@@ -13,6 +13,7 @@ class InputNamePage extends StatelessWidget {
 
   final VoidCallback nextPage;
   final _nicknameController = TextEditingController();
+  FocusNode focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +86,7 @@ class InputNamePage extends StatelessWidget {
                                   color: Colors.white,
                                   child: TextField(
                                     textAlignVertical: TextAlignVertical.top,
+                                    focusNode: focusNode,
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(12)
                                     ],
@@ -134,7 +136,7 @@ class InputNamePage extends StatelessWidget {
                         text: 'Продолжить',
                         textColor: Colors.white,
                         onPressed: () {
-                          FocusScope.of(context).unfocus();
+                          focusNode.unfocus();
 
                           BlocProvider.of<AuthBloc>(context)
                               .add(SetNickname(_nicknameController.text));
