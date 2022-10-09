@@ -4,6 +4,7 @@ import 'package:be_loved/models/user/user.dart';
 import 'package:be_loved/ui/auth/login/phone.dart';
 import 'package:be_loved/ui/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -15,16 +16,18 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // var appData = await AppData.getInstance();
   var user = await MySharedPrefs().user;
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(),
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) {
+    runApp(MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(),
+        ),
+      ],
+      child: OverlaySupport.global(
+        child: MyApp(user: user),
       ),
-    ],
-    child: OverlaySupport.global(
-      child: MyApp(user: user),
-    ),
-  ));
+    ));
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -54,7 +57,7 @@ class MyApp extends StatelessWidget {
 }
 
 // Анекдот ;)
-// 
+//
 // Муравей таскает камешки, веточки, строит дом. Подъезжает стрекоза на кабриолете:
 // — Что делаешь
 // — Дом строю.
