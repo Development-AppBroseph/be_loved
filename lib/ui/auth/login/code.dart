@@ -157,6 +157,7 @@ class _CodePageState extends State<CodePage> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.15.sh),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -33,6 +33,7 @@ class InputNamePage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.sp),
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.15.sh),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -116,7 +117,8 @@ class InputNamePage extends StatelessWidget {
                                           1.0,
                                         ),
                                       ),
-                                      contentPadding: const EdgeInsets.symmetric(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
                                         horizontal: 20,
                                       ),
                                     ),

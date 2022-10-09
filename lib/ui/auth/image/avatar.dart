@@ -43,6 +43,7 @@ class AvatarPage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 10),
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.sh),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

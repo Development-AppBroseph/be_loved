@@ -15,7 +15,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class InvitePartner extends StatefulWidget {
   const InvitePartner(
-      {Key? key, required this.nextPage, required this.previousPage, required this.streamController})
+      {Key? key,
+      required this.nextPage,
+      required this.previousPage,
+      required this.streamController})
       : super(key: key);
 
   final streamController;
@@ -51,7 +54,7 @@ class _InvitePartnerState extends State<InvitePartner> {
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
-          (Timer timer) {
+      (Timer timer) {
         if (_timer != null) {
           if (start == 0) {
             setState(() {
@@ -159,6 +162,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                     padding:
                         EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
                     child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.only(top: 0.sh),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -266,7 +270,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                 ],
                               ),
                               Padding(
-                                padding: EdgeInsets.all(18.w),
+                                padding: EdgeInsets.all(10.w),
                                 child:
                                     SvgPicture.asset('assets/icons/logo.svg'),
                               ),
@@ -286,7 +290,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                           ),
                                         ),
                                         clipBehavior: Clip.hardEdge,
-                                        child: bloc.user?.love?.photo != null && bloc.state is InviteAccepted
+                                        child: bloc.user?.love?.photo != null &&
+                                                bloc.state is InviteAccepted
                                             ? Image.network(
                                                 apiUrl + bloc.user!.love!.photo,
                                                 width: 135.h,
@@ -385,8 +390,11 @@ class _InvitePartnerState extends State<InvitePartner> {
                           CustomButton(
                             color: const Color.fromRGBO(32, 203, 131, 1.0),
                             text: 'Пригласить',
-                            validate: _phoneController.text.length == 12 && isValidate,
-                            code: false,
+                            validate: bloc.user?.love != null
+                                ? false
+                                : _phoneController.text.length == 12 &&
+                                    isValidate,
+                            code: bloc.user?.love != null ? true : false,
                             textColor: Colors.white,
                             onPressed: () async {
                               _inviteUser(context);
@@ -411,7 +419,9 @@ class _InvitePartnerState extends State<InvitePartner> {
                             visible:
                                 bloc.user?.love != null && bloc.user!.fromYou!,
                             color: redColor,
-                            text: _timer.isActive ? _getTime() : 'Отменить приглашение',
+                            text: _timer.isActive
+                                ? _getTime()
+                                : 'Отменить приглашение',
                             textColor: Colors.white,
                             validate: true,
                             onPressed: () async {

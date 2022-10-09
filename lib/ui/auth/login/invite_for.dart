@@ -259,9 +259,8 @@ class _InviteForState extends State<InviteFor> {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.all(15.w),
-                              child:
-                                  SvgPicture.asset('assets/icons/logov3.svg'),
+                              padding: EdgeInsets.all(10.w),
+                              child: SvgPicture.asset('assets/icons/logo.svg'),
                             ),
                             Column(
                               children: [
@@ -368,8 +367,8 @@ class _InviteForState extends State<InviteFor> {
                                 child: SvgPicture.asset(
                                   'assets/icons/back.svg',
                                   width: 15.sp,
-                                  color: const Color.fromRGBO(
-                                      150, 150, 150, 1.0),
+                                  color:
+                                      const Color.fromRGBO(150, 150, 150, 1.0),
                                 ),
                               ),
                             ],
