@@ -78,6 +78,9 @@ class _InviteForState extends State<InviteFor> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
+      if (current is ReletionshipsError) {
+        widget.previewPage();
+      }
       if (current is GetUserSuccess) {
         // Navigator.pop(context);
         return true;
