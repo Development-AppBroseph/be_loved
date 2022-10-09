@@ -138,8 +138,6 @@ class _InvitePartnerState extends State<InvitePartner> {
       }
       return true;
     }, builder: (context, state) {
-      print('${_phoneController.text.length == 12} номер');
-      print('$isValidate vali');
       var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         appBar: appBar(context),
@@ -396,9 +394,12 @@ class _InvitePartnerState extends State<InvitePartner> {
                               setState(() {
                                 timerIsStarted = true;
                               });
+                              _timer.cancel();
+                              print(timerIsStarted);
+                              print(_timer.isActive);
                               if (bloc.user?.me.phoneNumber != _phoneController.text) {
                                 _inviteUser(context);
-                                if (timerIsStarted) {
+                                if (timerIsStarted && !_timer.isActive) {
                                   startTimer();
                                 }
                               }
@@ -427,7 +428,10 @@ class _InvitePartnerState extends State<InvitePartner> {
                             validate: true,
                             onPressed: () async {
                               // nextPage();
-                              isValidate = true;
+                              setState(() {
+                                timerIsStarted = false;
+                                isValidate = true;
+                              });
                               BlocProvider.of<AuthBloc>(context)
                                   .add(DeleteInviteUser());
                             },
