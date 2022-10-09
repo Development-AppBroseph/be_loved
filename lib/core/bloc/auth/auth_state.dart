@@ -107,3 +107,7 @@ class ReletionshipsAcceptedError extends AuthState {}
 class TextFieldSuccess extends AuthState {}
 
 class TextFieldError extends AuthState {}
+
+class CheckIsUserExistSuccess extends AuthState {}
+
+class CheckIsUserExistError extends AuthState {}

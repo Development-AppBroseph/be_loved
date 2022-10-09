@@ -229,7 +229,7 @@ class _InviteForState extends State<InviteFor> {
                                             : bloc.user?.me.photo != null
                                                 ? Image.network(
                                                     apiUrl +
-                                                        bloc.user!.me.photo,
+                                                        bloc.user!.me.photo!,
                                                     width: 135.h,
                                                     height: 135.h,
                                                     fit: BoxFit.cover,
@@ -285,7 +285,8 @@ class _InviteForState extends State<InviteFor> {
                                         ),
                                         child: bloc.user?.love?.photo != null
                                             ? Image.network(
-                                                apiUrl + bloc.user!.love!.photo,
+                                                apiUrl +
+                                                    bloc.user!.love!.photo!,
                                                 width: 135.h,
                                                 height: 135.h,
                                                 fit: BoxFit.cover,

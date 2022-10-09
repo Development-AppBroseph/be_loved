@@ -156,20 +156,43 @@ class Repository {
     }
   }
 
+  Future<bool?> checkPhoneNumber(String phone) async {
+    try {
+      var response = await dio.get(
+        '/auth/code_phone',
+        queryParameters: {
+          'phone_number': phone,
+        },
+      );
+      if (response.statusCode == 200) {
+        print('object 1231231 ${response.data['exists']}');
+        final bool res = response.data['exists'];
+        return res;
+      }
+      // if (response.statusCode == 400) {}
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<String?> initUser(
       String secretKey, String nickname, File? xFile) async {
     try {
+      final data = xFile != null
+          ? {
+              'secret_key': secretKey,
+              'username': nickname,
+              'photo':
+                  MultipartFile.fromFileSync(xFile.path, filename: xFile.path),
+            }
+          : {
+              'secret_key': secretKey,
+              'username': nickname,
+            };
       var response = await dio.post(
         'auth/users',
-        data: FormData.fromMap(
-          {
-            'secret_key': secretKey,
-            'username': nickname,
-            'photo': xFile != null
-                ? MultipartFile.fromFileSync(xFile.path, filename: xFile.path)
-                : null,
-          },
-        ),
+        data: FormData.fromMap(data),
         options: Options(
           validateStatus: (status) => status! <= 450,
         ),
@@ -204,7 +227,6 @@ class Repository {
     var options = Options(headers: {
       'Authorization': 'Token ${await MySharedPrefs().token}',
     }, validateStatus: (status) => status! <= 400);
-    print('phone');
     try {
       var response = await dio.post(
         '/relations/',
@@ -213,6 +235,7 @@ class Repository {
         },
         options: options,
       );
+      print('object $response ${response.statusCode}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }

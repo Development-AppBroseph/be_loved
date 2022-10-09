@@ -131,7 +131,7 @@ class AvatarPage extends StatelessWidget {
                       CustomButton(
                         color: const Color.fromRGBO(32, 203, 131, 1.0),
                         text: bloc.image != null ? 'Продолжить' : 'Пропустить',
-                        validate: bloc.image != null,
+                        validate: true,
                         textColor: Colors.white,
                         onPressed: () => bloc.add(
                           InitUser(),
@@ -398,7 +398,7 @@ class PageTest extends StatelessWidget {
               child: SizedBox(
                 width: 67.w,
                 height: 67.h,
-                child: Material(
+                child: const Material(
                   color: Color.fromRGBO(150, 150, 150, 1),
                   shape: SquircleBorder(
                     radius: BorderRadius.all(

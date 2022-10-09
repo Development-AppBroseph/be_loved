@@ -120,7 +120,7 @@ class RelationShips extends StatelessWidget {
                                             )
                                       : bloc.user?.me.photo != null
                                           ? Image.network(
-                                              apiUrl + bloc.user!.me.photo,
+                                              apiUrl + bloc.user!.me.photo!,
                                               width: 135.h,
                                               height: 135.h,
                                               fit: BoxFit.cover,
@@ -167,7 +167,7 @@ class RelationShips extends StatelessWidget {
                                   clipBehavior: Clip.hardEdge,
                                   child: bloc.user?.love?.photo != null
                                       ? Image.network(
-                                          apiUrl + bloc.user!.love!.photo,
+                                          apiUrl + bloc.user!.love!.photo!,
                                           width: 135.h,
                                           height: 135.h,
                                           fit: BoxFit.cover,

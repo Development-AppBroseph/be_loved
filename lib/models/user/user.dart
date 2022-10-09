@@ -52,7 +52,7 @@ class User {
 
   String username;
   String phoneNumber;
-  String photo;
+  String? photo;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         username: json["username"],
