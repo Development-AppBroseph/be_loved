@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
+import 'package:be_loved/ui/auth/login/phone.dart';
 import 'package:be_loved/ui/auth/login/relationships.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -22,7 +23,7 @@ class InvitePartner extends StatefulWidget {
       required this.streamController})
       : super(key: key);
 
-  final streamController;
+  final StreamController streamController;
   final VoidCallback nextPage;
   final VoidCallback previousPage;
 
@@ -37,10 +38,12 @@ class _InvitePartnerState extends State<InvitePartner> {
   bool timerIsStarted = false;
   bool inviteUser = true;
 
+  FocusNode focusNode = FocusNode();
+
   final _phoneController = TextEditingController();
 
-  void _inviteUser(BuildContext context) =>
-      BlocProvider.of<AuthBloc>(context).add(InviteUser(_phoneController.text));
+  void _inviteUser(BuildContext context) => BlocProvider.of<AuthBloc>(context)
+      .add(InviteUser('+7${_phoneController.text.replaceAll(' ', '')}'));
 
   @override
   void initState() {
@@ -53,26 +56,31 @@ class _InvitePartnerState extends State<InvitePartner> {
   TextEditingController textEditingControllerDown = TextEditingController();
 
   void startTimer() {
-    start = 30;
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (_timer != null) {
-          if (start == 0) {
-            setState(() {
-              BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-              isValidate = true;
-              timer.cancel();
-            });
-          } else {
-            setState(() {
-              start--;
-            });
+    if (!_timer.isActive) {
+      start = 30;
+      const oneSec = Duration(seconds: 1);
+      _timer = Timer.periodic(
+        oneSec,
+        (Timer timer) {
+          if (_timer != null) {
+            if (start == 0) {
+              setState(() {
+                BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+                BlocProvider.of<AuthBloc>(context).add(CheckIsUserPhone(
+                    '7${_phoneController.text.replaceAll(' ', '')}'));
+
+                isValidate = true;
+                timer.cancel();
+              });
+            } else {
+              setState(() {
+                start--;
+              });
+            }
           }
-        }
-      },
-    );
+        },
+      );
+    }
   }
 
   @override
@@ -90,6 +98,7 @@ class _InvitePartnerState extends State<InvitePartner> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
+      printError(info: current.toString());
       // print(
       //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
       // if (current is GetUserError) {
@@ -162,6 +171,10 @@ class _InvitePartnerState extends State<InvitePartner> {
         //     fullscreenDialog: true,
         //   ),
         // ).then((value) => _startSearch(context));
+      }
+      if (current is DeleteInviteSuccess) {
+        BlocProvider.of<AuthBloc>(context).add(
+            CheckIsUserPhone('7${_phoneController.text.replaceAll(' ', '')}'));
       }
 
       print('object ${current} ${inviteUser}');
@@ -348,73 +361,95 @@ class _InvitePartnerState extends State<InvitePartner> {
                               ),
                             ],
                           ),
-                          Container(
-                            height: 70.sp,
-                            margin: EdgeInsets.only(top: 44.h),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                            ),
-                            alignment: Alignment.center,
+                          Padding(
+                            padding: EdgeInsets.only(top: 37.h, bottom: 5.h),
                             child: Container(
-                              alignment: Alignment.center,
-                              height: 60.sp,
-                              width: 0.78.sw,
-                              child: TextField(
-                                controller: _phoneController,
-                                style: GoogleFonts.inter(
-                                  fontSize: 25.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                              height: 70.h,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(10),
+                                  right: Radius.circular(10),
                                 ),
-                                keyboardType: TextInputType.phone,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(12),
-                                  // CustomInputFormatter()
-                                ],
-                                onChanged: (text) {
-                                  if (_phoneController.length == 12) {
-                                    print('123');
-                                    setState(() {
-                                      isValidate = true;
-                                    });
-                                  }
-                                  if (text.length == 1 && text != '+') {
-                                    // setState(() {
-                                    _phoneController.text = '+7$text';
-                                    _phoneController.selection =
-                                        TextSelection.fromPosition(
-                                      TextPosition(
-                                        offset: _phoneController.text.length,
+                              ),
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child:
+                                        Image.asset('assets/images/code.png'),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    '+7',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 25.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Container(
+                                    height: 37.h,
+                                    width: 1.w,
+                                    color: const Color.fromRGBO(
+                                        224, 224, 224, 1.0),
+                                  ),
+                                  SizedBox(
+                                    width: 12.w,
+                                  ),
+                                  Container(
+                                    width: 0.6.sw,
+                                    alignment: Alignment.center,
+                                    child: TextField(
+                                      controller: _phoneController,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 25.sp,
+                                        fontWeight: FontWeight.w700,
                                       ),
-                                    );
-                                    // });
-                                  }
-                                  if (text.length == 12) {
-                                    inviteUser = true;
-                                    // bloc.add(TextFieldFilled(true));
-                                    // print(
-                                    //     'object ${text.substring(1, text.length)}');
-                                    bloc.add(CheckIsUserPhone(
-                                        text.substring(1, text.length)));
-                                  } else {
-                                    bloc.add(TextFieldFilled(false));
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  hintText: '+79990009900',
-                                  hintStyle: GoogleFonts.inter(
-                                    fontSize: 25.sp,
-                                    color:
-                                        const Color.fromRGBO(150, 150, 150, 1),
-                                    fontWeight: FontWeight.w700,
+                                      onChanged: (value) {
+                                        if (_phoneController.length == 12) {
+                                          print('123');
+                                          setState(() {
+                                            isValidate = true;
+                                          });
+                                        }
+                                        if (value.length == 13) {
+                                          inviteUser = true;
+                                          // bloc.add(TextFieldFilled(true));
+                                          // print(
+                                          //     'object ${text.substring(1, text.length)}');
+                                          focusNode.unfocus();
+                                          bloc.add(CheckIsUserPhone(
+                                              '7${_phoneController.text.replaceAll(' ', '')}'));
+                                          printError(
+                                              info:
+                                                  '+7${_phoneController.text.replaceAll(' ', '')}');
+                                        } else {
+                                          bloc.add(TextFieldFilled(false));
+                                        }
+                                      },
+                                      focusNode: focusNode,
+                                      decoration: InputDecoration(
+                                        alignLabelWithHint: true,
+                                        border: InputBorder.none,
+                                        hintText: '900 000 00 00',
+                                        hintStyle: GoogleFonts.inter(
+                                          fontSize: 25.sp,
+                                          color: const Color.fromRGBO(
+                                              150, 150, 150, 1),
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.never,
+                                      ),
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        CustomInputFormatter(),
+                                      ],
+                                      keyboardType: TextInputType.number,
+                                    ),
                                   ),
-                                  border: InputBorder.none,
-                                  alignLabelWithHint: true,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
@@ -424,7 +459,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                           CustomButton(
                             color: const Color.fromRGBO(32, 203, 131, 1.0),
                             text: 'Пригласить',
-                            validate: (_phoneController.text.length == 12) &&
+                            validate: (_phoneController.text.length == 13) &&
                                 inviteUser,
                             code: false,
                             textColor: Colors.white,
@@ -435,7 +470,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                               _timer.cancel();
                               print(timerIsStarted);
                               print(_timer.isActive);
-                              if (bloc.user?.me.phoneNumber != _phoneController.text) {
+                              if (bloc.user?.me.phoneNumber !=
+                                  _phoneController.text) {
                                 _inviteUser(context);
                                 if (timerIsStarted && !_timer.isActive) {
                                   startTimer();
