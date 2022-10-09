@@ -15,7 +15,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class InvitePartner extends StatefulWidget {
   const InvitePartner(
-      {Key? key, required this.nextPage, required this.previousPage, required this.streamController})
+      {Key? key,
+      required this.nextPage,
+      required this.previousPage,
+      required this.streamController})
       : super(key: key);
 
   final streamController;
@@ -30,6 +33,7 @@ class _InvitePartnerState extends State<InvitePartner> {
   late Timer _timer;
   int start = 30;
   bool isValidate = true;
+  bool inviteUser = true;
 
   final _phoneController = TextEditingController();
 
@@ -51,7 +55,7 @@ class _InvitePartnerState extends State<InvitePartner> {
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
-          (Timer timer) {
+      (Timer timer) {
         if (_timer != null) {
           if (start == 0) {
             setState(() {
@@ -84,7 +88,15 @@ class _InvitePartnerState extends State<InvitePartner> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
+      // print(
+      //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
+      // if (current is GetUserError) {
+      //   inviteUser = true;
+      // }
+
       if (current is InviteSuccess) {
+        inviteUser = false;
+        startTimer();
         // StandartSnackBar.show(
         //   'Приглашение успешно отправлено',
         //   SnackBarStatus(Icons.done, Colors.green),
@@ -109,6 +121,21 @@ class _InvitePartnerState extends State<InvitePartner> {
         // ).then((value) => _startSearch(context));
       }
       if (current is InviteError) {
+        inviteUser = false;
+        // StandartSnackBar.show(
+        //   'Приглашение не удалось отправить',
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
+      }
+      if (current is CheckIsUserExistError) {
+        inviteUser = false;
+        // StandartSnackBar.show(
+        //   'Приглашение не удалось отправить',
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
+      }
+      if (current is CheckIsUserExistSuccess) {
+        inviteUser = true;
         // StandartSnackBar.show(
         //   'Приглашение не удалось отправить',
         //   SnackBarStatus(Icons.error, redColor),
@@ -134,9 +161,10 @@ class _InvitePartnerState extends State<InvitePartner> {
         //   ),
         // ).then((value) => _startSearch(context));
       }
+
+      print('object ${current} ${inviteUser}');
       return true;
     }, builder: (context, state) {
-      print(_phoneController.text.length == 12);
       var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         appBar: appBar(context),
@@ -225,7 +253,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                               ? bloc.user?.me.photo != null
                                                   ? Image.network(
                                                       apiUrl +
-                                                          bloc.user!.me.photo,
+                                                          bloc.user!.me.photo!,
                                                       fit: BoxFit.cover,
                                                     )
                                                   : Padding(
@@ -286,9 +314,11 @@ class _InvitePartnerState extends State<InvitePartner> {
                                           ),
                                         ),
                                         clipBehavior: Clip.hardEdge,
-                                        child: bloc.user?.love?.photo != null && bloc.state is InviteAccepted
+                                        child: bloc.user?.love?.photo != null &&
+                                                bloc.state is InviteAccepted
                                             ? Image.network(
-                                                apiUrl + bloc.user!.love!.photo,
+                                                apiUrl +
+                                                    bloc.user!.love!.photo!,
                                                 width: 135.h,
                                                 height: 135.h,
                                                 fit: BoxFit.cover,
@@ -357,7 +387,12 @@ class _InvitePartnerState extends State<InvitePartner> {
                                     // });
                                   }
                                   if (text.length == 12) {
-                                    bloc.add(TextFieldFilled(true));
+                                    inviteUser = true;
+                                    // bloc.add(TextFieldFilled(true));
+                                    // print(
+                                    //     'object ${text.substring(1, text.length)}');
+                                    bloc.add(CheckIsUserPhone(
+                                        text.substring(1, text.length)));
                                   } else {
                                     bloc.add(TextFieldFilled(false));
                                   }
@@ -385,7 +420,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                           CustomButton(
                             color: const Color.fromRGBO(32, 203, 131, 1.0),
                             text: 'Пригласить',
-                            validate: _phoneController.text.length == 12 && isValidate,
+                            validate: (_phoneController.text.length == 12) &&
+                                inviteUser,
                             code: false,
                             textColor: Colors.white,
                             onPressed: () async {
@@ -393,7 +429,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                               setState(() {
                                 isValidate = false;
                               });
-                              startTimer();
+                              // startTimer();
                             },
                           ),
                           // CustomAnimationButton(
@@ -411,7 +447,9 @@ class _InvitePartnerState extends State<InvitePartner> {
                             visible:
                                 bloc.user?.love != null && bloc.user!.fromYou!,
                             color: redColor,
-                            text: _timer.isActive ? _getTime() : 'Отменить приглашение',
+                            text: _timer.isActive
+                                ? _getTime()
+                                : 'Отменить приглашение',
                             textColor: Colors.white,
                             validate: true,
                             onPressed: () async {
