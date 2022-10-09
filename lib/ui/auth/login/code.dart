@@ -130,20 +130,24 @@ class _CodePageState extends State<CodePage> {
             padding: EdgeInsets.only(top: 20.h, right: 6.w),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: IconButton(
-                padding: const EdgeInsets.only(right: 20),
-                icon: SvgPicture.asset(
-                  'assets/icons/back.svg',
-                  width: 15,
+              child: Container(
+                height: 55.h,
+                width: 55.h,
+                alignment: Alignment.center,
+                child: IconButton(
+                  icon: SvgPicture.asset(
+                    'assets/icons/back.svg',
+                    width: 15,
+                  ),
+                  hoverColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
+              ),
             ),
           ),
           automaticallyImplyLeading: false,

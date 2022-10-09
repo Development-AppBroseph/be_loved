@@ -388,7 +388,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                             validate: _phoneController.text.length == 12 && isValidate,
                             code: false,
                             textColor: Colors.white,
-                            onPressed: () {
+                            onPressed: () async {
                               _inviteUser(context);
                               setState(() {
                                 isValidate = false;
@@ -451,8 +451,11 @@ class _InvitePartnerState extends State<InvitePartner> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-                padding: const EdgeInsets.only(right: 20),
+            Container(
+              height: 55.h,
+              width: 55.h,
+              alignment: Alignment.center,
+              child: IconButton(
                 icon: SvgPicture.asset(
                   'assets/icons/back.svg',
                   width: 15,
@@ -461,8 +464,11 @@ class _InvitePartnerState extends State<InvitePartner> {
                 splashColor: Colors.transparent,
                 focusColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onPressed: widget.previousPage,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
+            ),
             SizedBox(
               height: 5.sp,
               width: 55,

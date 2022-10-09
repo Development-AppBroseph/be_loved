@@ -173,8 +173,11 @@ class InputNamePage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-                padding: const EdgeInsets.only(right: 20),
+            Container(
+              height: 55.h,
+              width: 55.h,
+              alignment: Alignment.center,
+              child: IconButton(
                 icon: SvgPicture.asset(
                   'assets/icons/back.svg',
                   width: 15,
@@ -187,6 +190,7 @@ class InputNamePage extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
+            ),
             SizedBox(
               height: 5.sp,
               width: 55,
