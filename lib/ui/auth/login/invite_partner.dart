@@ -413,18 +413,24 @@ class _InvitePartnerState extends State<InvitePartner> {
                                             isValidate = true;
                                           });
                                         }
-                                        if (value.length == 13) {
+                                        if (value.length == 13 &&
+                                            bloc.user?.love == null) {
                                           inviteUser = true;
                                           // bloc.add(TextFieldFilled(true));
                                           // print(
                                           //     'object ${text.substring(1, text.length)}');
                                           focusNode.unfocus();
-                                          bloc.add(CheckIsUserPhone(
-                                              '7${_phoneController.text.replaceAll(' ', '')}'));
+                                          if (bloc.user?.love == null) {
+                                            bloc.add(CheckIsUserPhone(
+                                                '7${_phoneController.text.replaceAll(' ', '')}'));
+                                          }
                                           printError(
                                               info:
                                                   '+7${_phoneController.text.replaceAll(' ', '')}');
                                         } else {
+                                          if (value.length == 13) {
+                                            focusNode.unfocus();
+                                          }
                                           bloc.add(TextFieldFilled(false));
                                         }
                                       },
