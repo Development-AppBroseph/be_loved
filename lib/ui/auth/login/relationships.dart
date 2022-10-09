@@ -51,6 +51,7 @@ class RelationShips extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.sh),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -119,7 +120,7 @@ class RelationShips extends StatelessWidget {
                                             )
                                       : bloc.user?.me.photo != null
                                           ? Image.network(
-                                              apiUrl + bloc.user!.me.photo,
+                                              apiUrl + bloc.user!.me.photo!,
                                               width: 135.h,
                                               height: 135.h,
                                               fit: BoxFit.cover,
@@ -146,7 +147,7 @@ class RelationShips extends StatelessWidget {
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.all(18.w),
+                          padding: EdgeInsets.all(10.w),
                           child: SvgPicture.asset('assets/icons/logov2.svg'),
                         ),
                         Column(
@@ -166,7 +167,7 @@ class RelationShips extends StatelessWidget {
                                   clipBehavior: Clip.hardEdge,
                                   child: bloc.user?.love?.photo != null
                                       ? Image.network(
-                                          apiUrl + bloc.user!.love!.photo,
+                                          apiUrl + bloc.user!.love!.photo!,
                                           width: 135.h,
                                           height: 135.h,
                                           fit: BoxFit.cover,

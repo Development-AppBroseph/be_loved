@@ -43,6 +43,7 @@ class AvatarPage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 10),
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.sh),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +131,7 @@ class AvatarPage extends StatelessWidget {
                       CustomButton(
                         color: const Color.fromRGBO(32, 203, 131, 1.0),
                         text: bloc.image != null ? 'Продолжить' : 'Пропустить',
-                        validate: bloc.image != null,
+                        validate: true,
                         textColor: Colors.white,
                         onPressed: () => bloc.add(
                           InitUser(),
@@ -397,7 +398,7 @@ class PageTest extends StatelessWidget {
               child: SizedBox(
                 width: 67.w,
                 height: 67.h,
-                child: Material(
+                child: const Material(
                   color: Color.fromRGBO(150, 150, 150, 1),
                   shape: SquircleBorder(
                     radius: BorderRadius.all(

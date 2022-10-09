@@ -78,6 +78,12 @@ class InviteError extends AuthState {
   InviteError(this.error);
 }
 
+class InviteError400 extends AuthState {
+  String error;
+
+  InviteError400(this.error);
+}
+
 class DeleteInviteSuccess extends AuthState {}
 
 class DeleteInviteError extends AuthState {}
@@ -101,3 +107,7 @@ class ReletionshipsAcceptedError extends AuthState {}
 class TextFieldSuccess extends AuthState {}
 
 class TextFieldError extends AuthState {}
+
+class CheckIsUserExistSuccess extends AuthState {}
+
+class CheckIsUserExistError extends AuthState {}

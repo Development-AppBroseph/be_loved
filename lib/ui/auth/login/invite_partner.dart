@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
+import 'package:be_loved/ui/auth/login/phone.dart';
 import 'package:be_loved/ui/auth/login/relationships.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -12,13 +13,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart' as Get;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pinput/pinput.dart';
 
 class InvitePartner extends StatefulWidget {
   const InvitePartner(
-      {Key? key, required this.nextPage, required this.previousPage, required this.streamController})
+      {Key? key,
+      required this.nextPage,
+      required this.previousPage,
+      required this.streamController})
       : super(key: key);
 
-  final streamController;
+  final StreamController streamController;
   final VoidCallback nextPage;
   final VoidCallback previousPage;
 
@@ -30,11 +35,15 @@ class _InvitePartnerState extends State<InvitePartner> {
   late Timer _timer;
   int start = 30;
   bool isValidate = true;
+  bool timerIsStarted = false;
+  bool inviteUser = true;
+
+  FocusNode focusNode = FocusNode();
 
   final _phoneController = TextEditingController();
 
-  void _inviteUser(BuildContext context) =>
-      BlocProvider.of<AuthBloc>(context).add(InviteUser(_phoneController.text));
+  void _inviteUser(BuildContext context) => BlocProvider.of<AuthBloc>(context)
+      .add(InviteUser('+7${_phoneController.text.replaceAll(' ', '')}'));
 
   @override
   void initState() {
@@ -47,26 +56,31 @@ class _InvitePartnerState extends State<InvitePartner> {
   TextEditingController textEditingControllerDown = TextEditingController();
 
   void startTimer() {
-    start = 30;
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-          (Timer timer) {
-        if (_timer != null) {
-          if (start == 0) {
-            setState(() {
-              BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-              isValidate = true;
-              timer.cancel();
-            });
-          } else {
-            setState(() {
-              start--;
-            });
+    if (!_timer.isActive) {
+      start = 30;
+      const oneSec = Duration(seconds: 1);
+      _timer = Timer.periodic(
+        oneSec,
+        (Timer timer) {
+          if (_timer != null) {
+            if (start == 0) {
+              setState(() {
+                BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+                BlocProvider.of<AuthBloc>(context).add(CheckIsUserPhone(
+                    '7${_phoneController.text.replaceAll(' ', '')}'));
+
+                isValidate = true;
+                timer.cancel();
+              });
+            } else {
+              setState(() {
+                start--;
+              });
+            }
           }
-        }
-      },
-    );
+        },
+      );
+    }
   }
 
   @override
@@ -84,7 +98,16 @@ class _InvitePartnerState extends State<InvitePartner> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
+      printError(info: current.toString());
+      // print(
+      //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
+      // if (current is GetUserError) {
+      //   inviteUser = true;
+      // }
+
       if (current is InviteSuccess) {
+        inviteUser = false;
+        startTimer();
         // StandartSnackBar.show(
         //   'Приглашение успешно отправлено',
         //   SnackBarStatus(Icons.done, Colors.green),
@@ -109,6 +132,21 @@ class _InvitePartnerState extends State<InvitePartner> {
         // ).then((value) => _startSearch(context));
       }
       if (current is InviteError) {
+        inviteUser = false;
+        // StandartSnackBar.show(
+        //   'Приглашение не удалось отправить',
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
+      }
+      if (current is CheckIsUserExistError) {
+        inviteUser = false;
+        // StandartSnackBar.show(
+        //   'Приглашение не удалось отправить',
+        //   SnackBarStatus(Icons.error, redColor),
+        // );
+      }
+      if (current is CheckIsUserExistSuccess) {
+        inviteUser = true;
         // StandartSnackBar.show(
         //   'Приглашение не удалось отправить',
         //   SnackBarStatus(Icons.error, redColor),
@@ -134,9 +172,14 @@ class _InvitePartnerState extends State<InvitePartner> {
         //   ),
         // ).then((value) => _startSearch(context));
       }
+      if (current is DeleteInviteSuccess) {
+        BlocProvider.of<AuthBloc>(context).add(
+            CheckIsUserPhone('7${_phoneController.text.replaceAll(' ', '')}'));
+      }
+
+      print('object ${current} ${inviteUser}');
       return true;
     }, builder: (context, state) {
-      print(_phoneController.text.length == 12);
       var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         appBar: appBar(context),
@@ -159,6 +202,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                     padding:
                         EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
                     child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.only(top: 0.sh),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -225,7 +269,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                               ? bloc.user?.me.photo != null
                                                   ? Image.network(
                                                       apiUrl +
-                                                          bloc.user!.me.photo,
+                                                          bloc.user!.me.photo!,
                                                       fit: BoxFit.cover,
                                                     )
                                                   : Padding(
@@ -266,7 +310,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                 ],
                               ),
                               Padding(
-                                padding: EdgeInsets.all(18.w),
+                                padding: EdgeInsets.all(10.w),
                                 child:
                                     SvgPicture.asset('assets/icons/logo.svg'),
                               ),
@@ -286,9 +330,11 @@ class _InvitePartnerState extends State<InvitePartner> {
                                           ),
                                         ),
                                         clipBehavior: Clip.hardEdge,
-                                        child: bloc.user?.love?.photo != null && bloc.state is InviteAccepted
+                                        child: bloc.user?.love?.photo != null &&
+                                                bloc.state is InviteAccepted
                                             ? Image.network(
-                                                apiUrl + bloc.user!.love!.photo,
+                                                apiUrl +
+                                                    bloc.user!.love!.photo!,
                                                 width: 135.h,
                                                 height: 135.h,
                                                 fit: BoxFit.cover,
@@ -315,67 +361,95 @@ class _InvitePartnerState extends State<InvitePartner> {
                               ),
                             ],
                           ),
-                          Container(
-                            height: 70.sp,
-                            margin: EdgeInsets.only(top: 44.h),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                            ),
-                            alignment: Alignment.center,
+                          Padding(
+                            padding: EdgeInsets.only(top: 37.h, bottom: 5.h),
                             child: Container(
-                              alignment: Alignment.center,
-                              height: 60.sp,
-                              width: 0.78.sw,
-                              child: TextField(
-                                controller: _phoneController,
-                                style: GoogleFonts.inter(
-                                  fontSize: 25.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                              height: 70.h,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.horizontal(
+                                  left: Radius.circular(10),
+                                  right: Radius.circular(10),
                                 ),
-                                keyboardType: TextInputType.phone,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(12),
-                                  // CustomInputFormatter()
-                                ],
-                                onChanged: (text) {
-                                  if (_phoneController.text == 12) {
-                                    setState(() {
-                                      isValidate = false;
-                                    });
-                                  }
-                                  if (text.length == 1 && text != '+') {
-                                    // setState(() {
-                                    _phoneController.text = '+7$text';
-                                    _phoneController.selection =
-                                        TextSelection.fromPosition(
-                                      TextPosition(
-                                        offset: _phoneController.text.length,
+                              ),
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child:
+                                        Image.asset('assets/images/code.png'),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    '+7',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 25.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Container(
+                                    height: 37.h,
+                                    width: 1.w,
+                                    color: const Color.fromRGBO(
+                                        224, 224, 224, 1.0),
+                                  ),
+                                  SizedBox(
+                                    width: 12.w,
+                                  ),
+                                  Container(
+                                    width: 0.6.sw,
+                                    alignment: Alignment.center,
+                                    child: TextField(
+                                      controller: _phoneController,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 25.sp,
+                                        fontWeight: FontWeight.w700,
                                       ),
-                                    );
-                                    // });
-                                  }
-                                  if (text.length == 12) {
-                                    bloc.add(TextFieldFilled(true));
-                                  } else {
-                                    bloc.add(TextFieldFilled(false));
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  hintText: '+79990009900',
-                                  hintStyle: GoogleFonts.inter(
-                                    fontSize: 25.sp,
-                                    color:
-                                        const Color.fromRGBO(150, 150, 150, 1),
-                                    fontWeight: FontWeight.w700,
+                                      onChanged: (value) {
+                                        if (_phoneController.length == 12) {
+                                          print('123');
+                                          setState(() {
+                                            isValidate = true;
+                                          });
+                                        }
+                                        if (value.length == 13) {
+                                          inviteUser = true;
+                                          // bloc.add(TextFieldFilled(true));
+                                          // print(
+                                          //     'object ${text.substring(1, text.length)}');
+                                          focusNode.unfocus();
+                                          bloc.add(CheckIsUserPhone(
+                                              '7${_phoneController.text.replaceAll(' ', '')}'));
+                                          printError(
+                                              info:
+                                                  '+7${_phoneController.text.replaceAll(' ', '')}');
+                                        } else {
+                                          bloc.add(TextFieldFilled(false));
+                                        }
+                                      },
+                                      focusNode: focusNode,
+                                      decoration: InputDecoration(
+                                        alignLabelWithHint: true,
+                                        border: InputBorder.none,
+                                        hintText: '900 000 00 00',
+                                        hintStyle: GoogleFonts.inter(
+                                          fontSize: 25.sp,
+                                          color: const Color.fromRGBO(
+                                              150, 150, 150, 1),
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.never,
+                                      ),
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        CustomInputFormatter(),
+                                      ],
+                                      keyboardType: TextInputType.number,
+                                    ),
                                   ),
-                                  border: InputBorder.none,
-                                  alignLabelWithHint: true,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
@@ -385,15 +459,28 @@ class _InvitePartnerState extends State<InvitePartner> {
                           CustomButton(
                             color: const Color.fromRGBO(32, 203, 131, 1.0),
                             text: 'Пригласить',
-                            validate: _phoneController.text.length == 12 && isValidate,
+                            validate: (_phoneController.text.length == 13) &&
+                                inviteUser,
                             code: false,
                             textColor: Colors.white,
                             onPressed: () async {
-                              _inviteUser(context);
+                              setState(() {
+                                timerIsStarted = true;
+                              });
+                              _timer.cancel();
+                              print(timerIsStarted);
+                              print(_timer.isActive);
+                              if (bloc.user?.me.phoneNumber !=
+                                  _phoneController.text) {
+                                _inviteUser(context);
+                                if (timerIsStarted && !_timer.isActive) {
+                                  startTimer();
+                                }
+                              }
                               setState(() {
                                 isValidate = false;
                               });
-                              startTimer();
+                              // startTimer();
                             },
                           ),
                           // CustomAnimationButton(
@@ -411,12 +498,17 @@ class _InvitePartnerState extends State<InvitePartner> {
                             visible:
                                 bloc.user?.love != null && bloc.user!.fromYou!,
                             color: redColor,
-                            text: _timer.isActive ? _getTime() : 'Отменить приглашение',
+                            text: _timer.isActive
+                                ? _getTime()
+                                : 'Отменить приглашение',
                             textColor: Colors.white,
                             validate: true,
                             onPressed: () async {
                               // nextPage();
-                              isValidate = true;
+                              setState(() {
+                                timerIsStarted = false;
+                                isValidate = true;
+                              });
                               BlocProvider.of<AuthBloc>(context)
                                   .add(DeleteInviteUser());
                             },

@@ -1,12 +1,10 @@
 // ignore_for_file: avoid_single_cascade_in_expression_statements
 
 import 'dart:io';
-import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/core/helpers/enums.dart';
 import 'package:be_loved/core/network/repository.dart';
 import 'package:be_loved/core/helpers/shared_prefs.dart';
 import 'package:be_loved/models/user/user.dart';
-import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -28,6 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthStated()) {
     on<SendPhone>((event, emit) => _sendPhone(event, emit));
     on<CheckUser>((event, emit) => _checkUser(event, emit));
+    on<CheckIsUserPhone>((event, emit) => _checkPhoneNumber(event, emit));
     on<SetNickname>((event, emit) => _setNickname(event, emit));
     on<PickImage>((event, emit) => _pickImage(event, emit));
     on<InitUser>((event, emit) => _initUser(event, emit));
@@ -65,7 +64,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     var result = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    print(result);
+    //print(result);
     if (result != null) {
       var file = File(result.path);
       final filePath = file.absolute.path;
@@ -144,7 +143,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     var result = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    print(result);
+    //print(result);
     if (result != null) {
       var file = File(result.path);
       final filePath = file.absolute.path;
@@ -167,11 +166,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _initUser(InitUser event, Emitter<AuthState> emit) async {
     try {
-      var result = await Repository().initUser(
-        secretKey ?? '',
-        nickname ?? '',
-        File(image!.path),
-      );
+      var result = await Repository().initUser(secretKey ?? '', nickname ?? '',
+          image == null ? null : File(image!.path));
 
       if (result != null) {
         token = result;
@@ -230,15 +226,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _inviteUser(InviteUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     if (event.phone.length == 12) {
-      print('aboba');
       var result = await Repository().inviteUser(event.phone);
-      print(result);
+      //print(result);
 
+      print('${result?.date} -дата');
+      if (result?.date == null) {
+        emit(InviteError400('Нет такого номера'));
+      }
       if (result != null) {
         user = result;
         emit(InviteSuccess());
+      } else {
+        emit(InviteError('Укажите номер пользователя'));
       }
     } else {
+      // print('objecterror');
       emit(InviteError('Укажите номер пользователя'));
       return;
     }
@@ -271,6 +273,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(ReletionshipsStarted());
     } else {
       emit(ReletionshipsError());
+    }
+  }
+
+  void _checkPhoneNumber(
+      CheckIsUserPhone event, Emitter<AuthState> emit) async {
+    // emit(AuthLoading());
+    var result = await Repository().checkPhoneNumber(event.phone);
+
+    print('objectasd $result');
+    if (result != null && result) {
+      emit(CheckIsUserExistSuccess());
+    } else {
+      emit(CheckIsUserExistError());
     }
   }
 

@@ -32,6 +32,12 @@ class PickImage extends AuthEvent {}
 
 class InitUser extends AuthEvent {}
 
+class CheckIsUserPhone extends AuthEvent {
+  String phone;
+
+  CheckIsUserPhone(this.phone);
+}
+
 class InviteUser extends AuthEvent {
   String phone;
 

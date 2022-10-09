@@ -229,7 +229,7 @@ class _InviteForState extends State<InviteFor> {
                                             : bloc.user?.me.photo != null
                                                 ? Image.network(
                                                     apiUrl +
-                                                        bloc.user!.me.photo,
+                                                        bloc.user!.me.photo!,
                                                     width: 135.h,
                                                     height: 135.h,
                                                     fit: BoxFit.cover,
@@ -259,9 +259,8 @@ class _InviteForState extends State<InviteFor> {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.all(15.w),
-                              child:
-                                  SvgPicture.asset('assets/icons/logov3.svg'),
+                              padding: EdgeInsets.all(10.w),
+                              child: SvgPicture.asset('assets/icons/logo.svg'),
                             ),
                             Column(
                               children: [
@@ -286,7 +285,8 @@ class _InviteForState extends State<InviteFor> {
                                         ),
                                         child: bloc.user?.love?.photo != null
                                             ? Image.network(
-                                                apiUrl + bloc.user!.love!.photo,
+                                                apiUrl +
+                                                    bloc.user!.love!.photo!,
                                                 width: 135.h,
                                                 height: 135.h,
                                                 fit: BoxFit.cover,
@@ -368,8 +368,8 @@ class _InviteForState extends State<InviteFor> {
                                 child: SvgPicture.asset(
                                   'assets/icons/back.svg',
                                   width: 15.sp,
-                                  color: const Color.fromRGBO(
-                                      150, 150, 150, 1.0),
+                                  color:
+                                      const Color.fromRGBO(150, 150, 150, 1.0),
                                 ),
                               ),
                             ],

@@ -157,6 +157,7 @@ class _CodePageState extends State<CodePage> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.15.sh),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +220,10 @@ class _CodePageState extends State<CodePage> {
                       color: const Color.fromRGBO(32, 203, 131, 1.0),
                       text: 'Продолжить',
                       textColor: Colors.white,
-                      onPressed: () => _checkCode(context),
+                      onPressed: () {
+                        _checkCode(context);
+                        focusNode.unfocus();
+                      },
                     ),
                     // CustomAnimationButton(
                     //   text: 'Продолжить',

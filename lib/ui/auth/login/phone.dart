@@ -61,6 +61,7 @@ class _PhonePageState extends State<PhonePage> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.15.sh),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -170,7 +171,10 @@ class _PhonePageState extends State<PhonePage> {
                       text: 'Продолжить',
                       // validate: state is TextFieldSuccess ? true : false,
                       textColor: Colors.white,
-                      onPressed: _sendCode,
+                      onPressed: () {
+                        _sendCode();
+                        focusNode.unfocus();
+                      },
                     )
                     // CustomAnimationButton(
                     //   text: 'Продолжить',
