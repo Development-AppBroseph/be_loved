@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart' as Get;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pinput/pinput.dart';
 
 class InvitePartner extends StatefulWidget {
   const InvitePartner(
@@ -33,6 +34,7 @@ class _InvitePartnerState extends State<InvitePartner> {
   late Timer _timer;
   int start = 30;
   bool isValidate = true;
+  bool timerIsStarted = false;
 
   final _phoneController = TextEditingController();
 
@@ -139,7 +141,6 @@ class _InvitePartnerState extends State<InvitePartner> {
       }
       return true;
     }, builder: (context, state) {
-      print(_phoneController.text.length == 12);
       var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         appBar: appBar(context),
@@ -345,9 +346,10 @@ class _InvitePartnerState extends State<InvitePartner> {
                                   // CustomInputFormatter()
                                 ],
                                 onChanged: (text) {
-                                  if (_phoneController.text == 12) {
+                                  if (_phoneController.length == 12) {
+                                    print('123');
                                     setState(() {
-                                      isValidate = false;
+                                      isValidate = true;
                                     });
                                   }
                                   if (text.length == 1 && text != '+') {
@@ -397,11 +399,21 @@ class _InvitePartnerState extends State<InvitePartner> {
                             code: bloc.user?.love != null ? true : false,
                             textColor: Colors.white,
                             onPressed: () async {
-                              _inviteUser(context);
+                              setState(() {
+                                timerIsStarted = true;
+                              });
+                              _timer.cancel();
+                              print(timerIsStarted);
+                              print(_timer.isActive);
+                              if (bloc.user?.me.phoneNumber != _phoneController.text) {
+                                _inviteUser(context);
+                                if (timerIsStarted && !_timer.isActive) {
+                                  startTimer();
+                                }
+                              }
                               setState(() {
                                 isValidate = false;
                               });
-                              startTimer();
                             },
                           ),
                           // CustomAnimationButton(
@@ -426,7 +438,10 @@ class _InvitePartnerState extends State<InvitePartner> {
                             validate: true,
                             onPressed: () async {
                               // nextPage();
-                              isValidate = true;
+                              setState(() {
+                                timerIsStarted = false;
+                                isValidate = true;
+                              });
                               BlocProvider.of<AuthBloc>(context)
                                   .add(DeleteInviteUser());
                             },

@@ -220,7 +220,10 @@ class _CodePageState extends State<CodePage> {
                       color: const Color.fromRGBO(32, 203, 131, 1.0),
                       text: 'Продолжить',
                       textColor: Colors.white,
-                      onPressed: () => _checkCode(context),
+                      onPressed: () {
+                        _checkCode(context);
+                        focusNode.unfocus();
+                      },
                     ),
                     // CustomAnimationButton(
                     //   text: 'Продолжить',
