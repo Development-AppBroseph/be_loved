@@ -52,7 +52,6 @@ class InviteRelation extends StatelessWidget {
   }
 
   void nextPage() {
-    print('nextPage');
     pageController.previousPage(
         duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
   }

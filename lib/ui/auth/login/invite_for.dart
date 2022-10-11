@@ -65,7 +65,8 @@ class _InviteForState extends State<InviteFor> {
             });
             BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
             // Navigator.pop(context);
-            widget.previewPage();
+            // print('object previewpage1');
+            // widget.previewPage();
           } else {
             setState(() {
               start--;
@@ -358,7 +359,11 @@ class _InviteForState extends State<InviteFor> {
                           text: 'Отменить 0:${start < 10 ? '0$start' : start}',
                           textColor: Colors.white,
                           validate: true,
-                          onPressed: widget.previewPage,
+                          onPressed: () {
+                            // widget.previewPage();
+                            BlocProvider.of<AuthBloc>(context, listen: false)
+                                .add(DeleteInviteUser());
+                          },
                         ),
                         // SizedBox(height: 50.h),
                         const Spacer(),
