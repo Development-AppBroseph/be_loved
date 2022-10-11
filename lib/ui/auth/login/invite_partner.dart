@@ -168,9 +168,6 @@ class _InvitePartnerState extends State<InvitePartner> {
         _timer?.cancel();
         widget.nextPage();
         focusNode.unfocus();
-        Future.delayed(const Duration(milliseconds: 200), () {
-          widget.nextPage();
-        });
         // Get.Get.to(
         //   InviteFor(
         //       previewPage: () {
