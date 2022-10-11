@@ -13,6 +13,9 @@ class InputNamePage extends StatelessWidget {
 
   final VoidCallback nextPage;
   final _nicknameController = TextEditingController();
+
+  final _scrollController = ScrollController();
+
   FocusNode focusNode = FocusNode();
 
   @override
@@ -34,6 +37,7 @@ class InputNamePage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.sp),
               child: SingleChildScrollView(
+                controller: _scrollController,
                 physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.15.sh),
                 child: Column(
@@ -88,6 +92,14 @@ class InputNamePage extends StatelessWidget {
                                   child: TextField(
                                     textAlignVertical: TextAlignVertical.top,
                                     focusNode: focusNode,
+                                    onTap: () {
+                                      _scrollController.animateTo(
+                                        MediaQuery.of(context).size.height /
+                                            8.3,
+                                        duration: Duration(milliseconds: 500),
+                                        curve: Curves.ease,
+                                      );
+                                    },
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(12)
                                     ],

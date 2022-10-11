@@ -28,7 +28,11 @@ class InviteRelation extends StatelessWidget {
                 var bloc = BlocProvider.of<AuthBloc>(context);
                 return PageView(
                   scrollDirection: Axis.vertical,
-                  physics: snapshot.data == 1 ? const NeverScrollableScrollPhysics() : null,
+                  physics: snapshot.data == 1
+                      ? const NeverScrollableScrollPhysics()
+                      : state is InviteAccepted == false
+                          ? null
+                          : const NeverScrollableScrollPhysics(),
                   controller: pageController,
                   onPageChanged: (value) => streamController.add(value),
                   children: [
@@ -47,8 +51,11 @@ class InviteRelation extends StatelessWidget {
     );
   }
 
-  void nextPage() => pageController.previousPage(
-      duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
+  void nextPage() {
+    print('nextPage');
+    pageController.previousPage(
+        duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
+  }
 
   void previewPage(BuildContext context) {
     BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());

@@ -201,7 +201,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (result != null) {
       user = result;
 
-      if (result.status != 'Принято') {
+      if (result.status == null) {
+        emit(ReletionshipsError());
+      } else if (result.status != 'Принято') {
         if (result.fromYou != null) {
           if (!result.fromYou!) {
             emit(ReceiveInvite());

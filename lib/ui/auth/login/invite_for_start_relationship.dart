@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InviteForStartRelationship extends StatelessWidget {
-  InviteForStartRelationship({Key? key, required this.nextPage, required this.streamController})
+  InviteForStartRelationship(
+      {Key? key, required this.nextPage, required this.streamController})
       : super(key: key);
 
   final VoidCallback nextPage;
@@ -21,11 +22,13 @@ class InviteForStartRelationship extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           children: [
-            InviteFor(nextPage: nextPage1, previewPage: (() {
-              BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-              nextPage();
-              streamController.add(1);
-            })),
+            InviteFor(
+                nextPage: nextPage1,
+                previewPage: (() {
+                  BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+                  nextPage();
+                  streamController.add(1);
+                })),
             RelationShips(previewPage: nextPage, prevPage: previousPage)
           ],
         ),
@@ -34,8 +37,8 @@ class InviteForStartRelationship extends StatelessWidget {
   }
 
   void nextPage1() => pageController.nextPage(
-      duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
+      duration: const Duration(milliseconds: 1200), curve: Curves.ease);
 
   void previousPage() => pageController.previousPage(
-      duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
+      duration: const Duration(milliseconds: 1200), curve: Curves.ease);
 }
