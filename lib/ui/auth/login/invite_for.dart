@@ -6,6 +6,7 @@ import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/home/home.dart';
 import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -202,17 +203,19 @@ class _InviteForState extends State<InviteFor> {
                                   child: Padding(
                                     padding: EdgeInsets.only(
                                         top: 20.h, bottom: 10.h),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(35.sp),
+                                    child: Material(
+                                      shape: SquircleBorder(
+                                        radius: BorderRadius.all(
+                                          Radius.circular(80.r),
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.hardEdge,
                                       child: Container(
                                         alignment: Alignment.center,
-                                        height: 135.h,
+                                        height: 135.w,
                                         width: 135.h,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(35.sp),
-                                          color: const Color.fromRGBO(
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromRGBO(
                                               150, 150, 150, 1.0),
                                         ),
                                         child: bloc.user == null
@@ -262,8 +265,12 @@ class _InviteForState extends State<InviteFor> {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.all(10.w),
-                              child: SvgPicture.asset('assets/icons/logo.svg'),
+                              padding: EdgeInsets.all(21.w),
+                              child: SvgPicture.asset(
+                                'assets/icons/logo.svg',
+                                width: 66.w,
+                                height: 56.43.h,
+                              ),
                             ),
                             Column(
                               children: [
@@ -272,25 +279,27 @@ class _InviteForState extends State<InviteFor> {
                                   child: Padding(
                                     padding: EdgeInsets.only(
                                         top: 20.h, bottom: 10.h),
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(35.sp),
+                                    child: Material(
+                                      shape: SquircleBorder(
+                                        radius: BorderRadius.all(
+                                          Radius.circular(80.r),
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.hardEdge,
                                       child: Container(
                                         alignment: Alignment.center,
                                         // padding: EdgeInsets.all(43.h),
                                         height: 135.h,
                                         width: 135.h,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(35.sp),
-                                          color: const Color.fromRGBO(
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromRGBO(
                                               150, 150, 150, 1.0),
                                         ),
                                         child: bloc.user?.love?.photo != null
                                             ? Image.network(
                                                 apiUrl +
                                                     bloc.user!.love!.photo!,
-                                                width: 135.h,
+                                                width: 135.w,
                                                 height: 135.h,
                                                 fit: BoxFit.cover,
                                               )

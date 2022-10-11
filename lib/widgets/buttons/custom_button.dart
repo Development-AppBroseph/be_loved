@@ -35,7 +35,6 @@ class CustomButton extends StatefulWidget {
 }
 
 class CustomButtonState extends State<CustomButton> {
-
   late bool wasClicked;
 
   @override
@@ -54,7 +53,7 @@ class CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
       return AnimatedOpacity(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 200),
         opacity: widget.visible ? 1 : 0,
         child: Material(
           color: widget.validate == null
@@ -114,43 +113,46 @@ class CustomButtonState extends State<CustomButton> {
                               ),
               ),
               child: widget.isContactBtn
-              ? SvgPicture.asset(
-                'assets/icons/persons.svg',
-                color: widget.validate == null
-                      ? state is TextFieldSuccess
-                          ? widget.textColor
-                          : const Color.fromRGBO(23, 23, 23, 1)
-                      : widget.code
-                          ? widget.validate!
+                  ? SvgPicture.asset(
+                      'assets/icons/persons.svg',
+                      color: widget.validate == null
+                          ? state is TextFieldSuccess
                               ? widget.textColor
                               : const Color.fromRGBO(23, 23, 23, 1)
-                          : state is TextFieldSuccess || (widget.validate!)
-                              ? widget.textColor
-                              : const Color.fromRGBO(23, 23, 23, 1),
-              )
-              : Text(
-                widget.text,
-                style: GoogleFonts.inter(
-                  fontSize: 20.sp,
-                  color: widget.validate == null
-                      ? state is TextFieldSuccess
-                          ? widget.textColor
-                          : const Color.fromRGBO(23, 23, 23, 1)
-                      : widget.code
-                          ? widget.validate!
-                              ? widget.textColor
-                              : const Color.fromRGBO(23, 23, 23, 1)
-                          : state is TextFieldSuccess || (widget.validate!)
-                              ? widget.textColor
-                              : const Color.fromRGBO(23, 23, 23, 1),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+                          : widget.code
+                              ? widget.validate!
+                                  ? widget.textColor
+                                  : const Color.fromRGBO(23, 23, 23, 1)
+                              : state is TextFieldSuccess || (widget.validate!)
+                                  ? widget.textColor
+                                  : const Color.fromRGBO(23, 23, 23, 1),
+                    )
+                  : Text(
+                      widget.text,
+                      style: GoogleFonts.inter(
+                        fontSize: 20.sp,
+                        color: widget.validate == null
+                            ? state is TextFieldSuccess
+                                ? widget.textColor
+                                : const Color.fromRGBO(23, 23, 23, 1)
+                            : widget.code
+                                ? widget.validate!
+                                    ? widget.textColor
+                                    : const Color.fromRGBO(23, 23, 23, 1)
+                                : state is TextFieldSuccess ||
+                                        (widget.validate!)
+                                    ? widget.textColor
+                                    : const Color.fromRGBO(23, 23, 23, 1),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
             ),
             onTap: () {
               if (!wasClicked) {
                 if (widget.validate != null) {
-                  if ((state is TextFieldSuccess || widget.validate! || widget.isContactBtn) ||
+                  if ((state is TextFieldSuccess ||
+                          widget.validate! ||
+                          widget.isContactBtn) ||
                       widget.color == redColor) {
                     widget.onPressed();
                   }

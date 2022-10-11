@@ -20,6 +20,8 @@ class _PhonePageState extends State<PhonePage> {
   String? error;
   TextEditingController phoneController = TextEditingController();
 
+  final _scrollController = ScrollController();
+
   @override
   void dispose() {
     focusNode.dispose();
@@ -51,22 +53,24 @@ class _PhonePageState extends State<PhonePage> {
       var bloc = BlocProvider.of<AuthBloc>(context);
 
       return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          toolbarHeight: 80.sp,
-          backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-        ),
+        // appBar: AppBar(
+        //   elevation: 0,
+        //   toolbarHeight: 80.sp,
+        //   backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+        // ),
         body: SafeArea(
             bottom: true,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
               child: SingleChildScrollView(
+                controller: _scrollController,
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.only(top: 0.15.sh),
+                // padding: EdgeInsets.only(top: 0.15),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 253.h),
                     Text(
                       'Войти по номеру телефона',
                       style: GoogleFonts.inter(
@@ -122,6 +126,13 @@ class _PhonePageState extends State<PhonePage> {
                               width: 0.6.sw,
                               alignment: Alignment.center,
                               child: TextField(
+                                onTap: () {
+                                  _scrollController.animateTo(
+                                    MediaQuery.of(context).size.height / 10.7,
+                                    duration: Duration(milliseconds: 500),
+                                    curve: Curves.ease,
+                                  );
+                                },
                                 controller: phoneController,
                                 style: GoogleFonts.inter(
                                   fontSize: 25.sp,
@@ -175,7 +186,7 @@ class _PhonePageState extends State<PhonePage> {
                         _sendCode();
                         focusNode.unfocus();
                       },
-                    )
+                    ),
                     // CustomAnimationButton(
                     //   text: 'Продолжить',
                     //   border: Border.all(
@@ -184,6 +195,7 @@ class _PhonePageState extends State<PhonePage> {
                     //   onPressed: _sendCode,
                     //   state: phoneNumber.isNotEmpty && phoneNumber.length == 12,
                     // )
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),

@@ -111,7 +111,7 @@ class CustomButtonState extends State<CustomAnimationButton>
               // print(details);
               // print('end');
             },
-            onLongPressStart: (details) {
+            onTapDown: (details) {
               print(details.globalPosition.distance);
               print('start');
               controller.forward();
@@ -120,6 +120,15 @@ class CustomButtonState extends State<CustomAnimationButton>
                 _streamController.sink.add(timePressed);
               });
             },
+            // onLongPressStart: (details) {
+            //   print(details.globalPosition.distance);
+            //   print('start');
+            //   controller.forward();
+            //   _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+            //     timePressed += 0.1;
+            //     _streamController.sink.add(timePressed);
+            //   });
+            // },
             onLongPressEnd: (details) {
               print('end');
 
