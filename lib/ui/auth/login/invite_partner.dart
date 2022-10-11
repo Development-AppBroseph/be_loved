@@ -125,6 +125,7 @@ class _InvitePartnerState extends State<InvitePartner> {
       }
       if (current is InviteAccepted && current.fromYou) {
         _timer?.cancel();
+        focusNode.unfocus();
         Get.Get.to(
           RelationShips(previewPage: () {}, prevPage: () {}),
           duration: const Duration(seconds: 1),
@@ -166,6 +167,10 @@ class _InvitePartnerState extends State<InvitePartner> {
       if (current is ReceiveInvite && previous is ReceiveInvite == false) {
         _timer?.cancel();
         widget.nextPage();
+        focusNode.unfocus();
+        Future.delayed(const Duration(milliseconds: 200), () {
+          widget.nextPage();
+        });
         // Get.Get.to(
         //   InviteFor(
         //       previewPage: () {
