@@ -3,6 +3,7 @@ import 'package:be_loved/core/helpers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomButton extends StatefulWidget {
@@ -14,10 +15,12 @@ class CustomButton extends StatefulWidget {
   final Border? border;
   final String text;
   final VoidCallback onPressed;
+  final bool isContactBtn;
 
   CustomButton({
     Key? key,
     required this.color,
+    this.isContactBtn = false,
     this.visible = true,
     this.code = false,
     this.validate = false,
@@ -110,7 +113,22 @@ class CustomButtonState extends State<CustomButton> {
                                 color: const Color.fromRGBO(23, 23, 23, 1),
                               ),
               ),
-              child: Text(
+              child: widget.isContactBtn
+              ? SvgPicture.asset(
+                'assets/icons/persons.svg',
+                color: widget.validate == null
+                      ? state is TextFieldSuccess
+                          ? widget.textColor
+                          : const Color.fromRGBO(23, 23, 23, 1)
+                      : widget.code
+                          ? widget.validate!
+                              ? widget.textColor
+                              : const Color.fromRGBO(23, 23, 23, 1)
+                          : state is TextFieldSuccess || (widget.validate!)
+                              ? widget.textColor
+                              : const Color.fromRGBO(23, 23, 23, 1),
+              )
+              : Text(
                 widget.text,
                 style: GoogleFonts.inter(
                   fontSize: 20.sp,
@@ -132,7 +150,7 @@ class CustomButtonState extends State<CustomButton> {
             onTap: () {
               if (!wasClicked) {
                 if (widget.validate != null) {
-                  if ((state is TextFieldSuccess || widget.validate!) ||
+                  if ((state is TextFieldSuccess || widget.validate! || widget.isContactBtn) ||
                       widget.color == redColor) {
                     widget.onPressed();
                   }

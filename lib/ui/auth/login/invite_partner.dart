@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 import 'package:get/get.dart' as Get;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
@@ -462,32 +463,80 @@ class _InvitePartnerState extends State<InvitePartner> {
                           SizedBox(
                             height: 40.h,
                           ),
-                          CustomButton(
-                            color: const Color.fromRGBO(32, 203, 131, 1.0),
-                            text: 'Пригласить',
-                            validate: (_phoneController.text.length == 13) &&
-                                inviteUser,
-                            code: false,
-                            textColor: Colors.white,
-                            onPressed: () async {
-                              setState(() {
-                                timerIsStarted = true;
-                              });
-                              _timer.cancel();
-                              print(timerIsStarted);
-                              print(_timer.isActive);
-                              if (bloc.user?.me.phoneNumber !=
-                                  _phoneController.text) {
-                                _inviteUser(context);
-                                if (timerIsStarted && !_timer.isActive) {
-                                  startTimer();
-                                }
-                              }
-                              setState(() {
-                                isValidate = false;
-                              });
-                              // startTimer();
-                            },
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: CustomButton(
+                                  color: const Color.fromRGBO(32, 203, 131, 1.0),
+                                  text: 'Пригласить',
+                                  validate: (_phoneController.text.length == 13) &&
+                                      inviteUser,
+                                  code: false,
+                                  textColor: Colors.white,
+                                  onPressed: () async {
+                                    setState(() {
+                                      timerIsStarted = true;
+                                    });
+                                    _timer.cancel();
+                                    print(timerIsStarted);
+                                    print(_timer.isActive);
+                                    if (bloc.user?.me.phoneNumber !=
+                                        _phoneController.text) {
+                                      _inviteUser(context);
+                                      if (timerIsStarted && !_timer.isActive) {
+                                        startTimer();
+                                      }
+                                    }
+                                    setState(() {
+                                      isValidate = false;
+                                    });
+                                    // startTimer();
+                                  },
+                                ),
+                              ),
+                              SizedBox(width: 10.w,),
+                              SizedBox(
+                                width: 60.w,
+                                child: CustomButton(
+                                  color: const Color.fromRGBO(32, 203, 131, 1.0),
+                                  isContactBtn: true,
+                                  text: '',
+                                  validate: (_phoneController.text.length == 13) &&
+                                      inviteUser,
+                                  code: false,
+                                  textColor: Colors.white,
+                                  onPressed: () async {
+                                    if(await FlutterContactPicker.hasPermission()){
+                                      final PhoneContact contact = await FlutterContactPicker.pickPhoneContact();
+                                      if(contact.phoneNumber?.number != null){
+                                        String reversedPhone = contact.phoneNumber!.number!.split('').reversed.join('');
+                                        String phone = '';
+                                        for(var i = 0; i < reversedPhone.length; i++){
+                                          if(phone.length >= 13){
+                                            break;
+                                          }
+                                          if(double.tryParse(reversedPhone[i]) != null){
+                                            if(phone.length == 2 || phone.length == 5 || phone.length == 9){
+                                              phone += ' ';
+                                            }
+                                            phone += reversedPhone[i];
+                                          }
+                                        }
+                                        setState(() {
+                                          _phoneController.text = phone.split('').reversed.join('');
+                                          if(_phoneController.text.length == 13 && bloc.user?.love == null) {
+                                            inviteUser = true;
+                                          }
+                                        });
+                                      }
+                                    }else{
+                                      FlutterContactPicker.requestPermission();
+                                    }
+                                  },
+                                ),
+                              )
+                            ],
                           ),
                           // CustomAnimationButton(
                           //   text: 'Продолжить',

@@ -166,6 +166,7 @@ class _CodePageState extends State<CodePage> {
                       'Введи код подтверждения',
                       style: GoogleFonts.inter(
                         fontSize: 35.sp,
+                        height: 1.1,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
