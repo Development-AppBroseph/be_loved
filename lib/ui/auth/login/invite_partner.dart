@@ -101,7 +101,7 @@ class _InvitePartnerState extends State<InvitePartner> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
-      printError(info: current.toString());
+      // printError(info: current.toString());
       // print(
       //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
       // if (current is GetUserError) {
@@ -125,6 +125,7 @@ class _InvitePartnerState extends State<InvitePartner> {
       }
       if (current is InviteAccepted && current.fromYou) {
         _timer?.cancel();
+        focusNode.unfocus();
         Get.Get.to(
           RelationShips(previewPage: () {}, prevPage: () {}),
           duration: const Duration(seconds: 1),
@@ -165,9 +166,11 @@ class _InvitePartnerState extends State<InvitePartner> {
       }
       if (current is ReceiveInvite && previous is ReceiveInvite == false) {
         _timer?.cancel();
-        print('next page: $current');
-        print('next page');
         widget.nextPage();
+        focusNode.unfocus();
+        Future.delayed(const Duration(milliseconds: 200), () {
+          widget.nextPage();
+        });
         // Get.Get.to(
         //   InviteFor(
         //       previewPage: () {
@@ -190,7 +193,6 @@ class _InvitePartnerState extends State<InvitePartner> {
             CheckIsUserPhone('7${_phoneController.text.replaceAll(' ', '')}'));
       }
 
-      print('object ${current} ${inviteUser}');
       return true;
     }, builder: (context, state) {
       var bloc = BlocProvider.of<AuthBloc>(context);

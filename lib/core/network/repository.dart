@@ -165,7 +165,7 @@ class Repository {
         },
       );
       if (response.statusCode == 200) {
-        print('object 1231231 ${response.data['exists']}');
+        // print('object 1231231 ${response.data['exists']}');
         final bool res = response.data['exists'];
         return res;
       }
@@ -235,7 +235,7 @@ class Repository {
         },
         options: options,
       );
-      print('object $response ${response.statusCode}');
+      // print('object $response ${response.statusCode}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
@@ -254,7 +254,7 @@ class Repository {
 
       return null;
     } catch (e) {
-      print(e);
+      // print(e);
       return null;
     }
   }

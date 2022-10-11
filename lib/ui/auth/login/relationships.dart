@@ -214,6 +214,7 @@ class RelationShips extends StatelessWidget {
                     CustomButton(
                       color: accentColor,
                       text: 'Готово',
+                      validate: true,
                       textColor: Colors.white,
                       onPressed: () => _relationShips(context),
                     ),
