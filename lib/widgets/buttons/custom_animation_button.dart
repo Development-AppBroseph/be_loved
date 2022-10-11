@@ -129,7 +129,7 @@ class CustomButtonState extends State<CustomAnimationButton>
             //     _streamController.sink.add(timePressed);
             //   });
             // },
-            onLongPressEnd: (details) {
+            onTapUp: (details) {
               print('end');
 
               _timer?.cancel();

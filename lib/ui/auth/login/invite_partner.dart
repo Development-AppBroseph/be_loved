@@ -120,6 +120,9 @@ class _InvitePartnerState extends State<InvitePartner> {
         //   SnackBarStatus(Icons.done, Colors.green),
         // );
       }
+      if (current is ReletionshipsError) {
+        _timer?.cancel();
+      }
       if (current is InviteAccepted && current.fromYou) {
         _timer?.cancel();
         Get.Get.to(
