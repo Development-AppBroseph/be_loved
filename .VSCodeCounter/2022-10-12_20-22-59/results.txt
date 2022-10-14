@@ -1,0 +1,148 @@
+Date : 2022-10-12 20:22:59
+Directory : /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1
+Total : 73 files,  4493 codes, 627 comments, 454 blanks, all 5574 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| Dart       |         32 |      3,953 |        428 |        355 |      4,736 |
+| XML        |         24 |        239 |         41 |         26 |        306 |
+| JSON       |          5 |        131 |          0 |          4 |        135 |
+| Groovy     |          3 |         89 |          5 |         22 |        116 |
+| YAML       |          3 |         47 |        153 |         33 |        233 |
+| Markdown   |          2 |         13 |          0 |          9 |         22 |
+| Swift      |          1 |         12 |          0 |          2 |         14 |
+| Properties |          2 |          8 |          0 |          2 |         10 |
+| C++        |          1 |          1 |          0 |          1 |          2 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                  | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                     |         73 |      4,493 |        627 |        454 |      5,574 |
+| android                                                                                                               |         13 |        187 |         44 |         34 |        265 |
+| android/app                                                                                                           |          9 |        144 |         44 |         23 |        211 |
+| android/app/src                                                                                                       |          8 |         90 |         39 |         10 |        139 |
+| android/app/src/debug                                                                                                 |          1 |          4 |          4 |          1 |          9 |
+| android/app/src/main                                                                                                  |          6 |         82 |         31 |          8 |        121 |
+| android/app/src/main/res                                                                                              |          5 |         52 |         25 |          5 |         82 |
+| android/app/src/main/res/drawable                                                                                     |          1 |          9 |          0 |          1 |         10 |
+| android/app/src/main/res/drawable-v21                                                                                 |          1 |          9 |          0 |          1 |         10 |
+| android/app/src/main/res/values                                                                                       |          1 |         12 |          9 |          1 |         22 |
+| android/app/src/main/res/values-night                                                                                 |          1 |          9 |          9 |          1 |         19 |
+| android/app/src/main/res/values-v31                                                                                   |          1 |         13 |          7 |          1 |         21 |
+| android/app/src/profile                                                                                               |          1 |          4 |          4 |          1 |          9 |
+| android/gradle                                                                                                        |          1 |          5 |          0 |          1 |          6 |
+| android/gradle/wrapper                                                                                                |          1 |          5 |          0 |          1 |          6 |
+| assets                                                                                                                |         15 |         82 |          0 |         14 |         96 |
+| assets/animations                                                                                                     |          1 |          1 |          0 |          0 |          1 |
+| assets/icons                                                                                                          |         13 |         71 |          0 |         13 |         84 |
+| assets/images                                                                                                         |          1 |         10 |          0 |          1 |         11 |
+| ios                                                                                                                   |          9 |        214 |          2 |         11 |        227 |
+| ios/Runner                                                                                                            |          9 |        214 |          2 |         11 |        227 |
+| ios/Runner/Assets.xcassets                                                                                            |          5 |        133 |          0 |          6 |        139 |
+| ios/Runner/Assets.xcassets/AppIcon.appiconset                                                                         |          1 |         80 |          0 |          1 |         81 |
+| ios/Runner/Assets.xcassets/LaunchBackground.imageset                                                                  |          1 |         21 |          0 |          1 |         22 |
+| ios/Runner/Assets.xcassets/LaunchImage.imageset                                                                       |          2 |         26 |          0 |          3 |         29 |
+| ios/Runner/Base.lproj                                                                                                 |          2 |         68 |          2 |          2 |         72 |
+| lib                                                                                                                   |         32 |      3,953 |        428 |        355 |      4,736 |
+| lib/core                                                                                                              |          9 |        675 |        213 |        154 |      1,042 |
+| lib/core/bloc                                                                                                         |          4 |        397 |          9 |        101 |        507 |
+| lib/core/bloc/auth                                                                                                    |          4 |        397 |          9 |        101 |        507 |
+| lib/core/helpers                                                                                                      |          3 |         39 |          1 |         12 |         52 |
+| lib/core/network                                                                                                      |          1 |        239 |        155 |         26 |        420 |
+| lib/models                                                                                                            |          7 |        145 |          9 |         48 |        202 |
+| lib/models/auth                                                                                                       |          4 |         73 |          6 |         30 |        109 |
+| lib/models/helpers                                                                                                    |          2 |         18 |          0 |          6 |         24 |
+| lib/models/user                                                                                                       |          1 |         54 |          3 |         12 |         69 |
+| lib/ui                                                                                                                |         11 |      2,695 |        162 |        116 |      2,973 |
+| lib/ui/auth                                                                                                           |         10 |      2,649 |        162 |        113 |      2,924 |
+| lib/ui/auth/image                                                                                                     |          1 |        440 |         15 |         12 |        467 |
+| lib/ui/auth/login                                                                                                     |          9 |      2,209 |        147 |        101 |      2,457 |
+| lib/ui/home                                                                                                           |          1 |         46 |          0 |          3 |         49 |
+| lib/widgets                                                                                                           |          3 |        379 |         20 |         27 |        426 |
+| lib/widgets/alerts                                                                                                    |          1 |         87 |          1 |          9 |         97 |
+| lib/widgets/buttons                                                                                                   |          2 |        292 |         19 |         18 |        329 |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                              | language   | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/README.md                                                          | Markdown   |         10 |          0 |          7 |         17 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/analysis_options.yaml                                              | YAML       |          3 |         23 |          4 |         30 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/app/build.gradle                                           | Groovy     |         54 |          5 |         13 |         72 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/app/src/debug/AndroidManifest.xml                          | XML        |          4 |          4 |          1 |          9 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/app/src/main/AndroidManifest.xml                           | XML        |         30 |          6 |          3 |         39 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/app/src/main/res/drawable-v21/launch_background.xml        | XML        |          9 |          0 |          1 |         10 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/app/src/main/res/drawable/launch_background.xml            | XML        |          9 |          0 |          1 |         10 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/app/src/main/res/values-night/styles.xml                   | XML        |          9 |          9 |          1 |         19 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/app/src/main/res/values-v31/styles.xml                     | XML        |         13 |          7 |          1 |         21 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/app/src/main/res/values/styles.xml                         | XML        |         12 |          9 |          1 |         22 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/app/src/profile/AndroidManifest.xml                        | XML        |          4 |          4 |          1 |          9 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/build.gradle                                               | Groovy     |         27 |          0 |          5 |         32 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/gradle.properties                                          | Properties |          3 |          0 |          1 |          4 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/gradle/wrapper/gradle-wrapper.properties                   | Properties |          5 |          0 |          1 |          6 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/android/settings.gradle                                            | Groovy     |          8 |          0 |          4 |         12 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/animations/loading.json                                     | JSON       |          1 |          0 |          0 |          1 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/Russia.svg                                            | XML        |         17 |          0 |          1 |         18 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/back.svg                                              | XML        |          3 |          0 |          1 |          4 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/camera.svg                                            | XML        |          3 |          0 |          1 |          4 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/check.svg                                             | XML        |         11 |          0 |          1 |         12 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/logo.svg                                              | XML        |          4 |          0 |          1 |          5 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/logov2.svg                                            | XML        |          4 |          0 |          1 |          5 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/logov3.svg                                            | XML        |          4 |          0 |          1 |          5 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/men.svg                                               | XML        |          3 |          0 |          1 |          4 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/paw.svg                                               | XML        |          3 |          0 |          1 |          4 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/persons.svg                                           | XML        |          3 |          0 |          1 |          4 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/rects.svg                                             | XML        |          3 |          0 |          1 |          4 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/russia1.svg                                           | XML        |         10 |          0 |          1 |         11 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/icons/women.svg                                             | XML        |          3 |          0 |          1 |          4 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/assets/images/code.svg                                             | XML        |         10 |          0 |          1 |         11 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/flutter_native_splash.yaml                                         | YAML       |          5 |        110 |         17 |        132 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/ios/Runner/AppDelegate.swift                                       | Swift      |         12 |          0 |          2 |         14 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json        | JSON       |         80 |          0 |          1 |         81 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/ios/Runner/Assets.xcassets/Contents.json                           | JSON       |          6 |          0 |          1 |          7 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/ios/Runner/Assets.xcassets/LaunchBackground.imageset/Contents.json | JSON       |         21 |          0 |          1 |         22 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json      | JSON       |         23 |          0 |          1 |         24 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md          | Markdown   |          3 |          0 |          2 |          5 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/ios/Runner/Base.lproj/LaunchScreen.storyboard                      | XML        |         43 |          1 |          1 |         45 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/ios/Runner/Base.lproj/Main.storyboard                              | XML        |         25 |          1 |          1 |         27 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/ios/Runner/Runner-Bridging-Header.h                                | C++        |          1 |          0 |          1 |          2 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/core/app_data.dart                                             | Dart       |          0 |         48 |         15 |         63 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/core/bloc/auth/auth_bloc.dart                                  | Dart       |        284 |          9 |         32 |        325 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/core/bloc/auth/auth_event.dart                                 | Dart       |         43 |          0 |         24 |         67 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/core/bloc/auth/auth_state.dart                                 | Dart       |         70 |          0 |         44 |        114 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/core/bloc/auth/profile_builder.dart                            | Dart       |          0 |          0 |          1 |          1 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/core/helpers/constants.dart                                    | Dart       |          4 |          0 |          4 |          8 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/core/helpers/enums.dart                                        | Dart       |          4 |          0 |          1 |          5 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/core/helpers/shared_prefs.dart                                 | Dart       |         31 |          1 |          7 |         39 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/core/network/repository.dart                                   | Dart       |        239 |        155 |         26 |        420 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/generated_plugin_registrant.dart                               | Dart       |          6 |          7 |          5 |         18 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/main.dart                                                      | Dart       |         53 |         17 |          5 |         75 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/models/auth/check_is_user_exist.dart                           | Dart       |         22 |          0 |          7 |         29 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/models/auth/check_nickName.dart                                | Dart       |         15 |          0 |          7 |         22 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/models/auth/init_user.dart                                     | Dart       |         16 |          3 |          8 |         27 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/models/auth/invite.dart                                        | Dart       |         20 |          3 |          8 |         31 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/models/helpers/details.dart                                    | Dart       |         13 |          0 |          4 |         17 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/models/helpers/small_image.dart                                | Dart       |          5 |          0 |          2 |          7 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/models/user/user.dart                                          | Dart       |         54 |          3 |         12 |         69 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/image/avatar.dart                                      | Dart       |        440 |         15 |         12 |        467 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/login/code.dart                                        | Dart       |        267 |         10 |         14 |        291 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/login/create_account_info.dart                         | Dart       |         40 |          0 |          6 |         46 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/login/invite_for.dart                                  | Dart       |        451 |         10 |         13 |        474 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/login/invite_for_start_relationship.dart               | Dart       |         46 |          0 |          7 |         53 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/login/invite_partner.dart                              | Dart       |        609 |         99 |         24 |        732 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/login/invite_relation.dart                             | Dart       |         56 |          1 |          7 |         64 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/login/name.dart                                        | Dart       |        231 |         12 |          8 |        251 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/login/phone.dart                                       | Dart       |        220 |         15 |         14 |        249 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/auth/login/relationships.dart                               | Dart       |        289 |          0 |          8 |        297 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/ui/home/home.dart                                              | Dart       |         46 |          0 |          3 |         49 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/widgets/alerts/snack_bar.dart                                  | Dart       |         87 |          1 |          9 |         97 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/widgets/buttons/custom_animation_button.dart                   | Dart       |        128 |         19 |         10 |        157 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/lib/widgets/buttons/custom_button.dart                             | Dart       |        164 |          0 |          8 |        172 |
+| /Users/devbroseph/Desktop/DevAppBroseph/be_loved-1/pubspec.yaml                                                       | YAML       |         39 |         20 |         12 |         71 |
+| Total                                                                                                                 |            |      4,493 |        627 |        454 |      5,574 |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

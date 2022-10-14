@@ -127,11 +127,16 @@ class _PhonePageState extends State<PhonePage> {
                               alignment: Alignment.center,
                               child: TextField(
                                 onTap: () {
-                                  _scrollController.animateTo(
-                                    MediaQuery.of(context).size.height / 10.7,
-                                    duration: Duration(milliseconds: 500),
-                                    curve: Curves.ease,
-                                  );
+                                  Future.delayed(
+                                      const Duration(milliseconds: 600), () {
+                                    _scrollController.animateTo(
+                                      _scrollController
+                                          .position.maxScrollExtent,
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      curve: Curves.ease,
+                                    );
+                                  });
                                 },
                                 controller: phoneController,
                                 style: GoogleFonts.inter(

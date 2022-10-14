@@ -189,11 +189,15 @@ class _CodePageState extends State<CodePage> {
                           pinAnimationType: PinAnimationType.none,
                           showCursor: false,
                           onTap: () {
-                            _scrollController.animateTo(
-                              MediaQuery.of(context).size.height / 7,
-                              duration: Duration(milliseconds: 500),
-                              curve: Curves.ease,
-                            );
+                            Future.delayed(const Duration(milliseconds: 600),
+                                () {
+                              _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent -
+                                    80.h,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.ease,
+                              );
+                            });
                           },
                           length: 5,
                           androidSmsAutofillMethod:
@@ -254,8 +258,9 @@ class _CodePageState extends State<CodePage> {
                           width: 2.sp),
                       onPressed: () {
                         if (textEditingControllerUp.text.length == 5) {
-                          BlocProvider.of<AuthBloc>(context)
-                              .add(TextFieldFilled(true));
+                          BlocProvider.of<AuthBloc>(context).add(
+                            TextFieldFilled(true),
+                          );
                         }
                         resendCode = false;
                         if (_timer?.isActive == false) {

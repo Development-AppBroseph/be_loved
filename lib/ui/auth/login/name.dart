@@ -93,12 +93,17 @@ class InputNamePage extends StatelessWidget {
                                     textAlignVertical: TextAlignVertical.top,
                                     focusNode: focusNode,
                                     onTap: () {
-                                      _scrollController.animateTo(
-                                        MediaQuery.of(context).size.height /
-                                            8.3,
-                                        duration: Duration(milliseconds: 500),
-                                        curve: Curves.ease,
-                                      );
+                                      Future.delayed(
+                                          const Duration(milliseconds: 600),
+                                          () {
+                                        _scrollController.animateTo(
+                                          _scrollController
+                                              .position.maxScrollExtent,
+                                          duration:
+                                              const Duration(milliseconds: 500),
+                                          curve: Curves.ease,
+                                        );
+                                      });
                                     },
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(12)

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/helpers/constants.dart';
+import 'package:be_loved/models/user/user.dart';
 import 'package:be_loved/ui/home/home.dart';
 import 'package:be_loved/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
@@ -15,11 +16,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 class InviteFor extends StatefulWidget {
-  const InviteFor({Key? key, required this.previewPage, required this.nextPage})
-      : super(key: key);
+  InviteFor({
+    Key? key,
+    required this.previewPage,
+    required this.nextPage,
+    required this.isSwiping,
+  }) : super(key: key);
 
   final VoidCallback previewPage;
   final VoidCallback nextPage;
+  bool isSwiping;
 
   @override
   State<InviteFor> createState() => _InviteForState();
@@ -27,17 +33,23 @@ class InviteFor extends StatefulWidget {
 
 class _InviteForState extends State<InviteFor> {
   final streamController = StreamController<int>();
-
+  User? love;
   bool _accepted = false;
   int start = 30;
   Timer? _timer;
   Timer? timerSecond;
+  bool _opened = false;
 
   @override
   void initState() {
     _startSearch(context);
     super.initState();
     startTimer();
+
+    love = BlocProvider.of<AuthBloc>(context, listen: false).user?.love;
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _opened = true;
+    });
   }
 
   @override
@@ -81,7 +93,10 @@ class _InviteForState extends State<InviteFor> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
       if (current is ReletionshipsError) {
-        widget.previewPage();
+        if (!widget.isSwiping) {
+          widget.previewPage();
+        }
+        _opened = false;
       }
       if (current is GetUserSuccess) {
         // Navigator.pop(context);
@@ -157,7 +172,7 @@ class _InviteForState extends State<InviteFor> {
               duration: const Duration(milliseconds: 500),
               opacity: _accepted ? 0 : 1,
               child: SafeArea(
-                  bottom: true,
+                  bottom: false,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.sp),
                     child: Column(
@@ -177,7 +192,7 @@ class _InviteForState extends State<InviteFor> {
                                 ),
                               ),
                               TextSpan(
-                                text: bloc.user?.love?.username,
+                                text: love?.username,
                                 style: GoogleFonts.inter(
                                   fontSize: 35.sp,
                                   fontWeight: FontWeight.w800,
@@ -195,7 +210,7 @@ class _InviteForState extends State<InviteFor> {
                               fontWeight: FontWeight.w600),
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Column(
                               children: [
@@ -214,7 +229,7 @@ class _InviteForState extends State<InviteFor> {
                                       child: Container(
                                         alignment: Alignment.center,
                                         height: 135.w,
-                                        width: 135.h,
+                                        width: 135.w,
                                         decoration: const BoxDecoration(
                                           color: Color.fromRGBO(
                                               150, 150, 150, 1.0),
@@ -223,8 +238,8 @@ class _InviteForState extends State<InviteFor> {
                                             ? bloc.image != null
                                                 ? Image.file(
                                                     File(bloc.image!.path),
-                                                    width: 135.h,
-                                                    height: 135.h,
+                                                    height: 135.w,
+                                                    width: 135.w,
                                                     fit: BoxFit.cover,
                                                   )
                                                 : Padding(
@@ -237,8 +252,8 @@ class _InviteForState extends State<InviteFor> {
                                                 ? Image.network(
                                                     apiUrl +
                                                         bloc.user!.me.photo!,
-                                                    width: 135.h,
-                                                    height: 135.h,
+                                                    height: 135.w,
+                                                    width: 135.w,
                                                     fit: BoxFit.cover,
                                                   )
                                                 : Padding(
@@ -270,7 +285,7 @@ class _InviteForState extends State<InviteFor> {
                               child: SvgPicture.asset(
                                 'assets/icons/logo.svg',
                                 width: 66.w,
-                                height: 56.43.h,
+                                height: 56.43.w,
                               ),
                             ),
                             Column(
@@ -290,18 +305,17 @@ class _InviteForState extends State<InviteFor> {
                                       child: Container(
                                         alignment: Alignment.center,
                                         // padding: EdgeInsets.all(43.h),
-                                        height: 135.h,
-                                        width: 135.h,
+                                        height: 135.w,
+                                        width: 135.w,
                                         decoration: const BoxDecoration(
                                           color: Color.fromRGBO(
                                               150, 150, 150, 1.0),
                                         ),
-                                        child: bloc.user?.love?.photo != null
+                                        child: love?.photo != null
                                             ? Image.network(
-                                                apiUrl +
-                                                    bloc.user!.love!.photo!,
+                                                apiUrl + love!.photo!,
+                                                height: 135.w,
                                                 width: 135.w,
-                                                height: 135.h,
                                                 fit: BoxFit.cover,
                                               )
                                             : Padding(
@@ -315,7 +329,7 @@ class _InviteForState extends State<InviteFor> {
                                   ),
                                 ),
                                 Text(
-                                  bloc.user?.love?.username ?? '',
+                                  love?.username ?? '',
                                   style: GoogleFonts.inter(
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
@@ -352,7 +366,7 @@ class _InviteForState extends State<InviteFor> {
                                 .add(AcceptReletionships());
                           },
                         ),
-                        SizedBox(height: 40.h),
+                        SizedBox(height: 38.h),
                         // if (bloc.user?.status != 'Принято')
                         CustomButton(
                           color: redColor,
@@ -361,38 +375,47 @@ class _InviteForState extends State<InviteFor> {
                           validate: true,
                           onPressed: () {
                             // widget.previewPage();
+                            // widget.previewPage();
                             BlocProvider.of<AuthBloc>(context, listen: false)
                                 .add(DeleteInviteUser());
                           },
                         ),
                         // SizedBox(height: 50.h),
-                        const Spacer(),
+                        const Spacer(
+                          flex: 2,
+                        ),
 
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Свайп для отмены',
-                                style: GoogleFonts.inter(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color.fromRGBO(
-                                        150, 150, 150, 1.0)),
-                              ),
-                              Transform.rotate(
-                                angle: -pi / 2,
-                                child: SvgPicture.asset(
-                                  'assets/icons/back.svg',
-                                  width: 15.sp,
-                                  color:
-                                      const Color.fromRGBO(150, 150, 150, 1.0),
+                        AnimatedOpacity(
+                          duration: const Duration(milliseconds: 600),
+                          curve: Curves.easeInOutQuint,
+                          opacity: _opened ? 1 : 0,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Свайп для отмены',
+                                  style: GoogleFonts.inter(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color.fromRGBO(
+                                          150, 150, 150, 1.0)),
                                 ),
-                              ),
-                            ],
+                                Transform.rotate(
+                                  angle: -pi / 2,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/back.svg',
+                                    width: 15.sp,
+                                    color: const Color.fromRGBO(
+                                        150, 150, 150, 1.0),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        const Spacer(),
+                        SizedBox(height: 55.h),
+                        // const Spacer(),
                       ],
                     ),
                   )),
