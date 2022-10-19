@@ -60,70 +60,90 @@ class HomePage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(top: 11.h, bottom: 32.h),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
                   onTap: () => pageController.jumpToPage(0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/relationships.svg',
-                        color: currentIndex == 0 ? redColor : Colors.grey,
-                      ),
-                      SizedBox(height: 12.h),
-                      Text('Отношения',
-                          style:
-                              currentIndex == 0 ? styleSelect : styleUnSelect),
-                    ],
+                  child: SizedBox(
+                    width: 93.w,
+                    height: 74.h,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/relationships.svg',
+                          color: currentIndex == 0 ? redColor : Colors.grey,
+                        ),
+                        SizedBox(height: 12.h),
+                        Text('Отношения',
+                            style: currentIndex == 0
+                                ? styleSelect
+                                : styleUnSelect),
+                      ],
+                    ),
                   ),
                 ),
                 GestureDetector(
                   onTap: () => pageController.jumpToPage(1),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/events.svg',
-                        color: currentIndex == 1 ? redColor : Colors.grey,
-                      ),
-                      SizedBox(height: 12.h),
-                      Text('События',
-                          style:
-                              currentIndex == 1 ? styleSelect : styleUnSelect),
-                    ],
+                  child: SizedBox(
+                    width: 93.w,
+                    height: 74.h,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/events.svg',
+                          color: currentIndex == 1 ? redColor : Colors.grey,
+                        ),
+                        SizedBox(height: 12.h),
+                        Text('События',
+                            style: currentIndex == 1
+                                ? styleSelect
+                                : styleUnSelect),
+                      ],
+                    ),
                   ),
                 ),
                 GestureDetector(
                   onTap: () => pageController.jumpToPage(2),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/purposes.svg',
-                        color: currentIndex == 2 ? redColor : Colors.grey,
-                      ),
-                      SizedBox(height: 12.h),
-                      Text('Цели',
-                          style:
-                              currentIndex == 2 ? styleSelect : styleUnSelect),
-                    ],
+                  child: SizedBox(
+                    width: 93.w,
+                    height: 74.h,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/purposes.svg',
+                          color: currentIndex == 2 ? redColor : Colors.grey,
+                        ),
+                        SizedBox(height: 12.h),
+                        Text('Цели',
+                            style: currentIndex == 2
+                                ? styleSelect
+                                : styleUnSelect),
+                      ],
+                    ),
                   ),
                 ),
                 GestureDetector(
                   onTap: () => pageController.jumpToPage(3),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/archive.svg',
-                        color: currentIndex == 3 ? redColor : Colors.grey,
-                      ),
-                      SizedBox(height: 12.h),
-                      Text('Архив',
-                          style:
-                              currentIndex == 3 ? styleSelect : styleUnSelect),
-                    ],
+                  child: SizedBox(
+                    width: 93.w,
+                    height: 74.h,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/archive.svg',
+                          color: currentIndex == 3 ? redColor : Colors.grey,
+                        ),
+                        SizedBox(height: 12.h),
+                        Text('Архив',
+                            style: currentIndex == 3
+                                ? styleSelect
+                                : styleUnSelect),
+                      ],
+                    ),
                   ),
                 )
               ],
