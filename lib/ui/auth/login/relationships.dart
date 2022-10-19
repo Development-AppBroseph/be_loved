@@ -35,7 +35,7 @@ class RelationShips extends StatelessWidget {
       if (current is ReletionshipsStarted) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage()),
           (route) => false,
         );
         return true;
@@ -144,36 +144,35 @@ class RelationShips extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Text(
-                                bloc.user != null
-                                    ? bloc.user!.me.username
-                                    : bloc.nickname.toString(),
-                                style: GoogleFonts.inter(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(23, 23, 23, 1.0),
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(10.w),
-                            child: SvgPicture.asset('assets/icons/logov2.svg'),
-                          ),
-                          Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 20.h, bottom: 10.h),
-                                  child: Material(
-                                    color:
-                                        const Color.fromRGBO(150, 150, 150, 1),
-                                    shape: SquircleBorder(
-                                      radius: BorderRadius.all(
-                                        Radius.circular(80.r),
-                                      ),
+                            ),
+                            Text(
+                              bloc.user != null
+                                  ? bloc.user!.me.username
+                                  : bloc.nickname.toString(),
+                              style: GoogleFonts.inter(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                color: const Color.fromRGBO(23, 23, 23, 1.0),
+                              ),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(10.w),
+                          child: SvgPicture.asset('assets/icons/logov2.svg'),
+                        ),
+                        Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.only(top: 20.h, bottom: 10.h),
+                                child: Material(
+                                  color: const Color.fromRGBO(150, 150, 150, 1),
+                                  shape: SquircleBorder(
+                                    radius: BorderRadius.all(
+                                      Radius.circular(80.r),
                                     ),
                                     clipBehavior: Clip.hardEdge,
                                     child: bloc.user?.love?.photo != null

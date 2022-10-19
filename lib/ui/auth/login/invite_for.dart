@@ -115,7 +115,7 @@ class _InviteForState extends State<InviteFor> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomePage(),
+            builder: (context) => HomePage(),
           ),
           (route) => false,
         );

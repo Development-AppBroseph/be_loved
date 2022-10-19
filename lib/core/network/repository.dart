@@ -1,41 +1,17 @@
 import 'dart:io';
-
+import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/core/helpers/shared_prefs.dart';
 import 'package:be_loved/models/auth/check_is_user_exist.dart';
 import 'package:be_loved/models/auth/check_nickName.dart';
-import 'package:be_loved/models/helpers/details.dart';
 import 'package:be_loved/models/auth/init_user.dart';
 import 'package:be_loved/models/user/user.dart';
-import 'package:be_loved/widgets/alerts/snack_bar.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import '../helpers/constants.dart';
 
 class Repository {
   static var uri = Uri.parse(apiUrl);
   var dio = Dio(
     BaseOptions(baseUrl: apiUrl, validateStatus: (status) => status! <= 400),
   );
-
-  // Future<Profile?> getProfile() async {
-  //   try {
-  //     var response = await dio.get('$apiUrl/users');
-
-  //     if (response.statusCode == 400) {
-  //       StandartSnackBar.show(
-  //         DetailsAnswer.fromJson(response.data).details,
-  //         SnackBarStatus(Icons.error, redColor),
-  //       );
-  //     }
-  //     if (response.statusCode == 200) {
-  //       return Profile.fromJson(response.data);
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //     return null;
-  //   }
-  // }
 
   Future<bool?> editUser(File? file) async {
     var options = Options(headers: {
@@ -51,24 +27,9 @@ class Repository {
       if (response.statusCode == 200) {
         return true;
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(
-        //     response.data,
-        //     response.data.toString().split(':').first.substring(
-        //           1,
-        //           response.data.toString().split(':').length,
-        //         ),
-        //   ).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
+      if (response.statusCode == 400) {}
       return false;
     } catch (e) {
-      // StandartSnackBar.show(
-      //   'Ошибка сервера. Мы это уже исправляем.',
-      //   SnackBarStatus(Icons.error, redColor),
-      // );
       return false;
     }
   }
@@ -80,18 +41,7 @@ class Repository {
       if (response.statusCode == 204) {
         return 12345;
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(
-        //     response.data,
-        //     response.data.toString().split(':').first.substring(
-        //           1,
-        //           response.data.toString().split(':').length,
-        //         ),
-        //   ).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
+      if (response.statusCode == 400) {}
       return null;
     } catch (e) {
       return null;
@@ -107,18 +57,9 @@ class Repository {
       if (response.statusCode == 200) {
         return CheckIsUserExist.fromJson(response.data);
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(response.data).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
+      if (response.statusCode == 400) {}
       return null;
     } catch (e) {
-      // StandartSnackBar.show(
-      //   'Ошибка сервера. Мы это уже исправляем.',
-      //   SnackBarStatus(Icons.error, redColor),
-      // );
       return null;
     }
   }
@@ -134,24 +75,9 @@ class Repository {
       if (response.statusCode == 200) {
         return CheckNickName.fromJson(response.data).exists;
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(
-        //     response.data,
-        //     response.data.toString().split(':').first.substring(
-        //           1,
-        //           response.data.toString().split(':').length,
-        //         ),
-        //   ).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
+      if (response.statusCode == 400) {}
       return null;
     } catch (e) {
-      // StandartSnackBar.show(
-      //   'Ошибка сервера. Мы это уже исправляем.',
-      //   SnackBarStatus(Icons.error, redColor),
-      // );
       return null;
     }
   }
@@ -165,11 +91,9 @@ class Repository {
         },
       );
       if (response.statusCode == 200) {
-        // print('object 1231231 ${response.data['exists']}');
         final bool res = response.data['exists'];
         return res;
       }
-      // if (response.statusCode == 400) {}
       return null;
     } catch (e) {
       return null;
@@ -201,24 +125,9 @@ class Repository {
       if (response.statusCode == 200) {
         return InitUserAnswer.fromJson(response.data).authToken;
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(
-        //     response.data,
-        //     response.data.toString().split(':').first.substring(
-        //           1,
-        //           response.data.toString().split(':').length,
-        //         ),
-        //   ).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
+      if (response.statusCode == 400) {}
       return null;
     } catch (e) {
-      // StandartSnackBar.show(
-      //   'Ошибка сервера. Мы это уже исправляем.',
-      //   SnackBarStatus(Icons.error, redColor),
-      // );
       return null;
     }
   }
@@ -235,26 +144,13 @@ class Repository {
         },
         options: options,
       );
-      // print('object $response ${response.statusCode}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(
-        //     response.data,
-        //     response.data.toString().split(':').first.substring(
-        //           1,
-        //           response.data.toString().split(':').first.length,
-        //         ),
-        //   ).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
+      if (response.statusCode == 400) {}
 
       return null;
     } catch (e) {
-      // print(e);
       return null;
     }
   }
@@ -274,31 +170,11 @@ class Repository {
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(
-        //     response.data,
-        //     response.data.toString().split(':').first.substring(
-        //           1,
-        //           response.data.toString().split(':').length,
-        //         ),
-        //   ).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   'Невозможно отправить приглашение',
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
+      if (response.statusCode == 400) {}
+      if (response.statusCode == 400) {}
 
       return null;
     } catch (e) {
-      // StandartSnackBar.show(
-      //   'Ошибка сервера. Мы это уже исправляем.',
-      //   SnackBarStatus(Icons.error, redColor),
-      // );
       return null;
     }
   }
@@ -316,24 +192,9 @@ class Repository {
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(
-        //     response.data,
-        //     response.data.toString().split(':').first.substring(
-        //           1,
-        //           response.data.toString().split(':').length,
-        //         ),
-        //   ).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
+      if (response.statusCode == 400) {}
       return null;
     } catch (e) {
-      // StandartSnackBar.show(
-      //   'Ошибка сервера. Мы это уже исправляем.',
-      //   SnackBarStatus(Icons.error, redColor),
-      // );
       return null;
     }
   }
@@ -352,25 +213,9 @@ class Repository {
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(
-        //     response.data,
-        //     response.data.toString().split(':').first.substring(
-        //           1,
-        //           response.data.toString().split(':').length,
-        //         ),
-        //   ).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
-
+      if (response.statusCode == 400) {}
       return null;
     } catch (e) {
-      // StandartSnackBar.show(
-      //   'Ошибка сервера. Мы это уже исправляем.',
-      //   SnackBarStatus(Icons.error, redColor),
-      // );
       return null;
     }
   }
@@ -389,31 +234,11 @@ class Repository {
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   DetailsAnswer.fromJson(
-        //     response.data,
-        //     response.data.toString().split(':').first.substring(
-        //           1,
-        //           response.data.toString().split(':').length,
-        //         ),
-        //   ).details,
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
-      if (response.statusCode == 400) {
-        // StandartSnackBar.show(
-        //   'Невозможно отправить приглашение',
-        //   SnackBarStatus(Icons.error, redColor),
-        // );
-      }
+      if (response.statusCode == 400) {}
+      if (response.statusCode == 400) {}
 
       return null;
     } catch (e) {
-      // StandartSnackBar.show(
-      //   'Ошибка сервера. Мы это уже исправляем.',
-      //   SnackBarStatus(Icons.error, redColor),
-      // );
       return null;
     }
   }
