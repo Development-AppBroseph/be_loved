@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/models/helpers/small_image.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +42,7 @@ class AvatarPage extends StatelessWidget {
         body: SafeArea(
             bottom: true,
             child: Padding(
-              padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 10),
+              padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 10),
               child: SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.sh),
@@ -82,7 +83,7 @@ class AvatarPage extends StatelessWidget {
                     Align(
                       alignment: Alignment.center,
                       child: Container(
-                        margin: EdgeInsets.only(top: 20.sp, bottom: 36.sp),
+                        margin: EdgeInsets.only(top: 15.h, bottom: 30.h),
                         width: 135.h,
                         height: 135.h,
                         child: GestureDetector(
@@ -117,7 +118,7 @@ class AvatarPage extends StatelessWidget {
                     Container(
                       clipBehavior: Clip.hardEdge,
                       width: 378.w,
-                      height: 310.h,
+                      height: 307.w,
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(228, 228, 228, 1.0),
                         borderRadius: BorderRadius.circular(10),
@@ -125,7 +126,7 @@ class AvatarPage extends StatelessWidget {
                       child: AvatarMenu(),
                     ),
                     SizedBox(
-                      height: 40.h,
+                      height: 30.h,
                     ),
                     if (state is AuthLoading == false)
                       CustomButton(
@@ -158,7 +159,7 @@ class AvatarPage extends StatelessWidget {
     int indexPage = 2;
     return AppBar(
       elevation: 0,
-      toolbarHeight: 100,
+      toolbarHeight: 80,
       backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
         padding: EdgeInsets.only(top: 20.h, right: 6.sp),
@@ -167,8 +168,8 @@ class AvatarPage extends StatelessWidget {
           children: [
             Container(
               height: 55.h,
-              width: 55.h,
-              alignment: Alignment.center,
+              width: 55.w,
+              alignment: Alignment.bottomCenter,
               child: IconButton(
                 icon: SvgPicture.asset(
                   'assets/icons/back.svg',
@@ -230,21 +231,23 @@ class AvatarMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(
-            child: PageView(
-          controller: pageController,
-          onPageChanged: (value) {
-            streamController.add(value);
-          },
-          children: const [
-            PageTest(),
-            PageTest(),
-            PageTest(),
-            PageTest(),
-          ],
-        )),
+        SizedBox(
+          height: 262.w,
+          child: PageView(
+            controller: pageController,
+            onPageChanged: (value) {
+              streamController.add(value);
+            },
+            children: [
+              PageTest(),
+              PageTest(),
+              PageTest(),
+              PageTest(),
+            ],
+          ),
+        ),
         Container(
-          height: 45,
+          height: 45.w,
           decoration: const BoxDecoration(
             color: Color.fromRGBO(216, 216, 216, 1.0),
           ),
@@ -380,31 +383,78 @@ class AvatarMenu extends StatelessWidget {
   }
 }
 
-class PageTest extends StatelessWidget {
-  const PageTest({Key? key}) : super(key: key);
+class PageTest extends StatefulWidget {
+  PageTest({Key? key}) : super(key: key);
+
+  @override
+  State<PageTest> createState() => _PageTestState();
+}
+
+class _PageTestState extends State<PageTest> {
+  List<SmallImage> _images = [
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+    SmallImage('', false),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      height: 267.h,
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
       child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: 12,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4, mainAxisSpacing: 15, crossAxisSpacing: 20),
+          itemCount: _images.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4, mainAxisSpacing: 15.w, crossAxisSpacing: 20.w),
           itemBuilder: ((context, index) {
-            return Align(
-              alignment: Alignment.center,
-              child: CupertinoCard(
-                child: Container(
-                  color: Colors.grey,
+            return Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    height: 67.w,
+                    width: 67.w,
+                    child: GestureDetector(
+                      onTap: () {
+                        _images.forEach((element) {
+                          element.selected = false;
+                        });
+                        _images[index].selected = true;
+                        setState(() {});
+                      },
+                      child: CupertinoCard(
+                        child: Container(
+                          color: Colors.grey,
+                        ),
+                        elevation: 0,
+                        margin: EdgeInsets.zero,
+                        padding: EdgeInsets.zero,
+                        color: Colors.white,
+                        radius: BorderRadius.all(Radius.circular(40.r)),
+                      ),
+                    ),
+                  ),
                 ),
-                elevation: 0,
-                margin: const EdgeInsets.all(0),
-                padding: const EdgeInsets.all(0.0),
-                color: Colors.white,
-                radius: BorderRadius.all(Radius.circular(35.0.r)),
-              ),
+                if (_images[index].selected)
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: SvgPicture.asset(
+                      'assets/icons/check.svg',
+                      width: 20.w,
+                      height: 20.h,
+                    ),
+                  )
+              ],
             );
             // return Container(
             //   alignment: Alignment.center,

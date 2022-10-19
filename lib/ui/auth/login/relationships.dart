@@ -57,80 +57,91 @@ class RelationShips extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    RichText(
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: 'Когда начались\n',
-                            style: GoogleFonts.inter(
-                              fontSize: 35.sp,
-                              fontWeight: FontWeight.w800,
-                              color: const Color.fromRGBO(23, 23, 23, 1.0),
+                    SizedBox(
+                      height: 78.w,
+                      child: RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'Когда начались\n',
+                              style: GoogleFonts.inter(
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w800,
+                                color: const Color.fromRGBO(23, 23, 23, 1.0),
+                              ),
                             ),
-                          ),
-                          TextSpan(
-                            text: 'ваши ',
-                            style: GoogleFonts.inter(
-                              fontSize: 35.sp,
-                              fontWeight: FontWeight.w800,
-                              color: const Color.fromRGBO(23, 23, 23, 1.0),
+                            TextSpan(
+                              text: 'ваши ',
+                              style: GoogleFonts.inter(
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w800,
+                                color: const Color.fromRGBO(23, 23, 23, 1.0),
+                              ),
                             ),
-                          ),
-                          TextSpan(
-                            text: 'отношения?',
-                            style: GoogleFonts.inter(
-                              fontSize: 35.sp,
-                              fontWeight: FontWeight.w800,
-                              color: const Color.fromRGBO(255, 29, 29, 1.0),
+                            TextSpan(
+                              text: 'отношения?',
+                              style: GoogleFonts.inter(
+                                fontSize: 35.sp,
+                                fontWeight: FontWeight.w800,
+                                color: const Color.fromRGBO(255, 29, 29, 1.0),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding:
-                                    EdgeInsets.only(top: 20.h, bottom: 10.h),
-                                child: Material(
-                                  color: const Color.fromRGBO(150, 150, 150, 1),
-                                  shape: SquircleBorder(
-                                    radius: BorderRadius.all(
-                                      Radius.circular(80.r),
+                    SizedBox(height: 41.h),
+                    SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 20.h, bottom: 10.h),
+                                  child: Material(
+                                    color:
+                                        const Color.fromRGBO(150, 150, 150, 1),
+                                    shape: SquircleBorder(
+                                      radius: BorderRadius.all(
+                                        Radius.circular(80.r),
+                                      ),
                                     ),
-                                  ),
-                                  clipBehavior: Clip.hardEdge,
-                                  child: bloc.user == null
-                                      ? bloc.image != null
-                                          ? Image.file(
-                                              File(bloc.image!.path),
-                                              width: 135.h,
-                                              height: 135.h,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Padding(
-                                              padding: EdgeInsets.all(43.h),
-                                              child: SvgPicture.asset(
-                                                  'assets/icons/camera.svg'),
-                                            )
-                                      : bloc.user?.me.photo != null
-                                          ? Image.network(
-                                              apiUrl + bloc.user!.me.photo!,
-                                              width: 135.h,
-                                              height: 135.h,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Padding(
-                                              padding: EdgeInsets.all(43.h),
-                                              child: SvgPicture.asset(
-                                                'assets/icons/camera.svg',
+                                    clipBehavior: Clip.hardEdge,
+                                    child: bloc.user == null
+                                        ? bloc.image != null
+                                            ? Image.file(
+                                                File(bloc.image!.path),
+                                                width: 135.h,
+                                                height: 135.h,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Container(
+                                                margin: EdgeInsets.all(43.h),
+                                                width: 135.h,
+                                                height: 135.h,
+                                                child: SvgPicture.asset(
+                                                    'assets/icons/camera.svg'),
+                                              )
+                                        : bloc.user?.me.photo != null
+                                            ? Image.network(
+                                                apiUrl + bloc.user!.me.photo!,
+                                                width: 135.h,
+                                                height: 135.h,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Container(
+                                                padding: EdgeInsets.all(43.h),
+                                                width: 135.h,
+                                                height: 135.h,
+                                                child: SvgPicture.asset(
+                                                  'assets/icons/camera.svg',
+                                                ),
                                               ),
-                                            ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -163,36 +174,37 @@ class RelationShips extends StatelessWidget {
                                     radius: BorderRadius.all(
                                       Radius.circular(80.r),
                                     ),
-                                  ),
-                                  clipBehavior: Clip.hardEdge,
-                                  child: bloc.user?.love?.photo != null
-                                      ? Image.network(
-                                          apiUrl + bloc.user!.love!.photo!,
-                                          width: 135.h,
-                                          height: 135.h,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Padding(
-                                          padding: EdgeInsets.all(43.h),
-                                          child: SvgPicture.asset(
-                                            'assets/icons/camera.svg',
+                                    clipBehavior: Clip.hardEdge,
+                                    child: bloc.user?.love?.photo != null
+                                        ? Image.network(
+                                            apiUrl + bloc.user!.love!.photo!,
+                                            width: 135.h,
+                                            height: 135.h,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Padding(
+                                            padding: EdgeInsets.all(43.h),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/camera.svg',
+                                            ),
                                           ),
-                                        ),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Text(
-                              bloc.user?.love?.username ?? '',
-                              style: GoogleFonts.inter(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                                color: const Color.fromRGBO(23, 23, 23, 1.0),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
+                              Text(
+                                bloc.user?.love?.username ?? '',
+                                style: GoogleFonts.inter(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromRGBO(23, 23, 23, 1.0),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
+                    SizedBox(height: 20.h),
                     StreamBuilder<DateTime>(
                         stream: _streamController.stream,
                         initialData: DateTime.now(),
@@ -211,6 +223,7 @@ class RelationShips extends StatelessWidget {
                             ),
                           );
                         }),
+                    SizedBox(height: 20.h),
                     CustomButton(
                       color: accentColor,
                       text: 'Готово',

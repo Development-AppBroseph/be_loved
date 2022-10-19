@@ -283,7 +283,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // emit(AuthLoading());
     var result = await Repository().checkPhoneNumber(event.phone);
 
-    print('objectasd $result');
     if (result != null && result) {
       emit(CheckIsUserExistSuccess());
     } else {
