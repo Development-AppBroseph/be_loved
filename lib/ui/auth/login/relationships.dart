@@ -35,7 +35,7 @@ class RelationShips extends StatelessWidget {
       if (current is ReletionshipsStarted) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage()),
           (route) => false,
         );
         return true;
@@ -51,6 +51,7 @@ class RelationShips extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.sh),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -146,7 +147,7 @@ class RelationShips extends StatelessWidget {
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.all(18.w),
+                          padding: EdgeInsets.all(10.w),
                           child: SvgPicture.asset('assets/icons/logov2.svg'),
                         ),
                         Column(
@@ -213,6 +214,7 @@ class RelationShips extends StatelessWidget {
                     CustomButton(
                       color: accentColor,
                       text: 'Готово',
+                      validate: true,
                       textColor: Colors.white,
                       onPressed: () => _relationShips(context),
                     ),

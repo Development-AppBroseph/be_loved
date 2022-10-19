@@ -14,6 +14,10 @@ class InputNamePage extends StatelessWidget {
   final VoidCallback nextPage;
   final _nicknameController = TextEditingController();
 
+  final _scrollController = ScrollController();
+
+  FocusNode focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
@@ -33,6 +37,8 @@ class InputNamePage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.sp),
               child: SingleChildScrollView(
+                controller: _scrollController,
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.15.sh),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -85,6 +91,15 @@ class InputNamePage extends StatelessWidget {
                                   color: Colors.white,
                                   child: TextField(
                                     textAlignVertical: TextAlignVertical.top,
+                                    focusNode: focusNode,
+                                    onTap: () {
+                                      _scrollController.animateTo(
+                                        MediaQuery.of(context).size.height /
+                                            8.3,
+                                        duration: Duration(milliseconds: 500),
+                                        curve: Curves.ease,
+                                      );
+                                    },
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(12)
                                     ],
@@ -116,7 +131,8 @@ class InputNamePage extends StatelessWidget {
                                           1.0,
                                         ),
                                       ),
-                                      contentPadding: const EdgeInsets.symmetric(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
                                         horizontal: 20,
                                       ),
                                     ),
@@ -134,7 +150,7 @@ class InputNamePage extends StatelessWidget {
                         text: 'Продолжить',
                         textColor: Colors.white,
                         onPressed: () {
-                          FocusScope.of(context).unfocus();
+                          focusNode.unfocus();
 
                           BlocProvider.of<AuthBloc>(context)
                               .add(SetNickname(_nicknameController.text));

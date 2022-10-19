@@ -14,9 +14,9 @@ import 'package:overlay_support/overlay_support.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  // var appData = await AppData.getInstance();
   var user = await MySharedPrefs().user;
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) {
     runApp(MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
@@ -45,11 +45,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
           ),
-          home: user != null
-              ? user?.date != null
-                  ? const HomePage()
-                  : const PhonePage()
-              : const PhonePage(),
+          // home: user != null
+          //     ? user?.date != null
+          //         ? const HomePage()
+          //         : const PhonePage()
+          //     : const PhonePage(),
+          home: HomePage(),
         );
       },
     );

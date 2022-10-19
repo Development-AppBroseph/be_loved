@@ -29,6 +29,8 @@ class _CodePageState extends State<CodePage> {
   String? phone;
   bool resendCode = false;
 
+  final _scrollController = ScrollController();
+
   TextEditingController textEditingControllerUp = TextEditingController();
   TextEditingController textEditingControllerDown = TextEditingController();
 
@@ -105,7 +107,7 @@ class _CodePageState extends State<CodePage> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const HomePage(),
+                  builder: (context) => HomePage(),
                 ),
                 (route) => false,
               );
@@ -124,10 +126,10 @@ class _CodePageState extends State<CodePage> {
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          toolbarHeight: 100,
+          toolbarHeight: 80,
           backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
           title: Padding(
-            padding: EdgeInsets.only(top: 20.h, right: 6.w),
+            padding: EdgeInsets.only(top: 30.h, right: 6.w),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Container(
@@ -157,6 +159,8 @@ class _CodePageState extends State<CodePage> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25.w),
               child: SingleChildScrollView(
+                controller: _scrollController,
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.15.sh),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,6 +169,7 @@ class _CodePageState extends State<CodePage> {
                       'Введи код подтверждения',
                       style: GoogleFonts.inter(
                         fontSize: 35.sp,
+                        height: 1.1,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -183,6 +188,13 @@ class _CodePageState extends State<CodePage> {
                         child: Pinput(
                           pinAnimationType: PinAnimationType.none,
                           showCursor: false,
+                          onTap: () {
+                            _scrollController.animateTo(
+                              MediaQuery.of(context).size.height / 7,
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            );
+                          },
                           length: 5,
                           androidSmsAutofillMethod:
                               AndroidSmsAutofillMethod.smsRetrieverApi,
@@ -219,7 +231,10 @@ class _CodePageState extends State<CodePage> {
                       color: const Color.fromRGBO(32, 203, 131, 1.0),
                       text: 'Продолжить',
                       textColor: Colors.white,
-                      onPressed: () => _checkCode(context),
+                      onPressed: () {
+                        _checkCode(context);
+                        focusNode.unfocus();
+                      },
                     ),
                     // CustomAnimationButton(
                     //   text: 'Продолжить',
@@ -250,6 +265,7 @@ class _CodePageState extends State<CodePage> {
                       color: Colors.black,
                       textColor: Colors.white,
                     ),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),

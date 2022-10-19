@@ -43,6 +43,7 @@ class AvatarPage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 10),
               child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(top: 0.sh),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -394,17 +395,15 @@ class PageTest extends StatelessWidget {
           itemBuilder: ((context, index) {
             return Align(
               alignment: Alignment.center,
-              child: SizedBox(
-                width: 67.w,
-                height: 67.h,
-                child: const Material(
-                  color: Color.fromRGBO(150, 150, 150, 1),
-                  shape: SquircleBorder(
-                    radius: BorderRadius.all(
-                      Radius.circular(40),
-                    ),
-                  ),
+              child: CupertinoCard(
+                child: Container(
+                  color: Colors.grey,
                 ),
+                elevation: 0,
+                margin: const EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0.0),
+                color: Colors.white,
+                radius: BorderRadius.all(Radius.circular(35.0.r)),
               ),
             );
             // return Container(

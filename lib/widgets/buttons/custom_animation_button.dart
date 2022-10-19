@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,12 +31,15 @@ class CustomButtonState extends State<CustomAnimationButton>
   late AnimationController controller;
   late Animation<Color?> _colorAnim;
   late Color color = const Color.fromRGBO(23, 23, 23, 1.0);
+  Timer? _timer;
+  final _streamController = StreamController<double>();
+  double timePressed = 0;
 
   @override
   void initState() {
     super.initState();
     controller = AnimationController(
-        duration: const Duration(milliseconds: 300), vsync: this);
+        duration: const Duration(milliseconds: 600), vsync: this);
     _colorAnim = ColorTween(
             begin: const Color.fromRGBO(23, 23, 23, 1.0), end: Colors.white)
         .animate(controller);
@@ -47,61 +52,105 @@ class CustomButtonState extends State<CustomAnimationButton>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: AnimatedContainer(
-        height: 60.sp,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: animation
-                ? const Color.fromRGBO(23, 23, 23, 1.0)
-                : widget.black
-                    ? const Color.fromRGBO(23, 23, 23, 1.0)
-                    : const Color.fromRGBO(32, 230, 131, 1.0),
-            width: 1.sp,
-          ),
-        ),
-        duration: const Duration(milliseconds: 300),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 1000),
-                onEnd: widget.onPressed,
-                curve: Curves.fastOutSlowIn,
-                height: 60.sp,
-                width: animation ? 0 : 378.w,
-                decoration: BoxDecoration(
-                  color: widget.black
-                      ? const Color.fromRGBO(23, 23, 23, 1.0)
-                      : const Color.fromRGBO(32, 230, 131, 1.0),
-                  borderRadius: BorderRadius.circular(5),
+    return StreamBuilder<double>(
+        stream: _streamController.stream,
+        initialData: 0,
+        builder: (context, snapshot) {
+          return GestureDetector(
+            child: AnimatedContainer(
+              height: 60.sp,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: snapshot.data! < 0.1
+                      ? animation
+                          ? const Color.fromRGBO(23, 23, 23, 1.0)
+                          : widget.black
+                              ? const Color.fromRGBO(23, 23, 23, 1.0)
+                              : const Color.fromRGBO(32, 203, 131, 1.0)
+                      : const Color.fromRGBO(32, 203, 131, 1.0),
+                  width: 1.sp,
+                ),
+              ),
+              duration: const Duration(milliseconds: 300),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(9),
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 1000),
+                        onEnd: () {},
+                        curve: Curves.fastOutSlowIn,
+                        height: 60.sp,
+                        width: snapshot.data! > 0 ? 378.w : 0,
+                        decoration: BoxDecoration(
+                          color: widget.black
+                              ? const Color.fromRGBO(23, 23, 23, 1.0)
+                              : const Color.fromRGBO(32, 203, 131, 1.0),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(widget.text,
+                          style: GoogleFonts.inter(
+                            fontSize: 20.sp,
+                            color: color,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    )
+                  ],
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(widget.text,
-                  style: GoogleFonts.inter(
-                    fontSize: 20.sp,
-                    color: color,
-                    fontWeight: FontWeight.bold,
-                  )),
-            )
-          ],
-        ),
-      ),
-      onLongPress: () {
-        // if(widget.state != null && widget.state!) {
-        setState(() {
-          controller.forward();
-          animation = false;
+            onForcePressStart: (details) {
+              // print(details);
+              // print('end');
+            },
+            onTapDown: (details) {
+              print(details.globalPosition.distance);
+              print('start');
+              controller.forward();
+              _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+                timePressed += 0.1;
+                _streamController.sink.add(timePressed);
+              });
+            },
+            // onLongPressStart: (details) {
+            //   print(details.globalPosition.distance);
+            //   print('start');
+            //   controller.forward();
+            //   _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+            //     timePressed += 0.1;
+            //     _streamController.sink.add(timePressed);
+            //   });
+            // },
+            onTapUp: (details) {
+              print('end');
+
+              _timer?.cancel();
+              if (snapshot.data! > 0.6) {
+                widget.onPressed();
+                _streamController.sink.add(0.6);
+              } else {
+                controller.animateBack(0);
+                _streamController.sink.add(0);
+                timePressed = 0;
+              }
+            },
+            // onLongPress: () {
+            //   // if(widget.state != null && widget.state!) {
+            //   setState(() {
+            //     controller.forward();
+            //     animation = false;
+            //   });
+            //   // }
+            // },
+          );
         });
-        // }
-      },
-    );
   }
 }
