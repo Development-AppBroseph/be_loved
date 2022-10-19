@@ -223,9 +223,13 @@ class _InvitePartnerState extends State<InvitePartner> {
                   bottom: false,
                   child: Stack(
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 24.sp, right: 24.sp, top: 0.1.sw),
+                      AnimatedContainer(
+                        curve: Curves.easeInOutQuint,
+                        duration: const Duration(milliseconds: 600),
+                        margin: EdgeInsets.only(
+                            left: 24.sp,
+                            right: 24.sp,
+                            top: snapshot.data! ? 32.68.h : 51.68.h),
                         child: SingleChildScrollView(
                           controller: _scrollController,
                           physics: const NeverScrollableScrollPhysics(),

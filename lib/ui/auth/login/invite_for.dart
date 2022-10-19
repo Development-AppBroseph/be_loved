@@ -360,7 +360,7 @@ class _InviteForState extends State<InviteFor> {
                         ),
                         SizedBox(height: 40.h),
                         CustomAnimationButton(
-                          text: 'Принять',
+                          text: 'Зажми, чтобы принять',
                           onPressed: () async {
                             BlocProvider.of<AuthBloc>(context)
                                 .add(AcceptReletionships());

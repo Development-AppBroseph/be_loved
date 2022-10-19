@@ -201,19 +201,6 @@ class _CodePageState extends State<CodePage> {
                               child: Pinput(
                                 pinAnimationType: PinAnimationType.none,
                                 showCursor: false,
-                                onTap: () {
-                                  Future.delayed(
-                                      const Duration(milliseconds: 600), () {
-                                    _scrollController.animateTo(
-                                      _scrollController
-                                              .position.maxScrollExtent -
-                                          80.h,
-                                      duration:
-                                          const Duration(milliseconds: 500),
-                                      curve: Curves.ease,
-                                    );
-                                  });
-                                },
                                 length: 5,
                                 androidSmsAutofillMethod:
                                     AndroidSmsAutofillMethod.smsRetrieverApi,
