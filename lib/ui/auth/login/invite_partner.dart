@@ -624,30 +624,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                         }
                                       },
                                     ),
-                                  ),
-                                ),
-                                Text(
-                                  bloc.user?.love?.username ?? '',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color:
-                                        const Color.fromRGBO(23, 23, 23, 1.0),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 37.h, bottom: 5.h),
-                          child: Container(
-                            height: 70.h,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.horizontal(
-                                left: Radius.circular(10),
-                                right: Radius.circular(10),
+                                  )
+                                ],
                               ),
                               // CustomAnimationButton(
                               //   text: 'Продолжить',
