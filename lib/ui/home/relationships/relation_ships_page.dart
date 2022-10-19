@@ -21,7 +21,7 @@ class RelationShipsPage extends StatelessWidget {
         Column(
           children: [
             Expanded(child: Container(color: Colors.black)),
-            Expanded(child: Container(color: Colors.white))
+            Expanded(child: Container(color: Color(0xF0F0F0F0)))
           ],
         ),
         content(),
