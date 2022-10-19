@@ -1,3 +1,4 @@
+import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/widgets/buttons/custom_add_animation_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +22,7 @@ class RelationShipsPage extends StatelessWidget {
         Column(
           children: [
             Expanded(child: Container(color: Colors.black)),
-            Expanded(child: Container(color: Color(0xF0F0F0F0)))
+            Expanded(child: Container(color: backgroundColorGrey))
           ],
         ),
         content(),
