@@ -159,9 +159,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                               if (!_controllerAnimationRotate!.isAnimating) {
                                 if (_controllerAnimationRotate!.isCompleted) {
                                   _controllerAnimationRotate!.reverse();
-                                  print('object herer revrse');
                                 } else {
-                                  print('object herer forward');
                                   _controllerAnimationRotate!
                                       .forward(from: rotate);
                                 }
