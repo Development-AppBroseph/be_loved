@@ -23,7 +23,7 @@ class EventsPage extends StatelessWidget {
     UpcomingInfo(
       title: 'Арбузный вечер',
       subTitle: 'Добавил(а) Никита Белых',
-      days: 'Через три дня',
+      days: 'Через 3 дня',
     ),
     UpcomingInfo(
       title: 'Я роняю запад',
@@ -192,8 +192,9 @@ class EventsPage extends StatelessWidget {
           ),
           SizedBox(height: 26.h),
           events(),
-          SizedBox(height: 42.h),
+          SizedBox(height: 35.h),
           button(),
+          SizedBox(height: 117.h),
         ],
       ),
     );
@@ -202,23 +203,51 @@ class EventsPage extends StatelessWidget {
   Widget events() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 25.w),
-      child: Column(children: upComingInfo.map((e) => itemEvent(e)).toList()),
+      child: Column(children: eventsItem()),
     );
   }
 
-  Widget itemEvent(UpcomingInfo info) {
+  List<Widget> eventsItem() {
+    List<Widget> list = [];
+    for (int i = 0; i < upComingInfo.length; i++) {
+      list.add(itemEvent(upComingInfo[i], i));
+    }
+    return list;
+  }
+
+  Widget itemEvent(UpcomingInfo info, int index) {
     TextStyle style1 = TextStyle(
         color: Colors.black, fontWeight: FontWeight.w800, fontSize: 20.sp);
     TextStyle style2 = TextStyle(
         color: greyColor, fontWeight: FontWeight.w700, fontSize: 15.sp);
 
-    TextStyle style3 = TextStyle(fontWeight: FontWeight.w800, fontSize: 15.sp);
+    Color? colorDays;
+
+    if (info.days.contains('Сегодня') ||
+        info.days.contains('Завтра') ||
+        info.days.contains('2')) {
+      colorDays = const Color.fromRGBO(255, 29, 29, 1);
+    } else if (info.days.contains('3')) {
+      colorDays = const Color.fromRGBO(191, 51, 85, 1);
+    } else if (info.days.contains('4')) {
+      colorDays = const Color.fromRGBO(128, 74, 142, 1);
+    } else if (info.days.contains('5')) {
+      colorDays = const Color.fromRGBO(64, 97, 199, 1);
+    } else if (info.days.contains('6')) {
+      colorDays = const Color.fromRGBO(1, 119, 255, 1);
+    } else {
+      colorDays = const Color.fromRGBO(150, 150, 150, 1);
+    }
+
+    TextStyle style3 = TextStyle(
+        color: colorDays, fontWeight: FontWeight.w800, fontSize: 15.sp);
 
     TextStyle style4 = TextStyle(
         color: redColor, fontWeight: FontWeight.w800, fontSize: 15.sp);
 
     return Padding(
-      padding: EdgeInsets.only(bottom: 20.h),
+      padding:
+          EdgeInsets.only(bottom: index == upComingInfo.length - 1 ? 0 : 20.h),
       child: Row(
         children: [
           Column(

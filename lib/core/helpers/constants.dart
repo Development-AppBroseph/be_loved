@@ -10,4 +10,6 @@ const Color blueColor = Color.fromRGBO(1, 119, 255, 1.0);
 
 const Color greyColor = Color.fromRGBO(150, 150, 150, 1.0);
 
+const Color greyColor2 = Color.fromRGBO(218, 218, 218, 1.0);
+
 const Color backgroundColorGrey = Color(0xF0F0F0F0);

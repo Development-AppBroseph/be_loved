@@ -35,7 +35,8 @@ class CreateAccountInfo extends StatelessWidget {
 
   void nextPage() {
     pageController.nextPage(
-      duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);}
+        duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+  }
 
   void previousPage(BuildContext context) {
     pageController.previousPage(

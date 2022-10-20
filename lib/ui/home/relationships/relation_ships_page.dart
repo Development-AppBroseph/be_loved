@@ -140,8 +140,9 @@ class RelationShipsPage extends StatelessWidget {
           SizedBox(height: 27.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.w),
-            child: CustomAddAnimationButton(),
+            child: const CustomAddAnimationButton(),
           ),
+          SizedBox(height: 117.h),
         ],
       ),
     );
