@@ -64,9 +64,10 @@ class HomePage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => pageController.jumpToPage(0),
-                  child: SizedBox(
+                  child: Container(
                     width: 93.w,
                     height: 74.h,
+                    color: Colors.transparent,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -85,9 +86,10 @@ class HomePage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () => pageController.jumpToPage(1),
-                  child: SizedBox(
+                  child: Container(
                     width: 93.w,
                     height: 74.h,
+                    color: Colors.transparent,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -106,9 +108,10 @@ class HomePage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () => pageController.jumpToPage(2),
-                  child: SizedBox(
+                  child: Container(
                     width: 93.w,
                     height: 74.h,
+                    color: Colors.transparent,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -127,9 +130,10 @@ class HomePage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () => pageController.jumpToPage(3),
-                  child: SizedBox(
+                  child: Container(
                     width: 93.w,
                     height: 74.h,
+                    color: Colors.transparent,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

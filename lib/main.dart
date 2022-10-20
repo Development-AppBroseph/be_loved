@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           ),
           // home: user != null
           //     ? user?.date != null
-          //         ? const HomePage()
+          //         ? HomePage()
           //         : const PhonePage()
           //     : const PhonePage(),
           home: HomePage(),
