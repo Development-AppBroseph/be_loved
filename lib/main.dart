@@ -45,12 +45,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
           ),
-          // home: user != null
-          //     ? user?.date != null
-          //         ? HomePage()
-          //         : const PhonePage()
-          //     : const PhonePage(),
-          home: HomePage(),
+          home: user != null
+              ? user?.date != null
+                  ? HomePage()
+                  : const PhonePage()
+              : const PhonePage(),
+          // home: HomePage(),
         );
       },
     );
