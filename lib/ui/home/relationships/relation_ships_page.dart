@@ -1,6 +1,7 @@
 import 'dart:async';
-
+import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/widgets/buttons/custom_add_animation_button.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,9 +13,14 @@ class EventWidget {
   EventWidget(this.expanded, this.widget);
 }
 
-class RelationShipsPage extends StatelessWidget {
-  RelationShipsPage({Key? key}) : super(key: key);
+class RelationShipsPage extends StatefulWidget {
+  const RelationShipsPage({Key? key}) : super(key: key);
 
+  @override
+  State<RelationShipsPage> createState() => _RelationShipsPageState();
+}
+
+class _RelationShipsPageState extends State<RelationShipsPage> {
   final List<EventWidget> _events = [
     EventWidget(
       false,
@@ -57,6 +63,12 @@ class RelationShipsPage extends StatelessWidget {
   final _streamController = StreamController<int>();
 
   ScrollController scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamController.close();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,21 +228,35 @@ class RelationShipsPage extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Container(
-          width: 135.w,
-          height: 135.h,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40.r), color: Colors.white),
+        Material(
+          color: Colors.white,
+          shape: SquircleBorder(
+            radius: BorderRadius.all(
+              Radius.circular(80.r),
+            ),
+          ),
+          clipBehavior: Clip.hardEdge,
+          child: SizedBox(
+            width: 135.h,
+            height: 135.h,
+          ),
         ),
-        Container(
-          width: 125.w,
-          height: 125.h,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40.r), color: Colors.grey),
-          child: const Icon(
-            Icons.camera_alt,
-            color: Colors.white,
-            size: 45,
+        Material(
+          color: Colors.grey,
+          shape: SquircleBorder(
+            radius: BorderRadius.all(
+              Radius.circular(80.r),
+            ),
+          ),
+          clipBehavior: Clip.hardEdge,
+          child: SizedBox(
+            width: 125.h,
+            height: 125.h,
+            child: const Icon(
+              Icons.camera_alt,
+              color: Colors.white,
+              size: 45,
+            ),
           ),
         ),
       ],
