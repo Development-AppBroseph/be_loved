@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:be_loved/core/helpers/constants.dart';
+import 'package:be_loved/ui/home/relationships/widgets/home_info_first.dart';
+import 'package:be_loved/ui/home/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/widgets/buttons/custom_add_animation_button.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,46 +24,10 @@ class RelationShipsPage extends StatefulWidget {
 }
 
 class _RelationShipsPageState extends State<RelationShipsPage> {
-  final List<EventWidget> _events = [
-    EventWidget(
-      false,
-      Container(
-        width: 376.w,
-        height: 100,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r), color: Colors.grey),
-      ),
-    ),
-    EventWidget(
-      true,
-      Container(
-        width: 376.w,
-        height: 200,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r), color: Colors.grey),
-      ),
-    ),
-    EventWidget(
-      true,
-      Container(
-        width: 376.w,
-        height: 200,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r), color: Colors.grey),
-      ),
-    ),
-    EventWidget(
-      true,
-      Container(
-        width: 376.w,
-        height: 200,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r), color: Colors.grey),
-      ),
-    ),
-  ];
+  
 
   final _streamController = StreamController<int>();
+  final _streamControllerCarousel = StreamController<double>();
 
   ScrollController scrollController = ScrollController();
 
@@ -68,6 +35,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
   void dispose() {
     super.dispose();
     _streamController.close();
+    _streamControllerCarousel.close();
   }
 
   @override
@@ -159,34 +127,74 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                   ),
                 ),
                 SizedBox(height: 26.h),
-                AnimatedContainer(
-                  height: _events[snapshot.data!].expanded ? 200 : 100,
-                  width: double.infinity,
-                  duration: const Duration(milliseconds: 500),
-                  child: ListView.builder(
-                    itemCount: _events.length,
-                    padding: const EdgeInsets.only(left: 20),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      // print(index);
-                      _streamController.sink.add(index == 1 ? 0 : index);
-                      return Column(
-                        children: [
-                          AnimatedContainer(
-                            duration: Duration(milliseconds: 500),
-                            height: snapshot.data == 0
-                                ? 100
-                                : index == 0
-                                    ? 100
-                                    : 200,
-                            margin: const EdgeInsets.only(right: 20),
-                            child: _events[index].widget,
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                // AnimatedContainer(
+                //   height: _events[snapshot.data!].expanded ? 200 : 100,
+                //   width: double.infinity,
+                //   duration: const Duration(milliseconds: 500),
+                //   child: ListView.builder(
+                //     itemCount: _events.length,
+                //     padding: const EdgeInsets.only(left: 20),
+                //     shrinkWrap: true,
+                //     scrollDirection: Axis.horizontal,
+                //     itemBuilder: (context, index) {
+                //       // print(index);
+                //       _streamController.sink.add(index == 1 ? 0 : index);
+                //       return Column(
+                //         children: [
+                //           AnimatedContainer(
+                //             duration: Duration(milliseconds: 500),
+                //             height: snapshot.data == 0
+                //                 ? 100
+                //                 : index == 0
+                //                     ? 100
+                //                     : 200,
+                //             margin: const EdgeInsets.only(right: 20),
+                //             child: _events[index].widget,
+                //           ),
+                //         ],
+                //       );
+                //     },
+                //   ),
+                // ),
+                StreamBuilder<double>(
+                  stream: _streamControllerCarousel.stream,
+                  builder: (context, snapshot) {
+                    double data = snapshot.data ?? 0;
+                    return CarouselSlider(
+                      items: [
+                        Column(
+                          children: [
+                            Container(
+                              width: 378.w,
+                              height: 115.h,
+                              child: HomeInfoFirst(),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              width: 378.w,
+                              height: (data * 138.h + 115.h),
+                              child: HomeInfoSecond(data: data),
+                            ),
+                          ],
+                        )
+                      ],
+                      options: CarouselOptions(
+                        viewportFraction: 0.91,
+                        onScrolled: (d){
+                          print('DOUBLE: $d');
+                          _streamControllerCarousel.sink.add(d ?? 0);
+                        },
+                        enableInfiniteScroll: false,
+                        height: data >= 1 
+                        ? 253.h
+                        : (data * 138.h + 115.h),
+                        
+                      )
+                    );
+                  }
                 ),
                 SizedBox(height: 27.h),
                 Padding(
