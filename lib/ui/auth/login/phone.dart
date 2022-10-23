@@ -82,7 +82,7 @@ class _PhonePageState extends State<PhonePage> {
                       AnimatedContainer(
                         curve: Curves.easeInOutQuint,
                         duration: const Duration(milliseconds: 600),
-                        height: snapshot.data! ? 169.h : 253.h,
+                        height: snapshot.data! ? 131.h : 303.h,
                       ),
                       Text(
                         'Войти по номеру телефона',

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/models/auth/select_image.dart';
 import 'package:be_loved/models/helpers/small_image.dart';
 import 'package:be_loved/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -221,11 +222,19 @@ class AvatarPage extends StatelessWidget {
   }
 }
 
-class AvatarMenu extends StatelessWidget {
-  AvatarMenu({Key? key}) : super(key: key);
+class AvatarMenu extends StatefulWidget {
+  const AvatarMenu({Key? key}) : super(key: key);
 
+  @override
+  State<AvatarMenu> createState() => _AvatarMenuState();
+}
+
+class _AvatarMenuState extends State<AvatarMenu> {
   final streamController = StreamController<int>();
+
   final pageController = PageController(viewportFraction: 1.0, keepPage: false);
+
+  SelectImage selectImage = SelectImage();
 
   @override
   Widget build(BuildContext context) {
@@ -237,12 +246,13 @@ class AvatarMenu extends StatelessWidget {
             controller: pageController,
             onPageChanged: (value) {
               streamController.add(value);
+              setState(() {});
             },
             children: [
-              PageTest(),
-              PageTest(),
-              PageTest(),
-              PageTest(),
+              PageTest(page: 0, selectImage: selectImage),
+              PageTest(page: 1, selectImage: selectImage),
+              PageTest(page: 2, selectImage: selectImage),
+              PageTest(page: 3, selectImage: selectImage),
             ],
           ),
         ),
@@ -384,7 +394,13 @@ class AvatarMenu extends StatelessWidget {
 }
 
 class PageTest extends StatefulWidget {
-  PageTest({Key? key}) : super(key: key);
+  SelectImage selectImage;
+  int page;
+  PageTest({
+    Key? key,
+    required this.page,
+    required this.selectImage,
+  }) : super(key: key);
 
   @override
   State<PageTest> createState() => _PageTestState();
@@ -408,6 +424,7 @@ class _PageTestState extends State<PageTest> {
 
   @override
   Widget build(BuildContext context) {
+    print('object ${widget.selectImage.page}|||${widget.selectImage.image}');
     return Container(
       height: 267.h,
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
@@ -426,26 +443,29 @@ class _PageTestState extends State<PageTest> {
                     width: 67.w,
                     child: GestureDetector(
                       onTap: () {
-                        _images.forEach((element) {
-                          element.selected = false;
-                        });
-                        _images[index].selected = true;
+                        widget.selectImage.image = index;
+                        widget.selectImage.page = widget.page;
+                        // _images.forEach((element) {
+                        //   element.selected = false;
+                        // });
+                        // _images[index].selected = true;
                         setState(() {});
                       },
                       child: CupertinoCard(
-                        child: Container(
-                          color: Colors.grey,
-                        ),
                         elevation: 0,
                         margin: EdgeInsets.zero,
                         padding: EdgeInsets.zero,
                         color: Colors.white,
                         radius: BorderRadius.all(Radius.circular(40.r)),
+                        child: Container(
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                if (_images[index].selected)
+                if (widget.selectImage.page == widget.page &&
+                    widget.selectImage.image == index)
                   Align(
                     alignment: Alignment.topRight,
                     child: SvgPicture.asset(

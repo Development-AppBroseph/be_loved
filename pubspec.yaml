@@ -35,6 +35,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   overlay_support: ^2.0.1
   fluttercontactpicker: ^4.7.0
+  carousel_slider: ^4.0.0
 
 dev_dependencies:
   flutter_test:
