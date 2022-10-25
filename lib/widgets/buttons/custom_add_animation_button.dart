@@ -33,7 +33,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
         lowerBound: pi / 4,
         upperBound: pi / 2,
         animationBehavior: AnimationBehavior.preserve,
-        duration: const Duration(milliseconds: 1000));
+        duration: const Duration(milliseconds: 900));
     _controllerAnimationRotate!.addListener(() {
       setState(() {
         rotate = _controllerAnimationRotate!.value;
@@ -45,7 +45,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
         lowerBound: 0,
         upperBound: 70.h,
         animationBehavior: AnimationBehavior.preserve,
-        duration: const Duration(milliseconds: 1000));
+        duration: const Duration(milliseconds: 900));
   }
 
   @override
@@ -59,8 +59,9 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 1000),
                 top: snapshot.data! ? 0 : 70.h,
-                child: Container(
-                  margin: EdgeInsets.only(top: 15.h, right: 99.w, left: 20.w),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      top: 15.h, bottom: 15.h, right: 118.w, left: 20.w),
                   child: Row(
                     children: [
                       SizedBox(
@@ -74,6 +75,8 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                               SvgPicture.asset(
                                 'assets/icons/events.svg',
                                 color: greyColor,
+                                height: 38.h,
+                                width: 34.w,
                               ),
                               SizedBox(height: 12.h),
                               Text('Событие', style: style),
@@ -93,6 +96,8 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                               SvgPicture.asset(
                                 'assets/icons/purposes.svg',
                                 color: Colors.grey,
+                                height: 38.h,
+                                width: 38.w,
                               ),
                               SizedBox(height: 12.h),
                               Text('Цели', style: style),
@@ -112,6 +117,8 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                               SvgPicture.asset(
                                 'assets/icons/archive.svg',
                                 color: Colors.grey,
+                                height: 38.h,
+                                width: 34.74.w,
                               ),
                               SizedBox(height: 12.h),
                               Text('Архив', style: style),
@@ -144,7 +151,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                   alignment: Alignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      padding: EdgeInsets.only(left: 9.w, right: 20.w),
                       child: AnimatedAlign(
                         alignment: snapshot.data!
                             ? Alignment.centerRight
@@ -153,7 +160,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                         duration: const Duration(milliseconds: 1000),
                         child: SizedBox(
                           width: 70.w,
-                          height: 30.h,
+                          height: 70.h,
                           child: GestureDetector(
                             onTap: () {
                               if (!_controllerAnimationRotate!.isAnimating) {
@@ -176,8 +183,12 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                               padding: EdgeInsets.only(right: 0.w),
                               child: Transform.rotate(
                                   angle: rotate,
-                                  child:
-                                      SvgPicture.asset('assets/icons/add.svg')),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SvgPicture.asset('assets/icons/add.svg'),
+                                    ],
+                                  )),
                             ),
                           ),
                         ),

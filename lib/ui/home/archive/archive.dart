@@ -53,9 +53,23 @@ class _ArchivePageState extends State<ArchivePage> {
                       child: Row(
                         children: [
                           SizedBox(
-                            width: 45.w,
-                            height: 45.h,
-                            child: const Icon(Icons.more_horiz),
+                            height: 5.57.sp,
+                            width: 33.43,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 3,
+                              itemBuilder: (BuildContext context, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(right: 5.57.sp),
+                                  height: 5.57.sp,
+                                  width: 5.57.sp,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(1.5),
+                                    color: greyColor,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                           const Spacer(),
                           SizedBox(
@@ -89,17 +103,17 @@ class _ArchivePageState extends State<ArchivePage> {
                                         snapshot.data! == 0 ? style2 : style3),
                               ),
                               GestureDetector(
-                                  onTap: () => streamControllerPage.add(1),
-                                  child: Text('События',
-                                      style: snapshot.data! == 1
-                                          ? style2
-                                          : style3)),
+                                onTap: () => streamControllerPage.add(1),
+                                child: Text('События',
+                                    style:
+                                        snapshot.data! == 1 ? style2 : style3),
+                              ),
                               GestureDetector(
-                                  onTap: () => streamControllerPage.add(2),
-                                  child: Text('Моменты',
-                                      style: snapshot.data! == 2
-                                          ? style2
-                                          : style3)),
+                                onTap: () => streamControllerPage.add(2),
+                                child: Text('Моменты',
+                                    style:
+                                        snapshot.data! == 2 ? style2 : style3),
+                              ),
                             ],
                           )
                         ],
