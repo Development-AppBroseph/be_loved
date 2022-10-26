@@ -9,15 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class EventWidget {
-  final bool expanded;
-  final Widget widget;
-
-  EventWidget(this.expanded, this.widget);
-}
-
 class RelationShipsPage extends StatefulWidget {
-  const RelationShipsPage({Key? key}) : super(key: key);
+  final VoidCallback nextPage;
+  const RelationShipsPage({Key? key, required this.nextPage}) : super(key: key);
 
   @override
   State<RelationShipsPage> createState() => _RelationShipsPageState();
@@ -71,11 +65,18 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 25.w),
                   child: Row(
                     children: [
-                      photoMini(),
-                      SizedBox(width: 12.w),
-                      Text(
-                        'Олег Бочко',
-                        style: style1,
+                      GestureDetector(
+                        onTap: widget.nextPage,
+                        child: Row(
+                          children: [
+                            photoMini(),
+                            SizedBox(width: 12.w),
+                            Text(
+                              'Олег Бочко',
+                              style: style1,
+                            ),
+                          ],
+                        ),
                       ),
                       const Spacer(),
                       SizedBox(
@@ -194,41 +195,31 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
         SizedBox(
           width: 45.h,
           height: 45.h,
-          child: GestureDetector(
-            onTap: () async {
-              // bloc.add(PickImage());
-            },
-            child: Material(
-              color: Colors.white,
-              shape: SquircleBorder(
-                radius: BorderRadius.all(
-                  Radius.circular(30.r),
-                ),
+          child: Material(
+            color: Colors.white,
+            shape: SquircleBorder(
+              radius: BorderRadius.all(
+                Radius.circular(30.r),
               ),
-              clipBehavior: Clip.hardEdge,
             ),
+            clipBehavior: Clip.hardEdge,
           ),
         ),
         SizedBox(
           width: 42.h,
           height: 42.h,
-          child: GestureDetector(
-            onTap: () async {
-              // bloc.add(PickImage());
-            },
-            child: Material(
-              color: const Color.fromRGBO(150, 150, 150, 1),
-              shape: SquircleBorder(
-                radius: BorderRadius.all(
-                  Radius.circular(30.r),
-                ),
+          child: Material(
+            color: const Color.fromRGBO(150, 150, 150, 1),
+            shape: SquircleBorder(
+              radius: BorderRadius.all(
+                Radius.circular(30.r),
               ),
-              clipBehavior: Clip.hardEdge,
-              child: Padding(
-                padding: EdgeInsets.all(13.h),
-                child: SvgPicture.asset(
-                  'assets/icons/camera.svg',
-                ),
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: Padding(
+              padding: EdgeInsets.all(13.h),
+              child: SvgPicture.asset(
+                'assets/icons/camera.svg',
               ),
             ),
           ),

@@ -3,24 +3,37 @@ import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/home/archive/archive.dart';
 import 'package:be_loved/ui/home/events/events_page.dart';
 import 'package:be_loved/ui/home/purposes/purposes_page.dart';
-import 'package:be_loved/ui/home/relationships/relation_ships_page.dart';
+import 'package:be_loved/ui/home/relationships/main_relation_ships_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final pageController = PageController();
+
   final streamController = StreamController();
+
   int currentIndex = 0;
 
   List<Widget> pages = [
-    RelationShipsPage(),
+    MainRelationShipsPage(),
     EventsPage(),
     PurposesPage(),
     ArchivePage(),
   ];
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
