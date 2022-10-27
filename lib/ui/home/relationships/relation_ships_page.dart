@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/home/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/ui/home/relationships/widgets/home_info_second.dart';
@@ -151,7 +152,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                           items: [
                             Column(
                               children: [
-                                SizedBox(
+                                Container(
                                   width: 378.w,
                                   height: 115.h,
                                   child: HomeInfoFirst(),
@@ -160,7 +161,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                             ),
                             Column(
                               children: [
-                                SizedBox(
+                                Container(
                                   width: 378.w,
                                   height: (data * 138.h + 115.h),
                                   child: HomeInfoSecond(data: data),
@@ -171,6 +172,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                           options: CarouselOptions(
                             viewportFraction: 0.91,
                             onScrolled: (d) {
+                              print('DOUBLE: $d');
                               _streamControllerCarousel.sink.add(d ?? 0);
                             },
                             enableInfiniteScroll: false,
