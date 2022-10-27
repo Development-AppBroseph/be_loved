@@ -9,23 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class EventWidget {
-  final bool expanded;
-  final Widget widget;
-
-  EventWidget(this.expanded, this.widget);
-}
-
 class RelationShipsPage extends StatefulWidget {
-  const RelationShipsPage({Key? key}) : super(key: key);
+  final VoidCallback nextPage;
+  const RelationShipsPage({Key? key, required this.nextPage}) : super(key: key);
 
   @override
   State<RelationShipsPage> createState() => _RelationShipsPageState();
 }
 
 class _RelationShipsPageState extends State<RelationShipsPage> {
-  
-
   final _streamController = StreamController<int>();
   final _streamControllerCarousel = StreamController<double>();
 
@@ -40,12 +32,6 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // scrollController.addListener(() {
-    //   if (scrollController.offset % 376.w > 350.w) {
-    //     print('object ${scrollController.offset % 376.w}');
-    //     scrollController.jumpTo(376.w);
-    //   }
-    // });
     return Stack(
       children: [
         Column(
@@ -79,18 +65,43 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 25.w),
                   child: Row(
                     children: [
-                      photoMini(),
-                      SizedBox(width: 12.w),
-                      Text(
-                        'Олег Бочко',
-                        style: style1,
+                      GestureDetector(
+                        onTap: widget.nextPage,
+                        child: Row(
+                          children: [
+                            photoMini(),
+                            SizedBox(width: 12.w),
+                            Text(
+                              'Олег Бочко',
+                              style: style1,
+                            ),
+                          ],
+                        ),
                       ),
                       const Spacer(),
-                      const Icon(Icons.more_horiz, color: Colors.white)
+                      SizedBox(
+                        height: 5.57.sp,
+                        width: 33.43,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          itemBuilder: (BuildContext context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(left: 5.57.sp),
+                              height: 5.57.sp,
+                              width: 5.57.sp,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1.5),
+                                color: Colors.white,
+                              ),
+                            );
+                          },
+                        ),
+                      )
                     ],
                   ),
                 ),
-                SizedBox(height: 39.h),
+                SizedBox(height: 35.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.w),
                   child: Row(
@@ -101,12 +112,14 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 33.h),
+                SizedBox(height: 25.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.w),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           photo(),
                           SizedBox(height: 10.h),
@@ -114,7 +127,10 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                         ],
                       ),
                       const Spacer(),
-                      SvgPicture.asset('assets/icons/heart.svg'),
+                      Padding(
+                        padding: EdgeInsets.only(top: 37.h, bottom: 39.h),
+                        child: SvgPicture.asset('assets/icons/heart.svg'),
+                      ),
                       const Spacer(),
                       Column(
                         children: [
@@ -127,79 +143,44 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                   ),
                 ),
                 SizedBox(height: 26.h),
-                // AnimatedContainer(
-                //   height: _events[snapshot.data!].expanded ? 200 : 100,
-                //   width: double.infinity,
-                //   duration: const Duration(milliseconds: 500),
-                //   child: ListView.builder(
-                //     itemCount: _events.length,
-                //     padding: const EdgeInsets.only(left: 20),
-                //     shrinkWrap: true,
-                //     scrollDirection: Axis.horizontal,
-                //     itemBuilder: (context, index) {
-                //       // print(index);
-                //       _streamController.sink.add(index == 1 ? 0 : index);
-                //       return Column(
-                //         children: [
-                //           AnimatedContainer(
-                //             duration: Duration(milliseconds: 500),
-                //             height: snapshot.data == 0
-                //                 ? 100
-                //                 : index == 0
-                //                     ? 100
-                //                     : 200,
-                //             margin: const EdgeInsets.only(right: 20),
-                //             child: _events[index].widget,
-                //           ),
-                //         ],
-                //       );
-                //     },
-                //   ),
-                // ),
                 StreamBuilder<double>(
-                  stream: _streamControllerCarousel.stream,
-                  builder: (context, snapshot) {
-                    double data = snapshot.data ?? 0;
-                    return CarouselSlider(
-                      items: [
-                        Column(
-                          children: [
-                            Container(
-                              width: 378.w,
-                              height: 115.h,
-                              child: HomeInfoFirst(),
+                    stream: _streamControllerCarousel.stream,
+                    builder: (context, snapshot) {
+                      double data = snapshot.data ?? 0;
+                      return CarouselSlider(
+                          items: [
+                            Column(
+                              children: [
+                                SizedBox(
+                                  width: 378.w,
+                                  height: 115.h,
+                                  child: HomeInfoFirst(),
+                                ),
+                              ],
                             ),
+                            Column(
+                              children: [
+                                SizedBox(
+                                  width: 378.w,
+                                  height: (data * 138.h + 115.h),
+                                  child: HomeInfoSecond(data: data),
+                                ),
+                              ],
+                            )
                           ],
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              width: 378.w,
-                              height: (data * 138.h + 115.h),
-                              child: HomeInfoSecond(data: data),
-                            ),
-                          ],
-                        )
-                      ],
-                      options: CarouselOptions(
-                        viewportFraction: 0.91,
-                        onScrolled: (d){
-                          print('DOUBLE: $d');
-                          _streamControllerCarousel.sink.add(d ?? 0);
-                        },
-                        enableInfiniteScroll: false,
-                        height: data >= 1 
-                        ? 253.h
-                        : (data * 138.h + 115.h),
-                        
-                      )
-                    );
-                  }
-                ),
+                          options: CarouselOptions(
+                            viewportFraction: 0.91,
+                            onScrolled: (d) {
+                              _streamControllerCarousel.sink.add(d ?? 0);
+                            },
+                            enableInfiniteScroll: false,
+                            height: data >= 1 ? 253.h : (data * 138.h + 115.h),
+                          ));
+                    }),
                 SizedBox(height: 27.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.w),
-                  child: CustomAddAnimationButton(),
+                  child: const CustomAddAnimationButton(),
                 ),
               ],
             ),
@@ -211,21 +192,36 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Container(
-          width: 45.w,
+        SizedBox(
+          width: 45.h,
           height: 45.h,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.r), color: Colors.white),
-        ),
-        Container(
-          width: 40.w,
-          height: 40.h,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.r), color: Colors.grey),
-          child: const Icon(
-            Icons.camera_alt,
+          child: Material(
             color: Colors.white,
-            size: 15,
+            shape: SquircleBorder(
+              radius: BorderRadius.all(
+                Radius.circular(30.r),
+              ),
+            ),
+            clipBehavior: Clip.hardEdge,
+          ),
+        ),
+        SizedBox(
+          width: 42.h,
+          height: 42.h,
+          child: Material(
+            color: const Color.fromRGBO(150, 150, 150, 1),
+            shape: SquircleBorder(
+              radius: BorderRadius.all(
+                Radius.circular(30.r),
+              ),
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: Padding(
+              padding: EdgeInsets.all(13.h),
+              child: SvgPicture.asset(
+                'assets/icons/camera.svg',
+              ),
+            ),
           ),
         ),
       ],
@@ -236,34 +232,39 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Material(
-          color: Colors.white,
-          shape: SquircleBorder(
-            radius: BorderRadius.all(
-              Radius.circular(80.r),
+        SizedBox(
+          width: 135.h,
+          height: 135.h,
+          child: GestureDetector(
+            child: Material(
+              color: Colors.white,
+              shape: SquircleBorder(
+                radius: BorderRadius.all(
+                  Radius.circular(80.r),
+                ),
+              ),
+              clipBehavior: Clip.hardEdge,
             ),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: SizedBox(
-            width: 135.h,
-            height: 135.h,
           ),
         ),
-        Material(
-          color: Colors.grey,
-          shape: SquircleBorder(
-            radius: BorderRadius.all(
-              Radius.circular(80.r),
-            ),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: SizedBox(
-            width: 125.h,
-            height: 125.h,
-            child: const Icon(
-              Icons.camera_alt,
-              color: Colors.white,
-              size: 45,
+        SizedBox(
+          width: 127.h,
+          height: 127.h,
+          child: GestureDetector(
+            child: Material(
+              color: const Color.fromRGBO(150, 150, 150, 1),
+              shape: SquircleBorder(
+                radius: BorderRadius.all(
+                  Radius.circular(80.r),
+                ),
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Padding(
+                padding: EdgeInsets.all(43.h),
+                child: SvgPicture.asset(
+                  'assets/icons/camera.svg',
+                ),
+              ),
             ),
           ),
         ),

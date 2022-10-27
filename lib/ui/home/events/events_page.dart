@@ -1,12 +1,19 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/models/home/hashTag.dart';
 import 'package:be_loved/models/home/upcoming_info.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class EventsPage extends StatelessWidget {
+class EventsPage extends StatefulWidget {
+  @override
+  State<EventsPage> createState() => _EventsPageState();
+}
+
+class _EventsPageState extends State<EventsPage> {
   List<HashTagData> hashTags = [
     HashTagData(title: 'Важно', type: TypeHashTag.main),
     HashTagData(title: 'Арбуз', type: TypeHashTag.user),
@@ -31,6 +38,14 @@ class EventsPage extends StatelessWidget {
       days: 'Через 7 дней',
     )
   ];
+
+  final streamController = StreamController<int>();
+
+  @override
+  void dispose() {
+    streamController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +81,7 @@ class EventsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 59.h, left: 15.w, right: 15.w),
+            padding: EdgeInsets.only(top: 59.h, left: 15.w, right: 28.14.w),
             child: Row(
               children: [
                 SizedBox(
@@ -81,10 +96,24 @@ class EventsPage extends StatelessWidget {
                 ),
                 const Spacer(),
                 SizedBox(
-                  width: 55.w,
-                  height: 55.h,
-                  child: const Icon(Icons.more_horiz),
-                )
+                  height: 5.57.sp,
+                  width: 33.43,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 3,
+                    itemBuilder: (BuildContext context, index) {
+                      return Container(
+                        margin: EdgeInsets.only(left: 5.57.sp),
+                        height: 5.57.sp,
+                        width: 5.57.sp,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(1.5),
+                          color: greyColor,
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -144,33 +173,94 @@ class EventsPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 38.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25.w),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                color: Colors.white,
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 11.h),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Сегодня', style: style4),
-                        Text('Арбуз', style: style6),
-                      ],
+          CarouselSlider.builder(
+              itemCount: upComingInfo.length,
+              itemBuilder: ((context, index, i) {
+                Color? colorDays = checkColor(upComingInfo[i].days);
+                return Padding(
+                  padding: EdgeInsets.only(left: i == 0 ? 0 : 20.w),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      color: Colors.white,
                     ),
-                    const Spacer(),
-                    Text('#Арбуз', style: style5)
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.w, vertical: 11.h),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('${upComingInfo[i].days}:',
+                                  style: style4.copyWith(color: colorDays)),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: (MediaQuery.of(context).size.width *
+                                            70) /
+                                        100,
+                                    child: Text(
+                                      upComingInfo[i].title,
+                                      style: style6.copyWith(height: 1.1),
+                                      softWrap: false,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              options: CarouselOptions(
+                onPageChanged: (index, reason) {
+                  streamController.add(index);
+                },
+                viewportFraction: 0.9,
+                height: 113.h,
+                enableInfiniteScroll: false,
+              )),
+          SizedBox(height: 22.h),
+          StreamBuilder<int>(
+              stream: streamController.stream,
+              initialData: 0,
+              builder: (context, snapshot) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 7.sp,
+                      width: 31,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: upComingInfo.length,
+                        itemBuilder: (BuildContext context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(left: index == 0 ? 0 : 5.w),
+                            height: 7.sp,
+                            width: 7.sp,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2.r),
+                              border:
+                                  Border.all(color: greyColor, width: 1.5.w),
+                              color: index == snapshot.data ? greyColor : null,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ],
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 38.h),
+                );
+              }),
+          SizedBox(height: 20.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.w),
             child: Container(
@@ -221,23 +311,7 @@ class EventsPage extends StatelessWidget {
     TextStyle style2 = TextStyle(
         color: greyColor, fontWeight: FontWeight.w700, fontSize: 15.sp);
 
-    Color? colorDays;
-
-    if (info.days.contains('Сегодня') ||
-        info.days.contains('Завтра') ||
-        info.days.contains('2')) {
-      colorDays = const Color.fromRGBO(255, 29, 29, 1);
-    } else if (info.days.contains('3')) {
-      colorDays = const Color.fromRGBO(191, 51, 85, 1);
-    } else if (info.days.contains('4')) {
-      colorDays = const Color.fromRGBO(128, 74, 142, 1);
-    } else if (info.days.contains('5')) {
-      colorDays = const Color.fromRGBO(64, 97, 199, 1);
-    } else if (info.days.contains('6')) {
-      colorDays = const Color.fromRGBO(1, 119, 255, 1);
-    } else {
-      colorDays = const Color.fromRGBO(150, 150, 150, 1);
-    }
+    Color? colorDays = checkColor(info.days);
 
     TextStyle style3 = TextStyle(
         color: colorDays, fontWeight: FontWeight.w800, fontSize: 15.sp);
@@ -313,5 +387,26 @@ class EventsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color checkColor(String value) {
+    Color? colorDays;
+
+    if (value.contains('Сегодня') ||
+        value.contains('Завтра') ||
+        value.contains('2')) {
+      colorDays = const Color.fromRGBO(255, 29, 29, 1);
+    } else if (value.contains('3')) {
+      colorDays = const Color.fromRGBO(191, 51, 85, 1);
+    } else if (value.contains('4')) {
+      colorDays = const Color.fromRGBO(128, 74, 142, 1);
+    } else if (value.contains('5')) {
+      colorDays = const Color.fromRGBO(64, 97, 199, 1);
+    } else if (value.contains('6')) {
+      colorDays = const Color.fromRGBO(1, 119, 255, 1);
+    } else {
+      colorDays = const Color.fromRGBO(150, 150, 150, 1);
+    }
+    return colorDays;
   }
 }
