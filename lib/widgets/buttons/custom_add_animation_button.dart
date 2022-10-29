@@ -6,7 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAddAnimationButton extends StatefulWidget {
-  const CustomAddAnimationButton({Key? key}) : super(key: key);
+  final VoidCallback func;
+  const CustomAddAnimationButton({Key? key, required this.func})
+      : super(key: key);
 
   @override
   State<CustomAddAnimationButton> createState() =>
@@ -56,6 +58,53 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
         builder: (context, snapshot) {
           return Stack(
             children: [
+              AnimatedContainer(
+                curve: Curves.ease,
+                duration: const Duration(milliseconds: 1000),
+                height: snapshot.data! ? 100.h : 70.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(
+                    color: greyColor,
+                    width: 1,
+                  ),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 9.w, right: 20.w),
+                      child: AnimatedAlign(
+                        alignment: snapshot.data!
+                            ? Alignment.centerRight
+                            : Alignment.center,
+                        curve: Curves.ease,
+                        duration: const Duration(milliseconds: 1000),
+                        child: SizedBox(
+                          width: 70.w,
+                          height: 70.h,
+                          child: GestureDetector(
+                            onTap: () {
+                              closeOpen(snapshot.data!);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 0.w),
+                              child: Transform.rotate(
+                                  angle: rotate,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SvgPicture.asset('assets/icons/add.svg'),
+                                    ],
+                                  )),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 1000),
                 top: snapshot.data! ? 0 : 70.h,
@@ -68,6 +117,14 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                         width: 70.h,
                         height: 70.w,
                         child: GestureDetector(
+                          onTap: () {
+                            widget.func();
+                            //                     if (_controllerAnimationRow!.isCompleted) {
+                            //   print('objectadddd');
+                            //   // _controllerAnimationRow!.reverse();
+                            // }
+                            closeOpen(snapshot.data!);
+                          },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -136,69 +193,25 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                   ),
                 ),
               ),
-              AnimatedContainer(
-                curve: Curves.ease,
-                duration: const Duration(milliseconds: 1000),
-                height: snapshot.data! ? 100.h : 70.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  border: Border.all(
-                    color: greyColor,
-                    width: 1,
-                  ),
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 9.w, right: 20.w),
-                      child: AnimatedAlign(
-                        alignment: snapshot.data!
-                            ? Alignment.centerRight
-                            : Alignment.center,
-                        curve: Curves.ease,
-                        duration: const Duration(milliseconds: 1000),
-                        child: SizedBox(
-                          width: 70.w,
-                          height: 70.h,
-                          child: GestureDetector(
-                            onTap: () {
-                              if (!_controllerAnimationRotate!.isAnimating) {
-                                if (_controllerAnimationRotate!.isCompleted) {
-                                  _controllerAnimationRotate!.reverse();
-                                } else {
-                                  _controllerAnimationRotate!
-                                      .forward(from: rotate);
-                                }
-                                streamController.add(!snapshot.data!);
-                              }
-
-                              if (_controllerAnimationRow!.isCompleted) {
-                                _controllerAnimationRow!.reverse();
-                              } else {
-                                _controllerAnimationRow!.forward(from: 0.0);
-                              }
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 0.w),
-                              child: Transform.rotate(
-                                  angle: rotate,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SvgPicture.asset('assets/icons/add.svg'),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           );
         });
+  }
+
+  void closeOpen(bool state) {
+    if (!_controllerAnimationRotate!.isAnimating) {
+      if (_controllerAnimationRotate!.isCompleted) {
+        _controllerAnimationRotate!.reverse();
+      } else {
+        _controllerAnimationRotate!.forward(from: rotate);
+      }
+      streamController.add(!state);
+    }
+
+    if (_controllerAnimationRow!.isCompleted) {
+      _controllerAnimationRow!.reverse();
+    } else {
+      _controllerAnimationRow!.forward(from: 0.0);
+    }
   }
 }
