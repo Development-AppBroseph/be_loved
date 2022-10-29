@@ -3,6 +3,7 @@ import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/home/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/ui/home/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/widgets/buttons/custom_add_animation_button.dart';
+import 'package:be_loved/widgets/buttons/custom_animation_item_relationships.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
   final _streamController = StreamController<int>();
   final _streamControllerCarousel = StreamController<double>();
 
-  ScrollController scrollController = ScrollController();
+  // ScrollController scrollController = ScrollController();
 
   @override
   void dispose() {
@@ -37,13 +38,15 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
         Column(
           children: [
             Expanded(child: Container(color: Colors.black)),
-            Expanded(child: Container(color: backgroundColorGrey))
+            Expanded(child: Container(color: Colors.red))
           ],
         ),
-        content(),
+        SingleChildScrollView(child: content()),
       ],
     );
   }
+
+  List<Widget> events = [];
 
   Widget content() {
     TextStyle style1 = TextStyle(
@@ -144,48 +147,72 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                 ),
                 SizedBox(height: 26.h),
                 StreamBuilder<double>(
-                    stream: _streamControllerCarousel.stream,
-                    builder: (context, snapshot) {
-                      double data = snapshot.data ?? 0;
-                      return CarouselSlider(
-                          items: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: 378.w,
-                                  height: 115.h,
-                                  child: HomeInfoFirst(),
-                                ),
-                              ],
+                  stream: _streamControllerCarousel.stream,
+                  builder: (context, snapshot) {
+                    double data = snapshot.data ?? 0;
+                    return CarouselSlider(
+                      items: [
+                        Column(
+                          children: [
+                            SizedBox(
+                              width: 378.w,
+                              height: 115.h,
+                              child: HomeInfoFirst(),
                             ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: 378.w,
-                                  height: (data * 138.h + 115.h),
-                                  child: HomeInfoSecond(data: data),
-                                ),
-                              ],
-                            )
                           ],
-                          options: CarouselOptions(
-                            viewportFraction: 0.91,
-                            onScrolled: (d) {
-                              _streamControllerCarousel.sink.add(d ?? 0);
-                            },
-                            enableInfiniteScroll: false,
-                            height: data >= 1 ? 253.h : (data * 138.h + 115.h),
-                          ));
-                    }),
-                SizedBox(height: 27.h),
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(
+                              width: 378.w,
+                              height: (data * 138.h + 115.h),
+                              child: HomeInfoSecond(data: data),
+                            ),
+                          ],
+                        )
+                      ],
+                      options: CarouselOptions(
+                        viewportFraction: 0.91,
+                        onScrolled: (d) {
+                          _streamControllerCarousel.sink.add(d ?? 0);
+                        },
+                        enableInfiniteScroll: false,
+                        height: data >= 1 ? 253.h : (data * 138.h + 115.h),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: 11.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.w),
-                  child: const CustomAddAnimationButton(),
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(0),
+                    shrinkWrap: true,
+                    itemCount: events.length,
+                    itemBuilder: ((context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 15.h),
+                        child: CustomAnimationItemRelationships(func: func),
+                      );
+                    }),
+                  ),
                 ),
+                events.isEmpty ? SizedBox(height: 15.h) : const SizedBox(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.w),
+                  child: CustomAddAnimationButton(func: func),
+                ),
+                SizedBox(height: 200.h)
               ],
             ),
           );
         });
+  }
+
+  void func() {
+    events.add(const SizedBox());
+    setState(() {});
   }
 
   Widget photoMini() {
