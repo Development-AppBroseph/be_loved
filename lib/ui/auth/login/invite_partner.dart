@@ -208,6 +208,7 @@ class _InvitePartnerState extends State<InvitePartner> {
 
       return true;
     }, builder: (context, state) {
+      print(MediaQuery.of(context).viewInsets.bottom);
       focusNode.addListener(() {
         _streamController.sink.add(focusNode.hasFocus);
       });

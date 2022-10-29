@@ -216,6 +216,21 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
   }
 
   Widget photoMini() {
+    return Container(
+      width: 45.h,
+      height: 45.h,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(15.r),
+        ),
+        border: Border.all(width: 2.h, color: Colors.white),
+        image: DecorationImage(
+          image: AssetImage('assets/images/avatar_none.png'),
+          
+        )
+      ),
+    );
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -256,6 +271,22 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
   }
 
   Widget photo() {
+    
+    return Container(
+      width: 135.h,
+      height: 135.h,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(40.r),
+        ),
+        border: Border.all(width: 5.h, color: Colors.white),
+        image: DecorationImage(
+          image: AssetImage('assets/images/avatar_none.png'),
+          
+        )
+      ),
+    );
     return Stack(
       alignment: Alignment.center,
       children: [
