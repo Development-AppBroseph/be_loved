@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:be_loved/core/helpers/constants.dart';
 import 'package:be_loved/ui/home/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/ui/home/relationships/widgets/home_info_second.dart';
@@ -152,7 +151,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                           items: [
                             Column(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 378.w,
                                   height: 115.h,
                                   child: HomeInfoFirst(),
@@ -161,7 +160,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                             ),
                             Column(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 378.w,
                                   height: (data * 138.h + 115.h),
                                   child: HomeInfoSecond(data: data),
@@ -172,7 +171,6 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                           options: CarouselOptions(
                             viewportFraction: 0.91,
                             onScrolled: (d) {
-                              print('DOUBLE: $d');
                               _streamControllerCarousel.sink.add(d ?? 0);
                             },
                             enableInfiniteScroll: false,
@@ -191,6 +189,21 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
   }
 
   Widget photoMini() {
+    return Container(
+      width: 45.h,
+      height: 45.h,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(15.r),
+        ),
+        border: Border.all(width: 2.h, color: Colors.white),
+        image: DecorationImage(
+          image: AssetImage('assets/images/avatar_none.png'),
+          
+        )
+      ),
+    );
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -231,6 +244,22 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
   }
 
   Widget photo() {
+    
+    return Container(
+      width: 135.h,
+      height: 135.h,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(40.r),
+        ),
+        border: Border.all(width: 5.h, color: Colors.white),
+        image: DecorationImage(
+          image: AssetImage('assets/images/avatar_none.png'),
+          
+        )
+      ),
+    );
     return Stack(
       alignment: Alignment.center,
       children: [
