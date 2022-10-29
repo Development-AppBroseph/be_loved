@@ -24,6 +24,9 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
 
   // ScrollController scrollController = ScrollController();
 
+  TextEditingController _controller = TextEditingController();
+  FocusNode f1 = FocusNode();
+
   @override
   void dispose() {
     super.dispose();
@@ -109,9 +112,27 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                   padding: EdgeInsets.symmetric(horizontal: 25.w),
                   child: Row(
                     children: [
-                      Text('Назовите отношения', style: style2),
-                      const Spacer(),
-                      SvgPicture.asset('assets/icons/edit.svg')
+                      // Text('Назовите отношения', style: style2)
+                      Expanded(
+                        child: TextField(
+                          style: style2,
+                          controller: _controller,
+                          focusNode: f1,
+                          scrollPadding: EdgeInsets.zero,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            border: InputBorder.none,
+                            hintText: 'Назовите отношения',
+                            hintStyle: style2,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          FocusScope.of(context).requestFocus(f1);
+                        },
+                        child: SvgPicture.asset('assets/icons/edit.svg')
+                      )
                     ],
                   ),
                 ),
