@@ -220,9 +220,9 @@ class _InviteForState extends State<InviteFor> {
                                     padding: EdgeInsets.only(
                                         top: 20.h, bottom: 10.h),
                                     child: Material(
-                                      shape: SquircleBorder(
-                                        radius: BorderRadius.all(
-                                          Radius.circular(80.r),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(40.r),
                                         ),
                                       ),
                                       clipBehavior: Clip.hardEdge,
@@ -296,9 +296,9 @@ class _InviteForState extends State<InviteFor> {
                                     padding: EdgeInsets.only(
                                         top: 20.h, bottom: 10.h),
                                     child: Material(
-                                      shape: SquircleBorder(
-                                        radius: BorderRadius.all(
-                                          Radius.circular(80.r),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(40.r),
                                         ),
                                       ),
                                       clipBehavior: Clip.hardEdge,

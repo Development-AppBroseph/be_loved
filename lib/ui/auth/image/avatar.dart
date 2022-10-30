@@ -93,9 +93,9 @@ class AvatarPage extends StatelessWidget {
                           },
                           child: Material(
                             color: const Color.fromRGBO(150, 150, 150, 1),
-                            shape: SquircleBorder(
-                              radius: BorderRadius.all(
-                                Radius.circular(80.r),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(40.r),
                               ),
                             ),
                             clipBehavior: Clip.hardEdge,

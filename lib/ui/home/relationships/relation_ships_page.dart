@@ -316,8 +316,8 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
 
   Widget photo() {
     return Container(
-      width: 135.h,
-      height: 135.h,
+      width: 134.h,
+      height: 134.h,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
