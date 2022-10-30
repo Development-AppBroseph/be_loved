@@ -137,158 +137,260 @@ class _AccountPageState extends State<AccountPage> {
         stream: _streamController.stream,
         initialData: 0,
         builder: (context, snapshot) {
-          return SingleChildScrollView(
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 15.w, top: 76.h),
-                  child: GestureDetector(
-                    onTap: widget.prevPage,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 55.h,
-                          width: 55.w,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/icons/back.svg',
-                                color: Colors.white,
-                                width: 15.w,
-                                height: 26.32,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          'Назад',
-                          style: TextStyle(
-                              fontSize: 20.sp,
+          return Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 15.w, top: 76.h),
+                child: GestureDetector(
+                  onTap: widget.prevPage,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: 55.h,
+                        width: 55.w,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/back.svg',
                               color: Colors.white,
-                              fontWeight: FontWeight.w700),
-                        )
-                      ],
-                    ),
+                              width: 15.w,
+                              height: 26.32,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        'Назад',
+                        style: TextStyle(
+                            fontSize: 20.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700),
+                      )
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 186.h),
-                  child: Column(
-                    children: [
-                      Stack(
-                        alignment: Alignment.topCenter,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 135.h),
-                            child: Container(
-                              height: 120.h,
-                              width: 428.w,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20.r),
-                              ),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                      left: 105.w,
-                                      right: 105.w,
-                                      top: 38.h,
-                                      bottom: 25.h,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text('Никита ',
-                                                style: style3.copyWith(
-                                                    fontSize: 30.sp,
-                                                    color: Colors.black,
-                                                    height: 0.9)),
-                                            Text(' Белых',
-                                                style: style3.copyWith(
-                                                    fontSize: 30.sp,
-                                                    color: Colors.black,
-                                                    height: 0.9)),
-                                          ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 186.h),
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 135.h),
+                          child: Container(
+                            height: 120.h,
+                            width: 428.w,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    left: 105.w,
+                                    right: 105.w,
+                                    top: 38.h,
+                                    bottom: 25.h,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        // mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            'Никита Белых',
+                                            style: style3.copyWith(
+                                              fontSize: 30.sp,
+                                              color: Colors.black,
+                                              height: 1,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          // Text(' Белых',
+                                          //     style: style3.copyWith(
+                                          //         fontSize: 30.sp,
+                                          //         color: Colors.black,
+                                          //         height: 0.9)),
+                                        ],
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('+7 *** *** 00-00',
+                                              style: style3.copyWith(
+                                                  fontSize: 15.sp,
+                                                  color: Colors.black,
+                                                  height: 1)),
+                                          SvgPicture.asset(
+                                              'assets/icons/vk_logo.svg')
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        photo(),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.h),
+                      child: Container(
+                        height: 120.h,
+                        width: 428.w,
+                        padding: EdgeInsets.symmetric(horizontal: 25.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Страница VK',
+                                  style: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                SvgPicture.asset('assets/icons/vk_logo.svg')
+                              ],
+                            ),
+                            SizedBox(height: 15.h),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 60.h,
+                                  width: 60.h,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 18.w),
+                                  decoration: BoxDecoration(
+                                    color: greyColor,
+                                    borderRadius: BorderRadius.circular(20.r),
+                                  ),
+                                  child: SvgPicture.asset(
+                                    'assets/icons/camera.svg',
+                                  ),
+                                ),
+                                SizedBox(width: 28.w),
+                                Text(
+                                  'Никита Белых',
+                                  style: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                const Spacer(),
+                                SizedBox(
+                                  height: 45.h,
+                                  width: 45.w,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: 5.57.h,
+                                        width: 27.86,
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: 3,
+                                          itemBuilder:
+                                              (BuildContext context, index) {
+                                            return Container(
+                                              margin: EdgeInsets.only(
+                                                  left:
+                                                      index == 0 ? 0 : 5.57.w),
+                                              height: 5.57.sp,
+                                              width: 5.57.sp,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(1.5),
+                                                color: Colors.black,
+                                              ),
+                                            );
+                                          },
                                         ),
-                                        SizedBox(height: 5.h),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('+7 *** *** 00-00',
-                                                style: style3.copyWith(
-                                                    fontSize: 15.sp,
-                                                    color: Colors.black,
-                                                    height: 1)),
-                                            SvgPicture.asset(
-                                                'assets/icons/vk_logo.svg')
-                                          ],
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.h),
+                      child: Container(
+                        height: 250.h,
+                        width: 428.w,
+                        padding: EdgeInsets.symmetric(horizontal: 25.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 21.h, bottom: 50.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Основные',
+                                style: TextStyle(
+                                  fontSize: 30.sp,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              SizedBox(height: 32.h),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    height: 45.h,
+                                    width: 45.w,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/icons/data.svg',
+                                          height: 34.h,
+                                          width: 34.w,
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          photo(),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 15.h),
-                        child: Container(
-                          height: 120.h,
-                          width: 428.w,
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Страница VK',
-                                    style: TextStyle(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  SvgPicture.asset('assets/icons/vk_logo.svg')
-                                ],
-                              ),
-                              SizedBox(height: 15.h),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 60.h,
-                                    width: 60.h,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 18.w),
-                                    decoration: BoxDecoration(
-                                      color: greyColor,
-                                      borderRadius: BorderRadius.circular(20.r),
-                                    ),
-                                    child: SvgPicture.asset(
-                                      'assets/icons/camera.svg',
-                                    ),
-                                  ),
-                                  SizedBox(width: 28.w),
-                                  Text(
-                                    'Никита Белых',
-                                    style: TextStyle(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w800,
-                                    ),
+                                  SizedBox(width: 21.w),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Данные',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Редактировать',
+                                        style: TextStyle(
+                                          color: greyColor,
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   const Spacer(),
                                   SizedBox(
@@ -297,195 +399,105 @@ class _AccountPageState extends State<AccountPage> {
                                     child: Stack(
                                       alignment: Alignment.center,
                                       children: [
-                                        SizedBox(
-                                          height: 5.57.h,
-                                          width: 27.86,
-                                          child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: 3,
-                                            itemBuilder:
-                                                (BuildContext context, index) {
-                                              return Container(
-                                                margin: EdgeInsets.only(
-                                                    left: index == 0
-                                                        ? 0
-                                                        : 5.57.w),
-                                                height: 5.57.sp,
-                                                width: 5.57.sp,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          1.5),
-                                                  color: Colors.black,
-                                                ),
-                                              );
-                                            },
+                                        Transform.rotate(
+                                          angle: pi,
+                                          child: SvgPicture.asset(
+                                            'assets/icons/back.svg',
+                                            height: 19.96.h,
+                                            width: 11.37.w,
                                           ),
                                         ),
                                       ],
                                     ),
                                   )
                                 ],
-                              )
+                              ),
+                              SizedBox(height: 20.h),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    height: 45.h,
+                                    width: 45.w,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/icons/update.svg',
+                                          height: 34.h,
+                                          width: 34.w,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(width: 21.w),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Сменить пароль',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Управлениие',
+                                        style: TextStyle(
+                                          color: greyColor,
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  SizedBox(
+                                    height: 45.h,
+                                    width: 45.w,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Transform.rotate(
+                                          angle: pi,
+                                          child: SvgPicture.asset(
+                                            'assets/icons/back.svg',
+                                            height: 19.96.h,
+                                            width: 11.37.w,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 15.h),
-                        child: Container(
-                          height: 250.h,
-                          width: 428.w,
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 21.h, bottom: 50.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Основные',
-                                  style: TextStyle(
-                                    fontSize: 30.sp,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                                SizedBox(height: 32.h),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      height: 45.h,
-                                      width: 45.w,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                            'assets/icons/data.svg',
-                                            height: 34.h,
-                                            width: 34.w,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(width: 21.w),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Данные',
-                                          style: TextStyle(
-                                            fontSize: 20.sp,
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Редактировать',
-                                          style: TextStyle(
-                                            color: greyColor,
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    SizedBox(
-                                      height: 45.h,
-                                      width: 45.w,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Transform.rotate(
-                                            angle: pi,
-                                            child: SvgPicture.asset(
-                                              'assets/icons/back.svg',
-                                              height: 19.96.h,
-                                              width: 11.37.w,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(height: 20.h),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      height: 45.h,
-                                      width: 45.w,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                            'assets/icons/update.svg',
-                                            height: 34.h,
-                                            width: 34.w,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(width: 21.w),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Сменить пароль',
-                                          style: TextStyle(
-                                            fontSize: 20.sp,
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Управлениие',
-                                          style: TextStyle(
-                                            color: greyColor,
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    SizedBox(
-                                      height: 45.h,
-                                      width: 45.w,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Transform.rotate(
-                                            angle: pi,
-                                            child: SvgPicture.asset(
-                                              'assets/icons/back.svg',
-                                              height: 19.96.h,
-                                              width: 11.37.w,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         });
   }
 
   Widget photo() {
+    return Container(
+      width: 165.h,
+      height: 165.h,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(40.r),
+          ),
+          border: Border.all(width: 5.h, color: Colors.white),
+          image: DecorationImage(
+            image: AssetImage('assets/images/avatar_none.png'),
+          )),
+    );
     return Stack(
       alignment: Alignment.center,
       children: [

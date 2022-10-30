@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:be_loved/core/helpers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class CustomAnimationItemRelationships extends StatefulWidget {
   final VoidCallback func;
@@ -57,6 +58,7 @@ class _CustomAnimationItemRelationshipsState
             borderRadius: BorderRadius.circular(20.r),
             color: Colors.white,
           ),
+          clipBehavior: Clip.hardEdge,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 20.w),
             child: SingleChildScrollView(

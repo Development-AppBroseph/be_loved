@@ -59,7 +59,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
           return Stack(
             children: [
               AnimatedContainer(
-                curve: Curves.ease,
+                curve: Curves.easeIn,
                 duration: const Duration(milliseconds: 1000),
                 height: snapshot.data! ? 100.h : 70.h,
                 decoration: BoxDecoration(
@@ -73,20 +73,22 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                   alignment: Alignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 9.w, right: 20.w),
+                      padding: EdgeInsets.only(left: 9.w, right: 9.w),
                       child: AnimatedAlign(
                         alignment: snapshot.data!
                             ? Alignment.centerRight
                             : Alignment.center,
                         curve: Curves.ease,
                         duration: const Duration(milliseconds: 1000),
-                        child: SizedBox(
-                          width: 70.w,
-                          height: 70.h,
-                          child: GestureDetector(
-                            onTap: () {
-                              closeOpen(snapshot.data!);
-                            },
+                        child: GestureDetector(
+                          onTap: () {
+                            closeOpen(snapshot.data!);
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 1000),
+                            color: Colors.transparent,
+                            width: snapshot.data! ? 90.w : 378.w,
+                            height: snapshot.data! ? 100.h : 70.h, // 70.h,
                             child: Padding(
                               padding: EdgeInsets.only(right: 0.w),
                               child: Transform.rotate(
@@ -114,15 +116,11 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 70.h,
-                        height: 70.w,
+                        width: 70.w,
+                        height: 70.h,
                         child: GestureDetector(
                           onTap: () {
                             widget.func();
-                            //                     if (_controllerAnimationRow!.isCompleted) {
-                            //   print('objectadddd');
-                            //   // _controllerAnimationRow!.reverse();
-                            // }
                             closeOpen(snapshot.data!);
                           },
                           child: Column(
