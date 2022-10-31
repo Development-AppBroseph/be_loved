@@ -9,6 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import 'modals/create_event_modal.dart';
+
 class RelationShipsPage extends StatefulWidget {
   final VoidCallback nextPage;
   const RelationShipsPage({Key? key, required this.nextPage}) : super(key: key);
@@ -229,7 +231,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                     SizedBox(
                                       width: 378.w,
                                       height: 115.h,
-                                      child: HomeInfoFirst(),
+                                      child: HomeInfoFirst()
                                     ),
                                   ],
                                 ),
@@ -277,7 +279,17 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                             : const SizedBox(),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: CustomAddAnimationButton(func: func),
+                          child: CustomAddAnimationButton(
+                            func: (){
+                              showModalCreateEvent(
+                                context,
+                                (){
+                                  Navigator.pop(context);
+                                  func();
+                                }
+                              );
+                            }
+                          ),
                         ),
                         SizedBox(height: 200.h)
                       ],
