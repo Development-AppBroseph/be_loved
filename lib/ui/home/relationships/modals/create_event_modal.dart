@@ -1,10 +1,13 @@
 
 
 import 'package:be_loved/widgets/buttons/switch_btn.dart';
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../core/helpers/constants.dart';
 import '../../../../core/widgets/text_fields/default_text_form_field.dart';
@@ -48,6 +51,11 @@ showModalCreateEvent(
       bool switchVal3 = false;
       TextEditingController _controllerName = TextEditingController();
       TextEditingController _controllerDescription = TextEditingController();
+
+      DateTime fromDate = DateTime.now();
+      DateTime toDate = DateTime.now().add(Duration(days: 5));
+      CustomPopupMenuController _customPopupMenuController1 = CustomPopupMenuController();
+      CustomPopupMenuController _customPopupMenuController2 = CustomPopupMenuController();
       return StatefulBuilder(
         builder: (context, setState) {
           return Container(
@@ -123,7 +131,25 @@ showModalCreateEvent(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        _buildTimeItem(context, '16 мар. 2022 г.'),
+                                        CustomPopupMenu(
+                                          barrierColor: Colors.transparent,
+                                          showArrow: false,
+                                          controller: _customPopupMenuController1,
+                                          pressType: PressType.singleClick,
+                                          menuBuilder: (){
+                                            return _buildDatePicker(
+                                              context,
+                                              (date){
+                                                _customPopupMenuController1.hideMenu();
+                                                setState((){
+                                                  fromDate = date;
+                                                });
+                                              },
+                                              fromDate
+                                            );
+                                          },
+                                          child: _buildTimeItem(context, DateFormat('d MMM. yyyy г.').format(fromDate))
+                                        ),
                                         SizedBox(width: 15.w,),
                                         _buildTimeItem(context, '23:59'),
                                       ],
@@ -140,7 +166,25 @@ showModalCreateEvent(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        _buildTimeItem(context, '16 мар. 2022 г.'),
+                                        CustomPopupMenu(
+                                          barrierColor: Colors.transparent,
+                                          showArrow: false,
+                                          controller: _customPopupMenuController2,
+                                          pressType: PressType.singleClick,
+                                          menuBuilder: (){
+                                            return _buildDatePicker(
+                                              context,
+                                              (date){
+                                                _customPopupMenuController2.hideMenu();
+                                                setState((){
+                                                  toDate = date;
+                                                });
+                                              },
+                                              toDate
+                                            );
+                                          },
+                                          child: _buildTimeItem(context, DateFormat('d MMM. yyyy г.').format(toDate))
+                                        ),
                                         SizedBox(width: 15.w,),
                                         _buildTimeItem(context, '23:59'),
                                       ],
@@ -296,6 +340,135 @@ showModalCreateEvent(
             )
           );
         }
+      );
+    }
+  );
+}
+
+Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime) onTap, DateTime selectedDay) {
+  TextStyle style1 = TextStyle(
+    color: Colors.black,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w800
+  );
+  TextStyle style2 = TextStyle(
+    color: blackColor,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w700
+  );
+  Widget _buildJustDay(context, date, events) {
+    return Container(  
+      width: 40.h,
+      height: 40.h,
+      alignment: Alignment.center,  
+      child: Text(  
+        date.day.toString(),  
+        style: style2,  
+      )
+    );
+  }
+  final kToday = DateTime.now();
+  final kFirstDay = DateTime(kToday.year, kToday.month - 12, kToday.day);
+  final kLastDay = DateTime(kToday.year, kToday.month + 12, kToday.day);
+  Widget _buildSelectedDay(context, date, events) {
+    return Container(  
+      width: 40.h,
+      height: 40.h,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15.h),
+        border: Border.all(
+          color: redColor,
+          width: 5.h
+        )
+      ),
+      alignment: Alignment.center,  
+      child: Text(  
+        date.day.toString(),  
+        style: style2.copyWith(color: redColor),  
+      )
+    );
+  }
+  DateTime _focusedDay = selectedDay;
+  PageController _pageController = PageController();
+  return StatefulBuilder(
+    builder: (context, setState) {
+      return Container(
+        width: 344.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20.h,
+              color: Color.fromRGBO(0, 0, 0, 0.1)
+            )
+          ],
+          color: Colors.white,
+        ),
+        padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      _pageController.previousPage(duration: Duration(milliseconds: 100), curve: Curves.linear);
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: SvgPicture.asset('assets/icons/calendar_left_icon.svg', height: 17.h,)
+                  ),
+                  Text(
+                    DateFormat('MMMM yyyy').format(_focusedDay),
+                    style: style1,
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      _pageController.nextPage(duration: Duration(milliseconds: 100), curve: Curves.linear);
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: SvgPicture.asset('assets/icons/calendar_right_icon.svg', height: 17.h,)
+                  ),
+
+                ],
+              ),
+            ),
+            SizedBox(height: 20.h,),
+            TableCalendar(  
+              onCalendarCreated: (con){
+                _pageController = con;
+              },
+              focusedDay: _focusedDay,
+              calendarFormat: CalendarFormat.month,  
+              firstDay: kFirstDay,
+              lastDay: kLastDay,
+              headerVisible: false,
+              daysOfWeekVisible: false,
+              startingDayOfWeek: StartingDayOfWeek.monday,  
+              rangeSelectionMode: RangeSelectionMode.toggledOff,
+              onDaySelected: (date, events) {  
+                onTap(date);
+              },  
+              onPageChanged: (dt){
+                setState((){
+                  _focusedDay = dt;
+                });
+              },
+              rowHeight: 40.h,
+              selectedDayPredicate: (day) => isSameDay(_focusedDay, day),
+              calendarBuilders: CalendarBuilders(  
+                selectedBuilder: _buildSelectedDay,
+                defaultBuilder: _buildJustDay,
+                disabledBuilder: _buildJustDay,
+                holidayBuilder: _buildJustDay,
+                outsideBuilder: _buildJustDay,
+                todayBuilder: _buildJustDay,
+              ),  
+            ),
+          ],
+        )  
       );
     }
   );
