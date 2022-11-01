@@ -39,6 +39,8 @@ dependencies:
   carousel_slider: ^4.0.0
   modal_bottom_sheet: ^2.1.0
   table_calendar: ^3.0.8
+  custom_pop_up_menu: ^1.2.4
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
