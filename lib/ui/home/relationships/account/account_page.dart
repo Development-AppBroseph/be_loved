@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/core/helpers/constants.dart';
-import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -181,7 +180,7 @@ class _AccountPageState extends State<AccountPage> {
                         Padding(
                           padding: EdgeInsets.only(top: 135.h),
                           child: Container(
-                            height: 120.h,
+                            height: 124.h,
                             width: 428.w,
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -193,14 +192,13 @@ class _AccountPageState extends State<AccountPage> {
                                 Container(
                                   margin: EdgeInsets.only(
                                     left: 105.w,
-                                    right: 105.w,
+                                    right: 100.w,
                                     top: 38.h,
                                     bottom: 25.h,
                                   ),
                                   child: Column(
                                     children: [
                                       Row(
-                                        // mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(
                                             'Никита Белых',
@@ -211,11 +209,6 @@ class _AccountPageState extends State<AccountPage> {
                                             ),
                                             textAlign: TextAlign.center,
                                           ),
-                                          // Text(' Белых',
-                                          //     style: style3.copyWith(
-                                          //         fontSize: 30.sp,
-                                          //         color: Colors.black,
-                                          //         height: 0.9)),
                                         ],
                                       ),
                                       SizedBox(height: 5.h),
@@ -334,7 +327,7 @@ class _AccountPageState extends State<AccountPage> {
                     Padding(
                       padding: EdgeInsets.only(top: 15.h),
                       child: Container(
-                        height: 250.h,
+                        height: 252.h,
                         width: 428.w,
                         padding: EdgeInsets.symmetric(horizontal: 25.w),
                         decoration: BoxDecoration(

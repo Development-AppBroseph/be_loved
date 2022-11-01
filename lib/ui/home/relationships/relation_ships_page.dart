@@ -229,10 +229,9 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                 Column(
                                   children: [
                                     SizedBox(
-                                      width: 378.w,
-                                      height: 115.h,
-                                      child: HomeInfoFirst()
-                                    ),
+                                        width: 378.w,
+                                        height: 115.h,
+                                        child: HomeInfoFirst()),
                                   ],
                                 ),
                                 Column(
@@ -279,17 +278,12 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                             : const SizedBox(),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: CustomAddAnimationButton(
-                            func: (){
-                              showModalCreateEvent(
-                                context,
-                                (){
-                                  Navigator.pop(context);
-                                  func();
-                                }
-                              );
-                            }
-                          ),
+                          child: CustomAddAnimationButton(func: () {
+                            showModalCreateEvent(context, () {
+                              Navigator.pop(context);
+                              func();
+                            });
+                          }),
                         ),
                         SizedBox(height: 200.h)
                       ],
