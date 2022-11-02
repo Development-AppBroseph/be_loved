@@ -51,7 +51,6 @@ class _EventsPageState extends State<EventsPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(color: backgroundColorGrey),
         content(),
       ],
     );
@@ -80,12 +79,13 @@ class _EventsPageState extends State<EventsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(color: backgroundColorGrey),
           Padding(
-            padding: EdgeInsets.only(top: 59.h, left: 15.w, right: 28.14.w),
+            padding: EdgeInsets.only(top: 59.h, left: 15.w, right: 15.w),
             child: Row(
               children: [
                 SizedBox(
-                  width: 55.w,
+                  width: 55.h,
                   height: 55.h,
                   child: Stack(
                     alignment: Alignment.center,
@@ -96,22 +96,32 @@ class _EventsPageState extends State<EventsPage> {
                 ),
                 const Spacer(),
                 SizedBox(
-                  height: 5.57.sp,
-                  width: 33.43,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    itemBuilder: (BuildContext context, index) {
-                      return Container(
-                        margin: EdgeInsets.only(left: 5.57.sp),
-                        height: 5.57.sp,
-                        width: 5.57.sp,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(1.5),
-                          color: greyColor,
+                  width: 55.h,
+                  height: 55.h,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        height: 5.57.h,
+                        width: 27.86.h,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          itemBuilder: (BuildContext context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(
+                                  left: index == 0 ? 0 : 5.57.w),
+                              height: 5.57.h,
+                              width: 5.57.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1.5.r),
+                                color: greyColor,
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
                 ),
               ],
