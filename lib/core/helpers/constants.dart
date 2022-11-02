@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const String apiUrl = "http://195.133.49.15/";
+const String apiUrl = "http://194.58.69.88/";
 
 const Color accentColor = Color.fromRGBO(32, 203, 131, 1.0);
 
