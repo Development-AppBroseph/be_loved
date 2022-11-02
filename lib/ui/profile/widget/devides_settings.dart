@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../../../widgets/buttons/switch_btn.dart';
 
@@ -73,7 +74,9 @@ class _DevideSettingsState extends State<DevideSettings> {
                   value: switchValue,
                 )
               : IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    print('lol');
+                  },
                   icon: const Icon(Icons.arrow_forward_ios_rounded),
                 ),
         ],
