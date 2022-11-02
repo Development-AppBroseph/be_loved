@@ -293,17 +293,15 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                             shrinkWrap: true,
                             itemCount: events.length,
                             itemBuilder: ((context, index) {
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 15.h),
-                                child: CustomAnimationItemRelationships(
-                                    func: func),
+                              return CustomAnimationItemRelationships(
+                                // func: func,
+                                delete: delete,
+                                index: index,
                               );
                             }),
                           ),
                         ),
-                        events.isEmpty
-                            ? SizedBox(height: 15.h)
-                            : const SizedBox(),
+                        SizedBox(height: 15.h),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25.w),
                           child: CustomAddAnimationButton(func: () {
@@ -329,6 +327,12 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
       events.add(const SizedBox());
       setState(() {});
     }
+    // print('object ${events.length}');
+  }
+
+  void delete(int index) {
+    events.removeAt(index);
+    setState(() {});
   }
 
   Widget photoMini() {

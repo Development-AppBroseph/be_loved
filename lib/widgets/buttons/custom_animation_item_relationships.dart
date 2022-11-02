@@ -6,9 +6,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAnimationItemRelationships extends StatefulWidget {
-  final VoidCallback func;
-  const CustomAnimationItemRelationships({Key? key, required this.func})
-      : super(key: key);
+  // final VoidCallback func;
+  final Function(int) delete;
+  final int index;
+  const CustomAnimationItemRelationships({
+    Key? key,
+    // required this.func,
+    required this.delete,
+    required this.index,
+  }) : super(key: key);
 
   @override
   State<CustomAnimationItemRelationships> createState() =>
@@ -20,7 +26,7 @@ class _CustomAnimationItemRelationshipsState
     with TickerProviderStateMixin {
   final streamController = StreamController<bool>();
 
-  AnimationController? _controllerAnimationRow;
+  // AnimationController? _controllerAnimationRow;
   ScrollController scrollController = ScrollController();
 
   double rotate = pi / 4;
@@ -32,15 +38,6 @@ class _CustomAnimationItemRelationshipsState
   void initState() {
     super.initState();
 
-    _controllerAnimationRow = AnimationController(
-        vsync: this,
-        lowerBound: 0,
-        upperBound: 70.h,
-        animationBehavior: AnimationBehavior.preserve,
-        duration: const Duration(milliseconds: 900));
-
-    _controllerAnimationRow!.forward(from: 0.0);
-    _controllerAnimationRow!.reverse();
     streamController.add(true);
   }
 
@@ -54,143 +51,171 @@ class _CustomAnimationItemRelationshipsState
           onHorizontalDragUpdate: (details) {
             if (details.delta.direction > 0) {
               scrollController.animateTo(55.w,
-                  duration: const Duration(seconds: 1),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOutCubic);
             } else {
               scrollController.animateTo(0,
-                  duration: const Duration(seconds: 1),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOutCubic);
             }
           },
           child: AnimatedContainer(
             curve: Curves.ease,
             duration: const Duration(milliseconds: 1000),
-            height: snapshot.data! ? 140.h : 0.h,
+            height: snapshot.data! ? 155.h : 0.h,
             width: 378.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.r),
-              color: Colors.white,
             ),
             clipBehavior: Clip.hardEdge,
-            child: SingleChildScrollView(
-              controller: scrollController,
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              child: Stack(
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 15.h),
+              child: AnimatedContainer(
+                curve: Curves.ease,
+                duration: const Duration(milliseconds: 1000),
+                height: snapshot.data! ? 155.h : 0.h,
+                width: 378.w,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  color: Colors.white,
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  child: Stack(
                     children: [
-                      SingleChildScrollView(
-                        physics: NeverScrollableScrollPhysics(),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 11.h, horizontal: 20.w),
-                          child: SizedBox(
-                            width: 338.w,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SingleChildScrollView(
+                            physics: NeverScrollableScrollPhysics(),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 11.h, horizontal: 20.w),
+                              child: SizedBox(
+                                width: 338.w,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      'Предстоящее событие',
-                                      style: TextStyle(
-                                        color: greyColor,
-                                        fontSize: 15.sp,
-                                        fontWeight: FontWeight.w700,
-                                        height: 1,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Предстоящее событие',
+                                          style: TextStyle(
+                                            color: greyColor,
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w700,
+                                            height: 1,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        Text(
+                                          'Через 4 дня',
+                                          style: TextStyle(
+                                            color: const Color.fromRGBO(
+                                                128, 74, 142, 1),
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.w800,
+                                            height: 1,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const Spacer(),
-                                    Text(
-                                      'Через 4 дня',
-                                      style: TextStyle(
-                                        color:
-                                            const Color.fromRGBO(128, 74, 142, 1),
-                                        fontSize: 15.sp,
-                                        fontWeight: FontWeight.w800,
-                                        height: 1,
-                                      ),
+                                    AnimatedContainer(
+                                      curve: Curves.ease,
+                                      duration:
+                                          const Duration(milliseconds: 1000),
+                                      height: snapshot.data! ? 19.h : 0.h,
                                     ),
-                                  ],
-                                ),
-                                AnimatedContainer(
-                                  curve: Curves.ease,
-                                  duration: const Duration(milliseconds: 1000),
-                                  height: snapshot.data! ? 19.h : 0.h,
-                                ),
-                                Text(
-                                  'Годовщина',
-                                  style: TextStyle(
-                                      color: const Color.fromRGBO(23, 23, 23, 1),
-                                      fontSize: 50.sp,
-                                      fontWeight: FontWeight.w800,
-                                      height: 1),
-                                ),
-                                AnimatedContainer(
-                                  curve: Curves.ease,
-                                  duration: const Duration(milliseconds: 1000),
-                                  height: snapshot.data! ? 9.h : 0.h,
-                                ),
-                                Row(
-                                  children: [
                                     Text(
-                                      'Завтра:',
+                                      'Годовщина',
                                       style: TextStyle(
-                                          color: greyColor,
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w700,
+                                          color: const Color.fromRGBO(
+                                              23, 23, 23, 1),
+                                          fontSize: 50.sp,
+                                          fontWeight: FontWeight.w800,
                                           height: 1),
                                     ),
-                                    SizedBox(width: 10.w),
-                                    Text(
-                                      'Арбузный вечер',
-                                      style: TextStyle(
-                                          color: greyColor,
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w700),
+                                    AnimatedContainer(
+                                      curve: Curves.ease,
+                                      duration:
+                                          const Duration(milliseconds: 1000),
+                                      height: snapshot.data! ? 9.h : 0.h,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Завтра:',
+                                          style: TextStyle(
+                                              color: greyColor,
+                                              fontSize: 15.sp,
+                                              fontWeight: FontWeight.w700,
+                                              height: 1),
+                                        ),
+                                        SizedBox(width: 10.w),
+                                        Text(
+                                          'Арбузный вечер',
+                                          style: TextStyle(
+                                              color: greyColor,
+                                              fontSize: 15.sp,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        physics: NeverScrollableScrollPhysics(),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 70.h,
-                              width: 55.w,
-                              color: greyColor2,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SvgPicture.asset('assets/icons/setting.svg'),
-                                ],
-                              ),
+                          SingleChildScrollView(
+                            physics: NeverScrollableScrollPhysics(),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 70.h,
+                                  width: 55.w,
+                                  color: greyColor2,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                          'assets/icons/setting.svg'),
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    streamController.add(false);
+                                    Future.delayed(Duration(milliseconds: 1000))
+                                        .then((value) {
+                                      // widget.delete(widget.index);
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 70.h,
+                                    width: 55.w,
+                                    color: redColor,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                            'assets/icons/trash.svg'),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                            Container(
-                              height: 70.h,
-                              width: 55.w,
-                              color: redColor,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SvgPicture.asset('assets/icons/trash.svg'),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      )
+                          )
+                        ],
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -199,20 +224,20 @@ class _CustomAnimationItemRelationshipsState
     );
   }
 
-  void closeOpen(bool state) {
-    // if (!_controllerAnimationRotate!.isAnimating) {
-    //   if (_controllerAnimationRotate!.isCompleted) {
-    //     _controllerAnimationRotate!.reverse();
-    //   } else {
-    //     _controllerAnimationRotate!.forward(from: rotate);
-    //   }
-    //   streamController.add(!state);
-    // }
+  // void closeOpen(bool state) {
+  // if (!_controllerAnimationRotate!.isAnimating) {
+  //   if (_controllerAnimationRotate!.isCompleted) {
+  //     _controllerAnimationRotate!.reverse();
+  //   } else {
+  //     _controllerAnimationRotate!.forward(from: rotate);
+  //   }
+  //   streamController.add(!state);
+  // }
 
-    if (_controllerAnimationRow!.isCompleted) {
-      _controllerAnimationRow!.reverse();
-    } else {
-      _controllerAnimationRow!.forward(from: 0.0);
-    }
-  }
+  //   if (_controllerAnimationRow!.isCompleted) {
+  //     _controllerAnimationRow!.reverse();
+  //   } else {
+  //     _controllerAnimationRow!.forward(from: 0.0);
+  //   }
+  // }
 }

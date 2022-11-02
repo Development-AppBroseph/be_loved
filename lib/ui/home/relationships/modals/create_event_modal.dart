@@ -2,12 +2,14 @@
 
 import 'package:be_loved/ui/home/relationships/widgets/calendar_just_item.dart';
 import 'package:be_loved/ui/home/relationships/widgets/calendar_selected_item.dart';
+import 'package:be_loved/ui/home/relationships/widgets/time_item_text_field_widget.dart';
 import 'package:be_loved/widgets/buttons/switch_btn.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -44,6 +46,7 @@ showModalCreateEvent(
         fontSize: 18.sp,
         fontWeight: FontWeight.w800
       );
+      
       TextStyle styleBtn = TextStyle(
         color: Colors.white,
         fontSize: 20.sp,
@@ -161,7 +164,8 @@ showModalCreateEvent(
                                             child: TimeItemWidget(text: DateFormat('d MMM. yyyy г.').format(fromDate))
                                           ),
                                           SizedBox(width: 15.w,),
-                                          TimeItemWidget(text: '23:59'),
+                                          
+                                          TimeItemTextFieldWidget()
                                         ],
                                       )
                                     ],
@@ -198,7 +202,7 @@ showModalCreateEvent(
                                             child: TimeItemWidget(text: DateFormat('d MMM. yyyy г.').format(toDate))
                                           ),
                                           SizedBox(width: 15.w,),
-                                          TimeItemWidget(text: '23:59'),
+                                          TimeItemTextFieldWidget()
                                         ],
                                       )
                                     ],
