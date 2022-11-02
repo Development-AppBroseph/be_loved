@@ -1,5 +1,7 @@
 
 
+import 'package:be_loved/ui/home/relationships/widgets/calendar_just_item.dart';
+import 'package:be_loved/ui/home/relationships/widgets/calendar_selected_item.dart';
 import 'package:be_loved/widgets/buttons/switch_btn.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,8 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../core/helpers/constants.dart';
 import '../../../../core/widgets/text_fields/default_text_form_field.dart';
+import '../widgets/time_item_widget.dart';
+import '../widgets/years_month_select_widget.dart';
 
 
 showModalCreateEvent(
@@ -139,8 +143,10 @@ showModalCreateEvent(
                                           menuBuilder: (){
                                             return _buildDatePicker(
                                               context,
-                                              (date){
-                                                _customPopupMenuController1.hideMenu();
+                                              (date, hide){
+                                                if(hide){
+                                                  _customPopupMenuController1.hideMenu();
+                                                }
                                                 setState((){
                                                   fromDate = date;
                                                 });
@@ -148,10 +154,10 @@ showModalCreateEvent(
                                               fromDate
                                             );
                                           },
-                                          child: _buildTimeItem(context, DateFormat('d MMM. yyyy г.').format(fromDate))
+                                          child: TimeItemWidget(text: DateFormat('d MMM. yyyy г.').format(fromDate))
                                         ),
                                         SizedBox(width: 15.w,),
-                                        _buildTimeItem(context, '23:59'),
+                                        TimeItemWidget(text: '23:59'),
                                       ],
                                     )
                                   ],
@@ -174,8 +180,10 @@ showModalCreateEvent(
                                           menuBuilder: (){
                                             return _buildDatePicker(
                                               context,
-                                              (date){
-                                                _customPopupMenuController2.hideMenu();
+                                              (date, hide){
+                                                if(hide){
+                                                  _customPopupMenuController2.hideMenu();
+                                                }
                                                 setState((){
                                                   toDate = date;
                                                 });
@@ -183,10 +191,10 @@ showModalCreateEvent(
                                               toDate
                                             );
                                           },
-                                          child: _buildTimeItem(context, DateFormat('d MMM. yyyy г.').format(toDate))
+                                          child: TimeItemWidget(text: DateFormat('d MMM. yyyy г.').format(toDate))
                                         ),
                                         SizedBox(width: 15.w,),
-                                        _buildTimeItem(context, '23:59'),
+                                        TimeItemWidget(text: '23:59'),
                                       ],
                                     )
                                   ],
@@ -345,7 +353,7 @@ showModalCreateEvent(
   );
 }
 
-Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime) onTap, DateTime selectedDay) {
+Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime, bool hideMenu) onTap, DateTime selectedDay) {
   TextStyle style1 = TextStyle(
     color: Colors.black,
     fontSize: 20.sp,
@@ -357,39 +365,19 @@ Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime) onTap,
     fontWeight: FontWeight.w700
   );
   Widget _buildJustDay(context, date, events) {
-    return Container(  
-      width: 40.h,
-      height: 40.h,
-      alignment: Alignment.center,  
-      child: Text(  
-        date.day.toString(),  
-        style: style2,  
-      )
-    );
+    return CalendarJustItem(text: date.day.toString());
   }
   final kToday = DateTime.now();
   final kFirstDay = DateTime(kToday.year, kToday.month - 12, kToday.day);
-  final kLastDay = DateTime(kToday.year, kToday.month + 12, kToday.day);
+  final kLastDay = DateTime(kToday.year+13, kToday.month, kToday.day);
   Widget _buildSelectedDay(context, date, events) {
-    return Container(  
-      width: 40.h,
-      height: 40.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.h),
-        border: Border.all(
-          color: redColor,
-          width: 5.h
-        )
-      ),
-      alignment: Alignment.center,  
-      child: Text(  
-        date.day.toString(),  
-        style: style2.copyWith(color: redColor),  
-      )
-    );
+    return CalendarSelectedItem(text: date.day.toString());
   }
   DateTime _focusedDay = selectedDay;
   PageController _pageController = PageController();
+
+  CalendarType _calendarType = CalendarType.days;
+  
   return StatefulBuilder(
     builder: (context, setState) {
       return Container(
@@ -415,18 +403,33 @@ Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime) onTap,
                 children: [
                   GestureDetector(
                     onTap: (){
-                      _pageController.previousPage(duration: Duration(milliseconds: 100), curve: Curves.linear);
+                      if(_calendarType == CalendarType.days){
+                        _pageController.previousPage(duration: Duration(milliseconds: 100), curve: Curves.linear);
+                      }
                     },
                     behavior: HitTestBehavior.opaque,
                     child: SvgPicture.asset('assets/icons/calendar_left_icon.svg', height: 17.h,)
                   ),
-                  Text(
-                    DateFormat('MMMM yyyy').format(_focusedDay),
-                    style: style1,
+                  GestureDetector(
+                    onTap: (){
+                      setState((){
+                        if(_calendarType == CalendarType.days){
+                          _calendarType = CalendarType.month;
+                        }else if(_calendarType == CalendarType.month){
+                          _calendarType = CalendarType.years;
+                        }
+                      });
+                    },
+                    child: Text(
+                      DateFormat(_calendarType == CalendarType.days ? 'MMMM yyyy' : 'yyyy').format(_focusedDay),
+                      style: style1,
+                    ),
                   ),
                   GestureDetector(
                     onTap: (){
-                      _pageController.nextPage(duration: Duration(milliseconds: 100), curve: Curves.linear);
+                      if(_calendarType == CalendarType.days){
+                        _pageController.nextPage(duration: Duration(milliseconds: 100), curve: Curves.linear);
+                      }
                     },
                     behavior: HitTestBehavior.opaque,
                     child: SvgPicture.asset('assets/icons/calendar_right_icon.svg', height: 17.h,)
@@ -436,6 +439,25 @@ Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime) onTap,
               ),
             ),
             SizedBox(height: 20.h,),
+            if(_calendarType != CalendarType.days)
+            YearsMonthSelectWidget(
+              onTap: (i){
+                setState((){
+                  if(_calendarType == CalendarType.years){
+                    _focusedDay = DateTime(i, _focusedDay.month, _focusedDay.day);
+                    _calendarType = CalendarType.month;
+                  }else{
+                    _focusedDay = DateTime(_focusedDay.year, i+1, _focusedDay.day);
+                    _calendarType = CalendarType.days;
+                  }
+                  onTap(_focusedDay, false);
+                });
+              },
+              calendarType: _calendarType,
+              focusedDay: _focusedDay,
+            ),
+            
+            if(_calendarType == CalendarType.days)
             TableCalendar(  
               onCalendarCreated: (con){
                 _pageController = con;
@@ -449,7 +471,7 @@ Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime) onTap,
               startingDayOfWeek: StartingDayOfWeek.monday,  
               rangeSelectionMode: RangeSelectionMode.toggledOff,
               onDaySelected: (date, events) {  
-                onTap(date);
+                onTap(date, true);
               },  
               onPageChanged: (dt){
                 setState((){
@@ -475,18 +497,9 @@ Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime) onTap,
 }
 
 
-Widget _buildTimeItem(BuildContext context, String text){
-  TextStyle style3 = TextStyle(
-    color: Colors.white,
-    fontSize: 15.sp,
-    fontWeight: FontWeight.w700
-  );
-  return Container(
-    decoration: BoxDecoration(
-      color: greyColor3,
-      borderRadius: BorderRadius.circular(7.r)
-    ),
-    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.5.h),
-    child: Text(text, style: style3,),
-  );
+
+enum CalendarType{
+  days,
+  month,
+  years
 }

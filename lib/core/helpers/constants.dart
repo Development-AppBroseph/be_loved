@@ -17,3 +17,20 @@ const Color greyColor2 = Color.fromRGBO(218, 218, 218, 1.0);
 const Color greyColor3 = Color.fromRGBO(180, 180, 180, 1.0);
 
 const Color backgroundColorGrey = Color(0xF0F0F0F0);
+
+
+
+const List<String> months = [
+  'Янв',
+  'Фев',
+  'Мар',
+  'Апр',
+  'Май',
+  'Июн',
+  'Июл',
+  'Авг',
+  'Сен',
+  'Окт',
+  'Ноя',
+  'Дек',
+];

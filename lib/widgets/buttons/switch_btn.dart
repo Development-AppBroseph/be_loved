@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../core/helpers/constants.dart';
+
 
 class SwitchBtn extends StatelessWidget {
   final Function(bool val) onChange;
@@ -19,7 +21,7 @@ class SwitchBtn extends StatelessWidget {
         padding: EdgeInsets.all(2.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50.r),
-          color: Color.fromRGBO(120, 120, 128, 0.16)
+          color: value ? accentColor : Color.fromRGBO(120, 120, 128, 0.16)
         ),
         child: Container(
           width: 27.w,
