@@ -26,14 +26,21 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
   @override
   void dispose() {
     streamController.close();
+    _timer!.cancel();
     super.dispose();
   }
 
   void startTimer() {
-    const oneSec = Duration(seconds: 5);
+    var oneSec = const Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
+        if (DateTime.now().second == 0) {
+          _timer!.cancel();
+          Timer.periodic(const Duration(seconds: 60), (Timer timer) {
+            setTime();
+          });
+        }
         setTime();
       },
     );
