@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:be_loved/ui/home/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/ui/home/relationships/widgets/home_info_second.dart';
+import 'package:be_loved/ui/profile/widget/main_file/parametrs_user_bottomsheet.dart';
 import 'package:be_loved/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/widgets/buttons/custom_animation_item_relationships.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -102,26 +103,53 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                 child: Stack(
                                   alignment: Alignment.center,
                                   children: [
-                                    SizedBox(
-                                      height: 5.57.h,
-                                      width: 33.43.h,
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: 3,
-                                        itemBuilder:
-                                            (BuildContext context, index) {
-                                          return Container(
-                                            margin:
-                                                EdgeInsets.only(left: 5.57.h),
-                                            height: 5.57.h,
-                                            width: 5.57.h,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(1.5.r),
-                                              color: Colors.white,
+                                    GestureDetector(
+                                      onTap: (() {
+                                        showModalBottomSheet<void>(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(40),
                                             ),
-                                          );
-                                        },
+                                          ),
+                                          builder: (context) =>
+                                              DraggableScrollableSheet(
+                                            expand: false,
+                                            initialChildSize: 0.8,
+                                            maxChildSize: 0.85,
+                                            builder:
+                                                (context, scrollController) =>
+                                                    SingleChildScrollView(
+                                              controller: scrollController,
+                                              child:
+                                                  const ParametrsUserBottomsheet(),
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                      child: SizedBox(
+                                        height: 5.57.h,
+                                        width: 33.43.h,
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: 3,
+                                          itemBuilder:
+                                              (BuildContext context, index) {
+                                            return Container(
+                                              margin:
+                                                  EdgeInsets.only(left: 5.57.h),
+                                              height: 5.57.h,
+                                              width: 5.57.h,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        1.5.r),
+                                                color: Colors.white,
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ],

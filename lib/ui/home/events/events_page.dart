@@ -183,6 +183,18 @@ class _EventsPageState extends State<EventsPage> {
             ),
           ),
           SizedBox(height: 38.h),
+          const Padding(
+            padding: EdgeInsets.only(left: 25, bottom: 10),
+            child: Text(
+              'Совсем скоро',
+              style: TextStyle(
+                fontFamily: "Inter",
+                fontWeight: FontWeight.w800,
+                color: Colors.black,
+                fontSize: 25
+              ),
+            ),
+          ),
           CarouselSlider.builder(
               itemCount: upComingInfo.length,
               itemBuilder: ((context, index, i) {
