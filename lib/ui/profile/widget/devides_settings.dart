@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
-class DevideSettings extends StatelessWidget {
+import '../../../widgets/buttons/switch_btn.dart';
+
+class DevideSettings extends StatefulWidget {
   final String title;
   final String subtitle;
   final String icon;
@@ -15,16 +18,24 @@ class DevideSettings extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<DevideSettings> createState() => _DevideSettingsState();
+}
+
+class _DevideSettingsState extends State<DevideSettings> {
+  bool switchValue = false;
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
       child: Row(
         children: [
-          SvgPicture.asset(
-            icon,
-            color: Colors.black,
-            height: 32,
-            width: 32,
+          SizedBox(
+            height: 34,
+            width: 34,
+            child: SvgPicture.asset(
+              widget.icon,
+              color: Colors.black,
+            ),
           ),
           const SizedBox(
             width: 27,
@@ -33,7 +44,7 @@ class DevideSettings extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                widget.title,
                 style: const TextStyle(
                   fontFamily: "Inter",
                   fontSize: 20,
@@ -42,7 +53,7 @@ class DevideSettings extends StatelessWidget {
                 ),
               ),
               Text(
-                subtitle,
+                widget.subtitle,
                 style: const TextStyle(
                   fontFamily: "Inter",
                   fontSize: 15,
@@ -53,12 +64,21 @@ class DevideSettings extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          IconButton(
-            onPressed: () {
-              print('lol');
-            },
-            icon: const Icon(Icons.arrow_forward_ios_rounded),
-          ),
+          widget.haveToggleSwitch
+              ? SwitchBtn(
+                  onChange: (value) {
+                    setState(() {
+                      switchValue = value;
+                    });
+                  },
+                  value: switchValue,
+                )
+              : IconButton(
+                  onPressed: () {
+                    print('lol');
+                  },
+                  icon: const Icon(Icons.arrow_forward_ios_rounded),
+                ),
         ],
       ),
     );

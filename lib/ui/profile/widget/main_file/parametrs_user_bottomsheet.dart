@@ -31,13 +31,28 @@ class ParametrsUserBottomsheet extends StatelessWidget {
           title: "Виджеты",
           subtitle: "Настроить",
           haveToggleSwitch: false,
-          icon: SvgImg.logov2,
+          icon: SvgImg.widgets,
         ),
         DevideSettings(
           title: "Оформление",
           subtitle: "Изменить",
           haveToggleSwitch: false,
-          icon: SvgImg.logov2,
+          icon: SvgImg.documents,
+        ),
+        SizedBox(
+          height: 87,
+        ),
+        DevideSettings(
+          title: "Оформление",
+          subtitle: "Изменить",
+          haveToggleSwitch: false,
+          icon: SvgImg.person,
+        ),
+        DevideSettings(
+          title: "Оформление",
+          subtitle: "Изменить",
+          haveToggleSwitch: true,
+          icon: SvgImg.notification,
         ),
       ],
     );
