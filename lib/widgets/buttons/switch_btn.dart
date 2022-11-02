@@ -15,7 +15,7 @@ class SwitchBtn extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () => onChange(!value),
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 100),
         alignment: !value ? Alignment.centerLeft : Alignment.centerRight,
         width: 51.w,
         padding: EdgeInsets.all(2.h),
@@ -31,12 +31,12 @@ class SwitchBtn extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.06),
+                color: const Color.fromRGBO(0, 0, 0, 0.06),
                 offset: Offset(0, 3.h),
                 blurRadius: 1.w
               ),
               BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.15),
+                color: const Color.fromRGBO(0, 0, 0, 0.15),
                 offset: Offset(0, 3.h),
                 blurRadius: 8.w
               ),
