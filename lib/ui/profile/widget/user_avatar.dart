@@ -8,31 +8,34 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 135.h,
-          width: 135.w,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage(Img.avatarNone),
+    return SizedBox(
+      width: 135.w,
+      child: Column(
+        children: [
+          Container(
+            height: 135.h,
+            width: 135.h,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(Img.avatarNone),
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 10.w),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontFamily: 'Inter',
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 25.sp,
+          Padding(
+            padding: EdgeInsets.only(top: 10.w),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18.sp,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -108,16 +108,16 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                         showModalBottomSheet<void>(
                                           isScrollControlled: true,
                                           context: context,
-                                          shape: const RoundedRectangleBorder(
+                                          shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(40),
+                                              top: Radius.circular(40.r),
                                             ),
                                           ),
                                           builder: (context) =>
                                               DraggableScrollableSheet(
                                             expand: false,
-                                            initialChildSize: 0.8,
-                                            maxChildSize: 0.85,
+                                            initialChildSize: 0.8.h,
+                                            maxChildSize: 0.85.h,
                                             builder:
                                                 (context, scrollController) =>
                                                     SingleChildScrollView(
