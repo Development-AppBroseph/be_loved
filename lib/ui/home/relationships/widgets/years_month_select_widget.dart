@@ -24,7 +24,6 @@ class YearsMonthSelectWidget extends StatelessWidget {
       itemBuilder: (context, i) {
         int currentYear = (DateTime.now().year+i);
         String text = calendarType == CalendarType.month ? months[i] : currentYear.toString();
-        print('TEXT: ${text}');
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: (){
