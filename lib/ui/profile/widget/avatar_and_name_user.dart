@@ -1,6 +1,7 @@
 import 'package:be_loved/core/helpers/images.dart';
 import 'package:be_loved/ui/profile/widget/user_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AvatarAndNameUser extends StatelessWidget {
@@ -9,7 +10,7 @@ class AvatarAndNameUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 25),
+      padding: EdgeInsets.symmetric(vertical: 25.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

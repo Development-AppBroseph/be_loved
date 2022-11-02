@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../widgets/buttons/switch_btn.dart';
@@ -25,39 +26,39 @@ class _DevideSettingsState extends State<DevideSettings> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+      margin: EdgeInsets.symmetric(horizontal: 25.w, vertical: 12.w),
       child: Row(
         children: [
           SizedBox(
-            height: 34,
-            width: 34,
+            height: 34.h,
+            width: 34.w,
             child: SvgPicture.asset(
               widget.icon,
               color: Colors.black,
             ),
           ),
-          const SizedBox(
-            width: 27,
+          SizedBox(
+            width: 27.w,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 widget.title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: "Inter",
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xff171717),
+                  color: const Color(0xff171717),
                 ),
               ),
               Text(
                 widget.subtitle,
-                style: const TextStyle(
+                style:  TextStyle(
                   fontFamily: "Inter",
-                  fontSize: 15,
+                  fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xff969696),
+                  color: const Color(0xff969696),
                 ),
               ),
             ],
