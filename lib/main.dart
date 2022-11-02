@@ -45,9 +45,8 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-            fontFamily: 'Inter'
-          ),
+              scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+              fontFamily: 'Inter'),
           home: user != null
               ? user?.date != null
                   ? HomePage()
