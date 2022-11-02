@@ -1,6 +1,6 @@
 import 'package:be_loved/core/helpers/images.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserAvatar extends StatelessWidget {
   final String title;
@@ -11,8 +11,8 @@ class UserAvatar extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 135,
-          width: 135,
+          height: 135.h,
+          width: 135.w,
           decoration: const BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
@@ -21,14 +21,14 @@ class UserAvatar extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10),
+          padding: EdgeInsets.only(top: 10.w),
           child: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Inter',
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: 25.sp,
             ),
           ),
         ),
