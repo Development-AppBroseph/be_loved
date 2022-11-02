@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../core/helpers/constants.dart';
+
 
 class SwitchBtn extends StatelessWidget {
   final Function(bool val) onChange;
@@ -13,13 +15,13 @@ class SwitchBtn extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () => onChange(!value),
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 100),
         alignment: !value ? Alignment.centerLeft : Alignment.centerRight,
         width: 51.w,
         padding: EdgeInsets.all(2.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50.r),
-          color: Color.fromRGBO(120, 120, 128, 0.16)
+          color: value ? accentColor : Color.fromRGBO(120, 120, 128, 0.16)
         ),
         child: Container(
           width: 27.w,
@@ -29,12 +31,12 @@ class SwitchBtn extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.06),
+                color: const Color.fromRGBO(0, 0, 0, 0.06),
                 offset: Offset(0, 3.h),
                 blurRadius: 1.w
               ),
               BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.15),
+                color: const Color.fromRGBO(0, 0, 0, 0.15),
                 offset: Offset(0, 3.h),
                 blurRadius: 8.w
               ),

@@ -60,7 +60,7 @@ class _InviteForState extends State<InviteFor> {
   }
 
   void _startSearch(BuildContext context) {
-    timerSecond = Timer.periodic(const Duration(seconds: 2), (timer) {
+    timerSecond = Timer.periodic(const Duration(seconds: 5), (timer) {
       BlocProvider.of<AuthBloc>(context, listen: false).add(SearchUser());
     });
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const String apiUrl = "http://195.133.49.15/";
+const String apiUrl = "http://194.58.69.88/";
 
 const Color accentColor = Color.fromRGBO(32, 203, 131, 1.0);
 
@@ -17,3 +17,20 @@ const Color greyColor2 = Color.fromRGBO(218, 218, 218, 1.0);
 const Color greyColor3 = Color.fromRGBO(180, 180, 180, 1.0);
 
 const Color backgroundColorGrey = Color(0xF0F0F0F0);
+
+
+
+const List<String> months = [
+  'Янв',
+  'Фев',
+  'Мар',
+  'Апр',
+  'Май',
+  'Июн',
+  'Июл',
+  'Авг',
+  'Сен',
+  'Окт',
+  'Ноя',
+  'Дек',
+];

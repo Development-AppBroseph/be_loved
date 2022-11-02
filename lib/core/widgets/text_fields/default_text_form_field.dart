@@ -36,7 +36,7 @@ class DefaultTextFormField extends StatelessWidget {
     this.keyboardType,
   }) : super(key: key);
   TextStyle style = TextStyle(
-    color: blackColor,
+    color: Color(0xFF2C2C2E),
     fontSize: 18.sp,
     fontWeight: FontWeight.w800
   );
@@ -79,7 +79,7 @@ class DefaultTextFormField extends StatelessWidget {
             hintStyle: style2
           ),
         ),
-        if(maxLength != null)
+        if(maxLength != null && controller?.text.length == 0)
         Positioned(
           right: 20.w,
           top: 16.h,

@@ -96,7 +96,7 @@ class _InvitePartnerState extends State<InvitePartner> {
   }
 
   void _startSearch(BuildContext context) {
-    _timerSearching = Timer.periodic(const Duration(seconds: 2), (timer) {
+    _timerSearching = Timer.periodic(const Duration(seconds: 5), (timer) {
       BlocProvider.of<AuthBloc>(context, listen: false).add(SearchUser());
     });
   }

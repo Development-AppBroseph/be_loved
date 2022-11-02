@@ -54,6 +54,9 @@ class ParametrsUserBottomsheet extends StatelessWidget {
           haveToggleSwitch: true,
           icon: SvgImg.notification,
         ),
+        SizedBox(
+          height: 60,
+        ),
       ],
     );
   }

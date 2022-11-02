@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomSheetGreyLine extends StatelessWidget {
   const BottomSheetGreyLine({Key? key}) : super(key: key);
@@ -6,11 +7,11 @@ class BottomSheetGreyLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 5,
-      width: 100,
-      margin: const EdgeInsets.only(top: 7),
+      height: 5.h,
+      width: 100.w,
+      margin:  EdgeInsets.only(top: 7.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         color: const Color(0xff969696)
       ),
     );

@@ -31,10 +31,13 @@ class HomeInfoFirst extends StatelessWidget {
                   ),
                 ],
               ),
-              SvgPicture.asset(
-                'assets/icons/settings.svg',
-                height: 18.67.h,
-                width: 18.67.h,
+              Padding(
+                padding: EdgeInsets.only(top: 5.h),
+                child: SvgPicture.asset(
+                  'assets/icons/settings.svg',
+                  height: 18.67.h,
+                  width: 18.67.h,
+                ),
               ),
             ],
           ),
