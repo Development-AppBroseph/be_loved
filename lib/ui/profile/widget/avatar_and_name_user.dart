@@ -12,7 +12,7 @@ class AvatarAndNameUser extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 25),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           const UserAvatar(title: "Ник"),
           SvgPicture.asset(
