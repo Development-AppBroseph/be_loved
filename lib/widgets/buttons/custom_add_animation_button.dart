@@ -18,9 +18,10 @@ class CustomAddAnimationButton extends StatefulWidget {
 class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
     with TickerProviderStateMixin {
   final streamController = StreamController<bool>();
+  int milisec = 800;
 
   AnimationController? _controllerAnimationRotate;
-  AnimationController? _controllerAnimationRow;
+  // AnimationController? _controllerAnimationRow;
 
   double rotate = pi / 4;
 
@@ -34,20 +35,20 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
         vsync: this,
         lowerBound: pi / 4,
         upperBound: pi / 2,
-        animationBehavior: AnimationBehavior.preserve,
-        duration: const Duration(milliseconds: 900));
+        animationBehavior: AnimationBehavior.normal,
+        duration: Duration(milliseconds: milisec - 300));
     _controllerAnimationRotate!.addListener(() {
       setState(() {
         rotate = _controllerAnimationRotate!.value;
       });
     });
 
-    _controllerAnimationRow = AnimationController(
-        vsync: this,
-        lowerBound: 0,
-        upperBound: 70.h,
-        animationBehavior: AnimationBehavior.preserve,
-        duration: const Duration(milliseconds: 900));
+    // _controllerAnimationRow = AnimationController(
+    //     vsync: this,
+    //     lowerBound: 0,
+    //     upperBound: 70.h,
+    //     animationBehavior: AnimationBehavior.preserve,
+    //     duration: Duration(milliseconds: milisec));
   }
 
   @override
@@ -59,8 +60,8 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
           return Stack(
             children: [
               AnimatedContainer(
-                curve: Curves.easeInOutQuint,
-                duration: const Duration(milliseconds: 1000),
+                curve: Curves.ease,
+                duration: Duration(milliseconds: milisec - 200),
                 height: snapshot.data! ? 100.h : 70.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.r),
@@ -78,29 +79,24 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                         alignment: snapshot.data!
                             ? Alignment.centerRight
                             : Alignment.center,
-                        curve: Curves.easeInOutQuint,
-                        duration: const Duration(milliseconds: 1000),
-                        child: GestureDetector(
-                          onTap: () {
-                            closeOpen(snapshot.data!);
-                          },
-                          child: AnimatedContainer(
-                            curve: Curves.easeInOutQuint,
-                            duration: const Duration(milliseconds: 1000),
-                            color: Colors.transparent,
-                            width: snapshot.data! ? 90.w : 378.w,
-                            height: snapshot.data! ? 100.h : 70.h, // 70.h,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 0.w),
-                              child: Transform.rotate(
-                                  angle: rotate,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SvgPicture.asset('assets/icons/add.svg'),
-                                    ],
-                                  )),
-                            ),
+                        curve: Curves.ease,
+                        duration: Duration(milliseconds: milisec - 200),
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: milisec),
+                          color: Colors.transparent,
+                          curve: Curves.ease,
+                          // width: snapshot.data! ? 90.w : 378.w,
+                          // height: snapshot.data! ? 100.h : 70.h, // 70.h,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 33.79.w),
+                            child: Transform.rotate(
+                                angle: rotate,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    SvgPicture.asset('assets/icons/add.svg'),
+                                  ],
+                                )),
                           ),
                         ),
                       ),
@@ -109,8 +105,8 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                 ),
               ),
               AnimatedPositioned(
-                curve: Curves.easeInOutQuint,
-                duration: const Duration(milliseconds: 1000),
+                curve: Curves.ease,
+                duration: Duration(milliseconds: milisec - 200),
                 top: snapshot.data! ? 0 : 70.h,
                 child: Padding(
                   padding: EdgeInsets.only(
@@ -193,6 +189,24 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                   ),
                 ),
               ),
+              snapshot.data!
+                  ? Positioned.fill(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 279.w),
+                        child: GestureDetector(
+                          onTap: () {
+                            closeOpen(snapshot.data!);
+                          },
+                        ),
+                      ),
+                    )
+                  : Positioned.fill(
+                      child: GestureDetector(
+                        onTap: () {
+                          closeOpen(snapshot.data!);
+                        },
+                      ),
+                    )
             ],
           );
         });
@@ -208,10 +222,10 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
       streamController.add(!state);
     }
 
-    if (_controllerAnimationRow!.isCompleted) {
-      _controllerAnimationRow!.reverse();
-    } else {
-      _controllerAnimationRow!.forward(from: 0.0);
-    }
+    // if (_controllerAnimationRow!.isCompleted) {
+    //   _controllerAnimationRow!.reverse();
+    // } else {
+    //   _controllerAnimationRow!.forward(from: 0.0);
+    // }
   }
 }
