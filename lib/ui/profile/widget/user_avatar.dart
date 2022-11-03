@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserAvatar extends StatelessWidget {
   final String title;
-  const UserAvatar({Key? key, required this.title}) : super(key: key);
+  final double fontSize;
+  const UserAvatar({Key? key, required this.title, required this.fontSize})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class UserAvatar extends StatelessWidget {
                 fontFamily: 'Inter',
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 18.sp,
+                fontSize: fontSize,
               ),
             ),
           ),

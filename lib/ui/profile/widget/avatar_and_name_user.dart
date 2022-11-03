@@ -15,12 +15,18 @@ class AvatarAndNameUser extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const UserAvatar(title: "Ник"),
+          UserAvatar(
+            title: "Ник",
+            fontSize: 25.sp,
+          ),
           SvgPicture.asset(
             SvgImg.logov2,
             color: const Color(0xff171717),
           ),
-          const UserAvatar(title: "12 символов"),
+          UserAvatar(
+            title: "12 символов",
+            fontSize: 18.sp,
+          ),
         ],
       ),
     );

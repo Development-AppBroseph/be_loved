@@ -24,6 +24,7 @@ showModalCreateEvent(
     Function() onTap
   ){
   showMaterialModalBottomSheet(
+    animationCurve: Curves.easeInOutQuint,
     elevation: 12,
     barrierColor: Color.fromRGBO(0, 0, 0, 0.2),
     duration: Duration(milliseconds: 600),
@@ -72,15 +73,15 @@ showModalCreateEvent(
             child: Container(
               height: MediaQuery.of(context).size.height*0.8,
               width: MediaQuery.of(context).size.width,
-              color: Color.fromRGBO(0, 0, 0, 0),
+              color: const Color.fromRGBO(0, 0, 0, 0),
               
               child: Stack(
                 children: [
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     child: SingleChildScrollView(
-                      physics: ClampingScrollPhysics(),
+                      physics: const ClampingScrollPhysics(),
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 25.w),
                         child: Column(
@@ -90,6 +91,7 @@ showModalCreateEvent(
                             DefaultTextFormField(
                               hint: 'Название',
                               controller: _controllerName,
+                              maxLines: 1,
                             ),
                             SizedBox(height: 20.h,),
                             DefaultTextFormField(
@@ -165,7 +167,7 @@ showModalCreateEvent(
                                           ),
                                           SizedBox(width: 15.w,),
                                           
-                                          TimeItemTextFieldWidget()
+                                          const TimeItemTextFieldWidget()
                                         ],
                                       )
                                     ],
@@ -202,7 +204,7 @@ showModalCreateEvent(
                                             child: TimeItemWidget(text: DateFormat('d MMM. yyyy г.').format(toDate))
                                           ),
                                           SizedBox(width: 15.w,),
-                                          TimeItemTextFieldWidget()
+                                          const TimeItemTextFieldWidget()
                                         ],
                                       )
                                     ],
@@ -379,6 +381,7 @@ Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime, bool h
   final kToday = DateTime.now();
   final kFirstDay = DateTime(kToday.year, kToday.month - 12, kToday.day);
   final kLastDay = DateTime(kToday.year+13, kToday.month, kToday.day);
+  
   Widget _buildSelectedDay(context, date, events) {
     return CalendarSelectedItem(text: date.day.toString());
   }
@@ -413,7 +416,7 @@ Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime, bool h
                   GestureDetector(
                     onTap: (){
                       if(_calendarType == CalendarType.days){
-                        _pageController.previousPage(duration: Duration(milliseconds: 100), curve: Curves.linear);
+                        _pageController.previousPage(duration: const Duration(milliseconds: 1000), curve: Curves.linear);
                       }
                     },
                     behavior: HitTestBehavior.opaque,
@@ -437,7 +440,7 @@ Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime, bool h
                   GestureDetector(
                     onTap: (){
                       if(_calendarType == CalendarType.days){
-                        _pageController.nextPage(duration: Duration(milliseconds: 100), curve: Curves.linear);
+                        _pageController.nextPage(duration: const Duration(milliseconds: 1000), curve: Curves.linear);
                       }
                     },
                     behavior: HitTestBehavior.opaque,
@@ -467,36 +470,38 @@ Widget _buildDatePicker(BuildContext context, Function(DateTime dateTime, bool h
             ),
             
             if(_calendarType == CalendarType.days)
-            TableCalendar(  
-              onCalendarCreated: (con){
-                _pageController = con;
-              },
-              focusedDay: _focusedDay,
-              calendarFormat: CalendarFormat.month,  
-              firstDay: kFirstDay,
-              lastDay: kLastDay,
-              headerVisible: false,
-              daysOfWeekVisible: false,
-              startingDayOfWeek: StartingDayOfWeek.monday,  
-              rangeSelectionMode: RangeSelectionMode.toggledOff,
-              onDaySelected: (date, events) {  
-                onTap(date, true);
-              },  
-              onPageChanged: (dt){
-                setState((){
-                  _focusedDay = dt;
-                });
-              },
-              rowHeight: 40.h,
-              selectedDayPredicate: (day) => isSameDay(_focusedDay, day),
-              calendarBuilders: CalendarBuilders(  
-                selectedBuilder: _buildSelectedDay,
-                defaultBuilder: _buildJustDay,
-                disabledBuilder: _buildJustDay,
-                holidayBuilder: _buildJustDay,
-                outsideBuilder: _buildJustDay,
-                todayBuilder: _buildJustDay,
-              ),  
+            SizedBox(
+              child: TableCalendar(  
+                onCalendarCreated: (con){
+                  _pageController = con;
+                },
+                focusedDay: _focusedDay,
+                calendarFormat: CalendarFormat.month,  
+                firstDay: kFirstDay,
+                lastDay: kLastDay,
+                headerVisible: false,
+                daysOfWeekVisible: false,
+                startingDayOfWeek: StartingDayOfWeek.monday,  
+                rangeSelectionMode: RangeSelectionMode.toggledOff,
+                onDaySelected: (date, events) {  
+                  onTap(date, true);
+                },  
+                onPageChanged: (dt){
+                  setState((){
+                    _focusedDay = dt;
+                  });
+                },
+                rowHeight: 40.h,
+                selectedDayPredicate: (day) => isSameDay(_focusedDay, day),
+                calendarBuilders: CalendarBuilders(  
+                  selectedBuilder: _buildSelectedDay,
+                  defaultBuilder: _buildJustDay,
+                  disabledBuilder: _buildJustDay,
+                  holidayBuilder: _buildJustDay,
+                  outsideBuilder: _buildJustDay,
+                  todayBuilder: _buildJustDay,
+                ),  
+              ),
             ),
           ],
         )  

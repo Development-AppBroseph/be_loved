@@ -36,7 +36,7 @@ class DefaultTextFormField extends StatelessWidget {
     this.keyboardType,
   }) : super(key: key);
   TextStyle style = TextStyle(
-    color: Color(0xFF2C2C2E),
+    color: const Color(0xFF2C2C2E),
     fontSize: 18.sp,
     fontWeight: FontWeight.w800
   );
