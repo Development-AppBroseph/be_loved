@@ -60,7 +60,7 @@ class _InviteForState extends State<InviteFor> {
   }
 
   void _startSearch(BuildContext context) {
-    timerSecond = Timer.periodic(const Duration(seconds: 2), (timer) {
+    timerSecond = Timer.periodic(const Duration(seconds: 5), (timer) {
       BlocProvider.of<AuthBloc>(context, listen: false).add(SearchUser());
     });
   }
@@ -128,6 +128,7 @@ class _InviteForState extends State<InviteFor> {
         body: Stack(
           children: [
             AnimatedOpacity(
+              curve: Curves.easeInOutQuint,
               duration: const Duration(milliseconds: 500),
               opacity: _accepted ? 1 : 0,
               child: Center(
@@ -135,6 +136,7 @@ class _InviteForState extends State<InviteFor> {
               ),
             ),
             AnimatedOpacity(
+              curve: Curves.easeInOutQuint,
               duration: const Duration(milliseconds: 500),
               opacity: _accepted ? 1 : 0,
               child: Align(
@@ -169,6 +171,7 @@ class _InviteForState extends State<InviteFor> {
               ),
             ),
             AnimatedOpacity(
+              curve: Curves.easeInOutQuint,
               duration: const Duration(milliseconds: 500),
               opacity: _accepted ? 0 : 1,
               child: SafeArea(
@@ -220,9 +223,9 @@ class _InviteForState extends State<InviteFor> {
                                     padding: EdgeInsets.only(
                                         top: 20.h, bottom: 10.h),
                                     child: Material(
-                                      shape: SquircleBorder(
-                                        radius: BorderRadius.all(
-                                          Radius.circular(80.r),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(40.r),
                                         ),
                                       ),
                                       clipBehavior: Clip.hardEdge,
@@ -296,9 +299,9 @@ class _InviteForState extends State<InviteFor> {
                                     padding: EdgeInsets.only(
                                         top: 20.h, bottom: 10.h),
                                     child: Material(
-                                      shape: SquircleBorder(
-                                        radius: BorderRadius.all(
-                                          Radius.circular(80.r),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(40.r),
                                         ),
                                       ),
                                       clipBehavior: Clip.hardEdge,

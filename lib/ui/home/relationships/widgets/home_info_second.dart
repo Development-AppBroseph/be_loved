@@ -57,7 +57,7 @@ class HomeInfoSecond extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset('assets/icons/home_stats.svg'),
+                  SvgPicture.asset('assets/icons/home_stats.svg', height: 34.h,),
                   SizedBox(width: 26.w,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +80,7 @@ class HomeInfoSecond extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(right: 17.w),
-                child: SvgPicture.asset('assets/icons/home_arrow.svg'),
+                child: SvgPicture.asset('assets/icons/home_arrow.svg', height: 20.h,),
               )
             ],
           ),
@@ -92,7 +92,7 @@ class HomeInfoSecond extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset('assets/icons/home_logo.svg'),
+                  SvgPicture.asset('assets/icons/home_logo.svg', height: 34.h,),
                   SizedBox(width: 26.w,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +116,7 @@ class HomeInfoSecond extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(right: 17.w),
-                child: SvgPicture.asset('assets/icons/home_arrow.svg'),
+                child: SvgPicture.asset('assets/icons/home_arrow.svg', height: 20.h,),
               )
             ],
           ),

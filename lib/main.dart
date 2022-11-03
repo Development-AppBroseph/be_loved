@@ -9,12 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/route_manager.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   var user = await MySharedPrefs().user;
+  initializeDateFormatting('ru');
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) {
     runApp(MultiBlocProvider(
@@ -43,8 +45,8 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-          ),
+              scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+              fontFamily: 'Inter'),
           // home: user != null
           //     ? user?.date != null
           //         ? HomePage()
