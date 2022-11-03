@@ -15,7 +15,7 @@ class SwitchBtn extends StatelessWidget {
       onTap: () => onChange(!value),
       child: AnimatedContainer(
         curve: Curves.easeInOutQuint,
-        duration: const Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 300),
         alignment: !value ? Alignment.centerLeft : Alignment.centerRight,
         width: 51.w,
         padding: EdgeInsets.all(2.h),

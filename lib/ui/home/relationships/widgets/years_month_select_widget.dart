@@ -1,8 +1,8 @@
-import 'package:be_loved/ui/home/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/ui/home/relationships/widgets/calendar_just_item.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/helpers/constants.dart';
+import '../modals/create_event_widget.dart';
 import 'calendar_selected_item.dart';
 
 
@@ -32,7 +32,7 @@ class YearsMonthSelectWidget extends StatelessWidget {
           child: (calendarType == CalendarType.month && i+1 == focusedDay.month) 
             || (calendarType == CalendarType.years && currentYear == focusedDay.year)
             ? CalendarSelectedItem(text: text)
-            : CalendarJustItem(text: text)
+            : CalendarJustItem(text: text, disabled: false,)
         );
       }
     );
