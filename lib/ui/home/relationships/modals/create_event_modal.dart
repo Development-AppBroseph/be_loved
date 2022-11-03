@@ -18,6 +18,7 @@ import '../widgets/years_month_select_widget.dart';
 
 showModalCreateEvent(BuildContext context, Function() onTap) {
   showMaterialModalBottomSheet(
+    animationCurve: Curves.easeInOutQuint,
       elevation: 12,
       barrierColor: Color.fromRGBO(0, 0, 0, 0.2),
       duration: Duration(milliseconds: 600),
@@ -75,6 +76,7 @@ showModalCreateEvent(BuildContext context, Function() onTap) {
                               ),
                               DefaultTextFormField(
                                 hint: 'Название',
+                                maxLines: 1,
                                 controller: _controllerName,
                               ),
                               SizedBox(
@@ -351,7 +353,9 @@ showModalCreateEvent(BuildContext context, Function() onTap) {
                                           borderRadius:
                                               BorderRadius.circular(10.r)),
                                       child: SvgPicture.asset(
-                                          'assets/icons/close_event_create.svg'),
+                                        'assets/icons/close_event_create.svg',
+                                        height: 22.h,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -364,6 +368,7 @@ showModalCreateEvent(BuildContext context, Function() onTap) {
                                       child: Container(
                                         height: 60.h,
                                         alignment: Alignment.center,
+                                        padding: EdgeInsets.only(bottom: 2.h),
                                         decoration: BoxDecoration(
                                             color: accentColor,
                                             borderRadius:
@@ -468,8 +473,8 @@ Widget _buildDatePicker(BuildContext context,
                       onTap: () {
                         if (_calendarType == CalendarType.days) {
                           _pageController.previousPage(
-                              duration: Duration(milliseconds: 100),
-                              curve: Curves.linear);
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOutQuint);
                         }
                       },
                       behavior: HitTestBehavior.opaque,
@@ -499,8 +504,8 @@ Widget _buildDatePicker(BuildContext context,
                     onTap: () {
                       if (_calendarType == CalendarType.days) {
                         _pageController.nextPage(
-                            duration: Duration(milliseconds: 100),
-                            curve: Curves.linear);
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOutQuint);
                       }
                     },
                     behavior: HitTestBehavior.opaque,

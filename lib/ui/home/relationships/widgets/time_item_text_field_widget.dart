@@ -7,10 +7,13 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 
 class TimeItemTextFieldWidget extends StatelessWidget {
+  const TimeItemTextFieldWidget({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
     var maskFormatter = MaskTextInputFormatter(mask: '##:##', filter: { "#": RegExp(r'[0-9]') });
+    TextEditingController controller = TextEditingController();
     TextStyle style3 = TextStyle(
       color: Colors.white,
       fontSize: 15.sp,
@@ -19,6 +22,14 @@ class TimeItemTextFieldWidget extends StatelessWidget {
     return SizedBox(
       width: 64.w,
       child: TextFormField(
+        controller: controller,
+        onChanged: (text){
+          
+        },
+        validator: (value) {
+          
+        },
+        keyboardType: TextInputType.number,
         style: style3,
         maxLines: 1,
         textAlign: TextAlign.center, 

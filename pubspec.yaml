@@ -42,6 +42,7 @@ dependencies:
   custom_pop_up_menu: ^1.2.4
   intl: ^0.17.0
   mask_text_input_formatter: ^2.4.0
+  time_picker_sheet: ^0.0.2+1
 
 dev_dependencies:
   flutter_test:
@@ -59,7 +60,7 @@ flutter:
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
+  # list giving the asset and other descriptors ftable_calendaror the font. For
   # example:
   fonts:
     - family: Inter
