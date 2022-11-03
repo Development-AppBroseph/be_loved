@@ -64,6 +64,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
         initialData: 0,
         builder: (context, snapshot) {
           return SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
             child: Column(
               children: [
                 Stack(

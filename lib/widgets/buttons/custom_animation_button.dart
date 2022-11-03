@@ -58,6 +58,7 @@ class CustomButtonState extends State<CustomAnimationButton>
         builder: (context, snapshot) {
           return GestureDetector(
             child: AnimatedContainer(
+              curve: Curves.easeInOutQuint,
               height: 60.sp,
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -84,7 +85,7 @@ class CustomButtonState extends State<CustomAnimationButton>
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 1000),
                         onEnd: () {},
-                        curve: Curves.fastOutSlowIn,
+                        curve: Curves.easeInOutQuint,
                         height: 60.sp,
                         width: snapshot.data! > 0 ? 378.w : 0,
                         decoration: BoxDecoration(

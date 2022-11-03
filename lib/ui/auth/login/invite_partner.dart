@@ -72,8 +72,11 @@ class _InvitePartnerState extends State<InvitePartner> {
           if (start == 0) {
             setState(() {
               BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-              BlocProvider.of<AuthBloc>(context).add(CheckIsUserPhone(
-                  '7${_phoneController.text.replaceAll(' ', '')}'));
+              BlocProvider.of<AuthBloc>(context).add(
+                CheckIsUserPhone(
+                  '7${_phoneController.text.replaceAll(' ', '')}',
+                ),
+              );
 
               isValidate = true;
               timer.cancel();

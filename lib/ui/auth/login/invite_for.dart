@@ -128,6 +128,7 @@ class _InviteForState extends State<InviteFor> {
         body: Stack(
           children: [
             AnimatedOpacity(
+              curve: Curves.easeInOutQuint,
               duration: const Duration(milliseconds: 500),
               opacity: _accepted ? 1 : 0,
               child: Center(
@@ -135,6 +136,7 @@ class _InviteForState extends State<InviteFor> {
               ),
             ),
             AnimatedOpacity(
+              curve: Curves.easeInOutQuint,
               duration: const Duration(milliseconds: 500),
               opacity: _accepted ? 1 : 0,
               child: Align(
@@ -169,6 +171,7 @@ class _InviteForState extends State<InviteFor> {
               ),
             ),
             AnimatedOpacity(
+              curve: Curves.easeInOutQuint,
               duration: const Duration(milliseconds: 500),
               opacity: _accepted ? 0 : 1,
               child: SafeArea(

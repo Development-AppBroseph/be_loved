@@ -59,7 +59,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
           return Stack(
             children: [
               AnimatedContainer(
-                curve: Curves.easeIn,
+                curve: Curves.easeInOutQuint,
                 duration: const Duration(milliseconds: 1000),
                 height: snapshot.data! ? 100.h : 70.h,
                 decoration: BoxDecoration(
@@ -78,13 +78,14 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                         alignment: snapshot.data!
                             ? Alignment.centerRight
                             : Alignment.center,
-                        curve: Curves.ease,
+                        curve: Curves.easeInOutQuint,
                         duration: const Duration(milliseconds: 1000),
                         child: GestureDetector(
                           onTap: () {
                             closeOpen(snapshot.data!);
                           },
                           child: AnimatedContainer(
+                            curve: Curves.easeInOutQuint,
                             duration: const Duration(milliseconds: 1000),
                             color: Colors.transparent,
                             width: snapshot.data! ? 90.w : 378.w,
@@ -108,6 +109,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                 ),
               ),
               AnimatedPositioned(
+                curve: Curves.easeInOutQuint,
                 duration: const Duration(milliseconds: 1000),
                 top: snapshot.data! ? 0 : 70.h,
                 child: Padding(

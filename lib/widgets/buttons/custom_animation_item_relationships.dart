@@ -52,168 +52,179 @@ class _CustomAnimationItemRelationshipsState
             if (details.delta.direction > 0) {
               scrollController.animateTo(55.w,
                   duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOutCubic);
+                  curve: Curves.easeInOutQuint);
             } else {
               scrollController.animateTo(0,
                   duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOutCubic);
+                  curve: Curves.easeInOutQuint);
             }
           },
-          child: AnimatedContainer(
-            curve: Curves.ease,
+          child: AnimatedOpacity(
             duration: const Duration(milliseconds: 1000),
-            height: snapshot.data! ? 155.h : 0.h,
-            width: 378.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 15.h),
-              child: AnimatedContainer(
-                curve: Curves.ease,
-                duration: const Duration(milliseconds: 1000),
-                height: snapshot.data! ? 155.h : 0.h,
-                width: 378.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  color: Colors.white,
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  child: Stack(
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SingleChildScrollView(
-                            physics: NeverScrollableScrollPhysics(),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 11.h, horizontal: 20.w),
-                              child: SizedBox(
-                                width: 338.w,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Предстоящее событие',
-                                          style: TextStyle(
-                                            color: greyColor,
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.w700,
-                                            height: 1,
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        Text(
-                                          'Через 4 дня',
-                                          style: TextStyle(
-                                            color: const Color.fromRGBO(
-                                                128, 74, 142, 1),
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.w800,
-                                            height: 1,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    AnimatedContainer(
-                                      curve: Curves.ease,
-                                      duration:
-                                          const Duration(milliseconds: 1000),
-                                      height: snapshot.data! ? 19.h : 0.h,
-                                    ),
-                                    Text(
-                                      'Годовщина',
-                                      style: TextStyle(
-                                          color: const Color.fromRGBO(
-                                              23, 23, 23, 1),
-                                          fontSize: 50.sp,
-                                          fontWeight: FontWeight.w800,
-                                          height: 1),
-                                    ),
-                                    AnimatedContainer(
-                                      curve: Curves.ease,
-                                      duration:
-                                          const Duration(milliseconds: 1000),
-                                      height: snapshot.data! ? 9.h : 0.h,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Завтра:',
-                                          style: TextStyle(
+            opacity: snapshot.data! ? 1 : 0,
+            curve: Curves.easeInOutQuint,
+            child: AnimatedContainer(
+              curve: Curves.easeInOutQuint,
+              duration: const Duration(milliseconds: 1000),
+              height: snapshot.data! ? 155.h : 0.h,
+              width: 378.w,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 15.h),
+                child: AnimatedContainer(
+                  curve: Curves.easeInOutQuint,
+                  duration: const Duration(milliseconds: 1000),
+                  height: snapshot.data! ? 155.h : 0.h,
+                  width: 378.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    color: Colors.white,
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    child: Stack(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SingleChildScrollView(
+                              physics: NeverScrollableScrollPhysics(),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 11.h, horizontal: 20.w),
+                                child: SizedBox(
+                                  width: 338.w,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Предстоящее событие',
+                                            style: TextStyle(
                                               color: greyColor,
                                               fontSize: 15.sp,
                                               fontWeight: FontWeight.w700,
-                                              height: 1),
-                                        ),
-                                        SizedBox(width: 10.w),
-                                        Text(
-                                          'Арбузный вечер',
-                                          style: TextStyle(
-                                              color: greyColor,
+                                              height: 1,
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          Text(
+                                            'Через 4 дня',
+                                            style: TextStyle(
+                                              color: const Color.fromRGBO(
+                                                  128, 74, 142, 1),
                                               fontSize: 15.sp,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          SingleChildScrollView(
-                            physics: NeverScrollableScrollPhysics(),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 70.h,
-                                  width: 55.w,
-                                  color: greyColor2,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                          'assets/icons/setting.svg'),
+                                              fontWeight: FontWeight.w800,
+                                              height: 1,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      AnimatedContainer(
+                                        curve: Curves.easeInOutQuint,
+                                        duration:
+                                            const Duration(milliseconds: 1000),
+                                        height: snapshot.data! ? 19.h : 0.h,
+                                      ),
+                                      Text(
+                                        'Годовщина',
+                                        style: TextStyle(
+                                            color: const Color.fromRGBO(
+                                                23, 23, 23, 1),
+                                            fontSize: 50.sp,
+                                            fontWeight: FontWeight.w800,
+                                            height: 1),
+                                      ),
+                                      AnimatedContainer(
+                                        curve: Curves.easeInOutQuint,
+                                        duration:
+                                            const Duration(milliseconds: 1000),
+                                        height: snapshot.data! ? 9.h : 0.h,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Завтра:',
+                                            style: TextStyle(
+                                                color: greyColor,
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.w700,
+                                                height: 1),
+                                          ),
+                                          SizedBox(width: 10.w),
+                                          Text(
+                                            'Арбузный вечер',
+                                            style: TextStyle(
+                                                color: greyColor,
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    streamController.add(false);
-                                    Future.delayed(Duration(milliseconds: 1000))
-                                        .then((value) {
-                                      // widget.delete(widget.index);
-                                    });
-                                  },
-                                  child: Container(
+                              ),
+                            ),
+                            SingleChildScrollView(
+                              physics: NeverScrollableScrollPhysics(),
+                              child: Column(
+                                children: [
+                                  Container(
                                     height: 70.h,
                                     width: 55.w,
-                                    color: redColor,
+                                    color: greyColor2,
                                     child: Stack(
                                       alignment: Alignment.center,
                                       children: [
                                         SvgPicture.asset(
-                                            'assets/icons/trash.svg'),
+                                            'assets/icons/setting.svg'),
                                       ],
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      streamController.add(false);
+                                      scrollController.animateTo(0,
+                                          duration: const Duration(
+                                              milliseconds: 1000),
+                                          curve: Curves.easeInOutQuint);
+                                      Future.delayed(
+                                              Duration(milliseconds: 1000))
+                                          .then((value) {
+                                        // widget.delete(widget.index);
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 70.h,
+                                      width: 55.w,
+                                      color: redColor,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                              'assets/icons/trash.svg'),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

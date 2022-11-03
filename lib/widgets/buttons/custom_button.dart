@@ -53,6 +53,7 @@ class CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
       return AnimatedOpacity(
+        curve: Curves.easeInOutQuint,
         duration: const Duration(milliseconds: 200),
         opacity: widget.visible ? 1 : 0,
         child: Material(
@@ -86,6 +87,7 @@ class CustomButtonState extends State<CustomButton> {
                             : Colors.transparent
                         : Colors.transparent,
             child: AnimatedContainer(
+              curve: Curves.easeInOutQuint,
               duration: const Duration(milliseconds: 200),
               height: 60.h,
               alignment: Alignment.center,

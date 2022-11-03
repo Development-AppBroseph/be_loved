@@ -287,6 +287,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                             color: Colors.grey,
                           ),
                           AnimatedOpacity(
+                            curve: Curves.easeInOutQuint,
                             duration: const Duration(milliseconds: 300),
                             opacity: page.data == 0 ? 1 : 0,
                             child: SvgPicture.asset(
@@ -314,6 +315,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                             color: Colors.grey,
                           ),
                           AnimatedOpacity(
+                            curve: Curves.easeInOutQuint,
                             duration: const Duration(milliseconds: 300),
                             opacity: page.data == 1 ? 1 : 0,
                             child: SvgPicture.asset(
@@ -343,6 +345,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                             color: Colors.grey,
                           ),
                           AnimatedOpacity(
+                            curve: Curves.easeInOutQuint,
                             duration: const Duration(milliseconds: 300),
                             opacity: page.data == 2 ? 1 : 0,
                             child: SvgPicture.asset(
@@ -370,6 +373,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                             color: Colors.grey,
                           ),
                           AnimatedOpacity(
+                            curve: Curves.easeInOutQuint,
                             duration: const Duration(milliseconds: 300),
                             opacity: page.data == 3 ? 1 : 0,
                             child: SvgPicture.asset(
