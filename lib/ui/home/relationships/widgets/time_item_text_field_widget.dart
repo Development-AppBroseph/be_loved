@@ -7,7 +7,10 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 
 class TimeItemTextFieldWidget extends StatelessWidget {
-
+  final Function() validateText;
+  final TextEditingController controller;
+  const TimeItemTextFieldWidget({Key? key, required this.controller, required this.validateText}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     var maskFormatter = MaskTextInputFormatter(mask: '##:##', filter: { "#": RegExp(r'[0-9]') });
@@ -18,23 +21,32 @@ class TimeItemTextFieldWidget extends StatelessWidget {
     );
     return SizedBox(
       width: 64.w,
-      child: TextFormField(
-        style: style3,
-        maxLines: 1,
-        textAlign: TextAlign.center, 
-        inputFormatters: [maskFormatter],
-        decoration: InputDecoration(
-          filled: true,
-          isDense: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 8.5.h),
-          fillColor: greyColor3,
-          hintStyle: style3,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(7.r),
-            borderSide: BorderSide.none
+      child: FocusScope(
+        onFocusChange: (s){
+          if(!s){
+            validateText();
+          }
+        },
+        child: TextFormField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          style: style3,
+          maxLines: 1,
+          textAlign: TextAlign.center, 
+          inputFormatters: [maskFormatter],
+          decoration: InputDecoration(
+            filled: true,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 8.5.h),
+            fillColor: greyColor3,
+            hintStyle: style3,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(7.r),
+              borderSide: BorderSide.none
+            ),
+            
+            hintText: '23:59'
           ),
-          
-          hintText: '23:59'
         ),
       ),
     );

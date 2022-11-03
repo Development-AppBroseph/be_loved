@@ -8,7 +8,8 @@ import '../../../../core/helpers/constants.dart';
 
 class CalendarJustItem extends StatelessWidget {
   final String text;
-  CalendarJustItem({required this.text});
+  final bool disabled;
+  CalendarJustItem({required this.text, required this.disabled});
   
   TextStyle style2 = TextStyle(
     color: blackColor,
@@ -23,7 +24,7 @@ class CalendarJustItem extends StatelessWidget {
       alignment: Alignment.center,  
       child: Text(  
         text,  
-        style: style2,  
+        style: style2.copyWith(color: disabled ? greyColor : blackColor),  
       )
     );
   }
