@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/views/archive/archive.dart';
 import 'package:be_loved/features/home/presentation/views/events/events_page.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/purposes_page.dart';
@@ -89,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         SizedBox(height: 11.h),
                         SvgPicture.asset(
-                          'assets/icons/relationships.svg',
+                          SvgImg.relationships,
                           height: 32.h,
                           width: 37.w,
                           color: currentIndex == 0 ? ColorStyles.redColor : Colors.grey,
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         SizedBox(height: 11.h),
                         SvgPicture.asset(
-                          'assets/icons/events.svg',
+                          SvgImg.events,
                           height: 32.h,
                           width: 28.24.w,
                           color: currentIndex == 1 ? ColorStyles.redColor : Colors.grey,
@@ -141,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         SizedBox(height: 11.h),
                         SvgPicture.asset(
-                          'assets/icons/purposes.svg',
+                          SvgImg.purposes,
                           height: 32.h,
                           width: 32.w,
                           color: currentIndex == 2 ? ColorStyles.redColor : Colors.grey,
@@ -167,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         SizedBox(height: 11.h),
                         SvgPicture.asset(
-                          'assets/icons/archive.svg',
+                          SvgImg.archive,
                           height: 32.h,
                           width: 29.26.w,
                           color: currentIndex == 3 ? ColorStyles.redColor : Colors.grey,

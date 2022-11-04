@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/helpers/time_text.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/text_fields/default_text_form_field.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_just_item.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_selected_item.dart';
@@ -364,7 +365,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   width: 20.w,
                                 ),
                                 SvgPicture.asset(
-                                  'assets/icons/up_down_icon.svg',
+                                  SvgImg.upDownIcon,
                                   height: 20.h,
                                 )
                               ],
@@ -521,8 +522,7 @@ return StatefulBuilder(builder: (context, setState) {
                       }
                     },
                     behavior: HitTestBehavior.opaque,
-                    child: SvgPicture.asset(
-                      'assets/icons/calendar_left_icon.svg',
+                    child: SvgPicture.asset(SvgImg.calendarLeftIcon,
                       height: 17.h,
                     )),
                 GestureDetector(
@@ -552,8 +552,7 @@ return StatefulBuilder(builder: (context, setState) {
                     }
                   },
                   behavior: HitTestBehavior.opaque,
-                  child: SvgPicture.asset(
-                    'assets/icons/calendar_right_icon.svg',
+                  child: SvgPicture.asset(SvgImg.calendarRightIcon,
                     height: 17.h,
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -57,7 +58,7 @@ class HomeInfoSecond extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset('assets/icons/home_stats.svg', height: 34.h,),
+                  SvgPicture.asset(SvgImg.homeStats, height: 34.h,),
                   SizedBox(width: 26.w,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +81,7 @@ class HomeInfoSecond extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(right: 17.w),
-                child: SvgPicture.asset('assets/icons/home_arrow.svg', height: 20.h,),
+                child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
               )
             ],
           ),
@@ -92,7 +93,7 @@ class HomeInfoSecond extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset('assets/icons/home_logo.svg', height: 34.h,),
+                  SvgPicture.asset(SvgImg.homeLogo, height: 34.h,),
                   SizedBox(width: 26.w,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +117,7 @@ class HomeInfoSecond extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(right: 17.w),
-                child: SvgPicture.asset('assets/icons/home_arrow.svg', height: 20.h,),
+                child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
               )
             ],
           ),

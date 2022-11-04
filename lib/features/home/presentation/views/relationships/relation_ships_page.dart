@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/features/profile/presentation/widget/main_file/parametrs_user_bottomsheet.dart';
@@ -196,7 +197,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                                 .requestFocus(f1);
                                           },
                                           child: SvgPicture.asset(
-                                              'assets/icons/edit.svg')),
+                                              SvgImg.edit)),
                                     ],
                                   ),
                                 )
@@ -229,7 +230,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                     alignment: Alignment.center,
                                     children: [
                                       SvgPicture.asset(
-                                        'assets/icons/heart.svg',
+                                        SvgImg.heart,
                                         height: 59.h,
                                         width: 70.w,
                                       ),

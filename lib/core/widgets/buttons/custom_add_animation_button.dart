@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -94,7 +95,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                                 child: Stack(
                                   alignment: Alignment.center,
                                   children: [
-                                    SvgPicture.asset('assets/icons/add.svg'),
+                                    SvgPicture.asset(SvgImg.add),
                                   ],
                                 )),
                           ),
@@ -126,7 +127,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SvgPicture.asset(
-                                'assets/icons/events.svg',
+                                SvgImg.events,
                                 color: ColorStyles.greyColor,
                                 height: 38.h,
                                 width: 34.w,
@@ -147,7 +148,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SvgPicture.asset(
-                                'assets/icons/purposes.svg',
+                                SvgImg.purposes,
                                 color: Colors.grey,
                                 height: 38.h,
                                 width: 38.w,
@@ -168,7 +169,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SvgPicture.asset(
-                                'assets/icons/archive.svg',
+                                SvgImg.archive,
                                 color: Colors.grey,
                                 height: 38.h,
                                 width: 34.74.w,

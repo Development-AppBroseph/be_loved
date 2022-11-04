@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
@@ -248,8 +249,7 @@ class _InviteForState extends State<InviteFor> {
                                                 : Padding(
                                                     padding:
                                                         EdgeInsets.all(43.h),
-                                                    child: SvgPicture.asset(
-                                                        'assets/icons/camera.svg'),
+                                                    child: SvgPicture.asset(SvgImg.camera),
                                                   )
                                             : bloc.user?.me.photo != null
                                                 ? Image.network(
@@ -263,7 +263,7 @@ class _InviteForState extends State<InviteFor> {
                                                     padding:
                                                         EdgeInsets.all(43.h),
                                                     child: SvgPicture.asset(
-                                                      'assets/icons/camera.svg',
+                                                      SvgImg.camera,
                                                     ),
                                                   ),
                                       ),
@@ -286,7 +286,7 @@ class _InviteForState extends State<InviteFor> {
                             Padding(
                               padding: EdgeInsets.all(21.w),
                               child: SvgPicture.asset(
-                                'assets/icons/logo.svg',
+                                SvgImg.logo,
                                 width: 66.w,
                                 height: 56.43.w,
                               ),
@@ -324,7 +324,7 @@ class _InviteForState extends State<InviteFor> {
                                             : Padding(
                                                 padding: EdgeInsets.all(43.h),
                                                 child: SvgPicture.asset(
-                                                  'assets/icons/camera.svg',
+                                                  SvgImg.camera,
                                                 ),
                                               ),
                                       ),
@@ -407,7 +407,7 @@ class _InviteForState extends State<InviteFor> {
                                 Transform.rotate(
                                   angle: -pi / 2,
                                   child: SvgPicture.asset(
-                                    'assets/icons/back.svg',
+                                    SvgImg.back,
                                     width: 15.sp,
                                     color: const Color.fromRGBO(
                                         150, 150, 150, 1.0),
@@ -443,7 +443,7 @@ class _InviteForState extends State<InviteFor> {
             GestureDetector(
               onTap: () => Navigator.pop(context),
               child: SvgPicture.asset(
-                'assets/icons/back.svg',
+               SvgImg.back,
                 width: 15.sp,
               ),
             ),

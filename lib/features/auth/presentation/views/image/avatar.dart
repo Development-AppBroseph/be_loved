@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/utils/helpers/small_image.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/data/models/auth/select_image.dart';
 import 'package:flutter/material.dart';
@@ -109,7 +110,7 @@ class AvatarPage extends StatelessWidget {
                                 : Padding(
                                     padding: EdgeInsets.all(43.h),
                                     child: SvgPicture.asset(
-                                      'assets/icons/camera.svg',
+                                      SvgImg.camera,
                                     ),
                                   ),
                           ),
@@ -173,7 +174,7 @@ class AvatarPage extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: IconButton(
                 icon: SvgPicture.asset(
-                  'assets/icons/back.svg',
+                  SvgImg.back,
                   width: 15,
                 ),
                 hoverColor: Colors.transparent,
@@ -339,7 +340,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                       child: Stack(
                         children: [
                           SvgPicture.asset(
-                            'assets/icons/paw.svg',
+                            SvgImg.paw,
                             height: 17,
                             width: 17,
                             color: Colors.grey,
@@ -349,7 +350,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                             duration: const Duration(milliseconds: 300),
                             opacity: page.data == 2 ? 1 : 0,
                             child: SvgPicture.asset(
-                              'assets/icons/paw.svg',
+                              SvgImg.paw,
                               height: 17,
                               width: 17,
                               color: Colors.black,
@@ -367,7 +368,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                       child: Stack(
                         children: [
                           SvgPicture.asset(
-                            'assets/icons/rects.svg',
+                            SvgImg.rects,
                             height: 17,
                             width: 17,
                             color: Colors.grey,
@@ -377,7 +378,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                             duration: const Duration(milliseconds: 300),
                             opacity: page.data == 3 ? 1 : 0,
                             child: SvgPicture.asset(
-                              'assets/icons/rects.svg',
+                              SvgImg.rects,
                               height: 17,
                               width: 17,
                               color: Colors.black,
@@ -473,7 +474,7 @@ class _PageTestState extends State<PageTest> {
                   Align(
                     alignment: Alignment.topRight,
                     child: SvgPicture.asset(
-                      'assets/icons/check.svg',
+                      SvgImg.check,
                       width: 20.w,
                       height: 20.h,
                     ),
