@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'modals/create_event_modal.dart';
 
@@ -99,8 +100,9 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                               ),
                               const Spacer(),
                               GestureDetector(
-                                onTap: () => showModalBottomSheet<void>(
-                                  isScrollControlled: true,
+                                onTap: () => showMaterialModalBottomSheet(
+                                  animationCurve: Curves.easeInOutQuint,
+                                  duration: const Duration(milliseconds: 600),
                                   context: context,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.vertical(
