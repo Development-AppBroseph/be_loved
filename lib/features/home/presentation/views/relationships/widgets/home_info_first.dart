@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,33 +39,33 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
         if (DateTime.now().second == 0) {
           _timer!.cancel();
           Timer.periodic(const Duration(seconds: 60), (Timer timer) {
-            // setTime();
+            setTime();
           });
         }
-        // setTime();
+        setTime();
       },
     );
   }
 
-  // void setTime() async {
-  //   MySharedPrefs date = MySharedPrefs();
-  //   date.user.then((value) {
-  //     final startTime = value.date as String;
-  //     final array = startTime.split('-');
+  void setTime() async {
+    MySharedPrefs date = MySharedPrefs();
+    date.user.then((value) {
+      final startTime = value.date as String;
+      final array = startTime.split('-');
 
-  //     DateTime berlinWallFell = DateTime.now();
-  //     DateTime moonLanding = DateTime(
-  //         int.parse(array[0]), int.parse(array[1]), int.parse(array[2]));
+      DateTime berlinWallFell = DateTime.now();
+      DateTime moonLanding = DateTime(
+          int.parse(array[0]), int.parse(array[1]), int.parse(array[2]));
 
-  //     final difference = berlinWallFell.difference(moonLanding);
+      final difference = berlinWallFell.difference(moonLanding);
 
-  //     days = difference.inDays;
-  //     hour = difference.inHours - difference.inDays * 24;
-  //     minute = difference.inMinutes - difference.inHours * 60;
+      days = difference.inDays;
+      hour = difference.inHours - difference.inDays * 24;
+      minute = difference.inMinutes - difference.inHours * 60;
 
-  //     streamController.add(true);
-  //   });
-  // }
+      streamController.add(true);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
