@@ -11,7 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
   flutter_slidable: ^2.0.0
   cupertino_icons: ^1.0.2
   cupertino_rounded_corners: ^2.1.1

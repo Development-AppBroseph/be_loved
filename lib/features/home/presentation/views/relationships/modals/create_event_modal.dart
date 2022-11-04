@@ -12,8 +12,8 @@ showModalCreateEvent(BuildContext context, Function() onTap) {
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(28.h),
-        topRight: Radius.circular(28.h),
+        topLeft: Radius.circular(40.h),
+        topRight: Radius.circular(40.h),
       )),
       context: context,
       builder: (context) {

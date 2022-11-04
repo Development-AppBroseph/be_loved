@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../widgets/time_item_widget.dart';
@@ -207,7 +208,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                         },
                                         child: TimeItemWidget(
                                             text: DateFormat(
-                                                    'd MMM. yyyy г.')
+                                                    'd MMM yyyy г.', 'RU')
                                                 .format(fromDate))),
                                     SizedBox(
                                       width: 15.w,
@@ -269,7 +270,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                         },
                                         child: TimeItemWidget(
                                             text: DateFormat(
-                                                    'd MMM. yyyy г.')
+                                                    'd MMM yyyy г.', 'RU')
                                                 .format(toDate))),
                                     SizedBox(
                                       width: 15.w,
@@ -467,7 +468,10 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         Container(
                           width: 100.w,
                           height: 5.h,
-                          color: ColorStyles.greyColor,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            color: ColorStyles.greyColor,
+                          ),
                         ),
                         SizedBox(
                           height: 10.h,
@@ -493,21 +497,21 @@ TextStyle style1 = TextStyle(
     color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.w800);
 TextStyle style2 = TextStyle(
     color: ColorStyles.blackColor, fontSize: 18.sp, fontWeight: FontWeight.w700);
+DateTime _focusedDay = DateTime(selectedDay.year, selectedDay.month, 1);
 Widget _buildJustDay(context, DateTime date, events) {
   return CalendarJustItem(
     text: date.day.toString(),
-    disabled: date.year > currentDate.year || (date.year == currentDate.year && date.month > currentDate.month)
+    disabled: _focusedDay.month != date.month
   );
 }
 
-final kToday = DateTime.now();
-final kFirstDay = DateTime(kToday.year, 1, 1);
+final kToday = DateTime(currentDate.year, currentDate.month, 1);
+final kFirstDay = kToday;
 final kLastDay = DateTime(kToday.year + 13, kToday.month, kToday.day);
 Widget _buildSelectedDay(context, date, events) {
   return CalendarSelectedItem(text: date.day.toString());
 }
 
-DateTime _focusedDay = selectedDay;
 PageController _pageController = PageController();
 
 CalendarType _calendarType = CalendarType.days;
@@ -556,8 +560,8 @@ return StatefulBuilder(builder: (context, setState) {
                   child: Text(
                     DateFormat(_calendarType == CalendarType.days
                             ? 'MMMM yyyy'
-                            : 'yyyy')
-                        .format(_focusedDay),
+                            : 'yyyy', 'RU')
+                        .format(_focusedDay).capitalize(),
                     style: style1,
                   ),
                 ),
@@ -617,7 +621,19 @@ return StatefulBuilder(builder: (context, setState) {
               headerVisible: false,
               pageAnimationCurve: Curves.easeInOutQuint,
               daysOfWeekVisible: false,
-              startingDayOfWeek: StartingDayOfWeek.monday,
+              startingDayOfWeek: _focusedDay.weekday == DateTime.monday
+              ? StartingDayOfWeek.monday
+              : _focusedDay.weekday == DateTime.tuesday
+              ? StartingDayOfWeek.tuesday
+              : _focusedDay.weekday == DateTime.wednesday
+              ? StartingDayOfWeek.wednesday
+              : _focusedDay.weekday == DateTime.thursday
+              ? StartingDayOfWeek.thursday
+              : _focusedDay.weekday == DateTime.friday
+              ? StartingDayOfWeek.friday
+              : _focusedDay.weekday == DateTime.saturday
+              ? StartingDayOfWeek.saturday
+              : StartingDayOfWeek.sunday,
               rangeSelectionMode: RangeSelectionMode.toggledOff,
               onDaySelected: (date, events) {
                 if(date.millisecondsSinceEpoch >= currentDate.millisecondsSinceEpoch){
@@ -644,3 +660,10 @@ return StatefulBuilder(builder: (context, setState) {
 }
 
 enum CalendarType { days, month, years }
+
+
+extension StringExtension on String {
+    String capitalize() {
+      return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+    }
+}
