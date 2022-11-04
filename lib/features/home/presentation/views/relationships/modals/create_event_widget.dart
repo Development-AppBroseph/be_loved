@@ -498,6 +498,7 @@ TextStyle style1 = TextStyle(
 TextStyle style2 = TextStyle(
     color: ColorStyles.blackColor, fontSize: 18.sp, fontWeight: FontWeight.w700);
 DateTime _focusedDay = DateTime(selectedDay.year, selectedDay.month, 1);
+DateTime _calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
 Widget _buildJustDay(context, DateTime date, events) {
   return CalendarJustItem(
     text: date.day.toString(),
@@ -590,14 +591,20 @@ return StatefulBuilder(builder: (context, setState) {
                 setState(() {
                   if (_calendarType == CalendarType.years) {
                     _focusedDay =
-                        DateTime(i, _focusedDay.month, _focusedDay.day);
+                        DateTime(i, selectedDay.month, selectedDay.day);
                     _calendarType = CalendarType.month;
                   } else {
-                    _focusedDay =
-                        DateTime(_focusedDay.year, i + 1, _focusedDay.day);
+                    if(!((i + 1) < currentDate.month && selectedDay.year == currentDate.year)){
+                      _focusedDay =
+                        DateTime(selectedDay.year, i + 1, selectedDay.day);
                     _calendarType = CalendarType.days;
+                    }
                   }
-                  onTap(_focusedDay, false);
+                  if( _focusedDay.millisecondsSinceEpoch > currentDate.millisecondsSinceEpoch){
+                    selectedDay = _focusedDay;
+                    onTap(_focusedDay, false);
+                  }
+                  _calendarStartDay = _focusedDay;
                 });
               },
               calendarType: _calendarType,
@@ -612,6 +619,11 @@ return StatefulBuilder(builder: (context, setState) {
                 setState((){
                   _focusedDay = dt;
                 });
+                Future.delayed(Duration(milliseconds: 150), (){
+                  setState((){
+                    _calendarStartDay = dt;
+                  });
+                });
               },
               focusedDay: _focusedDay,
               calendarFormat: CalendarFormat.month,
@@ -621,17 +633,17 @@ return StatefulBuilder(builder: (context, setState) {
               headerVisible: false,
               pageAnimationCurve: Curves.easeInOutQuint,
               daysOfWeekVisible: false,
-              startingDayOfWeek: _focusedDay.weekday == DateTime.monday
+              startingDayOfWeek: _calendarStartDay.weekday == DateTime.monday
               ? StartingDayOfWeek.monday
-              : _focusedDay.weekday == DateTime.tuesday
+              : _calendarStartDay.weekday == DateTime.tuesday
               ? StartingDayOfWeek.tuesday
-              : _focusedDay.weekday == DateTime.wednesday
+              : _calendarStartDay.weekday == DateTime.wednesday
               ? StartingDayOfWeek.wednesday
-              : _focusedDay.weekday == DateTime.thursday
+              : _calendarStartDay.weekday == DateTime.thursday
               ? StartingDayOfWeek.thursday
-              : _focusedDay.weekday == DateTime.friday
+              : _calendarStartDay.weekday == DateTime.friday
               ? StartingDayOfWeek.friday
-              : _focusedDay.weekday == DateTime.saturday
+              : _calendarStartDay.weekday == DateTime.saturday
               ? StartingDayOfWeek.saturday
               : StartingDayOfWeek.sunday,
               rangeSelectionMode: RangeSelectionMode.toggledOff,

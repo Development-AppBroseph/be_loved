@@ -25,7 +25,7 @@ class _DevideSettingsState extends State<DevideSettings> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 25.w, vertical: 12.w),
+      margin: EdgeInsets.symmetric(horizontal: 25.w, vertical: 12.h),
       child: Row(
         children: [
           SizedBox(
