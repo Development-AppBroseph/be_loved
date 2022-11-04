@@ -1,22 +1,25 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-import 'package:be_loved/core/helpers/shared_prefs.dart';
-import 'package:be_loved/models/user/user.dart';
-import 'package:be_loved/ui/auth/login/phone.dart';
-import 'package:be_loved/ui/home/home.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
+import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
+import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/route_manager.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:overlay_support/overlay_support.dart';
+
+import 'features/auth/data/models/auth/user.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  // var appData = await AppData.getInstance();
   var user = await MySharedPrefs().user;
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) {
+  initializeDateFormatting('ru');
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) {
     runApp(MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
@@ -43,13 +46,14 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-          ),
-          home: user != null
-              ? user?.date != null
-                  ? const HomePage()
-                  : const PhonePage()
-              : const PhonePage(),
+              scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+              fontFamily: 'Inter'),
+          // home: user != null
+          //     ? user?.date != null
+          //         ? HomePage()
+          //         : const PhonePage()
+          //     : const PhonePage(),
+          home: HomePage(),
         );
       },
     );

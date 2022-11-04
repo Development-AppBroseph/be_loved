@@ -1,15 +1,16 @@
 // ignore_for_file: avoid_single_cascade_in_expression_statements
 
 import 'dart:io';
-import 'package:be_loved/core/helpers/enums.dart';
 import 'package:be_loved/core/network/repository.dart';
-import 'package:be_loved/core/helpers/shared_prefs.dart';
-import 'package:be_loved/models/user/user.dart';
+import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../services/database/shared_prefs.dart';
+import '../../utils/enums.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -283,7 +284,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // emit(AuthLoading());
     var result = await Repository().checkPhoneNumber(event.phone);
 
-    print('objectasd $result');
     if (result != null && result) {
       emit(CheckIsUserExistSuccess());
     } else {
