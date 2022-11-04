@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,13 +66,19 @@ class _EventsPageState extends State<EventsPage> {
         color: Colors.black, fontWeight: FontWeight.w800, fontSize: 25.sp);
 
     TextStyle style3 = TextStyle(
-        color: ColorStyles.greyColor, fontWeight: FontWeight.w700, fontSize: 15.sp);
+        color: ColorStyles.greyColor,
+        fontWeight: FontWeight.w700,
+        fontSize: 15.sp);
 
     TextStyle style4 = TextStyle(
-        color: ColorStyles.redColor, fontWeight: FontWeight.w800, fontSize: 25.sp);
+        color: ColorStyles.redColor,
+        fontWeight: FontWeight.w800,
+        fontSize: 25.sp);
 
     TextStyle style5 = TextStyle(
-        color: ColorStyles.accentColor, fontWeight: FontWeight.w800, fontSize: 15.sp);
+        color: ColorStyles.accentColor,
+        fontWeight: FontWeight.w800,
+        fontSize: 15.sp);
 
     TextStyle style6 = TextStyle(
         color: Colors.black, fontWeight: FontWeight.w800, fontSize: 50.sp);
@@ -91,7 +98,7 @@ class _EventsPageState extends State<EventsPage> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      SvgPicture.asset('assets/icons/calendar.svg'),
+                      SvgPicture.asset(SvgImg.calendar),
                     ],
                   ),
                 ),
@@ -172,7 +179,7 @@ class _EventsPageState extends State<EventsPage> {
                                   child: Transform.rotate(
                                       angle: pi / 4,
                                       child: SvgPicture.asset(
-                                          'assets/icons/add.svg')),
+                                          SvgImg.add)),
                                 )
                               : Text('#${hashTags[index].title}',
                                   style: style1)),
@@ -189,11 +196,10 @@ class _EventsPageState extends State<EventsPage> {
             child: Text(
               'Совсем скоро',
               style: TextStyle(
-                fontFamily: "Inter",
-                fontWeight: FontWeight.w800,
-                color: Colors.black,
-                fontSize: 25
-              ),
+                  fontFamily: "Inter",
+                  fontWeight: FontWeight.w800,
+                  color: Colors.black,
+                  fontSize: 25),
             ),
           ),
           CarouselSlider.builder(
@@ -272,9 +278,11 @@ class _EventsPageState extends State<EventsPage> {
                             width: 7.sp,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(2.r),
-                              border:
-                                  Border.all(color: ColorStyles.greyColor, width: 1.5.w),
-                              color: index == snapshot.data ? ColorStyles.greyColor : null,
+                              border: Border.all(
+                                  color: ColorStyles.greyColor, width: 1.5.w),
+                              color: index == snapshot.data
+                                  ? ColorStyles.greyColor
+                                  : null,
                             ),
                           );
                         },
@@ -332,7 +340,9 @@ class _EventsPageState extends State<EventsPage> {
     TextStyle style1 = TextStyle(
         color: Colors.black, fontWeight: FontWeight.w800, fontSize: 20.sp);
     TextStyle style2 = TextStyle(
-        color: ColorStyles.greyColor, fontWeight: FontWeight.w700, fontSize: 15.sp);
+        color: ColorStyles.greyColor,
+        fontWeight: FontWeight.w700,
+        fontSize: 15.sp);
 
     Color? colorDays = checkColor(info.days);
 
@@ -340,7 +350,9 @@ class _EventsPageState extends State<EventsPage> {
         color: colorDays, fontWeight: FontWeight.w800, fontSize: 15.sp);
 
     TextStyle style4 = TextStyle(
-        color: ColorStyles.redColor, fontWeight: FontWeight.w800, fontSize: 15.sp);
+        color: ColorStyles.redColor,
+        fontWeight: FontWeight.w800,
+        fontSize: 15.sp);
 
     return Padding(
       padding:
@@ -377,7 +389,9 @@ class _EventsPageState extends State<EventsPage> {
 
   Widget button() {
     TextStyle style = TextStyle(
-        color: ColorStyles.greyColor, fontWeight: FontWeight.w800, fontSize: 20.sp);
+        color: ColorStyles.greyColor,
+        fontWeight: FontWeight.w800,
+        fontSize: 20.sp);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -402,7 +416,7 @@ class _EventsPageState extends State<EventsPage> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 17.h),
                 child: SvgPicture.asset(
-                  'assets/icons/add_new_event.svg',
+                  SvgImg.addNewEvent,
                 ),
               ),
             ),

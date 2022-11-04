@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/features/auth/presentation/views/login/relationships.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -318,7 +319,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                         margin: EdgeInsets.all(
                                                             43.h),
                                                         child: SvgPicture.asset(
-                                                          'assets/icons/camera.svg',
+                                                          SvgImg.camera,
                                                         ),
                                                       )
                                                 : bloc.image == null
@@ -326,7 +327,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                         margin: EdgeInsets.all(
                                                             43.h),
                                                         child: SvgPicture.asset(
-                                                            'assets/icons/camera.svg'),
+                                                            SvgImg.camera),
                                                       )
                                                     : Image.file(
                                                         File(bloc.image!.path),
@@ -353,7 +354,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                   Padding(
                                     padding: EdgeInsets.all(21.w),
                                     child: SvgPicture.asset(
-                                      'assets/icons/logo.svg',
+                                      SvgImg.logo,
                                       width: 66.w,
                                       height: 56.43.h,
                                     ),
@@ -392,8 +393,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                 : Padding(
                                                     padding:
                                                         EdgeInsets.all(43.h),
-                                                    child: SvgPicture.asset(
-                                                      'assets/icons/camera.svg',
+                                                    child: SvgPicture.asset(SvgImg.camera,
                                                     ),
                                                   ),
                                           ),
@@ -707,8 +707,7 @@ class _InvitePartnerState extends State<InvitePartner> {
               margin: const EdgeInsets.only(top: 20),
               alignment: Alignment.center,
               child: IconButton(
-                icon: SvgPicture.asset(
-                  'assets/icons/back.svg',
+                icon: SvgPicture.asset(SvgImg.back,
                   width: 15,
                 ),
                 hoverColor: Colors.transparent,

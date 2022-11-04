@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -99,7 +100,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                     Padding(
                       padding: EdgeInsets.only(top: 5.h),
                       child: SvgPicture.asset(
-                        'assets/icons/settings.svg',
+                        SvgImg.settings,
                         height: 18.67.h,
                         width: 18.67.h,
                       ),

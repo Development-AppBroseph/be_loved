@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -78,8 +79,7 @@ class _ArchivePageState extends State<ArchivePage> {
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
-                                SvgPicture.asset(
-                                    'assets/icons/add_new_event.svg'),
+                                SvgPicture.asset(SvgImg.addNewEvent),
                               ],
                             ),
                           ),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/enums.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/auth/presentation/views/login/create_account_info.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_relation.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
@@ -143,7 +144,7 @@ class _CodePageState extends State<CodePage> {
                 alignment: Alignment.center,
                 child: IconButton(
                   icon: SvgPicture.asset(
-                    'assets/icons/back.svg',
+                    SvgImg.back,
                     width: 15,
                   ),
                   hoverColor: Colors.transparent,

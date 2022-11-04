@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -151,7 +152,7 @@ class _AccountPageState extends State<AccountPage> {
                           alignment: Alignment.center,
                           children: [
                             SvgPicture.asset(
-                              'assets/icons/back.svg',
+                              SvgImg.back,
                               color: Colors.white,
                               width: 15.w,
                               height: 26.32,
@@ -222,7 +223,7 @@ class _AccountPageState extends State<AccountPage> {
                                                   color: Colors.black,
                                                   height: 1)),
                                           SvgPicture.asset(
-                                              'assets/icons/vk_logo.svg')
+                                              SvgImg.vkLogo)
                                         ],
                                       ),
                                     ],
@@ -258,7 +259,7 @@ class _AccountPageState extends State<AccountPage> {
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
-                                SvgPicture.asset('assets/icons/vk_logo.svg')
+                                SvgPicture.asset(SvgImg.vkLogo)
                               ],
                             ),
                             SizedBox(height: 15.h),
@@ -273,8 +274,7 @@ class _AccountPageState extends State<AccountPage> {
                                     color: ColorStyles.greyColor,
                                     borderRadius: BorderRadius.circular(20.r),
                                   ),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/camera.svg',
+                                  child: SvgPicture.asset(SvgImg.camera,
                                   ),
                                 ),
                                 SizedBox(width: 28.w),
@@ -356,7 +356,7 @@ class _AccountPageState extends State<AccountPage> {
                                       alignment: Alignment.center,
                                       children: [
                                         SvgPicture.asset(
-                                          'assets/icons/data.svg',
+                                          SvgImg.data,
                                           height: 34.h,
                                           width: 34.w,
                                         ),
@@ -395,7 +395,7 @@ class _AccountPageState extends State<AccountPage> {
                                         Transform.rotate(
                                           angle: pi,
                                           child: SvgPicture.asset(
-                                            'assets/icons/back.svg',
+                                            SvgImg.back,
                                             height: 19.96.h,
                                             width: 11.37.w,
                                           ),
@@ -415,7 +415,7 @@ class _AccountPageState extends State<AccountPage> {
                                       alignment: Alignment.center,
                                       children: [
                                         SvgPicture.asset(
-                                          'assets/icons/update.svg',
+                                          SvgImg.update,
                                           height: 34.h,
                                           width: 34.w,
                                         ),
@@ -454,7 +454,7 @@ class _AccountPageState extends State<AccountPage> {
                                         Transform.rotate(
                                           angle: pi,
                                           child: SvgPicture.asset(
-                                            'assets/icons/back.svg',
+                                            SvgImg.back,
                                             height: 19.96.h,
                                             width: 11.37.w,
                                           ),
@@ -523,8 +523,7 @@ class _AccountPageState extends State<AccountPage> {
               clipBehavior: Clip.hardEdge,
               child: Padding(
                 padding: EdgeInsets.all(50.h),
-                child: SvgPicture.asset(
-                  'assets/icons/camera.svg',
+                child: SvgPicture.asset(SvgImg.camera,
                 ),
               ),
             ),

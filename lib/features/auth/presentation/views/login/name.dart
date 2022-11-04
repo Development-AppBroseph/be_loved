@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -220,7 +221,7 @@ class InputNamePage extends StatelessWidget {
               alignment: Alignment.center,
               child: IconButton(
                 icon: SvgPicture.asset(
-                  'assets/icons/back.svg',
+                  SvgImg.back,
                   width: 15,
                 ),
                 hoverColor: Colors.transparent,
