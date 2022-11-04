@@ -122,6 +122,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         maxLines: 3,
                         controller: _controllerDescription,
                         maxLength: 50,
+                        onChange: (s) {
+                          setState((){});
+                        }
                       ),
                       SizedBox(
                         height: 20.h,
@@ -212,6 +215,14 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                     TimeItemTextFieldWidget(
                                       controller: _controllerFromTime,
                                       validateText: validateTextFields,
+                                      onChanged: (text){
+                                        if(text != null && text.isNotEmpty){
+                                          if(text.length == 2 && int.parse(text[0]) == 2 && int.parse(text[1]) > 3){
+                                            _controllerFromTime.text = '';
+                                            setState(() {});
+                                          }
+                                        }
+                                      },
                                     )
                                   ],
                                 )
@@ -266,6 +277,14 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                     TimeItemTextFieldWidget(
                                       controller: _controllerToTime,
                                       validateText: validateTextFields,
+                                      onChanged: (text){
+                                        if(text != null && text.isNotEmpty){
+                                          if(text.length == 2 && int.parse(text[0]) == 2 && int.parse(text[1]) > 3){
+                                            _controllerToTime.text = '';
+                                            setState(() {});
+                                          }
+                                        }
+                                      },
                                     )
                                   ],
                                 )
