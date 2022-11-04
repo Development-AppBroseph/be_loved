@@ -7,12 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAnimationItemRelationships extends StatefulWidget {
-  // final VoidCallback func;
   final Function(int) delete;
   final int index;
   const CustomAnimationItemRelationships({
     Key? key,
-    // required this.func,
     required this.delete,
     required this.index,
   }) : super(key: key);
@@ -22,12 +20,12 @@ class CustomAnimationItemRelationships extends StatefulWidget {
       _CustomAnimationItemRelationshipsState();
 }
 
+enum DirectionAnimation { left, right }
+
 class _CustomAnimationItemRelationshipsState
     extends State<CustomAnimationItemRelationships>
     with TickerProviderStateMixin {
   final streamController = StreamController<bool>();
-
-  // AnimationController? _controllerAnimationRow;
   ScrollController scrollController = ScrollController();
 
   double rotate = pi / 4;
@@ -42,6 +40,8 @@ class _CustomAnimationItemRelationshipsState
     streamController.add(true);
   }
 
+  late DirectionAnimation directionAnimation;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
@@ -50,14 +50,31 @@ class _CustomAnimationItemRelationshipsState
       builder: (context, snapshot) {
         return GestureDetector(
           onHorizontalDragUpdate: (details) {
-            if (details.delta.direction > 0) {
-              scrollController.animateTo(55.w,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOutQuint);
+            if (details.delta.dx > 0) {
+              directionAnimation = DirectionAnimation.right;
+              if (scrollController.offset > 0) {
+                scrollController.jumpTo(scrollController.offset - 1);
+              }
             } else {
-              scrollController.animateTo(0,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOutQuint);
+              directionAnimation = DirectionAnimation.left;
+              if (scrollController.offset <= 55.w) {
+                scrollController.jumpTo(scrollController.offset + 1);
+              }
+            }
+          },
+          onHorizontalDragEnd: (details) {
+            if (directionAnimation == DirectionAnimation.right) {
+              scrollController.animateTo(
+                0,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOutQuint,
+              );
+            } else {
+              scrollController.animateTo(
+                55.w,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOutQuint,
+              );
             }
           },
           child: AnimatedOpacity(
@@ -188,8 +205,7 @@ class _CustomAnimationItemRelationshipsState
                                     child: Stack(
                                       alignment: Alignment.center,
                                       children: [
-                                        SvgPicture.asset(
-                                            SvgImg.setting),
+                                        SvgPicture.asset(SvgImg.setting),
                                       ],
                                     ),
                                   ),
@@ -213,8 +229,7 @@ class _CustomAnimationItemRelationshipsState
                                       child: Stack(
                                         alignment: Alignment.center,
                                         children: [
-                                          SvgPicture.asset(
-                                              SvgImg.trash),
+                                          SvgPicture.asset(SvgImg.trash),
                                         ],
                                       ),
                                     ),
