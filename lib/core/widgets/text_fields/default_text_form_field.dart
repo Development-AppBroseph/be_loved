@@ -18,10 +18,12 @@ class DefaultTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final int? maxLines;
   final int? maxLength;
+  final bool hideCounter;
   DefaultTextFormField({
     Key? key,
     this.focusNode,
     this.maxLength,
+    this.hideCounter = false,
     this.onTap,
     this.onChange,
     this.maxLines,
@@ -61,7 +63,7 @@ class DefaultTextFormField extends StatelessWidget {
             hintStyle: TextStyles(context).grey_18_w800
           ),
         ),
-        if(maxLength != null && controller?.text.length == 0)
+        if(!hideCounter && maxLength != null && controller?.text.length == 0)
         Positioned(
           right: 20.w,
           top: 16.h,

@@ -110,6 +110,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         hint: 'Название',
                         maxLines: 1,
                         controller: _controllerName,
+                        maxLength: 40,
+                        hideCounter: true,
                       ),
                       SizedBox(
                         height: 20.h,
@@ -117,9 +119,6 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                       DefaultTextFormField(
                         hint: 'Описание',
                         maxLines: 3,
-                        onChange: (b) {
-                          setState(() {});
-                        },
                         controller: _controllerDescription,
                         maxLength: 50,
                       ),
@@ -482,7 +481,7 @@ Widget _buildJustDay(context, DateTime date, events) {
 }
 
 final kToday = DateTime.now();
-final kFirstDay = DateTime(kToday.year, kToday.month - 12, kToday.day);
+final kFirstDay = DateTime(kToday.year, 1, 1);
 final kLastDay = DateTime(kToday.year + 13, kToday.month, kToday.day);
 Widget _buildSelectedDay(context, date, events) {
   return CalendarSelectedItem(text: date.day.toString());
@@ -604,7 +603,10 @@ return StatefulBuilder(builder: (context, setState) {
               rangeSelectionMode: RangeSelectionMode.toggledOff,
               onDaySelected: (date, events) {
                 if(date.millisecondsSinceEpoch >= currentDate.millisecondsSinceEpoch){
-                  onTap(date, true);
+                  onTap(date, false);
+                  setState((){
+                    selectedDay = date;
+                  });
                 }
               },
               rowHeight: 40.h,
