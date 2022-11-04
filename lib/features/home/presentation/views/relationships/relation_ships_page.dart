@@ -98,39 +98,35 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                 ),
                               ),
                               const Spacer(),
-                              Container(
-                                height: 55.h,
-                                width: 55.h,
-                                color: Colors.transparent,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: (() {
-                                        showModalBottomSheet<void>(
-                                          isScrollControlled: true,
-                                          context: context,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(40.r),
-                                            ),
-                                          ),
-                                          builder: (context) =>
-                                              DraggableScrollableSheet(
-                                            expand: false,
-                                            initialChildSize: 0.8.h,
-                                            maxChildSize: 0.85.h,
-                                            builder:
-                                                (context, scrollController) =>
-                                                    SingleChildScrollView(
-                                              controller: scrollController,
-                                              child:
-                                                  const ParametrsUserBottomsheet(),
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                                      child: SizedBox(
+                              GestureDetector(
+                                onTap: () => showModalBottomSheet<void>(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(40.r),
+                                    ),
+                                  ),
+                                  builder: (context) =>
+                                      DraggableScrollableSheet(
+                                    expand: false,
+                                    initialChildSize: 0.8.h,
+                                    maxChildSize: 0.85.h,
+                                    builder: (context, scrollController) =>
+                                        SingleChildScrollView(
+                                      controller: scrollController,
+                                      child: const ParametrsUserBottomsheet(),
+                                    ),
+                                  ),
+                                ),
+                                child: Container(
+                                  height: 55.h,
+                                  width: 55.h,
+                                  color: Colors.transparent,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SizedBox(
                                         height: 5.57.h,
                                         width: 33.43.h,
                                         child: ListView.builder(
@@ -153,8 +149,8 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                           },
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               )
                             ],
@@ -196,8 +192,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                             FocusScope.of(context)
                                                 .requestFocus(f1);
                                           },
-                                          child: SvgPicture.asset(
-                                              SvgImg.edit)),
+                                          child: SvgPicture.asset(SvgImg.edit)),
                                     ],
                                   ),
                                 )
