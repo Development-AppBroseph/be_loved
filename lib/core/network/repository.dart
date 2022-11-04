@@ -1,16 +1,17 @@
 import 'dart:io';
-import 'package:be_loved/core/helpers/constants.dart';
-import 'package:be_loved/core/helpers/shared_prefs.dart';
-import 'package:be_loved/models/auth/check_is_user_exist.dart';
-import 'package:be_loved/models/auth/check_nickName.dart';
-import 'package:be_loved/models/auth/init_user.dart';
-import 'package:be_loved/models/user/user.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
+import 'package:be_loved/core/services/network/config.dart';
 import 'package:dio/dio.dart';
 
+import '../../features/auth/data/models/auth/check_is_user_exist.dart';
+import '../../features/auth/data/models/auth/check_nickName.dart';
+import '../../features/auth/data/models/auth/init_user.dart';
+import '../../features/auth/data/models/auth/user.dart';
+
 class Repository {
-  static var uri = Uri.parse(apiUrl);
+  static var uri = Uri.parse(Config.url.url);
   var dio = Dio(
-    BaseOptions(baseUrl: apiUrl, validateStatus: (status) => status! <= 400),
+    BaseOptions(baseUrl: Config.url.url, validateStatus: (status) => status! <= 400),
   );
 
   Future<bool?> editUser(File? file) async {

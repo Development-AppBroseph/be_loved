@@ -1,8 +1,7 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-import 'package:be_loved/core/helpers/shared_prefs.dart';
-import 'package:be_loved/models/user/user.dart';
-import 'package:be_loved/ui/auth/login/phone.dart';
-import 'package:be_loved/ui/home/home.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
+import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
+import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +10,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:overlay_support/overlay_support.dart';
+
+import 'features/auth/data/models/auth/user.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

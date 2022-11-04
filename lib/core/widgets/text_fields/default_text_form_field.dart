@@ -1,11 +1,8 @@
-import 'dart:async';
-
+import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../helpers/constants.dart';
 
 
 
@@ -35,21 +32,6 @@ class DefaultTextFormField extends StatelessWidget {
     this.inputFormatters,
     this.keyboardType,
   }) : super(key: key);
-  TextStyle style = TextStyle(
-    color: const Color(0xFF2C2C2E),
-    fontSize: 18.sp,
-    fontWeight: FontWeight.w800
-  );
-  TextStyle style2 = TextStyle(
-    color: greyColor,
-    fontSize: 18.sp,
-    fontWeight: FontWeight.w800
-  );
-  TextStyle style3 = TextStyle(
-    color: greyColor,
-    fontSize: 15.sp,
-    fontWeight: FontWeight.w800
-  );
   @override
   Widget build(BuildContext context) {
     
@@ -64,7 +46,7 @@ class DefaultTextFormField extends StatelessWidget {
           validator: validator,
           controller: controller,
           maxLines: maxLines,
-          style: style,
+          style: TextStyles(context).black_18_w800,
           maxLength: maxLength,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(20.h),
@@ -75,15 +57,15 @@ class DefaultTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.r),
               borderSide: BorderSide.none,
             ),
-            fillColor: backgroundColorGrey,
-            hintStyle: style2
+            fillColor: ColorStyles.backgroundColorGrey,
+            hintStyle: TextStyles(context).grey_18_w800
           ),
         ),
         if(maxLength != null && controller?.text.length == 0)
         Positioned(
           right: 20.w,
           top: 16.h,
-          child: Text('${controller?.text.length}/$maxLength', style: style3,)
+          child: Text('${controller?.text.length}/$maxLength', style: TextStyles(context).grey_15_w800,)
         )
       ],
     );
