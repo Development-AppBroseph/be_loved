@@ -110,16 +110,13 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                     ),
                                   ),
                                   builder: (context) =>
-                                      DraggableScrollableSheet(
-                                    expand: false,
-                                    initialChildSize: 0.8.h,
-                                    maxChildSize: 0.85.h,
-                                    builder: (context, scrollController) =>
-                                        SingleChildScrollView(
-                                      controller: scrollController,
-                                      child: const ParametrsUserBottomsheet(),
+                                    Container(
+                                      height: MediaQuery.of(context).size.height * 0.8,
+                                      child: SingleChildScrollView(
+                                        physics: ClampingScrollPhysics(),
+                                        child: const ParametrsUserBottomsheet(),
+                                      ),
                                     ),
-                                  ),
                                 ),
                                 child: Container(
                                   height: 55.h,
