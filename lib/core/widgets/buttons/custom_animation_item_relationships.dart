@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -40,6 +41,8 @@ class _CustomAnimationItemRelationshipsState
     streamController.add(true);
   }
 
+  double pos = 0;
+
   late DirectionAnimation directionAnimation;
 
   @override
@@ -49,18 +52,22 @@ class _CustomAnimationItemRelationshipsState
       initialData: false,
       builder: (context, snapshot) {
         return GestureDetector(
+          onHorizontalDragStart: (details) {
+            pos = details.localPosition.dx;
+          },
           onHorizontalDragUpdate: (details) {
-            if (details.delta.dx > 0) {
+            if (pos > details.localPosition.dx) {
+              directionAnimation = DirectionAnimation.left;
+              if (scrollController.offset < 55.w) {
+                scrollController.jumpTo(scrollController.offset + 1);
+              }
+            } else {
               directionAnimation = DirectionAnimation.right;
               if (scrollController.offset > 0) {
                 scrollController.jumpTo(scrollController.offset - 1);
               }
-            } else {
-              directionAnimation = DirectionAnimation.left;
-              if (scrollController.offset <= 55.w) {
-                scrollController.jumpTo(scrollController.offset + 1);
-              }
             }
+            pos = details.localPosition.dx;
           },
           onHorizontalDragEnd: (details) {
             if (directionAnimation == DirectionAnimation.right) {
