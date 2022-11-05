@@ -32,9 +32,9 @@ PODS:
   - Mantle/extobjc (2.2.0)
   - path_provider_ios (0.0.1):
     - Flutter
-  - SDWebImage (5.13.2):
-    - SDWebImage/Core (= 5.13.2)
-  - SDWebImage/Core (5.13.2)
+  - SDWebImage (5.13.5):
+    - SDWebImage/Core (= 5.13.5)
+  - SDWebImage/Core (5.13.5)
   - SDWebImageWebPCoder (0.9.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.13)
@@ -106,7 +106,7 @@ SPEC CHECKSUMS:
   libwebp: 60305b2e989864154bd9be3d772730f08fc6a59c
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
-  SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
+  SDWebImage: 23d714cd599354ee7906dbae26dff89b421c4370
   SDWebImageWebPCoder: 18503de6621dd2c420d680e33d46bf8e1d5169b0
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   smart_auth: 4bedbc118723912d0e45a07e8ab34039c19e04f2

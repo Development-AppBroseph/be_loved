@@ -187,6 +187,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                       CrossAxisAlignment.center,
                                   children: [
                                     CustomPopupMenu(
+                                      position: PreferredPosition.top,
                                         barrierColor:
                                             Colors.transparent,
                                         showArrow: false,
@@ -203,6 +204,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                             }
                                             setState(() {
                                               fromDate = date;
+                                              if(fromDate.millisecondsSinceEpoch > toDate.millisecondsSinceEpoch){
+                                                toDate = fromDate.add(Duration(days: 1));
+                                              }
                                             });
                                           }, fromDate);
                                         },
@@ -249,6 +253,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                       CrossAxisAlignment.center,
                                   children: [
                                     CustomPopupMenu(
+                                      position: PreferredPosition.bottom,
                                         barrierColor:
                                             Colors.transparent,
                                         showArrow: false,
@@ -266,7 +271,10 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                             setState(() {
                                               toDate = date;
                                             });
-                                          }, toDate);
+                                          }, 
+                                          toDate,
+                                          fromDate: fromDate
+                                          );
                                         },
                                         child: TimeItemWidget(
                                             text: DateFormat(
@@ -491,8 +499,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
 
 
 Widget _buildDatePicker(BuildContext context,
-  Function(DateTime dateTime, bool hideMenu) onTap, DateTime selectedDay) {
-DateTime currentDate = DateTime.now();
+  Function(DateTime dateTime, bool hideMenu) onTap, DateTime selectedDay, {DateTime? fromDate}) {
+DateTime currentDate = fromDate != null ? fromDate : DateTime.now();
 TextStyle style1 = TextStyle(
     color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.w800);
 TextStyle style2 = TextStyle(
@@ -502,7 +510,7 @@ DateTime _calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
 Widget _buildJustDay(context, DateTime date, events) {
   return CalendarJustItem(
     text: date.day.toString(),
-    disabled: _focusedDay.month != date.month
+    disabled: _focusedDay.month != date.month || (fromDate != null && date.millisecondsSinceEpoch < currentDate.millisecondsSinceEpoch)
   );
 }
 
@@ -586,29 +594,32 @@ return StatefulBuilder(builder: (context, setState) {
             height: 20.h,
           ),
           if (_calendarType != CalendarType.days)
-            YearsMonthSelectWidget(
-              onTap: (i) {
-                setState(() {
-                  if (_calendarType == CalendarType.years) {
-                    _focusedDay =
-                        DateTime(i, selectedDay.month, selectedDay.day);
-                    _calendarType = CalendarType.month;
-                  } else {
-                    if(!((i + 1) < currentDate.month && selectedDay.year == currentDate.year)){
+            SizedBox(
+              width: 279.w,
+              child: YearsMonthSelectWidget(
+                onTap: (i) {
+                  setState(() {
+                    if (_calendarType == CalendarType.years) {
                       _focusedDay =
-                        DateTime(selectedDay.year, i + 1, selectedDay.day);
-                    _calendarType = CalendarType.days;
+                          DateTime(i, selectedDay.month, selectedDay.day);
+                      _calendarType = CalendarType.month;
+                    } else {
+                      if(!((i + 1) < currentDate.month && selectedDay.year == currentDate.year)){
+                        _focusedDay =
+                          DateTime(selectedDay.year, i + 1, selectedDay.day);
+                      _calendarType = CalendarType.days;
+                      }
                     }
-                  }
-                  if( _focusedDay.millisecondsSinceEpoch > currentDate.millisecondsSinceEpoch){
-                    selectedDay = _focusedDay;
-                    onTap(_focusedDay, false);
-                  }
-                  _calendarStartDay = _focusedDay;
-                });
-              },
-              calendarType: _calendarType,
-              focusedDay: _focusedDay,
+                    if( _focusedDay.millisecondsSinceEpoch > currentDate.millisecondsSinceEpoch){
+                      selectedDay = _focusedDay;
+                      onTap(_focusedDay, false);
+                    }
+                    _calendarStartDay = _focusedDay;
+                  });
+                },
+                calendarType: _calendarType,
+                focusedDay: _focusedDay,
+              ),
             ),
           if (_calendarType == CalendarType.days)
             TableCalendar(
@@ -633,17 +644,17 @@ return StatefulBuilder(builder: (context, setState) {
               headerVisible: false,
               pageAnimationCurve: Curves.easeInOutQuint,
               daysOfWeekVisible: false,
-              startingDayOfWeek: _calendarStartDay.weekday == DateTime.monday
+              startingDayOfWeek: kToday.weekday == DateTime.monday
               ? StartingDayOfWeek.monday
-              : _calendarStartDay.weekday == DateTime.tuesday
+              : kToday.weekday == DateTime.tuesday
               ? StartingDayOfWeek.tuesday
-              : _calendarStartDay.weekday == DateTime.wednesday
+              : kToday.weekday == DateTime.wednesday
               ? StartingDayOfWeek.wednesday
-              : _calendarStartDay.weekday == DateTime.thursday
+              : kToday.weekday == DateTime.thursday
               ? StartingDayOfWeek.thursday
-              : _calendarStartDay.weekday == DateTime.friday
+              : kToday.weekday == DateTime.friday
               ? StartingDayOfWeek.friday
-              : _calendarStartDay.weekday == DateTime.saturday
+              : kToday.weekday == DateTime.saturday
               ? StartingDayOfWeek.saturday
               : StartingDayOfWeek.sunday,
               rangeSelectionMode: RangeSelectionMode.toggledOff,
