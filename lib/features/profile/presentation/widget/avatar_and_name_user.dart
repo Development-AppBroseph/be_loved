@@ -9,26 +9,23 @@ class AvatarAndNameUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 25.w),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          UserAvatar(
-            title: "Ник",
-            fontSize: 25.sp,
-          ),
-          SvgPicture.asset(
-            SvgImg.logov2,
-            color: const Color(0xff171717),
-          ),
-          UserAvatar(
-            title: "12 символов",
-            fontSize: 18.sp,
-          ),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        UserAvatar(
+          title: "Ник",
+          fontSize: 25.sp,
+        ),
+        SvgPicture.asset(
+          SvgImg.logov2,
+          color: const Color(0xff171717),
+        ),
+        UserAvatar(
+          title: "12 символов",
+          fontSize: 18.sp,
+        ),
+      ],
     );
   }
 }

@@ -12,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import '../../../../profile/presentation/widget/grey_line_for_bottomsheet.dart';
 import 'modals/create_event_modal.dart';
 
 class RelationShipsPage extends StatefulWidget {
@@ -110,13 +111,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                     ),
                                   ),
                                   builder: (context) =>
-                                    Container(
-                                      height: MediaQuery.of(context).size.height * 0.8,
-                                      child: SingleChildScrollView(
-                                        physics: ClampingScrollPhysics(),
-                                        child: const ParametrsUserBottomsheet(),
-                                      ),
-                                    ),
+                                      const ParametrsUserBottomsheet(),
                                 ),
                                 child: Container(
                                   height: 55.h,

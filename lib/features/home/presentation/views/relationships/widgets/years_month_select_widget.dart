@@ -1,6 +1,7 @@
 import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_just_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../modals/create_event_widget.dart';
 import 'calendar_selected_item.dart';
 
@@ -18,8 +19,8 @@ class YearsMonthSelectWidget extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: 12,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, childAspectRatio: 93/50),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3, childAspectRatio: 93.w/50.h),
       itemBuilder: (context, i) {
         int currentYear = (DateTime.now().year+i);
         String text = calendarType == CalendarType.month ? MainConfigApp.months[i] : currentYear.toString();

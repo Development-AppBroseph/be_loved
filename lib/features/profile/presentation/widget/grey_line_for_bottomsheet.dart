@@ -9,11 +9,10 @@ class BottomSheetGreyLine extends StatelessWidget {
     return Container(
       height: 5.h,
       width: 100.w,
-      margin:  EdgeInsets.only(top: 7.w),
+      margin: EdgeInsets.only(top: 15.w, bottom: 15.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.r),
-        color: const Color(0xff969696)
-      ),
+          borderRadius: BorderRadius.circular(20.r),
+          color: const Color(0xff969696)),
     );
   }
 }
