@@ -40,7 +40,7 @@ class ParametrsUserBottomsheet extends StatelessWidget {
           icon: SvgImg.documents,
         ),
         SizedBox(
-          height: 87.h,
+          height: 87.h - 24.h,
         ),
         const DevideSettings(
           title: "Оформление",
