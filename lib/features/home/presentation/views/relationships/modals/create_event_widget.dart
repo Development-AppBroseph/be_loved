@@ -187,7 +187,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                       CrossAxisAlignment.center,
                                   children: [
                                     CustomPopupMenu(
-                                      position: PreferredPosition.top,
+                                      position: PreferredPosition.bottom,
                                         barrierColor:
                                             Colors.transparent,
                                         showArrow: false,
