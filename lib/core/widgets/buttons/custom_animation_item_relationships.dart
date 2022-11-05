@@ -58,12 +58,12 @@ class _CustomAnimationItemRelationshipsState
             if (pos > details.localPosition.dx) {
               directionAnimation = DirectionAnimation.left;
               if (scrollController.offset < 55.w) {
-                scrollController.jumpTo(scrollController.offset + 0.5);
+                scrollController.jumpTo(scrollController.offset + 3);
               }
             } else {
               directionAnimation = DirectionAnimation.right;
               if (scrollController.offset > 0) {
-                scrollController.jumpTo(scrollController.offset - 0.5);
+                scrollController.jumpTo(scrollController.offset - 3);
               }
             }
             pos = details.localPosition.dx;

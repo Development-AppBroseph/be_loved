@@ -11,10 +11,10 @@ showModalCreateEvent(BuildContext context, Function() onTap) {
       duration: Duration(milliseconds: 600),
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(40.h),
-        topRight: Radius.circular(40.h),
-      )),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(40.r),
+        ),
+      ),
       context: context,
       builder: (context) {
         return CreateEventWidget(onTap: onTap,);
