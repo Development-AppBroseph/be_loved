@@ -21,7 +21,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
   @override
   void initState() {
     super.initState();
-    startTimer();
+    // startTimer();
   }
 
   @override

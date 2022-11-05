@@ -10,54 +10,66 @@ class ParametrsUserBottomsheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const BottomSheetGreyLine(),
-        const AvatarAndNameUser(),
-        const DevideSettings(
-          title: "Аккаунт",
-          subtitle: "Информация",
-          haveToggleSwitch: false,
-          icon: SvgImg.person,
-        ),
-        const DevideSettings(
-          title: "Отношения",
-          subtitle: "Настроить",
-          haveToggleSwitch: false,
-          icon: SvgImg.logov2,
-        ),
-        const DevideSettings(
-          title: "Виджеты",
-          subtitle: "Настроить",
-          haveToggleSwitch: false,
-          icon: SvgImg.widgets,
-        ),
-        const DevideSettings(
-          title: "Оформление",
-          subtitle: "Изменить",
-          haveToggleSwitch: false,
-          icon: SvgImg.documents,
-        ),
-        SizedBox(
-          height: 87.h - 24.h,
-        ),
-        const DevideSettings(
-          title: "Оформление",
-          subtitle: "Изменить",
-          haveToggleSwitch: false,
-          icon: SvgImg.person,
-        ),
-        const DevideSettings(
-          title: "Оформление",
-          subtitle: "Изменить",
-          haveToggleSwitch: true,
-          icon: SvgImg.notification,
-        ),
-        const SizedBox(
-          height: 60,
-        ),
-      ],
+    return SizedBox(
+      height: 750.h,
+      child: Column(
+        children: [
+          const BottomSheetGreyLine(),
+          SizedBox(
+            height: 715.h,
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: Column(
+                children: [
+                  const AvatarAndNameUser(),
+                  const DevideSettings(
+                    title: "Аккаунт",
+                    subtitle: "Информация",
+                    haveToggleSwitch: false,
+                    icon: SvgImg.person,
+                  ),
+                  const DevideSettings(
+                    title: "Отношения",
+                    subtitle: "Настроить",
+                    haveToggleSwitch: false,
+                    icon: SvgImg.logov2,
+                  ),
+                  const DevideSettings(
+                    title: "Виджеты",
+                    subtitle: "Настроить",
+                    haveToggleSwitch: false,
+                    icon: SvgImg.widgets,
+                  ),
+                  const DevideSettings(
+                    title: "Оформление",
+                    subtitle: "Изменить",
+                    haveToggleSwitch: false,
+                    icon: SvgImg.documents,
+                  ),
+                  SizedBox(
+                    height: 87.h - 24.h,
+                  ),
+                  const DevideSettings(
+                    title: "Оформление",
+                    subtitle: "Изменить",
+                    haveToggleSwitch: false,
+                    icon: SvgImg.person,
+                  ),
+                  const DevideSettings(
+                    title: "Оформление",
+                    subtitle: "Изменить",
+                    haveToggleSwitch: true,
+                    icon: SvgImg.notification,
+                  ),
+                  SizedBox(
+                    height: 60.h,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
