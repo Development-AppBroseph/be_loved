@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -59,12 +58,12 @@ class _CustomAnimationItemRelationshipsState
             if (pos > details.localPosition.dx) {
               directionAnimation = DirectionAnimation.left;
               if (scrollController.offset < 55.w) {
-                scrollController.jumpTo(scrollController.offset + 1);
+                scrollController.jumpTo(scrollController.offset + 0.5);
               }
             } else {
               directionAnimation = DirectionAnimation.right;
               if (scrollController.offset > 0) {
-                scrollController.jumpTo(scrollController.offset - 1);
+                scrollController.jumpTo(scrollController.offset - 0.5);
               }
             }
             pos = details.localPosition.dx;

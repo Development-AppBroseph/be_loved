@@ -50,9 +50,7 @@ class MyApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [
-            Locale('ru')
-          ],
+          supportedLocales: [Locale('ru')],
           theme: ThemeData(
               scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
               fontFamily: 'Inter'),
