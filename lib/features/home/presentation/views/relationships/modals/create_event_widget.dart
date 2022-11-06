@@ -87,411 +87,416 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOutQuint,
-        height: MediaQuery.of(context).size.height * (keyboardOpened ? 0.99 : 0.8) - (keyboardOpened ? MediaQuery.of(context).padding.top : 0),
-        width: MediaQuery.of(context).size.width,
-        color: Color.fromRGBO(0, 0, 0, 0),
-        child: Stack(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                physics: ClampingScrollPhysics(),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 78.h,
-                      ),
-                      DefaultTextFormField(
-                        hint: 'Название',
-                        maxLines: 1,
-                        controller: _controllerName,
-                        maxLength: 40,
-                        hideCounter: true,
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      DefaultTextFormField(
-                        hint: 'Описание',
-                        maxLines: 3,
-                        controller: _controllerDescription,
-                        maxLength: 50,
-                        onChange: (s) {
-                          setState((){});
-                        }
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.r),
-                            color: ColorStyles.backgroundColorGrey),
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Весь день',
-                                  style: style2,
-                                ),
-                                SwitchBtn(
-                                    onChange: (val) {
-                                      setState(() {
-                                        switchVal1 = val;
-                                      });
-                                    },
-                                    value: switchVal1)
-                              ],
-                            ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                            Container(
-                              color: ColorStyles.greyColor,
-                              width: MediaQuery.of(context).size.width,
-                              height: 1.h,
-                            ),
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Начало',
-                                  style: style2,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.end,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                  children: [
-                                    CustomPopupMenu(
-                                      position: PreferredPosition.bottom,
-                                        barrierColor:
-                                            Colors.transparent,
-                                        showArrow: false,
-                                        controller:
-                                            _customPopupMenuController1,
-                                        pressType:
-                                            PressType.singleClick,
-                                        menuBuilder: () {
-                                          return _buildDatePicker(
-                                              context, (date, hide) {
-                                            if (hide) {
-                                              _customPopupMenuController1
-                                                  .hideMenu();
-                                            }
-                                            setState(() {
-                                              fromDate = date;
-                                              if(fromDate.millisecondsSinceEpoch > toDate.millisecondsSinceEpoch){
-                                                toDate = fromDate.add(Duration(days: 1));
-                                              }
-                                            });
-                                          }, fromDate);
-                                        },
-                                        child: TimeItemWidget(
-                                            text: DateFormat(
-                                                    'd MMM yyyy г.', 'RU')
-                                                .format(fromDate))),
-                                    SizedBox(
-                                      width: 15.w,
-                                    ),
-                                    TimeItemTextFieldWidget(
-                                      controller: _controllerFromTime,
-                                      validateText: validateTextFields,
-                                      onChanged: (text){
-                                        if(text != null && text.isNotEmpty){
-                                          if(text.length == 2 && int.parse(text[0]) == 2 && int.parse(text[1]) > 3){
-                                            _controllerFromTime.text = '';
-                                            setState(() {});
-                                          }
-                                        }
-                                      },
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Конец',
-                                  style: style2,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.end,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                  children: [
-                                    CustomPopupMenu(
-                                      position: PreferredPosition.bottom,
-                                        barrierColor:
-                                            Colors.transparent,
-                                        showArrow: false,
-                                        controller:
-                                            _customPopupMenuController2,
-                                        pressType:
-                                            PressType.singleClick,
-                                        menuBuilder: () {
-                                          return _buildDatePicker(
-                                              context, (date, hide) {
-                                            if (hide) {
-                                              _customPopupMenuController2
-                                                  .hideMenu();
-                                            }
-                                            setState(() {
-                                              toDate = date;
-                                            });
-                                          }, 
-                                          toDate,
-                                          fromDate: fromDate
-                                          );
-                                        },
-                                        child: TimeItemWidget(
-                                            text: DateFormat(
-                                                    'd MMM yyyy г.', 'RU')
-                                                .format(toDate))),
-                                    SizedBox(
-                                      width: 15.w,
-                                    ),
-                                    TimeItemTextFieldWidget(
-                                      controller: _controllerToTime,
-                                      validateText: validateTextFields,
-                                      onChanged: (text){
-                                        if(text != null && text.isNotEmpty){
-                                          if(text.length == 2 && int.parse(text[0]) == 2 && int.parse(text[1]) > 3){
-                                            _controllerToTime.text = '';
-                                            setState(() {});
-                                          }
-                                        }
-                                      },
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 32.h,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.r),
-                            color: ColorStyles.backgroundColorGrey),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 13.h),
-                        child: Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Повтор',
-                              style: style2,
-                            ),
-                            SwitchBtn(
-                                onChange: (val) {
-                                  setState(() {
-                                    switchVal2 = val;
-                                  });
-                                },
-                                value: switchVal2)
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.r),
-                            color: ColorStyles.backgroundColorGrey),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 13.h),
-                        child: Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Напоминание',
-                              style: style2,
-                            ),
-                            SwitchBtn(
-                                onChange: (val) {
-                                  setState(() {
-                                    switchVal3 = val;
-                                  });
-                                },
-                                value: switchVal3)
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.r),
-                            color: ColorStyles.backgroundColorGrey),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 13.h),
-                        child: Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Иконка',
-                              style: style2,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '😎',
-                                  style: TextStyle(fontSize: 30.sp),
-                                ),
-                                SizedBox(
-                                  width: 20.w,
-                                ),
-                                SvgPicture.asset(
-                                  SvgImg.upDownIcon,
-                                  height: 20.h,
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 40.h,
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            behavior: HitTestBehavior.opaque,
-                            child: Container(
-                              width: 60.h,
-                              height: 60.h,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: ColorStyles.redColor,
-                                  borderRadius:
-                                      BorderRadius.circular(10.r)),
-                              child: SvgPicture.asset(
-                                'assets/icons/close_event_create.svg',
-                                height: 22.h,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: widget.onTap,
-                              behavior: HitTestBehavior.opaque,
-                              child: Container(
-                                height: 60.h,
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.only(bottom: 2.h),
-                                decoration: BoxDecoration(
-                                    color: ColorStyles.accentColor,
-                                    borderRadius:
-                                        BorderRadius.circular(10.r)),
-                                child: Text(
-                                  'Создать событие',
-                                  style: styleBtn,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 74.h +
-                            MediaQuery.of(context).padding.bottom,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-                right: 0,
-                left: 0,
-                top: 0,
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(28.h),
-                        topRight: Radius.circular(28.h),
-                      ),
-                      color: Colors.white,
-                    ),
-                    padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
+      child: ClipRRect(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(40.r),
+        ),
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOutQuint,
+          height: MediaQuery.of(context).size.height * (keyboardOpened ? 0.99 : 0.8) - (keyboardOpened ? MediaQuery.of(context).padding.top : 0),
+          width: MediaQuery.of(context).size.width,
+          color: Color.fromRGBO(0, 0, 0, 0),
+          child: Stack(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.w),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(
+                          height: 78.h,
+                        ),
+                        DefaultTextFormField(
+                          hint: 'Название',
+                          maxLines: 1,
+                          controller: _controllerName,
+                          maxLength: 40,
+                          hideCounter: true,
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        DefaultTextFormField(
+                          hint: 'Описание',
+                          maxLines: 3,
+                          controller: _controllerDescription,
+                          maxLength: 50,
+                          onChange: (s) {
+                            setState((){});
+                          }
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
                         Container(
-                          width: 100.w,
-                          height: 5.h,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.r),
-                            color: ColorStyles.greyColor,
+                              borderRadius: BorderRadius.circular(15.r),
+                              color: ColorStyles.backgroundColorGrey),
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 12.h,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Весь день',
+                                    style: style2,
+                                  ),
+                                  SwitchBtn(
+                                      onChange: (val) {
+                                        setState(() {
+                                          switchVal1 = val;
+                                        });
+                                      },
+                                      value: switchVal1)
+                                ],
+                              ),
+                              SizedBox(
+                                height: 12.h,
+                              ),
+                              Container(
+                                color: ColorStyles.greyColor,
+                                width: MediaQuery.of(context).size.width,
+                                height: 1.h,
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Начало',
+                                    style: style2,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      CustomPopupMenu(
+                                        position: PreferredPosition.bottom,
+                                          barrierColor:
+                                              Colors.transparent,
+                                          showArrow: false,
+                                          controller:
+                                              _customPopupMenuController1,
+                                          pressType:
+                                              PressType.singleClick,
+                                          menuBuilder: () {
+                                            return _buildDatePicker(
+                                                context, (date, hide) {
+                                              if (hide) {
+                                                _customPopupMenuController1
+                                                    .hideMenu();
+                                              }
+                                              setState(() {
+                                                fromDate = date;
+                                                if(fromDate.millisecondsSinceEpoch > toDate.millisecondsSinceEpoch){
+                                                  toDate = fromDate.add(Duration(days: 1));
+                                                }
+                                              });
+                                            }, fromDate);
+                                          },
+                                          child: TimeItemWidget(
+                                              text: DateFormat(
+                                                      'd MMM yyyy г.', 'RU')
+                                                  .format(fromDate))),
+                                      SizedBox(
+                                        width: 15.w,
+                                      ),
+                                      TimeItemTextFieldWidget(
+                                        controller: _controllerFromTime,
+                                        validateText: validateTextFields,
+                                        onChanged: (text){
+                                          if(text != null && text.isNotEmpty){
+                                            if(text.length == 2 && int.parse(text[0]) == 2 && int.parse(text[1]) > 3){
+                                              _controllerFromTime.text = '';
+                                              setState(() {});
+                                            }
+                                          }
+                                        },
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Конец',
+                                    style: style2,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      CustomPopupMenu(
+                                        position: PreferredPosition.bottom,
+                                          barrierColor:
+                                              Colors.transparent,
+                                          showArrow: false,
+                                          controller:
+                                              _customPopupMenuController2,
+                                          pressType:
+                                              PressType.singleClick,
+                                          menuBuilder: () {
+                                            return _buildDatePicker(
+                                                context, (date, hide) {
+                                              if (hide) {
+                                                _customPopupMenuController2
+                                                    .hideMenu();
+                                              }
+                                              setState(() {
+                                                toDate = date;
+                                              });
+                                            }, 
+                                            toDate,
+                                            fromDate: fromDate
+                                            );
+                                          },
+                                          child: TimeItemWidget(
+                                              text: DateFormat(
+                                                      'd MMM yyyy г.', 'RU')
+                                                  .format(toDate))),
+                                      SizedBox(
+                                        width: 15.w,
+                                      ),
+                                      TimeItemTextFieldWidget(
+                                        controller: _controllerToTime,
+                                        validateText: validateTextFields,
+                                        onChanged: (text){
+                                          if(text != null && text.isNotEmpty){
+                                            if(text.length == 2 && int.parse(text[0]) == 2 && int.parse(text[1]) > 3){
+                                              _controllerToTime.text = '';
+                                              setState(() {});
+                                            }
+                                          }
+                                        },
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 32.h,
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(
-                          height: 10.h,
+                          height: 20.h,
                         ),
-                        Text(
-                          'Создать событие',
-                          style: style1,
-                        )
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.r),
+                              color: ColorStyles.backgroundColorGrey),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.w, vertical: 13.h),
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Повтор',
+                                style: style2,
+                              ),
+                              SwitchBtn(
+                                  onChange: (val) {
+                                    setState(() {
+                                      switchVal2 = val;
+                                    });
+                                  },
+                                  value: switchVal2)
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.r),
+                              color: ColorStyles.backgroundColorGrey),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.w, vertical: 13.h),
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Напоминание',
+                                style: style2,
+                              ),
+                              SwitchBtn(
+                                  onChange: (val) {
+                                    setState(() {
+                                      switchVal3 = val;
+                                    });
+                                  },
+                                  value: switchVal3)
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.r),
+                              color: ColorStyles.backgroundColorGrey),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.w, vertical: 13.h),
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Иконка',
+                                style: style2,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '😎',
+                                    style: TextStyle(fontSize: 30.sp),
+                                  ),
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
+                                  SvgPicture.asset(
+                                    SvgImg.upDownIcon,
+                                    height: 20.h,
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40.h,
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              behavior: HitTestBehavior.opaque,
+                              child: Container(
+                                width: 60.h,
+                                height: 60.h,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: ColorStyles.redColor,
+                                    borderRadius:
+                                        BorderRadius.circular(10.r)),
+                                child: SvgPicture.asset(
+                                  'assets/icons/close_event_create.svg',
+                                  height: 22.h,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: widget.onTap,
+                                behavior: HitTestBehavior.opaque,
+                                child: Container(
+                                  height: 60.h,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.only(bottom: 2.h),
+                                  decoration: BoxDecoration(
+                                      color: ColorStyles.accentColor,
+                                      borderRadius:
+                                          BorderRadius.circular(10.r)),
+                                  child: Text(
+                                    'Создать событие',
+                                    style: styleBtn,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 74.h +
+                              MediaQuery.of(context).padding.bottom,
+                        ),
                       ],
-                    )))
-          ],
-        )),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                  right: 0,
+                  left: 0,
+                  top: 0,
+                  child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(28.h),
+                          topRight: Radius.circular(28.h),
+                        ),
+                        color: Colors.white,
+                      ),
+                      padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 100.w,
+                            height: 5.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.r),
+                              color: ColorStyles.greyColor,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Text(
+                            'Создать событие',
+                            style: style1,
+                          )
+                        ],
+                      )))
+            ],
+          )),
+      ),
   );
 }
 }
@@ -510,7 +515,9 @@ DateTime _calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
 Widget _buildJustDay(context, DateTime date, events) {
   return CalendarJustItem(
     text: date.day.toString(),
-    disabled: _focusedDay.month != date.month || (fromDate != null && date.millisecondsSinceEpoch < currentDate.millisecondsSinceEpoch)
+    disabled: _focusedDay.month != date.month 
+      || (fromDate != null && date.millisecondsSinceEpoch < currentDate.millisecondsSinceEpoch)
+      || date.millisecondsSinceEpoch < currentDate.millisecondsSinceEpoch
   );
 }
 
@@ -591,7 +598,7 @@ return StatefulBuilder(builder: (context, setState) {
             ),
           ),
           SizedBox(
-            height: 20.h,
+            height: 11.h,
           ),
           if (_calendarType != CalendarType.days)
             SizedBox(
@@ -613,6 +620,9 @@ return StatefulBuilder(builder: (context, setState) {
                     if( _focusedDay.millisecondsSinceEpoch > currentDate.millisecondsSinceEpoch){
                       selectedDay = _focusedDay;
                       onTap(_focusedDay, false);
+                    }else{
+                      selectedDay = currentDate.add(Duration(days: 1));
+                      onTap(selectedDay, false);
                     }
                     _calendarStartDay = _focusedDay;
                   });
@@ -630,7 +640,7 @@ return StatefulBuilder(builder: (context, setState) {
                 setState((){
                   _focusedDay = dt;
                 });
-                Future.delayed(Duration(milliseconds: 150), (){
+                Future.delayed(Duration(milliseconds: 300), (){
                   setState((){
                     _calendarStartDay = dt;
                   });
@@ -644,19 +654,33 @@ return StatefulBuilder(builder: (context, setState) {
               headerVisible: false,
               pageAnimationCurve: Curves.easeInOutQuint,
               daysOfWeekVisible: false,
-              startingDayOfWeek: kToday.weekday == DateTime.monday
-              ? StartingDayOfWeek.monday
-              : kToday.weekday == DateTime.tuesday
-              ? StartingDayOfWeek.tuesday
-              : kToday.weekday == DateTime.wednesday
-              ? StartingDayOfWeek.wednesday
-              : kToday.weekday == DateTime.thursday
-              ? StartingDayOfWeek.thursday
-              : kToday.weekday == DateTime.friday
-              ? StartingDayOfWeek.friday
-              : kToday.weekday == DateTime.saturday
-              ? StartingDayOfWeek.saturday
-              : StartingDayOfWeek.sunday,
+              // startingDayOfWeek: _calendarStartDay.year == currentDate.year && _calendarStartDay.month == currentDate.month
+              // ? (kToday.weekday == DateTime.monday
+              // ? StartingDayOfWeek.monday
+              // : kToday.weekday == DateTime.tuesday
+              // ? StartingDayOfWeek.tuesday
+              // : kToday.weekday == DateTime.wednesday
+              // ? StartingDayOfWeek.wednesday
+              // : kToday.weekday == DateTime.thursday
+              // ? StartingDayOfWeek.thursday
+              // : kToday.weekday == DateTime.friday
+              // ? StartingDayOfWeek.friday
+              // : kToday.weekday == DateTime.saturday
+              // ? StartingDayOfWeek.saturday
+              // : StartingDayOfWeek.sunday)
+              // : (_calendarStartDay.weekday == DateTime.monday
+              // ? StartingDayOfWeek.friday
+              // : _calendarStartDay.weekday == DateTime.tuesday
+              // ? StartingDayOfWeek.saturday
+              // : _calendarStartDay.weekday == DateTime.wednesday
+              // ? StartingDayOfWeek.sunday
+              // : _calendarStartDay.weekday == DateTime.thursday
+              // ? StartingDayOfWeek.monday
+              // : _calendarStartDay.weekday == DateTime.friday
+              // ? StartingDayOfWeek.tuesday
+              // : _calendarStartDay.weekday == DateTime.saturday
+              // ? StartingDayOfWeek.wednesday
+              // : StartingDayOfWeek.thursday),
               rangeSelectionMode: RangeSelectionMode.toggledOff,
               onDaySelected: (date, events) {
                 if(date.millisecondsSinceEpoch >= currentDate.millisecondsSinceEpoch){
