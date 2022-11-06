@@ -154,7 +154,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                                 width: 38.w,
                               ),
                               SizedBox(height: 12.h),
-                              Text('Цели', style: style),
+                              Text('Цель', style: style),
                             ],
                           ),
                         ),

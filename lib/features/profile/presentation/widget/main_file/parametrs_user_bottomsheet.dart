@@ -22,6 +22,7 @@ class ParametrsUserBottomsheet extends StatelessWidget {
             children: [
               const BottomSheetGreyLine(),
               const AvatarAndNameUser(),
+              SizedBox(height: 16.h,),
               const DevideSettings(
                 title: "Аккаунт",
                 subtitle: "Информация",
@@ -50,14 +51,14 @@ class ParametrsUserBottomsheet extends StatelessWidget {
                 height: 87.h - 24.h,
               ),
               const DevideSettings(
-                title: "Оформление",
-                subtitle: "Изменить",
+                title: "Подписка BeLoved+",
+                subtitle: "Подробнее",
                 haveToggleSwitch: false,
                 icon: SvgImg.person,
               ),
               const DevideSettings(
-                title: "Оформление",
-                subtitle: "Изменить",
+                title: "Уведомления",
+                subtitle: "от приложения",
                 haveToggleSwitch: true,
                 icon: SvgImg.notification,
               ),

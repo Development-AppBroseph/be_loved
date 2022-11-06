@@ -25,7 +25,7 @@ class UserAvatar extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10.w),
+            padding: EdgeInsets.only(top: 10.h),
             child: Text(
               title,
               style: TextStyle(
