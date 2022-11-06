@@ -174,7 +174,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         token = result;
         await SharedPreferences.getInstance()
           ..setString('token', result);
-        emit(InitSuccess());
+        emit(InitSuccess(result));
       } else {
         emit(InitError('Выберите аватарку'));
       }
@@ -203,6 +203,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       user = result;
 
       if (result.status == null) {
+        print('object log result.status == null');
         emit(ReletionshipsError());
       } else if (result.status != 'Принято') {
         if (result.fromYou != null) {
@@ -214,9 +215,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       } else {
         if (result.date == null) {
+          print('object log InviteAccepted');
           emit(InviteAccepted(result.fromYou!));
         } else {
           MySharedPrefs().setUser(token!, result);
+          print('object log ReletionshipsStarted');
           emit(ReletionshipsStarted());
         }
       }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/enums.dart';
 import 'package:be_loved/core/utils/images.dart';
@@ -86,6 +87,7 @@ class _CodePageState extends State<CodePage> {
               builder: (context) => CreateAccountInfo(),
             ),
           ).then((value) {
+            BlocProvider.of<WebSocketBloc>(context).add(WebSocketCloseEvent());
             if (textEditingControllerUp.text.length == 5) {
               BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
             }
@@ -93,6 +95,8 @@ class _CodePageState extends State<CodePage> {
         } else {
           BlocProvider.of<AuthBloc>(context).add(GetUser());
           Future.delayed(const Duration(milliseconds: 500), () {
+            BlocProvider.of<WebSocketBloc>(context)
+                .add(WebSocketEvent(current.token));
             if (BlocProvider.of<AuthBloc>(context).user?.date == null) {
               Navigator.push(
                 context,
@@ -100,11 +104,15 @@ class _CodePageState extends State<CodePage> {
                   builder: (context) => InviteRelation(previousPage: () {}),
                 ),
               ).then((value) {
+                BlocProvider.of<WebSocketBloc>(context)
+                    .add(WebSocketCloseEvent());
                 if (textEditingControllerUp.text.length == 5) {
                   BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
                 }
               });
             } else {
+              BlocProvider.of<WebSocketBloc>(context)
+                  .add(WebSocketEvent(current.token));
               MySharedPrefs().setUser(current.token,
                   BlocProvider.of<AuthBloc>(context, listen: false).user!);
               Navigator.pushAndRemoveUntil(

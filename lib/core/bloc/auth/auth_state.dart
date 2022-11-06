@@ -54,7 +54,11 @@ class ImageSuccess extends AuthState {
   ImageSuccess(this.image);
 }
 
-class InitSuccess extends AuthState {}
+class InitSuccess extends AuthState {
+  String token;
+
+  InitSuccess(this.token);
+}
 
 class InitError extends AuthState {
   String error;
