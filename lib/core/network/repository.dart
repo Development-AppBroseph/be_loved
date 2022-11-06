@@ -11,7 +11,8 @@ import '../../features/auth/data/models/auth/user.dart';
 class Repository {
   static var uri = Uri.parse(Config.url.url);
   var dio = Dio(
-    BaseOptions(baseUrl: Config.url.url, validateStatus: (status) => status! <= 400),
+    BaseOptions(
+        baseUrl: Config.url.url, validateStatus: (status) => status! <= 400),
   );
 
   Future<bool?> editUser(File? file) async {
