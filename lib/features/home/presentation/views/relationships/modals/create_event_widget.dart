@@ -7,6 +7,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/widgets/
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_selected_item.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/time_item_text_field_widget.dart';
 import 'package:be_loved/core/widgets/buttons/switch_btn.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -87,10 +88,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(40.r),
+      child: CupertinoCard(
+        radius: BorderRadius.vertical(
+          top: Radius.circular(80.r),
         ),
+        elevation: 0,
+        margin: EdgeInsets.zero,
         child: AnimatedContainer(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOutQuint,
@@ -414,17 +417,23 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 Navigator.pop(context);
                               },
                               behavior: HitTestBehavior.opaque,
-                              child: Container(
-                                width: 60.h,
-                                height: 60.h,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: ColorStyles.redColor,
-                                    borderRadius:
-                                        BorderRadius.circular(10.r)),
-                                child: SvgPicture.asset(
-                                  'assets/icons/close_event_create.svg',
-                                  height: 22.h,
+                              child: CupertinoCard(
+                                color: ColorStyles.redColor,
+                                margin: EdgeInsets.zero,
+                                elevation: 0,
+                                radius: BorderRadius.circular(20.r),
+                                child: Container(
+                                  width: 60.h,
+                                  height: 60.h,
+                                  alignment: Alignment.center,
+                                  // decoration: BoxDecoration(
+                                  //     color: ColorStyles.redColor,
+                                  //     borderRadius:
+                                  //         BorderRadius.circular(10.r)),
+                                  child: SvgPicture.asset(
+                                    'assets/icons/close_event_create.svg',
+                                    height: 22.h,
+                                  ),
                                 ),
                               ),
                             ),
@@ -435,17 +444,23 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               child: GestureDetector(
                                 onTap: widget.onTap,
                                 behavior: HitTestBehavior.opaque,
-                                child: Container(
-                                  height: 60.h,
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.only(bottom: 2.h),
-                                  decoration: BoxDecoration(
-                                      color: ColorStyles.accentColor,
-                                      borderRadius:
-                                          BorderRadius.circular(10.r)),
-                                  child: Text(
-                                    'Создать событие',
-                                    style: styleBtn,
+                                child: CupertinoCard(
+                                  color: ColorStyles.accentColor,
+                                  margin: EdgeInsets.zero,
+                                  elevation: 0,
+                                  radius: BorderRadius.circular(20.r),
+                                  child: Container(
+                                    height: 60.h,
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.only(bottom: 2.h),
+                                    // decoration: BoxDecoration(
+                                    //     color: ColorStyles.accentColor,
+                                    //     borderRadius:
+                                    //         BorderRadius.circular(10.r)),
+                                    child: Text(
+                                      'Создать событие',
+                                      style: styleBtn,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -536,172 +551,178 @@ return StatefulBuilder(builder: (context, setState) {
   return Container(
       width: 344.w,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.r),
+        // borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(blurRadius: 20.h, color: Color.fromRGBO(0, 0, 0, 0.1))
         ],
-        color: Colors.white,
       ),
+      // padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
+      child: CupertinoCard(
       padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
+        color: Colors.white,
+        elevation: 0,
+        radius: BorderRadius.circular(40.r),
+        margin: EdgeInsets.zero,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        if (_calendarType == CalendarType.days) {
+                          _pageController.previousPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOutQuint);
+                        }
+                      },
+                      behavior: HitTestBehavior.opaque,
+                      child: SvgPicture.asset(SvgImg.calendarLeftIcon,
+                        height: 17.h,
+                      )),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (_calendarType == CalendarType.days) {
+                          _calendarType = CalendarType.month;
+                        } else if (_calendarType == CalendarType.month) {
+                          _calendarType = CalendarType.years;
+                        }
+                      });
+                    },
+                    child: Text(
+                      DateFormat(_calendarType == CalendarType.days
+                              ? 'MMMM yyyy'
+                              : 'yyyy', 'RU')
+                          .format(_focusedDay).capitalize(),
+                      style: style1,
+                    ),
+                  ),
+                  GestureDetector(
                     onTap: () {
                       if (_calendarType == CalendarType.days) {
-                        _pageController.previousPage(
+                        _pageController.nextPage(
                             duration: Duration(milliseconds: 300),
                             curve: Curves.easeInOutQuint);
                       }
                     },
                     behavior: HitTestBehavior.opaque,
-                    child: SvgPicture.asset(SvgImg.calendarLeftIcon,
+                    child: SvgPicture.asset(SvgImg.calendarRightIcon,
                       height: 17.h,
-                    )),
-                GestureDetector(
-                  onTap: () {
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 11.h,
+            ),
+            if (_calendarType != CalendarType.days)
+              SizedBox(
+                width: 279.w,
+                child: YearsMonthSelectWidget(
+                  onTap: (i) {
                     setState(() {
-                      if (_calendarType == CalendarType.days) {
+                      if (_calendarType == CalendarType.years) {
+                        _focusedDay =
+                            DateTime(i, selectedDay.month, selectedDay.day);
                         _calendarType = CalendarType.month;
-                      } else if (_calendarType == CalendarType.month) {
-                        _calendarType = CalendarType.years;
+                      } else {
+                        if(!((i + 1) < currentDate.month && selectedDay.year == currentDate.year)){
+                          _focusedDay =
+                            DateTime(selectedDay.year, i + 1, selectedDay.day);
+                        _calendarType = CalendarType.days;
+                        }
                       }
+                      if( _focusedDay.millisecondsSinceEpoch > currentDate.millisecondsSinceEpoch){
+                        selectedDay = _focusedDay;
+                        onTap(_focusedDay, false);
+                      }else{
+                        selectedDay = currentDate.add(Duration(days: 1));
+                        onTap(selectedDay, false);
+                      }
+                      _calendarStartDay = _focusedDay;
                     });
                   },
-                  child: Text(
-                    DateFormat(_calendarType == CalendarType.days
-                            ? 'MMMM yyyy'
-                            : 'yyyy', 'RU')
-                        .format(_focusedDay).capitalize(),
-                    style: style1,
-                  ),
+                  calendarType: _calendarType,
+                  focusedDay: _focusedDay,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    if (_calendarType == CalendarType.days) {
-                      _pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOutQuint);
-                    }
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: SvgPicture.asset(SvgImg.calendarRightIcon,
-                    height: 17.h,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 11.h,
-          ),
-          if (_calendarType != CalendarType.days)
-            SizedBox(
-              width: 279.w,
-              child: YearsMonthSelectWidget(
-                onTap: (i) {
-                  setState(() {
-                    if (_calendarType == CalendarType.years) {
-                      _focusedDay =
-                          DateTime(i, selectedDay.month, selectedDay.day);
-                      _calendarType = CalendarType.month;
-                    } else {
-                      if(!((i + 1) < currentDate.month && selectedDay.year == currentDate.year)){
-                        _focusedDay =
-                          DateTime(selectedDay.year, i + 1, selectedDay.day);
-                      _calendarType = CalendarType.days;
-                      }
-                    }
-                    if( _focusedDay.millisecondsSinceEpoch > currentDate.millisecondsSinceEpoch){
-                      selectedDay = _focusedDay;
-                      onTap(_focusedDay, false);
-                    }else{
-                      selectedDay = currentDate.add(Duration(days: 1));
-                      onTap(selectedDay, false);
-                    }
-                    _calendarStartDay = _focusedDay;
+              ),
+            if (_calendarType == CalendarType.days)
+              TableCalendar(
+                onCalendarCreated: (con) {
+                  _pageController = con;
+                },
+                onPageChanged: (dt){
+                  setState((){
+                    _focusedDay = dt;
+                  });
+                  Future.delayed(Duration(milliseconds: 300), (){
+                    setState((){
+                      _calendarStartDay = dt;
+                    });
                   });
                 },
-                calendarType: _calendarType,
                 focusedDay: _focusedDay,
+                calendarFormat: CalendarFormat.month,
+                
+                firstDay: kFirstDay,
+                lastDay: kLastDay,
+                headerVisible: false,
+                pageAnimationCurve: Curves.easeInOutQuint,
+                daysOfWeekVisible: false,
+                // startingDayOfWeek: _calendarStartDay.year == currentDate.year && _calendarStartDay.month == currentDate.month
+                // ? (kToday.weekday == DateTime.monday
+                // ? StartingDayOfWeek.monday
+                // : kToday.weekday == DateTime.tuesday
+                // ? StartingDayOfWeek.tuesday
+                // : kToday.weekday == DateTime.wednesday
+                // ? StartingDayOfWeek.wednesday
+                // : kToday.weekday == DateTime.thursday
+                // ? StartingDayOfWeek.thursday
+                // : kToday.weekday == DateTime.friday
+                // ? StartingDayOfWeek.friday
+                // : kToday.weekday == DateTime.saturday
+                // ? StartingDayOfWeek.saturday
+                // : StartingDayOfWeek.sunday)
+                // : (_calendarStartDay.weekday == DateTime.monday
+                // ? StartingDayOfWeek.friday
+                // : _calendarStartDay.weekday == DateTime.tuesday
+                // ? StartingDayOfWeek.saturday
+                // : _calendarStartDay.weekday == DateTime.wednesday
+                // ? StartingDayOfWeek.sunday
+                // : _calendarStartDay.weekday == DateTime.thursday
+                // ? StartingDayOfWeek.monday
+                // : _calendarStartDay.weekday == DateTime.friday
+                // ? StartingDayOfWeek.tuesday
+                // : _calendarStartDay.weekday == DateTime.saturday
+                // ? StartingDayOfWeek.wednesday
+                // : StartingDayOfWeek.thursday),
+                rangeSelectionMode: RangeSelectionMode.toggledOff,
+                onDaySelected: (date, events) {
+                  if(date.millisecondsSinceEpoch >= currentDate.millisecondsSinceEpoch){
+                    onTap(date, false);
+                    setState((){
+                      selectedDay = date;
+                    });
+                  }
+                },
+                rowHeight: 40.h,
+                selectedDayPredicate: (day) => isSameDay(selectedDay, day),
+                calendarBuilders: CalendarBuilders(
+                  selectedBuilder: _buildSelectedDay,
+                  defaultBuilder: _buildJustDay,
+                  disabledBuilder: _buildJustDay,
+                  holidayBuilder: _buildJustDay,
+                  outsideBuilder: _buildJustDay,
+                  todayBuilder: _buildJustDay,
+                ),
               ),
-            ),
-          if (_calendarType == CalendarType.days)
-            TableCalendar(
-              onCalendarCreated: (con) {
-                _pageController = con;
-              },
-              onPageChanged: (dt){
-                setState((){
-                  _focusedDay = dt;
-                });
-                Future.delayed(Duration(milliseconds: 300), (){
-                  setState((){
-                    _calendarStartDay = dt;
-                  });
-                });
-              },
-              focusedDay: _focusedDay,
-              calendarFormat: CalendarFormat.month,
-              
-              firstDay: kFirstDay,
-              lastDay: kLastDay,
-              headerVisible: false,
-              pageAnimationCurve: Curves.easeInOutQuint,
-              daysOfWeekVisible: false,
-              // startingDayOfWeek: _calendarStartDay.year == currentDate.year && _calendarStartDay.month == currentDate.month
-              // ? (kToday.weekday == DateTime.monday
-              // ? StartingDayOfWeek.monday
-              // : kToday.weekday == DateTime.tuesday
-              // ? StartingDayOfWeek.tuesday
-              // : kToday.weekday == DateTime.wednesday
-              // ? StartingDayOfWeek.wednesday
-              // : kToday.weekday == DateTime.thursday
-              // ? StartingDayOfWeek.thursday
-              // : kToday.weekday == DateTime.friday
-              // ? StartingDayOfWeek.friday
-              // : kToday.weekday == DateTime.saturday
-              // ? StartingDayOfWeek.saturday
-              // : StartingDayOfWeek.sunday)
-              // : (_calendarStartDay.weekday == DateTime.monday
-              // ? StartingDayOfWeek.friday
-              // : _calendarStartDay.weekday == DateTime.tuesday
-              // ? StartingDayOfWeek.saturday
-              // : _calendarStartDay.weekday == DateTime.wednesday
-              // ? StartingDayOfWeek.sunday
-              // : _calendarStartDay.weekday == DateTime.thursday
-              // ? StartingDayOfWeek.monday
-              // : _calendarStartDay.weekday == DateTime.friday
-              // ? StartingDayOfWeek.tuesday
-              // : _calendarStartDay.weekday == DateTime.saturday
-              // ? StartingDayOfWeek.wednesday
-              // : StartingDayOfWeek.thursday),
-              rangeSelectionMode: RangeSelectionMode.toggledOff,
-              onDaySelected: (date, events) {
-                if(date.millisecondsSinceEpoch >= currentDate.millisecondsSinceEpoch){
-                  onTap(date, false);
-                  setState((){
-                    selectedDay = date;
-                  });
-                }
-              },
-              rowHeight: 40.h,
-              selectedDayPredicate: (day) => isSameDay(selectedDay, day),
-              calendarBuilders: CalendarBuilders(
-                selectedBuilder: _buildSelectedDay,
-                defaultBuilder: _buildJustDay,
-                disabledBuilder: _buildJustDay,
-                holidayBuilder: _buildJustDay,
-                outsideBuilder: _buildJustDay,
-                todayBuilder: _buildJustDay,
-              ),
-            ),
-        ],
+          ],
+        ),
       ));
   });
 }

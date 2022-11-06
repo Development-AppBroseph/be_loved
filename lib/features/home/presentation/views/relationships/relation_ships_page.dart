@@ -6,6 +6,7 @@ import 'package:be_loved/features/profile/presentation/widget/main_file/parametr
 import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -105,11 +106,12 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                   animationCurve: Curves.easeInOutQuint,
                                   duration: const Duration(milliseconds: 600),
                                   context: context,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(40.r),
-                                    ),
-                                  ),
+                                  // shape: RoundedRectangleBorder(
+                                  //   borderRadius: BorderRadius.vertical(
+                                  //     top: Radius.circular(50.r),
+                                  //   ),
+                                  // ),
+                                  backgroundColor: Colors.transparent,
                                   builder: (context) =>
                                       const ParametrsUserBottomsheet(),
                                 ),
@@ -292,6 +294,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                             }),
                           ),
                         ),
+                        if(events.isEmpty)
                         SizedBox(height: 15.h),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25.w),
