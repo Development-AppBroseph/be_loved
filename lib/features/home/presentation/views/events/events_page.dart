@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -161,28 +162,47 @@ class _EventsPageState extends State<EventsPage> {
                         color = Colors.transparent;
                     }
 
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: hashTags[index].type == TypeHashTag.add
-                            ? Border.all(color: ColorStyles.greyColor)
-                            : null,
-                        borderRadius: BorderRadius.circular(10.r),
-                        color: color,
+                    return CupertinoCard(
+                      color: hashTags[index].type == TypeHashTag.add ? ColorStyles.greyColor : color,
+                      elevation: 0,
+                      margin: EdgeInsets.zero,
+                      radius: BorderRadius.circular(20.r),
+                      child: Stack(
+                        children: [
+                          if(hashTags[index].type == TypeHashTag.add)
+                          Positioned.fill(
+                            child: CupertinoCard(
+                              elevation: 0,
+                              margin: EdgeInsets.all(1.w),
+                              radius: BorderRadius.circular(17.r),
+                              color: ColorStyles.backgroundColorGrey,
+                            ),
+                          ),
+                          Container(
+                            // decoration: BoxDecoration(
+                            //   border: hashTags[index].type == TypeHashTag.add
+                            //       ? Border.all(color: ColorStyles.greyColor)
+                            //       : null,
+                            //   borderRadius: BorderRadius.circular(10.r),
+                            //   color: color,
+                            // ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25.w, vertical: 10.h),
+                            child: Center(
+                                child: hashTags[index].type == TypeHashTag.add
+                                    ? SizedBox(
+                                        height: 34.h,
+                                        width: 34.w,
+                                        child: Transform.rotate(
+                                            angle: pi / 4,
+                                            child: SvgPicture.asset(
+                                                SvgImg.add)),
+                                      )
+                                    : Text('#${hashTags[index].title}',
+                                        style: style1)),
+                          ),
+                        ],
                       ),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 25.w, vertical: 10.h),
-                      child: Center(
-                          child: hashTags[index].type == TypeHashTag.add
-                              ? SizedBox(
-                                  height: 34.h,
-                                  width: 34.w,
-                                  child: Transform.rotate(
-                                      angle: pi / 4,
-                                      child: SvgPicture.asset(
-                                          SvgImg.add)),
-                                )
-                              : Text('#${hashTags[index].title}',
-                                  style: style1)),
                     );
                   }),
                 );
@@ -208,42 +228,48 @@ class _EventsPageState extends State<EventsPage> {
                 Color? colorDays = checkColor(upComingInfo[i].days);
                 return Padding(
                   padding: EdgeInsets.only(left: i == 0 ? 0 : 20.w),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.r),
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20.w, vertical: 11.h),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${upComingInfo[i].days}:',
-                                  style: style4.copyWith(color: colorDays)),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: (MediaQuery.of(context).size.width *
-                                            70) /
-                                        100,
-                                    child: Text(
-                                      upComingInfo[i].title,
-                                      style: style6.copyWith(height: 1.1),
-                                      softWrap: false,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
+                  child: CupertinoCard(
+                    elevation: 0,
+                    margin: EdgeInsets.zero,
+                    radius: BorderRadius.circular(40.r),
+                    color: Colors.white,
+                    child: Container(
+                      // decoration: BoxDecoration(
+                      //   borderRadius: BorderRadius.circular(20.r),
+                      //   color: Colors.white,
+                      // ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 11.h),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('${upComingInfo[i].days}:',
+                                    style: style4.copyWith(color: colorDays)),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: (MediaQuery.of(context).size.width *
+                                              70) /
+                                          100,
+                                      child: Text(
+                                        upComingInfo[i].title,
+                                        style: style6.copyWith(height: 1.1),
+                                        softWrap: false,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.fade,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

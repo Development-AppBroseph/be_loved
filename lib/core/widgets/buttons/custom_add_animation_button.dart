@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -60,49 +61,63 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
         builder: (context, snapshot) {
           return Stack(
             children: [
-              AnimatedContainer(
-                curve: Curves.ease,
-                duration: Duration(milliseconds: milisec - 200),
-                height: snapshot.data! ? 100.h : 70.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  border: Border.all(
-                    color: ColorStyles.greyColor,
-                    width: 1,
-                  ),
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 9.w, right: 9.w),
-                      child: AnimatedAlign(
-                        alignment: snapshot.data!
-                            ? Alignment.centerRight
-                            : Alignment.center,
-                        curve: Curves.ease,
-                        duration: Duration(milliseconds: milisec - 200),
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: milisec),
-                          color: Colors.transparent,
+              CupertinoCard(
+                elevation: 0,
+                margin: EdgeInsets.zero,
+                radius: BorderRadius.circular(40.r),
+                color: ColorStyles.greyColor,
+                child: AnimatedContainer(
+                  curve: Curves.ease,
+                  duration: Duration(milliseconds: milisec - 200),
+                  height: snapshot.data! ? 100.h : 70.h,
+                  // decoration: BoxDecoration(
+                  //   borderRadius: BorderRadius.circular(20.r),
+                  //   border: Border.all(
+                  //     color: ColorStyles.greyColor,
+                  //     width: 1,
+                  //   ),
+                  // ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned.fill(
+                        child: CupertinoCard(
+                          elevation: 0,
+                          radius: BorderRadius.circular(37.r),
+                          margin: EdgeInsets.all(1.w),
+                          color: ColorStyles.backgroundColorGrey,
+                        )
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 9.w, right: 9.w),
+                        child: AnimatedAlign(
+                          alignment: snapshot.data!
+                              ? Alignment.centerRight
+                              : Alignment.center,
                           curve: Curves.ease,
-                          // width: snapshot.data! ? 90.w : 378.w,
-                          // height: snapshot.data! ? 100.h : 70.h, // 70.h,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 33.79.w),
-                            child: Transform.rotate(
-                                angle: rotate,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SvgPicture.asset(SvgImg.add),
-                                  ],
-                                )),
+                          duration: Duration(milliseconds: milisec - 200),
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: milisec),
+                            color: Colors.transparent,
+                            curve: Curves.ease,
+                            // width: snapshot.data! ? 90.w : 378.w,
+                            // height: snapshot.data! ? 100.h : 70.h, // 70.h,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 33.79.w),
+                              child: Transform.rotate(
+                                  angle: rotate,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SvgPicture.asset(SvgImg.add),
+                                    ],
+                                  )),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               AnimatedPositioned(
@@ -154,7 +169,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                                 width: 38.w,
                               ),
                               SizedBox(height: 12.h),
-                              Text('Цели', style: style),
+                              Text('Цель', style: style),
                             ],
                           ),
                         ),
