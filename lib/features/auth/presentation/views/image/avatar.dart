@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/utils/helpers/small_image.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -32,6 +33,8 @@ class AvatarPage extends StatelessWidget {
       }
       if (current is InitSuccess) {
         error = null;
+        BlocProvider.of<WebSocketBloc>(context)
+            .add(WebSocketEvent(current.token));
         nextPage();
       }
       if (current is InitError) error = current.error;

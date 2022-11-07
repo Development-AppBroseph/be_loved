@@ -1,6 +1,7 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
+import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,9 @@ void main() async {
       providers: [
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(),
+        ),
+        BlocProvider<WebSocketBloc>(
+          create: (context) => WebSocketBloc(),
         ),
       ],
       child: OverlaySupport.global(
@@ -54,12 +58,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
               fontFamily: 'Inter'),
-          // home: user != null
-          //     ? user?.date != null
-          //         ? HomePage()
-          //         : const PhonePage()
-          //     : const PhonePage(),
-          home: HomePage(),
+          home: user != null
+              ? user?.date != null
+                  ? HomePage()
+                  : const PhonePage()
+              : const PhonePage(),
+          // home: HomePage(),
         );
       },
     );
