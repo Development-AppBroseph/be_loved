@@ -5,6 +5,7 @@ import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -83,10 +84,10 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget content() {
-    TextStyle style1 = TextStyle(
-        fontWeight: FontWeight.w700, color: Colors.white, fontSize: 15.sp);
-    TextStyle style2 = TextStyle(
-        fontWeight: FontWeight.w700, color: Colors.white, fontSize: 30.sp);
+    // TextStyle style1 = TextStyle(
+    //     fontWeight: FontWeight.w700, color: Colors.white, fontSize: 15.sp);
+    // TextStyle style2 = TextStyle(
+    //     fontWeight: FontWeight.w700, color: Colors.white, fontSize: 30.sp);
     TextStyle style3 = TextStyle(
         fontWeight: FontWeight.w800, color: Colors.white, fontSize: 18.sp);
 
@@ -138,55 +139,57 @@ class _AccountPageState extends State<AccountPage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(top: 135.h),
-                        child: Container(
-                          height: 124.h,
+                        child: SizedBox(
+                          height: 130.h,
                           width: 428.w,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(
-                                  left: 105.w,
-                                  right: 100.w,
-                                  top: 38.h,
-                                  bottom: 25.h,
-                                ),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Никита Белых',
-                                          style: style3.copyWith(
-                                            fontSize: 30.sp,
-                                            color: Colors.black,
-                                            height: 1,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 5.h),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('+7 *** *** 00-00',
+                          child: CupertinoCard(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    left: 105.w,
+                                    right: 100.w,
+                                    top: 38.h,
+                                    bottom: 25.h,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Никита Белых',
                                             style: style3.copyWith(
-                                                fontSize: 15.sp,
-                                                color: Colors.black,
-                                                height: 1)),
-                                        SvgPicture.asset(SvgImg.vkLogo)
-                                      ],
-                                    ),
-                                  ],
+                                              fontSize: 30.sp,
+                                              color: Colors.black,
+                                              height: 1,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('+7 *** *** 00-00',
+                                              style: style3.copyWith(
+                                                  fontSize: 15.sp,
+                                                  color: Colors.black,
+                                                  height: 1)),
+                                          SvgPicture.asset(SvgImg.vkLogo)
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -195,169 +198,174 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 15.h),
-                    child: Container(
+                    child: SizedBox(
                       height: 65.h,
                       width: 428.w,
-                      padding: EdgeInsets.symmetric(horizontal: 25.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SvgPicture.asset(SvgImg.vkLogo),
-                          Text(
-                            'Привязать страницу VK',
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          const Icon(
-                            Icons.add,
-                            color: Color(0xff0077FF),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15.h),
-                    child: Container(
-                      height: 270.h,
-                      width: 428.w,
-                      padding: EdgeInsets.symmetric(horizontal: 25.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 20.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      child: CupertinoCard(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            SvgPicture.asset(SvgImg.vkLogo),
                             Text(
-                              'Сменить номер телефона',
+                              'Привязать страницу VK',
                               style: TextStyle(
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 37.h, bottom: 5.h),
-                              child: Container(
-                                height: 70.h,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: const BorderRadius.horizontal(
-                                    left: Radius.circular(10),
-                                    right: Radius.circular(10),
-                                  ),
-                                  border: Border.all(
-                                    width: 1,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child:
-                                          Image.asset('assets/images/code.png'),
-                                    ),
-                                    SizedBox(width: 12.w),
-                                    Text(
-                                      '+7',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 25.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(width: 12.w),
-                                    Container(
-                                      height: 37.h,
-                                      width: 1.w,
-                                      color: const Color.fromRGBO(
-                                          224, 224, 224, 1.0),
-                                    ),
-                                    SizedBox(
-                                      width: 12.w,
-                                    ),
-                                    Container(
-                                      width: 0.6.sw,
-                                      alignment: Alignment.center,
-                                      child: TextField(
-                                        onTap: () {
-                                          Future.delayed(
-                                              const Duration(milliseconds: 600),
-                                              () {
-                                            _scrollController.animateTo(
-                                              _scrollController
-                                                  .position.maxScrollExtent,
-                                              duration: const Duration(
-                                                  milliseconds: 500),
-                                              curve: Curves.ease,
-                                            );
-                                          });
-                                        },
-                                        controller: phoneController,
-                                        style: GoogleFonts.inter(
-                                          fontSize: 25.sp,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        onChanged: (value) {
-                                          phoneNumber =
-                                              '+7${value.replaceAll(RegExp(' '), '')}';
-                                          if (value.length > 12 &&
-                                              value.substring(0, 1) == '9') {
-                                            // BlocProvider.of<AuthBloc>(context)
-                                            //     .add(TextFieldFilled(true));
-                                            focusNode.unfocus();
-                                          } else {
-                                            // BlocProvider.of<AuthBloc>(context)
-                                            //     .add(TextFieldFilled(false));
-                                          }
-                                        },
-                                        focusNode: focusNode,
-                                        decoration: InputDecoration(
-                                          alignLabelWithHint: true,
-                                          border: InputBorder.none,
-                                          hintText: '900 000 00 00',
-                                          hintStyle: GoogleFonts.inter(
-                                            fontSize: 25.sp,
-                                            color: const Color.fromRGBO(
-                                                150, 150, 150, 1),
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.never,
-                                        ),
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter
-                                              .digitsOnly,
-                                          CustomInputFormatter(),
-                                        ],
-                                        keyboardType: TextInputType.number,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            CustomButton(
-                              validate: true,
-                              color: const Color.fromRGBO(32, 203, 131, 1.0),
-                              text: 'Продолжить',
-                              // validate: state is TextFieldSuccess ? true : false,
-                              textColor: Colors.white,
-                              onPressed: () {
-                                // _sendCode();
-                                focusNode.unfocus();
-                              },
+                            const Icon(
+                              Icons.add,
+                              color: Color(0xff0077FF),
                             ),
                           ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15.h),
+                    child: SizedBox(
+                      height: 310.h,
+                      width: 428.w,
+                      child: CupertinoCard(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 20.h),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Сменить номер телефона',
+                                style: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(top: 37.h, bottom: 5.h),
+                                child: Container(
+                                  height: 70.h,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: const BorderRadius.horizontal(
+                                      left: Radius.circular(10),
+                                      right: Radius.circular(10),
+                                    ),
+                                    border: Border.all(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.asset(
+                                            'assets/images/code.png'),
+                                      ),
+                                      SizedBox(width: 12.w),
+                                      Text(
+                                        '+7',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 25.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.w),
+                                      Container(
+                                        height: 37.h,
+                                        width: 1.w,
+                                        color: const Color.fromRGBO(
+                                            224, 224, 224, 1.0),
+                                      ),
+                                      SizedBox(
+                                        width: 12.w,
+                                      ),
+                                      Container(
+                                        width: 0.6.sw,
+                                        alignment: Alignment.center,
+                                        child: TextField(
+                                          onTap: () {
+                                            Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 600), () {
+                                              _scrollController.animateTo(
+                                                _scrollController
+                                                    .position.maxScrollExtent,
+                                                duration: const Duration(
+                                                    milliseconds: 500),
+                                                curve: Curves.ease,
+                                              );
+                                            });
+                                          },
+                                          controller: phoneController,
+                                          style: GoogleFonts.inter(
+                                            fontSize: 25.sp,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                          onChanged: (value) {
+                                            phoneNumber =
+                                                '+7${value.replaceAll(RegExp(' '), '')}';
+                                            if (value.length > 12 &&
+                                                value.substring(0, 1) == '9') {
+                                              // BlocProvider.of<AuthBloc>(context)
+                                              //     .add(TextFieldFilled(true));
+                                              focusNode.unfocus();
+                                            } else {
+                                              // BlocProvider.of<AuthBloc>(context)
+                                              //     .add(TextFieldFilled(false));
+                                            }
+                                          },
+                                          focusNode: focusNode,
+                                          decoration: InputDecoration(
+                                            alignLabelWithHint: true,
+                                            border: InputBorder.none,
+                                            hintText: '900 000 00 00',
+                                            hintStyle: GoogleFonts.inter(
+                                              fontSize: 25.sp,
+                                              color: const Color.fromRGBO(
+                                                  150, 150, 150, 1),
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.never,
+                                          ),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter
+                                                .digitsOnly,
+                                            CustomInputFormatter(),
+                                          ],
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 40.h),
+                                child: CustomButton(
+                                  validate: true,
+                                  color: const Color.fromRGBO(32, 203, 131, 1.0),
+                                  text: 'Продолжить',
+                                  // validate: state is TextFieldSuccess ? true : false,
+                                  textColor: Colors.white,
+                                  onPressed: () {
+                                    // _sendCode();
+                                    focusNode.unfocus();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

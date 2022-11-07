@@ -5,6 +5,7 @@ import 'package:be_loved/features/home/presentation/views/events/events_page.dar
 import 'package:be_loved/features/home/presentation/views/purposes/purposes_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -23,6 +24,8 @@ class _HomePageState extends State<HomePage> {
   final streamController = StreamController();
 
   int currentIndex = 0;
+  bool keyboardOpened = false;
+  late StreamSubscription<bool> keyboardSub;
 
   List<Widget> pages = [
     MainRelationShipsPage(),
@@ -47,6 +50,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     return Scaffold(
+      bottomNavigationBar: bottomNavigator(),
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -55,7 +59,6 @@ class _HomePageState extends State<HomePage> {
             controller: pageController,
             children: pages,
           ),
-          Align(alignment: Alignment.bottomCenter, child: bottomNavigator()),
         ],
       ),
     );
@@ -65,7 +68,9 @@ class _HomePageState extends State<HomePage> {
     TextStyle styleSelect = const TextStyle(
         fontWeight: FontWeight.w700, fontSize: 12, color: ColorStyles.redColor);
     TextStyle styleUnSelect = const TextStyle(
-        fontWeight: FontWeight.w700, fontSize: 12, color: ColorStyles.greyColor);
+        fontWeight: FontWeight.w700,
+        fontSize: 12,
+        color: ColorStyles.greyColor);
 
     return StreamBuilder(
       stream: streamController.stream,
@@ -93,7 +98,9 @@ class _HomePageState extends State<HomePage> {
                           SvgImg.relationships,
                           height: 32.h,
                           width: 37.w,
-                          color: currentIndex == 0 ? ColorStyles.redColor : Colors.grey,
+                          color: currentIndex == 0
+                              ? ColorStyles.redColor
+                              : Colors.grey,
                         ),
                         SizedBox(height: 12.h),
                         Text('Отношения',
@@ -119,7 +126,9 @@ class _HomePageState extends State<HomePage> {
                           SvgImg.events,
                           height: 32.h,
                           width: 28.24.w,
-                          color: currentIndex == 1 ? ColorStyles.redColor : Colors.grey,
+                          color: currentIndex == 1
+                              ? ColorStyles.redColor
+                              : Colors.grey,
                         ),
                         SizedBox(height: 12.h),
                         Text('События',
@@ -145,7 +154,9 @@ class _HomePageState extends State<HomePage> {
                           SvgImg.purposes,
                           height: 32.h,
                           width: 32.w,
-                          color: currentIndex == 2 ? ColorStyles.redColor : Colors.grey,
+                          color: currentIndex == 2
+                              ? ColorStyles.redColor
+                              : Colors.grey,
                         ),
                         SizedBox(height: 12.h),
                         Text('Цели',
@@ -171,7 +182,9 @@ class _HomePageState extends State<HomePage> {
                           SvgImg.archive,
                           height: 32.h,
                           width: 29.26.w,
-                          color: currentIndex == 3 ? ColorStyles.redColor : Colors.grey,
+                          color: currentIndex == 3
+                              ? ColorStyles.redColor
+                              : Colors.grey,
                         ),
                         SizedBox(height: 12.h),
                         Text('Архив',
