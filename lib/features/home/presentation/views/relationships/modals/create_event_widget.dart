@@ -159,6 +159,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   ),
                                   SwitchBtn(
                                       onChange: (val) {
+                                        FocusManager.instance.primaryFocus?.unfocus();
                                         setState(() {
                                           switchVal1 = val;
                                         });
@@ -203,6 +204,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                           pressType:
                                               PressType.singleClick,
                                           menuBuilder: () {
+                                            FocusManager.instance.primaryFocus?.unfocus();
                                             return _buildDatePicker(
                                                 context, (date, hide) {
                                               if (hide) {
@@ -269,6 +271,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                           pressType:
                                               PressType.singleClick,
                                           menuBuilder: () {
+                                            FocusManager.instance.primaryFocus?.unfocus();
                                             return _buildDatePicker(
                                                 context, (date, hide) {
                                               if (hide) {
@@ -332,6 +335,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               ),
                               SwitchBtn(
                                   onChange: (val) {
+                                    FocusManager.instance.primaryFocus?.unfocus();
                                     setState(() {
                                       switchVal2 = val;
                                     });
@@ -360,6 +364,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               ),
                               SwitchBtn(
                                   onChange: (val) {
+                                    FocusManager.instance.primaryFocus?.unfocus();
                                     setState(() {
                                       switchVal3 = val;
                                     });

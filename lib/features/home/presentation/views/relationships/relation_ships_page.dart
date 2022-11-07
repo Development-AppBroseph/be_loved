@@ -7,6 +7,7 @@ import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -280,7 +281,13 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                         SizedBox(height: 11.h),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: ListView.builder(
+                          child: ReorderableListView.builder(
+                            onReorder: (oldIndex, newIndex) {
+                              setState(() {
+                                final item = events.removeAt(oldIndex);
+                                events.insert(newIndex, item);
+                              });
+                            },
                             physics: const NeverScrollableScrollPhysics(),
                             padding: const EdgeInsets.all(0),
                             shrinkWrap: true,
@@ -288,10 +295,22 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                             itemBuilder: ((context, index) {
                               return CustomAnimationItemRelationships(
                                 // func: func,
+                                key: ValueKey('$index'),
                                 delete: delete,
                                 index: index,
                               );
                             }),
+                            proxyDecorator: (child, index, animation) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(blurRadius: 20.h, color: Color.fromRGBO(0, 0, 0, 0.1))
+                                  ],
+                                  borderRadius: BorderRadius.circular(20.r)
+                                ),
+                                child: child,
+                              );
+                            },
                           ),
                         ),
                         if(events.isEmpty)
