@@ -144,109 +144,109 @@ class _InvitePartnerState extends State<InvitePartner> {
       },
       builder: (context, snapshot) {
         return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
-          // printError(info: current.toString());
-          // print(
-          //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
-          // if (current is GetUserError) {
-          //   inviteUser = true;
-          // }
+          // // printError(info: current.toString());
+          // // print(
+          // //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
+          // // if (current is GetUserError) {
+          // //   inviteUser = true;
+          // // }
     
-          if (current is InviteSuccess) {
-            inviteUser = false;
-            if (_timer != null) {
-              if (!_timer!.isActive) {
-                startTimer();
-              }
-            }
-            // StandartSnackBar.show(
-            //   'Приглашение успешно отправлено',
-            //   SnackBarStatus(Icons.done, Colors.green),
-            // );
-          }
-          if (current is ReletionshipsError) {
-            _timer?.cancel();
-          }
-          // if (current is InviteAccepted &&
-          //     current.fromYou &&
-          //     previous is InviteAccepted == false &&
-          //     previous is AuthLoading == false) {
-          //   printInfo(info: 'CURRENT IS: $current');
-          //   printInfo(info: 'PREVIOUS IS: $previous');
+          // if (current is InviteSuccess) {
+          //   inviteUser = false;
+          //   if (_timer != null) {
+          //     if (!_timer!.isActive) {
+          //       startTimer();
+          //     }
+          //   }
+          //   // StandartSnackBar.show(
+          //   //   'Приглашение успешно отправлено',
+          //   //   SnackBarStatus(Icons.done, Colors.green),
+          //   // );
+          // }
+          // if (current is ReletionshipsError) {
           //   _timer?.cancel();
+          // }
+          // // if (current is InviteAccepted &&
+          // //     current.fromYou &&
+          // //     previous is InviteAccepted == false &&
+          // //     previous is AuthLoading == false) {
+          // //   printInfo(info: 'CURRENT IS: $current');
+          // //   printInfo(info: 'PREVIOUS IS: $previous');
+          // //   _timer?.cancel();
+          // //   focusNode.unfocus();
+          // //   Get.Get.to(
+          // //     RelationShips(previewPage: () {}, prevPage: () {}),
+          // //     duration: const Duration(seconds: 1),
+          // //     transition: Get.Transition.rightToLeft,
+          // //   )?.then((value) {
+          // //     setState(() {
+          // //       timerIsStarted = false;
+          // //       isValidate = true;
+          // //     });
+          // //     _timer?.cancel();
+          // //     // start = 30;
+          // //     BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+          // //   });
+          // //   // widget.previousPage();
+          // //   // Navigator.push(
+          // //   //   context,
+          // //   //   MaterialPageRoute(
+          // //   //     builder: (context) => RelationShips(
+          // //   //       previewPage: () {},
+          // //   //       prevPage: () {},
+          // //   //     ),
+          // //   //   ),
+          // //   // ).then((value) => _startSearch(context));
+          // // }
+          // if (current is InviteError) {
+          //   inviteUser = false;
+          //   _timer?.cancel();
+          //   // StandartSnackBar.show(
+          //   //   'Приглашение не удалось отправить',
+          //   //   SnackBarStatus(Icons.error, redColor),
+          //   // );
+          // }
+          // if (current is CheckIsUserExistError) {
+          //   inviteUser = false;
+          //   // StandartSnackBar.show(
+          //   //   'Приглашение не удалось отправить',
+          //   //   SnackBarStatus(Icons.error, redColor),
+          //   // );
+          // }
+          // if (current is CheckIsUserExistSuccess) {
+          //   inviteUser = true;
+          //   // StandartSnackBar.show(
+          //   //   'Приглашение не удалось отправить',
+          //   //   SnackBarStatus(Icons.error, redColor),
+          //   // );
+          // }
+          // if (current is ReceiveInvite && previous is ReceiveInvite == false) {
+          //   _timer?.cancel();
+          //   widget.nextPage();
           //   focusNode.unfocus();
-          //   Get.Get.to(
-          //     RelationShips(previewPage: () {}, prevPage: () {}),
-          //     duration: const Duration(seconds: 1),
-          //     transition: Get.Transition.rightToLeft,
-          //   )?.then((value) {
-          //     setState(() {
-          //       timerIsStarted = false;
-          //       isValidate = true;
-          //     });
-          //     _timer?.cancel();
-          //     // start = 30;
-          //     BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-          //   });
-          //   // widget.previousPage();
+          //   // Get.Get.to(
+          //   //   InviteFor(
+          //   //       previewPage: () {
+          //   //         BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+          //   //       },
+          //   //       nextPage: () {}),
+          //   //   duration: const Duration(seconds: 1),
+          //   //   transition: Get.Transition.upToDown,
+          //   // )?.then((value) => _startSearch(context));
           //   // Navigator.push(
           //   //   context,
           //   //   MaterialPageRoute(
-          //   //     builder: (context) => RelationShips(
-          //   //       previewPage: () {},
-          //   //       prevPage: () {},
-          //   //     ),
+          //   //     builder: (context) => InviteForStartRelationship(nextPage: () {}),
+          //   //     fullscreenDialog: true,
           //   //   ),
           //   // ).then((value) => _startSearch(context));
           // }
-          if (current is InviteError) {
-            inviteUser = false;
-            _timer?.cancel();
-            // StandartSnackBar.show(
-            //   'Приглашение не удалось отправить',
-            //   SnackBarStatus(Icons.error, redColor),
-            // );
-          }
-          if (current is CheckIsUserExistError) {
-            inviteUser = false;
-            // StandartSnackBar.show(
-            //   'Приглашение не удалось отправить',
-            //   SnackBarStatus(Icons.error, redColor),
-            // );
-          }
-          if (current is CheckIsUserExistSuccess) {
-            inviteUser = true;
-            // StandartSnackBar.show(
-            //   'Приглашение не удалось отправить',
-            //   SnackBarStatus(Icons.error, redColor),
-            // );
-          }
-          if (current is ReceiveInvite && previous is ReceiveInvite == false) {
-            _timer?.cancel();
-            widget.nextPage();
-            focusNode.unfocus();
-            // Get.Get.to(
-            //   InviteFor(
-            //       previewPage: () {
-            //         BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-            //       },
-            //       nextPage: () {}),
-            //   duration: const Duration(seconds: 1),
-            //   transition: Get.Transition.upToDown,
-            // )?.then((value) => _startSearch(context));
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => InviteForStartRelationship(nextPage: () {}),
-            //     fullscreenDialog: true,
-            //   ),
-            // ).then((value) => _startSearch(context));
-          }
-          if (current is DeleteInviteSuccess) {
-            BlocProvider.of<AuthBloc>(context).add(
-                CheckIsUserPhone('7${_phoneController.text.replaceAll(' ', '')}'));
-          }
+          // if (current is DeleteInviteSuccess) {
+          //   BlocProvider.of<AuthBloc>(context).add(
+          //       CheckIsUserPhone('7${_phoneController.text.replaceAll(' ', '')}'));
+          // }
     
-          return true;
+          return false;
         }, builder: (context, state) {
           // print(MediaQuery.of(context).viewInsets.bottom);
           focusNode.addListener(() {

@@ -91,6 +91,8 @@ class _InviteForState extends State<InviteFor> {
     );
   }
 
+  bool inviteState = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WebSocketBloc, WebSocketState>(
@@ -100,35 +102,7 @@ class _InviteForState extends State<InviteFor> {
          }
          if(current is WebSocketInviteAcceptState) {
 
-          _timer?.cancel();
-            _timer = null;
-            _accepted = true;
-          return true;
-         }
-        return false;
-      },
-      builder: (context, snapshot) {
-        return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
-          if (current is ReletionshipsError) {
-            if (!widget.isSwiping) {
-              widget.previewPage();
-            }
-            _opened = false;
-          }
-          if (current is GetUserSuccess) {
-            love = current.user.love;
-            return true;
-          }
-          // if (current is InviteAccepted) {
-            // _timer?.cancel();
-            // _timer = null;
-            // _accepted = true;
-          //   return true;
-          // }
-          if (current is ReletionshipsStarted) {
-            _timer?.cancel();
-            timerSecond?.cancel();
-            _timer = null;
+          if(inviteState) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -136,10 +110,49 @@ class _InviteForState extends State<InviteFor> {
               ),
               (route) => false,
             );
+          } else {
+            _timer?.cancel();
+            _timer = null;
+            _accepted = true;
           }
+          inviteState = true;
           return true;
+         }
+        return false;
+      },
+      builder: (context, snapshot) {
+        return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
+          // if (current is ReletionshipsError) {
+          //   if (!widget.isSwiping) {
+          //     widget.previewPage();
+          //   }
+          //   _opened = false;
+          // }
+          if (current is GetUserSuccess) {
+            love = current.user.love;
+            return true;
+          }
+          // // if (current is InviteAccepted) {
+          //   // _timer?.cancel();
+          //   // _timer = null;
+          //   // _accepted = true;
+          // //   return true;
+          // // }
+          // if (current is ReletionshipsStarted) {
+          //   _timer?.cancel();
+          //   timerSecond?.cancel();
+          //   _timer = null;
+            // Navigator.pushAndRemoveUntil(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => HomePage(),
+            //   ),
+            //   (route) => false,
+            // );
+          // }
+          return false;
         }, builder: (context, state) {
-          print('websocket message builder AuthBloc ${state}');
+          // print('websocket message builder AuthBloc ${state}');
           // if (state is ReletionshipsAccepted) {
           //   _timer?.cancel();
           //   timerSecond?.cancel();
