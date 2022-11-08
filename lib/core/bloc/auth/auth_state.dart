@@ -54,7 +54,11 @@ class ImageSuccess extends AuthState {
   ImageSuccess(this.image);
 }
 
-class InitSuccess extends AuthState {}
+class InitSuccess extends AuthState {
+  String token;
+
+  InitSuccess(this.token);
+}
 
 class InitError extends AuthState {
   String error;
@@ -90,11 +94,11 @@ class DeleteInviteError extends AuthState {}
 
 class ReceiveInvite extends AuthState {}
 
-class InviteAccepted extends AuthState {
-  bool fromYou;
+// class InviteAccepted extends AuthState {
+//   bool fromYou;
 
-  InviteAccepted(this.fromYou);
-}
+//   InviteAccepted(this.fromYou);
+// }
 
 class ReletionshipsStarted extends AuthState {}
 

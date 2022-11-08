@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../widgets/time_item_widget.dart';
@@ -22,7 +21,7 @@ import '../widgets/years_month_select_widget.dart';
 
 class CreateEventWidget extends StatefulWidget {
   final Function() onTap;
-  CreateEventWidget({required this.onTap});
+  const CreateEventWidget({Key? key, required this.onTap}) : super(key: key);
   @override
   State<CreateEventWidget> createState() => _CreateEventWidgetState();
 }
@@ -39,16 +38,16 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   bool switchVal1 = false;
   bool switchVal2 = false;
   bool switchVal3 = false;
-  TextEditingController _controllerName = TextEditingController();
-  TextEditingController _controllerDescription = TextEditingController();
-  TextEditingController _controllerFromTime = TextEditingController();
-  TextEditingController _controllerToTime = TextEditingController();
+  final TextEditingController _controllerName = TextEditingController();
+  final TextEditingController _controllerDescription = TextEditingController();
+  final TextEditingController _controllerFromTime = TextEditingController();
+  final TextEditingController _controllerToTime = TextEditingController();
 
   DateTime fromDate = DateTime.now();
-  DateTime toDate = DateTime.now().add(Duration(days: 5));
-  CustomPopupMenuController _customPopupMenuController1 =
+  DateTime toDate = DateTime.now().add(const Duration(days: 5));
+  final CustomPopupMenuController _customPopupMenuController1 =
       CustomPopupMenuController();
-  CustomPopupMenuController _customPopupMenuController2 =
+  final CustomPopupMenuController _customPopupMenuController2 =
       CustomPopupMenuController();
 
   validateTextFields(){
@@ -95,18 +94,18 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
         elevation: 0,
         margin: EdgeInsets.zero,
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOutQuint,
           height: MediaQuery.of(context).size.height * (keyboardOpened ? 0.99 : 0.8) - (keyboardOpened ? MediaQuery.of(context).padding.top : 0),
           width: MediaQuery.of(context).size.width,
-          color: Color.fromRGBO(0, 0, 0, 0),
+          color: const Color.fromRGBO(0, 0, 0, 0),
           child: Stack(
             children: [
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: SingleChildScrollView(
-                  physics: ClampingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.w),
                     child: Column(
@@ -214,7 +213,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                               setState(() {
                                                 fromDate = date;
                                                 if(fromDate.millisecondsSinceEpoch > toDate.millisecondsSinceEpoch){
-                                                  toDate = fromDate.add(Duration(days: 1));
+                                                  toDate = fromDate.add(const Duration(days: 1));
                                                 }
                                               });
                                             }, fromDate);
@@ -558,7 +557,7 @@ return StatefulBuilder(builder: (context, setState) {
       decoration: BoxDecoration(
         // borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
-          BoxShadow(blurRadius: 20.h, color: Color.fromRGBO(0, 0, 0, 0.1))
+          BoxShadow(blurRadius: 20.h, color: const Color.fromRGBO(0, 0, 0, 0.1))
         ],
       ),
       // padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
@@ -580,7 +579,7 @@ return StatefulBuilder(builder: (context, setState) {
                       onTap: () {
                         if (_calendarType == CalendarType.days) {
                           _pageController.previousPage(
-                              duration: Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOutQuint);
                         }
                       },
@@ -610,7 +609,7 @@ return StatefulBuilder(builder: (context, setState) {
                     onTap: () {
                       if (_calendarType == CalendarType.days) {
                         _pageController.nextPage(
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOutQuint);
                       }
                     },
@@ -646,7 +645,7 @@ return StatefulBuilder(builder: (context, setState) {
                         selectedDay = _focusedDay;
                         onTap(_focusedDay, false);
                       }else{
-                        selectedDay = currentDate.add(Duration(days: 1));
+                        selectedDay = currentDate.add(const Duration(days: 1));
                         onTap(selectedDay, false);
                       }
                       _calendarStartDay = _focusedDay;
@@ -665,7 +664,7 @@ return StatefulBuilder(builder: (context, setState) {
                   setState((){
                     _focusedDay = dt;
                   });
-                  Future.delayed(Duration(milliseconds: 300), (){
+                  Future.delayed(const Duration(milliseconds: 300), (){
                     setState((){
                       _calendarStartDay = dt;
                     });

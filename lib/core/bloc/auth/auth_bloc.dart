@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:be_loved/core/network/repository.dart';
+import 'package:be_loved/core/services/database/secure_storage.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<PickImage>((event, emit) => _pickImage(event, emit));
     on<InitUser>((event, emit) => _initUser(event, emit));
     on<GetUser>((event, emit) => _getUser(event, emit));
-    on<SearchUser>((event, emit) => _searchUser(event, emit));
+    // on<SearchUser>((event, emit) => _searchUser(event, emit));
     on<InviteUser>((event, emit) => _inviteUser(event, emit));
     on<DeleteInviteUser>((event, emit) => _deleteInviteUser(event, emit));
     on<StartRelationships>((event, emit) => _startRelationShips(event, emit));
@@ -174,7 +175,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         token = result;
         await SharedPreferences.getInstance()
           ..setString('token', result);
-        emit(InitSuccess());
+        emit(InitSuccess(result));
       } else {
         emit(InitError('Выберите аватарку'));
       }
@@ -195,36 +196,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _searchUser(SearchUser event, Emitter<AuthState> emit) async {
-    // emit(AuthLoading());
-    var result = await Repository().getUser();
+  // void _searchUser(SearchUser event, Emitter<AuthState> emit) async {
+  //   // emit(AuthLoading());
+  //   var result = await Repository().getUser();
 
-    if (result != null) {
-      user = result;
+  //   if (result != null) {
+  //     user = result;
 
-      if (result.status == null) {
-        emit(ReletionshipsError());
-      } else if (result.status != 'Принято') {
-        if (result.fromYou != null) {
-          if (!result.fromYou!) {
-            emit(ReceiveInvite());
-          }
-        } else {
-          emit(GetUserSuccess(result));
-        }
-      } else {
-        if (result.date == null) {
-          emit(InviteAccepted(result.fromYou!));
-        } else {
-          MySharedPrefs().setUser(token!, result);
-          emit(ReletionshipsStarted());
-        }
-      }
-      // print('huy');
-    } else {
-      emit(GetUserError());
-    }
-  }
+  //     if (result.status == null) {
+  //       emit(ReletionshipsError());
+  //     } else if (result.status != 'Принято') {
+  //       if (result.fromYou != null) {
+  //         if (!result.fromYou!) {
+  //           emit(ReceiveInvite());
+  //         }
+  //       } else {
+  //         emit(GetUserSuccess(result));
+  //       }
+  //     } else {
+  //       if (result.date == null) {
+  //         emit(InviteAccepted(result.fromYou!));
+  //       } else {
+  //         MySecureStorage().setToken(token!);
+  //         MySharedPrefs().setUser(token!, result);
+  //         emit(ReletionshipsStarted());
+  //       }
+  //     }
+  //     // print('huy');
+  //   } else {
+  //     emit(GetUserError());
+  //   }
+  // }
 
   void _inviteUser(InviteUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
@@ -251,6 +253,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _deleteInviteUser(
       DeleteInviteUser event, Emitter<AuthState> emit) async {
+
+    if(user?.relationId == null) {
+     var result = await Repository().getUser();
+
+      if (result != null) {
+        user = result;
+      }
+    }
     if (user?.relationId != null) {
       emit(AuthLoading());
       var result = await Repository().deleteInviteUser(user!.relationId!);
@@ -271,6 +281,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await Repository().startRelationships(event.date, user!.relationId!);
 
     if (result != null) {
+      MySecureStorage().setToken(token!);
       MySharedPrefs().setUser(token!, result);
       user = result;
       emit(ReletionshipsStarted());

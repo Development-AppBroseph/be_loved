@@ -9,6 +9,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -29,8 +30,17 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
   final _streamController = StreamController<int>();
   final _streamControllerCarousel = StreamController<double>();
 
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   FocusNode f1 = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.addListener(() {
+      setState(() {});
+    });
+  }
 
   @override
   void dispose() {
@@ -43,14 +53,14 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        content(),
+        content(context),
       ],
     );
   }
 
   List<Widget> events = [];
 
-  Widget content() {
+  Widget content(BuildContext context) {
     TextStyle style1 = TextStyle(
         fontWeight: FontWeight.w700,
         color: Colors.white,
@@ -69,7 +79,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
         initialData: 0,
         builder: (context, snapshot) {
           return SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
             child: Column(
               children: [
                 Stack(
@@ -155,7 +165,9 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                         ),
                         SizedBox(height: 30.h),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 25.w,
+                          ),
                           child: SizedBox(
                             height: 45.h,
                             child: Row(
@@ -164,6 +176,9 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                   child: SizedBox(
                                     height: 33.h,
                                     child: TextField(
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(18),
+                                      ],
                                       textAlignVertical:
                                           TextAlignVertical.center,
                                       style: style2,
@@ -185,11 +200,17 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                     alignment: Alignment.center,
                                     children: [
                                       GestureDetector(
-                                          onTap: () {
-                                            FocusScope.of(context)
-                                                .requestFocus(f1);
-                                          },
-                                          child: SvgPicture.asset(SvgImg.edit)),
+                                        onTap: () {
+                                          FocusScope.of(context)
+                                              .requestFocus(f1);
+                                        },
+                                        child: _controller.text.isNotEmpty
+                                            ? const Icon(
+                                                Icons.check_rounded,
+                                                color: Colors.white,
+                                              )
+                                            : SvgPicture.asset(SvgImg.edit),
+                                      ),
                                     ],
                                   ),
                                 )
@@ -313,8 +334,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                             },
                           ),
                         ),
-                        if(events.isEmpty)
-                        SizedBox(height: 15.h),
+                        if (events.isEmpty) SizedBox(height: 15.h),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25.w),
                           child: CustomAddAnimationButton(func: () {

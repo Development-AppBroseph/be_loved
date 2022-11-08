@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_for_start_relationship.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_partner.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +25,8 @@ class InviteRelation extends StatelessWidget {
             initialData: 1,
             stream: streamController.stream,
             builder: (context, snapshot) {
-              var user = BlocProvider.of<AuthBloc>(context).user;
-              return BlocBuilder<AuthBloc, AuthState>(
+              // var user = BlocProvider.of<AuthBloc>(context).user;
+              return BlocBuilder<WebSocketBloc, WebSocketState>(
                   builder: (context, state) {
                 // pageController.addListener(() {
                 //   if (pageController.offset.toInt() % 5 == 0) {
@@ -62,19 +62,23 @@ class InviteRelation extends StatelessWidget {
                 //     pageController.position.userScrollDirection ==
                 //         ScrollDirection.reverse);
                 // });
-                pageController.addListener(() {
-                  if (pageController.position.userScrollDirection ==
-                      ScrollDirection.reverse) {
-                    isSwipe = true;
-                  } else {
-                    isSwipe = false;
-                  }
-                });
+                if(state is WebSocketInviteGetState) {
+                  isSwipe = true;
+                } else {
+                  isSwipe = false;
+                }
+                // pageController.addListener(() {
+                //   if (state is WebSocketGetInviteMessage) {
+                //     isSwipe = true;
+                //   } else {
+                //     isSwipe = false;
+                //   }
+                // });
                 return PageView(
                   scrollDirection: Axis.vertical,
                   physics: snapshot.data == 1
                       ? const NeverScrollableScrollPhysics()
-                      : state is InviteAccepted == false
+                      : isSwipe
                           ? const ClampingScrollPhysics()
                           : const NeverScrollableScrollPhysics(),
                   controller: pageController,

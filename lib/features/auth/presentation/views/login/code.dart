@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/enums.dart';
 import 'package:be_loved/core/utils/images.dart';
@@ -86,6 +87,7 @@ class _CodePageState extends State<CodePage> {
               builder: (context) => CreateAccountInfo(),
             ),
           ).then((value) {
+            BlocProvider.of<WebSocketBloc>(context).add(WebSocketCloseEvent());
             if (textEditingControllerUp.text.length == 5) {
               BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
             }
@@ -93,6 +95,8 @@ class _CodePageState extends State<CodePage> {
         } else {
           BlocProvider.of<AuthBloc>(context).add(GetUser());
           Future.delayed(const Duration(milliseconds: 500), () {
+            BlocProvider.of<WebSocketBloc>(context)
+                .add(WebSocketEvent(current.token));
             if (BlocProvider.of<AuthBloc>(context).user?.date == null) {
               Navigator.push(
                 context,
@@ -100,11 +104,15 @@ class _CodePageState extends State<CodePage> {
                   builder: (context) => InviteRelation(previousPage: () {}),
                 ),
               ).then((value) {
+                BlocProvider.of<WebSocketBloc>(context)
+                    .add(WebSocketCloseEvent());
                 if (textEditingControllerUp.text.length == 5) {
                   BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
                 }
               });
             } else {
+              BlocProvider.of<WebSocketBloc>(context)
+                  .add(WebSocketEvent(current.token));
               MySharedPrefs().setUser(current.token,
                   BlocProvider.of<AuthBloc>(context, listen: false).user!);
               Navigator.pushAndRemoveUntil(
@@ -165,123 +173,121 @@ class _CodePageState extends State<CodePage> {
             stream: _streamController.stream,
             builder: (context, snapshot) {
               return SafeArea(
-                  bottom: true,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AnimatedContainer(
-                            curve: Curves.easeInOutQuint,
-                            duration: const Duration(milliseconds: 600),
-                            height: snapshot.data! ? 17.h : 161.h,
+                bottom: true,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.w),
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AnimatedContainer(
+                          curve: Curves.easeInOutQuint,
+                          duration: const Duration(milliseconds: 600),
+                          height: snapshot.data! ? 17.h : 161.h,
+                        ),
+                        Text(
+                          'Введи код подтверждения',
+                          style: GoogleFonts.inter(
+                            fontSize: 35.sp,
+                            height: 1.1,
+                            fontWeight: FontWeight.w800,
                           ),
-                          Text(
-                            'Введи код подтверждения',
-                            style: GoogleFonts.inter(
-                              fontSize: 35.sp,
-                              height: 1.1,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          const SizedBox(height: 3),
-                          Text(
-                            'В ближайшее время вам придёт sms-\nсообщение с кодом подтверждения',
-                            style: GoogleFonts.inter(
-                                fontSize: 15.sp,
-                                color: const Color.fromRGBO(137, 137, 137, 1.0),
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 44.h),
-                            child: SizedBox(
-                              height: 70.sp,
-                              child: Pinput(
-                                pinAnimationType: PinAnimationType.none,
-                                showCursor: false,
-                                length: 5,
-                                androidSmsAutofillMethod:
-                                    AndroidSmsAutofillMethod.smsRetrieverApi,
-                                controller: textEditingControllerUp,
-                                focusNode: focusNode,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                onChanged: (value) {
-                                  if (value.length == 5 &&
-                                      value == code.toString()) {
-                                    BlocProvider.of<AuthBloc>(context)
-                                        .add(TextFieldFilled(true));
-                                    focusNode.unfocus();
-                                  } else {
-                                    BlocProvider.of<AuthBloc>(context)
-                                        .add(TextFieldFilled(false));
-                                  }
-                                },
-                                defaultPinTheme: PinTheme(
-                                  width: 60.sp,
-                                  height: 80.sp,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  textStyle: GoogleFonts.inter(
-                                    fontSize: 35.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color:
-                                        const Color.fromRGBO(23, 23, 23, 1.0),
-                                  ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          'В ближайшее время вам придёт sms-\nсообщение с кодом подтверждения',
+                          style: GoogleFonts.inter(
+                              fontSize: 15.sp,
+                              color: const Color.fromRGBO(137, 137, 137, 1.0),
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 44.h),
+                          child: SizedBox(
+                            height: 70.sp,
+                            child: Pinput(
+                              pinAnimationType: PinAnimationType.none,
+                              showCursor: false,
+                              length: 5,
+                              androidSmsAutofillMethod:
+                                  AndroidSmsAutofillMethod.smsRetrieverApi,
+                              controller: textEditingControllerUp,
+                              focusNode: focusNode,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              onChanged: (value) {
+                                if (value.length == 5 &&
+                                    value == code.toString()) {
+                                  BlocProvider.of<AuthBloc>(context)
+                                      .add(TextFieldFilled(true));
+                                  focusNode.unfocus();
+                                } else {
+                                  BlocProvider.of<AuthBloc>(context)
+                                      .add(TextFieldFilled(false));
+                                }
+                              },
+                              defaultPinTheme: PinTheme(
+                                width: 60.sp,
+                                height: 80.sp,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10)),
+                                textStyle: GoogleFonts.inter(
+                                  fontSize: 35.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color.fromRGBO(23, 23, 23, 1.0),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 51.h),
-                          CustomButton(
-                            color: const Color.fromRGBO(32, 203, 131, 1.0),
-                            text: 'Продолжить',
-                            textColor: Colors.white,
-                            onPressed: () {
-                              _checkCode(context);
-                              focusNode.unfocus();
-                            },
-                          ),
-                          // CustomAnimationButton(
-                          //   text: 'Продолжить',
-                          //   border: Border.all(
-                          //       color:
-                          //       width: 2.sp),
-                          //   onPressed: () => _checkCode(context),
-                          // ),
-                          SizedBox(height: 17.h),
-                          CustomButton(
-                            // black: true,
-                            validate: resendCode,
-                            code: true,
-                            text:
-                                resendCode ? 'Отправить код снова' : _getTime(),
-                            border: Border.all(
-                                color: const Color.fromRGBO(23, 23, 23, 1.0),
-                                width: 2.sp),
-                            onPressed: () {
-                              if (textEditingControllerUp.text.length == 5) {
-                                BlocProvider.of<AuthBloc>(context).add(
-                                  TextFieldFilled(true),
-                                );
-                              }
-                              resendCode = false;
-                              if (_timer?.isActive == false) {
-                                startTimer();
-                              }
-                            },
-                            color: Colors.black,
-                            textColor: Colors.white,
-                          ),
-                          SizedBox(height: 20.h),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: 51.h),
+                        CustomButton(
+                          color: const Color.fromRGBO(32, 203, 131, 1.0),
+                          text: 'Продолжить',
+                          textColor: Colors.white,
+                          onPressed: () {
+                            _checkCode(context);
+                            focusNode.unfocus();
+                          },
+                        ),
+                        // CustomAnimationButton(
+                        //   text: 'Продолжить',
+                        //   border: Border.all(
+                        //       color:
+                        //       width: 2.sp),
+                        //   onPressed: () => _checkCode(context),
+                        // ),
+                        SizedBox(height: 17.h),
+                        CustomButton(
+                          // black: true,
+                          validate: resendCode,
+                          code: true,
+                          text: resendCode ? 'Отправить код снова' : _getTime(),
+                          border: Border.all(
+                              color: const Color.fromRGBO(23, 23, 23, 1.0),
+                              width: 2.sp),
+                          onPressed: () {
+                            if (textEditingControllerUp.text.length == 5) {
+                              BlocProvider.of<AuthBloc>(context).add(
+                                TextFieldFilled(true),
+                              );
+                            }
+                            resendCode = false;
+                            if (_timer?.isActive == false) {
+                              startTimer();
+                            }
+                          },
+                          color: Colors.black,
+                          textColor: Colors.white,
+                        ),
+                        SizedBox(height: 20.h),
+                      ],
                     ),
-                  ));
+                  ),
+                ),
+              );
             }),
       );
     });

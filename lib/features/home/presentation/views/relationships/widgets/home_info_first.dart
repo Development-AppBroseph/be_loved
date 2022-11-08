@@ -28,7 +28,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
   @override
   void dispose() {
     streamController.close();
-    _timer!.cancel();
+    // _timer!.cancel();
     super.dispose();
   }
 
