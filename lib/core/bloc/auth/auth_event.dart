@@ -26,7 +26,7 @@ class GetUser extends AuthEvent {}
 
 class EditUserInfo extends AuthEvent {}
 
-class SearchUser extends AuthEvent {}
+// class SearchUser extends AuthEvent {}
 
 class PickImage extends AuthEvent {}
 

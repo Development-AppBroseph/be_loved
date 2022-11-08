@@ -8,6 +8,12 @@ class WebSocketEvent extends WebSocketInitEvents {
   WebSocketEvent(this.token);
 }
 
-class WebSocketGetMessage extends WebSocketCloseEvent {}
+class WebSocketSendInviteMessage extends WebSocketCloseEvent {}
+
+class WebSocketGetInviteMessage extends WebSocketCloseEvent {}
+
+class WebSocketCloseInviteMessage extends WebSocketCloseEvent {}
+
+class WebSocketAcceptInviteMessage extends WebSocketCloseEvent {}
 
 class WebSocketCloseEvent extends WebSocketInitEvents {}

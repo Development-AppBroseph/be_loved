@@ -94,11 +94,11 @@ class DeleteInviteError extends AuthState {}
 
 class ReceiveInvite extends AuthState {}
 
-class InviteAccepted extends AuthState {
-  bool fromYou;
+// class InviteAccepted extends AuthState {
+//   bool fromYou;
 
-  InviteAccepted(this.fromYou);
-}
+//   InviteAccepted(this.fromYou);
+// }
 
 class ReletionshipsStarted extends AuthState {}
 

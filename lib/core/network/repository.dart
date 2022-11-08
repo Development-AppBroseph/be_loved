@@ -158,7 +158,6 @@ class Repository {
   }
 
   Future<UserAnswer?> deleteInviteUser(int relationId) async {
-    print('senddddddd');
     var options = Options(headers: {
       'Authorization': 'Token ${await MySharedPrefs().token}',
     }, validateStatus: (status) => status! <= 500);

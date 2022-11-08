@@ -11,4 +11,10 @@ class WebSocketErrorState extends WebSocketState {
   WebSocketErrorState({required this.message});
 }
 
-class WebSocketInviteState extends WebSocketState {}
+class WebSocketInviteGetState extends WebSocketState {}
+
+class WebSocketInviteSendState extends WebSocketState {}
+
+class WebSocketInviteCloseState extends WebSocketState {}
+
+class WebSocketInviteAcceptState extends WebSocketState {}
