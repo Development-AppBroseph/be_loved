@@ -24,8 +24,6 @@ class _HomePageState extends State<HomePage> {
   final streamController = StreamController();
 
   int currentIndex = 0;
-  bool keyboardOpened = false;
-  late StreamSubscription<bool> keyboardSub;
 
   List<Widget> pages = [
     MainRelationShipsPage(),
