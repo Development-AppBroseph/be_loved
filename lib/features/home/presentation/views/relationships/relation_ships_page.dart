@@ -203,6 +203,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                         onTap: () {
                                           FocusScope.of(context)
                                               .requestFocus(f1);
+                                              f1.unfocus();
                                         },
                                         child: _controller.text.isNotEmpty
                                             ? const Icon(

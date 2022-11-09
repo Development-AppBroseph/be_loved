@@ -18,7 +18,6 @@ import 'package:table_calendar/table_calendar.dart';
 import '../widgets/time_item_widget.dart';
 import '../widgets/years_month_select_widget.dart';
 
-
 class CreateEventWidget extends StatefulWidget {
   final Function() onTap;
   const CreateEventWidget({Key? key, required this.onTap}) : super(key: key);
@@ -28,9 +27,13 @@ class CreateEventWidget extends StatefulWidget {
 
 class _CreateEventWidgetState extends State<CreateEventWidget> {
   TextStyle style1 = TextStyle(
-      color: ColorStyles.greyColor, fontSize: 15.sp, fontWeight: FontWeight.w800);
+      color: ColorStyles.greyColor,
+      fontSize: 15.sp,
+      fontWeight: FontWeight.w800);
   TextStyle style2 = TextStyle(
-      color: ColorStyles.blackColor, fontSize: 18.sp, fontWeight: FontWeight.w800);
+      color: ColorStyles.blackColor,
+      fontSize: 18.sp,
+      fontWeight: FontWeight.w800);
 
   TextStyle styleBtn = TextStyle(
       color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.w700);
@@ -50,15 +53,14 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   final CustomPopupMenuController _customPopupMenuController2 =
       CustomPopupMenuController();
 
-  validateTextFields(){
+  validateTextFields() {
     setState(() {
-      timeTextHelper(_controllerFromTime.text) ? {} : _controllerFromTime.clear();
+      timeTextHelper(_controllerFromTime.text)
+          ? {}
+          : _controllerFromTime.clear();
       timeTextHelper(_controllerToTime.text) ? {} : _controllerToTime.clear();
     });
-    
   }
-
-
 
   bool keyboardOpened = false;
   late StreamSubscription<bool> keyboardSub;
@@ -80,7 +82,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
     // TODO: implement dispose
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -94,648 +96,681 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
         elevation: 0,
         margin: EdgeInsets.zero,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOutQuint,
-          height: MediaQuery.of(context).size.height * (keyboardOpened ? 0.99 : 0.8) - (keyboardOpened ? MediaQuery.of(context).padding.top : 0),
-          width: MediaQuery.of(context).size.width,
-          color: const Color.fromRGBO(0, 0, 0, 0),
-          child: Stack(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                  physics: const ClampingScrollPhysics(),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 78.h,
-                        ),
-                        DefaultTextFormField(
-                          hint: 'Название',
-                          maxLines: 1,
-                          controller: _controllerName,
-                          maxLength: 40,
-                          hideCounter: true,
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        DefaultTextFormField(
-                          hint: 'Описание',
-                          maxLines: 3,
-                          controller: _controllerDescription,
-                          maxLength: 50,
-                          onChange: (s) {
-                            setState((){});
-                          }
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.r),
-                              color: ColorStyles.backgroundColorGrey),
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 12.h,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Весь день',
-                                    style: style2,
-                                  ),
-                                  SwitchBtn(
-                                      onChange: (val) {
-                                        FocusManager.instance.primaryFocus?.unfocus();
-                                        setState(() {
-                                          switchVal1 = val;
-                                        });
-                                      },
-                                      value: switchVal1)
-                                ],
-                              ),
-                              SizedBox(
-                                height: 12.h,
-                              ),
-                              Container(
-                                color: ColorStyles.greyColor,
-                                width: MediaQuery.of(context).size.width,
-                                height: 1.h,
-                              ),
-                              SizedBox(
-                                height: 20.h,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Начало',
-                                    style: style2,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      CustomPopupMenu(
-                                        position: PreferredPosition.bottom,
-                                          barrierColor:
-                                              Colors.transparent,
-                                          showArrow: false,
-                                          controller:
-                                              _customPopupMenuController1,
-                                          pressType:
-                                              PressType.singleClick,
-                                          menuBuilder: () {
-                                            FocusManager.instance.primaryFocus?.unfocus();
-                                            return _buildDatePicker(
-                                                context, (date, hide) {
-                                              if (hide) {
-                                                _customPopupMenuController1
-                                                    .hideMenu();
-                                              }
-                                              setState(() {
-                                                fromDate = date;
-                                                if(fromDate.millisecondsSinceEpoch > toDate.millisecondsSinceEpoch){
-                                                  toDate = fromDate.add(const Duration(days: 1));
-                                                }
-                                              });
-                                            }, fromDate);
-                                          },
-                                          child: TimeItemWidget(
-                                              text: DateFormat(
-                                                      'd MMM yyyy г.', 'RU')
-                                                  .format(fromDate))),
-                                      SizedBox(
-                                        width: 15.w,
-                                      ),
-                                      TimeItemTextFieldWidget(
-                                        controller: _controllerFromTime,
-                                        validateText: validateTextFields,
-                                        onChanged: (text){
-                                          if(text != null && text.isNotEmpty){
-                                            if(text.length == 2 && int.parse(text[0]) == 2 && int.parse(text[1]) > 3){
-                                              _controllerFromTime.text = '';
-                                              setState(() {});
-                                            }
-                                          }
-                                        },
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20.h,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Конец',
-                                    style: style2,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      CustomPopupMenu(
-                                        position: PreferredPosition.bottom,
-                                          barrierColor:
-                                              Colors.transparent,
-                                          showArrow: false,
-                                          controller:
-                                              _customPopupMenuController2,
-                                          pressType:
-                                              PressType.singleClick,
-                                          menuBuilder: () {
-                                            FocusManager.instance.primaryFocus?.unfocus();
-                                            return _buildDatePicker(
-                                                context, (date, hide) {
-                                              if (hide) {
-                                                _customPopupMenuController2
-                                                    .hideMenu();
-                                              }
-                                              setState(() {
-                                                toDate = date;
-                                              });
-                                            }, 
-                                            toDate,
-                                            fromDate: fromDate
-                                            );
-                                          },
-                                          child: TimeItemWidget(
-                                              text: DateFormat(
-                                                      'd MMM yyyy г.', 'RU')
-                                                  .format(toDate))),
-                                      SizedBox(
-                                        width: 15.w,
-                                      ),
-                                      TimeItemTextFieldWidget(
-                                        controller: _controllerToTime,
-                                        validateText: validateTextFields,
-                                        onChanged: (text){
-                                          if(text != null && text.isNotEmpty){
-                                            if(text.length == 2 && int.parse(text[0]) == 2 && int.parse(text[1]) > 3){
-                                              _controllerToTime.text = '';
-                                              setState(() {});
-                                            }
-                                          }
-                                        },
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 32.h,
-                              ),
-                            ],
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOutQuint,
+            height: MediaQuery.of(context).size.height *
+                    (keyboardOpened ? 0.99 : 0.8) -
+                (keyboardOpened ? MediaQuery.of(context).padding.top : 0),
+            width: MediaQuery.of(context).size.width,
+            color: const Color.fromRGBO(0, 0, 0, 0),
+            child: Stack(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: SingleChildScrollView(
+                    physics: const ClampingScrollPhysics(),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 78.h,
                           ),
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.r),
-                              color: ColorStyles.backgroundColorGrey),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 13.h),
-                          child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Повтор',
-                                style: style2,
-                              ),
-                              SwitchBtn(
-                                  onChange: (val) {
-                                    FocusManager.instance.primaryFocus?.unfocus();
-                                    setState(() {
-                                      switchVal2 = val;
-                                    });
-                                  },
-                                  value: switchVal2)
-                            ],
+                          DefaultTextFormField(
+                            hint: 'Название',
+                            maxLines: 1,
+                            controller: _controllerName,
+                            maxLength: 40,
+                            hideCounter: true,
                           ),
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.r),
-                              color: ColorStyles.backgroundColorGrey),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 13.h),
-                          child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Напоминание',
-                                style: style2,
-                              ),
-                              SwitchBtn(
-                                  onChange: (val) {
-                                    FocusManager.instance.primaryFocus?.unfocus();
-                                    setState(() {
-                                      switchVal3 = val;
-                                    });
-                                  },
-                                  value: switchVal3)
-                            ],
+                          SizedBox(
+                            height: 20.h,
                           ),
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.r),
-                              color: ColorStyles.backgroundColorGrey),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 13.h),
-                          child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Иконка',
-                                style: style2,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '😎',
-                                    style: TextStyle(fontSize: 30.sp),
-                                  ),
-                                  SizedBox(
-                                    width: 20.w,
-                                  ),
-                                  SvgPicture.asset(
-                                    SvgImg.upDownIcon,
-                                    height: 20.h,
-                                  )
-                                ],
-                              )
-                            ],
+                          DefaultTextFormField(
+                              hint: 'Описание',
+                              maxLines: 3,
+                              controller: _controllerDescription,
+                              maxLength: 50,
+                              onChange: (s) {
+                                setState(() {});
+                              }),
+                          SizedBox(
+                            height: 20.h,
                           ),
-                        ),
-                        SizedBox(
-                          height: 40.h,
-                        ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              behavior: HitTestBehavior.opaque,
-                              child: CupertinoCard(
-                                color: ColorStyles.redColor,
-                                margin: EdgeInsets.zero,
-                                elevation: 0,
-                                radius: BorderRadius.circular(20.r),
-                                child: Container(
-                                  width: 60.h,
-                                  height: 60.h,
-                                  alignment: Alignment.center,
-                                  // decoration: BoxDecoration(
-                                  //     color: ColorStyles.redColor,
-                                  //     borderRadius:
-                                  //         BorderRadius.circular(10.r)),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/close_event_create.svg',
-                                    height: 22.h,
-                                  ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.r),
+                                color: ColorStyles.backgroundColorGrey),
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 12.h,
                                 ),
-                              ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Весь день',
+                                      style: style2,
+                                    ),
+                                    SwitchBtn(
+                                        onChange: (val) {
+                                          setState(() {
+                                            switchVal1 = val;
+                                          });
+                                        },
+                                        value: switchVal1)
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 12.h,
+                                ),
+                                Container(
+                                  color: ColorStyles.greyColor,
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 1.h,
+                                ),
+                                SizedBox(
+                                  height: 20.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Начало',
+                                      style: style2,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        CustomPopupMenu(
+                                            position: PreferredPosition.bottom,
+                                            barrierColor: Colors.transparent,
+                                            showArrow: false,
+                                            controller:
+                                                _customPopupMenuController1,
+                                            pressType: PressType.singleClick,
+                                            menuBuilder: () {
+                                              return _buildDatePicker(context,
+                                                  (date, hide) {
+                                                if (hide) {
+                                                  _customPopupMenuController1
+                                                      .hideMenu();
+                                                }
+                                                setState(() {
+                                                  fromDate = date;
+                                                  if (fromDate
+                                                          .millisecondsSinceEpoch >
+                                                      toDate
+                                                          .millisecondsSinceEpoch) {
+                                                    toDate = fromDate.add(
+                                                        const Duration(
+                                                            days: 1));
+                                                  }
+                                                });
+                                              }, fromDate);
+                                            },
+                                            child: TimeItemWidget(
+                                                text: DateFormat(
+                                                        'd MMM yyyy г.', 'RU')
+                                                    .format(fromDate))),
+                                        SizedBox(
+                                          width: 15.w,
+                                        ),
+                                        TimeItemTextFieldWidget(
+                                          controller: _controllerFromTime,
+                                          validateText: validateTextFields,
+                                          onChanged: (text) {
+                                            if (text != null &&
+                                                text.isNotEmpty) {
+                                              if (text.length == 2 &&
+                                                  int.parse(text[0]) == 2 &&
+                                                  int.parse(text[1]) > 3) {
+                                                _controllerFromTime.text = '';
+                                                setState(() {});
+                                              }
+                                            }
+                                          },
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Конец',
+                                      style: style2,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        CustomPopupMenu(
+                                            position: PreferredPosition.bottom,
+                                            barrierColor: Colors.transparent,
+                                            showArrow: false,
+                                            controller:
+                                                _customPopupMenuController2,
+                                            pressType: PressType.singleClick,
+                                            menuBuilder: () {
+                                              return _buildDatePicker(context,
+                                                  (date, hide) {
+                                                if (hide) {
+                                                  _customPopupMenuController2
+                                                      .hideMenu();
+                                                }
+                                                setState(() {
+                                                  toDate = date;
+                                                });
+                                              }, toDate, fromDate: fromDate);
+                                            },
+                                            child: TimeItemWidget(
+                                                text: DateFormat(
+                                                        'd MMM yyyy г.', 'RU')
+                                                    .format(toDate))),
+                                        SizedBox(
+                                          width: 15.w,
+                                        ),
+                                        TimeItemTextFieldWidget(
+                                          controller: _controllerToTime,
+                                          validateText: validateTextFields,
+                                          onChanged: (text) {
+                                            if (text != null &&
+                                                text.isNotEmpty) {
+                                              if (text.length == 2 &&
+                                                  int.parse(text[0]) == 2 &&
+                                                  int.parse(text[1]) > 3) {
+                                                _controllerToTime.text = '';
+                                                setState(() {});
+                                              }
+                                            }
+                                          },
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 32.h,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 10.w,
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.r),
+                                color: ColorStyles.backgroundColorGrey),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20.w, vertical: 13.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Повтор',
+                                  style: style2,
+                                ),
+                                SwitchBtn(
+                                    onChange: (val) {
+                                      setState(() {
+                                        switchVal2 = val;
+                                      });
+                                    },
+                                    value: switchVal2)
+                              ],
                             ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: widget.onTap,
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.r),
+                                color: ColorStyles.backgroundColorGrey),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20.w, vertical: 13.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Напоминание',
+                                  style: style2,
+                                ),
+                                SwitchBtn(
+                                    onChange: (val) {
+                                      setState(() {
+                                        switchVal3 = val;
+                                      });
+                                    },
+                                    value: switchVal3)
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.r),
+                                color: ColorStyles.backgroundColorGrey),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20.w, vertical: 13.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Иконка',
+                                  style: style2,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '😎',
+                                      style: TextStyle(fontSize: 30.sp),
+                                    ),
+                                    SizedBox(
+                                      width: 20.w,
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                      width: 20.w,
+                                      child: PopupMenuButton(
+                                        onSelected: (value) {},
+                                        splashRadius: 1,
+                                        padding: const EdgeInsets.all(0),
+                                        icon: SvgPicture.asset(
+                                          SvgImg.upDownIcon,
+                                        ),
+                                        constraints:
+                                            const BoxConstraints.expand(
+                                          width: 57,
+                                          height: 140,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(15.r),
+                                          ),
+                                        ),
+                                        itemBuilder: (context) => [
+                                          ...List.generate(
+                                              31,
+                                              (index) => PopupMenuItem(
+                                                    child: Center(
+                                                      child: Text(
+                                                        '😎',
+                                                        style: TextStyle(
+                                                            fontSize: 30.sp),
+                                                      ),
+                                                    ),
+                                                  ))
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40.h,
+                          ),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
                                 behavior: HitTestBehavior.opaque,
                                 child: CupertinoCard(
-                                  color: ColorStyles.accentColor,
+                                  color: ColorStyles.redColor,
                                   margin: EdgeInsets.zero,
                                   elevation: 0,
                                   radius: BorderRadius.circular(20.r),
                                   child: Container(
+                                    width: 60.h,
                                     height: 60.h,
                                     alignment: Alignment.center,
-                                    padding: EdgeInsets.only(bottom: 2.h),
                                     // decoration: BoxDecoration(
-                                    //     color: ColorStyles.accentColor,
+                                    //     color: ColorStyles.redColor,
                                     //     borderRadius:
                                     //         BorderRadius.circular(10.r)),
-                                    child: Text(
-                                      'Создать событие',
-                                      style: styleBtn,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/close_event_create.svg',
+                                      height: 22.h,
                                     ),
                                   ),
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 74.h +
-                              MediaQuery.of(context).padding.bottom,
-                        ),
-                      ],
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: widget.onTap,
+                                  behavior: HitTestBehavior.opaque,
+                                  child: CupertinoCard(
+                                    color: ColorStyles.accentColor,
+                                    margin: EdgeInsets.zero,
+                                    elevation: 0,
+                                    radius: BorderRadius.circular(20.r),
+                                    child: Container(
+                                      height: 60.h,
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.only(bottom: 2.h),
+                                      // decoration: BoxDecoration(
+                                      //     color: ColorStyles.accentColor,
+                                      //     borderRadius:
+                                      //         BorderRadius.circular(10.r)),
+                                      child: Text(
+                                        'Создать событие',
+                                        style: styleBtn,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height:
+                                74.h + MediaQuery.of(context).padding.bottom,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                  right: 0,
-                  left: 0,
-                  top: 0,
-                  child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(28.h),
-                          topRight: Radius.circular(28.h),
+                Positioned(
+                    right: 0,
+                    left: 0,
+                    top: 0,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(28.h),
+                            topRight: Radius.circular(28.h),
+                          ),
+                          color: Colors.white,
                         ),
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 100.w,
-                            height: 5.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.r),
-                              color: ColorStyles.greyColor,
+                        padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 100.w,
+                              height: 5.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.r),
+                                color: ColorStyles.greyColor,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Text(
-                            'Создать событие',
-                            style: style1,
-                          )
-                        ],
-                      )))
-            ],
-          )),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Text(
+                              'Создать событие',
+                              style: style1,
+                            )
+                          ],
+                        )))
+              ],
+            )),
       ),
-  );
+    );
+  }
 }
-}
-
-
 
 Widget _buildDatePicker(BuildContext context,
-  Function(DateTime dateTime, bool hideMenu) onTap, DateTime selectedDay, {DateTime? fromDate}) {
-DateTime currentDate = fromDate != null ? fromDate : DateTime.now();
-TextStyle style1 = TextStyle(
-    color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.w800);
-TextStyle style2 = TextStyle(
-    color: ColorStyles.blackColor, fontSize: 18.sp, fontWeight: FontWeight.w700);
-DateTime _focusedDay = DateTime(selectedDay.year, selectedDay.month, 1);
-DateTime _calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
-Widget _buildJustDay(context, DateTime date, events) {
-  return CalendarJustItem(
-    text: date.day.toString(),
-    disabled: _focusedDay.month != date.month 
-      || (fromDate != null && date.millisecondsSinceEpoch < currentDate.millisecondsSinceEpoch)
-      || date.millisecondsSinceEpoch < currentDate.millisecondsSinceEpoch
-  );
-}
+    Function(DateTime dateTime, bool hideMenu) onTap, DateTime selectedDay,
+    {DateTime? fromDate}) {
+  DateTime currentDate = fromDate != null ? fromDate : DateTime.now();
+  TextStyle style1 = TextStyle(
+      color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.w800);
+  TextStyle style2 = TextStyle(
+      color: ColorStyles.blackColor,
+      fontSize: 18.sp,
+      fontWeight: FontWeight.w700);
+  DateTime _focusedDay = DateTime(selectedDay.year, selectedDay.month, 1);
+  DateTime _calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
+  Widget _buildJustDay(context, DateTime date, events) {
+    return CalendarJustItem(
+        text: date.day.toString(),
+        disabled: _focusedDay.month != date.month ||
+            (fromDate != null &&
+                date.millisecondsSinceEpoch <
+                    currentDate.millisecondsSinceEpoch) ||
+            date.millisecondsSinceEpoch < currentDate.millisecondsSinceEpoch);
+  }
 
-final kToday = DateTime(currentDate.year, currentDate.month, 1);
-final kFirstDay = kToday;
-final kLastDay = DateTime(kToday.year + 13, kToday.month, kToday.day);
-Widget _buildSelectedDay(context, date, events) {
-  return CalendarSelectedItem(text: date.day.toString());
-}
+  final kToday = DateTime(currentDate.year, currentDate.month, 1);
+  final kFirstDay = kToday;
+  final kLastDay = DateTime(kToday.year + 13, kToday.month, kToday.day);
+  Widget _buildSelectedDay(context, date, events) {
+    return CalendarSelectedItem(text: date.day.toString());
+  }
 
-PageController _pageController = PageController();
+  PageController _pageController = PageController();
 
-CalendarType _calendarType = CalendarType.days;
+  CalendarType _calendarType = CalendarType.days;
 
-return StatefulBuilder(builder: (context, setState) {
-  return Container(
-      width: 344.w,
-      decoration: BoxDecoration(
-        // borderRadius: BorderRadius.circular(20.r),
-        boxShadow: [
-          BoxShadow(blurRadius: 20.h, color: const Color.fromRGBO(0, 0, 0, 0.1))
-        ],
-      ),
-      // padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
-      child: CupertinoCard(
-      padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
-        color: Colors.white,
-        elevation: 0,
-        radius: BorderRadius.circular(40.r),
-        margin: EdgeInsets.zero,
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
+  return StatefulBuilder(builder: (context, setState) {
+    return Container(
+        width: 344.w,
+        decoration: BoxDecoration(
+          // borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
+            BoxShadow(
+                blurRadius: 20.h, color: const Color.fromRGBO(0, 0, 0, 0.1))
+          ],
+        ),
+        // padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
+        child: CupertinoCard(
+          padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
+          color: Colors.white,
+          elevation: 0,
+          radius: BorderRadius.circular(40.r),
+          margin: EdgeInsets.zero,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          if (_calendarType == CalendarType.days) {
+                            _pageController.previousPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOutQuint);
+                          }
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: SvgPicture.asset(
+                          SvgImg.calendarLeftIcon,
+                          height: 17.h,
+                        )),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (_calendarType == CalendarType.days) {
+                            _calendarType = CalendarType.month;
+                          } else if (_calendarType == CalendarType.month) {
+                            _calendarType = CalendarType.years;
+                          }
+                        });
+                      },
+                      child: Text(
+                        DateFormat(
+                                _calendarType == CalendarType.days
+                                    ? 'MMMM yyyy'
+                                    : 'yyyy',
+                                'RU')
+                            .format(_focusedDay)
+                            .capitalize(),
+                        style: style1,
+                      ),
+                    ),
+                    GestureDetector(
                       onTap: () {
                         if (_calendarType == CalendarType.days) {
-                          _pageController.previousPage(
+                          _pageController.nextPage(
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOutQuint);
                         }
                       },
                       behavior: HitTestBehavior.opaque,
-                      child: SvgPicture.asset(SvgImg.calendarLeftIcon,
+                      child: SvgPicture.asset(
+                        SvgImg.calendarRightIcon,
                         height: 17.h,
-                      )),
-                  GestureDetector(
-                    onTap: () {
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 11.h,
+              ),
+              if (_calendarType != CalendarType.days)
+                SizedBox(
+                  width: 279.w,
+                  child: YearsMonthSelectWidget(
+                    onTap: (i) {
                       setState(() {
-                        if (_calendarType == CalendarType.days) {
+                        if (_calendarType == CalendarType.years) {
+                          _focusedDay =
+                              DateTime(i, selectedDay.month, selectedDay.day);
                           _calendarType = CalendarType.month;
-                        } else if (_calendarType == CalendarType.month) {
-                          _calendarType = CalendarType.years;
+                        } else {
+                          if (!((i + 1) < currentDate.month &&
+                              selectedDay.year == currentDate.year)) {
+                            _focusedDay = DateTime(
+                                selectedDay.year, i + 1, selectedDay.day);
+                            _calendarType = CalendarType.days;
+                          }
                         }
+                        if (_focusedDay.millisecondsSinceEpoch >
+                            currentDate.millisecondsSinceEpoch) {
+                          selectedDay = _focusedDay;
+                          onTap(_focusedDay, false);
+                        } else {
+                          selectedDay =
+                              currentDate.add(const Duration(days: 1));
+                          onTap(selectedDay, false);
+                        }
+                        _calendarStartDay = _focusedDay;
                       });
                     },
-                    child: Text(
-                      DateFormat(_calendarType == CalendarType.days
-                              ? 'MMMM yyyy'
-                              : 'yyyy', 'RU')
-                          .format(_focusedDay).capitalize(),
-                      style: style1,
-                    ),
+                    calendarType: _calendarType,
+                    focusedDay: _focusedDay,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      if (_calendarType == CalendarType.days) {
-                        _pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOutQuint);
-                      }
-                    },
-                    behavior: HitTestBehavior.opaque,
-                    child: SvgPicture.asset(SvgImg.calendarRightIcon,
-                      height: 17.h,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 11.h,
-            ),
-            if (_calendarType != CalendarType.days)
-              SizedBox(
-                width: 279.w,
-                child: YearsMonthSelectWidget(
-                  onTap: (i) {
+                ),
+              if (_calendarType == CalendarType.days)
+                TableCalendar(
+                  onCalendarCreated: (con) {
+                    _pageController = con;
+                  },
+                  onPageChanged: (dt) {
                     setState(() {
-                      if (_calendarType == CalendarType.years) {
-                        _focusedDay =
-                            DateTime(i, selectedDay.month, selectedDay.day);
-                        _calendarType = CalendarType.month;
-                      } else {
-                        if(!((i + 1) < currentDate.month && selectedDay.year == currentDate.year)){
-                          _focusedDay =
-                            DateTime(selectedDay.year, i + 1, selectedDay.day);
-                        _calendarType = CalendarType.days;
-                        }
-                      }
-                      if( _focusedDay.millisecondsSinceEpoch > currentDate.millisecondsSinceEpoch){
-                        selectedDay = _focusedDay;
-                        onTap(_focusedDay, false);
-                      }else{
-                        selectedDay = currentDate.add(const Duration(days: 1));
-                        onTap(selectedDay, false);
-                      }
-                      _calendarStartDay = _focusedDay;
+                      _focusedDay = dt;
+                    });
+                    Future.delayed(const Duration(milliseconds: 300), () {
+                      setState(() {
+                        _calendarStartDay = dt;
+                      });
                     });
                   },
-                  calendarType: _calendarType,
                   focusedDay: _focusedDay,
+                  calendarFormat: CalendarFormat.month,
+
+                  firstDay: kFirstDay,
+                  lastDay: kLastDay,
+                  headerVisible: false,
+                  pageAnimationCurve: Curves.easeInOutQuint,
+                  daysOfWeekVisible: false,
+                  // startingDayOfWeek: _calendarStartDay.year == currentDate.year && _calendarStartDay.month == currentDate.month
+                  // ? (kToday.weekday == DateTime.monday
+                  // ? StartingDayOfWeek.monday
+                  // : kToday.weekday == DateTime.tuesday
+                  // ? StartingDayOfWeek.tuesday
+                  // : kToday.weekday == DateTime.wednesday
+                  // ? StartingDayOfWeek.wednesday
+                  // : kToday.weekday == DateTime.thursday
+                  // ? StartingDayOfWeek.thursday
+                  // : kToday.weekday == DateTime.friday
+                  // ? StartingDayOfWeek.friday
+                  // : kToday.weekday == DateTime.saturday
+                  // ? StartingDayOfWeek.saturday
+                  // : StartingDayOfWeek.sunday)
+                  // : (_calendarStartDay.weekday == DateTime.monday
+                  // ? StartingDayOfWeek.friday
+                  // : _calendarStartDay.weekday == DateTime.tuesday
+                  // ? StartingDayOfWeek.saturday
+                  // : _calendarStartDay.weekday == DateTime.wednesday
+                  // ? StartingDayOfWeek.sunday
+                  // : _calendarStartDay.weekday == DateTime.thursday
+                  // ? StartingDayOfWeek.monday
+                  // : _calendarStartDay.weekday == DateTime.friday
+                  // ? StartingDayOfWeek.tuesday
+                  // : _calendarStartDay.weekday == DateTime.saturday
+                  // ? StartingDayOfWeek.wednesday
+                  // : StartingDayOfWeek.thursday),
+                  rangeSelectionMode: RangeSelectionMode.toggledOff,
+                  onDaySelected: (date, events) {
+                    if (date.millisecondsSinceEpoch >=
+                        currentDate.millisecondsSinceEpoch) {
+                      onTap(date, false);
+                      setState(() {
+                        selectedDay = date;
+                      });
+                    }
+                  },
+                  rowHeight: 40.h,
+                  selectedDayPredicate: (day) => isSameDay(selectedDay, day),
+                  calendarBuilders: CalendarBuilders(
+                    selectedBuilder: _buildSelectedDay,
+                    defaultBuilder: _buildJustDay,
+                    disabledBuilder: _buildJustDay,
+                    holidayBuilder: _buildJustDay,
+                    outsideBuilder: _buildJustDay,
+                    todayBuilder: _buildJustDay,
+                  ),
                 ),
-              ),
-            if (_calendarType == CalendarType.days)
-              TableCalendar(
-                onCalendarCreated: (con) {
-                  _pageController = con;
-                },
-                onPageChanged: (dt){
-                  setState((){
-                    _focusedDay = dt;
-                  });
-                  Future.delayed(const Duration(milliseconds: 300), (){
-                    setState((){
-                      _calendarStartDay = dt;
-                    });
-                  });
-                },
-                focusedDay: _focusedDay,
-                calendarFormat: CalendarFormat.month,
-                
-                firstDay: kFirstDay,
-                lastDay: kLastDay,
-                headerVisible: false,
-                pageAnimationCurve: Curves.easeInOutQuint,
-                daysOfWeekVisible: false,
-                // startingDayOfWeek: _calendarStartDay.year == currentDate.year && _calendarStartDay.month == currentDate.month
-                // ? (kToday.weekday == DateTime.monday
-                // ? StartingDayOfWeek.monday
-                // : kToday.weekday == DateTime.tuesday
-                // ? StartingDayOfWeek.tuesday
-                // : kToday.weekday == DateTime.wednesday
-                // ? StartingDayOfWeek.wednesday
-                // : kToday.weekday == DateTime.thursday
-                // ? StartingDayOfWeek.thursday
-                // : kToday.weekday == DateTime.friday
-                // ? StartingDayOfWeek.friday
-                // : kToday.weekday == DateTime.saturday
-                // ? StartingDayOfWeek.saturday
-                // : StartingDayOfWeek.sunday)
-                // : (_calendarStartDay.weekday == DateTime.monday
-                // ? StartingDayOfWeek.friday
-                // : _calendarStartDay.weekday == DateTime.tuesday
-                // ? StartingDayOfWeek.saturday
-                // : _calendarStartDay.weekday == DateTime.wednesday
-                // ? StartingDayOfWeek.sunday
-                // : _calendarStartDay.weekday == DateTime.thursday
-                // ? StartingDayOfWeek.monday
-                // : _calendarStartDay.weekday == DateTime.friday
-                // ? StartingDayOfWeek.tuesday
-                // : _calendarStartDay.weekday == DateTime.saturday
-                // ? StartingDayOfWeek.wednesday
-                // : StartingDayOfWeek.thursday),
-                rangeSelectionMode: RangeSelectionMode.toggledOff,
-                onDaySelected: (date, events) {
-                  if(date.millisecondsSinceEpoch >= currentDate.millisecondsSinceEpoch){
-                    onTap(date, false);
-                    setState((){
-                      selectedDay = date;
-                    });
-                  }
-                },
-                rowHeight: 40.h,
-                selectedDayPredicate: (day) => isSameDay(selectedDay, day),
-                calendarBuilders: CalendarBuilders(
-                  selectedBuilder: _buildSelectedDay,
-                  defaultBuilder: _buildJustDay,
-                  disabledBuilder: _buildJustDay,
-                  holidayBuilder: _buildJustDay,
-                  outsideBuilder: _buildJustDay,
-                  todayBuilder: _buildJustDay,
-                ),
-              ),
-          ],
-        ),
-      ));
+            ],
+          ),
+        ));
   });
 }
 
 enum CalendarType { days, month, years }
 
-
 extension StringExtension on String {
-    String capitalize() {
-      return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
-    }
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
 }
