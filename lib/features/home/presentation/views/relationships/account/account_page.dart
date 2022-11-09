@@ -87,6 +87,7 @@ class _AccountPageState extends State<AccountPage> {
     //   transform: GradientRotation(pi / 2),
     // );
     return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
       controller: _scrollController,
       child: Stack(
         children: [
@@ -165,44 +166,40 @@ class _AccountPageState extends State<AccountPage> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20.r),
                               ),
-                              child: Stack(
-                                alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                      left: 105.w,
-                                      right: 100.w,
-                                      top: 38.h,
-                                      bottom: 25.h,
-                                    ),
-                                    child: Column(
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Никита Белых',
+                                        style: style3.copyWith(
+                                          fontSize: 30.sp,
+                                          color: Colors.black,
+                                          height: 1.h,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5.h),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 105.h),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Никита Белых',
-                                              style: style3.copyWith(
-                                                fontSize: 30.sp,
-                                                color: Colors.black,
-                                                height: 1,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
+                                        Text(
+                                          '+7 *** *** 00-00',
+                                          style: style3.copyWith(
+                                            fontSize: 15.sp,
+                                            color: Colors.black,
+                                            height: 1.h,
+                                          ),
                                         ),
-                                        SizedBox(height: 5.h),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('+7 *** *** 00-00',
-                                                style: style3.copyWith(
-                                                    fontSize: 15.sp,
-                                                    color: Colors.black,
-                                                    height: 1)),
-                                            SvgPicture.asset(SvgImg.vkLogo)
-                                          ],
-                                        ),
+                                        SvgPicture.asset(SvgImg.vkLogo)
                                       ],
                                     ),
                                   ),
