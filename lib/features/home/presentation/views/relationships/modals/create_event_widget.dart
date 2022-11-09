@@ -384,53 +384,54 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   'Иконка',
                                   style: style2,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '😎',
-                                      style: TextStyle(fontSize: 30.sp),
-                                    ),
-                                    SizedBox(
-                                      width: 20.w,
-                                    ),
-                                    SizedBox(
-                                      height: 20.h,
-                                      width: 20.w,
-                                      child: PopupMenuButton(
-                                        onSelected: (value) {},
-                                        splashRadius: 1,
-                                        padding: const EdgeInsets.all(0),
-                                        icon: SvgPicture.asset(
-                                          SvgImg.upDownIcon,
-                                        ),
-                                        constraints:
-                                            const BoxConstraints.expand(
-                                          width: 57,
-                                          height: 140,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(15.r),
+                                SizedBox(
+                                  height: 30.h,
+                                  width: 56.w,
+                                  child: PopupMenuButton(
+                                    offset:  Offset(-30.w,-70.h),
+                                    onSelected: (value) {},
+                                    splashRadius: 1,
+                                    padding: const EdgeInsets.all(0),
+                                    icon: Row(
+                                      children: [
+                                        Text(
+                                          '😎',
+                                          style: TextStyle(
+                                            fontSize: 20.sp
                                           ),
                                         ),
-                                        itemBuilder: (context) => [
-                                          ...List.generate(
-                                              31,
-                                              (index) => PopupMenuItem(
-                                                    child: Center(
-                                                      child: Text(
-                                                        '😎',
-                                                        style: TextStyle(
-                                                            fontSize: 30.sp),
-                                                      ),
-                                                    ),
-                                                  ))
-                                        ],
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        SvgPicture.asset(
+                                          SvgImg.upDownIcon,
+                                        ),
+                                      ],
+                                    ),
+                                    constraints:
+                                        const BoxConstraints.expand(
+                                      width: 57,
+                                      height: 140,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15.r),
                                       ),
                                     ),
-                                  ],
+                                    itemBuilder: (context) => [
+                                      ...List.generate(
+                                          31,
+                                          (index) => PopupMenuItem(
+                                                child: Center(
+                                                  child: Text(
+                                                    '😎',
+                                                    style: TextStyle(
+                                                        fontSize: 30.sp),
+                                                  ),
+                                                ),
+                                              ))
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
