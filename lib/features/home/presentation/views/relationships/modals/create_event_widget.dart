@@ -388,7 +388,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   height: 30.h,
                                   width: 56.w,
                                   child: PopupMenuButton(
-                                    offset:  Offset(-30.w,-70.h),
+                                    offset: Offset(-30.w, -70.h),
                                     onSelected: (value) {},
                                     splashRadius: 1,
                                     padding: const EdgeInsets.all(0),
@@ -396,9 +396,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                       children: [
                                         Text(
                                           '😎',
-                                          style: TextStyle(
-                                            fontSize: 20.sp
-                                          ),
+                                          style: TextStyle(fontSize: 20.sp),
                                         ),
                                         SizedBox(
                                           width: 20.w,
@@ -408,8 +406,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                         ),
                                       ],
                                     ),
-                                    constraints:
-                                        const BoxConstraints.expand(
+                                    constraints: const BoxConstraints.expand(
                                       width: 57,
                                       height: 140,
                                     ),
@@ -424,9 +421,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                           (index) => PopupMenuItem(
                                                 child: Center(
                                                   child: Text(
-                                                    '😎',
+                                                    's',
                                                     style: TextStyle(
-                                                        fontSize: 30.sp),
+                                                      fontSize: 30.sp,
+                                                  
+                                                    ),
+                                                    textAlign: TextAlign.start,
                                                   ),
                                                 ),
                                               ))
