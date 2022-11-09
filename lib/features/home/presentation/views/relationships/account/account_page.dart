@@ -253,337 +253,337 @@ class _AccountPageState extends State<AccountPage> {
                     AnimatedContainer(
                       height: countPage == 0 ? 310.h : 400.h,
                       width: 430.w,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease,
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.easeInOutQuint,
                       child: CupertinoCard(
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(horizontal: 25),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.r),
                         ),
-                        child: PageView(
+                        child: SingleChildScrollView(
                           physics: const NeverScrollableScrollPhysics(),
                           controller: controller,
                           scrollDirection: Axis.vertical,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 15.h),
-                              child: SizedBox(
-                                height: 310.h,
-                                width: 428.w,
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 20.h),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Сменить номер телефона',
-                                        style: TextStyle(
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            top: 37.h, bottom: 5.h),
-                                        child: Container(
-                                          height: 70.h,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                const BorderRadius.horizontal(
-                                              left: Radius.circular(10),
-                                              right: Radius.circular(10),
-                                            ),
-                                            border: Border.all(
-                                              width: 1,
-                                              color: Colors.grey,
-                                            ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 15.h),
+                                child: SizedBox(
+                                  height: 310.h,
+                                  width: 428.w,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 20.h),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Сменить номер телефона',
+                                          style: TextStyle(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w800,
                                           ),
-                                          child: Row(
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: Image.asset(
-                                                    'assets/images/code.png'),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 37.h, bottom: 5.h),
+                                          child: Container(
+                                            height: 70.h,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  const BorderRadius.horizontal(
+                                                left: Radius.circular(10),
+                                                right: Radius.circular(10),
                                               ),
-                                              SizedBox(width: 12.w),
-                                              Text(
-                                                '+7',
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 25.sp,
-                                                  fontWeight: FontWeight.bold,
+                                              border: Border.all(
+                                                width: 1,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: Image.asset(
+                                                      'assets/images/code.png'),
                                                 ),
-                                              ),
-                                              SizedBox(width: 12.w),
-                                              Container(
-                                                height: 37.h,
-                                                width: 1.w,
-                                                color: const Color.fromRGBO(
-                                                    224, 224, 224, 1.0),
-                                              ),
-                                              SizedBox(
-                                                width: 12.w,
-                                              ),
-                                              Container(
-                                                width: 0.6.sw,
-                                                alignment: Alignment.center,
-                                                child: TextField(
-                                                  onTap: () {
-                                                    Future.delayed(
+                                                SizedBox(width: 12.w),
+                                                Text(
+                                                  '+7',
+                                                  style: GoogleFonts.inter(
+                                                    fontSize: 25.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 12.w),
+                                                Container(
+                                                  height: 37.h,
+                                                  width: 1.w,
+                                                  color: const Color.fromRGBO(
+                                                      224, 224, 224, 1.0),
+                                                ),
+                                                SizedBox(
+                                                  width: 12.w,
+                                                ),
+                                                Container(
+                                                  width: 0.6.sw,
+                                                  alignment: Alignment.center,
+                                                  child: TextField(
+                                                    onTap: () {
+                                                      Future.delayed(
                                                         const Duration(
                                                             milliseconds: 600),
                                                         () {
-                                                      _scrollController
-                                                          .animateTo(
-                                                        _scrollController
-                                                            .position
-                                                            .maxScrollExtent,
-                                                        duration:
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    400),
-                                                        curve: Curves.ease,
+                                                          _scrollController
+                                                              .animateTo(
+                                                            _scrollController
+                                                                .position
+                                                                .maxScrollExtent,
+                                                            duration:
+                                                                const Duration(
+                                                              milliseconds: 400,
+                                                            ),
+                                                            curve: Curves.ease,
+                                                          );
+                                                        },
                                                       );
-                                                    });
-                                                  },
-                                                  controller: phoneController,
-                                                  style: GoogleFonts.inter(
-                                                    fontSize: 25.sp,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                  onChanged: (value) {
-                                                    phoneNumber =
-                                                        '+7${value.replaceAll(RegExp(' '), '')}';
-                                                    if (value.length > 12 &&
-                                                        value.substring(0, 1) ==
-                                                            '9') {
-                                                      // BlocProvider.of<AuthBloc>(context)
-                                                      //     .add(TextFieldFilled(true));
-                                                      // focusNode.unfocus();
-                                                    } else {
-                                                      // BlocProvider.of<AuthBloc>(context)
-                                                      //     .add(TextFieldFilled(false));
-                                                    }
-                                                  },
-                                                  // focusNode: focusNode,
-                                                  decoration: InputDecoration(
-                                                    alignLabelWithHint: true,
-                                                    border: InputBorder.none,
-                                                    hintText: '900 000 00 00',
-                                                    hintStyle:
-                                                        GoogleFonts.inter(
+                                                    },
+                                                    controller: phoneController,
+                                                    style: GoogleFonts.inter(
                                                       fontSize: 25.sp,
-                                                      color:
-                                                          const Color.fromRGBO(
-                                                              150, 150, 150, 1),
                                                       fontWeight:
                                                           FontWeight.w700,
                                                     ),
-                                                    floatingLabelBehavior:
-                                                        FloatingLabelBehavior
-                                                            .never,
+                                                    onChanged: (value) {
+                                                      phoneNumber =
+                                                          '+7${value.replaceAll(RegExp(' '), '')}';
+                                                      if (value.length > 12 &&
+                                                          value.substring(
+                                                                  0, 1) ==
+                                                              '9') {
+                                                        // BlocProvider.of<AuthBloc>(context)
+                                                        //     .add(TextFieldFilled(true));
+                                                        // focusNode.unfocus();
+                                                      } else {
+                                                        // BlocProvider.of<AuthBloc>(context)
+                                                        //     .add(TextFieldFilled(false));
+                                                      }
+                                                    },
+                                                    focusNode: focusNode,
+                                                    decoration: InputDecoration(
+                                                      alignLabelWithHint: true,
+                                                      border: InputBorder.none,
+                                                      hintText: '900 000 00 00',
+                                                      hintStyle:
+                                                          GoogleFonts.inter(
+                                                        fontSize: 25.sp,
+                                                        color: const Color
+                                                                .fromRGBO(
+                                                            150, 150, 150, 1),
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                      floatingLabelBehavior:
+                                                          FloatingLabelBehavior
+                                                              .never,
+                                                    ),
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly,
+                                                      CustomInputFormatter(),
+                                                    ],
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                   ),
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly,
-                                                    CustomInputFormatter(),
-                                                  ],
-                                                  keyboardType:
-                                                      TextInputType.number,
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 40.h),
-                                        child: CustomButton(
-                                          validate: true,
-                                          color: const Color.fromRGBO(
-                                              32, 203, 131, 1.0),
-                                          text: 'Продолжить',
-                                          // validate: state is TextFieldSuccess ? true : false,
-                                          textColor: Colors.white,
-                                          onPressed: () {
-                                            // _sendCode();
-                                            setState(() {
-                                              countPage = 1;
-                                              // focusNode.requestFocus();
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 40.h),
+                                          child: CustomButton(
+                                            validate: true,
+                                            color: const Color.fromRGBO(
+                                                32, 203, 131, 1.0),
+                                            text: 'Продолжить',
+                                            // validate: state is TextFieldSuccess ? true : false,
+                                            textColor: Colors.white,
+                                            onPressed: () {
+                                              // _sendCode();
+                                              setState(() {
+                                                countPage = 1;
+                                                // focusNode.requestFocus();
 
-                                              controller.animateToPage(
-                                                1,
-                                                duration: const Duration(
-                                                    milliseconds: 1200),
-                                                curve: Curves.ease,
-                                              );
-                                              Future.delayed(
-                                                  const Duration(
-                                                      milliseconds: 200), () {
-                                                _scrollController.animateTo(
-                                                  _scrollController
-                                                      .position.maxScrollExtent,
+                                                controller.animateToPage(
+                                                  1,
                                                   duration: const Duration(
-                                                      milliseconds: 200),
+                                                      milliseconds: 1200),
                                                   curve: Curves.ease,
                                                 );
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 200), () {
+                                                  _scrollController.animateTo(
+                                                    _scrollController.position
+                                                        .maxScrollExtent,
+                                                    duration: const Duration(
+                                                        milliseconds: 200),
+                                                    curve: Curves.ease,
+                                                  );
+                                                });
                                               });
-                                            });
-                                          },
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 0.w),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AnimatedContainer(
-                                    curve: Curves.easeInOutQuint,
-                                    duration: const Duration(milliseconds: 200),
-                                    height: countPage == 1 ? 17.h : 0.h,
-                                  ),
-                                  Text(
-                                    'Введи код подтверждения',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w800,
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 0.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AnimatedContainer(
+                                        curve: Curves.easeInOutQuint,
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        height: 17.h),
+                                    Text(
+                                      'Введи код подтверждения',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                     ),
-                                  ),
-                                  AnimatedContainer(
-                                    height: 44.h,
-                                    curve: Curves.easeInOutQuint,
-                                    duration: const Duration(milliseconds: 200),
-                                  ),
-                                  SizedBox(
-                                    height: 70.sp,
-                                    child: Pinput(
-                                      onTap: () {
-                                        Future.delayed(
-                                            const Duration(milliseconds: 600),
-                                            () {
-                                          _scrollController.animateTo(
-                                            _scrollController
-                                                .position.maxScrollExtent,
+                                    SizedBox(
+                                      height: 44.h,
+                                    ),
+                                    SizedBox(
+                                      height: 70.sp,
+                                      child: Pinput(
+                                        onTap: () {
+                                          Future.delayed(
+                                              const Duration(milliseconds: 600),
+                                              () {
+                                            _scrollController.animateTo(
+                                              _scrollController
+                                                  .position.maxScrollExtent,
+                                              duration: const Duration(
+                                                  milliseconds: 500),
+                                              curve: Curves.ease,
+                                            );
+                                          });
+                                        },
+                                        pinAnimationType: PinAnimationType.none,
+                                        showCursor: false,
+                                        length: 5,
+                                        androidSmsAutofillMethod:
+                                            AndroidSmsAutofillMethod
+                                                .smsRetrieverApi,
+                                        controller: codeController,
+                                        focusNode: focusNode,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        onChanged: (value) {
+                                          if (value.length == 5 &&
+                                              value == code.toString()) {
+                                            // BlocProvider.of<AuthBloc>(context)
+                                            //     .add(TextFieldFilled(true));
+                                            focusNode.unfocus();
+                                          } else {
+                                            // BlocProvider.of<AuthBloc>(context)
+                                            //     .add(TextFieldFilled(false));
+                                          }
+                                        },
+                                        defaultPinTheme: PinTheme(
+                                          width: 60.sp,
+                                          height: 80.sp,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: Colors.grey,
+                                              )),
+                                          textStyle: GoogleFonts.inter(
+                                            fontSize: 35.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: const Color.fromRGBO(
+                                                23, 23, 23, 1.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 51.h,
+                                    ),
+                                    CustomButton(
+                                      validate: true,
+                                      color: const Color.fromRGBO(
+                                          32, 203, 131, 1.0),
+                                      text: 'Готово',
+                                      textColor: Colors.white,
+                                      onPressed: () {
+                                        // _checkCode(context);
+                                        setState(() {
+                                          countPage = 0;
+                                          focusNode.unfocus();
+                                          controller.animateToPage(
+                                            0,
                                             duration: const Duration(
-                                                milliseconds: 500),
+                                                milliseconds: 1200),
                                             curve: Curves.ease,
                                           );
                                         });
                                       },
-                                      pinAnimationType: PinAnimationType.none,
-                                      showCursor: false,
-                                      length: 5,
-                                      androidSmsAutofillMethod:
-                                          AndroidSmsAutofillMethod
-                                              .smsRetrieverApi,
-                                      controller: codeController,
-                                      focusNode: focusNode,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      onChanged: (value) {
-                                        if (value.length == 5 &&
-                                            value == code.toString()) {
-                                          // BlocProvider.of<AuthBloc>(context)
-                                          //     .add(TextFieldFilled(true));
-                                          focusNode.unfocus();
-                                        } else {
-                                          // BlocProvider.of<AuthBloc>(context)
-                                          //     .add(TextFieldFilled(false));
-                                        }
-                                      },
-                                      defaultPinTheme: PinTheme(
-                                        width: 60.sp,
-                                        height: 80.sp,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                            )),
-                                        textStyle: GoogleFonts.inter(
-                                          fontSize: 35.sp,
-                                          fontWeight: FontWeight.bold,
+                                    ),
+                                    // CustomAnimationButton(
+                                    //   text: 'Продолжить',
+                                    //   border: Border.all(
+                                    //       color:
+                                    //       width: 2.sp),
+                                    //   onPressed: () => _checkCode(context),
+                                    // ),
+                                    SizedBox(
+                                      height: 17.h,
+                                    ),
+                                    CustomButton(
+                                      // black: true,
+                                      validate: true,
+                                      code: true,
+                                      text: 'Отправить код снова',
+                                      border: Border.all(
                                           color: const Color.fromRGBO(
                                               23, 23, 23, 1.0),
-                                        ),
-                                      ),
+                                          width: 2.sp),
+                                      onPressed: () {
+                                        if (textEditingControllerUp
+                                                .text.length ==
+                                            5) {
+                                          // BlocProvider.of<AuthBloc>(context).add(
+                                          //   TextFieldFilled(true),
+                                          // );
+                                        }
+                                        resendCode = false;
+                                        // if (_timer?.isActive == false) {
+                                        //   startTimer();
+                                        // }
+                                      },
+                                      color: Colors.black,
+                                      textColor: Colors.white,
                                     ),
-                                  ),
-                                  AnimatedContainer(
-                                    height: countPage == 1 ? 51.h : 0.h,
-                                    curve: Curves.easeInOutQuint,
-                                    duration: const Duration(milliseconds: 200),
-                                  ),
-                                  CustomButton(
-                                    validate: true,
-                                    color:
-                                        const Color.fromRGBO(32, 203, 131, 1.0),
-                                    text: 'Готово',
-                                    textColor: Colors.white,
-                                    onPressed: () {
-                                      // _checkCode(context);
-                                      setState(() {
-                                        countPage = 0;
-                                        focusNode.unfocus();
-                                        controller.animateToPage(
-                                          0,
-                                          duration: const Duration(
-                                              milliseconds: 1200),
-                                          curve: Curves.ease,
-                                        );
-                                      });
-                                    },
-                                  ),
-                                  // CustomAnimationButton(
-                                  //   text: 'Продолжить',
-                                  //   border: Border.all(
-                                  //       color:
-                                  //       width: 2.sp),
-                                  //   onPressed: () => _checkCode(context),
-                                  // ),
-                                  AnimatedContainer(
-                                    height: countPage == 1 ? 17.h : 0.h,
-                                    curve: Curves.easeInOutQuint,
-                                    duration: const Duration(milliseconds: 100),
-                                  ),
-                                  CustomButton(
-                                    // black: true,
-                                    validate: true,
-                                    code: true,
-                                    text: 'Отправить код снова',
-                                    border: Border.all(
-                                        color: const Color.fromRGBO(
-                                            23, 23, 23, 1.0),
-                                        width: 2.sp),
-                                    onPressed: () {
-                                      if (textEditingControllerUp.text.length ==
-                                          5) {
-                                        // BlocProvider.of<AuthBloc>(context).add(
-                                        //   TextFieldFilled(true),
-                                        // );
-                                      }
-                                      resendCode = false;
-                                      // if (_timer?.isActive == false) {
-                                      //   startTimer();
-                                      // }
-                                    },
-                                    color: Colors.black,
-                                    textColor: Colors.white,
-                                  ),
-                                  SizedBox(height: 20.h),
-                                ],
-                              ),
-                            )
-                          ],
+                                    SizedBox(height: 20.h),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -600,7 +600,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget photo() {
     return InkWell(
       onTap: () => showAlignedDialog(
-        barrierColor: Colors.transparent,
+          barrierColor: Colors.transparent,
           context: context,
           builder: (context) {
             return Dialog(

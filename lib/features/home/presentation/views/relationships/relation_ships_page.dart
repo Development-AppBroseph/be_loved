@@ -222,12 +222,17 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                         FocusScope.of(context).requestFocus(f1);
                                       }
                                     },
-                                    child: _controller.text.isNotEmpty
+                                    child: _controller.text.isNotEmpty && f1.hasFocus
                                         ? const Icon(
                                             Icons.check_rounded,
                                             color: Colors.white,
                                           )
-                                        : SvgPicture.asset(SvgImg.edit),
+                                        : !f1.hasFocus
+                                            ? SvgPicture.asset(SvgImg.edit)
+                                            : const Icon(
+                                                Icons.check_rounded,
+                                                color: Colors.white,
+                                              ),
                                   )
                                 ],
                               ),

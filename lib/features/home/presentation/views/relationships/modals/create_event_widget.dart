@@ -48,9 +48,13 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
 
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now().add(const Duration(days: 5));
+  final ScrollController _controllerIcon = ScrollController();
+
   final CustomPopupMenuController _customPopupMenuController1 =
       CustomPopupMenuController();
   final CustomPopupMenuController _customPopupMenuController2 =
+      CustomPopupMenuController();
+  final CustomPopupMenuController _customPopupMenuControllerIcon =
       CustomPopupMenuController();
 
   validateTextFields() {
@@ -387,12 +391,51 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 SizedBox(
                                   height: 30.h,
                                   width: 56.w,
-                                  child: PopupMenuButton(
-                                    offset: Offset(-30.w, -70.h),
-                                    onSelected: (value) {},
-                                    splashRadius: 1,
-                                    padding: const EdgeInsets.all(0),
-                                    icon: Row(
+                                  child: CustomPopupMenu(
+                                    menuBuilder: () {
+                                      return Positioned(
+                                        top: 50,
+                                        child: Container(
+                                          height: 140.h,
+                                          width: 57.w,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5),
+                                            child: ListView.builder(
+                                              shrinkWrap: true,
+                                              controller: _controllerIcon,
+                                              itemCount: 31,
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              itemBuilder: (context, index) {
+                                                return Center(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 12),
+                                                    child: Text(
+                                                      '😎',
+                                                      style: TextStyle(
+                                                          fontSize: 20.sp),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    position: PreferredPosition.top,
+                                    barrierColor: Colors.transparent,
+                                    showArrow: false,
+                                    pressType: PressType.singleClick,
+                                    child: Row(
                                       children: [
                                         Text(
                                           '😎',
@@ -406,32 +449,49 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                         ),
                                       ],
                                     ),
-                                    constraints: const BoxConstraints.expand(
-                                      width: 57,
-                                      height: 140,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(15.r),
-                                      ),
-                                    ),
-                                    itemBuilder: (context) => [
-                                      ...List.generate(
-                                          31,
-                                          (index) => PopupMenuItem(
-                                                child: Center(
-                                                  child: Text(
-                                                    's',
-                                                    style: TextStyle(
-                                                      fontSize: 30.sp,
-                                                  
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                  ),
-                                                ),
-                                              ))
-                                    ],
                                   ),
+                                  // child: PopupMenuButton(
+                                  //   offset: Offset(-30.w, -70.h),
+                                  //   onSelected: (value) {},
+                                  //   splashRadius: 1,
+                                  //   padding: const EdgeInsets.all(0),
+                                  //   icon: Row(
+                                  //     children: [
+                                  //       Text(
+                                  //         '😎',
+                                  //         style: TextStyle(fontSize: 20.sp),
+                                  //       ),
+                                  //       SizedBox(
+                                  //         width: 20.w,
+                                  //       ),
+                                  //       SvgPicture.asset(
+                                  //         SvgImg.upDownIcon,
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  //   constraints: const BoxConstraints.expand(
+                                  //     width: 57,
+                                  //     height: 140,
+                                  //   ),
+                                  //   shape: RoundedRectangleBorder(
+                                  //     borderRadius: BorderRadius.all(
+                                  //       Radius.circular(15.r),
+                                  //     ),
+                                  //   ),
+                                  //   itemBuilder: (context) => [
+                                  //     ...List.generate(
+                                  //       31,
+                                  //       (index) => PopupMenuItem(
+                                  //         child: Center(
+                                  //           child: Text(
+                                  //             '😎',
+                                  //             style: TextStyle(fontSize: 20.sp),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     )
+                                  //   ],
+                                  // ),
                                 )
                               ],
                             ),
