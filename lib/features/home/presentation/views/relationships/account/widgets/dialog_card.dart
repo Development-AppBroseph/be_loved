@@ -24,6 +24,7 @@ class DilogTabs extends StatelessWidget {
       width: 250,
       margin: const EdgeInsets.symmetric(vertical: 3),
       child: Material(
+        color: Colors.white,
         child: InkWell(
           onTap: () {
             try {
