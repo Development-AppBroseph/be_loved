@@ -52,7 +52,7 @@ dependencies:
   equatable: ^2.0.5
   fluttertoast: ^8.0.9
   url_launcher: ^6.1.5
-  web_socket_channel: ^2.2.0
+  aligned_dialog: ^0.0.6
 
 dev_dependencies:
   flutter_test:
