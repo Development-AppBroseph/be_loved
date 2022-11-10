@@ -20,7 +20,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
 import 'dart:math' as math;
 
-import 'widgets/dialog_card.dart';
+import '../widgets/dialog_card.dart';
 
 class AccountPage extends StatefulWidget {
   final VoidCallback prevPage;
@@ -49,21 +49,21 @@ class _AccountPageState extends State<AccountPage> {
   File? _image;
   bool isMirror = false;
   // final headers["user"] = sl<AuthConfig>().user;
-  Future _pickImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image != null) {
-        File? img = File(image.path);
-        setState(() {
-          _image = img;
-        });
-        Navigator.of(context).pop();
-      }
-    } on PlatformException catch (e) {
-      print(e);
-      Navigator.of(context).pop();
-    }
-  }
+  // Future _pickImage(ImageSource source) async {
+  //   try {
+  //     final image = await ImagePicker().pickImage(source: source);
+  //     if (image != null) {
+  //       File? img = File(image.path);
+  //       setState(() {
+  //         _image = img;
+  //       });
+  //       Navigator.of(context).pop();
+  //     }
+  //   } on PlatformException catch (e) {
+  //     print(e);
+  //     Navigator.of(context).pop();
+  //   }
+  // }
 
   void mirror() {
     setState(() {

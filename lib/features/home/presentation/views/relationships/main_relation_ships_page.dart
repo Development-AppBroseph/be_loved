@@ -1,4 +1,4 @@
-import 'package:be_loved/features/home/presentation/views/relationships/account/account_page.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/account/view/account_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';
 import 'package:flutter/material.dart';
 
