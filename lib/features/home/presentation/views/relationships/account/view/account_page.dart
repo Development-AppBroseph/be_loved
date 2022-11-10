@@ -1,26 +1,17 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
-import 'package:aligned_dialog/aligned_dialog.dart';
-import 'package:be_loved/constants/colors/color_styles.dart';
-import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/avatar_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/mirror_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pinput/pinput.dart';
-import 'dart:math' as math;
-
-import '../widgets/dialog_card.dart';
 
 class AccountPage extends StatefulWidget {
   final VoidCallback prevPage;
@@ -95,6 +86,7 @@ class _AccountPageState extends State<AccountPage> {
     //   transform: GradientRotation(pi / 2),
     // );
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       physics: const ClampingScrollPhysics(),
       controller: _scrollController,
       child: Stack(
@@ -169,6 +161,7 @@ class _AccountPageState extends State<AccountPage> {
                             height: 130.h,
                             width: 428.w,
                             child: CupertinoCard(
+                              margin: EdgeInsets.all(0.h),
                               elevation: 0,
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -185,10 +178,19 @@ class _AccountPageState extends State<AccountPage> {
                                         'Никита Белых',
                                         style: style3.copyWith(
                                           fontSize: 30.sp,
-                                          color: Colors.black,
+                                          color: const Color(0xff171717),
                                           height: 1.h,
                                         ),
                                         textAlign: TextAlign.center,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 8.h, bottom: 5.h),
+                                        child: SvgPicture.asset(
+                                          SvgImg.edit,
+                                          color: const Color(0xff969696),
+                                          height: 17.h,
+                                          width: 17.w,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -201,8 +203,7 @@ class _AccountPageState extends State<AccountPage> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 20),
+                                          padding: EdgeInsets.only(left: 20.h),
                                           child: Text(
                                             '+7 *** *** 00-00',
                                             style: style3.copyWith(
@@ -230,6 +231,7 @@ class _AccountPageState extends State<AccountPage> {
                         height: 65.h,
                         width: 428.w,
                         child: CupertinoCard(
+                          margin: EdgeInsets.all(0.h),
                           elevation: 0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20.r),
@@ -260,8 +262,9 @@ class _AccountPageState extends State<AccountPage> {
                       width: 430.w,
                       duration: const Duration(milliseconds: 600),
                       curve: Curves.easeInOutQuint,
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsets.only(top: 15.h),
                       child: CupertinoCard(
+                        margin: EdgeInsets.all(0.h),
                         elevation: 0,
                         padding: EdgeInsets.symmetric(horizontal: 25.w),
                         decoration: BoxDecoration(
@@ -605,21 +608,17 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget photo() {
     return InkWell(
-      onTap: (){
-        showModalAvatarChange(context, 
-          (newFile, isMir){
+        onTap: () {
+          showModalAvatarChange(context, (newFile, isMir) {
             setState(() {
               _image = newFile;
               isMirror = isMir;
             });
-          },
-          _image
-        );
-      },
-      child: MirrorImage(
-        isMirror: isMirror,
-        path: _image,
-      )
-    );
+          }, _image);
+        },
+        child: MirrorImage(
+          isMirror: isMirror,
+          path: _image,
+        ));
   }
 }
