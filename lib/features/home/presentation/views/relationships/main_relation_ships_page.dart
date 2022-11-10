@@ -30,7 +30,7 @@ class _MainRelationShipsPageState extends State<MainRelationShipsPage> {
     );
   }
 
-  void nextPage() => controller.jumpToPage(1);
+  void nextPage() => controller.animateToPage(1, duration: Duration(milliseconds: 600), curve: Curves.easeInOutQuint);
 
-  void prevPage() => controller.jumpToPage(0);
+  void prevPage() => controller.animateToPage(0, duration: Duration(milliseconds: 600), curve: Curves.easeInOutQuint);
 }

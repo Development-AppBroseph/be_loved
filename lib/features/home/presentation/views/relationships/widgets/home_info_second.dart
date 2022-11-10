@@ -1,8 +1,11 @@
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 
 class HomeInfoSecond extends StatelessWidget {
@@ -11,6 +14,9 @@ class HomeInfoSecond extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime date = sl<AuthConfig>().user == null || sl<AuthConfig>().user!.date == null
+    ? DateTime.now() 
+    : DateFormat("yyyy-MM-dd").parse(sl<AuthConfig>().user!.date!, true).toLocal();
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -36,13 +42,13 @@ class HomeInfoSecond extends StatelessWidget {
             SizedBox(height: 9.h,),
             Row(
               children: [
-                Text('16 марта', style: TextStyle(
+                Text(DateFormat('dd MMMM', 'RU').format(date), style: TextStyle(
                   color: Color(0xFF171717),
                   fontSize: 35.sp,
                   fontWeight: FontWeight.w700
                 ),),
                 SizedBox(width: 10.w,),
-                Text('2022', style: TextStyle(
+                Text(DateFormat('yyyy', 'RU').format(date), style: TextStyle(
                   color: Color(0xFF171717),
                   fontSize: 35.sp,
                   fontWeight: FontWeight.w700

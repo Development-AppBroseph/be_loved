@@ -176,7 +176,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if (result != null) {
         token = result;
-        sl<AuthConfig>().token = result;
         await SharedPreferences.getInstance()
           ..setString('token', result);
         emit(InitSuccess(result));
@@ -287,8 +286,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (result != null) {
       MySecureStorage().setToken(token!);
+      sl<AuthConfig>().token = token;
       MySharedPrefs().setUser(token!, result);
       user = result;
+      sl<AuthConfig>().user = user;
       emit(ReletionshipsStarted());
     } else {
       emit(ReletionshipsError());

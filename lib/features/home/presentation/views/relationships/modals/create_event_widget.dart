@@ -18,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../widgets/time_item_widget.dart';
 import '../widgets/years_month_select_widget.dart';
+import 'icon_select_modal.dart';
 
 class CreateEventWidget extends StatefulWidget {
   final Function() onTap;
@@ -27,6 +28,7 @@ class CreateEventWidget extends StatefulWidget {
 }
 
 class _CreateEventWidgetState extends State<CreateEventWidget> {
+  GlobalKey iconBtn = GlobalKey(); 
   TextStyle style1 = TextStyle(
       color: ColorStyles.greyColor,
       fontSize: 15.sp,
@@ -42,6 +44,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   bool switchVal1 = false;
   bool switchVal2 = false;
   bool switchVal3 = false;
+  int iconIndex = 15;
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
   final TextEditingController _controllerFromTime = TextEditingController();
@@ -396,68 +399,105 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   'Иконка',
                                   style: style2,
                                 ),
-                                SizedBox(
+                                Container(
                                   height: 30.h,
-                                  width: 56.w,
-                                  child: CustomPopupMenu(
-                                    menuBuilder: () {
-                                      return Positioned(
-                                        top: 50,
-                                        child: Container(
-                                          height: 140.h,
-                                          width: 57.w,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              controller: _controllerIcon,
-                                              itemCount: 31,
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              itemBuilder: (context, index) {
-                                                return Center(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 12),
-                                                    child: Text(
-                                                      '😎',
-                                                      style: TextStyle(
-                                                          fontSize: 20.sp),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
+                                  alignment: Alignment.centerRight,
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      iconSelectModal(
+                                        context, 
+                                        getWidgetPosition(iconBtn),
+                                        (index){
+                                          setState(() {
+                                            iconIndex = index;
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        iconIndex
                                       );
                                     },
-                                    position: PreferredPosition.top,
-                                    barrierColor: Colors.transparent,
-                                    showArrow: false,
-                                    pressType: PressType.singleClick,
                                     child: Row(
-                                      children: [
-                                        Text(
-                                          '😎',
-                                          style: TextStyle(fontSize: 20.sp),
-                                        ),
-                                        SizedBox(
-                                          width: 20.w,
-                                        ),
-                                        SvgPicture.asset(
-                                          SvgImg.upDownIcon,
-                                        ),
-                                      ],
-                                    ),
+                                        children: [
+                                          iconIndex == 15
+                                          ? SvgPicture.asset(
+                                            'assets/icons/no_icon.svg', 
+                                            height: 28.h,
+                                            key: iconBtn,
+                                          )
+                                          : Text(
+                                            '😎',
+                                            key: iconBtn,
+                                            style: TextStyle(fontSize: 20.sp),
+                                          ),
+                                          SizedBox(
+                                            width: 20.w,
+                                          ),
+                                          SvgPicture.asset(
+                                            SvgImg.upDownIcon,
+                                          ),
+                                        ],
+                                      ),
                                   ),
+                                  // CustomPopupMenu(
+                                  //   menuBuilder: () {
+                                  //     return Positioned(
+                                  //       top: 50,
+                                  //       child: Container(
+                                  //         height: 140.h,
+                                  //         width: 57.w,
+                                  //         decoration: BoxDecoration(
+                                  //           color: Colors.white,
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(15),
+                                  //         ),
+                                  //         child: Padding(
+                                  //           padding: const EdgeInsets.symmetric(
+                                  //               vertical: 5),
+                                  //           child: ListView.builder(
+                                  //             shrinkWrap: true,
+                                  //             controller: _controllerIcon,
+                                  //             itemCount: 31,
+                                  //             physics:
+                                  //                 const BouncingScrollPhysics(),
+                                  //             itemBuilder: (context, index) {
+                                  //               return Center(
+                                  //                 child: Padding(
+                                  //                   padding: const EdgeInsets
+                                  //                           .symmetric(
+                                  //                       vertical: 12),
+                                  //                   child: Text(
+                                  //                     '😎',
+                                  //                     style: TextStyle(
+                                  //                         fontSize: 20.sp),
+                                  //                   ),
+                                  //                 ),
+                                  //               );
+                                  //             },
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  //   position: PreferredPosition.top,
+                                  //   barrierColor: Colors.transparent,
+                                  //   showArrow: false,
+                                  //   pressType: PressType.singleClick,
+                                  //   child: Row(
+                                  //     children: [
+                                  //       Text(
+                                  //         '😎',
+                                  //         key: iconBtn,
+                                  //         style: TextStyle(fontSize: 20.sp),
+                                  //       ),
+                                  //       SizedBox(
+                                  //         width: 20.w,
+                                  //       ),
+                                  //       SvgPicture.asset(
+                                  //         SvgImg.upDownIcon,
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   // child: PopupMenuButton(
                                   //   offset: Offset(-30.w, -70.h),
                                   //   onSelected: (value) {},
@@ -822,4 +862,11 @@ extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
+}
+
+
+Offset getWidgetPosition(GlobalKey key) {
+  final RenderBox renderBox = key.currentContext?.findRenderObject() as RenderBox;
+
+  return renderBox.localToGlobal(Offset.zero);
 }
