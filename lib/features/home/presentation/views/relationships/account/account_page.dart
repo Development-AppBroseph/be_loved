@@ -3,12 +3,14 @@ import 'dart:io';
 import 'dart:math';
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/avatar_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/mirror_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,6 +48,7 @@ class _AccountPageState extends State<AccountPage> {
 
   File? _image;
   bool isMirror = false;
+  // final headers["user"] = sl<AuthConfig>().user;
   Future _pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
