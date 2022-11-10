@@ -52,7 +52,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
 
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now().add(const Duration(days: 5));
-  final ScrollController _controllerIcon = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   final CustomPopupMenuController _customPopupMenuController1 =
       CustomPopupMenuController();
@@ -124,6 +124,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: SingleChildScrollView(
+                    controller: scrollController,
                     physics: const ClampingScrollPhysics(),
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -403,7 +404,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   height: 30.h,
                                   alignment: Alignment.centerRight,
                                   child: GestureDetector(
-                                    onTap: (){
+                                    onTap: () async {
+                                      await scrollController.animateTo(
+                                        scrollController.position.maxScrollExtent,
+                                        duration: Duration(milliseconds: 200),
+                                        curve: Curves.easeInOutQuint
+                                      );
                                       iconSelectModal(
                                         context, 
                                         getWidgetPosition(iconBtn),
@@ -438,108 +444,6 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                         ],
                                       ),
                                   ),
-                                  // CustomPopupMenu(
-                                  //   menuBuilder: () {
-                                  //     return Positioned(
-                                  //       top: 50,
-                                  //       child: Container(
-                                  //         height: 140.h,
-                                  //         width: 57.w,
-                                  //         decoration: BoxDecoration(
-                                  //           color: Colors.white,
-                                  //           borderRadius:
-                                  //               BorderRadius.circular(15),
-                                  //         ),
-                                  //         child: Padding(
-                                  //           padding: const EdgeInsets.symmetric(
-                                  //               vertical: 5),
-                                  //           child: ListView.builder(
-                                  //             shrinkWrap: true,
-                                  //             controller: _controllerIcon,
-                                  //             itemCount: 31,
-                                  //             physics:
-                                  //                 const BouncingScrollPhysics(),
-                                  //             itemBuilder: (context, index) {
-                                  //               return Center(
-                                  //                 child: Padding(
-                                  //                   padding: const EdgeInsets
-                                  //                           .symmetric(
-                                  //                       vertical: 12),
-                                  //                   child: Text(
-                                  //                     '😎',
-                                  //                     style: TextStyle(
-                                  //                         fontSize: 20.sp),
-                                  //                   ),
-                                  //                 ),
-                                  //               );
-                                  //             },
-                                  //           ),
-                                  //         ),
-                                  //       ),
-                                  //     );
-                                  //   },
-                                  //   position: PreferredPosition.top,
-                                  //   barrierColor: Colors.transparent,
-                                  //   showArrow: false,
-                                  //   pressType: PressType.singleClick,
-                                  //   child: Row(
-                                  //     children: [
-                                  //       Text(
-                                  //         '😎',
-                                  //         key: iconBtn,
-                                  //         style: TextStyle(fontSize: 20.sp),
-                                  //       ),
-                                  //       SizedBox(
-                                  //         width: 20.w,
-                                  //       ),
-                                  //       SvgPicture.asset(
-                                  //         SvgImg.upDownIcon,
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  // child: PopupMenuButton(
-                                  //   offset: Offset(-30.w, -70.h),
-                                  //   onSelected: (value) {},
-                                  //   splashRadius: 1,
-                                  //   padding: const EdgeInsets.all(0),
-                                  //   icon: Row(
-                                  //     children: [
-                                  //       Text(
-                                  //         '😎',
-                                  //         style: TextStyle(fontSize: 20.sp),
-                                  //       ),
-                                  //       SizedBox(
-                                  //         width: 20.w,
-                                  //       ),
-                                  //       SvgPicture.asset(
-                                  //         SvgImg.upDownIcon,
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  //   constraints: const BoxConstraints.expand(
-                                  //     width: 57,
-                                  //     height: 140,
-                                  //   ),
-                                  //   shape: RoundedRectangleBorder(
-                                  //     borderRadius: BorderRadius.all(
-                                  //       Radius.circular(15.r),
-                                  //     ),
-                                  //   ),
-                                  //   itemBuilder: (context) => [
-                                  //     ...List.generate(
-                                  //       31,
-                                  //       (index) => PopupMenuItem(
-                                  //         child: Center(
-                                  //           child: Text(
-                                  //             '😎',
-                                  //             style: TextStyle(fontSize: 20.sp),
-                                  //           ),
-                                  //         ),
-                                  //       ),
-                                  //     )
-                                  //   ],
-                                  // ),
                                 )
                               ],
                             ),
