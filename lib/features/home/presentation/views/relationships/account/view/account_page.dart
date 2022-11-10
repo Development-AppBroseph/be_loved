@@ -260,9 +260,10 @@ class _AccountPageState extends State<AccountPage> {
                       width: 430.w,
                       duration: const Duration(milliseconds: 600),
                       curve: Curves.easeInOutQuint,
+                      padding: EdgeInsets.zero,
                       child: CupertinoCard(
                         elevation: 0,
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        padding: EdgeInsets.symmetric(horizontal: 25.w),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.r),
                         ),
@@ -275,10 +276,10 @@ class _AccountPageState extends State<AccountPage> {
                               Padding(
                                 padding: EdgeInsets.only(top: 15.h),
                                 child: SizedBox(
-                                  height: 310.h,
+                                  height: 309.h,
                                   width: 428.w,
                                   child: Padding(
-                                    padding: EdgeInsets.only(top: 20.h),
+                                    padding: EdgeInsets.only(top: 5.h),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -292,7 +293,7 @@ class _AccountPageState extends State<AccountPage> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(
-                                              top: 37.h, bottom: 5.h),
+                                              top: 47.h, bottom: 5.h),
                                           child: Container(
                                             height: 70.h,
                                             decoration: BoxDecoration(
@@ -409,7 +410,7 @@ class _AccountPageState extends State<AccountPage> {
                                           ),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(top: 40.h),
+                                          padding: EdgeInsets.only(top: 35.h),
                                           child: CustomButton(
                                             validate: true,
                                             color: const Color.fromRGBO(
@@ -454,11 +455,11 @@ class _AccountPageState extends State<AccountPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    AnimatedContainer(
-                                        curve: Curves.easeInOutQuint,
-                                        duration:
-                                            const Duration(milliseconds: 200),
-                                        height: 17.h),
+                                    // AnimatedContainer(
+                                    //     curve: Curves.easeInOutQuint,
+                                    //     duration:
+                                    //         const Duration(milliseconds: 200),
+                                    //     height: 17.h),
                                     Text(
                                       'Введи код подтверждения',
                                       style: GoogleFonts.inter(
@@ -583,7 +584,7 @@ class _AccountPageState extends State<AccountPage> {
                                       color: Colors.black,
                                       textColor: Colors.white,
                                     ),
-                                    SizedBox(height: 20.h),
+                                    SizedBox(height: 47.h),
                                   ],
                                 ),
                               )
