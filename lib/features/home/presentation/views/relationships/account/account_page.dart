@@ -6,6 +6,8 @@ import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/avatar_modal.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/mirror_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -599,104 +601,21 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget photo() {
     return InkWell(
-      onTap: () => showAlignedDialog(
-          barrierColor: Colors.transparent,
-          context: context,
-          builder: (context) {
-            return Dialog(
-              insetPadding: const EdgeInsets.symmetric(horizontal: 70),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              backgroundColor: Colors.white,
-              child: SizedBox(
-                height: 120,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: Column(
-                    children: [
-                      DilogTabs(
-                        image: SvgImg.selectedImage,
-                        title: "Сменить аватарку",
-                        onTap: _pickImage,
-                      ),
-                      DilogTabs(
-                        image: SvgImg.mirror,
-                        title: "Отзеркалить",
-                        mirror: mirror,
-                        onTap: null,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
-      child: Transform.scale(
-        alignment: Alignment.center,
-        scaleX: !isMirror ? 1 : -1,
-        child: Container(
-          width: 165.h,
-          height: 165.h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(40.r),
-            ),
-            border: Border.all(width: 5.h, color: Colors.white),
-            image: _image == null
-                ? const DecorationImage(
-                    image: AssetImage(Img.avatarNone),
-                    fit: BoxFit.cover,
-                  )
-                : DecorationImage(
-                    image: FileImage(_image!),
-                    fit: BoxFit.cover,
-                  ),
-          ),
-        ),
-      ),
+      onTap: (){
+        showModalAvatarChange(context, 
+          (newFile, isMir){
+            setState(() {
+              _image = newFile;
+              isMirror = isMir;
+            });
+          },
+          _image
+        );
+      },
+      child: MirrorImage(
+        isMirror: isMirror,
+        path: _image,
+      )
     );
-    // return Stack(
-    //   alignment: Alignment.center,
-    //   children: [
-    //     SizedBox(
-    //       width: 165.h,
-    //       height: 165.h,
-    //       child: GestureDetector(
-    //         child: Material(
-    //           color: Colors.white,
-    //           shape: RoundedRectangleBorder(
-    //             borderRadius: BorderRadius.all(
-    //               Radius.circular(40.r),
-    //             ),
-    //           ),
-    //           clipBehavior: Clip.hardEdge,
-    //         ),
-    //       ),
-    //     ),
-    //     SizedBox(
-    //       width: 157.h,
-    //       height: 157.h,
-    //       child: GestureDetector(
-    //         child: Material(
-    //           color: const Color.fromRGBO(150, 150, 150, 1),
-    //           shape: RoundedRectangleBorder(
-    //             borderRadius: BorderRadius.all(
-    //               Radius.circular(40.r),
-    //             ),
-    //           ),
-    //           clipBehavior: Clip.hardEdge,
-    //           child: Padding(
-    //             padding: EdgeInsets.all(50.h),
-    //             child: SvgPicture.asset(
-    //               SvgImg.camera,
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ],
-    // );
   }
 }

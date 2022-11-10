@@ -3,6 +3,7 @@ import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,7 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   var user = await MySharedPrefs().user;
+  setupInjections();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) {
     runApp(MultiBlocProvider(

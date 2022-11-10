@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/helpers/time_text.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/text_fields/default_text_form_field.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_just_item.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_selected_item.dart';
@@ -64,6 +65,13 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
           : _controllerFromTime.clear();
       timeTextHelper(_controllerToTime.text) ? {} : _controllerToTime.clear();
     });
+  }
+
+  bool isValidate(){
+    return _controllerName.text.length > 3 
+    && _controllerDescription.text.length > 3
+    && _controllerFromTime.text.length > 3
+    && _controllerToTime.text.length > 3;
   }
 
   bool keyboardOpened = false;
@@ -501,58 +509,38 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                           ),
                           Row(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                behavior: HitTestBehavior.opaque,
-                                child: CupertinoCard(
+                              SizedBox(
+                                width: 60.h,
+                                child: CustomButton(
                                   color: ColorStyles.redColor,
-                                  margin: EdgeInsets.zero,
-                                  elevation: 0,
-                                  radius: BorderRadius.circular(20.r),
-                                  child: Container(
-                                    width: 60.h,
-                                    height: 60.h,
-                                    alignment: Alignment.center,
-                                    // decoration: BoxDecoration(
-                                    //     color: ColorStyles.redColor,
-                                    //     borderRadius:
-                                    //         BorderRadius.circular(10.r)),
-                                    child: SvgPicture.asset(
-                                      'assets/icons/close_event_create.svg',
-                                      height: 22.h,
-                                    ),
-                                  ),
+                                  text: 'Создать событие',
+                                  validate: true,
+                                  code: false,
+                                  textColor: Colors.white,
+                                  onPressed: (){
+                                    Navigator.pop(context);
+                                  },
+                                  svg: 'assets/icons/close_event_create.svg',
+                                  svgHeight: 22.h,
                                 ),
                               ),
                               SizedBox(
                                 width: 10.w,
                               ),
                               Expanded(
-                                child: GestureDetector(
-                                  onTap: widget.onTap,
-                                  behavior: HitTestBehavior.opaque,
-                                  child: CupertinoCard(
-                                    color: ColorStyles.accentColor,
-                                    margin: EdgeInsets.zero,
-                                    elevation: 0,
-                                    radius: BorderRadius.circular(20.r),
-                                    child: Container(
-                                      height: 60.h,
-                                      alignment: Alignment.center,
-                                      padding: EdgeInsets.only(bottom: 2.h),
-                                      // decoration: BoxDecoration(
-                                      //     color: ColorStyles.accentColor,
-                                      //     borderRadius:
-                                      //         BorderRadius.circular(10.r)),
-                                      child: Text(
-                                        'Создать событие',
-                                        style: styleBtn,
-                                      ),
-                                    ),
-                                  ),
+                                child: CustomButton(
+                                  color: ColorStyles.accentColor,
+                                  text: 'Создать событие',
+                                  validate: isValidate(),
+                                  code: false,
+                                  textColor: Colors.white,
+                                  onPressed: (){
+                                    if(isValidate()){
+                                      widget.onTap();
+                                    }
+                                  },
                                 ),
+                                
                               )
                             ],
                           ),
