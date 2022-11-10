@@ -1,6 +1,8 @@
 
 
 
+import 'package:be_loved/features/auth/data/models/auth/user.dart';
+
 enum AuthenticatedOption {
   unauthenticated, 
   authenticated
@@ -19,12 +21,12 @@ extension AuthenticatedOptionExtension on AuthenticatedOption {
 
 class AuthConfig {
   String? token;
-  // UserEntity? userEntity;
+  UserAnswer? user;
   AuthenticatedOption? authenticatedOption;
   
   AuthConfig({
     this.token, 
-    // this.userEntity, 
+    this.user, 
     this.authenticatedOption = AuthenticatedOption.unauthenticated
   });
 }
