@@ -2,8 +2,10 @@
 
 import 'dart:io';
 import 'package:be_loved/core/network/repository.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/secure_storage.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -99,6 +101,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             await SharedPreferences.getInstance()
               ..setString('token', result.token!);
             token = result.token;
+            sl<AuthConfig>().token = result.token;
           }
           secretKey = result.secretKey;
           emit(
@@ -173,6 +176,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       if (result != null) {
         token = result;
+        sl<AuthConfig>().token = result;
         await SharedPreferences.getInstance()
           ..setString('token', result);
         emit(InitSuccess(result));
@@ -189,6 +193,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     var result = await Repository().getUser();
 
     if (result != null) {
+      sl<AuthConfig>().user = result;
       user = result;
       emit(GetUserSuccess(result));
     } else {

@@ -1,4 +1,5 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
@@ -18,9 +19,9 @@ import 'features/auth/data/models/auth/user.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  setupInjections();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   var user = await MySharedPrefs().user;
-  setupInjections();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) {
     runApp(MultiBlocProvider(
@@ -60,12 +61,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
               fontFamily: 'Inter'),
-          // home: user != null
-          //     ? user?.date != null
-          //         ? HomePage()
-          //         : const PhonePage()
-          //     : const PhonePage(),
-          home: HomePage(),
+          home: user != null
+              ? user?.date != null
+                  ? HomePage()
+                  : const PhonePage()
+              : const PhonePage(),
+          // home: HomePage(),
         );
       },
     );

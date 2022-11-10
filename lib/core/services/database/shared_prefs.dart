@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/database/secure_storage.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../features/auth/data/models/auth/user.dart';
+import '../../../locator.dart';
 
 class MySharedPrefs {
   final _sharedPreferences = SharedPreferences.getInstance();
@@ -12,9 +15,12 @@ class MySharedPrefs {
 
   get user async {
     var user = (await _sharedPreferences).getString('user');
-    return user != null && user != ''
+    UserAnswer? userAnswer = user != null && user != ''
         ? UserAnswer.fromJson(jsonDecode(user))
         : null;
+    sl<AuthConfig>().user = userAnswer;
+    sl<AuthConfig>().token = await MySecureStorage().getToken();
+    return userAnswer;
   }
 
   void logOut(BuildContext context) async {
