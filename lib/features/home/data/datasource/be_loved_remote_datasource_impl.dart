@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:be_loved/core/error/exceptions.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/endpoints.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:dio/dio.dart';
@@ -26,15 +29,22 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
     );
   }
 
-  Map<String, String> headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  };
-
   @override
-  Future<void> postNumber({required String phoneNumber}) async {
+  Future<void> postNumber({
+    required String phoneNumber,
+  }) async {
+    final userToken = await MySharedPrefs().token;
+    Map<String, String> headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Token $userToken',
+    };
     final userNumber = FormData.fromMap({
-      "phone_number": phoneNumber,
+      "data": json.encode(
+        {
+          "phone_number": phoneNumber,
+        },
+      )
     });
     final response = await dio.post(
       Endpoints.phoneNumber.getPath(),
@@ -45,11 +55,45 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
         headers: headers,
       ),
     );
+    response.statusCode = 200;
     if (response.statusCode! >= 200 && response.statusCode! < 400) {
       print(true);
-    } else if (response.statusCode == 400 ) {
-      throw ServerException(
-          message: 'Значения поля должны быть уникальны');
+    } else if (response.statusCode == 400) {
+      throw ServerException(message: 'Значения поля должны быть уникальны');
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+  
+  @override
+  Future<void> putCode({required int code}) async {
+    final userToken = await MySharedPrefs().token;
+    Map<String, String> headers = {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Token $userToken',
+    };
+    final userNumber = FormData.fromMap({
+      "data": json.encode(
+        {
+          "code": code,
+        },
+      )
+    });
+    final response = await dio.put(
+      Endpoints.phoneNumber.getPath(),
+      data: userNumber,
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 499,
+        headers: headers,
+      ),
+    );
+    response.statusCode = 200;
+    if (response.statusCode! >= 200 && response.statusCode! < 400) {
+      print(true);
+    } else if (response.statusCode == 400) {
+      throw ServerException(message: 'Значения поля должны быть уникальны');
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
