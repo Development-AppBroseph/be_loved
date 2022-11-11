@@ -65,6 +65,7 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double height = (38.h-MediaQuery.of(context).padding.top);
     return CupertinoCard(
       radius: BorderRadius.vertical(
         top: Radius.circular(80.r),
@@ -112,8 +113,9 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                 },
               ),
               
-              SizedBox(height: 38.h-MediaQuery.of(context).padding.top,),
+              SizedBox(height: height.isNegative ? 0 : height),
               SafeArea(
+                bottom: false,
                 child: Container(
                   clipBehavior: Clip.hardEdge,
                   width: 378.w,
