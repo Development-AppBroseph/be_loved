@@ -1,13 +1,19 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_state.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/avatar_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/mirror_image.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,7 +30,8 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   int countPage = 0;
 
-  FocusNode focusNode = FocusNode();
+  FocusNode focusNodePhone = FocusNode();
+  FocusNode focusNodeCode = FocusNode();
   int? code;
   TextEditingController textEditingControllerUp = TextEditingController();
   TextEditingController textEditingControllerDown = TextEditingController();
@@ -70,7 +77,8 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   void dispose() {
-    focusNode.dispose();
+    focusNodePhone.dispose();
+    focusNodeCode.dispose();
     _streamController.close();
     _streamControllerCarousel.close();
     super.dispose();
@@ -85,19 +93,22 @@ class _AccountPageState extends State<AccountPage> {
     //   ],
     //   transform: GradientRotation(pi / 2),
     // );
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      physics: const ClampingScrollPhysics(),
-      controller: _scrollController,
-      child: Stack(
-        children: [
-          content(),
-        ],
-      ),
-    );
+    return BlocBuilder<AccountCubit, AccountPageState>(
+        builder: (context, state) {
+      return SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        physics: const ClampingScrollPhysics(),
+        controller: _scrollController,
+        child: Stack(
+          children: [
+            content(state),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget content() {
+  Widget content(AccountPageState state) {
     // TextStyle style1 = TextStyle(
     //     fontWeight: FontWeight.w700, color: Colors.white, fontSize: 15.sp);
     // TextStyle style2 = TextStyle(
@@ -184,7 +195,8 @@ class _AccountPageState extends State<AccountPage> {
                                         textAlign: TextAlign.center,
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: 8.h, bottom: 5.h),
+                                        padding: EdgeInsets.only(
+                                            left: 8.h, bottom: 5.h),
                                         child: SvgPicture.asset(
                                           SvgImg.edit,
                                           color: const Color(0xff969696),
@@ -381,7 +393,7 @@ class _AccountPageState extends State<AccountPage> {
                                                         //     .add(TextFieldFilled(false));
                                                       }
                                                     },
-                                                    focusNode: focusNode,
+                                                    focusNode: focusNodePhone,
                                                     decoration: InputDecoration(
                                                       alignLabelWithHint: true,
                                                       border: InputBorder.none,
@@ -423,10 +435,15 @@ class _AccountPageState extends State<AccountPage> {
                                             textColor: Colors.white,
                                             onPressed: () {
                                               // _sendCode();
-                                              setState(() {
-                                                countPage = 1;
-                                                // focusNode.requestFocus();
 
+                                              context
+                                                  .read<AccountCubit>()
+                                                  .postPhoneNumber(
+                                                      phoneController.text);
+                                              if (state
+                                                  is AccountGetResponsePageState) {
+                                                countPage = 1;
+                                                focusNodeCode.requestFocus();
                                                 controller.animateToPage(
                                                   1,
                                                   duration: const Duration(
@@ -444,7 +461,7 @@ class _AccountPageState extends State<AccountPage> {
                                                     curve: Curves.ease,
                                                   );
                                                 });
-                                              });
+                                              }
                                             },
                                           ),
                                         ),
@@ -496,7 +513,7 @@ class _AccountPageState extends State<AccountPage> {
                                             AndroidSmsAutofillMethod
                                                 .smsRetrieverApi,
                                         controller: codeController,
-                                        focusNode: focusNode,
+                                        focusNode: focusNodeCode,
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         onChanged: (value) {
@@ -504,7 +521,7 @@ class _AccountPageState extends State<AccountPage> {
                                               value == code.toString()) {
                                             // BlocProvider.of<AuthBloc>(context)
                                             //     .add(TextFieldFilled(true));
-                                            focusNode.unfocus();
+                                            focusNodeCode.unfocus();
                                           } else {
                                             // BlocProvider.of<AuthBloc>(context)
                                             //     .add(TextFieldFilled(false));
@@ -540,16 +557,17 @@ class _AccountPageState extends State<AccountPage> {
                                       textColor: Colors.white,
                                       onPressed: () {
                                         // _checkCode(context);
-                                        setState(() {
+                                        if (state
+                                            is AccountGetCodeResponsePageState) {
                                           countPage = 0;
-                                          focusNode.unfocus();
+                                          focusNodeCode.unfocus();
                                           controller.animateToPage(
                                             0,
                                             duration: const Duration(
                                                 milliseconds: 1200),
                                             curve: Curves.ease,
                                           );
-                                        });
+                                        }
                                       },
                                     ),
                                     // CustomAnimationButton(
