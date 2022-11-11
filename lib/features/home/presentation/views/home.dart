@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/views/archive/archive.dart';
-import 'package:be_loved/features/home/presentation/views/events/events_page.dart';
+import 'package:be_loved/features/home/presentation/views/events/view/events_page.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/purposes_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
 import 'package:flutter/material.dart';

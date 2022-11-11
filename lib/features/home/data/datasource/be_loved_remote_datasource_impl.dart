@@ -40,11 +40,7 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
       'Authorization': 'Token $userToken',
     };
     final userNumber = FormData.fromMap({
-      "data": json.encode(
-        {
-          "phone_number": phoneNumber,
-        },
-      )
+      "phone_number": phoneNumber,
     });
     final response = await dio.post(
       Endpoints.phoneNumber.getPath(),
@@ -55,7 +51,7 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
         headers: headers,
       ),
     );
-    response.statusCode = 200;
+
     if (response.statusCode! >= 200 && response.statusCode! < 400) {
       print(true);
     } else if (response.statusCode == 400) {
@@ -64,7 +60,7 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-  
+
   @override
   Future<void> putCode({required int code}) async {
     final userToken = await MySharedPrefs().token;
@@ -73,23 +69,19 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
       "Content-Type": "application/json",
       'Authorization': 'Token $userToken',
     };
-    final userNumber = FormData.fromMap({
-      "data": json.encode(
-        {
-          "code": code,
-        },
-      )
+
+    final userCode = FormData.fromMap({
+      "code": 12345,
     });
     final response = await dio.put(
       Endpoints.phoneNumber.getPath(),
-      data: userNumber,
+      data: userCode,
       options: Options(
         followRedirects: false,
         validateStatus: (status) => status! < 499,
         headers: headers,
       ),
     );
-    response.statusCode = 200;
     if (response.statusCode! >= 200 && response.statusCode! < 400) {
       print(true);
     } else if (response.statusCode == 400) {

@@ -12,7 +12,6 @@ class AccountCubit extends Cubit<AccountPageState> {
 
   Future<void> postPhoneNumber(String phoneNumber) async {
     try {
-      emit(AccountEmptytPageState());
       final postNumberOrFailure = await postNumber.call(PhoneNumberParams(
         phoneNumber: phoneNumber,
       ));

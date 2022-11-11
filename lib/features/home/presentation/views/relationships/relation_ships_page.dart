@@ -20,6 +20,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../profile/presentation/widget/grey_line_for_bottomsheet.dart';
+import 'modals/add_event_modal.dart';
 import 'modals/create_event_modal.dart';
 
 class RelationShipsPage extends StatefulWidget {
@@ -408,10 +409,11 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {
-                              showModalCreateEvent(context, () {
-                                Navigator.pop(context);
-                                func();
-                              });
+                              showModalAddEvent(context);
+                              // showModalCreateEvent(context, () {
+                              //   Navigator.pop(context);
+                              //   func();
+                              // });
                             }),
                           ),
                           SizedBox(height: 200.h)
