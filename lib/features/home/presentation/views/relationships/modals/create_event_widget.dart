@@ -80,6 +80,25 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   bool keyboardOpened = false;
   late StreamSubscription<bool> keyboardSub;
 
+  showIconModal() async {
+    await scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOutQuint
+    );
+    iconSelectModal(
+      context, 
+      getWidgetPosition(iconBtn),
+      (index){
+        setState(() {
+          iconIndex = index;
+        });
+        Navigator.pop(context);
+      },
+      iconIndex
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -387,11 +406,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                             height: 20.h,
                           ),
                           Container(
+                            height: 57.h,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.r),
                                 color: ColorStyles.backgroundColorGrey),
                             padding: EdgeInsets.symmetric(
-                                horizontal: 20.w, vertical: 13.h),
+                                horizontal: 20.w),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -401,27 +421,13 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   style: style2,
                                 ),
                                 Container(
-                                  height: 30.h,
                                   alignment: Alignment.centerRight,
                                   child: GestureDetector(
-                                    onTap: () async {
-                                      await scrollController.animateTo(
-                                        scrollController.position.maxScrollExtent,
-                                        duration: Duration(milliseconds: 200),
-                                        curve: Curves.easeInOutQuint
-                                      );
-                                      iconSelectModal(
-                                        context, 
-                                        getWidgetPosition(iconBtn),
-                                        (index){
-                                          setState(() {
-                                            iconIndex = index;
-                                          });
-                                          Navigator.pop(context);
-                                        },
-                                        iconIndex
-                                      );
+                                    onTap: showIconModal,
+                                    onPanEnd: (d){
+                                      showIconModal();
                                     },
+                                    behavior: HitTestBehavior.opaque,
                                     child: Row(
                                         children: [
                                           iconIndex == 15
@@ -433,7 +439,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                           : Text(
                                             '😎',
                                             key: iconBtn,
-                                            style: TextStyle(fontSize: 20.sp),
+                                            style: TextStyle(fontSize: 30.sp),
                                           ),
                                           SizedBox(
                                             width: 20.w,
