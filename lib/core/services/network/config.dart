@@ -1,4 +1,3 @@
-
 enum Config { baseUrl, baseScheme, baseAPIpath, url, ws }
 
 const bool isDev = true;
@@ -26,22 +25,16 @@ extension ConfigExtension on Config {
   String get url {
     return Config.baseScheme.value +
         "://" +
-        Config.baseUrl.value
-        +
-        '/' 
-        +
+        Config.baseUrl.value +
+        '/' +
         Config.baseAPIpath.value;
   }
+
   String get ws {
-    return Config.ws.value +
-        "://" +
-        myUrlIP +
-        ":8000";
+    return Config.ws.value + "://" + myUrlIP + ":8000";
   }
 
   String get urlWithoutApi {
-    return Config.baseScheme.value +
-        "://" +
-        Config.baseUrl.value;
+    return Config.baseScheme.value + "://" + Config.baseUrl.value;
   }
 }

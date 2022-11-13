@@ -13,24 +13,18 @@ import 'core/services/database/auth_params.dart';
 import 'core/services/network/config.dart';
 import 'core/services/network/network_info.dart';
 
-
-
 final sl = GetIt.instance;
 
 void setupInjections() {
-
   //Main config of system
   sl.registerLazySingleton<MainConfigApp>(() => MainConfigApp());
-
 
   //! External
   sl.registerLazySingleton(() => InternetConnectionChecker());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   sl.registerFactory<Dio>(
-    () => Dio(BaseOptions(
-      baseUrl: Config.url.url
-    )),
+    () => Dio(BaseOptions(baseUrl: Config.url.url)),
   );
 
   ///Authentication
@@ -55,17 +49,16 @@ void setupInjections() {
   // sl.registerFactory<AuthBloc>(
   //   () => AuthBloc(sl(), sl(), sl(), sl(), sl()),
   // );
-  
+
   //Repository
-  sl.registerLazySingleton<BelovedRepository>(() => BelovedRepositoryImplement(sl()));
+  sl.registerLazySingleton<BelovedRepository>(
+      () => BelovedRepositoryImplement(sl()));
   //Usecase
   sl.registerLazySingleton(() => PostNumber(sl()));
   sl.registerLazySingleton(() => PutCode(sl()));
   //Cubit
   sl.registerFactory(() => AccountCubit(postNumber: sl(), putCode: sl()));
   //Datasource
-  sl.registerLazySingleton<BeLovedRemoteDatasource>(() => BeLovedRemoteDatasourceImpl(dio: sl()));
-
-
-
+  sl.registerLazySingleton<BeLovedRemoteDatasource>(
+      () => BeLovedRemoteDatasourceImpl(dio: sl()));
 }
