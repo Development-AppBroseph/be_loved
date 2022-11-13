@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/helpers/time_text.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/text_fields/default_text_form_field.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_just_item.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_selected_item.dart';
@@ -17,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../widgets/time_item_widget.dart';
 import '../widgets/years_month_select_widget.dart';
+import 'icon_select_modal.dart';
 
 class CreateEventWidget extends StatefulWidget {
   final Function() onTap;
@@ -26,6 +28,7 @@ class CreateEventWidget extends StatefulWidget {
 }
 
 class _CreateEventWidgetState extends State<CreateEventWidget> {
+  GlobalKey iconBtn = GlobalKey(); 
   TextStyle style1 = TextStyle(
       color: ColorStyles.greyColor,
       fontSize: 15.sp,
@@ -41,6 +44,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   bool switchVal1 = false;
   bool switchVal2 = false;
   bool switchVal3 = false;
+  int iconIndex = 15;
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
   final TextEditingController _controllerFromTime = TextEditingController();
@@ -48,7 +52,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
 
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now().add(const Duration(days: 5));
-  final ScrollController _controllerIcon = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   final CustomPopupMenuController _customPopupMenuController1 =
       CustomPopupMenuController();
@@ -66,8 +70,34 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
     });
   }
 
+  bool isValidate(){
+    return _controllerName.text.length > 3 
+    && _controllerDescription.text.length > 3
+    && _controllerFromTime.text.length > 3
+    && _controllerToTime.text.length > 3;
+  }
+
   bool keyboardOpened = false;
   late StreamSubscription<bool> keyboardSub;
+
+  showIconModal() async {
+    await scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOutQuint
+    );
+    iconSelectModal(
+      context, 
+      getWidgetPosition(iconBtn),
+      (index){
+        setState(() {
+          iconIndex = index;
+        });
+        Navigator.pop(context);
+      },
+      iconIndex
+    );
+  }
 
   @override
   void initState() {
@@ -113,6 +143,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: SingleChildScrollView(
+                    controller: scrollController,
                     physics: const ClampingScrollPhysics(),
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -375,11 +406,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                             height: 20.h,
                           ),
                           Container(
+                            height: 57.h,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.r),
                                 color: ColorStyles.backgroundColorGrey),
                             padding: EdgeInsets.symmetric(
-                                horizontal: 20.w, vertical: 13.h),
+                                horizontal: 20.w),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -388,110 +420,36 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   'Иконка',
                                   style: style2,
                                 ),
-                                SizedBox(
-                                  height: 30.h,
-                                  width: 56.w,
-                                  child: CustomPopupMenu(
-                                    menuBuilder: () {
-                                      return Positioned(
-                                        top: 50,
-                                        child: Container(
-                                          height: 140.h,
-                                          width: 57.w,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              controller: _controllerIcon,
-                                              itemCount: 31,
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              itemBuilder: (context, index) {
-                                                return Center(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 12),
-                                                    child: Text(
-                                                      '😎',
-                                                      style: TextStyle(
-                                                          fontSize: 20.sp),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      );
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: GestureDetector(
+                                    onTap: showIconModal,
+                                    onPanEnd: (d){
+                                      showIconModal();
                                     },
-                                    position: PreferredPosition.top,
-                                    barrierColor: Colors.transparent,
-                                    showArrow: false,
-                                    pressType: PressType.singleClick,
+                                    behavior: HitTestBehavior.opaque,
                                     child: Row(
-                                      children: [
-                                        Text(
-                                          '😎',
-                                          style: TextStyle(fontSize: 20.sp),
-                                        ),
-                                        SizedBox(
-                                          width: 20.w,
-                                        ),
-                                        SvgPicture.asset(
-                                          SvgImg.upDownIcon,
-                                        ),
-                                      ],
-                                    ),
+                                        children: [
+                                          iconIndex == 15
+                                          ? SvgPicture.asset(
+                                            'assets/icons/no_icon.svg', 
+                                            height: 28.h,
+                                            key: iconBtn,
+                                          )
+                                          : Text(
+                                            '😎',
+                                            key: iconBtn,
+                                            style: TextStyle(fontSize: 30.sp),
+                                          ),
+                                          SizedBox(
+                                            width: 20.w,
+                                          ),
+                                          SvgPicture.asset(
+                                            SvgImg.upDownIcon,
+                                          ),
+                                        ],
+                                      ),
                                   ),
-                                  // child: PopupMenuButton(
-                                  //   offset: Offset(-30.w, -70.h),
-                                  //   onSelected: (value) {},
-                                  //   splashRadius: 1,
-                                  //   padding: const EdgeInsets.all(0),
-                                  //   icon: Row(
-                                  //     children: [
-                                  //       Text(
-                                  //         '😎',
-                                  //         style: TextStyle(fontSize: 20.sp),
-                                  //       ),
-                                  //       SizedBox(
-                                  //         width: 20.w,
-                                  //       ),
-                                  //       SvgPicture.asset(
-                                  //         SvgImg.upDownIcon,
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  //   constraints: const BoxConstraints.expand(
-                                  //     width: 57,
-                                  //     height: 140,
-                                  //   ),
-                                  //   shape: RoundedRectangleBorder(
-                                  //     borderRadius: BorderRadius.all(
-                                  //       Radius.circular(15.r),
-                                  //     ),
-                                  //   ),
-                                  //   itemBuilder: (context) => [
-                                  //     ...List.generate(
-                                  //       31,
-                                  //       (index) => PopupMenuItem(
-                                  //         child: Center(
-                                  //           child: Text(
-                                  //             '😎',
-                                  //             style: TextStyle(fontSize: 20.sp),
-                                  //           ),
-                                  //         ),
-                                  //       ),
-                                  //     )
-                                  //   ],
-                                  // ),
                                 )
                               ],
                             ),
@@ -501,58 +459,38 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                           ),
                           Row(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                behavior: HitTestBehavior.opaque,
-                                child: CupertinoCard(
+                              SizedBox(
+                                width: 60.h,
+                                child: CustomButton(
                                   color: ColorStyles.redColor,
-                                  margin: EdgeInsets.zero,
-                                  elevation: 0,
-                                  radius: BorderRadius.circular(20.r),
-                                  child: Container(
-                                    width: 60.h,
-                                    height: 60.h,
-                                    alignment: Alignment.center,
-                                    // decoration: BoxDecoration(
-                                    //     color: ColorStyles.redColor,
-                                    //     borderRadius:
-                                    //         BorderRadius.circular(10.r)),
-                                    child: SvgPicture.asset(
-                                      'assets/icons/close_event_create.svg',
-                                      height: 22.h,
-                                    ),
-                                  ),
+                                  text: 'Создать событие',
+                                  validate: true,
+                                  code: false,
+                                  textColor: Colors.white,
+                                  onPressed: (){
+                                    Navigator.pop(context);
+                                  },
+                                  svg: 'assets/icons/close_event_create.svg',
+                                  svgHeight: 22.h,
                                 ),
                               ),
                               SizedBox(
                                 width: 10.w,
                               ),
                               Expanded(
-                                child: GestureDetector(
-                                  onTap: widget.onTap,
-                                  behavior: HitTestBehavior.opaque,
-                                  child: CupertinoCard(
-                                    color: ColorStyles.accentColor,
-                                    margin: EdgeInsets.zero,
-                                    elevation: 0,
-                                    radius: BorderRadius.circular(20.r),
-                                    child: Container(
-                                      height: 60.h,
-                                      alignment: Alignment.center,
-                                      padding: EdgeInsets.only(bottom: 2.h),
-                                      // decoration: BoxDecoration(
-                                      //     color: ColorStyles.accentColor,
-                                      //     borderRadius:
-                                      //         BorderRadius.circular(10.r)),
-                                      child: Text(
-                                        'Создать событие',
-                                        style: styleBtn,
-                                      ),
-                                    ),
-                                  ),
+                                child: CustomButton(
+                                  color: ColorStyles.accentColor,
+                                  text: 'Создать событие',
+                                  validate: isValidate(),
+                                  code: false,
+                                  textColor: Colors.white,
+                                  onPressed: (){
+                                    if(isValidate()){
+                                      widget.onTap();
+                                    }
+                                  },
                                 ),
+                                
                               )
                             ],
                           ),
@@ -834,4 +772,11 @@ extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
+}
+
+
+Offset getWidgetPosition(GlobalKey key) {
+  final RenderBox renderBox = key.currentContext?.findRenderObject() as RenderBox;
+
+  return renderBox.localToGlobal(Offset.zero);
 }

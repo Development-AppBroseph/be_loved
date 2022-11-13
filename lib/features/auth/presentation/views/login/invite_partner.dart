@@ -640,7 +640,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                         child: CustomButton(
                                           color: const Color.fromRGBO(
                                               32, 203, 131, 1.0),
-                                          isContactBtn: true,
+                                          svg: SvgImg.persons,
                                           text: '',
                                           validate: bloc.user?.love == null,
                                           code: false,

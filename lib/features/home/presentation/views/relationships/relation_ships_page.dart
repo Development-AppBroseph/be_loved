@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
 import 'package:be_loved/features/profile/presentation/widget/main_file/parametrs_user_bottomsheet.dart';
 import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
+import 'package:be_loved/locator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/gestures.dart';
@@ -16,6 +20,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../profile/presentation/widget/grey_line_for_bottomsheet.dart';
+import 'modals/add_event_modal.dart';
 import 'modals/create_event_modal.dart';
 
 class RelationShipsPage extends StatefulWidget {
@@ -27,10 +32,12 @@ class RelationShipsPage extends StatefulWidget {
 }
 
 class _RelationShipsPageState extends State<RelationShipsPage> {
+  final int maxLength = 18;
+  String text = '';
   final _streamController = StreamController<int>();
   final _streamControllerCarousel = StreamController<double>();
 
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController(text: '');
   FocusNode f1 = FocusNode();
 
   @override
@@ -79,6 +86,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
         initialData: 0,
         builder: (context, snapshot) {
           return SingleChildScrollView(
+             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             physics: const ClampingScrollPhysics(),
             child: GestureDetector(
               onTap: () {
@@ -106,10 +114,17 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                   onTap: widget.nextPage,
                                   child: Row(
                                     children: [
-                                      photoMini(),
+                                      photoMini(sl<AuthConfig>().user == null
+                                          ? null
+                                          : sl<AuthConfig>().user!.me.photo),
                                       SizedBox(width: 12.w),
                                       Text(
-                                        'Олег Бочко',
+                                        sl<AuthConfig>().user == null
+                                            ? ''
+                                            : sl<AuthConfig>()
+                                                .user!
+                                                .me
+                                                .username,
                                         style: style1,
                                       ),
                                     ],
@@ -183,9 +198,26 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                       child: TextField(
                                         textCapitalization:
                                             TextCapitalization.words,
-                                        inputFormatters: [
-                                          LengthLimitingTextInputFormatter(18),
-                                        ],
+                                        onChanged: (value) {
+                                          if (value.length <= maxLength) {
+                                            text = value;
+                                          } else {
+                                            _controller.value =
+                                                TextEditingValue(
+                                              text: text,
+                                              selection: TextSelection(
+                                                baseOffset: maxLength,
+                                                extentOffset: maxLength,
+                                                affinity: TextAffinity.upstream,
+                                                isDirectional: false,
+                                              ),
+                                              composing: TextRange(
+                                                start: 0,
+                                                end: maxLength,
+                                              ),
+                                            );
+                                          }
+                                        },
                                         cursorColor: Colors.white,
                                         cursorHeight: 30,
                                         textAlignVertical:
@@ -222,7 +254,8 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                         FocusScope.of(context).requestFocus(f1);
                                       }
                                     },
-                                    child: _controller.text.isNotEmpty && f1.hasFocus
+                                    child: _controller.text.isNotEmpty &&
+                                            f1.hasFocus
                                         ? const Icon(
                                             Icons.check_rounded,
                                             color: Colors.white,
@@ -247,10 +280,15 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                 Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    photo(),
+                                    photo(sl<AuthConfig>().user == null
+                                        ? null
+                                        : sl<AuthConfig>().user!.me.photo),
                                     SizedBox(height: 10.h),
-                                    Text('Олег',
-                                        style: style3.copyWith(fontSize: 25.sp))
+                                    TextWidget(
+                                      text: sl<AuthConfig>().user == null
+                                          ? ''
+                                          : sl<AuthConfig>().user!.me.username,
+                                    )
                                   ],
                                 ),
                                 const Spacer(),
@@ -274,9 +312,21 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                 const Spacer(),
                                 Column(
                                   children: [
-                                    photo(),
+                                    photo(sl<AuthConfig>().user == null ||
+                                            sl<AuthConfig>().user!.love == null
+                                        ? null
+                                        : sl<AuthConfig>().user!.love!.photo),
                                     SizedBox(height: 10.h),
-                                    Text('Екатерина', style: style3)
+                                    TextWidget(
+                                      text: sl<AuthConfig>().user == null ||
+                                              sl<AuthConfig>().user?.love ==
+                                                  null
+                                          ? ''
+                                          : sl<AuthConfig>()
+                                              .user!
+                                              .love!
+                                              .username,
+                                    )
                                   ],
                                 ),
                               ],
@@ -359,10 +409,11 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {
-                              showModalCreateEvent(context, () {
-                                Navigator.pop(context);
-                                func();
-                              });
+                              showModalAddEvent(context);
+                              // showModalCreateEvent(context, () {
+                              //   Navigator.pop(context);
+                              //   func();
+                              // });
                             }),
                           ),
                           SizedBox(height: 200.h)
@@ -390,7 +441,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
     setState(() {});
   }
 
-  Widget photoMini() {
+  Widget photoMini(String? path) {
     return Container(
       width: 45.h,
       height: 45.h,
@@ -400,14 +451,15 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
           Radius.circular(15.r),
         ),
         border: Border.all(width: 2.h, color: Colors.white),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/avatar_none.png'),
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: getImage(path),
         ),
       ),
     );
   }
 
-  Widget photo() {
+  Widget photo(String? path) {
     return Container(
       width: 134.h,
       height: 134.h,
@@ -417,10 +469,19 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
           Radius.circular(40.r),
         ),
         border: Border.all(width: 5.h, color: Colors.white),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/avatar_none.png'),
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: getImage(path),
         ),
       ),
     );
+  }
+
+  ImageProvider<Object> getImage(String? path) {
+    print('PATH: ${path}');
+    if (path != null && path.trim() != '') {
+      return NetworkImage(Config.url.url + path);
+    }
+    return AssetImage('assets/images/avatar_none.png');
   }
 }

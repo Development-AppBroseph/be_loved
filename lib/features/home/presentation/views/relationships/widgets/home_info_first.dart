@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,36 +25,43 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
   @override
   void initState() {
     super.initState();
-    // startTimer();
+    if(sl<AuthConfig>().user != null){
+      startTimer();
+    }
   }
 
   @override
   void dispose() {
     streamController.close();
-    // _timer!.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
   void startTimer() {
-    var oneSec = const Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (DateTime.now().second == 0) {
-          _timer!.cancel();
-          Timer.periodic(const Duration(seconds: 60), (Timer timer) {
-            setTime();
-          });
-        }
-        setTime();
-      },
-    );
+    // var oneSec = const Duration(seconds: 1);
+    setTime();
+    Timer.periodic(const Duration(seconds: 60), (Timer timer) {
+      setTime();
+    });
+    // _timer = Timer.periodic(
+    //   oneSec,
+    //   (Timer timer) {
+    //     if (DateTime.now().second == 0) {
+    //       _timer!.cancel();
+    //       Timer.periodic(const Duration(seconds: 60), (Timer timer) {
+    //         setTime();
+    //       });
+    //     }
+    //     setTime();
+    //   },
+    // );
   }
 
   void setTime() async {
-    MySharedPrefs date = MySharedPrefs();
-    date.user.then((value) {
-      final startTime = value.date as String;
+    UserAnswer? user = sl<AuthConfig>().user;
+    print('USER: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
+    if(user!.date != null){
+      final startTime = user.date as String;
       final array = startTime.split('-');
 
       DateTime berlinWallFell = DateTime.now();
@@ -64,8 +74,8 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
       hour = difference.inHours - difference.inDays * 24;
       minute = difference.inMinutes - difference.inHours * 60;
 
-      streamController.add(true);
-    });
+      // streamController.add(true);
+    }
   }
 
   @override

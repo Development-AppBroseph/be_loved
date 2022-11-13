@@ -20,9 +20,9 @@ class DilogTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 45,
-      width: 250,
-      margin: const EdgeInsets.symmetric(vertical: 3),
+      height: 45.h,
+      width: 248.w,
+      margin: EdgeInsets.symmetric(vertical: 3.h),
       child: Material(
         color: Colors.white,
         child: InkWell(
@@ -35,7 +35,7 @@ class DilogTabs extends StatelessWidget {
           },
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 21),
+              padding: EdgeInsets.symmetric(horizontal: 21.w),
               child: Row(
                 children: [
                   SvgPicture.asset(image),

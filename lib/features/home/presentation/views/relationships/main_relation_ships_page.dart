@@ -1,4 +1,4 @@
-import 'package:be_loved/features/home/presentation/views/relationships/account/account_page.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/account/view/account_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +30,7 @@ class _MainRelationShipsPageState extends State<MainRelationShipsPage> {
     );
   }
 
-  void nextPage() => controller.jumpToPage(1);
+  void nextPage() => controller.animateToPage(1, duration: Duration(milliseconds: 600), curve: Curves.easeInOutQuint);
 
-  void prevPage() => controller.jumpToPage(0);
+  void prevPage() => controller.animateToPage(0, duration: Duration(milliseconds: 600), curve: Curves.easeInOutQuint);
 }
