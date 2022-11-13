@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
+import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_state.dart';
@@ -40,6 +42,7 @@ class _AccountPageState extends State<AccountPage> {
   TextEditingController textEditingControllerDown = TextEditingController();
 
   String phoneNumber = '';
+  String userPhone = '';
 
   bool resendCode = false;
 
@@ -72,6 +75,19 @@ class _AccountPageState extends State<AccountPage> {
     _streamController.close();
     _streamControllerCarousel.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _getUserPhone();
+    super.initState();
+  }
+
+  void _getUserPhone() async {
+    var phone = (await MySharedPrefs().user as UserAnswer).me.phoneNumber;
+    userPhone =
+        '${phone.substring(0, 2)} ${phone.substring(2, 5)} ${phone.substring(5, 8)} ${phone.substring(8, 10)} ${phone.substring(10, 12)}';
+    setState(() {});
   }
 
   @override
@@ -205,7 +221,7 @@ class _AccountPageState extends State<AccountPage> {
                                                   padding: EdgeInsets.only(
                                                       left: 20.h),
                                                   child: Text(
-                                                    '+7 *** *** 00-00',
+                                                    userPhone,
                                                     style: style3.copyWith(
                                                       fontSize: 15.sp,
                                                       color: Colors.black,
