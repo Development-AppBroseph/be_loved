@@ -2,6 +2,7 @@ import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math';
 
 class AddEventBottomsheet extends StatefulWidget {
-  const AddEventBottomsheet({Key? key}) : super(key: key);
+  final Function() onTap;
+  const AddEventBottomsheet({Key? key, required this.onTap}) : super(key: key);
 
   @override
   State<AddEventBottomsheet> createState() => _AddEventBottomsheetState();
@@ -150,7 +152,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: EdgeInsets.only(
-                              left: index == 0 ? 25.w : 15.w,
+                              left: index == 0 ? 0 : 15.w,
                               right: index == hashTags.length - 1 ? 25.w : 0),
                           child: Builder(builder: (context) {
                             Color color;
@@ -322,54 +324,18 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        widgets.add(
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 16.h),
-                            child: SizedBox(
-                              child: Row(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Предстоящее событие:',
-                                        style: TextStyle(
-                                          fontFamily: "Inter",
-                                          color: const Color(0xff171717),
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 6.h),
-                                        child: Text(
-                                          "1 событие",
-                                          style: TextStyle(
-                                            fontFamily: "Inter",
-                                            color: const Color(0xff969696),
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  const Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios_rounded,
-                                      color: Color(0xff171717),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      });
+                      showModalCreateEvent(
+                        context, 
+                        (){
+                          widget.onTap();
+                          setState(() {
+                            widgets.add(
+                              widgetItem()
+                            );
+                          });
+                        }
+                      );
+                      
                     },
                     child: Container(
                       height: 55.h,
@@ -420,4 +386,52 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
       ),
     );
   }
+}
+
+
+Widget widgetItem(){
+  return Padding(
+    padding: EdgeInsets.only(bottom: 16.h),
+    child: SizedBox(
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Предстоящее событие:',
+                style: TextStyle(
+                  fontFamily: "Inter",
+                  color: const Color(0xff171717),
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 6.h),
+                child: Text(
+                  "1 событие",
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                    color: const Color(0xff969696),
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Spacer(),
+          const Align(
+            alignment: Alignment.centerRight,
+            child: Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Color(0xff171717),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

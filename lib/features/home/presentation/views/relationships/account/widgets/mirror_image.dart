@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MirrorImage extends StatelessWidget {
   final bool isMirror;
   final File? path;
-  MirrorImage({required this.isMirror, this.path});
+  final String? urlToImage;
+  MirrorImage({required this.isMirror, this.path, this.urlToImage});
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +26,20 @@ class MirrorImage extends StatelessWidget {
             Radius.circular(50.r),
           ),
           border: Border.all(width: 5.h, color: Colors.white),
-          image: path == null
-              ? const DecorationImage(
+          image: path != null
+              ? DecorationImage(
+                  image: FileImage(path!),
+                  fit: BoxFit.cover,
+                )
+              : urlToImage != null 
+              ? DecorationImage(
+                  image: NetworkImage(Config.url.url + urlToImage!),
+                  fit: BoxFit.cover,
+                )
+              : const DecorationImage(
                   image: AssetImage(Img.avatarNone),
                   fit: BoxFit.cover,
                 )
-              : DecorationImage(
-                  image: FileImage(path!),
-                  fit: BoxFit.cover,
-                ),
         ),
       ),
     );

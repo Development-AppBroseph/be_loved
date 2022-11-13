@@ -409,11 +409,11 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {
-                              showModalAddEvent(context);
-                              // showModalCreateEvent(context, () {
-                              //   Navigator.pop(context);
-                              //   func();
-                              // });
+                              // showModalAddEvent(context);
+                              showModalAddEvent(context, () {
+                                Navigator.pop(context);
+                                func();
+                              });
                             }),
                           ),
                           SizedBox(height: 200.h)

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_events_bottomsheet.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../data/models/home/hashTag.dart';
 import '../../../../data/models/home/upcoming_info.dart';
+import '../../relationships/modals/add_event_modal.dart';
 
 class EventsPage extends StatefulWidget {
   @override
@@ -345,11 +347,11 @@ class _EventsPageState extends State<EventsPage> {
           events(),
           SizedBox(height: 35.h),
           GestureDetector(
-            onTap: () => showModalBottomSheet(
-              context: context,
-              builder: (contex) {
-                return const AddEventBottomsheet();
-              },
+            onTap: () => showModalCreateEvent(
+              context,
+              (){
+                Navigator.pop(context);
+              }
             ),
             child: button(),
           ),

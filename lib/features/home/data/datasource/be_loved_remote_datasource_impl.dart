@@ -52,6 +52,7 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
       ),
     );
 
+    print('RES: ${response.statusCode} ||| ${response.data}');
     if (response.statusCode! >= 200 && response.statusCode! < 400) {
       print(true);
     } else if (response.statusCode == 400) {
@@ -70,7 +71,7 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
       'Authorization': 'Token $userToken',
     };
 
-    final userCode = FormData.fromMap({
+    final userCode = jsonEncode({
       "code": 12345,
     });
     final response = await dio.put(
@@ -82,6 +83,7 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
         headers: headers,
       ),
     );
+    print('RES: ${response.statusCode} ||| ${response.data}');
     if (response.statusCode! >= 200 && response.statusCode! < 400) {
       print(true);
     } else if (response.statusCode == 400) {

@@ -122,6 +122,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
+        setState(() {});
       },
       child: CupertinoCard(
         radius: BorderRadius.vertical(
