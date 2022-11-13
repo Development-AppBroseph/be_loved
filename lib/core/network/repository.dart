@@ -28,6 +28,7 @@ class Repository {
           data: FormData.fromMap({
             'photo': MultipartFile.fromFileSync(file!.path, filename: file.path)
           }));
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return true;
       }
@@ -42,6 +43,7 @@ class Repository {
     try {
       var response =
           await dio.post('auth/code_phone', data: {'phone_number': number});
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 204) {
         return 12345;
       }
@@ -58,6 +60,7 @@ class Repository {
         'phone_number': number,
         'code': code,
       });
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return CheckIsUserExist.fromJson(response.data);
       }
@@ -76,6 +79,7 @@ class Repository {
           'username': name,
         },
       );
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return CheckNickName.fromJson(response.data).exists;
       }
@@ -94,6 +98,7 @@ class Repository {
           'phone_number': phone,
         },
       );
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         final bool res = response.data['exists'];
         return res;
@@ -125,6 +130,7 @@ class Repository {
           validateStatus: (status) => status! <= 450,
         ),
       );
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
 
       if (response.statusCode == 200) {
         return InitUserAnswer.fromJson(response.data).authToken;
@@ -139,7 +145,7 @@ class Repository {
   Future<UserAnswer?> inviteUser(String phone) async {
     var options = Options(headers: {
       'Authorization': 'Token ${await MySharedPrefs().token}',
-    }, validateStatus: (status) => status! <= 400);
+    }, validateStatus: (status) => status! <= 600);
     try {
       var response = await dio.post(
         '/relations/',
@@ -148,6 +154,7 @@ class Repository {
         },
         options: options,
       );
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
@@ -170,6 +177,7 @@ class Repository {
         data: {"relation_id": relationId, "status": 'Отменено'},
         options: options,
       );
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
@@ -193,6 +201,7 @@ class Repository {
         options: options,
       );
 
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         sl<AuthConfig>().token = token;
         return UserAnswer.fromJson(response.data);
@@ -215,6 +224,7 @@ class Repository {
         options: options,
       );
 
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
@@ -236,6 +246,7 @@ class Repository {
         options: options,
       );
 
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
