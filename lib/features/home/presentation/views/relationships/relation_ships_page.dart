@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
@@ -10,18 +13,12 @@ import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
 import 'package:be_loved/locator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
-import '../../../../profile/presentation/widget/grey_line_for_bottomsheet.dart';
 import 'modals/add_event_modal.dart';
-import 'modals/create_event_modal.dart';
 
 class RelationShipsPage extends StatefulWidget {
   final VoidCallback nextPage;
@@ -31,7 +28,7 @@ class RelationShipsPage extends StatefulWidget {
   State<RelationShipsPage> createState() => _RelationShipsPageState();
 }
 
-class _RelationShipsPageState extends State<RelationShipsPage> {
+class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKeepAliveClientMixin {
   final int maxLength = 18;
   String text = '';
   final _streamController = StreamController<int>();
@@ -47,6 +44,17 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
     _controller.addListener(() {
       setState(() {});
     });
+
+    getNameRelationShips();
+  }
+
+  void getNameRelationShips() async {
+    final name = await MySharedPrefs().getNameRelationShips;
+    if (name != null && name.length > 0) {
+      _controller.text = name;
+    } else {
+      _controller.text = 'Назовите отношения';
+    }
   }
 
   @override
@@ -65,7 +73,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
     );
   }
 
-  List<Widget> events = [];
+  List<Events> events = [];
 
   Widget content(BuildContext context) {
     TextStyle style1 = TextStyle(
@@ -86,7 +94,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
         initialData: 0,
         builder: (context, snapshot) {
           return SingleChildScrollView(
-             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             physics: const ClampingScrollPhysics(),
             child: GestureDetector(
               onTap: () {
@@ -234,9 +242,9 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                           contentPadding:
                                               const EdgeInsets.only(top: 20),
                                           border: InputBorder.none,
-                                          hintText: f1.hasFocus
-                                              ? " "
-                                              : 'Назовите отношения',
+                                          // hintText: f1.hasFocus
+                                          //     ? " "
+                                          //     : 'Назовите отношения',
                                           hintStyle: TextStyle(
                                             color: Colors.white,
                                             fontSize: 30.sp,
@@ -247,9 +255,12 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                                     ),
                                   ),
                                   GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
                                       if (f1.hasFocus) {
                                         f1.unfocus();
+                                        MySharedPrefs().setNameRelationShips(
+                                            _controller.text);
+                                        getNameRelationShips();
                                       } else {
                                         FocusScope.of(context).requestFocus(f1);
                                       }
@@ -372,39 +383,55 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                             },
                           ),
                           SizedBox(height: 11.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 25.w),
-                            child: ReorderableListView.builder(
-                              onReorder: (oldIndex, newIndex) {
-                                setState(() {
-                                  final item = events.removeAt(oldIndex);
-                                  events.insert(newIndex, item);
-                                });
-                              },
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.all(0),
-                              shrinkWrap: true,
-                              itemCount: events.length,
-                              itemBuilder: ((context, index) {
-                                return CustomAnimationItemRelationships(
-                                  // func: func,
-                                  key: ValueKey('$index'),
-                                  delete: delete,
-                                  index: index,
-                                );
-                              }),
-                              proxyDecorator: (child, index, animation) {
-                                return Container(
-                                  decoration: BoxDecoration(boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 20.h,
-                                        color: Color.fromRGBO(0, 0, 0, 0.1))
-                                  ], borderRadius: BorderRadius.circular(20.r)),
-                                  child: child,
-                                );
-                              },
-                            ),
-                          ),
+                          BlocBuilder<EventsBloc, EventsState>(
+                              buildWhen: (previous, current) {
+                            if (current is AddEventsState) {
+                              if (events.length < 3) {
+                                events.add(current.events);
+                                return true;
+                              }
+                            }
+                            return false;
+                          }, builder: (context, snapshot) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 25.w),
+                              child: ReorderableListView.builder(
+                                onReorder: (oldIndex, newIndex) {
+                                  setState(() {
+                                    final item = events.removeAt(oldIndex);
+                                    events.insert(newIndex, item);
+                                  });
+                                },
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: const EdgeInsets.all(0),
+                                shrinkWrap: true,
+                                itemCount: events.length,
+                                itemBuilder: ((context, index) {
+                                  return CustomAnimationItemRelationships(
+                                    events: events[index],
+                                    // func: func,
+                                    key: ValueKey('$index'),
+                                    delete: delete,
+                                    index: index,
+                                  );
+                                }),
+                                proxyDecorator: (child, index, animation) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 20.h,
+                                              color:
+                                                  Color.fromRGBO(0, 0, 0, 0.1))
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(20.r)),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          }),
                           if (events.isEmpty) SizedBox(height: 15.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -412,7 +439,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
                               // showModalAddEvent(context);
                               showModalAddEvent(context, () {
                                 Navigator.pop(context);
-                                func();
+                                // func();
                               });
                             }),
                           ),
@@ -428,13 +455,13 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
         });
   }
 
-  void func() {
-    if (events.length < 3) {
-      events.add(const SizedBox());
-      setState(() {});
-    }
-    // print('object ${events.length}');
-  }
+  // void func() {
+  //   if (events.length < 3) {
+  //     // events.add(Events(name: 'name', description: description, datetime: datetime));
+  //     setState(() {});
+  //   }
+  //   // print('object ${events.length}');
+  // }
 
   void delete(int index) {
     events.removeAt(index);
@@ -484,4 +511,8 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
     }
     return AssetImage('assets/images/avatar_none.png');
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

@@ -3,7 +3,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/relation
 import 'package:flutter/material.dart';
 
 class MainRelationShipsPage extends StatefulWidget {
-  MainRelationShipsPage({Key? key}) : super(key: key);
+  const MainRelationShipsPage({Key? key}) : super(key: key);
 
   @override
   State<MainRelationShipsPage> createState() => _MainRelationShipsPageState();
@@ -18,11 +18,19 @@ class _MainRelationShipsPageState extends State<MainRelationShipsPage> {
     super.dispose();
   }
 
+  ScrollPhysics physics = const NeverScrollableScrollPhysics();
+
   @override
   Widget build(BuildContext context) {
     return PageView(
-      physics: const NeverScrollableScrollPhysics(),
+      physics: physics,
       controller: controller,
+      onPageChanged: (value) {
+        physics = value == 0
+            ? const NeverScrollableScrollPhysics()
+            : const ClampingScrollPhysics();
+        setState(() {});
+      },
       children: [
         RelationShipsPage(nextPage: nextPage),
         AccountPage(prevPage: prevPage),
@@ -30,7 +38,11 @@ class _MainRelationShipsPageState extends State<MainRelationShipsPage> {
     );
   }
 
-  void nextPage() => controller.nextPage(duration: Duration(milliseconds: 600), curve: Curves.easeInOutQuint);
+  void nextPage() => controller.nextPage(
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeInOutQuint);
 
-  void prevPage() => controller.previousPage(duration: Duration(milliseconds: 600), curve: Curves.easeInOutQuint);
+  void prevPage() => controller.previousPage(
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeInOutQuint);
 }

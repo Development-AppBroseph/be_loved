@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/locator.dart';
 import 'package:dio/dio.dart';
 
@@ -13,7 +14,8 @@ import '../../features/auth/data/models/auth/user.dart';
 class Repository {
   static var uri = Uri.parse(Config.url.url);
   var dio = Dio(
-    BaseOptions(baseUrl: Config.url.url, validateStatus: (status) => status! <= 400),
+    BaseOptions(
+        baseUrl: Config.url.url, validateStatus: (status) => status! <= 400),
   );
 
   Future<bool?> editUser(File? file) async {
@@ -252,6 +254,34 @@ class Repository {
       if (response.statusCode == 400) {}
       if (response.statusCode == 400) {}
 
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<Events>?> getEvents() async {
+    String? token = await MySharedPrefs().token;
+    var options = Options(headers: {
+      'Authorization': 'Token $token',
+    });
+    try {
+      var response = await dio.get(
+        'events/',
+        options: options,
+      );
+
+      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      if (response.statusCode == 200) {
+        List<Events> events = [];
+        for(final val in response.data) {
+          events.add(Events.fromJson(val));
+        }
+        // sl<AuthConfig>().token = token;
+        // return Events.fromJson(response.data);
+        return events;
+      }
+      if (response.statusCode == 400) {}
       return null;
     } catch (e) {
       return null;
