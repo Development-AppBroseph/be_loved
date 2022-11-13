@@ -1,4 +1,6 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
+import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
@@ -6,6 +8,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/modals/c
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math';
@@ -324,18 +327,12 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      showModalCreateEvent(
-                        context, 
-                        (){
-                          widget.onTap();
-                          setState(() {
-                            widgets.add(
-                              widgetItem()
-                            );
-                          });
-                        }
-                      );
-                      
+                      showModalCreateEvent(context, () {
+                        widget.onTap();
+                        setState(() {
+                          widgets.add(widgetItem());
+                        });
+                      });
                     },
                     child: Container(
                       height: 55.h,
@@ -388,16 +385,14 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
   }
 }
 
-
-Widget widgetItem(){
+Widget widgetItem() {
   return Padding(
     padding: EdgeInsets.only(bottom: 16.h),
     child: SizedBox(
       child: Row(
         children: [
           Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Предстоящее событие:',

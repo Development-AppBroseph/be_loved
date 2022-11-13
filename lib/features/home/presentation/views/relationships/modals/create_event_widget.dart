@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
+import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/time_text.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -11,6 +13,7 @@ import 'package:be_loved/core/widgets/buttons/switch_btn.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,7 +31,7 @@ class CreateEventWidget extends StatefulWidget {
 }
 
 class _CreateEventWidgetState extends State<CreateEventWidget> {
-  GlobalKey iconBtn = GlobalKey(); 
+  GlobalKey iconBtn = GlobalKey();
   TextStyle style1 = TextStyle(
       color: ColorStyles.greyColor,
       fontSize: 15.sp,
@@ -70,33 +73,25 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
     });
   }
 
-  bool isValidate(){
-    return _controllerName.text.length > 3 
-    && _controllerDescription.text.length > 3
-    && _controllerFromTime.text.length > 3
-    && _controllerToTime.text.length > 3;
+  bool isValidate() {
+    return _controllerName.text.length > 3 &&
+        _controllerDescription.text.length > 3 &&
+        _controllerFromTime.text.length > 3 &&
+        _controllerToTime.text.length > 3;
   }
 
   bool keyboardOpened = false;
   late StreamSubscription<bool> keyboardSub;
 
   showIconModal() async {
-    await scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 200),
-      curve: Curves.easeInOutQuint
-    );
-    iconSelectModal(
-      context, 
-      getWidgetPosition(iconBtn),
-      (index){
-        setState(() {
-          iconIndex = index;
-        });
-        Navigator.pop(context);
-      },
-      iconIndex
-    );
+    await scrollController.animateTo(scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 200), curve: Curves.easeInOutQuint);
+    iconSelectModal(context, getWidgetPosition(iconBtn), (index) {
+      setState(() {
+        iconIndex = index;
+      });
+      Navigator.pop(context);
+    }, iconIndex);
   }
 
   @override
@@ -411,8 +406,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.r),
                                 color: ColorStyles.backgroundColorGrey),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20.w),
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -425,31 +419,32 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   alignment: Alignment.centerRight,
                                   child: GestureDetector(
                                     onTap: showIconModal,
-                                    onPanEnd: (d){
+                                    onPanEnd: (d) {
                                       showIconModal();
                                     },
                                     behavior: HitTestBehavior.opaque,
                                     child: Row(
-                                        children: [
-                                          iconIndex == 15
-                                          ? SvgPicture.asset(
-                                            'assets/icons/no_icon.svg', 
-                                            height: 28.h,
-                                            key: iconBtn,
-                                          )
-                                          : Text(
-                                            '😎',
-                                            key: iconBtn,
-                                            style: TextStyle(fontSize: 30.sp),
-                                          ),
-                                          SizedBox(
-                                            width: 20.w,
-                                          ),
-                                          SvgPicture.asset(
-                                            SvgImg.upDownIcon,
-                                          ),
-                                        ],
-                                      ),
+                                      children: [
+                                        iconIndex == 15
+                                            ? SvgPicture.asset(
+                                                'assets/icons/no_icon.svg',
+                                                height: 28.h,
+                                                key: iconBtn,
+                                              )
+                                            : Text(
+                                                '😎',
+                                                key: iconBtn,
+                                                style:
+                                                    TextStyle(fontSize: 30.sp),
+                                              ),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        SvgPicture.asset(
+                                          SvgImg.upDownIcon,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 )
                               ],
@@ -468,7 +463,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   validate: true,
                                   code: false,
                                   textColor: Colors.white,
-                                  onPressed: (){
+                                  onPressed: () {
                                     Navigator.pop(context);
                                   },
                                   svg: 'assets/icons/close_event_create.svg',
@@ -485,13 +480,19 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   validate: isValidate(),
                                   code: false,
                                   textColor: Colors.white,
-                                  onPressed: (){
-                                    if(isValidate()){
+                                  onPressed: () {
+                                    if (isValidate()) {
+                                      BlocProvider.of<EventsBloc>(context)
+                                          .add(AddEvent(
+                                              events: Events(
+                                        name: _controllerName.text,
+                                        description: _controllerDescription.text,
+                                        datetime: DateTime.fromMillisecondsSinceEpoch(fromDate.millisecond - DateTime.now().millisecond).day.toString(),
+                                      )));
                                       widget.onTap();
                                     }
                                   },
                                 ),
-                                
                               )
                             ],
                           ),
@@ -775,9 +776,9 @@ extension StringExtension on String {
   }
 }
 
-
 Offset getWidgetPosition(GlobalKey key) {
-  final RenderBox renderBox = key.currentContext?.findRenderObject() as RenderBox;
+  final RenderBox renderBox =
+      key.currentContext?.findRenderObject() as RenderBox;
 
   return renderBox.localToGlobal(Offset.zero);
 }

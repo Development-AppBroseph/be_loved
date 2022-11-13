@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CustomAnimationItemRelationships extends StatefulWidget {
   final Function(int) delete;
   final int index;
+  final Events events;
   const CustomAnimationItemRelationships({
     Key? key,
     required this.delete,
     required this.index,
+    required this.events,
   }) : super(key: key);
 
   @override
@@ -149,7 +152,7 @@ class _CustomAnimationItemRelationshipsState
                                             ),
                                             const Spacer(),
                                             Text(
-                                              'Через 4 дня',
+                                              'Через ${widget.events.datetime} ${checkDays()}',
                                               style: TextStyle(
                                                 color: const Color.fromRGBO(
                                                     128, 74, 142, 1),
@@ -162,12 +165,12 @@ class _CustomAnimationItemRelationshipsState
                                         ),
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
-                                          duration:
-                                              const Duration(milliseconds: 1000),
+                                          duration: const Duration(
+                                              milliseconds: 1000),
                                           height: snapshot.data! ? 19.h : 0.h,
                                         ),
                                         Text(
-                                          'Годовщина',
+                                          widget.events.name,
                                           style: TextStyle(
                                               color: const Color.fromRGBO(
                                                   23, 23, 23, 1),
@@ -177,8 +180,8 @@ class _CustomAnimationItemRelationshipsState
                                         ),
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
-                                          duration:
-                                              const Duration(milliseconds: 1000),
+                                          duration: const Duration(
+                                              milliseconds: 1000),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
                                         Row(
@@ -193,7 +196,7 @@ class _CustomAnimationItemRelationshipsState
                                             ),
                                             SizedBox(width: 10.w),
                                             Text(
-                                              'Арбузный вечер',
+                                              widget.events.description,
                                               style: TextStyle(
                                                   color: ColorStyles.greyColor,
                                                   fontSize: 15.sp,
@@ -262,6 +265,16 @@ class _CustomAnimationItemRelationshipsState
         );
       },
     );
+  }
+
+  String checkDays() {
+    int days = int.parse(widget.events.datetime);
+    int lastNumber = int.parse(widget.events.datetime[widget.events.datetime.length - 1]);
+    if(lastNumber > 5 && lastNumber < 10) return 'дней';
+    if(days % 5 == 0) return 'дней';
+    if(days == 11) return 'дней';
+    if(lastNumber == 1) return 'день';
+    return 'дня';
   }
 
   // void closeOpen(bool state) {
