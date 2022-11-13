@@ -1,19 +1,26 @@
 import 'dart:async';
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
 import 'package:be_loved/features/profile/presentation/widget/main_file/parametrs_user_bottomsheet.dart';
 import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
+import 'package:be_loved/locator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../profile/presentation/widget/grey_line_for_bottomsheet.dart';
+import 'modals/add_event_modal.dart';
 import 'modals/create_event_modal.dart';
 
 class RelationShipsPage extends StatefulWidget {
@@ -25,11 +32,22 @@ class RelationShipsPage extends StatefulWidget {
 }
 
 class _RelationShipsPageState extends State<RelationShipsPage> {
+  final int maxLength = 18;
+  String text = '';
   final _streamController = StreamController<int>();
   final _streamControllerCarousel = StreamController<double>();
 
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController(text: '');
   FocusNode f1 = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.addListener(() {
+      setState(() {});
+    });
+  }
 
   @override
   void dispose() {
@@ -42,24 +60,24 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        content(),
+        content(context),
       ],
     );
   }
 
   List<Widget> events = [];
 
-  Widget content() {
+  Widget content(BuildContext context) {
     TextStyle style1 = TextStyle(
         fontWeight: FontWeight.w700,
         color: Colors.white,
         fontSize: 15.sp,
         height: 1);
     TextStyle style2 = TextStyle(
-        fontWeight: FontWeight.w700,
-        color: Colors.white,
-        fontSize: 30.sp,
-        height: 0.2);
+      fontWeight: FontWeight.w700,
+      color: Colors.white,
+      fontSize: 30.sp,
+    );
     TextStyle style3 = TextStyle(
         fontWeight: FontWeight.w800, color: Colors.white, fontSize: 18.sp);
 
@@ -68,249 +86,343 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
         initialData: 0,
         builder: (context, snapshot) {
           return SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      height: 448.h,
-                      color: Colors.black,
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            right: 25.w,
-                            left: 25.w,
-                            top: 59.h,
-                          ),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: widget.nextPage,
-                                child: Row(
-                                  children: [
-                                    photoMini(),
-                                    SizedBox(width: 12.w),
-                                    Text(
-                                      'Олег Бочко',
-                                      style: style1,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () => showMaterialModalBottomSheet(
-                                  animationCurve: Curves.easeInOutQuint,
-                                  duration: const Duration(milliseconds: 600),
-                                  context: context,
-                                  // shape: RoundedRectangleBorder(
-                                  //   borderRadius: BorderRadius.vertical(
-                                  //     top: Radius.circular(50.r),
-                                  //   ),
-                                  // ),
-                                  backgroundColor: Colors.transparent,
-                                  builder: (context) =>
-                                      const ParametrsUserBottomsheet(),
-                                ),
-                                child: Container(
-                                  height: 55.h,
-                                  width: 55.h,
-                                  color: Colors.transparent,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SizedBox(
-                                        height: 5.57.h,
-                                        width: 33.43.h,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: 3,
-                                          itemBuilder:
-                                              (BuildContext context, index) {
-                                            return Container(
-                                              margin:
-                                                  EdgeInsets.only(left: 5.57.h),
-                                              height: 5.57.h,
-                                              width: 5.57.h,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        1.5.r),
-                                                color: Colors.white,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 30.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: SizedBox(
-                            height: 45.h,
+             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            physics: const ClampingScrollPhysics(),
+            child: GestureDetector(
+              onTap: () {
+                f1.unfocus();
+              },
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        height: 448.h,
+                        color: Colors.black,
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: 25.w,
+                              left: 25.w,
+                              top: 59.h,
+                            ),
                             child: Row(
                               children: [
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 33.h,
-                                    child: TextField(
-                                      textAlignVertical:
-                                          TextAlignVertical.center,
-                                      style: style2,
-                                      controller: _controller,
-                                      focusNode: f1,
-                                      scrollPadding: EdgeInsets.zero,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Назовите отношения',
-                                        hintStyle: style2,
+                                GestureDetector(
+                                  onTap: widget.nextPage,
+                                  child: Row(
+                                    children: [
+                                      photoMini(sl<AuthConfig>().user == null
+                                          ? null
+                                          : sl<AuthConfig>().user!.me.photo),
+                                      SizedBox(width: 12.w),
+                                      Text(
+                                        sl<AuthConfig>().user == null
+                                            ? ''
+                                            : sl<AuthConfig>()
+                                                .user!
+                                                .me
+                                                .username,
+                                        style: style1,
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 45.h,
-                                  width: 45.h,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      GestureDetector(
-                                          onTap: () {
-                                            FocusScope.of(context)
-                                                .requestFocus(f1);
-                                          },
-                                          child: SvgPicture.asset(SvgImg.edit)),
-                                    ],
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () => showMaterialModalBottomSheet(
+                                    animationCurve: Curves.easeInOutQuint,
+                                    duration: const Duration(milliseconds: 600),
+                                    context: context,
+                                    // shape: RoundedRectangleBorder(
+                                    //   borderRadius: BorderRadius.vertical(
+                                    //     top: Radius.circular(50.r),
+                                    //   ),
+                                    // ),
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) =>
+                                        const ParametrsUserBottomsheet(),
+                                  ),
+                                  child: Container(
+                                    height: 55.h,
+                                    width: 55.h,
+                                    color: Colors.transparent,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        SizedBox(
+                                          height: 5.57.h,
+                                          width: 33.43.h,
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: 3,
+                                            itemBuilder:
+                                                (BuildContext context, index) {
+                                              return Container(
+                                                margin: EdgeInsets.only(
+                                                    left: 5.57.h),
+                                                height: 5.57.h,
+                                                width: 5.57.h,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          1.5.r),
+                                                  color: Colors.white,
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 )
                               ],
                             ),
                           ),
-                        ),
-                        SizedBox(height: 25.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
+                          SizedBox(height: 30.h),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 25.w,
+                              right: 38.w,
+                            ),
+                            child: SizedBox(
+                              height: 45.h,
+                              child: Row(
                                 children: [
-                                  photo(),
-                                  SizedBox(height: 10.h),
-                                  Text('Олег',
-                                      style: style3.copyWith(fontSize: 25.sp))
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 33.h,
+                                      child: TextField(
+                                        textCapitalization:
+                                            TextCapitalization.words,
+                                        onChanged: (value) {
+                                          if (value.length <= maxLength) {
+                                            text = value;
+                                          } else {
+                                            _controller.value =
+                                                TextEditingValue(
+                                              text: text,
+                                              selection: TextSelection(
+                                                baseOffset: maxLength,
+                                                extentOffset: maxLength,
+                                                affinity: TextAffinity.upstream,
+                                                isDirectional: false,
+                                              ),
+                                              composing: TextRange(
+                                                start: 0,
+                                                end: maxLength,
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        cursorColor: Colors.white,
+                                        cursorHeight: 30,
+                                        textAlignVertical:
+                                            TextAlignVertical.center,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 30.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                        controller: _controller,
+                                        focusNode: f1,
+                                        scrollPadding: EdgeInsets.zero,
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.only(top: 20),
+                                          border: InputBorder.none,
+                                          hintText: f1.hasFocus
+                                              ? " "
+                                              : 'Назовите отношения',
+                                          hintStyle: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 30.sp,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (f1.hasFocus) {
+                                        f1.unfocus();
+                                      } else {
+                                        FocusScope.of(context).requestFocus(f1);
+                                      }
+                                    },
+                                    child: _controller.text.isNotEmpty &&
+                                            f1.hasFocus
+                                        ? const Icon(
+                                            Icons.check_rounded,
+                                            color: Colors.white,
+                                          )
+                                        : !f1.hasFocus
+                                            ? SvgPicture.asset(SvgImg.edit)
+                                            : const Icon(
+                                                Icons.check_rounded,
+                                                color: Colors.white,
+                                              ),
+                                  )
                                 ],
                               ),
-                              const Spacer(),
-                              Padding(
-                                padding: EdgeInsets.only(top: 13.h),
-                                child: SizedBox(
-                                  height: 108.h,
-                                  width: 108.w,
-                                  child: Stack(
-                                    alignment: Alignment.center,
+                            ),
+                          ),
+                          SizedBox(height: 25.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 25.w),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    photo(sl<AuthConfig>().user == null
+                                        ? null
+                                        : sl<AuthConfig>().user!.me.photo),
+                                    SizedBox(height: 10.h),
+                                    TextWidget(
+                                      text: sl<AuthConfig>().user == null
+                                          ? ''
+                                          : sl<AuthConfig>().user!.me.username,
+                                    )
+                                  ],
+                                ),
+                                const Spacer(),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 13.h),
+                                  child: SizedBox(
+                                    height: 108.h,
+                                    width: 108.w,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          SvgImg.heart,
+                                          height: 59.h,
+                                          width: 70.w,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const Spacer(),
+                                Column(
+                                  children: [
+                                    photo(sl<AuthConfig>().user == null ||
+                                            sl<AuthConfig>().user!.love == null
+                                        ? null
+                                        : sl<AuthConfig>().user!.love!.photo),
+                                    SizedBox(height: 10.h),
+                                    TextWidget(
+                                      text: sl<AuthConfig>().user == null ||
+                                              sl<AuthConfig>().user?.love ==
+                                                  null
+                                          ? ''
+                                          : sl<AuthConfig>()
+                                              .user!
+                                              .love!
+                                              .username,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 26.h),
+                          StreamBuilder<double>(
+                            stream: _streamControllerCarousel.stream,
+                            builder: (context, snapshot) {
+                              double data = snapshot.data ?? 0;
+                              return CarouselSlider(
+                                items: [
+                                  Column(
                                     children: [
-                                      SvgPicture.asset(
-                                        SvgImg.heart,
-                                        height: 59.h,
-                                        width: 70.w,
+                                      SizedBox(
+                                        width: 378.w,
+                                        height: 115.h,
+                                        child: HomeInfoFirst(),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ),
-                              const Spacer(),
-                              Column(
-                                children: [
-                                  photo(),
-                                  SizedBox(height: 10.h),
-                                  Text('Екатерина', style: style3)
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 26.h),
-                        StreamBuilder<double>(
-                          stream: _streamControllerCarousel.stream,
-                          builder: (context, snapshot) {
-                            double data = snapshot.data ?? 0;
-                            return CarouselSlider(
-                              items: [
-                                Column(
-                                  children: [
-                                    SizedBox(
+                                  Column(
+                                    children: [
+                                      SizedBox(
                                         width: 378.w,
-                                        height: 115.h,
-                                        child: HomeInfoFirst()),
-                                  ],
+                                        height: (data * 138.h + 115.h),
+                                        child: HomeInfoSecond(data: data),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                                options: CarouselOptions(
+                                  viewportFraction: 0.91,
+                                  onScrolled: (d) {
+                                    _streamControllerCarousel.sink.add(d ?? 0);
+                                  },
+                                  enableInfiniteScroll: false,
+                                  height: data >= 1
+                                      ? 253.h
+                                      : (data * 138.h + 115.h),
                                 ),
-                                Column(
-                                  children: [
-                                    SizedBox(
-                                      width: 378.w,
-                                      height: (data * 138.h + 115.h),
-                                      child: HomeInfoSecond(data: data),
-                                    ),
-                                  ],
-                                )
-                              ],
-                              options: CarouselOptions(
-                                viewportFraction: 0.91,
-                                onScrolled: (d) {
-                                  _streamControllerCarousel.sink.add(d ?? 0);
-                                },
-                                enableInfiniteScroll: false,
-                                height:
-                                    data >= 1 ? 253.h : (data * 138.h + 115.h),
-                              ),
-                            );
-                          },
-                        ),
-                        SizedBox(height: 11.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: const EdgeInsets.all(0),
-                            shrinkWrap: true,
-                            itemCount: events.length,
-                            itemBuilder: ((context, index) {
-                              return CustomAnimationItemRelationships(
-                                // func: func,
-                                delete: delete,
-                                index: index,
                               );
+                            },
+                          ),
+                          SizedBox(height: 11.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 25.w),
+                            child: ReorderableListView.builder(
+                              onReorder: (oldIndex, newIndex) {
+                                setState(() {
+                                  final item = events.removeAt(oldIndex);
+                                  events.insert(newIndex, item);
+                                });
+                              },
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.all(0),
+                              shrinkWrap: true,
+                              itemCount: events.length,
+                              itemBuilder: ((context, index) {
+                                return CustomAnimationItemRelationships(
+                                  // func: func,
+                                  key: ValueKey('$index'),
+                                  delete: delete,
+                                  index: index,
+                                );
+                              }),
+                              proxyDecorator: (child, index, animation) {
+                                return Container(
+                                  decoration: BoxDecoration(boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 20.h,
+                                        color: Color.fromRGBO(0, 0, 0, 0.1))
+                                  ], borderRadius: BorderRadius.circular(20.r)),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          ),
+                          if (events.isEmpty) SizedBox(height: 15.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 25.w),
+                            child: CustomAddAnimationButton(func: () {
+                              showModalAddEvent(context);
+                              // showModalCreateEvent(context, () {
+                              //   Navigator.pop(context);
+                              //   func();
+                              // });
                             }),
                           ),
-                        ),
-                        if(events.isEmpty)
-                        SizedBox(height: 15.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: CustomAddAnimationButton(func: () {
-                            showModalCreateEvent(context, () {
-                              Navigator.pop(context);
-                              func();
-                            });
-                          }),
-                        ),
-                        SizedBox(height: 200.h)
-                      ],
-                    )
-                  ],
-                ),
-              ],
+                          SizedBox(height: 200.h)
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         });
@@ -329,7 +441,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
     setState(() {});
   }
 
-  Widget photoMini() {
+  Widget photoMini(String? path) {
     return Container(
       width: 45.h,
       height: 45.h,
@@ -339,14 +451,15 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
           Radius.circular(15.r),
         ),
         border: Border.all(width: 2.h, color: Colors.white),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/avatar_none.png'),
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: getImage(path),
         ),
       ),
     );
   }
 
-  Widget photo() {
+  Widget photo(String? path) {
     return Container(
       width: 134.h,
       height: 134.h,
@@ -356,10 +469,19 @@ class _RelationShipsPageState extends State<RelationShipsPage> {
           Radius.circular(40.r),
         ),
         border: Border.all(width: 5.h, color: Colors.white),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/avatar_none.png'),
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: getImage(path),
         ),
       ),
     );
+  }
+
+  ImageProvider<Object> getImage(String? path) {
+    print('PATH: ${path}');
+    if (path != null && path.trim() != '') {
+      return NetworkImage(Config.url.url + path);
+    }
+    return AssetImage('assets/images/avatar_none.png');
   }
 }

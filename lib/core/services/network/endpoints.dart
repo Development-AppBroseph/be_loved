@@ -4,6 +4,7 @@ import 'dart:core';
 enum Endpoints {
   // Authentication
   register,
+  phoneNumber
   
 }
 
@@ -16,6 +17,8 @@ extension EndpointsExtension on Endpoints {
     switch (this) {
       case Endpoints.register:
         return "$url/auth/users/";
+      case Endpoints.phoneNumber:
+        return "/auth/change_number";  
       default:
         return '';
     }

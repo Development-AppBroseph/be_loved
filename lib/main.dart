@@ -1,8 +1,11 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +20,7 @@ import 'features/auth/data/models/auth/user.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  setupInjections();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   var user = await MySharedPrefs().user;
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -28,6 +32,9 @@ void main() async {
         ),
         BlocProvider<WebSocketBloc>(
           create: (context) => WebSocketBloc(),
+        ),
+        BlocProvider<AccountCubit>(
+          create: (context) => sl<AccountCubit>(),
         ),
       ],
       child: OverlaySupport.global(
@@ -58,12 +65,12 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
               fontFamily: 'Inter'),
-          // home: user != null
-          //     ? user?.date != null
-          //         ? HomePage()
-          //         : const PhonePage()
-          //     : const PhonePage(),
-          home: HomePage(),
+          home: user != null
+              ? user?.date != null
+                  ? HomePage()
+                  : const PhonePage()
+              : const PhonePage(),
+          // home: HomePage(),
         );
       },
     );

@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/locator.dart';
 import 'package:dio/dio.dart';
 
 import '../../features/auth/data/models/auth/check_is_user_exist.dart';
@@ -180,8 +182,9 @@ class Repository {
   }
 
   Future<UserAnswer?> getUser() async {
+    String? token = await MySharedPrefs().token;
     var options = Options(headers: {
-      'Authorization': 'Token ${await MySharedPrefs().token}',
+      'Authorization': 'Token ${token}',
     });
     try {
       var response = await dio.get(
@@ -190,6 +193,7 @@ class Repository {
       );
 
       if (response.statusCode == 200) {
+        sl<AuthConfig>().token = token;
         return UserAnswer.fromJson(response.data);
       }
       if (response.statusCode == 400) {}

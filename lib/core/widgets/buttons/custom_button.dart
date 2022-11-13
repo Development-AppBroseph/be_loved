@@ -16,12 +16,14 @@ class CustomButton extends StatefulWidget {
   final Border? border;
   final String text;
   final VoidCallback onPressed;
-  final bool isContactBtn;
+  final String? svg;
+  final double? svgHeight;
 
   CustomButton({
     Key? key,
+    this.svg,
+    this.svgHeight,
     required this.color,
-    this.isContactBtn = false,
     this.visible = true,
     this.code = false,
     this.validate = false,
@@ -115,9 +117,10 @@ class CustomButtonState extends State<CustomButton> {
                                 color: const Color.fromRGBO(23, 23, 23, 1),
                               ),
               ),
-              child: widget.isContactBtn
+              child: widget.svg != null
                   ? SvgPicture.asset(
-                      SvgImg.persons,
+                      widget.svg ?? SvgImg.persons,
+                      height: widget.svgHeight,
                       color: widget.validate == null
                           ? state is TextFieldSuccess
                               ? widget.textColor
@@ -155,7 +158,7 @@ class CustomButtonState extends State<CustomButton> {
                 if (widget.validate != null) {
                   if ((state is TextFieldSuccess ||
                           widget.validate! ||
-                          widget.isContactBtn) ||
+                          widget.svg != null) ||
                       widget.color == ColorStyles.redColor) {
                     widget.onPressed();
                   }
