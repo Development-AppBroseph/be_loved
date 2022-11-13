@@ -19,58 +19,61 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 
-class AccountPage extends StatelessWidget {
+class AccountPage extends StatefulWidget {
   final VoidCallback prevPage;
   AccountPage({Key? key, required this.prevPage}) : super(key: key);
 
+  @override
+  State<AccountPage> createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
   int countPage = 0;
 
   FocusNode focusNodePhone = FocusNode();
+
   FocusNode focusNodeCode = FocusNode();
+
   int? code;
+
   TextEditingController textEditingControllerUp = TextEditingController();
+
   TextEditingController textEditingControllerDown = TextEditingController();
+
   String phoneNumber = '';
+
   bool resendCode = false;
+
   final _streamController = StreamController<int>();
+
   final _streamControllerCarousel = StreamController<double>();
+
   final _scrollController = ScrollController();
+
   TextEditingController phoneController = TextEditingController();
+
   TextEditingController codeController = TextEditingController();
+
   PageController controller = PageController();
 
   File? _image;
-  bool isMirror = false;
-  // final headers["user"] = sl<AuthConfig>().user;
-  // Future _pickImage(ImageSource source) async {
-  //   try {
-  //     final image = await ImagePicker().pickImage(source: source);
-  //     if (image != null) {
-  //       File? img = File(image.path);
-  //       setState(() {
-  //         _image = img;
-  //       });
-  //       Navigator.of(context).pop();
-  //     }
-  //   } on PlatformException catch (e) {
-  //     print(e);
-  //     Navigator.of(context).pop();
-  //   }
-  // }
 
+  bool isMirror = false;
+
+  // final headers["user"] = sl<AuthConfig>().user;
   void mirror(BuildContext context) {
     !isMirror ? isMirror = true : isMirror = false;
     Navigator.of(context).pop();
   }
 
-  // @override
-  // void dispose() {
-  //   focusNodePhone.dispose();
-  //   focusNodeCode.dispose();
-  //   _streamController.close();
-  //   _streamControllerCarousel.close();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    focusNodePhone.dispose();
+    focusNodeCode.dispose();
+    _streamController.close();
+    _streamControllerCarousel.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +106,7 @@ class AccountPage extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(left: 15.w, top: 76.h),
                         child: GestureDetector(
-                          onTap: prevPage,
+                          onTap: widget.prevPage,
                           child: Row(
                             children: [
                               SizedBox(
@@ -163,7 +166,9 @@ class AccountPage extends StatelessWidget {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                'Никита Белых',
+                                                sl<AuthConfig>().user == null
+                                                ? 'Никита Белых'
+                                                : sl<AuthConfig>().user!.me.username,
                                                 style: style3.copyWith(
                                                   fontSize: 30.sp,
                                                   color:
@@ -669,9 +674,6 @@ class AccountPage extends StatelessWidget {
   }
 
   // TextStyle style1 = TextStyle(
-  //     fontWeight: FontWeight.w700, color: Colors.white, fontSize: 15.sp);
-  // TextStyle style2 = TextStyle(
-  //     fontWeight: FontWeight.w700, color: Colors.white, fontSize: 30.sp);
   TextStyle style3 = TextStyle(
       fontWeight: FontWeight.w800, color: Colors.white, fontSize: 18.sp);
 
@@ -679,13 +681,16 @@ class AccountPage extends StatelessWidget {
     return InkWell(
         onTap: () {
           showModalAvatarChange(context, (newFile, isMir) {
-            _image = newFile;
-            isMirror = isMir;
+            setState(() {
+              _image = newFile;
+              isMirror = isMir;
+            });
           }, _image);
         },
         child: MirrorImage(
           isMirror: isMirror,
           path: _image,
+          urlToImage: sl<AuthConfig>().user == null ? null : sl<AuthConfig>().user!.me.photo,
         ));
   }
 }
