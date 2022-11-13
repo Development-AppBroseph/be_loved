@@ -1,5 +1,6 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
+import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
@@ -48,6 +49,9 @@ void main() async {
         ),
         BlocProvider<AccountCubit>(
           create: (context) => sl<AccountCubit>(),
+        ),
+        BlocProvider<EventsBloc>(
+          create: (context) => EventsBloc(),
         ),
       ],
       child: OverlaySupport.global(

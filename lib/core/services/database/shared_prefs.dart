@@ -11,6 +11,8 @@ import '../../../locator.dart';
 class MySharedPrefs {
   final _sharedPreferences = SharedPreferences.getInstance();
 
+  final nameRelationShips = 'nameRelationShips';
+
   get token async => (await _sharedPreferences).getString('token');
 
   get user async {
@@ -21,6 +23,14 @@ class MySharedPrefs {
     sl<AuthConfig>().user = userAnswer;
     sl<AuthConfig>().token = await MySecureStorage().getToken();
     return userAnswer;
+  }
+
+  void setNameRelationShips(String value) async {
+    (await _sharedPreferences).setString(nameRelationShips, value);
+  }
+
+  get getNameRelationShips async {
+    return (await _sharedPreferences).getString(nameRelationShips);
   }
 
   void logOut(BuildContext context) async {
