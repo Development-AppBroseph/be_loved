@@ -49,20 +49,16 @@ void setupInjections() {
   // sl.registerFactory<AuthBloc>(
   //   () => AuthBloc(sl(), sl(), sl(), sl(), sl()),
   // );
-<<<<<<< HEAD
-=======
-  
+
   //Repository
-  sl.registerLazySingleton<BelovedRepository>(() => BelovedRepositoryImplement(sl()));
+  sl.registerLazySingleton<BelovedRepository>(
+      () => BelovedRepositoryImplement(sl()));
   //Usecase
   sl.registerLazySingleton(() => PostNumber(sl()));
   sl.registerLazySingleton(() => PutCode(sl()));
   //Cubit
   sl.registerFactory(() => AccountCubit(postNumber: sl(), putCode: sl()));
   //Datasource
-  sl.registerLazySingleton<BeLovedRemoteDatasource>(() => BeLovedRemoteDatasourceImpl(dio: sl()));
-
-
-
->>>>>>> develop
+  sl.registerLazySingleton<BeLovedRemoteDatasource>(
+      () => BeLovedRemoteDatasourceImpl(dio: sl()));
 }

@@ -1,9 +1,6 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-<<<<<<< HEAD
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
-=======
 import 'package:be_loved/core/services/database/auth_params.dart';
->>>>>>> develop
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
@@ -27,6 +24,18 @@ void main() async {
   setupInjections();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   var user = await MySharedPrefs().user;
+  // MySharedPrefs().setUser(
+  //   '123123123123123213',
+  //   UserAnswer(
+  //     me: User(username: 'Максим', phoneNumber: '+79035749646', photo: null),
+  //     love:
+  //         User(username: 'Ананстасия', phoneNumber: '+79939009646', photo: ''),
+  //     relationId: 16,
+  //     status: 'Принято',
+  //     fromYou: true,
+  //     date: '2022-05-05 21:30:00',
+  //   ),
+  // );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) {
     runApp(MultiBlocProvider(

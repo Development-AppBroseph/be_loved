@@ -109,268 +109,312 @@ class _InvitePartnerState extends State<InvitePartner> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WebSocketBloc, WebSocketState>(
-      buildWhen: (previous, current) {
-        if(current is WebSocketInviteGetState) {
-          widget.nextPage();
-          return false;
-        }
-        if(current is WebSocketInviteCloseState) {
-            BlocProvider.of<AuthBloc>(context).user=null;
-            setState(() {
-              timerIsStarted = false;
-              isValidate = true;
-            });
-            _timer?.cancel();
-            return true;
-        }
-        if(current is WebSocketInviteAcceptState) {
-          _timer?.cancel();
-            focusNode.unfocus();
-            Get.Get.to(
-              RelationShips(previewPage: () {}, prevPage: () {}),
-              duration: const Duration(seconds: 1),
-              transition: Get.Transition.rightToLeft,
-            )?.then((value) {
-              setState(() {
-                timerIsStarted = false;
-                isValidate = true;
-              });
-              _timer?.cancel();
-              // start = 30;
-              BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-            });
-        }
+        buildWhen: (previous, current) {
+      if (current is WebSocketInviteGetState) {
+        widget.nextPage();
         return false;
-      },
-      builder: (context, snapshot) {
-        return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
-          // // printError(info: current.toString());
-          // // print(
-          // //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
-          // // if (current is GetUserError) {
-          // //   inviteUser = true;
-          // // }
-    
-          // if (current is InviteSuccess) {
-          //   inviteUser = false;
-          //   if (_timer != null) {
-          //     if (!_timer!.isActive) {
-          //       startTimer();
-          //     }
-          //   }
-          //   // StandartSnackBar.show(
-          //   //   'Приглашение успешно отправлено',
-          //   //   SnackBarStatus(Icons.done, Colors.green),
-          //   // );
-          // }
-          // if (current is ReletionshipsError) {
-          //   _timer?.cancel();
-          // }
-          // // if (current is InviteAccepted &&
-          // //     current.fromYou &&
-          // //     previous is InviteAccepted == false &&
-          // //     previous is AuthLoading == false) {
-          // //   printInfo(info: 'CURRENT IS: $current');
-          // //   printInfo(info: 'PREVIOUS IS: $previous');
-          // //   _timer?.cancel();
-          // //   focusNode.unfocus();
-          // //   Get.Get.to(
-          // //     RelationShips(previewPage: () {}, prevPage: () {}),
-          // //     duration: const Duration(seconds: 1),
-          // //     transition: Get.Transition.rightToLeft,
-          // //   )?.then((value) {
-          // //     setState(() {
-          // //       timerIsStarted = false;
-          // //       isValidate = true;
-          // //     });
-          // //     _timer?.cancel();
-          // //     // start = 30;
-          // //     BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-          // //   });
-          // //   // widget.previousPage();
-          // //   // Navigator.push(
-          // //   //   context,
-          // //   //   MaterialPageRoute(
-          // //   //     builder: (context) => RelationShips(
-          // //   //       previewPage: () {},
-          // //   //       prevPage: () {},
-          // //   //     ),
-          // //   //   ),
-          // //   // ).then((value) => _startSearch(context));
-          // // }
-          // if (current is InviteError) {
-          //   inviteUser = false;
-          //   _timer?.cancel();
-          //   // StandartSnackBar.show(
-          //   //   'Приглашение не удалось отправить',
-          //   //   SnackBarStatus(Icons.error, redColor),
-          //   // );
-          // }
-          // if (current is CheckIsUserExistError) {
-          //   inviteUser = false;
-          //   // StandartSnackBar.show(
-          //   //   'Приглашение не удалось отправить',
-          //   //   SnackBarStatus(Icons.error, redColor),
-          //   // );
-          // }
-          // if (current is CheckIsUserExistSuccess) {
-          //   inviteUser = true;
-          //   // StandartSnackBar.show(
-          //   //   'Приглашение не удалось отправить',
-          //   //   SnackBarStatus(Icons.error, redColor),
-          //   // );
-          // }
-          // if (current is ReceiveInvite && previous is ReceiveInvite == false) {
-          //   _timer?.cancel();
-          //   widget.nextPage();
-          //   focusNode.unfocus();
-          //   // Get.Get.to(
-          //   //   InviteFor(
-          //   //       previewPage: () {
-          //   //         BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-          //   //       },
-          //   //       nextPage: () {}),
-          //   //   duration: const Duration(seconds: 1),
-          //   //   transition: Get.Transition.upToDown,
-          //   // )?.then((value) => _startSearch(context));
-          //   // Navigator.push(
-          //   //   context,
-          //   //   MaterialPageRoute(
-          //   //     builder: (context) => InviteForStartRelationship(nextPage: () {}),
-          //   //     fullscreenDialog: true,
-          //   //   ),
-          //   // ).then((value) => _startSearch(context));
-          // }
-          // if (current is DeleteInviteSuccess) {
-          //   BlocProvider.of<AuthBloc>(context).add(
-          //       CheckIsUserPhone('7${_phoneController.text.replaceAll(' ', '')}'));
-          // }
-    
-          return false;
-        }, builder: (context, state) {
-          // print(MediaQuery.of(context).viewInsets.bottom);
-          focusNode.addListener(() {
-            _streamController.sink.add(focusNode.hasFocus);
+      }
+      if (current is WebSocketInviteCloseState) {
+        BlocProvider.of<AuthBloc>(context).user = null;
+        setState(() {
+          timerIsStarted = false;
+          isValidate = true;
+        });
+        _timer?.cancel();
+        return true;
+      }
+      if (current is WebSocketInviteAcceptState) {
+        _timer?.cancel();
+        focusNode.unfocus();
+        Get.Get.to(
+          RelationShips(previewPage: () {}, prevPage: () {}),
+          duration: const Duration(seconds: 1),
+          transition: Get.Transition.rightToLeft,
+        )?.then((value) {
+          setState(() {
+            timerIsStarted = false;
+            isValidate = true;
           });
-          var bloc = BlocProvider.of<AuthBloc>(context);
-          return Scaffold(
-            appBar: appBar(context),
-            backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-            body: StreamBuilder<bool>(
-                initialData: false,
-                stream: _streamController.stream,
-                builder: (context, snapshot) {
-                  return SafeArea(
-                      bottom: false,
-                      child: Stack(
-                        children: [
-                          AnimatedContainer(
-                            curve: Curves.easeInOutQuint,
-                            duration: const Duration(milliseconds: 600),
-                            margin: EdgeInsets.only(
-                                left: 24.sp,
-                                right: 24.sp,
-                                top: snapshot.data! ? 32.68.h : 51.68.h),
-                            child: SingleChildScrollView(
-                              controller: _scrollController,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.only(top: 0.sh),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: 'Пригласи ',
+          _timer?.cancel();
+          // start = 30;
+          BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+        });
+      }
+      return false;
+    }, builder: (context, snapshot) {
+      return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
+        // // printError(info: current.toString());
+        // // print(
+        // //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
+        // // if (current is GetUserError) {
+        // //   inviteUser = true;
+        // // }
+
+        // if (current is InviteSuccess) {
+        //   inviteUser = false;
+        //   if (_timer != null) {
+        //     if (!_timer!.isActive) {
+        //       startTimer();
+        //     }
+        //   }
+        //   // StandartSnackBar.show(
+        //   //   'Приглашение успешно отправлено',
+        //   //   SnackBarStatus(Icons.done, Colors.green),
+        //   // );
+        // }
+        // if (current is ReletionshipsError) {
+        //   _timer?.cancel();
+        // }
+        // // if (current is InviteAccepted &&
+        // //     current.fromYou &&
+        // //     previous is InviteAccepted == false &&
+        // //     previous is AuthLoading == false) {
+        // //   printInfo(info: 'CURRENT IS: $current');
+        // //   printInfo(info: 'PREVIOUS IS: $previous');
+        // //   _timer?.cancel();
+        // //   focusNode.unfocus();
+        // //   Get.Get.to(
+        // //     RelationShips(previewPage: () {}, prevPage: () {}),
+        // //     duration: const Duration(seconds: 1),
+        // //     transition: Get.Transition.rightToLeft,
+        // //   )?.then((value) {
+        // //     setState(() {
+        // //       timerIsStarted = false;
+        // //       isValidate = true;
+        // //     });
+        // //     _timer?.cancel();
+        // //     // start = 30;
+        // //     BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+        // //   });
+        // //   // widget.previousPage();
+        // //   // Navigator.push(
+        // //   //   context,
+        // //   //   MaterialPageRoute(
+        // //   //     builder: (context) => RelationShips(
+        // //   //       previewPage: () {},
+        // //   //       prevPage: () {},
+        // //   //     ),
+        // //   //   ),
+        // //   // ).then((value) => _startSearch(context));
+        // // }
+        // if (current is InviteError) {
+        //   inviteUser = false;
+        //   _timer?.cancel();
+        //   // StandartSnackBar.show(
+        //   //   'Приглашение не удалось отправить',
+        //   //   SnackBarStatus(Icons.error, redColor),
+        //   // );
+        // }
+        // if (current is CheckIsUserExistError) {
+        //   inviteUser = false;
+        //   // StandartSnackBar.show(
+        //   //   'Приглашение не удалось отправить',
+        //   //   SnackBarStatus(Icons.error, redColor),
+        //   // );
+        // }
+        // if (current is CheckIsUserExistSuccess) {
+        //   inviteUser = true;
+        //   // StandartSnackBar.show(
+        //   //   'Приглашение не удалось отправить',
+        //   //   SnackBarStatus(Icons.error, redColor),
+        //   // );
+        // }
+        // if (current is ReceiveInvite && previous is ReceiveInvite == false) {
+        //   _timer?.cancel();
+        //   widget.nextPage();
+        //   focusNode.unfocus();
+        //   // Get.Get.to(
+        //   //   InviteFor(
+        //   //       previewPage: () {
+        //   //         BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+        //   //       },
+        //   //       nextPage: () {}),
+        //   //   duration: const Duration(seconds: 1),
+        //   //   transition: Get.Transition.upToDown,
+        //   // )?.then((value) => _startSearch(context));
+        //   // Navigator.push(
+        //   //   context,
+        //   //   MaterialPageRoute(
+        //   //     builder: (context) => InviteForStartRelationship(nextPage: () {}),
+        //   //     fullscreenDialog: true,
+        //   //   ),
+        //   // ).then((value) => _startSearch(context));
+        // }
+        // if (current is DeleteInviteSuccess) {
+        //   BlocProvider.of<AuthBloc>(context).add(
+        //       CheckIsUserPhone('7${_phoneController.text.replaceAll(' ', '')}'));
+        // }
+
+        return false;
+      }, builder: (context, state) {
+        // print(MediaQuery.of(context).viewInsets.bottom);
+        focusNode.addListener(() {
+          _streamController.sink.add(focusNode.hasFocus);
+        });
+        var bloc = BlocProvider.of<AuthBloc>(context);
+        return Scaffold(
+          appBar: appBar(context),
+          backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+          body: StreamBuilder<bool>(
+              initialData: false,
+              stream: _streamController.stream,
+              builder: (context, snapshot) {
+                return SafeArea(
+                    bottom: false,
+                    child: Stack(
+                      children: [
+                        AnimatedContainer(
+                          curve: Curves.easeInOutQuint,
+                          duration: const Duration(milliseconds: 600),
+                          margin: EdgeInsets.only(
+                              left: 24.sp,
+                              right: 24.sp,
+                              top: snapshot.data! ? 32.68.h : 51.68.h),
+                          child: SingleChildScrollView(
+                            controller: _scrollController,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.only(top: 0.sh),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: 'Пригласи ',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 35.sp,
+                                          fontWeight: FontWeight.w800,
+                                          color: const Color.fromRGBO(
+                                              23, 23, 23, 1.0),
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: 'партнёра',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 35.sp,
+                                          fontWeight: FontWeight.w800,
+                                          color: const Color.fromRGBO(
+                                              255, 29, 29, 1.0),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(
+                                  'Позови партнёра на этот экран, введи его\nномер, и ожидай принятия приглашения',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 15.sp,
+                                    color: const Color.fromRGBO(
+                                        137, 137, 137, 1.0),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                AnimatedContainer(
+                                  curve: Curves.easeInOutQuint,
+                                  duration: const Duration(milliseconds: 600),
+                                  height: snapshot.data! ? 20.h : 59.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Container(
+                                          width: 135.h,
+                                          height: 135.h,
+                                          margin: EdgeInsets.only(
+                                            bottom: 10.h,
+                                          ),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              // bloc.add(EditUserInfo());
+                                            },
+                                            child: Material(
+                                              color: const Color.fromRGBO(
+                                                  150, 150, 150, 1),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(40.r),
+                                                ),
+                                              ),
+                                              clipBehavior: Clip.hardEdge,
+                                              child: bloc.user != null
+                                                  ? bloc.user?.me.photo != null
+                                                      ? Image.network(
+                                                          Config.url.url +
+                                                              bloc.user!.me
+                                                                  .photo!,
+                                                          width: 135.w,
+                                                          height: 135.h,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Container(
+                                                          margin:
+                                                              EdgeInsets.all(
+                                                                  43.h),
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            SvgImg.camera,
+                                                          ),
+                                                        )
+                                                  : bloc.image == null
+                                                      ? Container(
+                                                          margin:
+                                                              EdgeInsets.all(
+                                                                  43.h),
+                                                          child:
+                                                              SvgPicture.asset(
+                                                                  SvgImg
+                                                                      .camera),
+                                                        )
+                                                      : Image.file(
+                                                          File(
+                                                              bloc.image!.path),
+                                                          width: 135.w,
+                                                          height: 135.h,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          bloc.user != null
+                                              ? bloc.user!.me.username
+                                              : bloc.nickname.toString(),
                                           style: GoogleFonts.inter(
-                                            fontSize: 35.sp,
-                                            fontWeight: FontWeight.w800,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.bold,
                                             color: const Color.fromRGBO(
                                                 23, 23, 23, 1.0),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: 'партнёра',
-                                          style: GoogleFonts.inter(
-                                            fontSize: 35.sp,
-                                            fontWeight: FontWeight.w800,
-                                            color: const Color.fromRGBO(
-                                                255, 29, 29, 1.0),
-                                          ),
-                                        ),
+                                        )
                                       ],
                                     ),
-                                  ),
-                                  Text(
-                                    'Позови партнёра на этот экран, введи его\nномер, и ожидай принятия приглашения',
-                                    style: GoogleFonts.inter(
-                                      fontSize: 15.sp,
-                                      color:
-                                          const Color.fromRGBO(137, 137, 137, 1.0),
-                                      fontWeight: FontWeight.w600,
+                                    Padding(
+                                      padding: EdgeInsets.all(21.w),
+                                      child: SvgPicture.asset(
+                                        SvgImg.logo,
+                                        width: 66.w,
+                                        height: 56.43.h,
+                                      ),
                                     ),
-                                  ),
-                                  AnimatedContainer(
-                                    curve: Curves.easeInOutQuint,
-                                    duration: const Duration(milliseconds: 600),
-                                    height: snapshot.data! ? 20.h : 59.h,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        children: [
-                                          Container(
+                                    Column(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Container(
                                             width: 135.h,
                                             height: 135.h,
-                                            margin: EdgeInsets.only(
-                                              bottom: 10.h,
-                                            ),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                // bloc.add(EditUserInfo());
-                                              },
-                                              child: Material(
-                                                color: const Color.fromRGBO(
-                                                    150, 150, 150, 1),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
-                                                    Radius.circular(40.r),
-                                                  ),
-                                                ),
-                                                clipBehavior: Clip.hardEdge,
-                                                child: bloc.user != null
-                                                    ? bloc.user?.me.photo != null
-                                                        ? Image.network(
-                                                            Config.url.url +
-                                                                bloc.user!.me
-                                                                    .photo!,
-                                                            width: 135.w,
-                                                            height: 135.h,
-                                                            fit: BoxFit.cover,
-                                                          )
-                                                        : Container(
-                                                            margin: EdgeInsets.all(
-                                                                43.h),
-                                                            child: SvgPicture.asset(
-                                                              SvgImg.camera,
-                                                            ),
-                                                          )
-                                                    : bloc.image == null
-                                                        ? Container(
-                                                            margin: EdgeInsets.all(
-                                                                43.h),
-                                                            child: SvgPicture.asset(
-                                                                SvgImg.camera),
-                                                          )
-                                                        : Image.file(
-                                                            File(bloc.image!.path),
-                                                            width: 135.w,
-                                                            height: 135.h,
-                                                            fit: BoxFit.cover,
-                                                          ),
+                                            margin:
+                                                EdgeInsets.only(bottom: 10.h),
+                                            child: Material(
+                                              color: const Color.fromRGBO(
+                                                150,
+                                                150,
+                                                150,
+                                                1,
                                               ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
@@ -380,8 +424,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                               clipBehavior: Clip.hardEdge,
                                               child: bloc.user?.love?.photo !=
                                                           null &&
-                                                      bloc.state
-                                                          is InviteAccepted
+                                                      snapshot
+                                                          is WebSocketInviteGetState
                                                   ? Image.network(
                                                       Config.url.url +
                                                           bloc.user!.love!
@@ -399,187 +443,120 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                     ),
                                             ),
                                           ),
-                                          Text(
-                                            bloc.user != null
-                                                ? bloc.user!.me.username
-                                                : bloc.nickname.toString(),
-                                            style: GoogleFonts.inter(
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: const Color.fromRGBO(
-                                                  23, 23, 23, 1.0),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(21.w),
-                                        child: SvgPicture.asset(
-                                          SvgImg.logo,
-                                          width: 66.w,
-                                          height: 56.43.h,
                                         ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: Container(
-                                              width: 135.h,
-                                              height: 135.h,
-                                              margin: EdgeInsets.only(bottom: 10.h),
-                                              child: Material(
-                                                color: const Color.fromRGBO(
-                                                  150,
-                                                  150,
-                                                  150,
-                                                  1,
-                                                ),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
-                                                    Radius.circular(40.r),
-                                                  ),
-                                                ),
-                                                clipBehavior: Clip.hardEdge,
-                                                child: bloc.user?.love?.photo !=
-                                                            null &&
-                                                        snapshot is WebSocketInviteGetState
-                                                    ? Image.network(
-                                                        Config.url.url +
-                                                            bloc.user!.love!.photo!,
-                                                        width: 135.w,
-                                                        height: 135.h,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : Padding(
-                                                        padding:
-                                                            EdgeInsets.all(43.h),
-                                                        child: SvgPicture.asset(SvgImg.camera,
-                                                        ),
-                                                      ),
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            bloc.user?.love?.username ?? '',
-                                            style: GoogleFonts.inter(
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: const Color.fromRGBO(
-                                                  23, 23, 23, 1.0),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  AnimatedContainer(
-                                    curve: Curves.easeInOutQuint,
-                                    duration: const Duration(milliseconds: 600),
-                                    height: snapshot.data! ? 25.h : 44.h,
-                                  ),
-                                  Container(
-                                    height: 70.h,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.horizontal(
-                                        left: Radius.circular(10),
-                                        right: Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
-                                          child:
-                                              Image.asset('assets/images/code.png'),
-                                        ),
-                                        SizedBox(width: 12.w),
                                         Text(
-                                          '+7',
+                                          bloc.user?.love?.username ?? '',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: const Color.fromRGBO(
+                                                23, 23, 23, 1.0),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                AnimatedContainer(
+                                  curve: Curves.easeInOutQuint,
+                                  duration: const Duration(milliseconds: 600),
+                                  height: snapshot.data! ? 25.h : 44.h,
+                                ),
+                                Container(
+                                  height: 70.h,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.horizontal(
+                                      left: Radius.circular(10),
+                                      right: Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.asset(
+                                            'assets/images/code.png'),
+                                      ),
+                                      SizedBox(width: 12.w),
+                                      Text(
+                                        '+7',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 25.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.w),
+                                      Container(
+                                        height: 37.h,
+                                        width: 1.w,
+                                        color: const Color.fromRGBO(
+                                            224, 224, 224, 1.0),
+                                      ),
+                                      SizedBox(
+                                        width: 12.w,
+                                      ),
+                                      Container(
+                                        width: 0.6.sw,
+                                        alignment: Alignment.center,
+                                        child: TextField(
+                                          controller: _phoneController,
                                           style: GoogleFonts.inter(
                                             fontSize: 25.sp,
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w700,
                                           ),
-                                        ),
-                                        SizedBox(width: 12.w),
-                                        Container(
-                                          height: 37.h,
-                                          width: 1.w,
-                                          color: const Color.fromRGBO(
-                                              224, 224, 224, 1.0),
-                                        ),
-                                        SizedBox(
-                                          width: 12.w,
-                                        ),
-                                        Container(
-                                          width: 0.6.sw,
-                                          alignment: Alignment.center,
-                                          child: TextField(
-                                            controller: _phoneController,
-                                            style: GoogleFonts.inter(
+                                          onTap: () {
+                                            // Future.delayed(
+                                            //     const Duration(milliseconds: 600), () {
+                                            //   _scrollController.animateTo(
+                                            //     5,
+                                            //     duration:
+                                            //         const Duration(milliseconds: 500),
+                                            //     curve: Curves.ease,
+                                            //   );
+                                            // });
+                                          },
+                                          onChanged: (value) {
+                                            if (_phoneController.length == 12) {
+                                              print('123');
+                                              setState(() {
+                                                isValidate = true;
+                                              });
+                                            }
+                                            if (value.length == 13 &&
+                                                bloc.user?.love == null) {
+                                              inviteUser = true;
+                                              // bloc.add(TextFieldFilled(true));
+                                              // print(
+                                              //     'object ${text.substring(1, text.length)}');
+                                              focusNode.unfocus();
+                                              if (bloc.user?.love == null) {
+                                                bloc.add(CheckIsUserPhone(
+                                                    '7${_phoneController.text.replaceAll(' ', '')}'));
+                                              }
+                                              printError(
+                                                  info:
+                                                      '+7${_phoneController.text.replaceAll(' ', '')}');
+                                            } else {
+                                              if (value.length == 13) {
+                                                focusNode.unfocus();
+                                              }
+                                              bloc.add(TextFieldFilled(false));
+                                            }
+                                          },
+                                          focusNode: focusNode,
+                                          decoration: InputDecoration(
+                                            alignLabelWithHint: true,
+                                            border: InputBorder.none,
+                                            hintText: '900 000 00 00',
+                                            hintStyle: GoogleFonts.inter(
                                               fontSize: 25.sp,
+                                              color: const Color.fromRGBO(
+                                                  150, 150, 150, 1),
                                               fontWeight: FontWeight.w700,
                                             ),
-                                            onTap: () {
-                                              // Future.delayed(
-                                              //     const Duration(milliseconds: 600), () {
-                                              //   _scrollController.animateTo(
-                                              //     5,
-                                              //     duration:
-                                              //         const Duration(milliseconds: 500),
-                                              //     curve: Curves.ease,
-                                              //   );
-                                              // });
-                                            },
-                                            onChanged: (value) {
-                                              if (_phoneController.length == 12) {
-                                                print('123');
-                                                setState(() {
-                                                  isValidate = true;
-                                                });
-                                              }
-                                              if (value.length == 13 &&
-                                                  bloc.user?.love == null) {
-                                                inviteUser = true;
-                                                // bloc.add(TextFieldFilled(true));
-                                                // print(
-                                                //     'object ${text.substring(1, text.length)}');
-                                                focusNode.unfocus();
-                                                if (bloc.user?.love == null) {
-                                                  bloc.add(CheckIsUserPhone(
-                                                      '7${_phoneController.text.replaceAll(' ', '')}'));
-                                                }
-                                                printError(
-                                                    info:
-                                                        '+7${_phoneController.text.replaceAll(' ', '')}');
-                                              } else {
-                                                if (value.length == 13) {
-                                                  focusNode.unfocus();
-                                                }
-                                                bloc.add(TextFieldFilled(false));
-                                              }
-                                            },
-                                            focusNode: focusNode,
-                                            decoration: InputDecoration(
-                                              alignLabelWithHint: true,
-                                              border: InputBorder.none,
-                                              hintText: '900 000 00 00',
-                                              hintStyle: GoogleFonts.inter(
-                                                fontSize: 25.sp,
-                                                color: const Color.fromRGBO(
-                                                    150, 150, 150, 1),
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                              floatingLabelBehavior:
-                                                  FloatingLabelBehavior.never,
-                                            ),
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter
-                                                  .digitsOnly,
-                                              CustomInputFormatter(),
-                                            ],
-                                            keyboardType: TextInputType.number,
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.never,
                                           ),
                                           inputFormatters: [
                                             FilteringTextInputFormatter
@@ -588,167 +565,169 @@ class _InvitePartnerState extends State<InvitePartner> {
                                           ],
                                           keyboardType: TextInputType.number,
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  AnimatedContainer(
-                                    curve: Curves.easeInOutQuint,
-                                    duration: const Duration(milliseconds: 600),
-                                    height: snapshot.data! ? 24.h : 57.h,
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: CustomButton(
-                                          color: const Color.fromRGBO(
-                                              32, 203, 131, 1.0),
-                                          text: 'Пригласить',
-                                          validate: (_phoneController.text.length ==
-                                                  13) &&
-                                              inviteUser,
-                                          code: false,
-                                          textColor: Colors.white,
-                                          onPressed: () async {
-                                            setState(() {
-                                              timerIsStarted = true;
-                                            });
-                                            // _timer.cancel();
-                                            print(timerIsStarted);
-                                            print(_timer?.isActive);
-                                            if (bloc.user?.me.phoneNumber !=
-                                                _phoneController.text) {
-                                              _inviteUser(context);
-                                              if (_timer != null) {
-                                                if (!_timer!.isActive) {
-                                                  startTimer();
-                                                }
-                                              }
-                                            }
-                                            setState(() {
-                                              isValidate = false;
-                                            });
-                                            // startTimer();
-                                          },
-                                        ),
                                       ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      SizedBox(
-                                        width: 60.w,
-                                        child: CustomButton(
-                                          color: const Color.fromRGBO(
-                                              32, 203, 131, 1.0),
-                                          svg: SvgImg.persons,
-                                          text: '',
-                                          validate: bloc.user?.love == null,
-                                          code: false,
-                                          textColor: Colors.white,
-                                          onPressed: () async {
-                                            if (await FlutterContactPicker
-                                                .hasPermission()) {
-                                              final PhoneContact contact =
-                                                  await FlutterContactPicker
-                                                      .pickPhoneContact();
-                                              if (contact.phoneNumber?.number !=
-                                                  null) {
-                                                String reversedPhone = contact
-                                                    .phoneNumber!.number!
-                                                    .split('')
-                                                    .reversed
-                                                    .join('');
-                                                String phone = '';
-                                                for (var i = 0;
-                                                    i < reversedPhone.length;
-                                                    i++) {
-                                                  if (phone.length >= 13) {
-                                                    break;
-                                                  }
-                                                  if (double.tryParse(
-                                                          reversedPhone[i]) !=
-                                                      null) {
-                                                    if (phone.length == 2 ||
-                                                        phone.length == 5 ||
-                                                        phone.length == 9) {
-                                                      phone += ' ';
-                                                    }
-                                                    phone += reversedPhone[i];
-                                                  }
-                                                }
-                                                setState(() {
-                                                  _phoneController.text = phone
-                                                      .split('')
-                                                      .reversed
-                                                      .join('');
-                                                  if (_phoneController
-                                                              .text.length ==
-                                                          13 &&
-                                                      bloc.user?.love == null) {
-                                                    inviteUser = true;
-                                                  }
-                                                });
-                                              }
-                                            } else {
-                                              FlutterContactPicker
-                                                  .requestPermission();
-                                            }
-                                          },
-                                        ),
-                                      )
                                     ],
                                   ),
-                                  // CustomAnimationButton(
-                                  //   text: 'Продолжить',
-                                  //   border: Border.all(
-                                  //     color: const Color.fromRGBO(32, 203, 131, 1.0),
-                                  //     width: 2.sp),
-                                  //   onPressed: () async {
-                                  //     // nextPage();
-                                  //     _inviteUser(context);
-                                  //   },
-                                  // ),
-                                  SizedBox(height: 17.h),
-                                  Container(
-                                    height: 400.h,
-                                    child: AnimatedAlign(
-                                      curve: Curves.easeInOutQuint,
-                                      alignment: bloc.user?.love != null &&
-                                              bloc.user!.fromYou!
-                                          ? Alignment.topLeft
-                                          : Alignment.bottomCenter,
-                                      duration: const Duration(milliseconds: 1200),
+                                ),
+                                AnimatedContainer(
+                                  curve: Curves.easeInOutQuint,
+                                  duration: const Duration(milliseconds: 600),
+                                  height: snapshot.data! ? 24.h : 57.h,
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
                                       child: CustomButton(
-                                        visible: true,
-                                        color: ColorStyles.redColor,
-                                        text: _getTime(),
+                                        color: const Color.fromRGBO(
+                                            32, 203, 131, 1.0),
+                                        text: 'Пригласить',
+                                        validate:
+                                            (_phoneController.text.length ==
+                                                    13) &&
+                                                inviteUser,
+                                        code: false,
                                         textColor: Colors.white,
-                                        validate: true,
                                         onPressed: () async {
-                                          // nextPage();
                                           setState(() {
-                                            timerIsStarted = false;
-                                            isValidate = true;
+                                            timerIsStarted = true;
                                           });
-                                          _timer?.cancel();
-                                          // start = 30;
-                                          BlocProvider.of<AuthBloc>(context)
-                                              .add(DeleteInviteUser());
+                                          // _timer.cancel();
+                                          print(timerIsStarted);
+                                          print(_timer?.isActive);
+                                          if (bloc.user?.me.phoneNumber !=
+                                              _phoneController.text) {
+                                            _inviteUser(context);
+                                            if (_timer != null) {
+                                              if (!_timer!.isActive) {
+                                                startTimer();
+                                              }
+                                            }
+                                          }
+                                          setState(() {
+                                            isValidate = false;
+                                          });
+                                          // startTimer();
                                         },
                                       ),
                                     ),
+                                    SizedBox(
+                                      width: 10.w,
+                                    ),
+                                    SizedBox(
+                                      width: 60.w,
+                                      child: CustomButton(
+                                        color: const Color.fromRGBO(
+                                            32, 203, 131, 1.0),
+                                        svg: SvgImg.persons,
+                                        text: '',
+                                        validate: bloc.user?.love == null,
+                                        code: false,
+                                        textColor: Colors.white,
+                                        onPressed: () async {
+                                          if (await FlutterContactPicker
+                                              .hasPermission()) {
+                                            final PhoneContact contact =
+                                                await FlutterContactPicker
+                                                    .pickPhoneContact();
+                                            if (contact.phoneNumber?.number !=
+                                                null) {
+                                              String reversedPhone = contact
+                                                  .phoneNumber!.number!
+                                                  .split('')
+                                                  .reversed
+                                                  .join('');
+                                              String phone = '';
+                                              for (var i = 0;
+                                                  i < reversedPhone.length;
+                                                  i++) {
+                                                if (phone.length >= 13) {
+                                                  break;
+                                                }
+                                                if (double.tryParse(
+                                                        reversedPhone[i]) !=
+                                                    null) {
+                                                  if (phone.length == 2 ||
+                                                      phone.length == 5 ||
+                                                      phone.length == 9) {
+                                                    phone += ' ';
+                                                  }
+                                                  phone += reversedPhone[i];
+                                                }
+                                              }
+                                              setState(() {
+                                                _phoneController.text = phone
+                                                    .split('')
+                                                    .reversed
+                                                    .join('');
+                                                if (_phoneController
+                                                            .text.length ==
+                                                        13 &&
+                                                    bloc.user?.love == null) {
+                                                  inviteUser = true;
+                                                }
+                                              });
+                                            }
+                                          } else {
+                                            FlutterContactPicker
+                                                .requestPermission();
+                                          }
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                // CustomAnimationButton(
+                                //   text: 'Продолжить',
+                                //   border: Border.all(
+                                //     color: const Color.fromRGBO(32, 203, 131, 1.0),
+                                //     width: 2.sp),
+                                //   onPressed: () async {
+                                //     // nextPage();
+                                //     _inviteUser(context);
+                                //   },
+                                // ),
+                                SizedBox(height: 17.h),
+                                Container(
+                                  height: 400.h,
+                                  child: AnimatedAlign(
+                                    curve: Curves.easeInOutQuint,
+                                    alignment: bloc.user?.love != null &&
+                                            bloc.user!.fromYou!
+                                        ? Alignment.topLeft
+                                        : Alignment.bottomCenter,
+                                    duration:
+                                        const Duration(milliseconds: 1200),
+                                    child: CustomButton(
+                                      visible: true,
+                                      color: ColorStyles.redColor,
+                                      text: _getTime(),
+                                      textColor: Colors.white,
+                                      validate: true,
+                                      onPressed: () async {
+                                        // nextPage();
+                                        setState(() {
+                                          timerIsStarted = false;
+                                          isValidate = true;
+                                        });
+                                        _timer?.cancel();
+                                        // start = 30;
+                                        BlocProvider.of<AuthBloc>(context)
+                                            .add(DeleteInviteUser());
+                                      },
+                                    ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ));
-                }),
-          );
-        });
-      }
-    );
+                        ),
+                      ],
+                    ));
+              }),
+        );
+      });
+    });
   }
 
   String _getTime() {

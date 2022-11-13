@@ -25,7 +25,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
   @override
   void initState() {
     super.initState();
-    if(sl<AuthConfig>().user != null){
+    if (sl<AuthConfig>().user != null) {
       startTimer();
     }
   }
@@ -60,7 +60,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
   void setTime() async {
     UserAnswer? user = sl<AuthConfig>().user;
     print('USER: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
-    if(user!.date != null){
+    if (user!.date != null) {
       final startTime = user.date as String;
       final array = startTime.split('-');
 

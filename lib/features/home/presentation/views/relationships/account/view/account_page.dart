@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/services/database/auth_params.dart';
-import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
@@ -167,8 +166,11 @@ class _AccountPageState extends State<AccountPage> {
                                             children: [
                                               Text(
                                                 sl<AuthConfig>().user == null
-                                                ? 'Никита Белых'
-                                                : sl<AuthConfig>().user!.me.username,
+                                                    ? 'Никита Белых'
+                                                    : sl<AuthConfig>()
+                                                        .user!
+                                                        .me
+                                                        .username,
                                                 style: style3.copyWith(
                                                   fontSize: 30.sp,
                                                   color:
@@ -690,7 +692,9 @@ class _AccountPageState extends State<AccountPage> {
         child: MirrorImage(
           isMirror: isMirror,
           path: _image,
-          urlToImage: sl<AuthConfig>().user == null ? null : sl<AuthConfig>().user!.me.photo,
+          urlToImage: sl<AuthConfig>().user == null
+              ? null
+              : sl<AuthConfig>().user!.me.photo,
         ));
   }
 }
