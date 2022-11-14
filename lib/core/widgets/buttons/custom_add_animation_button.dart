@@ -81,13 +81,12 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                     alignment: Alignment.center,
                     children: [
                       Positioned.fill(
-                        child: CupertinoCard(
-                          elevation: 0,
-                          radius: BorderRadius.circular(37.r),
-                          margin: EdgeInsets.all(1.w),
-                          color: ColorStyles.backgroundColorGrey,
-                        )
-                      ),
+                          child: CupertinoCard(
+                        elevation: 0,
+                        radius: BorderRadius.circular(37.r),
+                        margin: EdgeInsets.all(1.w),
+                        color: ColorStyles.backgroundColorGrey,
+                      )),
                       Padding(
                         padding: EdgeInsets.only(left: 9.w, right: 9.w),
                         child: AnimatedAlign(
@@ -103,7 +102,8 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                             // width: snapshot.data! ? 90.w : 378.w,
                             // height: snapshot.data! ? 100.h : 70.h, // 70.h,
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 33.79.w),
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 33.79.w),
                               child: Transform.rotate(
                                   angle: rotate,
                                   child: Stack(

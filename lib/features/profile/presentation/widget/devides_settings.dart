@@ -21,7 +21,7 @@ class DevideSettings extends StatefulWidget {
 }
 
 class _DevideSettingsState extends State<DevideSettings> {
-  bool switchValue = false;
+  bool switchValue = true;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,7 +53,7 @@ class _DevideSettingsState extends State<DevideSettings> {
               ),
               Text(
                 widget.subtitle,
-                style:  TextStyle(
+                style: TextStyle(
                   fontFamily: "Inter",
                   fontSize: 15.sp,
                   fontWeight: FontWeight.bold,

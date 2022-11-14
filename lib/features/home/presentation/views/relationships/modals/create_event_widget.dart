@@ -482,13 +482,18 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   textColor: Colors.white,
                                   onPressed: () {
                                     if (isValidate()) {
-                                      BlocProvider.of<EventsBloc>(context)
-                                          .add(AddEvent(
-                                              events: Events(
-                                        name: _controllerName.text,
-                                        description: _controllerDescription.text,
-                                        datetime: DateTime.fromMillisecondsSinceEpoch(fromDate.millisecond - DateTime.now().millisecond).day.toString(),
-                                      )));
+                                      BlocProvider.of<EventsBloc>(context).add(
+                                        AddEvent(
+                                          events: Events(
+                                              name: _controllerName.text,
+                                              description:
+                                                  _controllerDescription.text,
+                                              datetime: fromDate,
+                                              image: iconIndex == 15
+                                                  ? null
+                                                  : '😎'),
+                                        ),
+                                      );
                                       widget.onTap();
                                     }
                                   },
@@ -506,38 +511,40 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                   ),
                 ),
                 Positioned(
-                    right: 0,
-                    left: 0,
-                    top: 0,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(28.h),
-                            topRight: Radius.circular(28.h),
+                  right: 0,
+                  left: 0,
+                  top: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(28.h),
+                        topRight: Radius.circular(28.h),
+                      ),
+                      color: Colors.white,
+                    ),
+                    padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 100.w,
+                          height: 5.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            color: ColorStyles.greyColor,
                           ),
-                          color: Colors.white,
                         ),
-                        padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 100.w,
-                              height: 5.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.r),
-                                color: ColorStyles.greyColor,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Text(
-                              'Создать событие',
-                              style: style1,
-                            )
-                          ],
-                        )))
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          'Создать событие',
+                          style: style1,
+                        )
+                      ],
+                    ),
+                  ),
+                )
               ],
             )),
       ),

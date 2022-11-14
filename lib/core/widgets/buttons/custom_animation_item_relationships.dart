@@ -11,12 +11,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CustomAnimationItemRelationships extends StatefulWidget {
   final Function(int) delete;
   final int index;
-  final Events events;
+  final Events event;
+  final Events? nextEvent;
   const CustomAnimationItemRelationships({
     Key? key,
     required this.delete,
     required this.index,
-    required this.events,
+    required this.event,
+    required this.nextEvent,
   }) : super(key: key);
 
   @override
@@ -50,6 +52,7 @@ class _CustomAnimationItemRelationshipsState
 
   @override
   Widget build(BuildContext context) {
+    streamController.add(true);
     return StreamBuilder<bool>(
       stream: streamController.stream,
       initialData: false,
@@ -127,7 +130,7 @@ class _CustomAnimationItemRelationshipsState
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SingleChildScrollView(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: 11.h, horizontal: 20.w),
@@ -141,76 +144,134 @@ class _CustomAnimationItemRelationshipsState
                                       children: [
                                         Row(
                                           children: [
-                                            Text(
-                                              'Предстоящее событие',
-                                              style: TextStyle(
-                                                color: ColorStyles.greyColor,
-                                                fontSize: 15.sp,
-                                                fontWeight: FontWeight.w700,
-                                                height: 1,
+                                            if (widget.event.datetime.day !=
+                                                DateTime.now().day)
+                                              Row(
+                                                children: [
+                                                  if (widget.event.image !=
+                                                      null)
+                                                    Text(
+                                                      widget.event.image!,
+                                                      style: TextStyle(
+                                                        fontSize: 15.sp,
+                                                        fontFamily: 'Inter',
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        height: 1,
+                                                      ),
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                  if (widget.event.image !=
+                                                      null)
+                                                    SizedBox(width: 4.92.w),
+                                                  Text(
+                                                    'Предстоящее событие',
+                                                    style: TextStyle(
+                                                      color:
+                                                          ColorStyles.greyColor,
+                                                      fontSize: 15.sp,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      height: 1,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            else
+                                              Text(
+                                                '${checkDays(widget.event.datetime)}:',
+                                                style: TextStyle(
+                                                  color: _getTextColor(
+                                                    widget.event.datetime,
+                                                  ),
+                                                  fontSize: 25.sp,
+                                                  fontWeight: FontWeight.w800,
+                                                  height: 1,
+                                                ),
                                               ),
-                                            ),
                                             const Spacer(),
-                                            Text(
-                                              'Через ${widget.events.datetime} ${checkDays()}',
-                                              style: TextStyle(
-                                                color: const Color.fromRGBO(
-                                                    128, 74, 142, 1),
-                                                fontSize: 15.sp,
-                                                fontWeight: FontWeight.w800,
-                                                height: 1,
+                                            if (widget.event.datetime.day !=
+                                                DateTime.now().day)
+                                              Text(
+                                                checkDays(
+                                                    widget.event.datetime),
+                                                style: TextStyle(
+                                                  color: _getTextColor(
+                                                    widget.event.datetime,
+                                                  ),
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.w800,
+                                                  height: 1,
+                                                ),
                                               ),
-                                            ),
                                           ],
                                         ),
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
                                           duration: const Duration(
                                               milliseconds: 1000),
-                                          height: snapshot.data! ? 19.h : 0.h,
+                                          height: snapshot.data!
+                                              ? widget.nextEvent != null
+                                                  ? 19.h
+                                                  : 34.h
+                                              : 0.h,
                                         ),
                                         Text(
-                                          widget.events.name,
+                                          widget.event.name,
                                           style: TextStyle(
-                                              color: const Color.fromRGBO(
-                                                  23, 23, 23, 1),
-                                              fontSize: 50.sp,
-                                              fontWeight: FontWeight.w800,
-                                              height: 1),
+                                            color: const Color.fromRGBO(
+                                                23, 23, 23, 1),
+                                            fontSize: _getFontSize(
+                                                widget.event.name.length),
+                                            fontWeight: FontWeight.w800,
+                                            height: 1,
+                                          ),
                                         ),
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
                                           duration: const Duration(
-                                              milliseconds: 1000),
+                                            milliseconds: 1000,
+                                          ),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Завтра:',
-                                              style: TextStyle(
+                                        if (widget.nextEvent != null)
+                                          Row(
+                                            children: [
+                                              Text(
+                                                checkDays(
+                                                  widget.nextEvent!.datetime,
+                                                ),
+                                                style: TextStyle(
                                                   color: ColorStyles.greyColor,
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w700,
-                                                  height: 1),
-                                            ),
-                                            SizedBox(width: 10.w),
-                                            Text(
-                                              widget.events.description,
-                                              style: TextStyle(
-                                                  color: ColorStyles.greyColor,
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                          ],
-                                        ),
+                                                  height: 1,
+                                                ),
+                                              ),
+                                              SizedBox(width: 10.w),
+                                              SizedBox(
+                                                width: 225.w,
+                                                child: Text(
+                                                  widget.nextEvent!.name,
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                    color:
+                                                        ColorStyles.greyColor,
+                                                    fontSize: 15.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                    height: 1,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
                               SingleChildScrollView(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 child: Column(
                                   children: [
                                     Container(
@@ -227,14 +288,17 @@ class _CustomAnimationItemRelationshipsState
                                     GestureDetector(
                                       onTap: () {
                                         streamController.add(false);
-                                        scrollController.animateTo(0,
-                                            duration: const Duration(
-                                                milliseconds: 1000),
-                                            curve: Curves.easeInOutQuint);
-                                        Future.delayed(
-                                                Duration(milliseconds: 1000))
+                                        scrollController.animateTo(
+                                          0,
+                                          duration: const Duration(
+                                            milliseconds: 1000,
+                                          ),
+                                          curve: Curves.easeInOutQuint,
+                                        );
+                                        Future.delayed(const Duration(
+                                                milliseconds: 1000))
                                             .then((value) {
-                                          // widget.delete(widget.index);
+                                          widget.delete(widget.index);
                                         });
                                       },
                                       child: Container(
@@ -267,14 +331,61 @@ class _CustomAnimationItemRelationshipsState
     );
   }
 
-  String checkDays() {
-    int days = int.parse(widget.events.datetime);
-    int lastNumber = int.parse(widget.events.datetime[widget.events.datetime.length - 1]);
-    if(lastNumber > 5 && lastNumber < 10) return 'дней';
-    if(days % 5 == 0) return 'дней';
-    if(days == 11) return 'дней';
-    if(lastNumber == 1) return 'день';
-    return 'дня';
+  double _getFontSize(int length) {
+    if (length < 10) {
+      return 50;
+    } else if (length < 16) {
+      return 40;
+    } else if (length < 24 && widget.event.datetime != '0') {
+      return 30;
+    } else if (length < 30) {
+      return 25;
+    } else {
+      return 25;
+    }
+  }
+
+  Color _getTextColor(DateTime date) {
+    int days = date.difference(DateTime.now()).inDays;
+
+    if (days < 3) {
+      return const Color.fromRGBO(255, 29, 29, 1);
+    } else if (days == 3) {
+      return const Color.fromRGBO(191, 51, 85, 1);
+    } else if (days == 4) {
+      return const Color.fromRGBO(128, 74, 142, 1);
+    } else if (days == 5) {
+      return const Color.fromRGBO(64, 97, 199, 1);
+    } else if (days == 6) {
+      return const Color.fromRGBO(1, 119, 255, 1);
+    } else {
+      return const Color.fromRGBO(150, 150, 150, 1);
+    }
+  }
+
+  String checkDays(DateTime date) {
+    int days = date.difference(DateTime.now()).inHours ~/ 24;
+    String whenDate = '';
+    if (DateTime.now().add(date.difference(DateTime.now())).day !=
+        DateTime.now().day + days) {
+      days++;
+    }
+    int lastNumber = int.parse(days.toString()[days.toString().length - 1]);
+    print(lastNumber);
+    if (days == 0) {
+      whenDate = 'Сегодня';
+      return whenDate;
+    }
+    if (days == 1) {
+      whenDate = 'Завтра';
+      return whenDate;
+    }
+    if (days > 5 && lastNumber < 10) return 'Через $days дней';
+    if (days % 5 == 0) return 'Через $days дней';
+    if (days == 11) return 'Через $days дней';
+    if (lastNumber == 1) return 'Завтра';
+    if (lastNumber == 2) return 'Через день';
+    return 'Через $days дня';
   }
 
   // void closeOpen(bool state) {

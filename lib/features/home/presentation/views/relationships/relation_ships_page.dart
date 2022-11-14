@@ -28,7 +28,8 @@ class RelationShipsPage extends StatefulWidget {
   State<RelationShipsPage> createState() => _RelationShipsPageState();
 }
 
-class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKeepAliveClientMixin {
+class _RelationShipsPageState extends State<RelationShipsPage>
+    with AutomaticKeepAliveClientMixin {
   final int maxLength = 18;
   String text = '';
   final _streamController = StreamController<int>();
@@ -386,6 +387,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                           BlocBuilder<EventsBloc, EventsState>(
                               buildWhen: (previous, current) {
                             if (current is AddEventsState) {
+                              print('length: ${events.length}');
                               if (events.length < 3) {
                                 events.add(current.events);
                                 return true;
@@ -397,10 +399,18 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                               padding: EdgeInsets.symmetric(horizontal: 25.w),
                               child: ReorderableListView.builder(
                                 onReorder: (oldIndex, newIndex) {
-                                  setState(() {
-                                    final item = events.removeAt(oldIndex);
-                                    events.insert(newIndex, item);
-                                  });
+                                  // setState(() {
+                                  // final newEvent = events[newIndex];
+                                  // final oldEvent = events[oldIndex];
+                                  // events.insert(newIndex, newEvent);
+                                  // events.insert(oldIndex, oldEvent);
+                                  // setState(() {});
+                                  // });
+                                  // Future.delayed(
+                                  //     const Duration(milliseconds: 10), () {
+                                  //   events.removeAt(oldIndex);
+                                  //   setState(() {});
+                                  // });
                                 },
                                 physics: const NeverScrollableScrollPhysics(),
                                 padding: const EdgeInsets.all(0),
@@ -408,7 +418,10 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                                 itemCount: events.length,
                                 itemBuilder: ((context, index) {
                                   return CustomAnimationItemRelationships(
-                                    events: events[index],
+                                    event: events[index],
+                                    nextEvent: index < events.length - 1
+                                        ? events[index + 1]
+                                        : null,
                                     // func: func,
                                     key: ValueKey('$index'),
                                     delete: delete,
@@ -418,14 +431,14 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                                 proxyDecorator: (child, index, animation) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              blurRadius: 20.h,
-                                              color:
-                                                  Color.fromRGBO(0, 0, 0, 0.1))
-                                        ],
-                                        borderRadius:
-                                            BorderRadius.circular(20.r)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 20.h,
+                                          color: Color.fromRGBO(0, 0, 0, 0.1),
+                                        )
+                                      ],
+                                      borderRadius: BorderRadius.circular(20.r),
+                                    ),
                                     child: child,
                                   );
                                 },
@@ -466,6 +479,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
   void delete(int index) {
     events.removeAt(index);
     setState(() {});
+    print('event length ${events.length}');
   }
 
   Widget photoMini(String? path) {
@@ -511,7 +525,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
     }
     return AssetImage('assets/images/avatar_none.png');
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;

@@ -51,4 +51,10 @@ class MySharedPrefs {
       jsonEncode(user.toJson()),
     );
   }
+
+  void changeName(String newName) async {
+    var newUser = (await user) as UserAnswer;
+    newUser.me.username = newName;
+    setUser(await token, newUser);
+  }
 }
