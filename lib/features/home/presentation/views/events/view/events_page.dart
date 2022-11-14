@@ -88,6 +88,7 @@ class _EventsPageState extends State<EventsPage> {
         color: Colors.black, fontWeight: FontWeight.w800, fontSize: 50.sp);
 
     return SingleChildScrollView(
+      physics: ClampingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

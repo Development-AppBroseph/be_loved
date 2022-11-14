@@ -150,9 +150,9 @@ class Repository {
     try {
       var response = await dio.post(
         '/relations/',
-        data: {
+        data: FormData.fromMap({
           "to_phone_number": phone,
-        },
+        }),
         options: options,
       );
       print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');

@@ -4,8 +4,13 @@ import 'dart:core';
 enum Endpoints {
   // Authentication
   register,
-  phoneNumber
+  phoneNumber,
+  editProfile,
   
+
+  //Events
+  getEvents,
+  addEvent
 }
 
 extension EndpointsExtension on Endpoints {
@@ -19,6 +24,12 @@ extension EndpointsExtension on Endpoints {
         return "$url/auth/users/";
       case Endpoints.phoneNumber:
         return "/auth/change_number";  
+      case Endpoints.editProfile:
+        return "$url/auth/users/";
+      case Endpoints.getEvents:
+        return "/events/";  
+      case Endpoints.addEvent:
+        return "/events/";  
       default:
         return '';
     }

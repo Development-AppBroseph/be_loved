@@ -482,13 +482,13 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   textColor: Colors.white,
                                   onPressed: () {
                                     if (isValidate()) {
-                                      BlocProvider.of<EventsBloc>(context)
-                                          .add(AddEvent(
-                                              events: Events(
-                                        name: _controllerName.text,
-                                        description: _controllerDescription.text,
-                                        datetime: DateTime.fromMillisecondsSinceEpoch(fromDate.millisecond - DateTime.now().millisecond).day.toString(),
-                                      )));
+                                      // BlocProvider.of<EventsBloc>(context)
+                                      //     .add(AddEvent(
+                                      //         events: Events(
+                                      //   name: _controllerName.text,
+                                      //   description: _controllerDescription.text,
+                                      //   datetime: DateTime.fromMillisecondsSinceEpoch(fromDate.millisecond - DateTime.now().millisecond).day.toString(),
+                                      // )));
                                       widget.onTap();
                                     }
                                   },

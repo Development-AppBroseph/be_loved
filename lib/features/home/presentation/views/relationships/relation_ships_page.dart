@@ -383,55 +383,55 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                             },
                           ),
                           SizedBox(height: 11.h),
-                          BlocBuilder<EventsBloc, EventsState>(
-                              buildWhen: (previous, current) {
-                            if (current is AddEventsState) {
-                              if (events.length < 3) {
-                                events.add(current.events);
-                                return true;
-                              }
-                            }
-                            return false;
-                          }, builder: (context, snapshot) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 25.w),
-                              child: ReorderableListView.builder(
-                                onReorder: (oldIndex, newIndex) {
-                                  setState(() {
-                                    final item = events.removeAt(oldIndex);
-                                    events.insert(newIndex, item);
-                                  });
-                                },
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.all(0),
-                                shrinkWrap: true,
-                                itemCount: events.length,
-                                itemBuilder: ((context, index) {
-                                  return CustomAnimationItemRelationships(
-                                    events: events[index],
-                                    // func: func,
-                                    key: ValueKey('$index'),
-                                    delete: delete,
-                                    index: index,
-                                  );
-                                }),
-                                proxyDecorator: (child, index, animation) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              blurRadius: 20.h,
-                                              color:
-                                                  Color.fromRGBO(0, 0, 0, 0.1))
-                                        ],
-                                        borderRadius:
-                                            BorderRadius.circular(20.r)),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          }),
+                          // BlocBuilder<EventsBloc, EventsState>(
+                          //     buildWhen: (previous, current) {
+                          //   if (current is AddEventsState) {
+                          //     if (events.length < 3) {
+                          //       events.add(current.events);
+                          //       return true;
+                          //     }
+                          //   }
+                          //   return false;
+                          // }, builder: (context, snapshot) {
+                          //   return Padding(
+                          //     padding: EdgeInsets.symmetric(horizontal: 25.w),
+                          //     child: ReorderableListView.builder(
+                          //       onReorder: (oldIndex, newIndex) {
+                          //         setState(() {
+                          //           final item = events.removeAt(oldIndex);
+                          //           events.insert(newIndex, item);
+                          //         });
+                          //       },
+                          //       physics: const NeverScrollableScrollPhysics(),
+                          //       padding: const EdgeInsets.all(0),
+                          //       shrinkWrap: true,
+                          //       itemCount: events.length,
+                          //       itemBuilder: ((context, index) {
+                          //         return CustomAnimationItemRelationships(
+                          //           events: events[index],
+                          //           // func: func,
+                          //           key: ValueKey('$index'),
+                          //           delete: delete,
+                          //           index: index,
+                          //         );
+                          //       }),
+                          //       proxyDecorator: (child, index, animation) {
+                          //         return Container(
+                          //           decoration: BoxDecoration(
+                          //               boxShadow: [
+                          //                 BoxShadow(
+                          //                     blurRadius: 20.h,
+                          //                     color:
+                          //                         Color.fromRGBO(0, 0, 0, 0.1))
+                          //               ],
+                          //               borderRadius:
+                          //                   BorderRadius.circular(20.r)),
+                          //           child: child,
+                          //         );
+                          //       },
+                          //     ),
+                          //   );
+                          // }),
                           if (events.isEmpty) SizedBox(height: 15.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
