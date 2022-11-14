@@ -108,33 +108,38 @@ class _EventsPageState extends State<EventsPage> {
                   ),
                 ),
                 const Spacer(),
-                SizedBox(
-                  width: 55.h,
-                  height: 55.h,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        height: 5.57.h,
-                        width: 27.86.h,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 3,
-                          itemBuilder: (BuildContext context, index) {
-                            return Container(
-                              margin: EdgeInsets.only(
-                                  left: index == 0 ? 0 : 5.57.w),
-                              height: 5.57.h,
-                              width: 5.57.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(1.5.r),
-                                color: ColorStyles.greyColor,
-                              ),
-                            );
-                          },
+                GestureDetector(
+                  onTap: () {
+                    
+                  },
+                  child: SizedBox(
+                    width: 55.h,
+                    height: 55.h,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          height: 5.57.h,
+                          width: 27.86.h,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 3,
+                            itemBuilder: (BuildContext context, index) {
+                              return Container(
+                                margin: EdgeInsets.only(
+                                    left: index == 0 ? 0 : 5.57.w),
+                                height: 5.57.h,
+                                width: 5.57.h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(1.5.r),
+                                  color: ColorStyles.greyColor,
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

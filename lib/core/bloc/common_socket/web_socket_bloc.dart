@@ -6,7 +6,7 @@ part 'web_socket_state.dart';
 
 class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
   WebSocketBloc() : super(WebSocketState()) {
-    on<WebSocketEvent>(_initWebSocket);
+    // on<WebSocketEvent>(_initWebSocket);
     on<WebSocketCloseEvent>(_closeConnection);
     on<WebSocketGetInviteMessage>(_getInvite);
     on<WebSocketSendInviteMessage>(_sendInvite);
