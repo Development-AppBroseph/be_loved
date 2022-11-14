@@ -19,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'modals/add_event_modal.dart';
+import 'modals/create_event_modal.dart';
 
 class RelationShipsPage extends StatefulWidget {
   final VoidCallback nextPage;
@@ -437,7 +438,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {
                               // showModalAddEvent(context);
-                              showModalAddEvent(context, () {
+                              showModalCreateEvent(context, () {
                                 Navigator.pop(context);
                                 // func();
                               });
