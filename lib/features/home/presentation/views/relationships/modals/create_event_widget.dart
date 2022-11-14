@@ -108,7 +108,6 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   @override
   void dispose() {
     keyboardSub.cancel();
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -431,12 +430,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                 height: 28.h,
                                                 key: iconBtn,
                                               )
-                                            : Text(
-                                                '😎',
-                                                key: iconBtn,
-                                                style:
-                                                    TextStyle(fontSize: 30.sp),
-                                              ),
+                                            : Image.asset(Img.smile, height: 33.h, width: 33.h,),
                                         SizedBox(
                                           width: 20.w,
                                         ),
@@ -486,8 +480,15 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                       //     .add(AddEvent(
                                       //         events: Events(
                                       //   name: _controllerName.text,
-                                      //   description: _controllerDescription.text,
-                                      //   datetime: DateTime.fromMillisecondsSinceEpoch(fromDate.millisecond - DateTime.now().millisecond).day.toString(),
+                                      //   description:
+                                      //       _controllerDescription.text,
+                                      //   datetime:
+                                      //       DateTime.fromMillisecondsSinceEpoch(
+                                      //               fromDate.millisecond -
+                                      //                   DateTime.now()
+                                      //                       .millisecond)
+                                      //           .day
+                                      //           .toString(),
                                       // )));
                                       widget.onTap();
                                     }
