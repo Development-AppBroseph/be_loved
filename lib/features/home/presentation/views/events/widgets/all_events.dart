@@ -19,6 +19,8 @@ class AllEeventsPage extends StatefulWidget {
 
 class _AllEeventsPageState extends State<AllEeventsPage> {
   final PageController _pageController = PageController();
+  ScrollController scrollController = ScrollController();
+
   int countPage = 0;
   List<HashTagData> hashTags = [
     HashTagData(title: 'Важно', type: TypeHashTag.main),
@@ -28,11 +30,15 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
   ];
   TextStyle style1 = TextStyle(
       color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
-  ScrollController scrollController = ScrollController();
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -112,6 +118,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              countPage = 1;
                               _pageController.nextPage(
                                   duration: const Duration(milliseconds: 600),
                                   curve: Curves.easeInOutQuint);
@@ -172,9 +179,12 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
-                        _pageController.previousPage(
-                            duration: const Duration(milliseconds: 600),
-                            curve: Curves.easeInOutQuint);
+                        setState(() {
+                          countPage = 0;
+                          _pageController.previousPage(
+                              duration: const Duration(milliseconds: 600),
+                              curve: Curves.easeInOutQuint);
+                        });
                       },
                       child: Container(
                         height: 55.h,
@@ -274,13 +284,17 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
             child: Padding(
               padding: EdgeInsets.only(top: 39.h),
               child: ListView.builder(
+                controller: scrollController,
                 padding: EdgeInsets.symmetric(horizontal: 25.w),
                 scrollDirection: Axis.vertical,
                 itemCount: 30,
                 physics: const ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return UserEvents(
-                    countPage: countPage,
+                  return GestureDetector(
+                    onLongPress: () {
+                      
+                    },
+                    child: UserEvents(countPage: countPage),
                   );
                 },
               ),
