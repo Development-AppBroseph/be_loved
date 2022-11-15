@@ -5,8 +5,10 @@ import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -54,7 +56,7 @@ class _CustomAnimationItemRelationshipsState
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
       stream: streamController.stream,
-      initialData: false,
+      initialData: true,
       builder: (context, snapshot) {
         return GestureDetector(
           onHorizontalDragStart: (details) {
@@ -186,7 +188,8 @@ class _CustomAnimationItemRelationshipsState
                                               milliseconds: 1000),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
-                                        Row(
+                                        widget.index == 0 && context.read<EventsBloc>().events.any((element) => element.datetimeString == '1' || element.datetimeString == '0')
+                                        ? Row(
                                           children: [
                                             Text(
                                               'Завтра:',
@@ -198,14 +201,15 @@ class _CustomAnimationItemRelationshipsState
                                             ),
                                             SizedBox(width: 10.w),
                                             Text(
-                                              widget.events.description,
+                                              context.read<EventsBloc>().events.where((element) => element.datetimeString == '1')
+                                              .first.title,
                                               style: TextStyle(
                                                   color: ColorStyles.greyColor,
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w700),
                                             ),
                                           ],
-                                        ),
+                                        ) : SizedBox(height: 10.h,),
                                       ],
                                     ),
                                   ),

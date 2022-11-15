@@ -327,8 +327,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _logOut(LogOut event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    await Repository().deleteInviteUser(
-        ((await MySharedPrefs().user) as UserAnswer).relationId!);
+    // await Repository().deleteInviteUser(
+    //     ((await MySharedPrefs().user) as UserAnswer).relationId!);
     // ignore: use_build_context_synchronously
     MySharedPrefs().logOut(event.context);
     emit(AuthStated());

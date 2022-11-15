@@ -12,3 +12,9 @@ class EventAddEvent extends EventsEvent{
   final EventEntity eventEntity;
   EventAddEvent({required this.eventEntity});
 }
+
+class EventChangeToHomeEvent extends EventsEvent{
+  final EventEntity? eventEntity;
+  final int position;
+  EventChangeToHomeEvent({required this.eventEntity, required this.position});
+}

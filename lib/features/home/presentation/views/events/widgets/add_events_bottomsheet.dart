@@ -3,8 +3,11 @@ import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
+import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
+import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
@@ -35,6 +38,15 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
   ScrollController scrollController = ScrollController();
   TextStyle style1 = TextStyle(
       color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
+  
+
+  selectEvent(EventEntity event){
+    context.read<EventsBloc>().add(EventChangeToHomeEvent(
+      eventEntity: event,
+      position: 0
+    ));
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,130 +239,134 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                       itemCount: hashTags.length,
                     ),
                   ),
-                  SizedBox(
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Предстоящее событие:',
-                              style: TextStyle(
-                                fontFamily: "Inter",
-                                color: const Color(0xff171717),
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 6.h),
-                              child: Text(
-                                "${eventsBloc.events.length} событие",
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  color: const Color(0xff969696),
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        const Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: Color(0xff171717),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 17.h, bottom: 26.h),
-                    height: 1.h,
-                    width: 378.w,
-                    color: const Color(0xff969696),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 35.w),
-                    child: SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: Column(
-                        children: List.generate(
-                          eventsBloc.events.length,
-                          (index) => Padding(
-                            padding: EdgeInsets.only(bottom: 16.h),
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: (){
-                                widget.onTap();
-                              },
-                              child: SizedBox(
-                                child: Row(
+                  BlocConsumer<EventsBloc, EventsState>(
+                    listener: (context, state) {
+                      if(state is EventErrorState){
+                        showAlertToast(state.message);
+                      }
+                      if(state is EventInternetErrorState){
+                        showAlertToast('Проверьте соединение с интернетом!');
+                      }
+                    },
+                    builder: (context, state) {
+                      if(state is EventLoadingState){
+                        return CircularProgressIndicator();
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${eventsBloc.events[index].title}',
-                                          style: TextStyle(
-                                            fontFamily: "Inter",
-                                            color: const Color(0xff171717),
-                                            fontSize: 20.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(top: 6.h),
-                                          child: Text(
-                                            'Добавил(а): Никита Белых',
-                                            style: TextStyle(
-                                              fontFamily: "Inter",
-                                              color: const Color(0xff969696),
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                    Text(
+                                      'Предстоящее событие:',
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        color: const Color(0xff171717),
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                    const Spacer(),
-                                    Align(
-                                      alignment: Alignment.centerRight,
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 6.h),
                                       child: Text(
-                                        eventsBloc.events[index].datetimeString == '1'
-                                        ? 'Завтра'
-                                        : 'Через ${eventsBloc.events[index].datetimeString} ${checkDays(eventsBloc.events[index].datetimeString)}',
+                                        "${eventsBloc.events.length} событие",
                                         style: TextStyle(
-                                          fontFamily: 'Inter',
+                                          fontFamily: "Inter",
+                                          color: const Color(0xff969696),
                                           fontSize: 15.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: eventsBloc.events[index].datetimeString == '1'
-                                          ? ColorStyles.redColor
-                                          : const Color(0xff1D33FF),
+                                          fontWeight: FontWeight.w700,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
+                                const Spacer(),
+                                const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Color(0xff171717),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 17.h, bottom: 26.h),
+                            height: 1.h,
+                            width: 378.w,
+                            color: const Color(0xff969696),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 35.w),
+                            child: SingleChildScrollView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              child: Column(
+                                children: List.generate(
+                                  eventsBloc.events.length,
+                                  (index) => Padding(
+                                    padding: EdgeInsets.only(bottom: 16.h),
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: (){
+                                        selectEvent(eventsBloc.events[index]);
+                                      },
+                                      child: SizedBox(
+                                        child: Row(
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${eventsBloc.events[index].title}',
+                                                  style: TextStyle(
+                                                    fontFamily: "Inter",
+                                                    color: const Color(0xff171717),
+                                                    fontSize: 20.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 6.h),
+                                                  child: Text(
+                                                    'Добавил(а): ${eventsBloc.events[index].eventCreator.username}',
+                                                    style: TextStyle(
+                                                      fontFamily: "Inter",
+                                                      color: const Color(0xff969696),
+                                                      fontSize: 15.sp,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const Spacer(),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: DayTextWidget(eventEntity: eventsBloc.events[index],)
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
+                        ],
+                      );
+                    }
                   ),
+                  
                   GestureDetector(
                     onTap: () {
-                      showModalCreateEvent(context, () {
-                        widget.onTap();
-                        setState(() {
-                          widgets.add(widgetItem());
-                        });
-                      });
+                      showModalCreateEvent(context, () {});
                     },
                     child: Container(
                       height: 55.h,

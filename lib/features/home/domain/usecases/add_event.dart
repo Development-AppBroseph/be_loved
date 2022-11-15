@@ -5,13 +5,13 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 
-class AddEvent implements UseCase<bool, AddEventParams> {
+class AddEvent implements UseCase<EventEntity, AddEventParams> {
   final EventsRepository repository;
 
   AddEvent(this.repository);
 
   @override
-  Future<Either<Failure, bool>> call(AddEventParams params) async {
+  Future<Either<Failure, EventEntity>> call(AddEventParams params) async {
     return await repository.addEvent(params);
   }
 }

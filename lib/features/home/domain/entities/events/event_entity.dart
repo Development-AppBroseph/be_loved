@@ -1,3 +1,4 @@
+import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
@@ -6,32 +7,47 @@ class EventEntity extends Equatable {
   final String title;
   final String description;
   final bool important;
-  final DateTime datetime;
+  final DateTime start;
+  final DateTime finish;
   final String datetimeString;
   final bool married;
+  final bool allDays;
+  final bool repeat;
+  final bool notification;
   final int relationId;
+  final User eventCreator;
 
   EventEntity({
     required this.id,
     required this.title,
     required this.description,
     required this.important,
-    required this.datetime,
+    required this.start,
+    required this.finish,
     required this.datetimeString,
     required this.married,
-    required this.relationId
+    required this.relationId,
+    required this.notification,
+    required this.repeat,
+    required this.allDays,
+    required this.eventCreator,
   });
 
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      // 'id': id,
       'name': title,
       'description': description,
       'important': important,
-      'datetime': datetimeString,
+      'start': start.toString(),
+      'finish': finish.toString(),
       'married': married,
-      'relation': relationId,
+      // 'relation': relationId,
+      'all_day': allDays,
+      'repeat': repeat,
+      'notification': notification,
+      // 'event_creator': eventCreator
     };
   }
 
@@ -42,7 +58,8 @@ class EventEntity extends Equatable {
         title,
         description,
         important,
-        datetime,
+        start,
+        finish,
         married,
         relationId
       ];

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
@@ -391,6 +392,10 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                             listener: (context, state) {
                               if(state is EventErrorState){
                                 showAlertToast(state.message);
+                                if(state.isTokenError){
+                                  print('TOKEN ERROR, LOGOUT...');
+                                  context.read<AuthBloc>().add(LogOut(context));
+                                }
                               }
                               if(state is EventInternetErrorState){
                                 showAlertToast('Проверьте соединение с интернетом!');
@@ -404,21 +409,30 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                                 padding: EdgeInsets.symmetric(horizontal: 25.w),
                                 child: ReorderableListView.builder(
                                   onReorder: (oldIndex, newIndex) {
-                                    setState(() {
-                                      final item = events.removeAt(oldIndex);
-                                      events.insert(newIndex, item);
-                                    });
+                                    // setState(() {
+                                    //   final item = events.removeAt(oldIndex);
+                                    //   events.insert(newIndex, item);
+                                    // });
+                                    context.read<EventsBloc>().add(EventChangeToHomeEvent(
+                                      eventEntity: eventsBloc.eventsInHome[oldIndex], 
+                                      position: newIndex
+                                    ));
                                   },
                                   physics: const NeverScrollableScrollPhysics(),
                                   padding: const EdgeInsets.all(0),
                                   shrinkWrap: true,
-                                  itemCount: eventsBloc.events.length,
+                                  itemCount: eventsBloc.eventsInHome.length,
                                   itemBuilder: ((context, index) {
                                     return CustomAnimationItemRelationships(
-                                      events: eventsBloc.events[index],
+                                      events: eventsBloc.eventsInHome[index],
                                       // func: func,
-                                      key: ValueKey('$index'),
-                                      delete: (i){},
+                                      key: ValueKey('${eventsBloc.eventsInHome[index].id}'),
+                                      delete: (i){
+                                        context.read<EventsBloc>().add(EventChangeToHomeEvent(
+                                          eventEntity: null, 
+                                          position: i
+                                        ));
+                                      },
                                       index: index,
                                     );
                                   }),
@@ -444,11 +458,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {
-                              showModalAddEvent(context,(){
-                              // showModalCreateEvent(context, () {
-                                Navigator.pop(context);
-                                // func();
-                              });
+                              showModalAddEvent(context,(){});
                             }),
                           ),
                           SizedBox(height: 200.h)
@@ -513,9 +523,8 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
   }
 
   ImageProvider<Object> getImage(String? path) {
-    print('PATH: ${path}');
     if (path != null && path.trim() != '') {
-      // return NetworkImage(Config.url.url + path);
+      return NetworkImage(Config.url.url + path);
     }
     return AssetImage('assets/images/avatar_none.png');
   }

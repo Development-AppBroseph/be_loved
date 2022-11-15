@@ -1,12 +1,18 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
+import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_events_bottomsheet.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -30,31 +36,24 @@ class _MainEventsPageState extends State<MainEventsPage> {
     HashTagData(type: TypeHashTag.add),
   ];
 
-  List<UpcomingInfo> upComingInfo = [
-    UpcomingInfo(
-      title: 'Годовщина',
-      subTitle: 'Beloved :)',
-      days: 'Завтра',
-    ),
-    UpcomingInfo(
-      title: 'Арбузный вечер',
-      subTitle: 'Добавил(а) Никита Белых',
-      days: 'Через 3 дня',
-    ),
-    UpcomingInfo(
-      title: 'Я роняю запад',
-      subTitle: 'от Кремля',
-      days: 'Через 7 дней',
-    )
-  ];
-
-  final streamController = StreamController<int>();
-
-  @override
-  void dispose() {
-    streamController.close();
-    super.dispose();
-  }
+  // List<UpcomingInfo> upComingInfo = [
+  //   UpcomingInfo(
+  //     title: 'Годовщина',
+  //     subTitle: 'Beloved :)',
+  //     days: 'Завтра',
+  //   ),
+  //   UpcomingInfo(
+  //     title: 'Арбузный вечер',
+  //     subTitle: 'Добавил(а) Никита Белых',
+  //     days: 'Через 3 дня',
+  //   ),
+  //   UpcomingInfo(
+  //     title: 'Я роняю запад',
+  //     subTitle: 'от Кремля',
+  //     days: 'Через 7 дней',
+  //   )
+  // ];
+  int itemIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +88,8 @@ class _MainEventsPageState extends State<MainEventsPage> {
 
     TextStyle style6 = TextStyle(
         color: Colors.black, fontWeight: FontWeight.w800, fontSize: 50.sp);
+    
+    EventsBloc eventsBloc = context.read<EventsBloc>();
 
     return SingleChildScrollView(
       physics: ClampingScrollPhysics(),
@@ -225,135 +226,162 @@ class _MainEventsPageState extends State<MainEventsPage> {
             ),
           ),
           SizedBox(height: 38.h),
-          const Padding(
-            padding: EdgeInsets.only(left: 25, bottom: 10),
-            child: Text(
-              'Совсем скоро',
-              style: TextStyle(
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black,
-                  fontSize: 25),
-            ),
-          ),
-          CarouselSlider.builder(
-              itemCount: upComingInfo.length,
-              itemBuilder: ((context, index, i) {
-                Color? colorDays = checkColor(upComingInfo[i].days);
-                return Padding(
-                  padding: EdgeInsets.only(left: i == 0 ? 0 : 20.w),
-                  child: CupertinoCard(
-                    elevation: 0,
-                    margin: EdgeInsets.zero,
-                    radius: BorderRadius.circular(40.r),
-                    color: Colors.white,
-                    child: Container(
-                      // decoration: BoxDecoration(
-                      //   borderRadius: BorderRadius.circular(20.r),
-                      //   color: Colors.white,
-                      // ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.w, vertical: 11.h),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('${upComingInfo[i].days}:',
-                                    style: style4.copyWith(color: colorDays)),
-                                Row(
+          BlocConsumer<EventsBloc, EventsState>(
+            listener: (context, state) {
+              if(state is EventErrorState){
+                showAlertToast(state.message);
+              }
+              if(state is EventInternetErrorState){
+                showAlertToast('Проверьте соединение с интернетом!');
+              }
+            },
+            builder: (context, state) {
+              if(state is EventLoadingState){
+                return CircularProgressIndicator();
+              }
+              List<EventEntity> eventsSlider = eventsBloc.events.where((element) 
+                        => int.parse(element.datetimeString) < 7).toList();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25, bottom: 10),
+                    child: Text(
+                      'Совсем скоро',
+                      style: TextStyle(
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.w800,
+                          color: Colors.black,
+                          fontSize: 25),
+                    ),
+                  ),
+                  CarouselSlider.builder(
+                      itemCount: eventsSlider.length,
+                      itemBuilder: ((context, index, i) {
+                        return Padding(
+                          padding: EdgeInsets.only(left: i == 0 ? 0 : 20.w),
+                          child: CupertinoCard(
+                            elevation: 0,
+                            margin: EdgeInsets.zero,
+                            radius: BorderRadius.circular(40.r),
+                            color: Colors.white,
+                            child: Container(
+                              // decoration: BoxDecoration(
+                              //   borderRadius: BorderRadius.circular(20.r),
+                              //   color: Colors.white,
+                              // ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w, vertical: 11.h),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width:
-                                          (MediaQuery.of(context).size.width *
-                                                  70) /
-                                              100,
-                                      child: Text(
-                                        upComingInfo[i].title,
-                                        style: style6.copyWith(height: 1.1),
-                                        softWrap: false,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.fade,
-                                      ),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        DayTextWidget(
+                                          eventEntity: eventsSlider[i],
+                                          additionString: ':',
+                                          textStyle: TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontSize: 25.sp,
+                                            fontWeight: FontWeight.w800,
+                                            color: getColorFromDays(eventsSlider[i].datetimeString),
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width:
+                                                  (MediaQuery.of(context).size.width *
+                                                          70) /
+                                                      100,
+                                              child: Text(
+                                                eventsSlider[i].title,
+                                                style: style6.copyWith(height: 1.1),
+                                                softWrap: false,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.fade,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ],
+                          ),
+                        );
+                      }),
+                      options: CarouselOptions(
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            itemIndex = index;
+                          });
+                        },
+                        viewportFraction: 0.9,
+                        height: 113.h,
+                        enableInfiniteScroll: false,
+                      )),
+                  SizedBox(height: 22.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 7.sp,
+                        width: 31,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: eventsSlider.length,
+                          itemBuilder: (BuildContext context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(left: index == 0 ? 0 : 5.w),
+                              height: 7.sp,
+                              width: 7.sp,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2.r),
+                                border: Border.all(
+                                    color: ColorStyles.greyColor, width: 1.5.w),
+                                color: index == itemIndex
+                                    ? ColorStyles.greyColor
+                                    : null,
+                              ),
+                            );
+                          },
                         ),
                       ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    child: Container(
+                      height: 1,
+                      color: ColorStyles.greyColor,
                     ),
                   ),
-                );
-              }),
-              options: CarouselOptions(
-                onPageChanged: (index, reason) {
-                  streamController.add(index);
-                },
-                viewportFraction: 0.9,
-                height: 113.h,
-                enableInfiniteScroll: false,
-              )),
-          SizedBox(height: 22.h),
-          StreamBuilder<int>(
-              stream: streamController.stream,
-              initialData: 0,
-              builder: (context, snapshot) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 7.sp,
-                      width: 31,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: upComingInfo.length,
-                        itemBuilder: (BuildContext context, index) {
-                          return Container(
-                            margin: EdgeInsets.only(left: index == 0 ? 0 : 5.w),
-                            height: 7.sp,
-                            width: 7.sp,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2.r),
-                              border: Border.all(
-                                  color: ColorStyles.greyColor, width: 1.5.w),
-                              color: index == snapshot.data
-                                  ? ColorStyles.greyColor
-                                  : null,
-                            ),
-                          );
-                        },
-                      ),
+                  SizedBox(height: 38.h),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Предстоящие события', style: style2),
+                        SizedBox(height: 8.h),
+                        Text('${eventsBloc.events.length} событие', style: style3),
+                      ],
                     ),
-                  ],
-                );
-              }),
-          SizedBox(height: 20.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25.w),
-            child: Container(
-              height: 1,
-              color: ColorStyles.greyColor,
-            ),
+                  ),
+                  SizedBox(height: 26.h),
+                  events(eventsBloc.events),
+                ],
+              );
+            }
           ),
-          SizedBox(height: 38.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Предстоящие события', style: style2),
-                SizedBox(height: 8.h),
-                Text('1 событие', style: style3),
-              ],
-            ),
-          ),
-          SizedBox(height: 26.h),
-          events(),
+          
           SizedBox(height: 35.h),
           GestureDetector(
             onTap: () => showModalCreateEvent(
@@ -370,22 +398,22 @@ class _MainEventsPageState extends State<MainEventsPage> {
     );
   }
 
-  Widget events() {
+  Widget events(List<EventEntity> events) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 25.w),
-      child: Column(children: eventsItem()),
+      child: Column(children: eventsItem(events)),
     );
   }
 
-  List<Widget> eventsItem() {
+  List<Widget> eventsItem(List<EventEntity> events) {
     List<Widget> list = [];
-    for (int i = 0; i < upComingInfo.length; i++) {
-      list.add(itemEvent(upComingInfo[i], i));
+    for (int i = 0; i < events.length; i++) {
+      list.add(itemEvent(events[i]));
     }
     return list;
   }
 
-  Widget itemEvent(UpcomingInfo info, int index) {
+  Widget itemEvent(EventEntity eventEntity) {
     TextStyle style1 = TextStyle(
         color: Colors.black, fontWeight: FontWeight.w800, fontSize: 20.sp);
     TextStyle style2 = TextStyle(
@@ -393,7 +421,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
         fontWeight: FontWeight.w700,
         fontSize: 15.sp);
 
-    Color? colorDays = checkColor(info.days);
+    Color? colorDays = checkColor(eventEntity.datetimeString);
 
     TextStyle style3 = TextStyle(
         color: colorDays, fontWeight: FontWeight.w800, fontSize: 15.sp);
@@ -405,32 +433,30 @@ class _MainEventsPageState extends State<MainEventsPage> {
 
     return Padding(
       padding:
-          EdgeInsets.only(bottom: index == upComingInfo.length - 1 ? 0 : 20.h),
+          EdgeInsets.only(bottom: 20.h),
       child: Row(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(info.title, style: style1),
-              info.subTitle.contains('Beloved')
-                  ? RichText(
+              Text(eventEntity.title, style: style1),
+              // info.subTitle.contains('Beloved')
+              //     ? RichText(
+              //         text: TextSpan(children: [
+              //           TextSpan(text: 'от ', style: style2),
+              //           TextSpan(text: info.subTitle, style: style4),
+              //         ]),
+              //       )
+              //     : 
+                  RichText(
                       text: TextSpan(children: [
-                        TextSpan(text: 'от ', style: style2),
-                        TextSpan(text: info.subTitle, style: style4),
-                      ]),
-                    )
-                  : RichText(
-                      text: TextSpan(children: [
-                        TextSpan(text: info.subTitle, style: style2),
+                        TextSpan(text: 'Добавил(а): ${eventEntity.eventCreator.username}', style: style2),
                       ]),
                     )
             ],
           ),
           const Spacer(),
-          Text(
-            info.days,
-            style: style3,
-          )
+          DayTextWidget(eventEntity: eventEntity)
         ],
       ),
     );

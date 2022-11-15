@@ -9,8 +9,9 @@ abstract class EventsState extends Equatable {
 class EventInitialState extends EventsState {}
 class EventLoadingState extends EventsState {}
 class EventErrorState extends EventsState {
+  final bool isTokenError;
   final String message;
-  EventErrorState({required this.message});
+  EventErrorState({required this.message, required this.isTokenError});
 }
 class EventInternetErrorState extends EventsState{}
 

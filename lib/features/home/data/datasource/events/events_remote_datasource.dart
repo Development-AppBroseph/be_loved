@@ -10,7 +10,7 @@ import '../../../../../locator.dart';
 
 abstract class EventsRemoteDataSource {
   Future<List<EventEntity>> getEvents();
-  Future<bool> addEvent(EventEntity eventEntity);
+  Future<EventEntity> addEvent(EventEntity eventEntity);
 
 }
 
@@ -39,7 +39,9 @@ class EventsRemoteDataSourceImpl
       return (response.data as List)
             .map((json) => EventModel.fromJson(json))
             .toList();
-    } else {
+    } else if(response.statusCode == 401){
+      throw ServerException(message: 'token_error');
+    }else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
@@ -47,17 +49,17 @@ class EventsRemoteDataSourceImpl
 
 
   @override
-  Future<bool> addEvent(EventEntity eventEntity) async {
+  Future<EventEntity> addEvent(EventEntity eventEntity) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.post(Endpoints.addEvent.getPath(),
         data: jsonEncode(eventEntity.toMap()),
         options: Options(
             followRedirects: false,
-            validateStatus: (status) => status! < 499,
+            validateStatus: (status) => status! < 699,
             headers: headers));
     printRes(response);
-    if (response.statusCode == 200) {
-      return true;
+    if (response.statusCode == 201) {
+      return EventModel.fromJson(response.data);
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }

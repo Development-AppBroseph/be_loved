@@ -5,5 +5,5 @@ import 'package:dartz/dartz.dart';
 
 abstract class EventsRepository {
   Future<Either<Failure, List<EventEntity>>> getEvents();
-  Future<Either<Failure, bool>> addEvent(AddEventParams eventEntity);
+  Future<Either<Failure, EventEntity>> addEvent(AddEventParams eventEntity);
 }

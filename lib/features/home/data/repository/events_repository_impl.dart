@@ -1,3 +1,4 @@
+import 'package:be_loved/core/error/exceptions.dart';
 import 'package:be_loved/core/services/network/network_info.dart';
 import 'package:be_loved/features/home/data/datasource/events/events_remote_datasource.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
@@ -23,6 +24,9 @@ class EventsRepositoryImpl implements EventsRepository {
         return Right(items);
       } catch (e) {
         print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message.toString()));
+        }
         return Left(ServerFailure(e.toString()));
       }
     } else {
@@ -33,7 +37,7 @@ class EventsRepositoryImpl implements EventsRepository {
 
 
   @override
-  Future<Either<Failure, bool>> addEvent(params) async {
+  Future<Either<Failure, EventEntity>> addEvent(params) async {
     if (await networkInfo.isConnected) {
       try {
         final items = await remoteDataSource.addEvent(params.eventEntity);
