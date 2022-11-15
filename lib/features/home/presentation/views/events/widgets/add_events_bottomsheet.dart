@@ -1,9 +1,11 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
+import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -36,6 +38,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
 
   @override
   Widget build(BuildContext context) {
+    EventsBloc eventsBloc = context.read<EventsBloc>();
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -242,7 +245,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                             Padding(
                               padding: EdgeInsets.only(top: 6.h),
                               child: Text(
-                                "1 событие",
+                                "${eventsBloc.events.length} событие",
                                 style: TextStyle(
                                   fontFamily: "Inter",
                                   color: const Color(0xff969696),
@@ -276,48 +279,63 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                       physics: const NeverScrollableScrollPhysics(),
                       child: Column(
                         children: List.generate(
-                          widgets.length,
+                          eventsBloc.events.length,
                           (index) => Padding(
                             padding: EdgeInsets.only(bottom: 16.h),
-                            child: SizedBox(
-                              child: Row(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Предстоящее событие:',
-                                        style: TextStyle(
-                                          fontFamily: "Inter",
-                                          color: const Color(0xff171717),
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 6.h),
-                                        child: Text(
-                                          "1 событие",
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: (){
+                                widget.onTap();
+                              },
+                              child: SizedBox(
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${eventsBloc.events[index].title}',
                                           style: TextStyle(
                                             fontFamily: "Inter",
-                                            color: const Color(0xff969696),
-                                            fontSize: 15.sp,
-                                            fontWeight: FontWeight.w700,
+                                            color: const Color(0xff171717),
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  const Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios_rounded,
-                                      color: Color(0xff171717),
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 6.h),
+                                          child: Text(
+                                            'Добавил(а): Никита Белых',
+                                            style: TextStyle(
+                                              fontFamily: "Inter",
+                                              color: const Color(0xff969696),
+                                              fontSize: 15.sp,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                    const Spacer(),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        eventsBloc.events[index].datetimeString == '1'
+                                        ? 'Завтра'
+                                        : 'Через ${eventsBloc.events[index].datetimeString} ${checkDays(eventsBloc.events[index].datetimeString)}',
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: eventsBloc.events[index].datetimeString == '1'
+                                          ? ColorStyles.redColor
+                                          : const Color(0xff1D33FF),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

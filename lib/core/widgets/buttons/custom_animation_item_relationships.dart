@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
@@ -153,7 +154,7 @@ class _CustomAnimationItemRelationshipsState
                                             ),
                                             const Spacer(),
                                             Text(
-                                              'Через ${widget.events.datetime} ${checkDays()}',
+                                              'Через ${widget.events.datetimeString} ${checkDays(widget.events.datetimeString)}',
                                               style: TextStyle(
                                                 color: const Color.fromRGBO(
                                                     128, 74, 142, 1),
@@ -268,15 +269,6 @@ class _CustomAnimationItemRelationshipsState
     );
   }
 
-  String checkDays() {
-    int days = int.parse(widget.events.datetimeString);
-    int lastNumber = int.parse(widget.events.datetimeString[widget.events.datetimeString.length - 1]);
-    if(lastNumber > 5 && lastNumber < 10) return 'дней';
-    if(days % 5 == 0) return 'дней';
-    if(days == 11) return 'дней';
-    if(lastNumber == 1) return 'день';
-    return 'дня';
-  }
 
   // void closeOpen(bool state) {
   // if (!_controllerAnimationRotate!.isAnimating) {

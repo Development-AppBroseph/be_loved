@@ -412,7 +412,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                                   physics: const NeverScrollableScrollPhysics(),
                                   padding: const EdgeInsets.all(0),
                                   shrinkWrap: true,
-                                  itemCount: events.length,
+                                  itemCount: eventsBloc.events.length,
                                   itemBuilder: ((context, index) {
                                     return CustomAnimationItemRelationships(
                                       events: eventsBloc.events[index],
@@ -444,8 +444,8 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {
-                              // showModalAddEvent(context);
-                              showModalCreateEvent(context, () {
+                              showModalAddEvent(context,(){
+                              // showModalCreateEvent(context, () {
                                 Navigator.pop(context);
                                 // func();
                               });

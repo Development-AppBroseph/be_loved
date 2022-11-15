@@ -14,3 +14,16 @@ String convertToAgo(DateTime input){
     return 'just now';
   }
 }
+
+
+
+
+String checkDays(String days) {
+  int _days = int.parse(days);
+  int lastNumber = int.parse(days[days.length - 1]);
+  if(lastNumber > 5 && lastNumber < 10) return 'дней';
+  if(_days % 5 == 0) return 'дней';
+  if(_days == 11) return 'дней';
+  if(lastNumber == 1) return 'день';
+  return 'дня';
+}

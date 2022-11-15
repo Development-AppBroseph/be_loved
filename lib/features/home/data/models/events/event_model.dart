@@ -31,6 +31,11 @@ class EventModel extends EventEntity{
     datetime: json['datetime'] == null ? DateTime.now() : DateTime.parse(json['datetime']).toLocal(),
     married: json['married'],
     relationId: json['relation'],
-    datetimeString: json['datetime'] ?? ''
+    datetimeString: DateTime.fromMillisecondsSinceEpoch(
+                                                    DateTime.parse(json['datetime']).toUtc().millisecond -
+                                                        DateTime.now()
+                                                            .millisecond)
+                                                .day
+                                                .toString()
   );
 }
