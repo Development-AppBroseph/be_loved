@@ -28,6 +28,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
     HashTagData(title: 'Название', type: TypeHashTag.custom),
     HashTagData(type: TypeHashTag.add),
   ];
+  bool isSelectedAll = false;
   TextStyle style1 = TextStyle(
       color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
   @override
@@ -177,6 +178,37 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                       ),
                     ),
                     const Spacer(),
+                    isSelectedAll
+                        ? GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                countPage = 0;
+                                _pageController.previousPage(
+                                    duration: const Duration(milliseconds: 600),
+                                    curve: Curves.easeInOutQuint);
+                              });
+                            },
+                            child: Container(
+                              height: 55.h,
+                              width: 55.w,
+                              margin: EdgeInsets.only(right: 25.w),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                  border: Border.all(
+                                    color: const Color(0xffFF1D1D),
+                                    width: 1,
+                                  )),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  SvgImg.bin,
+                                  height: 19.h,
+                                  width: 19.w,
+                                  color: const Color(0xffFF1D1D),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -292,9 +324,14 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onLongPress: () {
-                      
+                      setState(() {
+                        isSelectedAll = true;
+                      });
                     },
-                    child: UserEvents(countPage: countPage),
+                    child: UserEvents(
+                      countPage: countPage,
+                      isSelectedAll: isSelectedAll,
+                    ),
                   );
                 },
               ),

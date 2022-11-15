@@ -59,4 +59,5 @@ abstract class SvgImg {
   static const String mirror = "assets/icons/mirror.svg";
   static const String smile = "assets/icons/smile.svg";
   static const String minus = "assets/icons/minus.svg";
+  static const String bin = "assets/icons/bin.svg";
 }

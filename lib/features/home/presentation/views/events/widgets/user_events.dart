@@ -5,7 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class UserEvents extends StatefulWidget {
   final int countPage;
-  const UserEvents({Key? key, required this.countPage}) : super(key: key);
+  final bool isSelectedAll;
+  const UserEvents({Key? key, required this.countPage, required this.isSelectedAll}) : super(key: key);
 
   @override
   State<UserEvents> createState() => _UserEventsState();
