@@ -28,7 +28,7 @@ class _UserEventsState extends State<UserEvents> {
         children: [
           AnimatedContainer(
             height: 44.h,
-            width: widget.countPage == 1 ? 250.w : 200.w,
+            width: widget.countPage == 1 ? 280.w : 200.w,
             duration: const Duration(milliseconds: 600),
             child: SingleChildScrollView(
                 reverse: false,
@@ -75,7 +75,7 @@ class _UserEventsState extends State<UserEvents> {
           Align(
             alignment: Alignment.center,
             child: Text(
-              'Через 6 дней',
+              '01.04',
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 15.sp,
