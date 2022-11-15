@@ -1,24 +1,37 @@
 import 'package:equatable/equatable.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class EventEntity extends Equatable {
   final int id;
-  final String chatName;
-  final int usersCount;
-  final bool flag;
-  final String? linkTelegram;
+  final String title;
+  final String description;
+  final bool important;
+  final DateTime datetime;
+  final String datetimeString;
+  final bool married;
+  final int relationId;
 
   EventEntity({
     required this.id,
-    required this.chatName,
-    required this.usersCount,
-    required this.flag,
-    required this.linkTelegram,
+    required this.title,
+    required this.description,
+    required this.important,
+    required this.datetime,
+    required this.datetimeString,
+    required this.married,
+    required this.relationId
   });
 
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'name': title,
+      'description': description,
+      'important': important,
+      'datetime': datetimeString,
+      'married': married,
+      'relation': relationId,
     };
   }
 
@@ -26,8 +39,11 @@ class EventEntity extends Equatable {
   @override
   List<Object> get props => [
         id,
-        chatName,
-        usersCount,
-        flag
+        title,
+        description,
+        important,
+        datetime,
+        married,
+        relationId
       ];
 }

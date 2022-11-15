@@ -5,6 +5,8 @@ import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
@@ -77,6 +79,7 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
   List<Events> events = [];
 
   Widget content(BuildContext context) {
+    EventsBloc eventsBloc = context.read<EventsBloc>();
     TextStyle style1 = TextStyle(
         fontWeight: FontWeight.w700,
         color: Colors.white,
@@ -384,55 +387,59 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                             },
                           ),
                           SizedBox(height: 11.h),
-                          // BlocBuilder<EventsBloc, EventsState>(
-                          //     buildWhen: (previous, current) {
-                          //   if (current is AddEventsState) {
-                          //     if (events.length < 3) {
-                          //       events.add(current.events);
-                          //       return true;
-                          //     }
-                          //   }
-                          //   return false;
-                          // }, builder: (context, snapshot) {
-                          //   return Padding(
-                          //     padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          //     child: ReorderableListView.builder(
-                          //       onReorder: (oldIndex, newIndex) {
-                          //         setState(() {
-                          //           final item = events.removeAt(oldIndex);
-                          //           events.insert(newIndex, item);
-                          //         });
-                          //       },
-                          //       physics: const NeverScrollableScrollPhysics(),
-                          //       padding: const EdgeInsets.all(0),
-                          //       shrinkWrap: true,
-                          //       itemCount: events.length,
-                          //       itemBuilder: ((context, index) {
-                          //         return CustomAnimationItemRelationships(
-                          //           events: events[index],
-                          //           // func: func,
-                          //           key: ValueKey('$index'),
-                          //           delete: delete,
-                          //           index: index,
-                          //         );
-                          //       }),
-                          //       proxyDecorator: (child, index, animation) {
-                          //         return Container(
-                          //           decoration: BoxDecoration(
-                          //               boxShadow: [
-                          //                 BoxShadow(
-                          //                     blurRadius: 20.h,
-                          //                     color:
-                          //                         Color.fromRGBO(0, 0, 0, 0.1))
-                          //               ],
-                          //               borderRadius:
-                          //                   BorderRadius.circular(20.r)),
-                          //           child: child,
-                          //         );
-                          //       },
-                          //     ),
-                          //   );
-                          // }),
+                          BlocConsumer<EventsBloc, EventsState>(
+                            listener: (context, state) {
+                              if(state is EventErrorState){
+                                showAlertToast(state.message);
+                              }
+                              if(state is EventInternetErrorState){
+                                showAlertToast('Проверьте соединение с интернетом!');
+                              }
+                            },
+                            builder: (context, state) {
+                              if(state is EventLoadingState){
+                                return CircularProgressIndicator();
+                              }
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                child: ReorderableListView.builder(
+                                  onReorder: (oldIndex, newIndex) {
+                                    setState(() {
+                                      final item = events.removeAt(oldIndex);
+                                      events.insert(newIndex, item);
+                                    });
+                                  },
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.all(0),
+                                  shrinkWrap: true,
+                                  itemCount: events.length,
+                                  itemBuilder: ((context, index) {
+                                    return CustomAnimationItemRelationships(
+                                      events: eventsBloc.events[index],
+                                      // func: func,
+                                      key: ValueKey('$index'),
+                                      delete: (i){},
+                                      index: index,
+                                    );
+                                  }),
+                                  proxyDecorator: (child, index, animation) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 20.h,
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 0.1))
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(20.r)),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                          ),
                           if (events.isEmpty) SizedBox(height: 15.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),

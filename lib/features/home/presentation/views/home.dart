@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/archive.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/events_page.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/purposes_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,6 +34,15 @@ class _HomePageState extends State<HomePage> {
     PurposesPage(),
     ArchivePage(),
   ];
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    context.read<EventsBloc>().add(GetEventsEvent());
+  }
 
   @override
   void dispose() {

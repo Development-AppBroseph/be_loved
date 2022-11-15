@@ -4,24 +4,33 @@ import 'package:be_loved/features/home/domain/entities/events/event_entity.dart'
 class EventModel extends EventEntity{
   EventModel({
     required int id,
-    required String chatName,
-    required int usersCount,
-    required bool flag,
-    required String? linkTelegram,
+    required String title,
+    required String description,
+    required bool important,
+    required DateTime datetime,
+    required String datetimeString,
+    required bool married,
+    required int relationId,
 
   }) : super(
     id: id, 
-    chatName: chatName,
-    usersCount: usersCount,
-    flag: flag,
-    linkTelegram: linkTelegram
+    title: title,
+    description: description,
+    important: important,
+    datetime: datetime,
+    married: married,
+    relationId: relationId,
+    datetimeString: datetimeString
   );
 
   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
-    id: json['chat_id'],
-    chatName: json['chat_name'],
-    usersCount: json['users_count'],
-    linkTelegram: json['link'],
-    flag: json['flag']
+    id: json['id'],
+    title: json['name'],
+    description: json['description'],
+    important: json['important'],
+    datetime: json['datetime'] == null ? DateTime.now() : DateTime.parse(json['datetime']).toLocal(),
+    married: json['married'],
+    relationId: json['relation'],
+    datetimeString: json['datetime'] ?? ''
   );
 }

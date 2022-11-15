@@ -1,12 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/database/secure_storage.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
+import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
 part 'web_socket_event.dart';
 part 'web_socket_state.dart';
 
 class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
   WebSocketBloc() : super(WebSocketState()) {
-    // on<WebSocketEvent>(_initWebSocket);
+    on<WebSocketEvent>(_initWebSocket);
     on<WebSocketCloseEvent>(_closeConnection);
     on<WebSocketGetInviteMessage>(_getInvite);
     on<WebSocketSendInviteMessage>(_sendInvite);
@@ -25,36 +30,39 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
 
   WebSocket? channel;
 
-  // void _initWebSocket(
-  //     WebSocketEvent event, Emitter<WebSocketState> emit) async {
-  //   channel = await WebSocket.connect(
-  //     'ws://194.58.69.88:8000/ws/${event.token}',
-  //   );
+  void _initWebSocket(
+      WebSocketEvent event, Emitter<WebSocketState> emit) async {
+    print('WEBSOCKET: ${'${Config.ws.ws}/ws/${event.token}'}');
+    channel = await WebSocket.connect(
+      '${'${Config.ws.ws}/ws/${event.token}'}',
+    );
 
-  //   if (channel != null) {
-  //     print('websocket CONNECT');
-  //     channel!.listen(
-  //       (event) async {
-  //         print('websocket message ${jsonDecode(event)}');
-  //         // Приглашение в авторизации
-  //         if (jsonDecode(event)['type'] == 'notification') {
-  //           if(jsonDecode(event)['message'] == 'Вам пришло приглашение') {
-  //             add(WebSocketGetInviteMessage());
-  //           } else if(jsonDecode(event)['message'] == 'Приглашение отправлено') {
-  //             add(WebSocketSendInviteMessage());
-  //           } else if(jsonDecode(event)['message'] == 'Отношения разрушены (может даже не начавшись') {
-  //             add(WebSocketCloseInviteMessage());
-  //           } else if(jsonDecode(event)['message'] == 'Поздравляю с началом отношений!') {
-  //             add(WebSocketAcceptInviteMessage());
-  //           }
-  //         }
-  //       },
-  //       onDone: () {
-  //         // _initWebSocket(event, emit);
-  //       },
-  //     );
-  //   }
-  // }
+    if (channel != null) {
+      print('websocket CONNECT');
+      channel!.listen(
+        (event) async {
+          print('websocket message ${jsonDecode(event)}');
+          // Приглашение в авторизации
+          if (jsonDecode(event)['type'] == 'notification') {
+            if(jsonDecode(event)['message'] == 'Вам пришло приглашение') {
+              add(WebSocketGetInviteMessage());
+            } else if(jsonDecode(event)['message'] == 'Приглашение отправлено') {
+              add(WebSocketSendInviteMessage());
+            } else if(jsonDecode(event)['message'] == 'Отношения разрушены (может даже не начавшись') {
+              add(WebSocketCloseInviteMessage());
+            } else if(jsonDecode(event)['message'] == 'Поздравляю с началом отношений!') {
+              sl<AuthConfig>().user = await MySharedPrefs().user;
+              sl<AuthConfig>().token = await MySecureStorage().getToken();
+              add(WebSocketAcceptInviteMessage());
+            }
+          }
+        },
+        onDone: () {
+          _initWebSocket(event, emit);
+        },
+      );
+    }
+  }
 
   void _closeConnection(
           WebSocketCloseEvent event, Emitter<WebSocketState> emit) =>

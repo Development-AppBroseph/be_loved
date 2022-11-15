@@ -16,12 +16,15 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     on<EventAddEvent>(_addEvents);
   }
 
+  List<EventEntity> events = [];
+
   void _getEvents(GetEventsEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
     final gotEvents = await getEvents.call(NoParams());
     EventsState state = gotEvents.fold(
       (error) => errorCheck(error),
       (data) {
+        events = data;
         return GotSuccessEventsState();
       },
     );

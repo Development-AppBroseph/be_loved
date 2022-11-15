@@ -97,9 +97,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         var result =
             await Repository().checkIsUserExist(event.phone, event.code);
         if (result != null) {
+            print('SETTTING TOKEN ${result.token}');
           if (result.token != null) {
+            print('SETTTING TOKEN ${result.token}');
             await SharedPreferences.getInstance()
               ..setString('token', result.token!);
+            MySecureStorage().setToken(result.token!);
             token = result.token;
             sl<AuthConfig>().token = result.token;
           }
@@ -178,6 +181,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         token = result;
         await SharedPreferences.getInstance()
           ..setString('token', result);
+        MySecureStorage().setToken(result);
         emit(InitSuccess(result));
       } else {
         emit(InitError('Выберите аватарку'));

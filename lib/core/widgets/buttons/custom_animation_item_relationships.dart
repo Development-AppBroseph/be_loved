@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CustomAnimationItemRelationships extends StatefulWidget {
   final Function(int) delete;
   final int index;
-  final Events events;
+  final EventEntity events;
   const CustomAnimationItemRelationships({
     Key? key,
     required this.delete,
@@ -170,7 +171,7 @@ class _CustomAnimationItemRelationshipsState
                                           height: snapshot.data! ? 19.h : 0.h,
                                         ),
                                         Text(
-                                          widget.events.name,
+                                          widget.events.title,
                                           style: TextStyle(
                                               color: const Color.fromRGBO(
                                                   23, 23, 23, 1),
@@ -234,7 +235,7 @@ class _CustomAnimationItemRelationshipsState
                                         Future.delayed(
                                                 Duration(milliseconds: 1000))
                                             .then((value) {
-                                          // widget.delete(widget.index);
+                                          widget.delete(widget.index);
                                         });
                                       },
                                       child: Container(
@@ -268,8 +269,8 @@ class _CustomAnimationItemRelationshipsState
   }
 
   String checkDays() {
-    int days = int.parse(widget.events.datetime);
-    int lastNumber = int.parse(widget.events.datetime[widget.events.datetime.length - 1]);
+    int days = int.parse(widget.events.datetimeString);
+    int lastNumber = int.parse(widget.events.datetimeString[widget.events.datetimeString.length - 1]);
     if(lastNumber > 5 && lastNumber < 10) return 'дней';
     if(days % 5 == 0) return 'дней';
     if(days == 11) return 'дней';
