@@ -10,16 +10,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../data/models/home/hashTag.dart';
-import '../../../../data/models/home/upcoming_info.dart';
-import '../../relationships/modals/add_event_modal.dart';
+import '../../../../../data/models/home/hashTag.dart';
+import '../../../../../data/models/home/upcoming_info.dart';
+import '../../../relationships/modals/add_event_modal.dart';
 
-class EventsPage extends StatefulWidget {
+class MainEventsPage extends StatefulWidget {
+  final VoidCallback nextPage;
+  const MainEventsPage({Key? key, required this.nextPage}) : super(key: key);
+
   @override
-  State<EventsPage> createState() => _EventsPageState();
+  State<MainEventsPage> createState() => _MainEventsPageState();
 }
 
-class _EventsPageState extends State<EventsPage> {
+class _MainEventsPageState extends State<MainEventsPage> {
   List<HashTagData> hashTags = [
     HashTagData(title: 'Важно', type: TypeHashTag.main),
     HashTagData(title: 'Арбуз', type: TypeHashTag.user),
@@ -110,7 +113,7 @@ class _EventsPageState extends State<EventsPage> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    
+                    widget.nextPage();
                   },
                   child: SizedBox(
                     width: 55.h,

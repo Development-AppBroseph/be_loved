@@ -25,36 +25,36 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
 
   WebSocket? channel;
 
-  void _initWebSocket(
-      WebSocketEvent event, Emitter<WebSocketState> emit) async {
-    channel = await WebSocket.connect(
-      'ws://194.58.69.88:8000/ws/${event.token}',
-    );
+  // void _initWebSocket(
+  //     WebSocketEvent event, Emitter<WebSocketState> emit) async {
+  //   channel = await WebSocket.connect(
+  //     'ws://194.58.69.88:8000/ws/${event.token}',
+  //   );
 
-    if (channel != null) {
-      print('websocket CONNECT');
-      channel!.listen(
-        (event) async {
-          print('websocket message ${jsonDecode(event)}');
-          // Приглашение в авторизации
-          if (jsonDecode(event)['type'] == 'notification') {
-            if(jsonDecode(event)['message'] == 'Вам пришло приглашение') {
-              add(WebSocketGetInviteMessage());
-            } else if(jsonDecode(event)['message'] == 'Приглашение отправлено') {
-              add(WebSocketSendInviteMessage());
-            } else if(jsonDecode(event)['message'] == 'Отношения разрушены (может даже не начавшись') {
-              add(WebSocketCloseInviteMessage());
-            } else if(jsonDecode(event)['message'] == 'Поздравляю с началом отношений!') {
-              add(WebSocketAcceptInviteMessage());
-            }
-          }
-        },
-        onDone: () {
-          _initWebSocket(event, emit);
-        },
-      );
-    }
-  }
+  //   if (channel != null) {
+  //     print('websocket CONNECT');
+  //     channel!.listen(
+  //       (event) async {
+  //         print('websocket message ${jsonDecode(event)}');
+  //         // Приглашение в авторизации
+  //         if (jsonDecode(event)['type'] == 'notification') {
+  //           if(jsonDecode(event)['message'] == 'Вам пришло приглашение') {
+  //             add(WebSocketGetInviteMessage());
+  //           } else if(jsonDecode(event)['message'] == 'Приглашение отправлено') {
+  //             add(WebSocketSendInviteMessage());
+  //           } else if(jsonDecode(event)['message'] == 'Отношения разрушены (может даже не начавшись') {
+  //             add(WebSocketCloseInviteMessage());
+  //           } else if(jsonDecode(event)['message'] == 'Поздравляю с началом отношений!') {
+  //             add(WebSocketAcceptInviteMessage());
+  //           }
+  //         }
+  //       },
+  //       onDone: () {
+  //         // _initWebSocket(event, emit);
+  //       },
+  //     );
+  //   }
+  // }
 
   void _closeConnection(
           WebSocketCloseEvent event, Emitter<WebSocketState> emit) =>

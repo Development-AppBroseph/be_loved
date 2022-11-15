@@ -26,20 +26,20 @@ class MirrorImage extends StatelessWidget {
             Radius.circular(50.r),
           ),
           border: Border.all(width: 5.h, color: Colors.white),
-          image: path != null
-              ? DecorationImage(
-                  image: FileImage(path!),
-                  fit: BoxFit.cover,
-                )
-              : urlToImage != null 
-              ? DecorationImage(
-                  image: NetworkImage(Config.url.url + urlToImage!),
-                  fit: BoxFit.cover,
-                )
-              : const DecorationImage(
-                  image: AssetImage(Img.avatarNone),
-                  fit: BoxFit.cover,
-                )
+          // image: path != null
+          //     ? DecorationImage(
+          //         image: FileImage(path!),
+          //         fit: BoxFit.cover,
+          //       )
+          //     : urlToImage != null 
+          //     ? DecorationImage(
+          //         image: NetworkImage(Config.url.url + urlToImage!),
+          //         fit: BoxFit.cover,
+          //       )
+          //     : const DecorationImage(
+          //         image: AssetImage(Img.avatarNone),
+          //         fit: BoxFit.cover,
+          //       )
         ),
       ),
     );

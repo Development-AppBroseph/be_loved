@@ -68,7 +68,7 @@ class UserAvatar extends StatelessWidget {
   ImageProvider<Object> getImage(String? path) {
     print('PATH: ${path}');
     if (path != null && path.trim() != '') {
-      return NetworkImage(Config.url.url + path);
+      // return NetworkImage(Config.url.url + path);
     }
     return AssetImage('assets/images/avatar_none.png');
   }

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/views/archive/archive.dart';
-import 'package:be_loved/features/home/presentation/views/events/view/events_page.dart';
+import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/events_page.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/purposes_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../constants/colors/color_styles.dart';
+import 'events/view/event_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -26,8 +27,8 @@ class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
 
   List<Widget> pages = [
-    MainRelationShipsPage(),
-    EventsPage(),
+    const MainRelationShipsPage(),
+    const EventPage(),
     PurposesPage(),
     ArchivePage(),
   ];
