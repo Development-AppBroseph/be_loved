@@ -21,7 +21,7 @@ class DayTextWidget extends StatelessWidget {
       ?? TextStyle(
         fontFamily: 'Inter',
         fontSize: 15.sp,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w800,
         color: getColorFromDays(eventEntity.datetimeString),
       ),
     );

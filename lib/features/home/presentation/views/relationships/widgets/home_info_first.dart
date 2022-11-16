@@ -38,23 +38,23 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
   }
 
   void startTimer() {
-    // var oneSec = const Duration(seconds: 1);
+    var oneSec = const Duration(seconds: 1);
     setTime();
-    Timer.periodic(const Duration(seconds: 60), (Timer timer) {
-      setTime();
-    });
-    // _timer = Timer.periodic(
-    //   oneSec,
-    //   (Timer timer) {
-    //     if (DateTime.now().second == 0) {
-    //       _timer!.cancel();
-    //       Timer.periodic(const Duration(seconds: 60), (Timer timer) {
-    //         setTime();
-    //       });
-    //     }
-    //     setTime();
-    //   },
-    // );
+    // Timer.periodic(const Duration(seconds: 60), (Timer timer) {
+    //   setTime();
+    // });
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (DateTime.now().second == 0) {
+          _timer!.cancel();
+          Timer.periodic(const Duration(seconds: 60), (Timer timer) {
+            setTime();
+          });
+        }
+        setTime();
+      },
+    );
   }
 
   void setTime() async {
@@ -74,13 +74,13 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
       hour = difference.inHours - difference.inDays * 24;
       minute = difference.inMinutes - difference.inHours * 60;
 
-      // streamController.add(true);
+      streamController.add(true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: double.infinity,
       // padding: EdgeInsets.only(top: 11.h, left: 20.w, right: 25.w),

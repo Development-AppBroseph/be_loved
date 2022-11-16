@@ -70,7 +70,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
         color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
 
     TextStyle style2 = TextStyle(
-        color: Colors.black, fontWeight: FontWeight.w800, fontSize: 25.sp);
+        color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.sp);
 
     TextStyle style3 = TextStyle(
         color: ColorStyles.greyColor,
@@ -89,7 +89,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
 
     TextStyle style6 = TextStyle(
         color: Colors.black, fontWeight: FontWeight.w800, fontSize: 50.sp);
-    
+
     EventsBloc eventsBloc = context.read<EventsBloc>();
 
     return SingleChildScrollView(
@@ -152,6 +152,155 @@ class _MainEventsPageState extends State<MainEventsPage> {
             ),
           ),
           SizedBox(height: 37.h),
+          BlocConsumer<EventsBloc, EventsState>(
+            listener: (context, state) {
+              if (state is EventErrorState) {
+                showAlertToast(state.message);
+              }
+              if (state is EventInternetErrorState) {
+                showAlertToast('Проверьте соединение с интернетом!');
+              }
+            },
+            builder: ((context, state) {
+              if (state is EventLoadingState) {
+                return Container();
+              }
+              List<EventEntity> eventsSlider = eventsBloc.events
+                  .where((element) => int.parse(element.datetimeString) < 7)
+                  .toList();
+              return Column(
+                children: [
+                  // const Padding(
+                  //   padding: EdgeInsets.only(left: 25, bottom: 10),
+                  //   child: Text(
+                  //     'Совсем скоро',
+                  //     style: TextStyle(
+                  //         fontFamily: "Inter",
+                  //         fontWeight: FontWeight.w800,
+                  //         color: Colors.black,
+                  //         fontSize: 25),
+                  //   ),
+                  // ),
+                  CarouselSlider.builder(
+                      itemCount: eventsSlider.length,
+                      itemBuilder: ((context, index, i) {
+                        return Padding(
+                          padding: EdgeInsets.only(left: i == 0 ? 0 : 20.w),
+                          child: CupertinoCard(
+                            elevation: 0,
+                            margin: EdgeInsets.zero,
+                            radius: BorderRadius.circular(40.r),
+                            color: ColorStyles.greyColor,
+                            child: SizedBox(
+                              child: Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: CupertinoCard(
+                                      elevation: 0,
+                                      radius: BorderRadius.circular(37.r),
+                                      margin: EdgeInsets.all(1.w),
+                                      color: ColorStyles.backgroundColorGrey,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20.w, vertical: 11.h),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            DayTextWidget(
+                                              eventEntity: eventsSlider[i],
+                                              additionString: ':',
+                                              textStyle: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontSize: 25.sp,
+                                                fontWeight: FontWeight.w800,
+                                                color: getColorFromDays(
+                                                    eventsSlider[i]
+                                                        .datetimeString),
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: (MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          70) /
+                                                      100,
+                                                  child: Text(
+                                                    eventsSlider[i].title,
+                                                    style: style6.copyWith(
+                                                        height: 1.1),
+                                                    softWrap: false,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.fade,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                      options: CarouselOptions(
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            itemIndex = index;
+                          });
+                        },
+                        viewportFraction: 0.9,
+                        height: 113.h,
+                        enableInfiniteScroll: false,
+                      )),
+                  SizedBox(height: 22.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 7.sp,
+                        width: 31,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: eventsSlider.length,
+                          itemBuilder: (BuildContext context, index) {
+                            return Container(
+                              margin:
+                                  EdgeInsets.only(left: index == 0 ? 0 : 5.w),
+                              height: 7.sp,
+                              width: 7.sp,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2.r),
+                                border: Border.all(
+                                    color: ColorStyles.greyColor, width: 1.5.w),
+                                color: index == itemIndex
+                                    ? ColorStyles.greyColor
+                                    : null,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }),
+          ),
+          SizedBox(height: 45.h),
           SizedBox(
             height: 38.h,
             child: ListView.builder(
@@ -227,171 +376,199 @@ class _MainEventsPageState extends State<MainEventsPage> {
               itemCount: hashTags.length,
             ),
           ),
-          SizedBox(height: 38.h),
-          BlocConsumer<EventsBloc, EventsState>(
-            listener: (context, state) {
-              if(state is EventErrorState){
-                showAlertToast(state.message);
-              }
-              if(state is EventInternetErrorState){
-                showAlertToast('Проверьте соединение с интернетом!');
-              }
-            },
-            builder: (context, state) {
-              if(state is EventLoadingState){
-                return Container();
-              }
-              List<EventEntity> eventsSlider = eventsBloc.events.where((element) 
-                        => int.parse(element.datetimeString) < 7).toList();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 25, bottom: 10),
-                    child: Text(
-                      'Совсем скоро',
-                      style: TextStyle(
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w800,
-                          color: Colors.black,
-                          fontSize: 25),
-                    ),
-                  ),
-                  CarouselSlider.builder(
-                      itemCount: eventsSlider.length,
-                      itemBuilder: ((context, index, i) {
-                        return Padding(
-                          padding: EdgeInsets.only(left: i == 0 ? 0 : 20.w),
-                          child: CupertinoCard(
-                            elevation: 0,
-                            margin: EdgeInsets.zero,
-                            radius: BorderRadius.circular(40.r),
-                            color: Colors.white,
-                            child: Container(
-                              // decoration: BoxDecoration(
-                              //   borderRadius: BorderRadius.circular(20.r),
-                              //   color: Colors.white,
-                              // ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20.w, vertical: 11.h),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        DayTextWidget(
-                                          eventEntity: eventsSlider[i],
-                                          additionString: ':',
-                                          textStyle: TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontSize: 25.sp,
-                                            fontWeight: FontWeight.w800,
-                                            color: getColorFromDays(eventsSlider[i].datetimeString),
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                              width:
-                                                  (MediaQuery.of(context).size.width *
-                                                          70) /
-                                                      100,
-                                              child: Text(
-                                                eventsSlider[i].title,
-                                                style: style6.copyWith(height: 1.1),
-                                                softWrap: false,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.fade,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                      options: CarouselOptions(
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            itemIndex = index;
-                          });
-                        },
-                        viewportFraction: 0.9,
-                        height: 113.h,
-                        enableInfiniteScroll: false,
-                      )),
-                  SizedBox(height: 22.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          SizedBox(height: 25.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 25.w),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Предстоящие события', style: style2),
+                    SizedBox(height: 8.h),
+                    Text(countEventsText(eventsBloc.events), style: style3),
+                  ],
+                ),
+                const Spacer(),
+                SizedBox(
+                  height: 45.w,
+                  width: 45.w,
+                  child: Stack(
                     children: [
-                      SizedBox(
-                        height: 7.sp,
-                        width: 31,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: eventsSlider.length,
-                          itemBuilder: (BuildContext context, index) {
-                            return Container(
-                              margin: EdgeInsets.only(left: index == 0 ? 0 : 5.w),
-                              height: 7.sp,
-                              width: 7.sp,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(2.r),
-                                border: Border.all(
-                                    color: ColorStyles.greyColor, width: 1.5.w),
-                                color: index == itemIndex
-                                    ? ColorStyles.greyColor
-                                    : null,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      Align(
+                        child: Transform.rotate(
+                            angle: pi,
+                            child: SvgPicture.asset(
+                              SvgImg.back,
+                              height: 20.41.h,
+                              width: 11.37.h,
+                            )),
+                      )
                     ],
                   ),
-                  SizedBox(height: 20.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: Container(
-                      height: 1,
-                      color: ColorStyles.greyColor,
-                    ),
-                  ),
-                  SizedBox(height: 38.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Предстоящие события', style: style2),
-                        SizedBox(height: 8.h),
-                        Text(countEventsText(eventsBloc.events), style: style3),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 26.h),
-                  events(eventsBloc.events),
-                ],
-              );
-            }
+                )
+              ],
+            ),
           ),
-          
+          SizedBox(height: 17.h),
+          BlocConsumer<EventsBloc, EventsState>(listener: (context, state) {
+            if (state is EventErrorState) {
+              showAlertToast(state.message);
+            }
+            if (state is EventInternetErrorState) {
+              showAlertToast('Проверьте соединение с интернетом!');
+            }
+          }, builder: (context, state) {
+            if (state is EventLoadingState) {
+              return Container();
+            }
+            List<EventEntity> eventsSlider = eventsBloc.events
+                .where((element) => int.parse(element.datetimeString) < 7)
+                .toList();
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // const Padding(
+                //   padding: EdgeInsets.only(left: 25, bottom: 10),
+                //   child: Text(
+                //     'Совсем скоро',
+                //     style: TextStyle(
+                //         fontFamily: "Inter",
+                //         fontWeight: FontWeight.w800,
+                //         color: Colors.black,
+                //         fontSize: 25),
+                //   ),
+                // ),
+                // CarouselSlider.builder(
+                //     itemCount: eventsSlider.length,
+                //     itemBuilder: ((context, index, i) {
+                //       return Padding(
+                //         padding: EdgeInsets.only(left: i == 0 ? 0 : 20.w),
+                //         child: CupertinoCard(
+                //           elevation: 0,
+                //           margin: EdgeInsets.zero,
+                //           radius: BorderRadius.circular(40.r),
+                //           color: Colors.white,
+                //           child: Container(
+                //             // decoration: BoxDecoration(
+                //             //   borderRadius: BorderRadius.circular(20.r),
+                //             //   color: Colors.white,
+                //             // ),
+                //             child: Padding(
+                //               padding: EdgeInsets.symmetric(
+                //                   horizontal: 20.w, vertical: 11.h),
+                //               child: Row(
+                //                 crossAxisAlignment: CrossAxisAlignment.start,
+                //                 children: [
+                //                   Column(
+                //                     mainAxisSize: MainAxisSize.min,
+                //                     crossAxisAlignment: CrossAxisAlignment.start,
+                //                     children: [
+                //                       DayTextWidget(
+                //                         eventEntity: eventsSlider[i],
+                //                         additionString: ':',
+                //                         textStyle: TextStyle(
+                //                           fontFamily: 'Inter',
+                //                           fontSize: 25.sp,
+                //                           fontWeight: FontWeight.w800,
+                //                           color: getColorFromDays(eventsSlider[i].datetimeString),
+                //                         ),
+                //                       ),
+                //                       Row(
+                //                         children: [
+                //                           SizedBox(
+                //                             width:
+                //                                 (MediaQuery.of(context).size.width *
+                //                                         70) /
+                //                                     100,
+                //                             child: Text(
+                //                               eventsSlider[i].title,
+                //                               style: style6.copyWith(height: 1.1),
+                //                               softWrap: false,
+                //                               maxLines: 1,
+                //                               overflow: TextOverflow.fade,
+                //                             ),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                     ],
+                //                   ),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       );
+                //     }),
+                //     options: CarouselOptions(
+                //       onPageChanged: (index, reason) {
+                //         setState(() {
+                //           itemIndex = index;
+                //         });
+                //       },
+                //       viewportFraction: 0.9,
+                //       height: 113.h,
+                //       enableInfiniteScroll: false,
+                //     )),
+                // SizedBox(height: 22.h),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     SizedBox(
+                //       height: 7.sp,
+                //       width: 31,
+                //       child: ListView.builder(
+                //         scrollDirection: Axis.horizontal,
+                //         itemCount: eventsSlider.length,
+                //         itemBuilder: (BuildContext context, index) {
+                //           return Container(
+                //             margin: EdgeInsets.only(left: index == 0 ? 0 : 5.w),
+                //             height: 7.sp,
+                //             width: 7.sp,
+                //             decoration: BoxDecoration(
+                //               borderRadius: BorderRadius.circular(2.r),
+                //               border: Border.all(
+                //                   color: ColorStyles.greyColor, width: 1.5.w),
+                //               color: index == itemIndex
+                //                   ? ColorStyles.greyColor
+                //                   : null,
+                //             ),
+                //           );
+                //         },
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(height: 20.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.w),
+                  child: Container(
+                    height: 1,
+                    color: ColorStyles.greyColor,
+                  ),
+                ),
+                // SizedBox(height: 38.h),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 25.w),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text('Предстоящие события', style: style2),
+                //       SizedBox(height: 8.h),
+                //       Text(countEventsText(eventsBloc.events), style: style3),
+                //     ],
+                //   ),
+                // ),
+                SizedBox(height: 25.h),
+                events(eventsBloc.events),
+              ],
+            );
+          }),
           SizedBox(height: 35.h),
           GestureDetector(
-            onTap: () => showModalCreateEvent(
-              context,
-              (){
-                Navigator.pop(context);
-              }
-            ),
+            onTap: () => showModalCreateEvent(context, () {
+              Navigator.pop(context);
+            }),
             child: button(),
           ),
           SizedBox(height: 117.h),
@@ -417,7 +594,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
 
   Widget itemEvent(EventEntity eventEntity) {
     TextStyle style1 = TextStyle(
-        color: Colors.black, fontWeight: FontWeight.w800, fontSize: 20.sp);
+        color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.sp);
     TextStyle style2 = TextStyle(
         color: ColorStyles.greyColor,
         fontWeight: FontWeight.w700,
@@ -434,8 +611,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
         fontSize: 15.sp);
 
     return Padding(
-      padding:
-          EdgeInsets.only(bottom: 20.h),
+      padding: EdgeInsets.only(bottom: 20.h),
       child: Row(
         children: [
           Column(
@@ -449,12 +625,15 @@ class _MainEventsPageState extends State<MainEventsPage> {
               //           TextSpan(text: info.subTitle, style: style4),
               //         ]),
               //       )
-              //     : 
-                  RichText(
-                      text: TextSpan(children: [
-                        TextSpan(text: 'Добавил(а): ${eventEntity.eventCreator.username}', style: style2),
-                      ]),
-                    )
+              //     :
+              SizedBox(height: 5.h),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: 'Добавил(а): ${eventEntity.eventCreator.username}',
+                      style: style2),
+                ]),
+              )
             ],
           ),
           const Spacer(),
@@ -485,18 +664,23 @@ class _MainEventsPageState extends State<MainEventsPage> {
           ),
           Align(
               alignment: Alignment.center,
-              child: Text('Новое событие', style: style.copyWith(color: Colors.white))),
+              child: Text('Новое событие',
+                  style: style.copyWith(color: Colors.white))),
           Align(
             alignment: Alignment.centerRight,
             child: SizedBox(
               height: 55.h,
               width: 55.w,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 17.h),
-                child: SvgPicture.asset(
-                  SvgImg.addNewEvent,
-                  color: Colors.white,
-                ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SvgPicture.asset(
+                    SvgImg.addNewEvent,
+                    color: Colors.white,
+                    width: 22.15.h,
+                    height: 22.15.h,
+                  ),
+                ],
               ),
             ),
           ),
