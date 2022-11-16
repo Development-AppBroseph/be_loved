@@ -49,9 +49,9 @@ void main() async {
         BlocProvider<WebSocketBloc>(
           create: (context) => WebSocketBloc(),
         ),
-        BlocProvider<AccountCubit>(
-          create: (context) => sl<AccountCubit>(),
-        ),
+        // BlocProvider<AccountCubit>(
+        //   create: (context) => sl<AccountCubit>(),
+        // ),
         BlocProvider<EventsBloc>(
           create: (context) => sl<EventsBloc>(),
         ),

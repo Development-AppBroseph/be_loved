@@ -2,6 +2,7 @@ import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
+import 'package:be_loved/core/utils/helpers/events_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -250,7 +251,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                     },
                     builder: (context, state) {
                       if(state is EventLoadingState){
-                        return CircularProgressIndicator();
+                        return Container();
                       }
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,7 +274,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                     Padding(
                                       padding: EdgeInsets.only(top: 6.h),
                                       child: Text(
-                                        "${eventsBloc.events.length} событие",
+                                        countEventsText(eventsBloc.events),
                                         style: TextStyle(
                                           fontFamily: "Inter",
                                           color: const Color(0xff969696),
@@ -417,50 +418,4 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
       ),
     );
   }
-}
-
-Widget widgetItem() {
-  return Padding(
-    padding: EdgeInsets.only(bottom: 16.h),
-    child: SizedBox(
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Предстоящее событие:',
-                style: TextStyle(
-                  fontFamily: "Inter",
-                  color: const Color(0xff171717),
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 6.h),
-                child: Text(
-                  "1 событие",
-                  style: TextStyle(
-                    fontFamily: "Inter",
-                    color: const Color(0xff969696),
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          const Align(
-            alignment: Alignment.centerRight,
-            child: Icon(
-              Icons.arrow_forward_ios_rounded,
-              color: Color(0xff171717),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
 }

@@ -95,12 +95,15 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
         iconIndex = index;
       });
       Navigator.pop(context);
-    }, iconIndex);
+    }, iconIndex, );
   }
 
 
   createEvent(){
     if(isValidate()){
+      if(context.read<EventsBloc>().events.length >= 30){
+        showAlertToast('Максимум кол-во событии 30');
+      }
       showLoaderWrapper(context);
       context.read<EventsBloc>().add(EventAddEvent(eventEntity: EventEntity(
         id: 0,

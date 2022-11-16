@@ -3,25 +3,27 @@ import 'dart:io';
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/core/utils/helpers/image_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/image/avatar.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/dialog_card.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/image_change_popup.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'mirror_image.dart';
 
 class AvatarModalWidget extends StatefulWidget {
-  final Function(File? file, bool isMirror) onTap;
-  final File? currentImage; 
-  const AvatarModalWidget({Key? key, required this.onTap, required this.currentImage}) : super(key: key);
+  final Function(File? file) onTap;
+  const AvatarModalWidget({Key? key, required this.onTap}) : super(key: key);
 
   @override
   State<AvatarModalWidget> createState() => _AvatarModalWidgetState();
@@ -29,7 +31,6 @@ class AvatarModalWidget extends StatefulWidget {
 
 class _AvatarModalWidgetState extends State<AvatarModalWidget> {
   File? _image;
-  bool isMirror = false;
   final CustomPopupMenuController _customPopupMenuController = CustomPopupMenuController();
 
   Future _pickImage(ImageSource source) async {
@@ -48,11 +49,20 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
     }
   }
 
-  void mirror() {
-    setState(() {
-      !isMirror ? isMirror = true : isMirror = false;
-      _customPopupMenuController.hideMenu();
-    });
+  Future<void> mirror() async {
+    _customPopupMenuController.hideMenu();
+    if(_image != null){
+      _image = await flipHorizontalImage(_image!);
+    }
+    setState(() {});
+  }
+
+
+  setImage() async{
+    if(sl<AuthConfig>().user?.me.photo != null){
+      _image = await downloadFile(Config.url.url + sl<AuthConfig>().user!.me.photo!);
+      setState(() {});
+    }
   }
 
 
@@ -60,7 +70,7 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _image = widget.currentImage;
+    setImage();
   }
 
   @override
@@ -101,7 +111,6 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                     _customPopupMenuController,
                 pressType: PressType.singleClick,
                 child: MirrorImage(
-                  isMirror: isMirror,
                   path: _image,
                 ),
                 verticalMargin: 14.h,
@@ -139,7 +148,6 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                   onPressed: (){
                     widget.onTap(
                       _image,
-                      isMirror
                     );
                     Navigator.pop(context);
                   },

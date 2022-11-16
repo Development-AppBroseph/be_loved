@@ -25,7 +25,7 @@ class EventsRepositoryImpl implements EventsRepository {
       } catch (e) {
         print(e);
         if(e is ServerException){
-          return Left(ServerFailure(e.message.toString()));
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
       }
@@ -44,6 +44,55 @@ class EventsRepositoryImpl implements EventsRepository {
         return Right(items);
       } catch (e) {
         print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+
+  @override
+  Future<Either<Failure, EventEntity>> editEvent(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.editEvent(params.eventEntity);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+
+  @override
+  Future<Either<Failure, void>> deleteEvent(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.deleteEvent(params.id);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
         return Left(ServerFailure(e.toString()));
       }
     } else {

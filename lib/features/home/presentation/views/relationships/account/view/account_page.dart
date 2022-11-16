@@ -4,18 +4,22 @@ import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
+import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_state.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/avatar_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/mirror_image.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -64,15 +68,6 @@ class _AccountPageState extends State<AccountPage> {
 
   PageController controller = PageController();
 
-  File? _image;
-
-  bool isMirror = false;
-
-  // final headers["user"] = sl<AuthConfig>().user;
-  void mirror(BuildContext context) {
-    !isMirror ? isMirror = true : isMirror = false;
-    Navigator.of(context).pop();
-  }
 
   @override
   void dispose() {
@@ -97,6 +92,23 @@ class _AccountPageState extends State<AccountPage> {
     setState(() {});
   }
 
+
+
+  _sendCode() {
+    if(phoneController.text.length == 13){
+      showLoaderWrapper(context);
+      context.read<ProfileBloc>().add(PostPhoneNumberEvent(phone: phoneNumber));
+    }
+  }
+
+  _confirmCode() {
+    if(codeController.text.length == 5){
+      showLoaderWrapper(context);
+      context.read<ProfileBloc>().add(PutUserCodeEvent(code: int.parse(codeController.text)));
+      
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // LinearGradient gradientText = const LinearGradient(
@@ -106,7 +118,62 @@ class _AccountPageState extends State<AccountPage> {
     //   ],
     //   transform: GradientRotation(pi / 2),
     // );
-    return BlocBuilder<AccountCubit, AccountPageState>(
+    return BlocConsumer<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if(state is ProfileErrorState){
+          Loader.hide();
+          showAlertToast(state.message);
+        }
+        if(state is ProfileInternetErrorState){
+          Loader.hide();
+          showAlertToast('Проверьте соединение с интернетом!');
+        }
+        if(state is ProfileSentCodeState){
+          Loader.hide();
+          countPage = 1;
+          focusNodeCode.requestFocus();
+          controller.animateToPage(1,
+            duration: const Duration(milliseconds: 1200),
+            curve: Curves.ease,
+          );
+          Future.delayed(
+              const Duration(
+                  milliseconds:
+                      200), () {
+            _scrollController
+                .animateTo(
+              _scrollController
+                  .position
+                  .maxScrollExtent,
+              duration:
+                  const Duration(
+                      milliseconds:
+                          200),
+              curve:
+                  Curves.ease,
+            );
+          });
+        }
+
+        if(state is ProfileConfirmedSuccessState){
+          Loader.hide();
+          countPage = 0;
+          focusNodeCode.unfocus();
+          controller.animateToPage(
+            0,
+            duration: const Duration(
+                milliseconds: 1200),
+            curve: Curves.ease,
+          );
+          phoneController.clear();
+          codeController.clear();
+          _getUserPhone();
+        }
+        
+        if(state is ProfileEditedSuccessState){
+          Loader.hide();
+        }
+      },
         builder: (context, state) {
       return SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -382,59 +449,16 @@ class _AccountPageState extends State<AccountPage> {
                                                 Padding(
                                                   padding: EdgeInsets.only(
                                                       top: 35.h),
-                                                  child: BlocBuilder<
-                                                      AccountCubit,
-                                                      AccountPageState>(
-                                                    builder: (context, state) {
-                                                      return CustomButton(
-                                                        validate: true,
-                                                        color: const Color
-                                                                .fromRGBO(
-                                                            32, 203, 131, 1.0),
-                                                        text: 'Продолжить',
-                                                        // validate: state is TextFieldSuccess ? true : false,
-                                                        textColor: Colors.white,
-                                                        onPressed: () {
-                                                          // _sendCode();
-                                                          context
-                                                              .read<
-                                                                  AccountCubit>()
-                                                              .postPhoneNumber(
-                                                                  phoneNumber);
-
-                                                          countPage = 1;
-                                                          focusNodeCode
-                                                              .requestFocus();
-                                                          controller
-                                                              .animateToPage(
-                                                            1,
-                                                            duration:
-                                                                const Duration(
-                                                                    milliseconds:
-                                                                        1200),
-                                                            curve: Curves.ease,
-                                                          );
-                                                          Future.delayed(
-                                                              const Duration(
-                                                                  milliseconds:
-                                                                      200), () {
-                                                            _scrollController
-                                                                .animateTo(
-                                                              _scrollController
-                                                                  .position
-                                                                  .maxScrollExtent,
-                                                              duration:
-                                                                  const Duration(
-                                                                      milliseconds:
-                                                                          200),
-                                                              curve:
-                                                                  Curves.ease,
-                                                            );
-                                                          });
-                                                        },
-                                                      );
-                                                    },
-                                                  ),
+                                                  child: CustomButton(
+                                                    validate: true,
+                                                    color: const Color
+                                                            .fromRGBO(
+                                                        32, 203, 131, 1.0),
+                                                    text: 'Продолжить',
+                                                    // validate: state is TextFieldSuccess ? true : false,
+                                                    textColor: Colors.white,
+                                                    onPressed: _sendCode
+                                                  )
                                                 ),
                                               ],
                                             ),
@@ -527,32 +551,13 @@ class _AccountPageState extends State<AccountPage> {
                                             SizedBox(
                                               height: 51.h,
                                             ),
-                                            BlocBuilder<AccountCubit,
-                                                AccountPageState>(
-                                              builder: (context, state) {
-                                                return CustomButton(
-                                                  validate: true,
-                                                  color: const Color.fromRGBO(
-                                                      32, 203, 131, 1.0),
-                                                  text: 'Готово',
-                                                  textColor: Colors.white,
-                                                  onPressed: () {
-                                                    // _checkCode(context);
-                                                    context
-                                                        .read<AccountCubit>()
-                                                        .putUserCode(12345);
-
-                                                    countPage = 0;
-                                                    focusNodeCode.unfocus();
-                                                    controller.animateToPage(
-                                                      0,
-                                                      duration: const Duration(
-                                                          milliseconds: 1200),
-                                                      curve: Curves.ease,
-                                                    );
-                                                  },
-                                                );
-                                              },
+                                            CustomButton(
+                                              validate: true,
+                                              color: const Color.fromRGBO(
+                                                  32, 203, 131, 1.0),
+                                              text: 'Готово',
+                                              textColor: Colors.white,
+                                              onPressed: _confirmCode
                                             ),
                                             // CustomAnimationButton(
                                             //   text: 'Продолжить',
@@ -753,16 +758,12 @@ class _AccountPageState extends State<AccountPage> {
   Widget photo(BuildContext context) {
     return InkWell(
         onTap: () {
-          showModalAvatarChange(context, (newFile, isMir) {
-            setState(() {
-              _image = newFile;
-              isMirror = isMir;
-            });
-          }, _image);
+          showModalAvatarChange(context, (newFile) {
+            showLoaderWrapper(context);
+            context.read<ProfileBloc>().add(EditProfileEvent(user: sl<AuthConfig>().user!.me, avatar: newFile));
+          });
         },
         child: MirrorImage(
-          isMirror: isMirror,
-          path: _image,
           urlToImage: sl<AuthConfig>().user == null
               ? null
               : sl<AuthConfig>().user!.me.photo,

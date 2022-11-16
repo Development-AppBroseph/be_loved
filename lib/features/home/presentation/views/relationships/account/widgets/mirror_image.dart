@@ -7,40 +7,35 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class MirrorImage extends StatelessWidget {
-  final bool isMirror;
   final File? path;
   final String? urlToImage;
-  MirrorImage({required this.isMirror, this.path, this.urlToImage});
+  MirrorImage({this.path, this.urlToImage});
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      alignment: Alignment.center,
-      scaleX: !isMirror ? 1 : -1,
-      child: Container(
-        width: 165.h,
-        height: 165.h,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(50.r),
-          ),
-          border: Border.all(width: 5.h, color: Colors.white),
-          // image: path != null
-          //     ? DecorationImage(
-          //         image: FileImage(path!),
-          //         fit: BoxFit.cover,
-          //       )
-          //     : urlToImage != null 
-          //     ? DecorationImage(
-          //         image: NetworkImage(Config.url.url + urlToImage!),
-          //         fit: BoxFit.cover,
-          //       )
-          //     : const DecorationImage(
-          //         image: AssetImage(Img.avatarNone),
-          //         fit: BoxFit.cover,
-          //       )
+    return Container(
+      width: 165.h,
+      height: 165.h,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(50.r),
         ),
+        border: Border.all(width: 5.h, color: Colors.white),
+        image: path != null
+            ? DecorationImage(
+                image: FileImage(path!),
+                fit: BoxFit.cover,
+              )
+            : urlToImage != null 
+            ? DecorationImage(
+                image: NetworkImage(Config.url.url + urlToImage!),
+                fit: BoxFit.cover,
+              )
+            : const DecorationImage(
+                image: AssetImage(Img.avatarNone),
+                fit: BoxFit.cover,
+              )
       ),
     );
   }

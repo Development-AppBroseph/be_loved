@@ -45,7 +45,7 @@ class MySharedPrefs {
     );
   }
 
-  void setUser(String token, UserAnswer user) async {
+  Future<void> setUser(String token, UserAnswer user) async {
     (await _sharedPreferences).setString('token', token);
     (await _sharedPreferences).setString(
       'user',

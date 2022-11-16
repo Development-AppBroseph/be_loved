@@ -67,8 +67,8 @@ void setupInjections() {
   //Usecase
   sl.registerLazySingleton(() => PostNumber(sl()));
   sl.registerLazySingleton(() => PutCode(sl()));
-  //Cubit
-  sl.registerFactory(() => AccountCubit(postNumber: sl(), putCode: sl()));
+  // //Cubit
+  // sl.registerFactory(() => AccountCubit(postNumber: sl(), putCode: sl()));
   //Datasource
   sl.registerLazySingleton<BeLovedRemoteDatasource>(
       () => BeLovedRemoteDatasourceImpl(dio: sl()));
@@ -116,6 +116,6 @@ void setupInjections() {
 
   //Blocs
   sl.registerFactory<ProfileBloc>(
-    () => ProfileBloc(sl()),
+    () => ProfileBloc(sl(), sl(), sl()),
   );
 }

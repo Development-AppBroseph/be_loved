@@ -35,9 +35,11 @@ class EventModel extends EventEntity{
   );
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
-    Duration duration = DateTime.parse(json['finish']).toUtc().difference(DateTime.now().toUtc());
+    int days = 0;
+    days = calculateDifference(DateTime.parse(json['start']).toLocal());
+    String date = days.isNegative ? '0' : days.toString();
 
-    String date = duration.inDays.isNegative || duration.inDays == 0 ? '1' :  duration.inDays.toString();
+
     return EventModel(
       id: json['id'],
       title: json['name'],
@@ -54,4 +56,9 @@ class EventModel extends EventEntity{
       eventCreator: User.fromJson(json['event_creator']),
     );
   }
+}
+
+int calculateDifference(DateTime date) {
+  DateTime now = DateTime.now();
+  return DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
 }

@@ -20,16 +20,16 @@ class ProfileRemoteDataSourceImpl
   ProfileRemoteDataSourceImpl({required this.dio});
   Map<String, String> headers = {
     "Accept": "application/json",
-    "Content-Type": "application/json"
   };
 
   @override
   Future<User> editProfile(User user, File? file) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Map map = user.toJson();
-    map['avatar'] = file == null ? null : await MultipartFile.fromFile(file.path);
+    Map<String, dynamic> map = user.toJson();
+    map['photo'] = file == null ? null : await MultipartFile.fromFile(file.path);
+    print('DATA: ${map}');
     Response response = await dio.put(Endpoints.editProfile.getPath(),
-        data: jsonEncode(map),
+        data: FormData.fromMap(map),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 499,

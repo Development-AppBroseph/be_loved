@@ -8,6 +8,9 @@ import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+import 'tag_modal.dart';
 
 class AllEeventsPage extends StatefulWidget {
   final VoidCallback prevPage;
@@ -191,19 +194,17 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                             child: Container(
                               height: 55.h,
                               width: 55.w,
-                              margin: EdgeInsets.only(right: 25.w),
+                              margin: EdgeInsets.only(right: 10.w),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.r),
-                                  border: Border.all(
-                                    color: const Color(0xffFF1D1D),
-                                    width: 1,
-                                  )),
+                                borderRadius: BorderRadius.circular(15.r),
+                                color: const Color(0xffFF1D1D),
+                              ),
                               child: Center(
                                 child: SvgPicture.asset(
                                   SvgImg.bin,
-                                  height: 19.h,
-                                  width: 19.w,
-                                  color: const Color(0xffFF1D1D),
+                                  height: 22.h,
+                                  width: 24.w,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -269,41 +270,51 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                         color = Colors.transparent;
                     }
 
-                    return CupertinoCard(
-                      color: hashTags[index].type == TypeHashTag.add
-                          ? ColorStyles.greyColor
-                          : color,
-                      elevation: 0,
-                      margin: EdgeInsets.zero,
-                      radius: BorderRadius.circular(20.r),
-                      child: Stack(
-                        children: [
-                          if (hashTags[index].type == TypeHashTag.add)
-                            Positioned.fill(
-                              child: CupertinoCard(
-                                elevation: 0,
-                                margin: EdgeInsets.all(1.w),
-                                radius: BorderRadius.circular(17.r),
-                                color: ColorStyles.backgroundColorGrey,
+                    return GestureDetector(
+                      onTap: () => showMaterialModalBottomSheet(
+                          context: context,
+                          animationCurve: Curves.easeInOutQuint,
+                          duration: const Duration(milliseconds: 600),
+                          backgroundColor: Colors.transparent,
+                          builder: (context) {
+                            return TagModal(typeHashTag: hashTags[index].type);
+                          }),
+                      child: CupertinoCard(
+                        color: hashTags[index].type == TypeHashTag.add
+                            ? ColorStyles.greyColor
+                            : color,
+                        elevation: 0,
+                        margin: EdgeInsets.zero,
+                        radius: BorderRadius.circular(20.r),
+                        child: Stack(
+                          children: [
+                            if (hashTags[index].type == TypeHashTag.add)
+                              Positioned.fill(
+                                child: CupertinoCard(
+                                  elevation: 0,
+                                  margin: EdgeInsets.all(1.w),
+                                  radius: BorderRadius.circular(17.r),
+                                  color: ColorStyles.backgroundColorGrey,
+                                ),
                               ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25.w, vertical: 10.h),
+                              child: Center(
+                                  child: hashTags[index].type == TypeHashTag.add
+                                      ? SizedBox(
+                                          height: 34.h,
+                                          width: 34.w,
+                                          child: Transform.rotate(
+                                              angle: pi / 4,
+                                              child:
+                                                  SvgPicture.asset(SvgImg.add)),
+                                        )
+                                      : Text('#${hashTags[index].title}',
+                                          style: style1)),
                             ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25.w, vertical: 10.h),
-                            child: Center(
-                                child: hashTags[index].type == TypeHashTag.add
-                                    ? SizedBox(
-                                        height: 34.h,
-                                        width: 34.w,
-                                        child: Transform.rotate(
-                                            angle: pi / 4,
-                                            child:
-                                                SvgPicture.asset(SvgImg.add)),
-                                      )
-                                    : Text('#${hashTags[index].title}',
-                                        style: style1)),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   }),
@@ -325,7 +336,11 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                   return GestureDetector(
                     onLongPress: () {
                       setState(() {
-                        isSelectedAll = true;
+                        if (isSelectedAll) {
+                          isSelectedAll = false;
+                        } else {
+                          isSelectedAll = true;
+                        }
                       });
                     },
                     child: UserEvents(
