@@ -1,3 +1,4 @@
+import 'package:be_loved/core/error/exceptions.dart';
 import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/features/home/data/datasource/be_loved_remote_datasource.dart';
 import 'package:be_loved/features/home/domain/repositories/be_loved.dart';
@@ -22,6 +23,9 @@ class BelovedRepositoryImplement implements BelovedRepository {
       final postNumber = await number();
       return Right(postNumber);
     } catch (e) {
+      if(e is ServerException){
+        return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+      }
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -40,6 +44,9 @@ class BelovedRepositoryImplement implements BelovedRepository {
       final putCode = await code();
       return Right(putCode);
     } catch (e) {
+      if(e is ServerException){
+        return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+      }
       return Left(ServerFailure(e.toString()));
     }
   }

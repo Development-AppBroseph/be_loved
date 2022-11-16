@@ -1,5 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/database/secure_storage.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
+import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
 part 'web_socket_event.dart';
 part 'web_socket_state.dart';
@@ -20,15 +25,19 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
       emit(WebSocketInviteSendState());
   void _closeInvite(WebSocketCloseInviteMessage event, Emitter<WebSocketState> emit) =>
       emit(WebSocketInviteCloseState());
-  void _acceptInvite(WebSocketAcceptInviteMessage event, Emitter<WebSocketState> emit) =>
-      emit(WebSocketInviteAcceptState());
+  void _acceptInvite(WebSocketAcceptInviteMessage event, Emitter<WebSocketState> emit) async {
+    sl<AuthConfig>().user = await MySharedPrefs().user;
+    sl<AuthConfig>().token = await MySecureStorage().getToken();
+    emit(WebSocketInviteAcceptState());
+  }
 
   WebSocket? channel;
 
   void _initWebSocket(
       WebSocketEvent event, Emitter<WebSocketState> emit) async {
+    print('WEBSOCKET: ${'${Config.ws.ws}/ws/${event.token}'}');
     channel = await WebSocket.connect(
-      'ws://194.58.69.88:8000/ws/${event.token}',
+      '${'${Config.ws.ws}/ws/${event.token}'}',
     );
 
     if (channel != null) {

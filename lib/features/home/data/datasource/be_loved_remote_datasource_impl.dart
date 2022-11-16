@@ -56,7 +56,7 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
     if (response.statusCode! >= 200 && response.statusCode! < 400) {
       print(true);
     } else if (response.statusCode == 400) {
-      throw ServerException(message: 'Значения поля должны быть уникальны');
+      throw ServerException(message: 'Попробуйте через 1 минуту');
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
@@ -70,9 +70,9 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
       "Content-Type": "application/json",
       'Authorization': 'Token $userToken',
     };
-
+    print('CODE: ${code}');
     final userCode = jsonEncode({
-      "code": 12345,
+      "code": code,
     });
     final response = await dio.put(
       Endpoints.phoneNumber.getPath(),
@@ -87,7 +87,7 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
     if (response.statusCode! >= 200 && response.statusCode! < 400) {
       print(true);
     } else if (response.statusCode == 400) {
-      throw ServerException(message: 'Значения поля должны быть уникальны');
+      throw ServerException(message: 'Неверный код');
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }

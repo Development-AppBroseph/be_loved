@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'avatar_modal_widget.dart';
 
-showModalAvatarChange(BuildContext context, Function(File? file, bool isMirror) onTap, File? currentImage) {
+showModalAvatarChange(BuildContext context, Function(File? file) onTap) {
   showMaterialModalBottomSheet(
     animationCurve: Curves.easeInOutQuint,
       elevation: 12,
@@ -12,7 +12,7 @@ showModalAvatarChange(BuildContext context, Function(File? file, bool isMirror) 
       backgroundColor: Colors.transparent,
       context: context,
       builder: (context) {
-        return AvatarModalWidget(onTap: onTap, currentImage: currentImage,);
+        return AvatarModalWidget(onTap: onTap);
       });
 }
 

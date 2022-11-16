@@ -1,11 +1,11 @@
-part of 'events_bloc.dart';
+// part of 'events_bloc.dart';
 
-abstract class EventsState {}
+// abstract class EventsState {}
 
-class AddEventsStated extends EventsState {}
+// class AddEventsStated extends EventsState {}
 
-class AddEventsState extends EventsState {
-  Events events;
+// class AddEventsState extends EventsState {
+//   Events events;
 
-  AddEventsState({required this.events});
-}
+//   AddEventsState({required this.events});
+// }

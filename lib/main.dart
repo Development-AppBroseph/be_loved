@@ -5,8 +5,10 @@ import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,11 +49,14 @@ void main() async {
         BlocProvider<WebSocketBloc>(
           create: (context) => WebSocketBloc(),
         ),
-        BlocProvider<AccountCubit>(
-          create: (context) => sl<AccountCubit>(),
-        ),
+        // BlocProvider<AccountCubit>(
+        //   create: (context) => sl<AccountCubit>(),
+        // ),
         BlocProvider<EventsBloc>(
-          create: (context) => EventsBloc(),
+          create: (context) => sl<EventsBloc>(),
+        ),
+        BlocProvider<ProfileBloc>(
+          create: (context) => sl<ProfileBloc>(),
         ),
       ],
       child: OverlaySupport.global(
@@ -67,18 +72,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // MySharedPrefs().logOut(context);
     FlutterNativeSplash.remove();
     return ScreenUtilInit(
       designSize: const Size(428, 926),
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          localizationsDelegates: [
+          localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: [Locale('ru')],
+          supportedLocales: const [Locale('ru')],
           theme: ThemeData(
               scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
               fontFamily: 'Inter'),

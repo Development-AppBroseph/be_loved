@@ -1,17 +1,21 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAnimationItemRelationships extends StatefulWidget {
   final Function(int) delete;
   final int index;
-  final Events events;
+  final EventEntity events;
   const CustomAnimationItemRelationships({
     Key? key,
     required this.delete,
@@ -52,7 +56,7 @@ class _CustomAnimationItemRelationshipsState
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
       stream: streamController.stream,
-      initialData: false,
+      initialData: true,
       builder: (context, snapshot) {
         return GestureDetector(
           onHorizontalDragStart: (details) {
@@ -117,6 +121,7 @@ class _CustomAnimationItemRelationshipsState
                     color: Colors.white,
                     elevation: 0,
                     margin: EdgeInsets.zero,
+                    padding: EdgeInsets.zero,
                     child: SingleChildScrollView(
                       controller: scrollController,
                       physics: const NeverScrollableScrollPhysics(),
@@ -152,7 +157,7 @@ class _CustomAnimationItemRelationshipsState
                                             ),
                                             const Spacer(),
                                             Text(
-                                              'Через ${widget.events.datetime} ${checkDays()}',
+                                              'Через ${widget.events.datetimeString} ${checkDays(widget.events.datetimeString)}',
                                               style: TextStyle(
                                                 color: const Color.fromRGBO(
                                                     128, 74, 142, 1),
@@ -170,7 +175,7 @@ class _CustomAnimationItemRelationshipsState
                                           height: snapshot.data! ? 19.h : 0.h,
                                         ),
                                         Text(
-                                          widget.events.name,
+                                          widget.events.title,
                                           style: TextStyle(
                                               color: const Color.fromRGBO(
                                                   23, 23, 23, 1),
@@ -184,7 +189,9 @@ class _CustomAnimationItemRelationshipsState
                                               milliseconds: 1000),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
-                                        Row(
+                                        widget.index == 0 && context.read<EventsBloc>().events.any((element) => element.datetimeString == '1')
+                                        ? Row(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
                                             Text(
                                               'Завтра:',
@@ -192,18 +199,19 @@ class _CustomAnimationItemRelationshipsState
                                                   color: ColorStyles.greyColor,
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w700,
-                                                  height: 1),
+                                                  ),
                                             ),
                                             SizedBox(width: 10.w),
                                             Text(
-                                              widget.events.description,
+                                              context.read<EventsBloc>().events.where((element) => element.datetimeString == '1')
+                                              .first.title,
                                               style: TextStyle(
                                                   color: ColorStyles.greyColor,
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w700),
                                             ),
                                           ],
-                                        ),
+                                        ) : SizedBox(height: 10.h,),
                                       ],
                                     ),
                                   ),
@@ -234,7 +242,7 @@ class _CustomAnimationItemRelationshipsState
                                         Future.delayed(
                                                 Duration(milliseconds: 1000))
                                             .then((value) {
-                                          // widget.delete(widget.index);
+                                          widget.delete(widget.index);
                                         });
                                       },
                                       child: Container(
@@ -267,15 +275,6 @@ class _CustomAnimationItemRelationshipsState
     );
   }
 
-  String checkDays() {
-    int days = int.parse(widget.events.datetime);
-    int lastNumber = int.parse(widget.events.datetime[widget.events.datetime.length - 1]);
-    if(lastNumber > 5 && lastNumber < 10) return 'дней';
-    if(days % 5 == 0) return 'дней';
-    if(days == 11) return 'дней';
-    if(lastNumber == 1) return 'день';
-    return 'дня';
-  }
 
   // void closeOpen(bool state) {
   // if (!_controllerAnimationRotate!.isAnimating) {
