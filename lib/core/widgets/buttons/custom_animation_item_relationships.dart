@@ -188,7 +188,7 @@ class _CustomAnimationItemRelationshipsState
                                               milliseconds: 1000),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
-                                        widget.index == 0 && context.read<EventsBloc>().events.any((element) => element.datetimeString == '1' || element.datetimeString == '0')
+                                        widget.index == 0 && context.read<EventsBloc>().events.any((element) => element.datetimeString == '1')
                                         ? Row(
                                           children: [
                                             Text(

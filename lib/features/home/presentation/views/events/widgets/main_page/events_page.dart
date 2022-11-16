@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
+import 'package:be_loved/core/utils/helpers/events_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
@@ -237,7 +238,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
             },
             builder: (context, state) {
               if(state is EventLoadingState){
-                return CircularProgressIndicator();
+                return Container();
               }
               List<EventEntity> eventsSlider = eventsBloc.events.where((element) 
                         => int.parse(element.datetimeString) < 7).toList();
@@ -371,7 +372,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                       children: [
                         Text('Предстоящие события', style: style2),
                         SizedBox(height: 8.h),
-                        Text('${eventsBloc.events.length} событие', style: style3),
+                        Text(countEventsText(eventsBloc.events), style: style3),
                       ],
                     ),
                   ),

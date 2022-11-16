@@ -10,7 +10,9 @@ enum Endpoints {
 
   //Events
   getEvents,
-  addEvent
+  addEvent,
+  deleteEvent,
+  editEvent,
 }
 
 extension EndpointsExtension on Endpoints {
@@ -29,7 +31,9 @@ extension EndpointsExtension on Endpoints {
       case Endpoints.getEvents:
         return "/events/";  
       case Endpoints.addEvent:
-        return "/events/";  
+        return "/events/${params![0]}/";  
+      case Endpoints.addEvent:
+        return "/events/${params![0]}/";  
       default:
         return '';
     }

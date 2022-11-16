@@ -403,16 +403,12 @@ class _RelationShipsPageState extends State<RelationShipsPage> with AutomaticKee
                             },
                             builder: (context, state) {
                               if(state is EventLoadingState){
-                                return CircularProgressIndicator();
+                                return Container();
                               }
                               return Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 25.w),
                                 child: ReorderableListView.builder(
                                   onReorder: (oldIndex, newIndex) {
-                                    // setState(() {
-                                    //   final item = events.removeAt(oldIndex);
-                                    //   events.insert(newIndex, item);
-                                    // });
                                     context.read<EventsBloc>().add(EventChangeToHomeEvent(
                                       eventEntity: eventsBloc.eventsInHome[oldIndex], 
                                       position: newIndex

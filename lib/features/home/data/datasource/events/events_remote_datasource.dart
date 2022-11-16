@@ -11,6 +11,8 @@ import '../../../../../locator.dart';
 abstract class EventsRemoteDataSource {
   Future<List<EventEntity>> getEvents();
   Future<EventEntity> addEvent(EventEntity eventEntity);
+  Future<EventEntity> editEvent(EventEntity eventEntity);
+  Future<void> deleteEvent(int id);
 
 }
 
@@ -25,7 +27,6 @@ class EventsRemoteDataSourceImpl
   };
 
 
-  //Get test
   @override
   Future<List<EventEntity>> getEvents() async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
@@ -60,6 +61,47 @@ class EventsRemoteDataSourceImpl
     printRes(response);
     if (response.statusCode == 201) {
       return EventModel.fromJson(response.data);
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
+
+  @override
+  Future<EventEntity> editEvent(EventEntity eventEntity) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.patch(Endpoints.editEvent.getPath(params: [eventEntity.id]),
+        data: jsonEncode(eventEntity.toMap()),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 699,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 201) {
+      return EventModel.fromJson(response.data);
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
+
+  @override
+  Future<void> deleteEvent(int id) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.delete(Endpoints.deleteEvent.getPath(params: [id]),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 699,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      return;
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
