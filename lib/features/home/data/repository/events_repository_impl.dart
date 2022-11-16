@@ -25,7 +25,7 @@ class EventsRepositoryImpl implements EventsRepository {
       } catch (e) {
         print(e);
         if(e is ServerException){
-          return Left(ServerFailure(e.message.toString()));
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
       }
@@ -44,6 +44,9 @@ class EventsRepositoryImpl implements EventsRepository {
         return Right(items);
       } catch (e) {
         print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
         return Left(ServerFailure(e.toString()));
       }
     } else {

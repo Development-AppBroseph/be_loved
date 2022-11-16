@@ -20,3 +20,5 @@ class ProfileAddedState extends ProfileState{
   final User user;
   ProfileAddedState({required this.user});
 }
+class ProfileSentCodeState extends ProfileState{}
+class ProfileConfirmedSuccessState extends ProfileState{}
