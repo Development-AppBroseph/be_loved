@@ -1,18 +1,21 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAnimationItemRelationships extends StatefulWidget {
   final Function(int) delete;
   final int index;
-  final Events event;
-  final Events? nextEvent;
+  final EventEntity events;
   const CustomAnimationItemRelationships({
     Key? key,
     required this.delete,
@@ -55,7 +58,7 @@ class _CustomAnimationItemRelationshipsState
     streamController.add(true);
     return StreamBuilder<bool>(
       stream: streamController.stream,
-      initialData: false,
+      initialData: true,
       builder: (context, snapshot) {
         return GestureDetector(
           onHorizontalDragStart: (details) {
@@ -190,19 +193,14 @@ class _CustomAnimationItemRelationshipsState
                                                 ),
                                               ),
                                             const Spacer(),
-                                            if (widget.event.datetime.day !=
-                                                DateTime.now().day)
-                                              Text(
-                                                checkDays(
-                                                    widget.event.datetime),
-                                                style: TextStyle(
-                                                  color: _getTextColor(
-                                                    widget.event.datetime,
-                                                  ),
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w800,
-                                                  height: 1,
-                                                ),
+                                            Text(
+                                              'Через ${widget.events.datetimeString} ${checkDays(widget.events.datetimeString)}',
+                                              style: TextStyle(
+                                                color: const Color.fromRGBO(
+                                                    128, 74, 142, 1),
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.w800,
+                                                height: 1,
                                               ),
                                           ],
                                         ),
@@ -217,7 +215,7 @@ class _CustomAnimationItemRelationshipsState
                                               : 0.h,
                                         ),
                                         Text(
-                                          widget.event.name,
+                                          widget.events.title,
                                           style: TextStyle(
                                             color: const Color.fromRGBO(
                                                 23, 23, 23, 1),
@@ -234,37 +232,28 @@ class _CustomAnimationItemRelationshipsState
                                           ),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
-                                        if (widget.nextEvent != null)
-                                          Row(
-                                            children: [
-                                              Text(
-                                                checkDays(
-                                                  widget.nextEvent!.datetime,
-                                                ),
-                                                style: TextStyle(
+                                        widget.index == 0 && context.read<EventsBloc>().events.any((element) => element.datetimeString == '1' || element.datetimeString == '0')
+                                        ? Row(
+                                          children: [
+                                            Text(
+                                              'Завтра:',
+                                              style: TextStyle(
                                                   color: ColorStyles.greyColor,
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w700,
-                                                  height: 1,
-                                                ),
-                                              ),
-                                              SizedBox(width: 10.w),
-                                              SizedBox(
-                                                width: 225.w,
-                                                child: Text(
-                                                  widget.nextEvent!.name,
-                                                  maxLines: 1,
-                                                  style: TextStyle(
-                                                    color:
-                                                        ColorStyles.greyColor,
-                                                    fontSize: 15.sp,
-                                                    fontWeight: FontWeight.w700,
-                                                    height: 1,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                                  height: 1),
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            Text(
+                                              context.read<EventsBloc>().events.where((element) => element.datetimeString == '1')
+                                              .first.title,
+                                              style: TextStyle(
+                                                  color: ColorStyles.greyColor,
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          ],
+                                        ) : SizedBox(height: 10.h,),
                                       ],
                                     ),
                                   ),
@@ -331,19 +320,6 @@ class _CustomAnimationItemRelationshipsState
     );
   }
 
-  double _getFontSize(int length) {
-    if (length < 10) {
-      return 50;
-    } else if (length < 16) {
-      return 40;
-    } else if (length < 24 && widget.event.datetime != '0') {
-      return 30;
-    } else if (length < 30) {
-      return 25;
-    } else {
-      return 25;
-    }
-  }
 
   Color _getTextColor(DateTime date) {
     int days = date.difference(DateTime.now()).inDays;

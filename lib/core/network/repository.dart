@@ -144,15 +144,18 @@ class Repository {
   }
 
   Future<UserAnswer?> inviteUser(String phone) async {
+    print('PHNE: ${phone} ::: ${await MySharedPrefs().token}');
     var options = Options(headers: {
-      'Authorization': 'Token ${await MySharedPrefs().token}',
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Token ${await MySharedPrefs().token}",
     }, validateStatus: (status) => status! <= 600);
     try {
       var response = await dio.post(
         '/relations/',
-        data: {
+        data: FormData.fromMap({
           "to_phone_number": phone,
-        },
+        }),
         options: options,
       );
       print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');

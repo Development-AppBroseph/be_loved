@@ -9,6 +9,7 @@ abstract class Img {
   static const String android12SplashScreen = "assets/images/android12splash.png";
   static const String splashScreen = "assets/images/splash.png";
   static const String backgroungProfile = "assets/images/background_profile.png";
+  static const String smile = "assets/images/smile.png";
 }
 
 abstract class SvgImg {
@@ -56,4 +57,7 @@ abstract class SvgImg {
   static const String code = "assets/icons/code.svg";
   static const String selectedImage = "assets/icons/selected_image.svg";
   static const String mirror = "assets/icons/mirror.svg";
+  static const String smile = "assets/icons/smile.svg";
+  static const String minus = "assets/icons/minus.svg";
+  static const String bin = "assets/icons/bin.svg";
 }

@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
@@ -19,6 +22,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'modals/add_event_modal.dart';
+import 'modals/create_event_modal.dart';
 
 class RelationShipsPage extends StatefulWidget {
   final VoidCallback nextPage;
@@ -77,6 +81,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   List<Events> events = [];
 
   Widget content(BuildContext context) {
+    EventsBloc eventsBloc = context.read<EventsBloc>();
     TextStyle style1 = TextStyle(
         fontWeight: FontWeight.w700,
         color: Colors.white,
@@ -384,76 +389,77 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                             },
                           ),
                           SizedBox(height: 11.h),
-                          BlocBuilder<EventsBloc, EventsState>(
-                              buildWhen: (previous, current) {
-                            if (current is AddEventsState) {
-                              print('length: ${events.length}');
-                              if (events.length < 3) {
-                                events.add(current.events);
-                                return true;
+                          BlocConsumer<EventsBloc, EventsState>(
+                            listener: (context, state) {
+                              if(state is EventErrorState){
+                                showAlertToast(state.message);
+                                if(state.isTokenError){
+                                  print('TOKEN ERROR, LOGOUT...');
+                                  context.read<AuthBloc>().add(LogOut(context));
+                                }
                               }
+                              if(state is EventInternetErrorState){
+                                showAlertToast('Проверьте соединение с интернетом!');
+                              }
+                            },
+                            builder: (context, state) {
+                              if(state is EventLoadingState){
+                                return CircularProgressIndicator();
+                              }
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                child: ReorderableListView.builder(
+                                  onReorder: (oldIndex, newIndex) {
+                                    // setState(() {
+                                    //   final item = events.removeAt(oldIndex);
+                                    //   events.insert(newIndex, item);
+                                    // });
+                                    context.read<EventsBloc>().add(EventChangeToHomeEvent(
+                                      eventEntity: eventsBloc.eventsInHome[oldIndex], 
+                                      position: newIndex
+                                    ));
+                                  },
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.all(0),
+                                  shrinkWrap: true,
+                                  itemCount: eventsBloc.eventsInHome.length,
+                                  itemBuilder: ((context, index) {
+                                    return CustomAnimationItemRelationships(
+                                      events: eventsBloc.eventsInHome[index],
+                                      // func: func,
+                                      key: ValueKey('${eventsBloc.eventsInHome[index].id}'),
+                                      delete: (i){
+                                        context.read<EventsBloc>().add(EventChangeToHomeEvent(
+                                          eventEntity: null, 
+                                          position: i
+                                        ));
+                                      },
+                                      index: index,
+                                    );
+                                  }),
+                                  proxyDecorator: (child, index, animation) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 20.h,
+                                                color:
+                                                    Color.fromRGBO(0, 0, 0, 0.1))
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(20.r)),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
                             }
-                            return false;
-                          }, builder: (context, snapshot) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 25.w),
-                              child: ReorderableListView.builder(
-                                onReorder: (oldIndex, newIndex) {
-                                  // setState(() {
-                                  // final newEvent = events[newIndex];
-                                  // final oldEvent = events[oldIndex];
-                                  // events.insert(newIndex, newEvent);
-                                  // events.insert(oldIndex, oldEvent);
-                                  // setState(() {});
-                                  // });
-                                  // Future.delayed(
-                                  //     const Duration(milliseconds: 10), () {
-                                  //   events.removeAt(oldIndex);
-                                  //   setState(() {});
-                                  // });
-                                },
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.all(0),
-                                shrinkWrap: true,
-                                itemCount: events.length,
-                                itemBuilder: ((context, index) {
-                                  return CustomAnimationItemRelationships(
-                                    event: events[index],
-                                    nextEvent: index < events.length - 1
-                                        ? events[index + 1]
-                                        : null,
-                                    // func: func,
-                                    key: ValueKey('$index'),
-                                    delete: delete,
-                                    index: index,
-                                  );
-                                }),
-                                proxyDecorator: (child, index, animation) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 20.h,
-                                          color: Color.fromRGBO(0, 0, 0, 0.1),
-                                        )
-                                      ],
-                                      borderRadius: BorderRadius.circular(20.r),
-                                    ),
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          }),
+                          ),
                           if (events.isEmpty) SizedBox(height: 15.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {
-                              // showModalAddEvent(context);
-                              showModalAddEvent(context, () {
-                                Navigator.pop(context);
-                                // func();
-                              });
+                              showModalAddEvent(context,(){});
                             }),
                           ),
                           SizedBox(height: 200.h)
@@ -519,7 +525,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   }
 
   ImageProvider<Object> getImage(String? path) {
-    print('PATH: ${path}');
     if (path != null && path.trim() != '') {
       return NetworkImage(Config.url.url + path);
     }

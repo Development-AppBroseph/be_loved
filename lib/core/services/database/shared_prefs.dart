@@ -36,6 +36,7 @@ class MySharedPrefs {
   void logOut(BuildContext context) async {
     (await _sharedPreferences).setString('token', '');
     (await _sharedPreferences).setString('user', '');
+    MySecureStorage().setToken('');
     // ignore: use_build_context_synchronously
     Navigator.pushAndRemoveUntil(
       context,
