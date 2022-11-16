@@ -24,7 +24,7 @@ class TagModal extends StatefulWidget {
 class _TagModalState extends State<TagModal> {
   bool isPointed = false;
   ScrollController scrollController = ScrollController();
-  int iconIndex = 5;
+  int iconIndex = 1;
   GlobalKey iconBtn = GlobalKey();
   showColorModal() async {
     await scrollController.animateTo(scrollController.position.maxScrollExtent,
