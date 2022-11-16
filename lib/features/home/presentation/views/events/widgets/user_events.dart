@@ -35,7 +35,7 @@ class _UserEventsState extends State<UserEvents> {
         children: [
           AnimatedContainer(
             height: 44.h,
-            width: widget.countPage == 1 ? 280.w : 200.w,
+            width: widget.countPage == 1 ? 280.w : 205.w,
             duration: const Duration(milliseconds: 600),
             child: SingleChildScrollView(
               reverse: false,

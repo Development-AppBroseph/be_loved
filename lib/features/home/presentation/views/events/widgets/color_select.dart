@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-void colorSelectModal(BuildContext context, Offset offset,
-        Function(int index) onTap, int iconIndex,) =>
+void colorSelectModal(
+  BuildContext context,
+  Offset offset,
+  Function(int index) onTap,
+  int iconIndex,
+) =>
     showDialog(
       useSafeArea: false,
       barrierColor: Colors.transparent,
@@ -72,24 +76,13 @@ void colorSelectModal(BuildContext context, Offset offset,
                             },
                             child: Container(
                               alignment: Alignment.center,
-                              height: 57.h, 
-                              child: index == 3
-                                  ? Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 12.h),
-                                      child: SvgPicture.asset(
-                                        'assets/icons/no_icon.svg',
-                                        height: 28.h,
-                                      ))
-                                  : Container(
-                                      color: Colors.white,
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 13.w),
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: SvgPicture.asset(SvgImg.colors[index],),
-                                      ),
-                                    ),
+                              height: 57.h,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: SvgPicture.asset(
+                                  SvgImg.colors[index],
+                                ),
+                              ),
                             ),
                           );
                         },
