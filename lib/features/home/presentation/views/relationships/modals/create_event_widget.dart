@@ -475,7 +475,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                   height: 28.h,
                                                   key: iconBtn,
                                                 )
-                                              : Image.asset(Img.smile, height: 33.h, width: 33.h,),
+                                              : Image.asset(
+                                                Img.smile, 
+                                                height: 33.h, 
+                                                width: 33.h,
+                                                key: iconBtn,
+                                              ),
                                           SizedBox(
                                             width: 20.w,
                                           ),
