@@ -124,7 +124,7 @@ class _TagModalState extends State<TagModal> {
                                     height: 28.h,
                                     key: iconBtn,
                                   )
-                                : SvgPicture.asset(SvgImg.colors[1]),
+                                : SvgPicture.asset(SvgImg.colors[1], key: iconBtn,),
                             SizedBox(
                               width: 20.w,
                             ),

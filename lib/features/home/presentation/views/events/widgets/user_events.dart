@@ -18,13 +18,17 @@ class _UserEventsState extends State<UserEvents> {
   final ScrollController scrollController = ScrollController();
   bool isPointed = false;
   void scrollToBottom() {
+    if (widget.isSelectedAll) {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      WidgetsBinding.instance.addPostFrameCallback((_) => scrollToBottom());
+    }
     scrollController.jumpTo(scrollController.position.maxScrollExtent);
     WidgetsBinding.instance.addPostFrameCallback((_) => scrollToBottom());
   }
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) => scrollToBottom());
+    WidgetsBinding.instance.addPostFrameCallback((_) => scrollToBottom());
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
