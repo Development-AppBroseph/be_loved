@@ -20,8 +20,7 @@ class CustomAnimationItemRelationships extends StatefulWidget {
     Key? key,
     required this.delete,
     required this.index,
-    required this.event,
-    required this.nextEvent,
+    required this.events,
   }) : super(key: key);
 
   @override
@@ -55,7 +54,6 @@ class _CustomAnimationItemRelationshipsState
 
   @override
   Widget build(BuildContext context) {
-    streamController.add(true);
     return StreamBuilder<bool>(
       stream: streamController.stream,
       initialData: true,
@@ -133,7 +131,7 @@ class _CustomAnimationItemRelationshipsState
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SingleChildScrollView(
-                                physics: const NeverScrollableScrollPhysics(),
+                                physics: NeverScrollableScrollPhysics(),
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: 11.h, horizontal: 20.w),
@@ -147,51 +145,15 @@ class _CustomAnimationItemRelationshipsState
                                       children: [
                                         Row(
                                           children: [
-                                            if (widget.event.datetime.day !=
-                                                DateTime.now().day)
-                                              Row(
-                                                children: [
-                                                  if (widget.event.image !=
-                                                      null)
-                                                    Text(
-                                                      widget.event.image!,
-                                                      style: TextStyle(
-                                                        fontSize: 15.sp,
-                                                        fontFamily: 'Inter',
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        height: 1,
-                                                      ),
-                                                      textAlign: TextAlign.left,
-                                                    ),
-                                                  if (widget.event.image !=
-                                                      null)
-                                                    SizedBox(width: 4.92.w),
-                                                  Text(
-                                                    'Предстоящее событие',
-                                                    style: TextStyle(
-                                                      color:
-                                                          ColorStyles.greyColor,
-                                                      fontSize: 15.sp,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      height: 1,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            else
-                                              Text(
-                                                '${checkDays(widget.event.datetime)}:',
-                                                style: TextStyle(
-                                                  color: _getTextColor(
-                                                    widget.event.datetime,
-                                                  ),
-                                                  fontSize: 25.sp,
-                                                  fontWeight: FontWeight.w800,
-                                                  height: 1,
-                                                ),
+                                            Text(
+                                              'Предстоящее событие',
+                                              style: TextStyle(
+                                                color: ColorStyles.greyColor,
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.w700,
+                                                height: 1,
                                               ),
+                                            ),
                                             const Spacer(),
                                             Text(
                                               'Через ${widget.events.datetimeString} ${checkDays(widget.events.datetimeString)}',
@@ -202,65 +164,82 @@ class _CustomAnimationItemRelationshipsState
                                                 fontWeight: FontWeight.w800,
                                                 height: 1,
                                               ),
+                                            ),
                                           ],
                                         ),
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
                                           duration: const Duration(
                                               milliseconds: 1000),
-                                          height: snapshot.data!
-                                              ? widget.nextEvent != null
-                                                  ? 19.h
-                                                  : 34.h
-                                              : 0.h,
+                                          height: snapshot.data! ? 19.h : 0.h,
                                         ),
                                         Text(
                                           widget.events.title,
                                           style: TextStyle(
-                                            color: const Color.fromRGBO(
-                                                23, 23, 23, 1),
-                                            fontSize: _getFontSize(
-                                                widget.event.name.length),
-                                            fontWeight: FontWeight.w800,
-                                            height: 1,
-                                          ),
+                                              color: const Color.fromRGBO(
+                                                  23, 23, 23, 1),
+                                              fontSize: 50.sp,
+                                              fontWeight: FontWeight.w800,
+                                              height: 1),
                                         ),
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
                                           duration: const Duration(
-                                            milliseconds: 1000,
-                                          ),
+                                              milliseconds: 1000),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
-                                        widget.index == 0 && context.read<EventsBloc>().events.any((element) => element.datetimeString == '1')
-                                        ? Row(
-                                          children: [
-                                            Text(
-                                              'Завтра:',
-                                              style: TextStyle(
-                                                  color: ColorStyles.greyColor,
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w700,
-                                                  height: 1),
-                                            ),
-                                            SizedBox(width: 10.w),
-                                            Text(
-                                              context.read<EventsBloc>().events.where((element) => element.datetimeString == '1')
-                                              .first.title,
-                                              style: TextStyle(
-                                                  color: ColorStyles.greyColor,
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                          ],
-                                        ) : SizedBox(height: 10.h,),
+                                        widget.index == 0 &&
+                                                context
+                                                    .read<EventsBloc>()
+                                                    .events
+                                                    .any((element) =>
+                                                        element.datetimeString ==
+                                                            '1' ||
+                                                        element.datetimeString ==
+                                                            '0')
+                                            ? Row(
+                                                children: [
+                                                  Text(
+                                                    'Завтра:',
+                                                    style: TextStyle(
+                                                      color:
+                                                          ColorStyles.greyColor,
+                                                      fontSize: 15.sp,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      height: 1,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10.w),
+                                                  Text(
+                                                    context
+                                                        .read<EventsBloc>()
+                                                        .events
+                                                        .where((element) =>
+                                                            element
+                                                                .datetimeString ==
+                                                            '1')
+                                                        .first
+                                                        .title,
+                                                    style: TextStyle(
+                                                        color: ColorStyles
+                                                            .greyColor,
+                                                        fontSize: 15.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                ],
+                                              )
+                                            : SizedBox(
+                                                height: 10.h,
+                                              ),
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
                               SingleChildScrollView(
-                                physics: const NeverScrollableScrollPhysics(),
+                                physics: NeverScrollableScrollPhysics(),
                                 child: Column(
                                   children: [
                                     Container(
@@ -277,15 +256,12 @@ class _CustomAnimationItemRelationshipsState
                                     GestureDetector(
                                       onTap: () {
                                         streamController.add(false);
-                                        scrollController.animateTo(
-                                          0,
-                                          duration: const Duration(
-                                            milliseconds: 1000,
-                                          ),
-                                          curve: Curves.easeInOutQuint,
-                                        );
-                                        Future.delayed(const Duration(
-                                                milliseconds: 1000))
+                                        scrollController.animateTo(0,
+                                            duration: const Duration(
+                                                milliseconds: 1000),
+                                            curve: Curves.easeInOutQuint);
+                                        Future.delayed(
+                                                Duration(milliseconds: 1000))
                                             .then((value) {
                                           widget.delete(widget.index);
                                         });
@@ -318,50 +294,6 @@ class _CustomAnimationItemRelationshipsState
         );
       },
     );
-  }
-
-
-  Color _getTextColor(DateTime date) {
-    int days = date.difference(DateTime.now()).inDays;
-
-    if (days < 3) {
-      return const Color.fromRGBO(255, 29, 29, 1);
-    } else if (days == 3) {
-      return const Color.fromRGBO(191, 51, 85, 1);
-    } else if (days == 4) {
-      return const Color.fromRGBO(128, 74, 142, 1);
-    } else if (days == 5) {
-      return const Color.fromRGBO(64, 97, 199, 1);
-    } else if (days == 6) {
-      return const Color.fromRGBO(1, 119, 255, 1);
-    } else {
-      return const Color.fromRGBO(150, 150, 150, 1);
-    }
-  }
-
-  String checkDays(DateTime date) {
-    int days = date.difference(DateTime.now()).inHours ~/ 24;
-    String whenDate = '';
-    if (DateTime.now().add(date.difference(DateTime.now())).day !=
-        DateTime.now().day + days) {
-      days++;
-    }
-    int lastNumber = int.parse(days.toString()[days.toString().length - 1]);
-    print(lastNumber);
-    if (days == 0) {
-      whenDate = 'Сегодня';
-      return whenDate;
-    }
-    if (days == 1) {
-      whenDate = 'Завтра';
-      return whenDate;
-    }
-    if (days > 5 && lastNumber < 10) return 'Через $days дней';
-    if (days % 5 == 0) return 'Через $days дней';
-    if (days == 11) return 'Через $days дней';
-    if (lastNumber == 1) return 'Завтра';
-    if (lastNumber == 2) return 'Через день';
-    return 'Через $days дня';
   }
 
   // void closeOpen(bool state) {
