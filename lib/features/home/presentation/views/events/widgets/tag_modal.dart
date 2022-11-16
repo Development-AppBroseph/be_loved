@@ -43,6 +43,10 @@ class _TagModalState extends State<TagModal> {
     );
   }
 
+  bool isValidate(){
+    return titleController.text.length > 3;
+  }
+
   final TextEditingController titleController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -88,6 +92,9 @@ class _TagModalState extends State<TagModal> {
                 controller: titleController,
                 maxLength: 40,
                 hideCounter: true,
+                onChange: (s){
+                  setState(() {});
+                },
               ),
               Container(
                 height: 57.h,
@@ -190,6 +197,7 @@ class _TagModalState extends State<TagModal> {
                 width: 378.w,
                 margin: EdgeInsets.only(top: 16.h),
                 child: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
                   child: Column(
                     children: [
                       ...List.generate(
@@ -228,7 +236,7 @@ class _TagModalState extends State<TagModal> {
                       child: CustomButton(
                           color: ColorStyles.accentColor,
                           text: 'Создать тег',
-                          // validate: isValidate(),
+                          validate: isValidate(),
                           code: false,
                           textColor: Colors.white,
                           onPressed: () {}),

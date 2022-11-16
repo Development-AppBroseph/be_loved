@@ -72,6 +72,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // MySharedPrefs().logOut(context);
     FlutterNativeSplash.remove();
     return ScreenUtilInit(
       designSize: const Size(428, 926),

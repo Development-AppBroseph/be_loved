@@ -20,7 +20,7 @@ void colorSelectModal(
             initialScrollOffset: iconIndex == 0 ? 0 : (57.h * (iconIndex - 1)));
         return AlertDialog(
           insetPadding:
-              EdgeInsets.only(top: offset.dy - 70.h, left: offset.dx - 14.w),
+              EdgeInsets.only(top: offset.dy - 58.h, left: offset.dx),
           alignment: Alignment.topLeft,
           contentPadding: EdgeInsets.zero,
           backgroundColor: Colors.transparent,
