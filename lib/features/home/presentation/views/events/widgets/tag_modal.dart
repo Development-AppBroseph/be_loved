@@ -24,7 +24,7 @@ class TagModal extends StatefulWidget {
 class _TagModalState extends State<TagModal> {
   bool isPointed = false;
   ScrollController scrollController = ScrollController();
-  int iconIndex = 15;
+  int iconIndex = 5;
   GlobalKey iconBtn = GlobalKey();
   showColorModal() async {
     await scrollController.animateTo(scrollController.position.maxScrollExtent,
@@ -118,13 +118,10 @@ class _TagModalState extends State<TagModal> {
                         behavior: HitTestBehavior.opaque,
                         child: Row(
                           children: [
-                            iconIndex == 3
-                                ? SvgPicture.asset(
-                                    'assets/icons/no_icon.svg',
-                                    height: 28.h,
-                                    key: iconBtn,
-                                  )
-                                : SvgPicture.asset(SvgImg.colors[1], key: iconBtn,),
+                            SvgPicture.asset(
+                              SvgImg.colors[iconIndex],
+                              key: iconBtn,
+                            ),
                             SizedBox(
                               width: 20.w,
                             ),
@@ -170,11 +167,12 @@ class _TagModalState extends State<TagModal> {
                       height: 35.h,
                       width: 35.w,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(
-                            color: const Color(0xffFF1D1D),
-                            width: 1,
-                          )),
+                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(
+                          color: const Color(0xffFF1D1D),
+                          width: 1,
+                        ),
+                      ),
                       child: Center(
                         child: SvgPicture.asset(
                           SvgImg.add,
@@ -187,18 +185,21 @@ class _TagModalState extends State<TagModal> {
                   ],
                 ),
               ),
-              SizedBox(
+              Container(
                 height: 308.h,
                 width: 378.w,
-                child: ListView(
-                  children: [
-                    ...List.generate(
-                      20,
-                      (index) => Container(
-                          margin: EdgeInsets.symmetric(vertical: 8.h),
-                          child: const UserTag()),
-                    )
-                  ],
+                margin: EdgeInsets.only(top: 16.h),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ...List.generate(
+                        20,
+                        (index) => Container(
+                            margin: EdgeInsets.symmetric(vertical: 8.h),
+                            child: const UserTag()),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Padding(
