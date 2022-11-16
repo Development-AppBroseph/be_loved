@@ -121,6 +121,7 @@ class _CustomAnimationItemRelationshipsState
                     color: Colors.white,
                     elevation: 0,
                     margin: EdgeInsets.zero,
+                    padding: EdgeInsets.zero,
                     child: SingleChildScrollView(
                       controller: scrollController,
                       physics: const NeverScrollableScrollPhysics(),
@@ -190,6 +191,7 @@ class _CustomAnimationItemRelationshipsState
                                         ),
                                         widget.index == 0 && context.read<EventsBloc>().events.any((element) => element.datetimeString == '1')
                                         ? Row(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
                                             Text(
                                               'Завтра:',
@@ -197,7 +199,7 @@ class _CustomAnimationItemRelationshipsState
                                                   color: ColorStyles.greyColor,
                                                   fontSize: 15.sp,
                                                   fontWeight: FontWeight.w700,
-                                                  height: 1),
+                                                  ),
                                             ),
                                             SizedBox(width: 10.w),
                                             Text(

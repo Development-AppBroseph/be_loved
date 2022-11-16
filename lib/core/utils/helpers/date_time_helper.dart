@@ -44,3 +44,15 @@ Color getColorFromDays(String days){
   }
   return ColorStyles.violetColor;
 }
+
+
+
+getTextFromDate(String days, [String? additionString]){
+  bool isTomorrow = days == '1';
+  bool isToday = days == '0';
+  return isTomorrow
+      ? 'Завтра${additionString ?? ''}'
+      : isToday
+      ? 'Сегодня${additionString ?? ''}'
+      : 'Через ${days} ${checkDays(days)}${additionString ?? ''}';
+}

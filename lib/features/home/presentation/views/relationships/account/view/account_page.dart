@@ -96,8 +96,12 @@ class _AccountPageState extends State<AccountPage> {
 
   _confirmCode() {
     if(codeController.text.length == 5){
-      showLoaderWrapper(context);
-      context.read<ProfileBloc>().add(PutUserCodeEvent(code: int.parse(codeController.text)));
+      if(!(codeController.text[0] != '0')){
+        showLoaderWrapper(context);
+        context.read<ProfileBloc>().add(PutUserCodeEvent(code: int.parse(codeController.text)));
+      }else{
+        showAlertToast('Пишите корректный код');
+      }
       
     }
   }

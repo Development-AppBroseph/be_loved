@@ -80,7 +80,7 @@ class EventsRemoteDataSourceImpl
             validateStatus: (status) => status! < 699,
             headers: headers));
     printRes(response);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return EventModel.fromJson(response.data);
     } else {
       throw ServerException(message: 'Ошибка с сервером');
@@ -100,7 +100,7 @@ class EventsRemoteDataSourceImpl
             validateStatus: (status) => status! < 699,
             headers: headers));
     printRes(response);
-    if (response.statusCode == 201 || response.statusCode == 200) {
+    if (response.statusCode == 204) {
       return;
     } else {
       throw ServerException(message: 'Ошибка с сервером');

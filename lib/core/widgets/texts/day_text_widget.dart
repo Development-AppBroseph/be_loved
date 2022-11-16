@@ -15,14 +15,8 @@ class DayTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isTomorrow = eventEntity.datetimeString == '1';
-    bool isToday = eventEntity.datetimeString == '0';
     return Text(
-      isTomorrow
-      ? 'Завтра${additionString ?? ''}'
-      : isToday
-      ? 'Сегодня${additionString ?? ''}'
-      : 'Через ${eventEntity.datetimeString} ${checkDays(eventEntity.datetimeString)}${additionString ?? ''}',
+      getTextFromDate(eventEntity.datetimeString, additionString),
       style: textStyle
       ?? TextStyle(
         fontFamily: 'Inter',

@@ -25,9 +25,9 @@ class ProfileRemoteDataSourceImpl
   @override
   Future<User> editProfile(User user, File? file) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Content-Type"] = "multipart/form-data";
     Map<String, dynamic> map = user.toJson();
     map['photo'] = file == null ? null : await MultipartFile.fromFile(file.path);
-    print('DATA: ${map}');
     Response response = await dio.put(Endpoints.editProfile.getPath(),
         data: FormData.fromMap(map),
         options: Options(
@@ -36,7 +36,7 @@ class ProfileRemoteDataSourceImpl
             headers: headers));
     printRes(response);
     if (response.statusCode == 200) {
-      return User.fromJson(response.data);
+      return User.fromJson(response.data['me']);
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }

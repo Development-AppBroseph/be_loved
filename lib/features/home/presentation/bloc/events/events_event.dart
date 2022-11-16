@@ -18,3 +18,8 @@ class EventChangeToHomeEvent extends EventsEvent{
   final int position;
   EventChangeToHomeEvent({required this.eventEntity, required this.position});
 }
+
+class EventDeleteEvent extends EventsEvent{
+  final int id;
+  EventDeleteEvent({required this.id});
+}

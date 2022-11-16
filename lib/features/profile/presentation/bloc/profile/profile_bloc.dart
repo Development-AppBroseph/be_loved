@@ -28,9 +28,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ProfileState state = data.fold(
       (error) => errorCheck(error),
       (data) {
+        sl<AuthConfig>().user!.me = data;
         return ProfileEditedSuccessState();
       },
     );
+    await MySharedPrefs().setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
     emit(state);
   }
 

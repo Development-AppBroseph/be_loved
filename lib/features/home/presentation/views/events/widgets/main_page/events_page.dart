@@ -117,6 +117,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                   onTap: () {
                     widget.nextPage();
                   },
+                  behavior: HitTestBehavior.translucent,
                   child: SizedBox(
                     width: 55.h,
                     height: 55.h,
@@ -477,13 +478,14 @@ class _MainEventsPageState extends State<MainEventsPage> {
           Container(
             height: 55.h,
             decoration: BoxDecoration(
-              border: Border.all(color: ColorStyles.greyColor),
+              border: Border.all(color: ColorStyles.accentColor),
+              color: ColorStyles.accentColor,
               borderRadius: BorderRadius.circular(20.r),
             ),
           ),
           Align(
               alignment: Alignment.center,
-              child: Text('Новое событие', style: style)),
+              child: Text('Новое событие', style: style.copyWith(color: Colors.white))),
           Align(
             alignment: Alignment.centerRight,
             child: SizedBox(
@@ -493,6 +495,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                 padding: EdgeInsets.symmetric(vertical: 17.h),
                 child: SvgPicture.asset(
                   SvgImg.addNewEvent,
+                  color: Colors.white,
                 ),
               ),
             ),
