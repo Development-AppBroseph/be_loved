@@ -95,7 +95,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
         iconIndex = index;
       });
       Navigator.pop(context);
-    }, iconIndex);
+    }, iconIndex, );
   }
 
 

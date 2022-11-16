@@ -1,14 +1,17 @@
 abstract class Img {
   static const String avatarNone = "assets/images/avatar_none.png";
-  static const String belovedBackground = "assets/images/beloved_background.png";
+  static const String belovedBackground =
+      "assets/images/beloved_background.png";
   static const String codeRegion = "assets/images/code_region.png";
   static const String code = "assets/images/code.png";
   static const String nickNameBusy = "assets/images/nick_name_busy.png";
   static const String nickNameNotBusy = "assets/images/nick_name_not_busy.png";
   static const String russia = "assets/images/Russia.png";
-  static const String android12SplashScreen = "assets/images/android12splash.png";
+  static const String android12SplashScreen =
+      "assets/images/android12splash.png";
   static const String splashScreen = "assets/images/splash.png";
-  static const String backgroungProfile = "assets/images/background_profile.png";
+  static const String backgroungProfile =
+      "assets/images/background_profile.png";
   static const String smile = "assets/images/smile.png";
 }
 
@@ -27,7 +30,8 @@ abstract class SvgImg {
   static const String belovedBackground = "assets/icons/beloved_background.svg";
   static const String belovedText = "assets/icons/beloved_text.svg";
   static const String calendarLeftIcon = "assets/icons/calendar_left_icon.svg";
-  static const String calendarRightIcon = "assets/icons/calendar_right_icon.svg";
+  static const String calendarRightIcon =
+      "assets/icons/calendar_right_icon.svg";
   static const String calendar = "assets/icons/calendar.svg";
   static const String camera = "assets/icons/camera.svg";
   static const String check = "assets/icons/check.svg";
@@ -60,4 +64,11 @@ abstract class SvgImg {
   static const String smile = "assets/icons/smile.svg";
   static const String minus = "assets/icons/minus.svg";
   static const String bin = "assets/icons/bin.svg";
+  static const List<String> colors = [
+    "assets/icons/blue.svg",
+    "assets/icons/red.svg",
+    "assets/icons/green.svg",
+    "assets/icons/black.svg",
+    "assets/icons/perpul.svg",
+  ];
 }

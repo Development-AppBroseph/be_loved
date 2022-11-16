@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-void iconSelectModal(BuildContext context, Offset offset,
+void colorSelectModal(BuildContext context, Offset offset,
         Function(int index) onTap, int iconIndex,) =>
     showDialog(
       useSafeArea: false,
@@ -22,7 +22,7 @@ void iconSelectModal(BuildContext context, Offset offset,
           backgroundColor: Colors.transparent,
           elevation: 0,
           iconColor: Colors.transparent,
-          content: Container(
+          content: SizedBox(
             height: 140.h,
             child: StatefulBuilder(builder: ((context, setState) {
               initWidgets() {
@@ -57,13 +57,13 @@ void iconSelectModal(BuildContext context, Offset offset,
                     height: isInit ? 140.h : 100.h,
                     width: 57.w,
                     child: AnimatedOpacity(
-                      duration: Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 200),
                       opacity: isInitOpacity ? 1 : 0,
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
                         controller: scrollController,
-                        itemCount: 31,
+                        itemCount: 5,
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -73,7 +73,7 @@ void iconSelectModal(BuildContext context, Offset offset,
                             child: Container(
                               alignment: Alignment.center,
                               height: 57.h, 
-                              child: index == 15
+                              child: index == 3
                                   ? Padding(
                                       padding:
                                           EdgeInsets.symmetric(vertical: 12.h),
@@ -87,7 +87,7 @@ void iconSelectModal(BuildContext context, Offset offset,
                                           horizontal: 13.w),
                                       child: Align(
                                         alignment: Alignment.center,
-                                        child: Image.asset(Img.smile),
+                                        child: SvgPicture.asset(SvgImg.colors[index],),
                                       ),
                                     ),
                             ),
