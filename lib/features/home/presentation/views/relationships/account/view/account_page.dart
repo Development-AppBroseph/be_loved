@@ -46,7 +46,7 @@ class _AccountPageState extends State<AccountPage> {
 
   String text = "";
 
-  int maxLength = 10;
+  int maxLength = 12;
 
   TextEditingController textEditingControllerUp = TextEditingController();
 
@@ -70,7 +70,10 @@ class _AccountPageState extends State<AccountPage> {
 
   TextEditingController codeController = TextEditingController();
 
-  TextEditingController nameController = TextEditingController();
+  TextEditingController nameController = TextEditingController(text: sl<AuthConfig>().user == null 
+    ? '' 
+    : sl<AuthConfig>().user!.me.username,
+  );
 
   PageController controller = PageController();
 
@@ -315,11 +318,7 @@ class _AccountPageState extends State<AccountPage> {
                                                                   top: 20),
                                                           border:
                                                               InputBorder.none,
-                                                          hintText:
-                                                              sl<AuthConfig>()
-                                                                  .user!
-                                                                  .me
-                                                                  .username,
+                                                          hintText: '',
                                                           hintStyle: TextStyle(
                                                             color: Colors.black,
                                                             fontSize: 30.sp,
@@ -335,15 +334,14 @@ class _AccountPageState extends State<AccountPage> {
                                                       if (focusNodeName
                                                           .hasFocus) {
                                                         focusNodeName.unfocus();
-                                                        // MySharedPrefs().setNameRelationShips(
-                                                        //     _controller.text);
-                                                        // getNameRelationShips();
-                                                        // showLoaderWrapper(context);
-                                                        // context.read<ProfileBloc>().add(EditRelationNameEvent(name: _controller.text.trim()));
+                                                        sl<AuthConfig>().user!.me.username = nameController.text.trim();
+                                                        showLoaderWrapper(context);
+                                                        context.read<ProfileBloc>().add(EditProfileEvent(user: sl<AuthConfig>().user!.me, avatar: null));
                                                       } else {
                                                         FocusScope.of(context).requestFocus(focusNodeName);
                                                       }
                                                     },
+                                                    behavior: HitTestBehavior.translucent,
                                                     child: nameController.text
                                                                 .isNotEmpty &&
                                                             focusNodeName

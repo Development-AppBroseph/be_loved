@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../constants/colors/color_styles.dart';
+import '../bloc/tags/tags_bloc.dart';
 import 'events/view/event_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,6 +43,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     context.read<EventsBloc>().add(GetEventsEvent());
+    context.read<TagsBloc>().add(GetTagsEvent());
   }
 
   @override

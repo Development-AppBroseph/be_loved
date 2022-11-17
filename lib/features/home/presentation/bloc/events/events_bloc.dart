@@ -1,6 +1,7 @@
 import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/core/usecases/usecase.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
+import 'package:be_loved/features/home/domain/entities/events/tag_entity.dart';
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
@@ -18,11 +19,15 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     on<GetEventsEvent>(_getEvents);
     on<EventAddEvent>(_addEvents);
     on<EventChangeToHomeEvent>(_addHomeEvents);
+    on<SortByTagEvent>(_sortEvents);
     on<EventDeleteEvent>(_deleteEvent);
   }
 
   List<EventEntity> events = [];
   List<EventEntity> eventsInHome = [];
+  List<EventEntity> eventsSorted = [];
+  TagEntity? selectedTag;
+
 
   void _getEvents(GetEventsEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
@@ -32,6 +37,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       (error) => errorCheck(error),
       (data) {
         events = data;
+        eventsSorted = data;
         return GotSuccessEventsState();
       },
     );
@@ -49,6 +55,8 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
         events = events.reversed.toList();
         events.add(data);
         events = events.reversed.toList();
+        selectedTag = null;
+        eventsSorted = events;
         return EventAddedState(eventEntity: event.eventEntity);
       },
     );
@@ -74,6 +82,27 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
 
 
+  void _sortEvents(SortByTagEvent event, Emitter<EventsState> emit) async {
+    emit(EventBlankState());
+    eventsSorted = [];
+    if(selectedTag != null && selectedTag!.id == event.tagEntity.id){
+      selectedTag = null;
+      eventsSorted.addAll(events);
+    }else{
+      selectedTag = event.tagEntity;
+      for(var eventItem in events){
+        if(event.tagEntity.events.contains(eventItem.id)){
+          eventsSorted.add(eventItem);
+        }
+      }
+    }
+    emit(GotSuccessEventsState());
+  }
+
+
+
+
+
   void _deleteEvent(EventDeleteEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
     final data = await deleteEvent.call(DeleteEventParams(ids: event.ids));
@@ -83,6 +112,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
         for(int id in event.ids){
           events.removeWhere((element) => element.id == id);
           eventsInHome.removeWhere((element) => element.id == id);
+          eventsSorted.removeWhere((element) => element.id == id);
         }
         return EventDeletedState();
       },
