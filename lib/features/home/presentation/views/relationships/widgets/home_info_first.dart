@@ -74,7 +74,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
       hour = difference.inHours - difference.inDays * 24;
       minute = difference.inMinutes - difference.inHours * 60;
 
-      streamController.add(true);
+      streamController. add(true);
     }
   }
 
