@@ -20,7 +20,7 @@ class MySharedPrefs {
     UserAnswer? userAnswer = user != null && user != ''
         ? UserAnswer.fromJson(jsonDecode(user))
         : null;
-    sl<AuthConfig>().user = userAnswer;
+    // sl<AuthConfig>().user = userAnswer;
     sl<AuthConfig>().token = await MySecureStorage().getToken();
     return userAnswer;
   }
@@ -47,6 +47,13 @@ class MySharedPrefs {
 
   Future<void> setUser(String token, UserAnswer user) async {
     (await _sharedPreferences).setString('token', token);
+    (await _sharedPreferences).setString(
+      'user',
+      jsonEncode(user.toJson()),
+    );
+  }
+
+  Future<void> updateUser(UserAnswer user) async {
     (await _sharedPreferences).setString(
       'user',
       jsonEncode(user.toJson()),

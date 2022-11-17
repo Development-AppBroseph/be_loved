@@ -17,42 +17,46 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 135.w,
-      child: Column(
-        children: [
-          Container(
-            height: 135.h,
-            width: 135.h,
-            decoration: image == null
-                ? const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(Img.avatarNone),
-                    ),
-                  )
-                : BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(40.r),
-                    ),
-                    border: Border.all(width: 5.h, color: Colors.white),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: getImage(image),
-                    ),
-                  ),
+    return Stack(
+      children: [
+        SizedBox(
+          width: 135.w,
+          child: Column(
+            children: [
+              Container(
+                height: 135.h,
+                width: 135.h,
+                decoration: image == null
+                    ? const BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(Img.avatarNone),
+                        ),
+                      )
+                    : BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(40.r),
+                        ),
+                        border: Border.all(width: 5.h, color: Colors.white),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: getImage(image),
+                        ),
+                      ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10.h),
+                child: Text(
+                  title,
+                  style: getStyle(),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 10.h),
-            child: Text(
-              title,
-              style: getStyle(),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

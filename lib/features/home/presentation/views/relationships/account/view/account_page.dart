@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
@@ -58,15 +57,12 @@ class _AccountPageState extends State<AccountPage> {
   bool resendCode = false;
 
   final _streamController = StreamController<int>();
-  final _nameStreamController = StreamController<int>();
 
   final _streamControllerCarousel = StreamController<double>();
 
   final _scrollController = ScrollController();
 
   TextEditingController phoneController = TextEditingController();
-
-  TextEditingController nameController = TextEditingController();
 
   TextEditingController codeController = TextEditingController();
 
@@ -253,13 +249,15 @@ class _AccountPageState extends State<AccountPage> {
                                             child: SizedBox(
                                               height: 45.h,
                                               child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   Expanded(
                                                     child: SizedBox(
                                                       height: 33.h,
                                                       child: TextField(
-                                                        textAlign: TextAlign.center,
+                                                        textAlign:
+                                                            TextAlign.center,
                                                         textCapitalization:
                                                             TextCapitalization
                                                                 .words,
@@ -338,7 +336,9 @@ class _AccountPageState extends State<AccountPage> {
                                                         showLoaderWrapper(context);
                                                         context.read<ProfileBloc>().add(EditProfileEvent(user: sl<AuthConfig>().user!.me, avatar: null));
                                                       } else {
-                                                        FocusScope.of(context).requestFocus(focusNodeName);
+                                                        FocusScope.of(context)
+                                                            .requestFocus(
+                                                                focusNodeName);
                                                       }
                                                     },
                                                     behavior: HitTestBehavior.translucent,
@@ -791,140 +791,6 @@ class _AccountPageState extends State<AccountPage> {
         ),
       );
     });
-  }
-
-  Stack _nameAndPhoneWidget(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 135.h),
-          child: SizedBox(
-            height: 130.h,
-            width: 428.w,
-            child: CupertinoCard(
-              margin: EdgeInsets.all(0.h),
-              elevation: 0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20.r),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      StreamBuilder<int>(
-                          stream: _nameStreamController.stream,
-                          initialData: nameController.text.length * 22,
-                          builder: (context, snapshot) {
-                            return SizedBox(
-                              width: nameController.text.length > 3
-                                  ? snapshot.data!.w
-                                  : 70.w,
-                              height: 33.h,
-                              child: TextField(
-                                textAlign: TextAlign.center,
-                                controller: nameController,
-                                style: style3.copyWith(
-                                  fontSize: 30.sp,
-                                  color: const Color(0xff171717),
-                                  height: 1.h,
-                                ),
-                                focusNode: focusNodeName,
-                                onChanged: (value) {
-                                  _nameStreamController.sink.add(
-                                      (value.contains(' ')
-                                              ? value.length - 1
-                                              : value.length) *
-                                          22);
-                                  MySharedPrefs().changeName(value);
-                                },
-                                inputFormatters: [],
-                                decoration: InputDecoration.collapsed(
-                                  hintText: '',
-                                  hintStyle: style3.copyWith(
-                                    fontSize: 30.sp,
-                                    color: const Color(0xff969696),
-                                    height: 1.h,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }),
-                      // Text(
-                      //   sl<AuthConfig>().user == null
-                      //       ? 'Никита Белых'
-                      //       : sl<AuthConfig>()
-                      //           .user!
-                      //           .me
-                      //           .username,
-                      //   style: style3.copyWith(
-                      //     fontSize: 30.sp,
-                      //     color:
-                      //         const Color(0xff171717),
-                      //     height: 1.h,
-                      //   ),
-                      //   textAlign: TextAlign.center,
-                      // ),
-                      GestureDetector(
-                        onTap: () {
-                          if (!focusNodeName.hasFocus) {
-                            focusNodeName.requestFocus();
-                            setState(() {});
-                          } else {
-                            focusNodeName.unfocus();
-                            setState(() {});
-                          }
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 8.h, bottom: 5.h),
-                          child: focusNodeName.hasFocus
-                              ? const Icon(
-                                  Icons.check_rounded,
-                                  color: const Color(0xff969696),
-                                )
-                              : SvgPicture.asset(
-                                  SvgImg.edit,
-                                  color: const Color(0xff969696),
-                                  height: 17.h,
-                                  width: 17.w,
-                                ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 105.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 20.h),
-                          child: Text(
-                            userPhone,
-                            style: style3.copyWith(
-                              fontSize: 15.sp,
-                              color: Colors.black,
-                              height: 1.h,
-                            ),
-                          ),
-                        ),
-                        SvgPicture.asset(SvgImg.vkLogo)
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        photo(context),
-      ],
-    );
   }
 
   // TextStyle style1 = TextStyle(

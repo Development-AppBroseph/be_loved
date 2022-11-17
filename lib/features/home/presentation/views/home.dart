@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/archive.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/events_page.dart';
@@ -8,6 +10,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/main_rel
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -36,13 +39,13 @@ class _HomePageState extends State<HomePage> {
     ArchivePage(),
   ];
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     context.read<EventsBloc>().add(GetEventsEvent());
+    context.read<AuthBloc>().add(GetUser());
     context.read<TagsBloc>().add(GetTagsEvent());
   }
 
@@ -61,18 +64,35 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    return Scaffold(
-      bottomNavigationBar: bottomNavigator(),
-      body: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: pages,
-          ),
-        ],
-      ),
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        // var loader = showLoaderWrapper(context);
+        if (state is GetUserSuccess || state is GetUserError) {
+          // Loader.hide();
+          return Scaffold(
+            bottomNavigationBar: bottomNavigator(),
+            body: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pageController,
+                  children: pages,
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Container(
+            color: Colors.white,
+            alignment: Alignment.center,
+            child: SvgPicture.asset(
+              'assets/icons/heart.svg',
+              color: ColorStyles.redColor,
+            ),
+          );
+        }
+      },
     );
   }
 

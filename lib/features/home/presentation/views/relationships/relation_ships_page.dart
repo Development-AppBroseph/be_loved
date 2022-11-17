@@ -17,6 +17,7 @@ import 'package:be_loved/features/profile/presentation/widget/main_file/parametr
 import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
 import 'package:be_loved/locator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +43,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   final _streamController = StreamController<int>();
   final _streamControllerCarousel = StreamController<double>();
 
-  final TextEditingController _controller = TextEditingController(text: sl<AuthConfig>().user == null ? '' : sl<AuthConfig>().user!.name);
+  final TextEditingController _controller = TextEditingController(
+      text: sl<AuthConfig>().user == null ? '' : sl<AuthConfig>().user!.name);
   FocusNode f1 = FocusNode();
 
   @override
@@ -202,15 +204,16 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                           SizedBox(height: 30.h),
                           BlocConsumer<ProfileBloc, ProfileState>(
                             listener: (context, state) {
-                              if(state is ProfileErrorState){
+                              if (state is ProfileErrorState) {
                                 Loader.hide();
                                 showAlertToast(state.message);
                               }
-                              if(state is ProfileInternetErrorState){
+                              if (state is ProfileInternetErrorState) {
                                 Loader.hide();
-                                showAlertToast('Проверьте соединение с интернетом!');
+                                showAlertToast(
+                                    'Проверьте соединение с интернетом!');
                               }
-                              if(state is ProfileRelationNameChangedState){
+                              if (state is ProfileRelationNameChangedState) {
                                 Loader.hide();
                               }
                             },
@@ -240,7 +243,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                                   selection: TextSelection(
                                                     baseOffset: maxLength,
                                                     extentOffset: maxLength,
-                                                    affinity: TextAffinity.upstream,
+                                                    affinity:
+                                                        TextAffinity.upstream,
                                                     isDirectional: false,
                                                   ),
                                                   composing: TextRange(
@@ -264,7 +268,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                             scrollPadding: EdgeInsets.zero,
                                             decoration: InputDecoration(
                                               contentPadding:
-                                                  const EdgeInsets.only(top: 20),
+                                                  const EdgeInsets.only(
+                                                      top: 20),
                                               border: InputBorder.none,
                                               hintText: f1.hasFocus
                                                   ? " "
@@ -286,9 +291,13 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                             //     _controller.text);
                                             // getNameRelationShips();
                                             showLoaderWrapper(context);
-                                            context.read<ProfileBloc>().add(EditRelationNameEvent(name: _controller.text.trim()));
+                                            context.read<ProfileBloc>().add(
+                                                EditRelationNameEvent(
+                                                    name: _controller.text
+                                                        .trim()));
                                           } else {
-                                            FocusScope.of(context).requestFocus(f1);
+                                            FocusScope.of(context)
+                                                .requestFocus(f1);
                                           }
                                         },
                                         child: _controller.text.isNotEmpty &&
@@ -310,7 +319,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                               );
                             },
                           ),
-                          
                           SizedBox(height: 25.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -413,13 +421,12 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                           ),
                           SizedBox(height: 11.h),
                           BlocConsumer<EventsBloc, EventsState>(
-                            listener: (context, state) {
-                              if(state is EventErrorState){
-                                showAlertToast(state.message);
-                                if(state.isTokenError){
-                                  print('TOKEN ERROR, LOGOUT...');
-                                  context.read<AuthBloc>().add(LogOut(context));
-                                }
+                              listener: (context, state) {
+                            if (state is EventErrorState) {
+                              showAlertToast(state.message);
+                              if (state.isTokenError) {
+                                print('TOKEN ERROR, LOGOUT...');
+                                context.read<AuthBloc>().add(LogOut(context));
                               }
                               if(state is EventInternetErrorState){
                                 showAlertToast('Проверьте соединение с интернетом!');
@@ -473,7 +480,59 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                 ),
                               );
                             }
-                          ),
+                            if (state is EventInternetErrorState) {
+                              showAlertToast(
+                                  'Проверьте соединение с интернетом!');
+                            }
+                          }, builder: (context, state) {
+                            if (state is EventLoadingState) {
+                              return Container();
+                            }
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 25.w),
+                              child: ReorderableListView.builder(
+                                onReorder: (oldIndex, newIndex) {
+                                  context.read<EventsBloc>().add(
+                                      EventChangeToHomeEvent(
+                                          eventEntity:
+                                              eventsBloc.eventsInHome[oldIndex],
+                                          position: newIndex));
+                                },
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: const EdgeInsets.all(0),
+                                shrinkWrap: true,
+                                itemCount: eventsBloc.eventsInHome.length,
+                                itemBuilder: ((context, index) {
+                                  return CustomAnimationItemRelationships(
+                                    events: eventsBloc.eventsInHome[index],
+                                    // func: func,
+                                    key: ValueKey(
+                                        '${eventsBloc.eventsInHome[index].id}'),
+                                    delete: (i) {
+                                      context.read<EventsBloc>().add(
+                                          EventChangeToHomeEvent(
+                                              eventEntity: null, position: i));
+                                    },
+                                    index: index,
+                                  );
+                                }),
+                                proxyDecorator: (child, index, animation) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 20.h,
+                                              color:
+                                                  Color.fromRGBO(0, 0, 0, 0.1))
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(20.r)),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          }),
                           if (events.isEmpty) SizedBox(height: 15.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -510,20 +569,37 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   }
 
   Widget photoMini(String? path) {
-    return Container(
-      width: 45.h,
-      height: 45.h,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(15.r),
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.all(
+            Radius.circular(15.r),
+          ),
+          child: CachedNetworkImage(
+            imageUrl: Config.url.url + path!,
+            width: 45.h,
+            height: 45.h,
+            fit: BoxFit.cover,
+          ),
         ),
-        border: Border.all(width: 2.h, color: Colors.white),
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: getImage(path),
+        Container(
+          width: 45.h,
+          height: 45.h,
+          decoration: BoxDecoration(
+            // color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.r),
+            ),
+            border: Border.all(width: 2.h, color: Colors.white),
+            image: path == null && path.trim() == ''
+                ? DecorationImage(
+                    fit: BoxFit.cover,
+                    image: getImage(path),
+                  )
+                : null,
+          ),
         ),
-      ),
+      ],
     );
   }
 
