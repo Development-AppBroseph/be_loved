@@ -36,7 +36,15 @@ class EventModel extends EventEntity{
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
     int days = 0;
-    days = calculateDifference(DateTime.parse(json['start']).toLocal());
+    DateTime startDate = DateTime.parse(json['start']).toLocal();
+    days = calculateDifference(startDate);
+    if(json['important'] == true){
+      int currentYearDays = calculateDifference(DateTime(DateTime.now().year, startDate.month, startDate.day));
+      if(currentYearDays.isNegative){
+        currentYearDays = calculateDifference(DateTime(DateTime.now().year+1, startDate.month, startDate.day));
+      }
+      days = currentYearDays;
+    }
     String date = days.isNegative ? '0' : days.toString();
 
 

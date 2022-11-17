@@ -33,10 +33,10 @@ String checkDays(String days) {
 
 
 
-Color getColorFromDays(String days){
+Color getColorFromDays(String days, bool isImportant){
   int daysP = int.parse(days);
 
-  if(daysP <= 1){
+  if(daysP <= 1 || isImportant){
     return ColorStyles.redColor;
   }
   if(daysP >= 5){

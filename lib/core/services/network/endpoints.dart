@@ -7,6 +7,8 @@ enum Endpoints {
   phoneNumber,
   editProfile,
   
+  //Releation
+  editRelations,
 
   //Events
   getEvents,
@@ -31,11 +33,13 @@ extension EndpointsExtension on Endpoints {
       case Endpoints.getEvents:
         return "/events/";  
       case Endpoints.addEvent:
-        return "/events/";  
+        return "/events/"; 
       case Endpoints.deleteEvent:
-        return "/events/${params![0]}/";  
+        return "/events/";  
       case Endpoints.editEvent:
         return "/events/${params![0]}/";  
+      case Endpoints.editRelations:
+        return "/relations/";  
       default:
         return '';
     }

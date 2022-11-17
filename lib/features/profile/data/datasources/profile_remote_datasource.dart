@@ -10,6 +10,7 @@ import '../../../../../locator.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<User> editProfile(User user, File? file);
+  Future<String> editRelation(int id, String relationName);
 
 }
 
@@ -20,6 +21,7 @@ class ProfileRemoteDataSourceImpl
   ProfileRemoteDataSourceImpl({required this.dio});
   Map<String, String> headers = {
     "Accept": "application/json",
+    "Content-Type": "application/json",
   };
 
   @override
@@ -37,6 +39,31 @@ class ProfileRemoteDataSourceImpl
     printRes(response);
     if (response.statusCode == 200) {
       return User.fromJson(response.data['me']);
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
+
+
+  @override
+  Future<String> editRelation(int id, String relationName) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.put(Endpoints.editRelations.getPath(),
+        data: jsonEncode({
+          'relation_id': id,
+          'name': relationName
+        }),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 499,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 200) {
+      return relationName;
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }

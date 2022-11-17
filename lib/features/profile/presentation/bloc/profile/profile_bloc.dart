@@ -6,6 +6,7 @@ import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
 import 'package:be_loved/features/home/domain/usecases/put_code.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
+import 'package:be_loved/features/profile/domain/usecases/edit_relation.dart';
 import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -16,10 +17,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final EditProfile editProfile;
   final PostNumber postNumber;
   final PutCode putCode;
-  ProfileBloc(this.editProfile, this.postNumber, this.putCode) : super(ProfileInitialState()) {
+  final EditRelation editRelation;
+  ProfileBloc(this.editProfile, this.postNumber, this.putCode, this.editRelation) : super(ProfileInitialState()) {
     on<EditProfileEvent>(_editProfile);
     on<PostPhoneNumberEvent>(_postPhone);
     on<PutUserCodeEvent>(_putCode);
+    on<EditRelationNameEvent>(_editRelationName);
   }
   String? newPhone;
   void _editProfile(EditProfileEvent event, Emitter<ProfileState> emit) async {
@@ -61,6 +64,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           sl<AuthConfig>().user!.me.phoneNumber = newPhone!;
         }
         return ProfileConfirmedSuccessState();
+      },
+    );
+    await MySharedPrefs().setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
+    emit(state);
+  }
+
+
+
+
+
+
+  void _editRelationName(EditRelationNameEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileLoadingState());
+    final data = await editRelation.call(EditRelationParams(
+      relationId: sl<AuthConfig>().user!.relationId!,
+      nameRelation: event.name
+    ));
+    ProfileState state = data.fold(
+      (error) => errorCheck(error),
+      (data) {
+        sl<AuthConfig>().user!.name = data;
+        return ProfileRelationNameChangedState();
       },
     );
     await MySharedPrefs().setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);

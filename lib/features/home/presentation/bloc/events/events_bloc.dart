@@ -76,12 +76,14 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
   void _deleteEvent(EventDeleteEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
-    final data = await deleteEvent.call(DeleteEventParams(id: event.id));
+    final data = await deleteEvent.call(DeleteEventParams(ids: event.ids));
     EventsState state = data.fold(
       (error) => errorCheck(error),
       (data) {
-        events.removeWhere((element) => element.id == event.id);
-        eventsInHome.removeWhere((element) => element.id == event.id);
+        for(int id in event.ids){
+          events.removeWhere((element) => element.id == id);
+          eventsInHome.removeWhere((element) => element.id == id);
+        }
         return EventDeletedState();
       },
     );

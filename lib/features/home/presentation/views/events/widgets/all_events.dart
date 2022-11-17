@@ -198,7 +198,9 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                     duration: const Duration(milliseconds: 600),
                                     curve: Curves.easeInOutQuint);
                               });
-                              selectedEvents.clear();
+                              showLoaderWrapper(context);
+                              print('SENT: ${selectedEvents}');
+                              eventsBloc.add(EventDeleteEvent(ids: selectedEvents));
                               isSelectedAll = false;
                             },
                             child: Container(
@@ -348,6 +350,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
               }
               if(state is EventDeletedState){
                 Loader.hide();
+                selectedEvents.clear();
                 setState(() {});
               }
             },
@@ -389,7 +392,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                         isSelected: selectedEvents.contains(eventsBloc.events[index].id),
                         onTapDelete: (){
                           showLoaderWrapper(context);
-                          context.read<EventsBloc>().add(EventDeleteEvent(id: eventsBloc.events[index].id));
+                          context.read<EventsBloc>().add(EventDeleteEvent(ids: [eventsBloc.events[index].id]));
                         },
                       );
                     },

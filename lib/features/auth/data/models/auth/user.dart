@@ -14,6 +14,7 @@ class UserAnswer {
     required this.love,
     required this.relationId,
     required this.status,
+    required this.name,
     required this.fromYou,
     required this.date,
   });
@@ -22,6 +23,7 @@ class UserAnswer {
   User? love;
   int? relationId;
   String? status;
+  String? name;
   bool? fromYou;
   String? date;
 
@@ -30,6 +32,7 @@ class UserAnswer {
         love: json["love"] != null ? User.fromJson(json["love"]) : null,
         relationId: json["relation_id"],
         status: json["status"],
+        name: json["name"],
         fromYou: json["from_you"],
         date: json["date"],
       );
@@ -40,6 +43,7 @@ class UserAnswer {
         "relation_id": relationId,
         "status": status,
         "date": date,
+        "name": name
       };
 }
 

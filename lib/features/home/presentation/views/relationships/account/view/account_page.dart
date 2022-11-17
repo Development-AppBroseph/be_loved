@@ -46,7 +46,7 @@ class _AccountPageState extends State<AccountPage> {
   TextEditingController textEditingControllerDown = TextEditingController();
 
   String phoneNumber = '';
-  String userPhone = '';
+  // String userPhone = '';
 
   bool resendCode = false;
 
@@ -74,15 +74,13 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   void initState() {
-    _getUserPhone();
+    // _getUserPhone();
     super.initState();
   }
 
-  void _getUserPhone() async {
-    var phone = (await MySharedPrefs().user as UserAnswer).me.phoneNumber;
-    userPhone =
-        '${phone.substring(0, 2)} ${phone.substring(2, 5)} ${phone.substring(5, 8)} ${phone.substring(8, 10)} ${phone.substring(10, 12)}';
-    setState(() {});
+  String getUserPhone(String phone) {
+    // var phone = (await MySharedPrefs().user as UserAnswer).me.phoneNumber;
+    return '${phone.substring(0, 2)} ${phone.substring(2, 5)} ${phone.substring(5, 8)} ${phone.substring(8, 10)}-${phone.substring(10, 12)}';
   }
 
 
@@ -164,7 +162,6 @@ class _AccountPageState extends State<AccountPage> {
           );
           phoneController.clear();
           codeController.clear();
-          _getUserPhone();
         }
         
         if(state is ProfileEditedSuccessState){
@@ -292,7 +289,7 @@ class _AccountPageState extends State<AccountPage> {
                                                   padding: EdgeInsets.only(
                                                       left: 20.h),
                                                   child: Text(
-                                                    userPhone,
+                                                    getUserPhone(sl<AuthConfig>().user!.me.phoneNumber),
                                                     style: style3.copyWith(
                                                       fontSize: 15.sp,
                                                       color: Colors.black,

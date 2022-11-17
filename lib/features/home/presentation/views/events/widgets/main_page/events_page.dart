@@ -6,6 +6,7 @@ import 'package:be_loved/core/utils/helpers/events_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
+import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_events_bottomsheet.dart';
@@ -168,6 +169,9 @@ class _MainEventsPageState extends State<MainEventsPage> {
               List<EventEntity> eventsSlider = eventsBloc.events
                   .where((element) => int.parse(element.datetimeString) < 7)
                   .toList();
+              if (eventsSlider.isEmpty) {
+                return Container();
+              }
               return Column(
                 children: [
                   // const Padding(
@@ -223,7 +227,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                                                 fontWeight: FontWeight.w800,
                                                 color: getColorFromDays(
                                                     eventsSlider[i]
-                                                        .datetimeString),
+                                                        .datetimeString, eventsSlider[i].important),
                                               ),
                                             ),
                                             Row(
@@ -417,6 +421,9 @@ class _MainEventsPageState extends State<MainEventsPage> {
             }
             if (state is EventInternetErrorState) {
               showAlertToast('Проверьте соединение с интернетом!');
+            }
+            if(state is EventAddedState || state is GotSuccessEventsState){
+              setState(() {});
             }
           }, builder: (context, state) {
             if (state is EventLoadingState) {
@@ -627,7 +634,9 @@ class _MainEventsPageState extends State<MainEventsPage> {
               //       )
               //     :
               SizedBox(height: 5.h),
-              RichText(
+              eventEntity.important
+              ? ImportantTextWidget()
+              : RichText(
                 text: TextSpan(children: [
                   TextSpan(
                       text: 'Добавил(а): ${eventEntity.eventCreator.username}',

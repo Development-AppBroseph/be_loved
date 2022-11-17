@@ -86,7 +86,7 @@ class EventsRepositoryImpl implements EventsRepository {
   Future<Either<Failure, void>> deleteEvent(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.deleteEvent(params.id);
+        final items = await remoteDataSource.deleteEvent(params.ids);
         return Right(items);
       } catch (e) {
         print(e);

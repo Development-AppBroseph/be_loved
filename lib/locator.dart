@@ -15,6 +15,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/account/
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
+import 'package:be_loved/features/profile/domain/usecases/edit_relation.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -115,9 +116,10 @@ void setupInjections() {
 
   // //UseCases
   sl.registerLazySingleton(() => EditProfile(sl()));
+  sl.registerLazySingleton(() => EditRelation(sl()));
 
   //Blocs
   sl.registerFactory<ProfileBloc>(
-    () => ProfileBloc(sl(), sl(), sl()),
+    () => ProfileBloc(sl(), sl(), sl(), sl()),
   );
 }
