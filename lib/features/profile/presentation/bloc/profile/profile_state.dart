@@ -22,3 +22,4 @@ class ProfileAddedState extends ProfileState{
 }
 class ProfileSentCodeState extends ProfileState{}
 class ProfileConfirmedSuccessState extends ProfileState{}
+class ProfileRelationNameChangedState extends ProfileState{}

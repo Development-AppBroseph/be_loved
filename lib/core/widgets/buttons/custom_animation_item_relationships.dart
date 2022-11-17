@@ -121,6 +121,7 @@ class _CustomAnimationItemRelationshipsState
                     color: Colors.white,
                     elevation: 0,
                     margin: EdgeInsets.zero,
+                    padding: EdgeInsets.zero,
                     child: SingleChildScrollView(
                       controller: scrollController,
                       physics: const NeverScrollableScrollPhysics(),
@@ -188,51 +189,29 @@ class _CustomAnimationItemRelationshipsState
                                               milliseconds: 1000),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
-                                        widget.index == 0 &&
-                                                context
-                                                    .read<EventsBloc>()
-                                                    .events
-                                                    .any((element) =>
-                                                        element.datetimeString ==
-                                                            '1' ||
-                                                        element.datetimeString ==
-                                                            '0')
-                                            ? Row(
-                                                children: [
-                                                  Text(
-                                                    'Завтра:',
-                                                    style: TextStyle(
-                                                      color:
-                                                          ColorStyles.greyColor,
-                                                      fontSize: 15.sp,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      height: 1,
-                                                    ),
+                                        widget.index == 0 && context.read<EventsBloc>().events.any((element) => element.datetimeString == '1')
+                                        ? Row(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              'Завтра:',
+                                              style: TextStyle(
+                                                  color: ColorStyles.greyColor,
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.w700,
                                                   ),
-                                                  SizedBox(width: 10.w),
-                                                  Text(
-                                                    context
-                                                        .read<EventsBloc>()
-                                                        .events
-                                                        .where((element) =>
-                                                            element
-                                                                .datetimeString ==
-                                                            '1')
-                                                        .first
-                                                        .title,
-                                                    style: TextStyle(
-                                                        color: ColorStyles
-                                                            .greyColor,
-                                                        fontSize: 15.sp,
-                                                        fontWeight:
-                                                            FontWeight.w700),
-                                                  ),
-                                                ],
-                                              )
-                                            : SizedBox(
-                                                height: 10.h,
-                                              ),
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            Text(
+                                              context.read<EventsBloc>().events.where((element) => element.datetimeString == '1')
+                                              .first.title,
+                                              style: TextStyle(
+                                                  color: ColorStyles.greyColor,
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          ],
+                                        ) : SizedBox(height: 10.h,),
                                       ],
                                     ),
                                   ),

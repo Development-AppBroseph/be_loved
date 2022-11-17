@@ -7,6 +7,7 @@ import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
+import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
@@ -334,7 +335,8 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(top: 6.h),
-                                                  child: Text(
+                                                  child: !eventsBloc.events[index].important
+                                                  ? Text(
                                                     'Добавил(а): ${eventsBloc.events[index].eventCreator.username}',
                                                     style: TextStyle(
                                                       fontFamily: "Inter",
@@ -342,7 +344,8 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                                       fontSize: 15.sp,
                                                       fontWeight: FontWeight.w700,
                                                     ),
-                                                  ),
+                                                  ) 
+                                                  : ImportantTextWidget()
                                                 ),
                                               ],
                                             ),

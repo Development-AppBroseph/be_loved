@@ -7,10 +7,12 @@ import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/profile/presentation/widget/main_file/parametrs_user_bottomsheet.dart';
 import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
@@ -18,6 +20,7 @@ import 'package:be_loved/locator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -39,7 +42,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   final _streamController = StreamController<int>();
   final _streamControllerCarousel = StreamController<double>();
 
-  final TextEditingController _controller = TextEditingController(text: '');
+  final TextEditingController _controller = TextEditingController(text: sl<AuthConfig>().user == null ? '' : sl<AuthConfig>().user!.name);
   FocusNode f1 = FocusNode();
 
   @override
@@ -50,17 +53,17 @@ class _RelationShipsPageState extends State<RelationShipsPage>
       setState(() {});
     });
 
-    getNameRelationShips();
+    // getNameRelationShips();
   }
 
-  void getNameRelationShips() async {
-    final name = await MySharedPrefs().getNameRelationShips;
-    if (name != null && name.length > 0) {
-      _controller.text = name;
-    } else {
-      _controller.text = 'Назовите отношения';
-    }
-  }
+  // void getNameRelationShips() async {
+  //   final name = await MySharedPrefs().getNameRelationShips;
+  //   if (name != null && name.length > 0) {
+  //     _controller.text = name;
+  //   } else {
+  //     _controller.text = 'Назовите отношения';
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -197,97 +200,117 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                             ),
                           ),
                           SizedBox(height: 30.h),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: 25.w,
-                              right: 38.w,
-                            ),
-                            child: SizedBox(
-                              height: 45.h,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: SizedBox(
-                                      height: 33.h,
-                                      child: TextField(
-                                        textCapitalization:
-                                            TextCapitalization.words,
-                                        onChanged: (value) {
-                                          if (value.length <= maxLength) {
-                                            text = value;
-                                          } else {
-                                            _controller.value =
-                                                TextEditingValue(
-                                              text: text,
-                                              selection: TextSelection(
-                                                baseOffset: maxLength,
-                                                extentOffset: maxLength,
-                                                affinity: TextAffinity.upstream,
-                                                isDirectional: false,
+                          BlocConsumer<ProfileBloc, ProfileState>(
+                            listener: (context, state) {
+                              if(state is ProfileErrorState){
+                                Loader.hide();
+                                showAlertToast(state.message);
+                              }
+                              if(state is ProfileInternetErrorState){
+                                Loader.hide();
+                                showAlertToast('Проверьте соединение с интернетом!');
+                              }
+                              if(state is ProfileRelationNameChangedState){
+                                Loader.hide();
+                              }
+                            },
+                            builder: (context, state) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  left: 25.w,
+                                  right: 38.w,
+                                ),
+                                child: SizedBox(
+                                  height: 45.h,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: 33.h,
+                                          child: TextField(
+                                            textCapitalization:
+                                                TextCapitalization.words,
+                                            onChanged: (value) {
+                                              if (value.length <= maxLength) {
+                                                text = value;
+                                              } else {
+                                                _controller.value =
+                                                    TextEditingValue(
+                                                  text: text,
+                                                  selection: TextSelection(
+                                                    baseOffset: maxLength,
+                                                    extentOffset: maxLength,
+                                                    affinity: TextAffinity.upstream,
+                                                    isDirectional: false,
+                                                  ),
+                                                  composing: TextRange(
+                                                    start: 0,
+                                                    end: maxLength,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            cursorColor: Colors.white,
+                                            cursorHeight: 30,
+                                            textAlignVertical:
+                                                TextAlignVertical.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 30.sp,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                            controller: _controller,
+                                            focusNode: f1,
+                                            scrollPadding: EdgeInsets.zero,
+                                            decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.only(top: 20),
+                                              border: InputBorder.none,
+                                              hintText: f1.hasFocus
+                                                  ? " "
+                                                  : 'Назовите отношения',
+                                              hintStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 30.sp,
+                                                fontWeight: FontWeight.w700,
                                               ),
-                                              composing: TextRange(
-                                                start: 0,
-                                                end: maxLength,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        cursorColor: Colors.white,
-                                        cursorHeight: 30,
-                                        textAlignVertical:
-                                            TextAlignVertical.center,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 30.sp,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        controller: _controller,
-                                        focusNode: f1,
-                                        scrollPadding: EdgeInsets.zero,
-                                        decoration: InputDecoration(
-                                          contentPadding:
-                                              const EdgeInsets.only(top: 20),
-                                          border: InputBorder.none,
-                                          // hintText: f1.hasFocus
-                                          //     ? " "
-                                          //     : 'Назовите отношения',
-                                          hintStyle: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 30.sp,
-                                            fontWeight: FontWeight.w700,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      if (f1.hasFocus) {
-                                        f1.unfocus();
-                                        MySharedPrefs().setNameRelationShips(
-                                            _controller.text);
-                                        getNameRelationShips();
-                                      } else {
-                                        FocusScope.of(context).requestFocus(f1);
-                                      }
-                                    },
-                                    child: _controller.text.isNotEmpty &&
-                                            f1.hasFocus
-                                        ? const Icon(
-                                            Icons.check_rounded,
-                                            color: Colors.white,
-                                          )
-                                        : !f1.hasFocus
-                                            ? SvgPicture.asset(SvgImg.edit)
-                                            : const Icon(
+                                      GestureDetector(
+                                        onTap: () async {
+                                          if (f1.hasFocus) {
+                                            f1.unfocus();
+                                            // MySharedPrefs().setNameRelationShips(
+                                            //     _controller.text);
+                                            // getNameRelationShips();
+                                            showLoaderWrapper(context);
+                                            context.read<ProfileBloc>().add(EditRelationNameEvent(name: _controller.text.trim()));
+                                          } else {
+                                            FocusScope.of(context).requestFocus(f1);
+                                          }
+                                        },
+                                        child: _controller.text.isNotEmpty &&
+                                                f1.hasFocus
+                                            ? const Icon(
                                                 Icons.check_rounded,
                                                 color: Colors.white,
-                                              ),
-                                  )
-                                ],
-                              ),
-                            ),
+                                              )
+                                            : !f1.hasFocus
+                                                ? SvgPicture.asset(SvgImg.edit)
+                                                : const Icon(
+                                                    Icons.check_rounded,
+                                                    color: Colors.white,
+                                                  ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
+                          
                           SizedBox(height: 25.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),

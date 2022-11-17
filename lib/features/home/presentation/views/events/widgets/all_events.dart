@@ -2,10 +2,16 @@ import 'dart:math';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/events/widgets/user_event_item.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_events.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -32,6 +38,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
     HashTagData(type: TypeHashTag.add),
   ];
   bool isSelectedAll = false;
+  List<int> selectedEvents = [];
   TextStyle style1 = TextStyle(
       color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
   @override
@@ -47,6 +54,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
 
   @override
   Widget build(BuildContext context) {
+    EventsBloc eventsBloc = context.read<EventsBloc>();
     return Scaffold(
       body: Column(
         children: [
@@ -105,7 +113,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                       ),
                       child: Center(
                         child: Text(
-                          "0/30",
+                          "${eventsBloc.events.length}/30",
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 20.sp,
@@ -171,7 +179,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 25),
                       child: Text(
-                        'Выделено: 0 событий',
+                        'Выделено: ${selectedEvents.length} событий',
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 20.sp,
@@ -190,6 +198,10 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                     duration: const Duration(milliseconds: 600),
                                     curve: Curves.easeInOutQuint);
                               });
+                              showLoaderWrapper(context);
+                              print('SENT: ${selectedEvents}');
+                              eventsBloc.add(EventDeleteEvent(ids: selectedEvents));
+                              isSelectedAll = false;
                             },
                             child: Container(
                               height: 55.h,
@@ -217,6 +229,9 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                           _pageController.previousPage(
                               duration: const Duration(milliseconds: 600),
                               curve: Curves.easeInOutQuint);
+
+                          selectedEvents.clear();
+                          isSelectedAll = false;
                         });
                       },
                       child: Container(
@@ -323,37 +338,82 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
               itemCount: hashTags.length,
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(top: 39.h),
-              child: ListView.builder(
-                controller: scrollController,
-                padding: EdgeInsets.symmetric(horizontal: 25.w),
-                scrollDirection: Axis.vertical,
-                itemCount: 30,
-                physics: const ClampingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onLongPress: () {
-                      setState(() {
-                        if (isSelectedAll) {
-                          isSelectedAll = false;
-                        } else {
-                          isSelectedAll = true;
-                        }
-                      });
+          BlocConsumer<EventsBloc, EventsState>(
+            listener: (context, state) {
+              if(state is EventErrorState){
+                Loader.hide();
+                showAlertToast(state.message);
+              }
+              if(state is EventInternetErrorState){
+                Loader.hide();
+                showAlertToast('Проверьте соединение с интернетом!');
+              }
+              if(state is EventDeletedState){
+                Loader.hide();
+                selectedEvents.clear();
+                setState(() {});
+              }
+            },
+            builder: (context, state) {
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 39.h),
+                  child: ListView.builder(
+                    controller: scrollController,
+                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    scrollDirection: Axis.vertical,
+                    itemCount: eventsBloc.events.length,
+                    physics: const ClampingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return UserEventItem(
+                        editorState: isSelectedAll 
+                        ? EditorState.groupSelect
+                        : countPage == 0
+                        ? EditorState.just
+                        : EditorState.oneItemDelete,
+                        onLongPress: (){
+                          setState(() {
+                            if(isSelectedAll == false && countPage == 1){
+                              isSelectedAll = true;
+                              selectedEvents.add(eventsBloc.events[index].id);
+                            }
+                          });
+                        },
+                        onSelect: (val) {
+                          setState(() {
+                            if(val){
+                              selectedEvents.add(eventsBloc.events[index].id);
+                            }else{
+                              selectedEvents.remove(eventsBloc.events[index].id);
+                            }
+                          });
+                        },
+                        eventEntity: eventsBloc.events[index],
+                        isSelected: selectedEvents.contains(eventsBloc.events[index].id),
+                        onTapDelete: (){
+                          showLoaderWrapper(context);
+                          context.read<EventsBloc>().add(EventDeleteEvent(ids: [eventsBloc.events[index].id]));
+                        },
+                      );
                     },
-                    child: UserEvents(
-                      countPage: countPage,
-                      isSelectedAll: isSelectedAll,
-                    ),
-                  );
-                },
-              ),
-            ),
+                  ),
+                ),
+              );
+            }
           ),
+          SizedBox(height: 30.h,)
+
         ],
       ),
     );
   }
+}
+
+
+
+
+enum EditorState{
+  just,
+  oneItemDelete,
+  groupSelect
 }

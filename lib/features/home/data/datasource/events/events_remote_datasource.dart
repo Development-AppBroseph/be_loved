@@ -12,7 +12,7 @@ abstract class EventsRemoteDataSource {
   Future<List<EventEntity>> getEvents();
   Future<EventEntity> addEvent(EventEntity eventEntity);
   Future<EventEntity> editEvent(EventEntity eventEntity);
-  Future<void> deleteEvent(int id);
+  Future<void> deleteEvent(List<int> ids);
 
 }
 
@@ -80,7 +80,7 @@ class EventsRemoteDataSourceImpl
             validateStatus: (status) => status! < 699,
             headers: headers));
     printRes(response);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return EventModel.fromJson(response.data);
     } else {
       throw ServerException(message: 'Ошибка с сервером');
@@ -92,15 +92,18 @@ class EventsRemoteDataSourceImpl
 
 
   @override
-  Future<void> deleteEvent(int id) async {
+  Future<void> deleteEvent(List<int> ids) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.delete(Endpoints.deleteEvent.getPath(params: [id]),
+    Response response = await dio.delete(Endpoints.deleteEvent.getPath(),
+        data: jsonEncode({
+          'event_list': ids
+        }),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,
             headers: headers));
     printRes(response);
-    if (response.statusCode == 201 || response.statusCode == 200) {
+    if (response.statusCode == 204 || response.statusCode == 200) {
       return;
     } else {
       throw ServerException(message: 'Ошибка с сервером');

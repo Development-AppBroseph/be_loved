@@ -25,8 +25,11 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
       emit(WebSocketInviteSendState());
   void _closeInvite(WebSocketCloseInviteMessage event, Emitter<WebSocketState> emit) =>
       emit(WebSocketInviteCloseState());
-  void _acceptInvite(WebSocketAcceptInviteMessage event, Emitter<WebSocketState> emit) =>
-      emit(WebSocketInviteAcceptState());
+  void _acceptInvite(WebSocketAcceptInviteMessage event, Emitter<WebSocketState> emit) async {
+    sl<AuthConfig>().user = await MySharedPrefs().user;
+    sl<AuthConfig>().token = await MySecureStorage().getToken();
+    emit(WebSocketInviteAcceptState());
+  }
 
   WebSocket? channel;
 
@@ -51,8 +54,6 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
             } else if(jsonDecode(event)['message'] == 'Отношения разрушены (может даже не начавшись') {
               add(WebSocketCloseInviteMessage());
             } else if(jsonDecode(event)['message'] == 'Поздравляю с началом отношений!') {
-              sl<AuthConfig>().user = await MySharedPrefs().user;
-              sl<AuthConfig>().token = await MySecureStorage().getToken();
               add(WebSocketAcceptInviteMessage());
             }
           }

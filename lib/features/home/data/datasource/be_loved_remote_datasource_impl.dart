@@ -56,7 +56,7 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
     if (response.statusCode! >= 200 && response.statusCode! < 400) {
       print(true);
     } else if (response.statusCode == 400) {
-      throw ServerException(message: 'Повторите попытку потом');
+      throw ServerException(message: 'Попробуйте через 1 минуту');
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }

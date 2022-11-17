@@ -2,6 +2,7 @@ import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/core/usecases/usecase.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
+import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -11,10 +12,13 @@ part 'events_state.dart';
 class EventsBloc extends Bloc<EventsEvent, EventsState> {
   final GetEvents getEvents;
   final AddEvent addEvent;
-  EventsBloc(this.addEvent, this.getEvents) : super(EventInitialState()) {
+  final DeleteEvent deleteEvent;
+
+  EventsBloc(this.addEvent, this.getEvents, this.deleteEvent) : super(EventInitialState()) {
     on<GetEventsEvent>(_getEvents);
     on<EventAddEvent>(_addEvents);
     on<EventChangeToHomeEvent>(_addHomeEvents);
+    on<EventDeleteEvent>(_deleteEvent);
   }
 
   List<EventEntity> events = [];
@@ -23,6 +27,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   void _getEvents(GetEventsEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
     final gotEvents = await getEvents.call(NoParams());
+    await Future.delayed(Duration(seconds: 3));
     EventsState state = gotEvents.fold(
       (error) => errorCheck(error),
       (data) {
@@ -63,6 +68,26 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       eventsInHome.insert(event.position == 0 ? 0 : event.position-1, event.eventEntity!);
     }
     emit(GotSuccessEventsState());
+  }
+
+
+
+
+
+  void _deleteEvent(EventDeleteEvent event, Emitter<EventsState> emit) async {
+    emit(EventLoadingState());
+    final data = await deleteEvent.call(DeleteEventParams(ids: event.ids));
+    EventsState state = data.fold(
+      (error) => errorCheck(error),
+      (data) {
+        for(int id in event.ids){
+          events.removeWhere((element) => element.id == id);
+          eventsInHome.removeWhere((element) => element.id == id);
+        }
+        return EventDeletedState();
+      },
+    );
+    emit(state);
   }
 
 

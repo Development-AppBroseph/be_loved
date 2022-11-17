@@ -26,3 +26,10 @@ class PutUserCodeEvent extends ProfileEvent{
   PutUserCodeEvent({required this.code});
 }
 
+
+
+
+class EditRelationNameEvent extends ProfileEvent{
+  final String name;
+  EditRelationNameEvent({required this.name});
+}

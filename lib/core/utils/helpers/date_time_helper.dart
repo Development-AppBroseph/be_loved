@@ -33,14 +33,26 @@ String checkDays(String days) {
 
 
 
-Color getColorFromDays(String days){
+Color getColorFromDays(String days, bool isImportant){
   int daysP = int.parse(days);
 
-  if(daysP <= 1){
+  if(daysP <= 1 || isImportant){
     return ColorStyles.redColor;
   }
   if(daysP >= 5){
     return ColorStyles.blueColor;
   }
   return ColorStyles.violetColor;
+}
+
+
+
+getTextFromDate(String days, [String? additionString]){
+  bool isTomorrow = days == '1';
+  bool isToday = days == '0';
+  return isTomorrow
+      ? 'Завтра${additionString ?? ''}'
+      : isToday
+      ? 'Сегодня${additionString ?? ''}'
+      : 'Через ${days} ${checkDays(days)}${additionString ?? ''}';
 }

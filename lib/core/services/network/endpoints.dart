@@ -7,6 +7,8 @@ enum Endpoints {
   phoneNumber,
   editProfile,
   
+  //Releation
+  editRelations,
 
   //Events
   getEvents,
@@ -23,17 +25,21 @@ extension EndpointsExtension on Endpoints {
     var ws = Config.ws.ws;
     switch (this) {
       case Endpoints.register:
-        return "$url/auth/users/";
+        return "/auth/users/";
       case Endpoints.phoneNumber:
         return "/auth/change_number";  
       case Endpoints.editProfile:
-        return "$url/auth/users/";
+        return "/auth/users";
       case Endpoints.getEvents:
         return "/events/";  
       case Endpoints.addEvent:
+        return "/events/"; 
+      case Endpoints.deleteEvent:
+        return "/events/";  
+      case Endpoints.editEvent:
         return "/events/${params![0]}/";  
-      case Endpoints.addEvent:
-        return "/events/${params![0]}/";  
+      case Endpoints.editRelations:
+        return "/relations/";  
       default:
         return '';
     }

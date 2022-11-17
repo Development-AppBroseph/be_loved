@@ -6,6 +6,7 @@ import 'package:be_loved/features/home/data/repository/events_repository_impl.da
 import 'package:be_loved/features/home/domain/repositories/be_loved.dart';
 import 'package:be_loved/features/home/domain/repositories/events_repository.dart';
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
+import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
 import 'package:be_loved/features/home/domain/usecases/put_code.dart';
@@ -14,6 +15,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/account/
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
+import 'package:be_loved/features/profile/domain/usecases/edit_relation.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -89,11 +91,12 @@ void setupInjections() {
 
   // //UseCases
   sl.registerLazySingleton(() => AddEvent(sl()));
+  sl.registerLazySingleton(() => DeleteEvent(sl()));
   sl.registerLazySingleton(() => GetEvents(sl()));
 
   //Blocs
   sl.registerFactory<EventsBloc>(
-    () => EventsBloc(sl(), sl()),
+    () => EventsBloc(sl(), sl(), sl()),
   );
 
 
@@ -113,9 +116,10 @@ void setupInjections() {
 
   // //UseCases
   sl.registerLazySingleton(() => EditProfile(sl()));
+  sl.registerLazySingleton(() => EditRelation(sl()));
 
   //Blocs
   sl.registerFactory<ProfileBloc>(
-    () => ProfileBloc(sl(), sl(), sl()),
+    () => ProfileBloc(sl(), sl(), sl(), sl()),
   );
 }
