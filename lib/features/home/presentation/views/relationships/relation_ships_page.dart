@@ -423,21 +423,21 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                           BlocConsumer<EventsBloc, EventsState>(
                               listener: (context, state) {
                             if (state is EventErrorState) {
-                                showAlertToast(state.message);
-                                if (state.isTokenError) {
-                                  print('TOKEN ERROR, LOGOUT...');
-                                  context.read<AuthBloc>().add(LogOut(context));
-                                }
-                                if(state is EventInternetErrorState){
-                                  showAlertToast('Проверьте соединение с интернетом!');
-                                }
+                              showAlertToast(state.message);
+                              if (state.isTokenError) {
+                                print('TOKEN ERROR, LOGOUT...');
+                                context.read<AuthBloc>().add(LogOut(context));
                               }
-                            },
-                            builder: (context, state) {
-                              if(state is EventLoadingState){
-                                return Container();
-                              }
-                              return Padding(
+                            }
+                            if (state is EventInternetErrorState) {
+                              showAlertToast(
+                                  'Проверьте соединение с интернетом!');
+                            }
+                          }, builder: (context, state) {
+                            if (state is EventLoadingState) {
+                              return Container();
+                            }
+                            return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 25.w),
                               child: ReorderableListView.builder(
                                 onReorder: (oldIndex, newIndex) {
@@ -458,9 +458,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                     key: ValueKey(
                                         '${eventsBloc.eventsInHome[index].id}'),
                                     delete: (i) {
-                                      context.read<EventsBloc>().add(
-                                          EventChangeToHomeEvent(
-                                              eventEntity: null, position: i));
+                                      eventsBloc.add(EventChangeToHomeEvent(
+                                          eventEntity: null, position: i));
                                     },
                                     index: index,
                                   );
@@ -486,8 +485,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {
-                              if(eventsBloc.eventsInHome.length < 3){
-                                showModalAddEvent(context,(){});
+                              if (eventsBloc.eventsInHome.length < 3) {
+                                showModalAddEvent(context, () {});
                               }
                             }),
                           ),
@@ -520,17 +519,28 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   Widget photoMini(String? path) {
     return Stack(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.all(
-            Radius.circular(15.r),
+        if (path != null && path.trim() != '')
+          ClipRRect(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.r),
+            ),
+            child: Container(
+              decoration: const BoxDecoration(color: Colors.white),
+              child: CachedNetworkImage(
+                imageUrl: Config.url.url + path,
+                placeholder: (_, __){
+                  return Container();
+                },
+                fit: BoxFit.cover,
+                width: 45.h,
+                height: 45.h,
+                fadeInCurve: Curves.easeInOutQuint,
+                fadeOutCurve: Curves.easeInOutQuint,
+                fadeInDuration: const Duration(milliseconds: 300),
+                fadeOutDuration: const Duration(milliseconds: 300),
+              ),
+            ),
           ),
-          child: CachedNetworkImage(
-            imageUrl: Config.url.url + path!,
-            width: 45.h,
-            height: 45.h,
-            fit: BoxFit.cover,
-          ),
-        ),
         Container(
           width: 45.h,
           height: 45.h,
@@ -540,7 +550,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
               Radius.circular(15.r),
             ),
             border: Border.all(width: 2.h, color: Colors.white),
-            image: path == null && path.trim() == ''
+            image: path == null || path.trim() == ''
                 ? DecorationImage(
                     fit: BoxFit.cover,
                     image: getImage(path),
@@ -553,20 +563,45 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   }
 
   Widget photo(String? path) {
-    return Container(
-      width: 134.h,
-      height: 134.h,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(40.r),
+    return Stack(
+      children: [
+        if (path != null && path.trim() != '')
+          ClipRRect(
+            borderRadius: BorderRadius.all(
+              Radius.circular(40.r),
+            ),
+            child: Container(
+              decoration: const BoxDecoration(color: Colors.white),
+              child: CachedNetworkImage(
+                imageUrl: Config.url.url + path,
+                fit: BoxFit.cover,
+                fadeInCurve: Curves.easeInOutQuint,
+                fadeOutCurve: Curves.easeInOutQuint,
+                fadeInDuration: const Duration(milliseconds: 300),
+                fadeOutDuration: const Duration(milliseconds: 300),
+                width: 134.h,
+                height: 134.h,
+              ),
+            ),
+          ),
+        Container(
+          width: 134.h,
+          height: 134.h,
+          decoration: BoxDecoration(
+            // color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(40.r),
+            ),
+            border: Border.all(width: 5.h, color: Colors.white),
+            image: path == null || path.trim() == ''
+                ? DecorationImage(
+                    fit: BoxFit.cover,
+                    image: getImage(path),
+                  )
+                : null,
+          ),
         ),
-        border: Border.all(width: 5.h, color: Colors.white),
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: getImage(path),
-        ),
-      ),
+      ],
     );
   }
 
