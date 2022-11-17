@@ -3,6 +3,7 @@ import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
+import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -11,6 +12,7 @@ import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -164,83 +166,9 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 35.h, bottom: 25.h),
-                    height: 38.h,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              left: index == 0 ? 0 : 15.w,
-                              right: index == hashTags.length - 1 ? 25.w : 0),
-                          child: Builder(builder: (context) {
-                            Color color;
-                            switch (hashTags[index].type) {
-                              case TypeHashTag.main:
-                                color = ColorStyles.redColor;
-                                break;
-                              case TypeHashTag.user:
-                                color = ColorStyles.accentColor;
-                                break;
-                              case TypeHashTag.custom:
-                                color = ColorStyles.blueColor;
-                                break;
-                              default:
-                                color = Colors.transparent;
-                            }
-
-                            return CupertinoCard(
-                              color: hashTags[index].type == TypeHashTag.add
-                                  ? ColorStyles.greyColor
-                                  : color,
-                              elevation: 0,
-                              margin: EdgeInsets.zero,
-                              radius: BorderRadius.circular(20.r),
-                              child: Stack(
-                                children: [
-                                  if (hashTags[index].type == TypeHashTag.add)
-                                    Positioned.fill(
-                                      child: CupertinoCard(
-                                        elevation: 0,
-                                        margin: EdgeInsets.all(1.w),
-                                        radius: BorderRadius.circular(17.r),
-                                        color: ColorStyles.backgroundColorGrey,
-                                      ),
-                                    ),
-                                  Container(
-                                    // decoration: BoxDecoration(
-                                    //   border: hashTags[index].type == TypeHashTag.add
-                                    //       ? Border.all(color: ColorStyles.greyColor)
-                                    //       : null,
-                                    //   borderRadius: BorderRadius.circular(10.r),
-                                    //   color: color,
-                                    // ),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 25.w, vertical: 10.h),
-                                    child: Center(
-                                        child: hashTags[index].type ==
-                                                TypeHashTag.add
-                                            ? SizedBox(
-                                                height: 34.h,
-                                                width: 34.w,
-                                                child: Transform.rotate(
-                                                    angle: pi / 4,
-                                                    child: SvgPicture.asset(
-                                                        SvgImg.add)),
-                                              )
-                                            : Text('#${hashTags[index].title}',
-                                                style: style1)),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                        );
-                      },
-                      itemCount: hashTags.length,
-                    ),
-                  ),
+                  SizedBox(height: 35.h,),
+                  TagsListBlock(isLeftPadding: false,),
+                  SizedBox(height: 25.h,),
                   BlocConsumer<EventsBloc, EventsState>(
                     listener: (context, state) {
                       if(state is EventErrorState){
@@ -248,6 +176,9 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                       }
                       if(state is EventInternetErrorState){
                         showAlertToast('Проверьте соединение с интернетом!');
+                      }
+                      if(state is GotSuccessEventsState){
+                        setState(() {});
                       }
                     },
                     builder: (context, state) {
@@ -309,13 +240,13 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                               physics: const NeverScrollableScrollPhysics(),
                               child: Column(
                                 children: List.generate(
-                                  eventsBloc.events.length,
+                                  eventsBloc.eventsSorted.length,
                                   (index) => Padding(
                                     padding: EdgeInsets.only(bottom: 16.h),
                                     child: GestureDetector(
                                       behavior: HitTestBehavior.translucent,
                                       onTap: (){
-                                        selectEvent(eventsBloc.events[index]);
+                                        selectEvent(eventsBloc.eventsSorted[index]);
                                       },
                                       child: SizedBox(
                                         child: Row(
@@ -325,7 +256,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  '${eventsBloc.events[index].title}',
+                                                  truncateWithEllipsis(22, '${eventsBloc.eventsSorted[index].title}'),
                                                   style: TextStyle(
                                                     fontFamily: "Inter",
                                                     color: const Color(0xff171717),
@@ -335,9 +266,9 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(top: 6.h),
-                                                  child: !eventsBloc.events[index].important
+                                                  child: !eventsBloc.eventsSorted[index].important
                                                   ? Text(
-                                                    'Добавил(а): ${eventsBloc.events[index].eventCreator.username}',
+                                                    'Добавил(а): ${eventsBloc.eventsSorted[index].eventCreator.username}',
                                                     style: TextStyle(
                                                       fontFamily: "Inter",
                                                       color: const Color(0xff969696),
@@ -352,7 +283,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                             const Spacer(),
                                             Align(
                                               alignment: Alignment.centerRight,
-                                              child: DayTextWidget(eventEntity: eventsBloc.events[index],)
+                                              child: DayTextWidget(eventEntity: eventsBloc.eventsSorted[index],)
                                             ),
                                           ],
                                         ),

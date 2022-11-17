@@ -17,6 +17,8 @@ import '../../../bloc/tags/tags_bloc.dart';
 
 
 class TagsListBlock extends StatelessWidget {
+  bool isLeftPadding;
+  TagsListBlock({this.isLeftPadding = true});
   TextStyle style1 = TextStyle(
         color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
 
@@ -58,7 +60,7 @@ class TagsListBlock extends StatelessWidget {
                 },
                 child: Padding(
                   padding: EdgeInsets.only(
-                      left: index == 0 ? 25.w : 15.w,
+                      left: !isLeftPadding && index == 0  ? 0 : index == 0 ? 25.w : 15.w,
                       right: isLast ? 25.w : 0),
                   child: Builder(builder: (context) {
                     return CupertinoCard(

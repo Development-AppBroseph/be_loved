@@ -34,4 +34,6 @@ class ColorStyles {
   static const Color backgroundColorGrey = Color(0xF0F0F0F0);
 
   static const Color violetColor = Color(0xFF804A8E);
+
+  static const Color violet2Color = Color(0xFFBF3355);
 }

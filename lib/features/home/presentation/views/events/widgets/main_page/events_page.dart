@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
+import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
@@ -548,15 +549,11 @@ class _MainEventsPageState extends State<MainEventsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(eventEntity.title, style: style1),
-              // info.subTitle.contains('Beloved')
-              //     ? RichText(
-              //         text: TextSpan(children: [
-              //           TextSpan(text: 'от ', style: style2),
-              //           TextSpan(text: info.subTitle, style: style4),
-              //         ]),
-              //       )
-              //     :
+              Text(
+                truncateWithEllipsis(22, eventEntity.title), 
+                style: style1,
+                overflow: TextOverflow.ellipsis,
+              ),
               SizedBox(height: 5.h),
               eventEntity.important
               ? ImportantTextWidget()

@@ -1,4 +1,5 @@
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
+import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
@@ -63,7 +64,7 @@ class UserEventItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        eventEntity.title,
+                        truncateWithEllipsis(22, eventEntity.title),
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 20.sp,

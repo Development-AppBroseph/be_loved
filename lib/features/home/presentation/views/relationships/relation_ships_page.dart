@@ -448,7 +448,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                       // func: func,
                                       key: ValueKey('${eventsBloc.eventsInHome[index].id}'),
                                       delete: (i){
-                                        context.read<EventsBloc>().add(EventChangeToHomeEvent(
+                                        eventsBloc.add(EventChangeToHomeEvent(
                                           eventEntity: null, 
                                           position: i
                                         ));
@@ -478,7 +478,9 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {
-                              showModalAddEvent(context,(){});
+                              if(eventsBloc.eventsInHome.length < 3){
+                                showModalAddEvent(context,(){});
+                              }
                             }),
                           ),
                           SizedBox(height: 200.h)
