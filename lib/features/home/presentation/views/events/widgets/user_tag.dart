@@ -1,34 +1,29 @@
+import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
+import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class UserTag extends StatefulWidget {
-  const UserTag({Key? key}) : super(key: key);
 
-  @override
-  State<UserTag> createState() => _UserTagState();
-}
+class UserTag extends StatelessWidget {
+  final EventEntity eventEntity;
+  final bool isSelected;
+  final Function(bool s) onSelect;
+  UserTag({Key? key, required this.eventEntity, required this.onSelect, required this.isSelected}) : super(key: key);
 
-class _UserTagState extends State<UserTag> {
-  bool isPointed = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          if (isPointed) {
-            isPointed = false;
-          } else {
-            isPointed = true;
-          }
-        });
+        onSelect(!isSelected);
       },
+      behavior: HitTestBehavior.translucent,
       child: Row(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Арбузный вечер',
+                eventEntity.title,
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 20.sp,
@@ -36,8 +31,10 @@ class _UserTagState extends State<UserTag> {
                   color: const Color(0xff171717),
                 ),
               ),
-              Text(
-                'Добавил(а): Никита Белых',
+              eventEntity.important
+              ? ImportantTextWidget()
+              : Text(
+                'Добавил(а): ${eventEntity.eventCreator.username}',
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 15.sp,
@@ -53,7 +50,7 @@ class _UserTagState extends State<UserTag> {
             width: 25.w,
             child: Checkbox(
                 shape: const CircleBorder(),
-                value: isPointed,
+                value: isSelected,
                 splashRadius: 0,
                 activeColor: const Color(0xffFF1D1D),
                 side: MaterialStateBorderSide.resolveWith(
@@ -63,9 +60,7 @@ class _UserTagState extends State<UserTag> {
                   ),
                 ),
                 onChanged: (value) {
-                  setState(() {
-                    isPointed = value!;
-                  });
+                  onSelect(value!);
                 }),
           )
         ],

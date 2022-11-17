@@ -1,3 +1,4 @@
+import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -67,7 +68,7 @@ void colorSelectModal(
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
                         controller: scrollController,
-                        itemCount: 5,
+                        itemCount: MainConfigApp.tagColors.length,
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -80,7 +81,7 @@ void colorSelectModal(
                               child: Align(
                                 alignment: Alignment.center,
                                 child: SvgPicture.asset(
-                                  SvgImg.colors[index],
+                                  MainConfigApp.tagColors[index].assetPath,
                                 ),
                               ),
                             ),

@@ -10,6 +10,7 @@ import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_events_bottomsheet.dart';
+import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -152,7 +153,6 @@ class _MainEventsPageState extends State<MainEventsPage> {
               ],
             ),
           ),
-          SizedBox(height: 37.h),
           BlocConsumer<EventsBloc, EventsState>(
             listener: (context, state) {
               if (state is EventErrorState) {
@@ -174,6 +174,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
               }
               return Column(
                 children: [
+                  SizedBox(height: 37.h),
                   // const Padding(
                   //   padding: EdgeInsets.only(left: 25, bottom: 10),
                   //   child: Text(
@@ -305,81 +306,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
             }),
           ),
           SizedBox(height: 45.h),
-          SizedBox(
-            height: 38.h,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      left: index == 0 ? 25.w : 15.w,
-                      right: index == hashTags.length - 1 ? 25.w : 0),
-                  child: Builder(builder: (context) {
-                    Color color;
-                    switch (hashTags[index].type) {
-                      case TypeHashTag.main:
-                        color = ColorStyles.redColor;
-                        break;
-                      case TypeHashTag.user:
-                        color = ColorStyles.accentColor;
-                        break;
-                      case TypeHashTag.custom:
-                        color = ColorStyles.blueColor;
-                        break;
-                      default:
-                        color = Colors.transparent;
-                    }
-
-                    return CupertinoCard(
-                      color: hashTags[index].type == TypeHashTag.add
-                          ? ColorStyles.greyColor
-                          : color,
-                      elevation: 0,
-                      margin: EdgeInsets.zero,
-                      radius: BorderRadius.circular(20.r),
-                      child: Stack(
-                        children: [
-                          if (hashTags[index].type == TypeHashTag.add)
-                            Positioned.fill(
-                              child: CupertinoCard(
-                                elevation: 0,
-                                margin: EdgeInsets.all(1.w),
-                                radius: BorderRadius.circular(17.r),
-                                color: ColorStyles.backgroundColorGrey,
-                              ),
-                            ),
-                          Container(
-                            // decoration: BoxDecoration(
-                            //   border: hashTags[index].type == TypeHashTag.add
-                            //       ? Border.all(color: ColorStyles.greyColor)
-                            //       : null,
-                            //   borderRadius: BorderRadius.circular(10.r),
-                            //   color: color,
-                            // ),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25.w, vertical: 10.h),
-                            child: Center(
-                                child: hashTags[index].type == TypeHashTag.add
-                                    ? SizedBox(
-                                        height: 34.h,
-                                        width: 34.w,
-                                        child: Transform.rotate(
-                                            angle: pi / 4,
-                                            child:
-                                                SvgPicture.asset(SvgImg.add)),
-                                      )
-                                    : Text('#${hashTags[index].title}',
-                                        style: style1)),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-                );
-              },
-              itemCount: hashTags.length,
-            ),
-          ),
+          TagsListBlock(),
           SizedBox(height: 25.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -390,7 +317,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                   children: [
                     Text('Предстоящие события', style: style2),
                     SizedBox(height: 8.h),
-                    Text(countEventsText(eventsBloc.events), style: style3),
+                    Text(countEventsText(eventsBloc.eventsSorted), style: style3),
                   ],
                 ),
                 const Spacer(),
@@ -429,9 +356,6 @@ class _MainEventsPageState extends State<MainEventsPage> {
             if (state is EventLoadingState) {
               return Container();
             }
-            List<EventEntity> eventsSlider = eventsBloc.events
-                .where((element) => int.parse(element.datetimeString) < 7)
-                .toList();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -567,7 +491,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                 //   ),
                 // ),
                 SizedBox(height: 25.h),
-                events(eventsBloc.events),
+                events(eventsBloc.eventsSorted),
               ],
             );
           }),
