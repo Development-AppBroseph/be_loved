@@ -39,7 +39,13 @@ class _AccountPageState extends State<AccountPage> {
 
   FocusNode focusNodeCode = FocusNode();
 
+  FocusNode focusNodeName = FocusNode();
+
   int? code;
+
+  String text = "";
+
+  int maxLength = 10;
 
   TextEditingController textEditingControllerUp = TextEditingController();
 
@@ -60,8 +66,9 @@ class _AccountPageState extends State<AccountPage> {
 
   TextEditingController codeController = TextEditingController();
 
-  PageController controller = PageController();
+  TextEditingController nameController = TextEditingController();
 
+  PageController controller = PageController();
 
   @override
   void dispose() {
@@ -74,7 +81,9 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   void initState() {
-    // _getUserPhone();
+    nameController.addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -83,24 +92,23 @@ class _AccountPageState extends State<AccountPage> {
     return '${phone.substring(0, 2)} ${phone.substring(2, 5)} ${phone.substring(5, 8)} ${phone.substring(8, 10)}-${phone.substring(10, 12)}';
   }
 
-
-
   _sendCode() {
-    if(phoneController.text.length == 13){
+    if (phoneController.text.length == 13) {
       showLoaderWrapper(context);
       context.read<ProfileBloc>().add(PostPhoneNumberEvent(phone: phoneNumber));
     }
   }
 
   _confirmCode() {
-    if(codeController.text.length == 5){
-      if(!(codeController.text[0] != '0')){
+    if (codeController.text.length == 5) {
+      if (!(codeController.text[0] != '0')) {
         showLoaderWrapper(context);
-        context.read<ProfileBloc>().add(PutUserCodeEvent(code: int.parse(codeController.text)));
-      }else{
+        context
+            .read<ProfileBloc>()
+            .add(PutUserCodeEvent(code: int.parse(codeController.text)));
+      } else {
         showAlertToast('Пишите корректный код');
       }
-      
     }
   }
 
@@ -113,62 +121,50 @@ class _AccountPageState extends State<AccountPage> {
     //   ],
     //   transform: GradientRotation(pi / 2),
     // );
-    return BlocConsumer<ProfileBloc, ProfileState>(
-      listener: (context, state) {
-        if(state is ProfileErrorState){
-          Loader.hide();
-          showAlertToast(state.message);
-        }
-        if(state is ProfileInternetErrorState){
-          Loader.hide();
-          showAlertToast('Проверьте соединение с интернетом!');
-        }
-        if(state is ProfileSentCodeState){
-          Loader.hide();
-          countPage = 1;
-          focusNodeCode.requestFocus();
-          controller.animateToPage(1,
-            duration: const Duration(milliseconds: 1200),
+    return BlocConsumer<ProfileBloc, ProfileState>(listener: (context, state) {
+      if (state is ProfileErrorState) {
+        Loader.hide();
+        showAlertToast(state.message);
+      }
+      if (state is ProfileInternetErrorState) {
+        Loader.hide();
+        showAlertToast('Проверьте соединение с интернетом!');
+      }
+      if (state is ProfileSentCodeState) {
+        Loader.hide();
+        countPage = 1;
+        focusNodeCode.requestFocus();
+        controller.animateToPage(
+          1,
+          duration: const Duration(milliseconds: 1200),
+          curve: Curves.ease,
+        );
+        Future.delayed(const Duration(milliseconds: 200), () {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 200),
             curve: Curves.ease,
           );
-          Future.delayed(
-              const Duration(
-                  milliseconds:
-                      200), () {
-            _scrollController
-                .animateTo(
-              _scrollController
-                  .position
-                  .maxScrollExtent,
-              duration:
-                  const Duration(
-                      milliseconds:
-                          200),
-              curve:
-                  Curves.ease,
-            );
-          });
-        }
+        });
+      }
 
-        if(state is ProfileConfirmedSuccessState){
-          Loader.hide();
-          countPage = 0;
-          focusNodeCode.unfocus();
-          controller.animateToPage(
-            0,
-            duration: const Duration(
-                milliseconds: 1200),
-            curve: Curves.ease,
-          );
-          phoneController.clear();
-          codeController.clear();
-        }
-        
-        if(state is ProfileEditedSuccessState){
-          Loader.hide();
-        }
-      },
-        builder: (context, state) {
+      if (state is ProfileConfirmedSuccessState) {
+        Loader.hide();
+        countPage = 0;
+        focusNodeCode.unfocus();
+        controller.animateToPage(
+          0,
+          duration: const Duration(milliseconds: 1200),
+          curve: Curves.ease,
+        );
+        phoneController.clear();
+        codeController.clear();
+      }
+
+      if (state is ProfileEditedSuccessState) {
+        Loader.hide();
+      }
+    }, builder: (context, state) {
       return SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         physics: const ClampingScrollPhysics(),
@@ -244,37 +240,134 @@ class _AccountPageState extends State<AccountPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                sl<AuthConfig>().user == null
-                                                    ? 'Никита Белых'
-                                                    : sl<AuthConfig>()
-                                                        .user!
-                                                        .me
-                                                        .username,
-                                                style: style3.copyWith(
-                                                  fontSize: 30.sp,
-                                                  color:
-                                                      const Color(0xff171717),
-                                                  height: 1.h,
-                                                ),
-                                                textAlign: TextAlign.center,
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 89.w, right: 98.w),
+                                            child: SizedBox(
+                                              height: 45.h,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                    child: SizedBox(
+                                                      height: 33.h,
+                                                      child: TextField(
+                                                        textAlign: TextAlign.center,
+                                                        textCapitalization:
+                                                            TextCapitalization
+                                                                .words,
+                                                        onChanged: (value) {
+                                                          if (value.length <=
+                                                              maxLength) {
+                                                            text = value;
+                                                          } else {
+                                                            nameController
+                                                                    .value =
+                                                                TextEditingValue(
+                                                              text: text,
+                                                              selection:
+                                                                  TextSelection(
+                                                                baseOffset:
+                                                                    maxLength,
+                                                                extentOffset:
+                                                                    maxLength,
+                                                                affinity:
+                                                                    TextAffinity
+                                                                        .upstream,
+                                                                isDirectional:
+                                                                    false,
+                                                              ),
+                                                              composing:
+                                                                  TextRange(
+                                                                start: 0,
+                                                                end: maxLength,
+                                                              ),
+                                                            );
+                                                          }
+                                                        },
+                                                        cursorColor:
+                                                            Colors.black,
+                                                        cursorHeight: 30,
+                                                        textAlignVertical:
+                                                            TextAlignVertical
+                                                                .center,
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 30.sp,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        controller:
+                                                            nameController,
+                                                        focusNode:
+                                                            focusNodeName,
+                                                        scrollPadding:
+                                                            EdgeInsets.zero,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          contentPadding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 20),
+                                                          border:
+                                                              InputBorder.none,
+                                                          hintText:
+                                                              sl<AuthConfig>()
+                                                                  .user!
+                                                                  .me
+                                                                  .username,
+                                                          hintStyle: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 30.sp,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      if (focusNodeName
+                                                          .hasFocus) {
+                                                        focusNodeName.unfocus();
+                                                        // MySharedPrefs().setNameRelationShips(
+                                                        //     _controller.text);
+                                                        // getNameRelationShips();
+                                                        // showLoaderWrapper(context);
+                                                        // context.read<ProfileBloc>().add(EditRelationNameEvent(name: _controller.text.trim()));
+                                                      } else {
+                                                        FocusScope.of(context).requestFocus(focusNodeName);
+                                                      }
+                                                    },
+                                                    child: nameController.text
+                                                                .isNotEmpty &&
+                                                            focusNodeName
+                                                                .hasFocus
+                                                        ? const Icon(
+                                                            Icons.check_rounded,
+                                                            color: Color(
+                                                                0xff969696),
+                                                          )
+                                                        : !focusNodeName
+                                                                .hasFocus
+                                                            ? SvgPicture.asset(
+                                                                SvgImg.edit,
+                                                                height: 17.h,
+                                                                width: 17.w,
+                                                                color: const Color(
+                                                                    0xff969696),
+                                                              )
+                                                            : const Icon(
+                                                                Icons
+                                                                    .check_rounded,
+                                                                color: Color(
+                                                                    0xff969696),
+                                                              ),
+                                                  ),
+                                                ],
                                               ),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 8.h, bottom: 5.h),
-                                                child: SvgPicture.asset(
-                                                  SvgImg.edit,
-                                                  color:
-                                                      const Color(0xff969696),
-                                                  height: 17.h,
-                                                  width: 17.w,
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                           SizedBox(height: 5.h),
                                           Padding(
@@ -289,7 +382,11 @@ class _AccountPageState extends State<AccountPage> {
                                                   padding: EdgeInsets.only(
                                                       left: 20.h),
                                                   child: Text(
-                                                    getUserPhone(sl<AuthConfig>().user!.me.phoneNumber),
+                                                    getUserPhone(
+                                                        sl<AuthConfig>()
+                                                            .user!
+                                                            .me
+                                                            .phoneNumber),
                                                     style: style3.copyWith(
                                                       fontSize: 15.sp,
                                                       color: Colors.black,
@@ -527,19 +624,17 @@ class _AccountPageState extends State<AccountPage> {
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 35.h),
-                                                  child: CustomButton(
-                                                    validate: true,
-                                                    color: const Color
-                                                            .fromRGBO(
-                                                        32, 203, 131, 1.0),
-                                                    text: 'Продолжить',
-                                                    // validate: state is TextFieldSuccess ? true : false,
-                                                    textColor: Colors.white,
-                                                    onPressed: _sendCode
-                                                  )
-                                                ),
+                                                    padding: EdgeInsets.only(
+                                                        top: 35.h),
+                                                    child: CustomButton(
+                                                        validate: true,
+                                                        color: const Color
+                                                                .fromRGBO(
+                                                            32, 203, 131, 1.0),
+                                                        text: 'Продолжить',
+                                                        // validate: state is TextFieldSuccess ? true : false,
+                                                        textColor: Colors.white,
+                                                        onPressed: _sendCode)),
                                               ],
                                             ),
                                           ),
@@ -632,13 +727,12 @@ class _AccountPageState extends State<AccountPage> {
                                               height: 51.h,
                                             ),
                                             CustomButton(
-                                              validate: true,
-                                              color: const Color.fromRGBO(
-                                                  32, 203, 131, 1.0),
-                                              text: 'Готово',
-                                              textColor: Colors.white,
-                                              onPressed: _confirmCode
-                                            ),
+                                                validate: true,
+                                                color: const Color.fromRGBO(
+                                                    32, 203, 131, 1.0),
+                                                text: 'Готово',
+                                                textColor: Colors.white,
+                                                onPressed: _confirmCode),
                                             // CustomAnimationButton(
                                             //   text: 'Продолжить',
                                             //   border: Border.all(
@@ -706,7 +800,8 @@ class _AccountPageState extends State<AccountPage> {
         onTap: () {
           showModalAvatarChange(context, (newFile) {
             showLoaderWrapper(context);
-            context.read<ProfileBloc>().add(EditProfileEvent(user: sl<AuthConfig>().user!.me, avatar: newFile));
+            context.read<ProfileBloc>().add(EditProfileEvent(
+                user: sl<AuthConfig>().user!.me, avatar: newFile));
           });
         },
         child: MirrorImage(
