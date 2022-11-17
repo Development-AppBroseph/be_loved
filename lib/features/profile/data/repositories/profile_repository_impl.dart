@@ -26,5 +26,24 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(NetworkFailure());
     }
   }
+
+
+
+
+
+  @override
+  Future<Either<Failure, String>> editRelation(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.editRelation(params.relationId, params.nameRelation);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
 }
 

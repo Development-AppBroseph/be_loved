@@ -6,6 +6,8 @@ import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/events/widgets/show_create_tag_modal.dart';
+import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_event_item.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_events.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -113,7 +115,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                       ),
                       child: Center(
                         child: Text(
-                          "${eventsBloc.events.length}/30",
+                          "${eventsBloc.eventsSorted.length}/30",
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 20.sp,
@@ -198,7 +200,9 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                     duration: const Duration(milliseconds: 600),
                                     curve: Curves.easeInOutQuint);
                               });
-                              selectedEvents.clear();
+                              showLoaderWrapper(context);
+                              print('SENT: ${selectedEvents}');
+                              eventsBloc.add(EventDeleteEvent(ids: selectedEvents));
                               isSelectedAll = false;
                             },
                             child: Container(
@@ -257,85 +261,8 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 39.h),
-            height: 38.h,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      left: index == 0 ? 25.w : 15.w,
-                      right: index == hashTags.length - 1 ? 25.w : 0),
-                  child: Builder(builder: (context) {
-                    Color color;
-                    switch (hashTags[index].type) {
-                      case TypeHashTag.main:
-                        color = ColorStyles.redColor;
-                        break;
-                      case TypeHashTag.user:
-                        color = ColorStyles.accentColor;
-                        break;
-                      case TypeHashTag.custom:
-                        color = ColorStyles.blueColor;
-                        break;
-                      default:
-                        color = Colors.transparent;
-                    }
-
-                    return GestureDetector(
-                      onTap: () => showMaterialModalBottomSheet(
-                          context: context,
-                          animationCurve: Curves.easeInOutQuint,
-                          duration: const Duration(milliseconds: 600),
-                          backgroundColor: Colors.transparent,
-                          builder: (context) {
-                            return TagModal(typeHashTag: hashTags[index].type);
-                          }),
-                      child: CupertinoCard(
-                        color: hashTags[index].type == TypeHashTag.add
-                            ? ColorStyles.greyColor
-                            : color,
-                        elevation: 0,
-                        margin: EdgeInsets.zero,
-                        radius: BorderRadius.circular(20.r),
-                        child: Stack(
-                          children: [
-                            if (hashTags[index].type == TypeHashTag.add)
-                              Positioned.fill(
-                                child: CupertinoCard(
-                                  elevation: 0,
-                                  margin: EdgeInsets.all(1.w),
-                                  radius: BorderRadius.circular(17.r),
-                                  color: ColorStyles.backgroundColorGrey,
-                                ),
-                              ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25.w, vertical: 10.h),
-                              child: Center(
-                                  child: hashTags[index].type == TypeHashTag.add
-                                      ? SizedBox(
-                                          height: 34.h,
-                                          width: 34.w,
-                                          child: Transform.rotate(
-                                              angle: pi / 4,
-                                              child:
-                                                  SvgPicture.asset(SvgImg.add)),
-                                        )
-                                      : Text('#${hashTags[index].title}',
-                                          style: style1)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-                );
-              },
-              itemCount: hashTags.length,
-            ),
-          ),
+          SizedBox(height: 39.h,),
+          TagsListBlock(),
           BlocConsumer<EventsBloc, EventsState>(
             listener: (context, state) {
               if(state is EventErrorState){
@@ -348,6 +275,10 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
               }
               if(state is EventDeletedState){
                 Loader.hide();
+                selectedEvents.clear();
+                setState(() {});
+              }
+              if(state is GotSuccessEventsState || state is EventDeletedState){
                 setState(() {});
               }
             },
@@ -359,7 +290,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                     controller: scrollController,
                     padding: EdgeInsets.symmetric(horizontal: 25.w),
                     scrollDirection: Axis.vertical,
-                    itemCount: eventsBloc.events.length,
+                    itemCount: eventsBloc.eventsSorted.length,
                     physics: const ClampingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return UserEventItem(
@@ -372,24 +303,24 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                           setState(() {
                             if(isSelectedAll == false && countPage == 1){
                               isSelectedAll = true;
-                              selectedEvents.add(eventsBloc.events[index].id);
+                              selectedEvents.add(eventsBloc.eventsSorted[index].id);
                             }
                           });
                         },
                         onSelect: (val) {
                           setState(() {
                             if(val){
-                              selectedEvents.add(eventsBloc.events[index].id);
+                              selectedEvents.add(eventsBloc.eventsSorted[index].id);
                             }else{
-                              selectedEvents.remove(eventsBloc.events[index].id);
+                              selectedEvents.remove(eventsBloc.eventsSorted[index].id);
                             }
                           });
                         },
-                        eventEntity: eventsBloc.events[index],
-                        isSelected: selectedEvents.contains(eventsBloc.events[index].id),
+                        eventEntity: eventsBloc.eventsSorted[index],
+                        isSelected: selectedEvents.contains(eventsBloc.eventsSorted[index].id),
                         onTapDelete: (){
                           showLoaderWrapper(context);
-                          context.read<EventsBloc>().add(EventDeleteEvent(id: eventsBloc.events[index].id));
+                          context.read<EventsBloc>().add(EventDeleteEvent(ids: [eventsBloc.eventsSorted[index].id]));
                         },
                       );
                     },

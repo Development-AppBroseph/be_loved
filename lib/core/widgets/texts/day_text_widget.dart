@@ -22,7 +22,7 @@ class DayTextWidget extends StatelessWidget {
         fontFamily: 'Inter',
         fontSize: 15.sp,
         fontWeight: FontWeight.w800,
-        color: getColorFromDays(eventEntity.datetimeString),
+        color: getColorFromDays(eventEntity.datetimeString, eventEntity.important),
       ),
     );
   }

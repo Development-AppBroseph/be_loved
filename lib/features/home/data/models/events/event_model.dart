@@ -16,6 +16,7 @@ class EventModel extends EventEntity{
     required bool repeat,
     required bool notification,
     required int relationId,
+    required int mainPosition,
     required User eventCreator,
 
   }) : super(
@@ -31,12 +32,21 @@ class EventModel extends EventEntity{
     repeat: repeat,
     allDays: allDays,
     notification: notification,
-    eventCreator: eventCreator
+    eventCreator: eventCreator,
+    mainPosition: mainPosition
   );
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
     int days = 0;
-    days = calculateDifference(DateTime.parse(json['start']).toLocal());
+    DateTime startDate = DateTime.parse(json['start']).toLocal();
+    days = calculateDifference(startDate);
+    if(json['important'] == true){
+      int currentYearDays = calculateDifference(DateTime(DateTime.now().year, startDate.month, startDate.day));
+      if(currentYearDays.isNegative){
+        currentYearDays = calculateDifference(DateTime(DateTime.now().year+1, startDate.month, startDate.day));
+      }
+      days = currentYearDays;
+    }
     String date = days.isNegative ? '0' : days.toString();
 
 
@@ -53,6 +63,7 @@ class EventModel extends EventEntity{
       allDays: json['all_day'],
       repeat: json['repeat'],
       notification: json['notification'],
+      mainPosition: json['main_position'],
       eventCreator: User.fromJson(json['event_creator']),
     );
   }

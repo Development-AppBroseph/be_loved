@@ -20,6 +20,12 @@ class EventChangeToHomeEvent extends EventsEvent{
 }
 
 class EventDeleteEvent extends EventsEvent{
-  final int id;
-  EventDeleteEvent({required this.id});
+  final List<int> ids;
+  EventDeleteEvent({required this.ids});
+}
+
+
+class SortByTagEvent extends EventsEvent{
+  final TagEntity tagEntity;
+  SortByTagEvent({required this.tagEntity});
 }

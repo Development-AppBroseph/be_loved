@@ -24,25 +24,37 @@ String convertToAgo(DateTime input){
 String checkDays(String days) {
   int _days = int.parse(days);
   int lastNumber = int.parse(days[days.length - 1]);
-  if(lastNumber > 5 && lastNumber < 10) return 'дней';
-  if(_days % 5 == 0) return 'дней';
-  if(_days == 11) return 'дней';
-  if(lastNumber == 1) return 'день';
-  return 'дня';
+  if(_days == 0){
+    return 'Сегодня';
+  }
+  if(_days == 1){
+    return 'Завтра';
+  }
+  if(lastNumber > 5 && lastNumber < 10) return 'Через $days дней';
+  if(_days % 5 == 0) return 'Через $days дней';
+  if(_days == 11) return 'Через $days дней';
+  if(lastNumber == 1) return 'Через $days день';
+  return 'Через $days дня';
 }
 
 
 
-Color getColorFromDays(String days){
+Color getColorFromDays(String days, bool isImportant){
   int daysP = int.parse(days);
 
-  if(daysP <= 1){
+  if(daysP <= 2 || isImportant){
     return ColorStyles.redColor;
   }
-  if(daysP >= 5){
-    return ColorStyles.blueColor;
+  if(daysP == 3){
+    return ColorStyles.violet2Color;
   }
-  return ColorStyles.violetColor;
+  if(daysP == 4){
+    return ColorStyles.violetColor;
+  }
+  if(daysP == 5){
+    return Color(0xFF4061C7);
+  }
+  return ColorStyles.blueColor;
 }
 
 
@@ -54,5 +66,5 @@ getTextFromDate(String days, [String? additionString]){
       ? 'Завтра${additionString ?? ''}'
       : isToday
       ? 'Сегодня${additionString ?? ''}'
-      : 'Через ${days} ${checkDays(days)}${additionString ?? ''}';
+      : '${checkDays(days)}${additionString ?? ''}';
 }

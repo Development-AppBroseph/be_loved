@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
+import 'package:be_loved/core/utils/helpers/text_size.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/widgets/texts/today_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -142,9 +144,12 @@ class _CustomAnimationItemRelationshipsState
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Row(
+                                        widget.events.datetimeString == '0'
+                                        ? TodayTextWidget()
+                                        : Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Предстоящее событие',
@@ -157,10 +162,11 @@ class _CustomAnimationItemRelationshipsState
                                             ),
                                             const Spacer(),
                                             Text(
-                                              'Через ${widget.events.datetimeString} ${checkDays(widget.events.datetimeString)}',
+                                              widget.events.datetimeString == '0'
+                                              ? 'Сегодня'
+                                              : '${checkDays(widget.events.datetimeString)}',
                                               style: TextStyle(
-                                                color: const Color.fromRGBO(
-                                                    128, 74, 142, 1),
+                                                color: getColorFromDays(widget.events.datetimeString, false),
                                                 fontSize: 15.sp,
                                                 fontWeight: FontWeight.w800,
                                                 height: 1,
@@ -179,7 +185,7 @@ class _CustomAnimationItemRelationshipsState
                                           style: TextStyle(
                                               color: const Color.fromRGBO(
                                                   23, 23, 23, 1),
-                                              fontSize: 50.sp,
+                                              fontSize: homeWidgetTextSize(widget.events.title).sp,
                                               fontWeight: FontWeight.w800,
                                               height: 1),
                                         ),
@@ -274,7 +280,6 @@ class _CustomAnimationItemRelationshipsState
       },
     );
   }
-
 
   // void closeOpen(bool state) {
   // if (!_controllerAnimationRotate!.isAnimating) {

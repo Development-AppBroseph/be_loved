@@ -97,7 +97,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         var result =
             await Repository().checkIsUserExist(event.phone, event.code);
         if (result != null) {
-            print('SETTTING TOKEN ${result.token}');
+          print('SETTTING TOKEN ${result.token}');
           if (result.token != null) {
             print('SETTTING TOKEN ${result.token}');
             await SharedPreferences.getInstance()
@@ -196,10 +196,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     var result = await Repository().getUser();
 
     if (result != null) {
+      await MySharedPrefs().updateUser(result);
       sl<AuthConfig>().user = result;
       user = result;
       emit(GetUserSuccess(result));
     } else {
+      sl<AuthConfig>().user = await MySharedPrefs().user;
+
       emit(GetUserError());
     }
   }
@@ -261,9 +264,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _deleteInviteUser(
       DeleteInviteUser event, Emitter<AuthState> emit) async {
-
-    if(user?.relationId == null) {
-     var result = await Repository().getUser();
+    if (user?.relationId == null) {
+      var result = await Repository().getUser();
 
       if (result != null) {
         user = result;

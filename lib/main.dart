@@ -1,25 +1,20 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
-import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
-import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
-import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/route_manager.dart';
 import 'package:overlay_support/overlay_support.dart';
-
 import 'features/auth/data/models/auth/user.dart';
 
 void main() async {
@@ -57,6 +52,9 @@ void main() async {
         ),
         BlocProvider<ProfileBloc>(
           create: (context) => sl<ProfileBloc>(),
+        ),
+        BlocProvider<TagsBloc>(
+          create: (context) => sl<TagsBloc>(),
         ),
       ],
       child: OverlaySupport.global(

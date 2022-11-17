@@ -86,7 +86,31 @@ class EventsRepositoryImpl implements EventsRepository {
   Future<Either<Failure, void>> deleteEvent(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.deleteEvent(params.id);
+        final items = await remoteDataSource.deleteEvent(params.ids);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+
+
+  @override
+  Future<Either<Failure, void>> changePositionEvent(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.homeChangePosition(params.items);
         return Right(items);
       } catch (e) {
         print(e);

@@ -1,5 +1,7 @@
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
+import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/all_events.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +64,7 @@ class UserEventItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        eventEntity.title,
+                        truncateWithEllipsis(22, eventEntity.title),
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 20.sp,
@@ -70,7 +72,9 @@ class UserEventItem extends StatelessWidget {
                           color: const Color(0xff171717),
                         ),
                       ),
-                      Text(
+                      eventEntity.important
+                      ? ImportantTextWidget()
+                      : Text(
                         'Добавил(а): ${eventEntity.eventCreator.username}',
                         style: TextStyle(
                           fontFamily: 'Inter',
@@ -102,7 +106,7 @@ class UserEventItem extends StatelessWidget {
                             fontFamily: 'Inter',
                             fontSize: 15.sp,
                             fontWeight: FontWeight.bold,
-                            color: getColorFromDays(eventEntity.datetimeString),
+                            color: getColorFromDays(eventEntity.datetimeString, eventEntity.important),
                           ),
                         ),
                       ),

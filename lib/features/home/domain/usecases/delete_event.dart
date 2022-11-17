@@ -16,9 +16,9 @@ class DeleteEvent implements UseCase<void, DeleteEventParams> {
 }
 
 class DeleteEventParams extends Equatable {
-  final int id;
-  const DeleteEventParams({required this.id});
+  final List<int> ids;
+  const DeleteEventParams({required this.ids});
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [ids];
 }

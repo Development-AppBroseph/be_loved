@@ -3,18 +3,21 @@ class Events {
   String name;
   String description;
   bool? important;
-  String datetime;
+  DateTime datetime;
   bool? married;
   int? relation;
+  String? image;
 
-  Events(
-      {this.id,
-      required this.name,
-      required this.description,
-      this.important,
-      required this.datetime,
-      this.married,
-      this.relation});
+  Events({
+    this.id,
+    required this.name,
+    required this.description,
+    this.important,
+    required this.datetime,
+    this.married,
+    this.image,
+    this.relation,
+  });
 
   factory Events.fromJson(Map<String, dynamic> json) {
     final id = json['id'];
