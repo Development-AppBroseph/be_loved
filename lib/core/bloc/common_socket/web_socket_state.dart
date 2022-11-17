@@ -18,3 +18,5 @@ class WebSocketInviteSendState extends WebSocketState {}
 class WebSocketInviteCloseState extends WebSocketState {}
 
 class WebSocketInviteAcceptState extends WebSocketState {}
+
+class WebSocketStartRelatioinshipsState extends WebSocketState {}

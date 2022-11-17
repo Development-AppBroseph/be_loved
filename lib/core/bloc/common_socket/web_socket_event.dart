@@ -16,4 +16,6 @@ class WebSocketCloseInviteMessage extends WebSocketCloseEvent {}
 
 class WebSocketAcceptInviteMessage extends WebSocketCloseEvent {}
 
+class WebSocketStartRelationshipsMessage extends WebSocketCloseEvent {}
+
 class WebSocketCloseEvent extends WebSocketInitEvents {}

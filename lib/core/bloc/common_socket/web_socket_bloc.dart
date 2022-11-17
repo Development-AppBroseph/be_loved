@@ -17,6 +17,7 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
     on<WebSocketSendInviteMessage>(_sendInvite);
     on<WebSocketCloseInviteMessage>(_closeInvite);
     on<WebSocketAcceptInviteMessage>(_acceptInvite);
+    on<WebSocketStartRelationshipsMessage>(_startRelationships);
   }
 
   void _getInvite(WebSocketGetInviteMessage event, Emitter<WebSocketState> emit) =>
@@ -30,6 +31,8 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
     sl<AuthConfig>().token = await MySecureStorage().getToken();
     emit(WebSocketInviteAcceptState());
   }
+  void _startRelationships(WebSocketStartRelationshipsMessage event, Emitter<WebSocketState> emit) =>
+      emit(WebSocketStartRelatioinshipsState());
 
   WebSocket? channel;
 
@@ -45,6 +48,7 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
       channel!.listen(
         (event) async {
           print('websocket message ${jsonDecode(event)}');
+          print('object sokect statetyeteyte ${jsonDecode(event)['message'] == 'Дата отношений изменена!'}');
           // Приглашение в авторизации
           if (jsonDecode(event)['type'] == 'notification') {
             if(jsonDecode(event)['message'] == 'Вам пришло приглашение') {
@@ -55,6 +59,8 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
               add(WebSocketCloseInviteMessage());
             } else if(jsonDecode(event)['message'] == 'Поздравляю с началом отношений!') {
               add(WebSocketAcceptInviteMessage());
+            } else if(jsonDecode(event)['message'] == 'Дата отношений изменена!') {
+              add(WebSocketStartRelationshipsMessage());
             }
           }
         },
