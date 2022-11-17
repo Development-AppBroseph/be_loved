@@ -16,6 +16,7 @@ class EventModel extends EventEntity{
     required bool repeat,
     required bool notification,
     required int relationId,
+    required int mainPosition,
     required User eventCreator,
 
   }) : super(
@@ -31,7 +32,8 @@ class EventModel extends EventEntity{
     repeat: repeat,
     allDays: allDays,
     notification: notification,
-    eventCreator: eventCreator
+    eventCreator: eventCreator,
+    mainPosition: mainPosition
   );
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
@@ -61,6 +63,7 @@ class EventModel extends EventEntity{
       allDays: json['all_day'],
       repeat: json['repeat'],
       notification: json['notification'],
+      mainPosition: json['main_position'],
       eventCreator: User.fromJson(json['event_creator']),
     );
   }

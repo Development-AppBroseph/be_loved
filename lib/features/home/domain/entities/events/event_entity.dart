@@ -15,6 +15,7 @@ class EventEntity extends Equatable {
   final bool repeat;
   final bool notification;
   final int relationId;
+  final int mainPosition;
   final User eventCreator;
 
   EventEntity({
@@ -27,6 +28,7 @@ class EventEntity extends Equatable {
     required this.datetimeString,
     required this.married,
     required this.relationId,
+    required this.mainPosition,
     required this.notification,
     required this.repeat,
     required this.allDays,
@@ -47,6 +49,7 @@ class EventEntity extends Equatable {
       'all_day': allDays,
       'repeat': repeat,
       'notification': notification,
+      'main_position': mainPosition
       // 'event_creator': eventCreator
     };
   }

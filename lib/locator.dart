@@ -10,6 +10,7 @@ import 'package:be_loved/features/home/domain/repositories/events_repository.dar
 import 'package:be_loved/features/home/domain/repositories/tags_repository.dart';
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
 import 'package:be_loved/features/home/domain/usecases/add_tag.dart';
+import 'package:be_loved/features/home/domain/usecases/change_position_event.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
@@ -98,11 +99,12 @@ void setupInjections() {
   // //UseCases
   sl.registerLazySingleton(() => AddEvent(sl()));
   sl.registerLazySingleton(() => DeleteEvent(sl()));
+  sl.registerLazySingleton(() => ChangePositionEvent(sl()));
   sl.registerLazySingleton(() => GetEvents(sl()));
 
   //Blocs
   sl.registerFactory<EventsBloc>(
-    () => EventsBloc(sl(), sl(), sl()),
+    () => EventsBloc(sl(), sl(), sl(), sl()),
   );
 
 

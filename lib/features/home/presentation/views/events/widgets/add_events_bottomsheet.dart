@@ -206,7 +206,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                     Padding(
                                       padding: EdgeInsets.only(top: 6.h),
                                       child: Text(
-                                        countEventsText(eventsBloc.events),
+                                        countEventsText(eventsBloc.eventsSorted),
                                         style: TextStyle(
                                           fontFamily: "Inter",
                                           color: const Color(0xff969696),

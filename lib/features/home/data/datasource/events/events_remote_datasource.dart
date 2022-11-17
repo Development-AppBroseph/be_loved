@@ -13,6 +13,7 @@ abstract class EventsRemoteDataSource {
   Future<EventEntity> addEvent(EventEntity eventEntity);
   Future<EventEntity> editEvent(EventEntity eventEntity);
   Future<void> deleteEvent(List<int> ids);
+  Future<void> homeChangePosition(Map<String, int> items);
 
 }
 
@@ -98,6 +99,29 @@ class EventsRemoteDataSourceImpl
         data: jsonEncode({
           'event_list': ids
         }),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 699,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 204 || response.statusCode == 200) {
+      return;
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
+
+
+
+  @override
+  Future<void> homeChangePosition(Map<String, int> items) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.put(Endpoints.changePositionEvent.getPath(),
+        data: jsonEncode(items),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,

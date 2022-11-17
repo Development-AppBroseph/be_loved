@@ -59,6 +59,8 @@ class _AccountPageState extends State<AccountPage> {
   final _streamController = StreamController<int>();
 
   final _streamControllerCarousel = StreamController<double>();
+  
+  final _streamControllerName = StreamController<int>();
 
   final _scrollController = ScrollController();
 
@@ -79,6 +81,7 @@ class _AccountPageState extends State<AccountPage> {
     focusNodeCode.dispose();
     _streamController.close();
     _streamControllerCarousel.close();
+    _streamControllerName.close();
     super.dispose();
   }
 
@@ -87,6 +90,7 @@ class _AccountPageState extends State<AccountPage> {
     nameController.addListener(() {
       setState(() {});
     });
+    _streamControllerName.sink.add(nameController.text.length);
     super.initState();
   }
 
@@ -104,7 +108,7 @@ class _AccountPageState extends State<AccountPage> {
 
   _confirmCode() {
     if (codeController.text.length == 5) {
-      if (!(codeController.text[0] != '0')) {
+      if ((codeController.text[0] != '0')) {
         showLoaderWrapper(context);
         context
             .read<ProfileBloc>()
@@ -243,133 +247,146 @@ class _AccountPageState extends State<AccountPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 89.w, right: 98.w),
-                                            child: SizedBox(
-                                              height: 45.h,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Expanded(
-                                                    child: SizedBox(
-                                                      height: 33.h,
-                                                      child: TextField(
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        textCapitalization:
-                                                            TextCapitalization
-                                                                .words,
-                                                        onChanged: (value) {
-                                                          if (value.length <=
-                                                              maxLength) {
-                                                            text = value;
-                                                          } else {
-                                                            nameController
-                                                                    .value =
-                                                                TextEditingValue(
-                                                              text: text,
-                                                              selection:
-                                                                  TextSelection(
-                                                                baseOffset:
-                                                                    maxLength,
-                                                                extentOffset:
-                                                                    maxLength,
-                                                                affinity:
-                                                                    TextAffinity
-                                                                        .upstream,
-                                                                isDirectional:
-                                                                    false,
+                                          StreamBuilder<int>(
+                                            stream: _streamControllerName.stream,
+                                            initialData: 2,
+                                            builder: (context, snapshot) {
+                                              int data = snapshot.data??2;
+                                              return SizedBox(
+                                                width: (data < 7 ? 7 : data)*24.w,
+                                                // padding: EdgeInsets.only(
+                                                //     left: 89.w, right: 98.w),
+                                                child: SizedBox(
+                                                  height: 45.h,
+                                                  child: Stack(
+                                                    // mainAxisAlignment:
+                                                    //     MainAxisAlignment.center,
+                                                    children: [
+                                                      Align(
+                                                        alignment: Alignment.centerLeft,
+                                                        child: SizedBox(
+                                                            height: 33.h,
+                                                            child: TextField(
+                                                              textAlign:
+                                                                  TextAlign.center,
+                                                              textCapitalization:
+                                                                  TextCapitalization
+                                                                      .words,
+                                                              onChanged: (value) {
+                                                                if (value.length <=
+                                                                    maxLength) {
+                                                                  text = value;
+                                                                } else {
+                                                                  nameController
+                                                                          .value =
+                                                                      TextEditingValue(
+                                                                    text: text,
+                                                                    selection:
+                                                                        TextSelection(
+                                                                      baseOffset:
+                                                                          maxLength,
+                                                                      extentOffset:
+                                                                          maxLength,
+                                                                      affinity:
+                                                                          TextAffinity
+                                                                              .upstream,
+                                                                      isDirectional:
+                                                                          false,
+                                                                    ),
+                                                                    composing:
+                                                                        TextRange(
+                                                                      start: 0,
+                                                                      end: maxLength,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                                _streamControllerName.sink.add(nameController.text.length);
+                                                              },
+                                                              cursorColor:
+                                                                  Colors.black,
+                                                              cursorHeight: 30,
+                                                              textAlignVertical:
+                                                                  TextAlignVertical
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: Colors.black,
+                                                                fontSize: 30.sp,
+                                                                fontWeight:
+                                                                    FontWeight.w700,
                                                               ),
-                                                              composing:
-                                                                  TextRange(
-                                                                start: 0,
-                                                                end: maxLength,
+                                                              controller:
+                                                                  nameController,
+                                                              focusNode:
+                                                                  focusNodeName,
+                                                              scrollPadding:
+                                                                  EdgeInsets.zero,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                contentPadding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        top: 20),
+                                                                border:
+                                                                    InputBorder.none,
+                                                                hintText: '',
+                                                                hintStyle: TextStyle(
+                                                                  color: Colors.black,
+                                                                  fontSize: 30.sp,
+                                                                  fontWeight:
+                                                                      FontWeight.w700,
+                                                                ),
                                                               ),
-                                                            );
-                                                          }
-                                                        },
-                                                        cursorColor:
-                                                            Colors.black,
-                                                        cursorHeight: 30,
-                                                        textAlignVertical:
-                                                            TextAlignVertical
-                                                                .center,
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 30.sp,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                        controller:
-                                                            nameController,
-                                                        focusNode:
-                                                            focusNodeName,
-                                                        scrollPadding:
-                                                            EdgeInsets.zero,
-                                                        decoration:
-                                                            InputDecoration(
-                                                          contentPadding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 20),
-                                                          border:
-                                                              InputBorder.none,
-                                                          hintText: '',
-                                                          hintStyle: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 30.sp,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                          ),
+                                                            ),
                                                         ),
                                                       ),
-                                                    ),
+                                                      Align(
+                                                        alignment: Alignment.centerRight,
+                                                        child: GestureDetector(
+                                                          onTap: () async {
+                                                            if (focusNodeName
+                                                                .hasFocus && nameController.text.length > 1) {
+                                                              focusNodeName.unfocus();
+                                                              sl<AuthConfig>().user!.me.username = nameController.text.trim();
+                                                              showLoaderWrapper(context);
+                                                              context.read<ProfileBloc>().add(EditProfileEvent(user: sl<AuthConfig>().user!.me, avatar: null));
+                                                            } else {
+                                                              FocusScope.of(context)
+                                                                  .requestFocus(
+                                                                      focusNodeName);
+                                                            }
+                                                          },
+                                                          behavior: HitTestBehavior.translucent,
+                                                          child: nameController.text
+                                                                      .isNotEmpty &&
+                                                                  focusNodeName
+                                                                      .hasFocus
+                                                              ? const Icon(
+                                                                  Icons.check_rounded,
+                                                                  color: Color(
+                                                                      0xff969696),
+                                                                )
+                                                              : !focusNodeName
+                                                                      .hasFocus
+                                                                  ? SvgPicture.asset(
+                                                                      SvgImg.edit,
+                                                                      height: 17.h,
+                                                                      width: 17.w,
+                                                                      color: const Color(
+                                                                          0xff969696),
+                                                                    )
+                                                                  : const Icon(
+                                                                      Icons
+                                                                          .check_rounded,
+                                                                      color: Color(
+                                                                          0xff969696),
+                                                                    ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  GestureDetector(
-                                                    onTap: () async {
-                                                      if (focusNodeName
-                                                          .hasFocus) {
-                                                        focusNodeName.unfocus();
-                                                        sl<AuthConfig>().user!.me.username = nameController.text.trim();
-                                                        showLoaderWrapper(context);
-                                                        context.read<ProfileBloc>().add(EditProfileEvent(user: sl<AuthConfig>().user!.me, avatar: null));
-                                                      } else {
-                                                        FocusScope.of(context)
-                                                            .requestFocus(
-                                                                focusNodeName);
-                                                      }
-                                                    },
-                                                    behavior: HitTestBehavior.translucent,
-                                                    child: nameController.text
-                                                                .isNotEmpty &&
-                                                            focusNodeName
-                                                                .hasFocus
-                                                        ? const Icon(
-                                                            Icons.check_rounded,
-                                                            color: Color(
-                                                                0xff969696),
-                                                          )
-                                                        : !focusNodeName
-                                                                .hasFocus
-                                                            ? SvgPicture.asset(
-                                                                SvgImg.edit,
-                                                                height: 17.h,
-                                                                width: 17.w,
-                                                                color: const Color(
-                                                                    0xff969696),
-                                                              )
-                                                            : const Icon(
-                                                                Icons
-                                                                    .check_rounded,
-                                                                color: Color(
-                                                                    0xff969696),
-                                                              ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                                ),
+                                              );
+                                            }
                                           ),
                                           SizedBox(height: 5.h),
                                           Padding(
