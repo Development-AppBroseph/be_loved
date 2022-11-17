@@ -215,22 +215,30 @@ class _TagModalState extends State<TagModal> {
                         ],
                       ),
                       const Spacer(),
-                      Container(
-                        height: 35.h,
-                        width: 35.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.r),
-                          border: Border.all(
-                            color: const Color(0xffFF1D1D),
-                            width: 1,
+                      GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            selectedItems = [];
+                          });
+                        },
+                        behavior: HitTestBehavior.translucent,
+                        child: Container(
+                          height: 35.h,
+                          width: 35.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            border: Border.all(
+                              color: const Color(0xffFF1D1D),
+                              width: 1,
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: SvgPicture.asset(
-                            SvgImg.add,
-                            height: 17.h,
-                            width: 17.w,
-                            color: const Color(0xffFF1D1D),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              SvgImg.add,
+                              height: 17.h,
+                              width: 17.w,
+                              color: const Color(0xffFF1D1D),
+                            ),
                           ),
                         ),
                       ),

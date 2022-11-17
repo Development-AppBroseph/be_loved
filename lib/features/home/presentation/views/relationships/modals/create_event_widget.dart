@@ -122,7 +122,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
         notification: notification,
         repeat: repeat,
         allDays: allDays,
-        eventCreator: sl<AuthConfig>().user!.me
+        eventCreator: sl<AuthConfig>().user!.me,
+        mainPosition: 0
       )));
     }
   }

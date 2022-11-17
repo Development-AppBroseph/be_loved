@@ -15,6 +15,7 @@ enum Endpoints {
   addEvent,
   deleteEvent,
   editEvent,
+  changePositionEvent,
 
   //Tags
   getTags,
@@ -41,13 +42,15 @@ extension EndpointsExtension on Endpoints {
       case Endpoints.deleteEvent:
         return "/events/";  
       case Endpoints.editEvent:
-        return "/events/${params![0]}/";  
+        return "/events/${params![0]}";  
       case Endpoints.editRelations:
         return "/relations/";  
       case Endpoints.getTags:
         return "/events/tags";  
       case Endpoints.addTag:
         return "/events/tags";  
+      case Endpoints.changePositionEvent:
+        return "/events/";  
       default:
         return '';
     }

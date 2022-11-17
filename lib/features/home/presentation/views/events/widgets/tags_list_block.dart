@@ -42,11 +42,12 @@ class TagsListBlock extends StatelessWidget {
           return Container();
         }
         return SizedBox(
-          height: 38.h,
+          height: 48.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               bool isLast = tagsBloc.tags.isEmpty || (tagsBloc.tags.length) == index;
+              bool isSelected = !isLast && context.read<EventsBloc>().selectedTag?.id == tagsBloc.tags[index].id;
               return GestureDetector(
                 onTap: (){
                   if(!isLast){
@@ -56,48 +57,55 @@ class TagsListBlock extends StatelessWidget {
                   }
                 },
                 onLongPress: (){
-                  showModalCreateTag(context, isLast);
+                  // showModalCreateTag(context, isLast);
                 },
                 child: Padding(
                   padding: EdgeInsets.only(
                       left: !isLeftPadding && index == 0  ? 0 : index == 0 ? 25.w : 15.w,
-                      right: isLast ? 25.w : 0),
+                      right: isLast ? 25.w : 0,
+                      top: 2.h,
+                      bottom: 6.h),
                   child: Builder(builder: (context) {
-                    return CupertinoCard(
-                      color: isLast
-                          ? ColorStyles.greyColor
-                          : tagsBloc.tags[index].color.color,
-                      elevation: 0,
-                      margin: EdgeInsets.zero,
-                      radius: BorderRadius.circular(20.r),
-                      child: Stack(
-                        children: [
-                          if (isLast)
-                            Positioned.fill(
-                              child: CupertinoCard(
-                                elevation: 0,
-                                margin: EdgeInsets.all(1.w),
-                                radius: BorderRadius.circular(17.r),
-                                color: ColorStyles.backgroundColorGrey,
+                    return AnimatedOpacity(
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeInOutQuint,
+                      opacity: context.read<EventsBloc>().selectedTag != null && !isSelected ? 0.5 : 1,
+                      child: CupertinoCard(
+                        color: isLast
+                            ? ColorStyles.greyColor
+                            : tagsBloc.tags[index].color.color,
+                        elevation: 0,
+                        margin: EdgeInsets.zero,
+                        radius: BorderRadius.circular(20.r),
+                        child: Stack(
+                          children: [
+                            if (isLast)
+                              Positioned.fill(
+                                child: CupertinoCard(
+                                  elevation: 0,
+                                  margin: EdgeInsets.all(1.w),
+                                  radius: BorderRadius.circular(17.r),
+                                  color: ColorStyles.backgroundColorGrey,
+                                ),
                               ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25.w, vertical: 10.h),
+                              child: Center(
+                                  child: isLast
+                                      ? SizedBox(
+                                          height: 34.h,
+                                          width: 34.w,
+                                          child: Transform.rotate(
+                                              angle: pi / 4,
+                                              child:
+                                                  SvgPicture.asset(SvgImg.add)),
+                                        )
+                                      : Text('#${tagsBloc.tags[index].title}',
+                                          style: style1)),
                             ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25.w, vertical: 10.h),
-                            child: Center(
-                                child: isLast
-                                    ? SizedBox(
-                                        height: 34.h,
-                                        width: 34.w,
-                                        child: Transform.rotate(
-                                            angle: pi / 4,
-                                            child:
-                                                SvgPicture.asset(SvgImg.add)),
-                                      )
-                                    : Text('#${tagsBloc.tags[index].title}',
-                                        style: style1)),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   }),

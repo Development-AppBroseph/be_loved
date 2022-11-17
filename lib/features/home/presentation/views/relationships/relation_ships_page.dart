@@ -419,7 +419,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                               );
                             },
                           ),
-                          SizedBox(height: 11.h),
+                          SizedBox(height: 15.h),
                           BlocConsumer<EventsBloc, EventsState>(
                               listener: (context, state) {
                             if (state is EventErrorState) {
@@ -481,7 +481,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                               ),
                             );
                           }),
-                          if (events.isEmpty) SizedBox(height: 15.h),
+                          // if (events.isEmpty) SizedBox(height: 15.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: CustomAddAnimationButton(func: () {

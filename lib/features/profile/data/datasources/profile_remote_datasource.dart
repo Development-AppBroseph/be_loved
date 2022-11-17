@@ -34,9 +34,11 @@ class ProfileRemoteDataSourceImpl
         data: FormData.fromMap(map),
         options: Options(
             followRedirects: false,
-            validateStatus: (status) => status! < 499,
+            validateStatus: (status) => status! < 599,
             headers: headers));
     printRes(response);
+    print('RES: ${response.statusCode}');
+    print('RES: ${response.data}');
     if (response.statusCode == 200) {
       return User.fromJson(response.data['me']);
     } else {
