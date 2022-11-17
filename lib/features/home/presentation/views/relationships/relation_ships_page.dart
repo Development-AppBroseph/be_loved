@@ -423,13 +423,14 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                           BlocConsumer<EventsBloc, EventsState>(
                               listener: (context, state) {
                             if (state is EventErrorState) {
-                              showAlertToast(state.message);
-                              if (state.isTokenError) {
-                                print('TOKEN ERROR, LOGOUT...');
-                                context.read<AuthBloc>().add(LogOut(context));
-                              }
-                              if(state is EventInternetErrorState){
-                                showAlertToast('Проверьте соединение с интернетом!');
+                                showAlertToast(state.message);
+                                if (state.isTokenError) {
+                                  print('TOKEN ERROR, LOGOUT...');
+                                  context.read<AuthBloc>().add(LogOut(context));
+                                }
+                                if(state is EventInternetErrorState){
+                                  showAlertToast('Проверьте соединение с интернетом!');
+                                }
                               }
                             },
                             builder: (context, state) {
@@ -437,58 +438,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                 return Container();
                               }
                               return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 25.w),
-                                child: ReorderableListView.builder(
-                                  onReorder: (oldIndex, newIndex) {
-                                    context.read<EventsBloc>().add(EventChangeToHomeEvent(
-                                      eventEntity: eventsBloc.eventsInHome[oldIndex], 
-                                      position: newIndex
-                                    ));
-                                  },
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding: const EdgeInsets.all(0),
-                                  shrinkWrap: true,
-                                  itemCount: eventsBloc.eventsInHome.length,
-                                  itemBuilder: ((context, index) {
-                                    return CustomAnimationItemRelationships(
-                                      events: eventsBloc.eventsInHome[index],
-                                      // func: func,
-                                      key: ValueKey('${eventsBloc.eventsInHome[index].id}'),
-                                      delete: (i){
-                                        eventsBloc.add(EventChangeToHomeEvent(
-                                          eventEntity: null, 
-                                          position: i
-                                        ));
-                                      },
-                                      index: index,
-                                    );
-                                  }),
-                                  proxyDecorator: (child, index, animation) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                                blurRadius: 20.h,
-                                                color:
-                                                    Color.fromRGBO(0, 0, 0, 0.1))
-                                          ],
-                                          borderRadius:
-                                              BorderRadius.circular(20.r)),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            }
-                            if (state is EventInternetErrorState) {
-                              showAlertToast(
-                                  'Проверьте соединение с интернетом!');
-                            }
-                          }, builder: (context, state) {
-                            if (state is EventLoadingState) {
-                              return Container();
-                            }
-                            return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 25.w),
                               child: ReorderableListView.builder(
                                 onReorder: (oldIndex, newIndex) {
