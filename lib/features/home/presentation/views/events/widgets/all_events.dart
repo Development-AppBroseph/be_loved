@@ -301,7 +301,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                         : EditorState.oneItemDelete,
                         onLongPress: (){
                           setState(() {
-                            if(isSelectedAll == false && countPage == 1){
+                            if(isSelectedAll == false && countPage == 1 && !eventsBloc.eventsSorted[index].important){
                               isSelectedAll = true;
                               selectedEvents.add(eventsBloc.eventsSorted[index].id);
                             }
@@ -310,7 +310,9 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                         onSelect: (val) {
                           setState(() {
                             if(val){
-                              selectedEvents.add(eventsBloc.eventsSorted[index].id);
+                              if(!eventsBloc.eventsSorted[index].important){
+                                selectedEvents.add(eventsBloc.eventsSorted[index].id);
+                              }
                             }else{
                               selectedEvents.remove(eventsBloc.eventsSorted[index].id);
                             }
@@ -319,8 +321,10 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                         eventEntity: eventsBloc.eventsSorted[index],
                         isSelected: selectedEvents.contains(eventsBloc.eventsSorted[index].id),
                         onTapDelete: (){
-                          showLoaderWrapper(context);
-                          context.read<EventsBloc>().add(EventDeleteEvent(ids: [eventsBloc.eventsSorted[index].id]));
+                          if(!eventsBloc.eventsSorted[index].important){
+                            showLoaderWrapper(context);
+                            context.read<EventsBloc>().add(EventDeleteEvent(ids: [eventsBloc.eventsSorted[index].id]));
+                          }
                         },
                       );
                     },

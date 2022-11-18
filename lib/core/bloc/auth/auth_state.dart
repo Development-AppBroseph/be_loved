@@ -115,3 +115,5 @@ class TextFieldError extends AuthState {}
 class CheckIsUserExistSuccess extends AuthState {}
 
 class CheckIsUserExistError extends AuthState {}
+
+class RefreshUser extends AuthState {}

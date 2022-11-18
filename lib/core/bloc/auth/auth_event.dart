@@ -22,7 +22,10 @@ class SetNickname extends AuthEvent {
   SetNickname(this.nickname);
 }
 
-class GetUser extends AuthEvent {}
+class GetUser extends AuthEvent {
+  final bool isJustRefresh;
+  GetUser({this.isJustRefresh = false});
+}
 
 class EditUserInfo extends AuthEvent {}
 

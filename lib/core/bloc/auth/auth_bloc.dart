@@ -192,7 +192,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _getUser(GetUser event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    if(event.isJustRefresh){
+      emit(RefreshUser());
+    }else{
+      emit(AuthLoading());
+    }
     var result = await Repository().getUser();
 
     if (result != null) {

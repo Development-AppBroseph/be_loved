@@ -56,9 +56,23 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     EventsState state = data.fold(
       (error) => errorCheck(error),
       (data) {
-        events = events.reversed.toList();
-        events.add(data);
-        events = events.reversed.toList();
+        List<EventEntity> newSortedList = [];
+        bool isAdded = false;
+        for(EventEntity eventItem in events){
+          print('TEST: ${eventItem.start.millisecondsSinceEpoch >= data.start.millisecondsSinceEpoch}');
+          if(!isAdded && eventItem.start.millisecondsSinceEpoch >= data.start.millisecondsSinceEpoch){
+            newSortedList.add(data);
+            isAdded = true;
+          }
+          newSortedList.add(eventItem);
+        }
+        if(!isAdded){
+          newSortedList.add(data);
+        }
+        // events = events.reversed.toList();
+        // events.add(data);
+        // events = events.reversed.toList();
+        events = newSortedList;
         selectedTag = null;
         eventsSorted = events;
         return EventAddedState(eventEntity: event.eventEntity);

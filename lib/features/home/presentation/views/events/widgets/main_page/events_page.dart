@@ -170,6 +170,9 @@ class _MainEventsPageState extends State<MainEventsPage> {
               List<EventEntity> eventsSlider = eventsBloc.events
                   .where((element) => int.parse(element.datetimeString) < 7)
                   .toList();
+              if(eventsSlider.length > 3){
+                eventsSlider = [eventsSlider[0],eventsSlider[2],eventsSlider[3]];
+              }
               if (eventsSlider.isEmpty) {
                 return Container();
               }
