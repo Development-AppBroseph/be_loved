@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final pageController = PageController();
 
-  final streamController = StreamController();
+  final streamController = StreamController<String>();
 
   int currentIndex = 0;
 
@@ -47,27 +47,34 @@ class _HomePageState extends State<HomePage> {
     context.read<EventsBloc>().add(GetEventsEvent());
     context.read<AuthBloc>().add(GetUser());
     context.read<TagsBloc>().add(GetTagsEvent());
+
+    pageController.addListener(() {
+      if (pageController.page != currentIndex) {
+        Future.delayed(Duration(milliseconds: 50),(){
+        // streamController.add('');
+        setState(() {
+          currentIndex = pageController.page!.toInt();
+          
+        });
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     pageController.dispose();
+    streamController.close();
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    pageController.addListener(() {
-      if (pageController.page != currentIndex) {
-        currentIndex = pageController.page!.toInt();
-        streamController.add('');
-      }
-    });
 
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         // var loader = showLoaderWrapper(context);
-        if (state is GetUserSuccess || state is GetUserError) {
+        if (state is GetUserSuccess || state is GetUserError || state is RefreshUser) {
           // Loader.hide();
           return Scaffold(
             bottomNavigationBar: bottomNavigator(),
@@ -104,10 +111,7 @@ class _HomePageState extends State<HomePage> {
         fontSize: 12,
         color: ColorStyles.greyColor);
 
-    return StreamBuilder(
-      stream: streamController.stream,
-      builder: (context, snapshot) {
-        return Container(
+    return Container(
           height: 100.h,
           color: Colors.white,
           child: Padding(
@@ -231,7 +235,5 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         );
-      },
-    );
   }
 }

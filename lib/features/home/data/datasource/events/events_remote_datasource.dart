@@ -34,7 +34,7 @@ class EventsRemoteDataSourceImpl
     Response response = await dio.get(Endpoints.getEvents.getPath(),
         options: Options(
             followRedirects: false,
-            validateStatus: (status) => status! < 499,
+            validateStatus: (status) => status! < 599,
             headers: headers));
     printRes(response);
     if (response.statusCode == 200) {

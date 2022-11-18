@@ -96,7 +96,8 @@ class _AccountPageState extends State<AccountPage> {
 
   String getUserPhone(String phone) {
     // var phone = (await MySharedPrefs().user as UserAnswer).me.phoneNumber;
-    return '${phone.substring(0, 2)} ${phone.substring(2, 5)} ${phone.substring(5, 8)} ${phone.substring(8, 10)}-${phone.substring(10, 12)}';
+    // return '${phone.substring(0, 2)} ${phone.substring(2, 5)} ${phone.substring(5, 8)} ${phone.substring(8, 10)}-${phone.substring(10, 12)}';
+    return '${phone.substring(0, 2)} *** *** ${phone.substring(8, 10)}-${phone.substring(10, 12)}';
   }
 
   _sendCode() {

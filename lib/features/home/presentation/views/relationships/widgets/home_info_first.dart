@@ -48,7 +48,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
       (Timer timer) {
         if (DateTime.now().second == 0) {
           _timer!.cancel();
-          Timer.periodic(const Duration(seconds: 60), (Timer timer) {
+          Timer.periodic(const Duration(seconds: 10), (Timer timer) {
             setTime();
           });
         }
@@ -59,7 +59,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
 
   void setTime() async {
     UserAnswer? user = sl<AuthConfig>().user;
-    print('USER: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
+    print('SET TIME: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
     if (user!.date != null) {
       final startTime = user.date as String;
       final array = startTime.split('-');

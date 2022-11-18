@@ -57,8 +57,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   int iconIndex = 15;
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
-  final TextEditingController _controllerFromTime = TextEditingController();
-  final TextEditingController _controllerToTime = TextEditingController();
+  final TextEditingController _controllerFromTime = TextEditingController(text: '23:59');
+  final TextEditingController _controllerToTime = TextEditingController(text: '23:59');
 
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now().add(const Duration(days: 5));
