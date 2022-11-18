@@ -10,6 +10,7 @@ import 'package:be_loved/features/home/presentation/views/events/widgets/show_cr
 import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_event_item.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_events.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -156,18 +157,23 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                           SizedBox(
                             width: 10.w,
                           ),
-                          Container(
-                            height: 55.h,
-                            width: 55.w,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.r),
-                              color: const Color(0xff20CB83),
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.add,
-                                size: 35,
-                                color: Colors.white,
+                          GestureDetector(
+                            onTap: () {
+                              showModalCreateEvent(context, () {});
+                            },
+                            child: Container(
+                              height: 55.h,
+                              width: 55.w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.r),
+                                color: const Color(0xff20CB83),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.add,
+                                  size: 35,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -202,7 +208,8 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                               });
                               showLoaderWrapper(context);
                               print('SENT: ${selectedEvents}');
-                              eventsBloc.add(EventDeleteEvent(ids: selectedEvents));
+                              eventsBloc
+                                  .add(EventDeleteEvent(ids: selectedEvents));
                               isSelectedAll = false;
                             },
                             child: Container(
@@ -261,91 +268,91 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
               ],
             ),
           ),
-          SizedBox(height: 39.h,),
-          TagsListBlock(),
-          BlocConsumer<EventsBloc, EventsState>(
-            listener: (context, state) {
-              if(state is EventErrorState){
-                Loader.hide();
-                showAlertToast(state.message);
-              }
-              if(state is EventInternetErrorState){
-                Loader.hide();
-                showAlertToast('Проверьте соединение с интернетом!');
-              }
-              if(state is EventDeletedState){
-                Loader.hide();
-                selectedEvents.clear();
-                setState(() {});
-              }
-              if(state is GotSuccessEventsState || state is EventDeletedState){
-                setState(() {});
-              }
-            },
-            builder: (context, state) {
-              return Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 39.h),
-                  child: ListView.builder(
-                    controller: scrollController,
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
-                    scrollDirection: Axis.vertical,
-                    itemCount: eventsBloc.eventsSorted.length,
-                    physics: const ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return UserEventItem(
-                        editorState: isSelectedAll 
-                        ? EditorState.groupSelect
-                        : countPage == 0
-                        ? EditorState.just
-                        : EditorState.oneItemDelete,
-                        onLongPress: (){
-                          setState(() {
-                            if(isSelectedAll == false && countPage == 1 && !eventsBloc.eventsSorted[index].important){
-                              isSelectedAll = true;
-                              selectedEvents.add(eventsBloc.eventsSorted[index].id);
-                            }
-                          });
-                        },
-                        onSelect: (val) {
-                          setState(() {
-                            if(val){
-                              if(!eventsBloc.eventsSorted[index].important){
-                                selectedEvents.add(eventsBloc.eventsSorted[index].id);
-                              }
-                            }else{
-                              selectedEvents.remove(eventsBloc.eventsSorted[index].id);
-                            }
-                          });
-                        },
-                        eventEntity: eventsBloc.eventsSorted[index],
-                        isSelected: selectedEvents.contains(eventsBloc.eventsSorted[index].id),
-                        onTapDelete: (){
-                          if(!eventsBloc.eventsSorted[index].important){
-                            showLoaderWrapper(context);
-                            context.read<EventsBloc>().add(EventDeleteEvent(ids: [eventsBloc.eventsSorted[index].id]));
-                          }
-                        },
-                      );
-                    },
-                  ),
-                ),
-              );
-            }
+          SizedBox(
+            height: 39.h,
           ),
-          SizedBox(height: 30.h,)
-
+          TagsListBlock(),
+          BlocConsumer<EventsBloc, EventsState>(listener: (context, state) {
+            if (state is EventErrorState) {
+              Loader.hide();
+              showAlertToast(state.message);
+            }
+            if (state is EventInternetErrorState) {
+              Loader.hide();
+              showAlertToast('Проверьте соединение с интернетом!');
+            }
+            if (state is EventDeletedState) {
+              Loader.hide();
+              selectedEvents.clear();
+              setState(() {});
+            }
+            if (state is GotSuccessEventsState || state is EventDeletedState) {
+              setState(() {});
+            }
+          }, builder: (context, state) {
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(top: 39.h),
+                child: ListView.builder(
+                  controller: scrollController,
+                  padding: EdgeInsets.symmetric(horizontal: 25.w),
+                  scrollDirection: Axis.vertical,
+                  itemCount: eventsBloc.eventsSorted.length,
+                  physics: const ClampingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return UserEventItem(
+                      editorState: isSelectedAll
+                          ? EditorState.groupSelect
+                          : countPage == 0
+                              ? EditorState.just
+                              : EditorState.oneItemDelete,
+                      onLongPress: () {
+                        setState(() {
+                          if (isSelectedAll == false &&
+                              countPage == 1 &&
+                              !eventsBloc.eventsSorted[index].important) {
+                            isSelectedAll = true;
+                            selectedEvents
+                                .add(eventsBloc.eventsSorted[index].id);
+                          }
+                        });
+                      },
+                      onSelect: (val) {
+                        setState(() {
+                          if (val) {
+                            if (!eventsBloc.eventsSorted[index].important) {
+                              selectedEvents
+                                  .add(eventsBloc.eventsSorted[index].id);
+                            }
+                          } else {
+                            selectedEvents
+                                .remove(eventsBloc.eventsSorted[index].id);
+                          }
+                        });
+                      },
+                      eventEntity: eventsBloc.eventsSorted[index],
+                      isSelected: selectedEvents
+                          .contains(eventsBloc.eventsSorted[index].id),
+                      onTapDelete: () {
+                        if (!eventsBloc.eventsSorted[index].important) {
+                          showLoaderWrapper(context);
+                          context.read<EventsBloc>().add(EventDeleteEvent(
+                              ids: [eventsBloc.eventsSorted[index].id]));
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+            );
+          }),
+          SizedBox(
+            height: 30.h,
+          )
         ],
       ),
     );
   }
 }
 
-
-
-
-enum EditorState{
-  just,
-  oneItemDelete,
-  groupSelect
-}
+enum EditorState { just, oneItemDelete, groupSelect }
