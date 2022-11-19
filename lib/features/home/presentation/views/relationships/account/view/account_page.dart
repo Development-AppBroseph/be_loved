@@ -182,6 +182,11 @@ class _AccountPageState extends State<AccountPage> {
             GestureDetector(
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
+                if(sl<AuthConfig>().user!.me.username != nameController.text.trim()){
+                  sl<AuthConfig>().user!.me.username = nameController.text.trim();
+                  showLoaderWrapper(context);
+                  context.read<ProfileBloc>().add(EditProfileEvent(user: sl<AuthConfig>().user!.me, avatar: null));
+                }
               },
               child: StreamBuilder<int>(
                 stream: _streamController.stream,

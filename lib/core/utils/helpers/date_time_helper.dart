@@ -1,6 +1,7 @@
 
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 String convertToAgo(DateTime input){
   Duration diff = DateTime.now().difference(input);
@@ -29,6 +30,25 @@ String checkDays(String days) {
   }
   if(_days == 1){
     return 'Завтра';
+  }
+  if(_days == 7){
+    return 'Через неделю';
+  }
+  if(_days == 14){
+    return 'Через 2 недели';
+  }
+  if(_days == 21){
+    return 'Через 3 недели';
+  }
+  if(_days >= 29 && _days <= 31){
+    return 'Через месяц';
+  }
+  DateTime _daysInDateTime = DateTime.now().add(Duration(days: _days));
+  if(DateTime.now().year != _daysInDateTime.year){
+    return DateFormat('dd.MM.yy').format(_daysInDateTime);
+  }
+  if(_days > 31){
+    return DateFormat('dd.MM').format(_daysInDateTime);
   }
   if(lastNumber > 5 && lastNumber < 10) return 'Через $days дней';
   if(_days % 5 == 0) return 'Через $days дней';
@@ -59,7 +79,15 @@ Color getColorFromDays(String days, bool isImportant){
 
 
 
-getTextFromDate(String days, [String? additionString]){
+getTextFromDate(String days, [String? additionString, bool showAllDate = false]){
+  if(showAllDate){
+    int _days = int.parse(days);
+    DateTime _daysInDateTime = DateTime.now().add(Duration(days: _days));
+    if(DateTime.now().year != _daysInDateTime.year){
+      return DateFormat('dd.MM.yy').format(_daysInDateTime);
+    }
+    return DateFormat('dd.MM').format(_daysInDateTime);
+  }
   bool isTomorrow = days == '1';
   bool isToday = days == '0';
   return isTomorrow

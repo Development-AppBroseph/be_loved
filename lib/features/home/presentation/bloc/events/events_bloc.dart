@@ -39,6 +39,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     EventsState state = gotEvents.fold(
       (error) => errorCheck(error),
       (data) {
+        data.sort(((a, b) => int.parse(a.datetimeString).compareTo(int.parse(b.datetimeString))));
         events = data;
         eventsSorted = data;
         eventsInHome = getInHomeEvents(data);
