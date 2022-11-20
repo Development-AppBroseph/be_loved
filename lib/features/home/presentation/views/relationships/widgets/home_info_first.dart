@@ -48,7 +48,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
       (Timer timer) {
         if (DateTime.now().second == 0) {
           _timer!.cancel();
-          Timer.periodic(const Duration(seconds: 10), (Timer timer) {
+          Timer.periodic(const Duration(seconds: 5), (Timer timer) {
             setTime();
           });
         }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
@@ -81,29 +83,35 @@ void colorSelectModal(
                     child: AnimatedOpacity(
                       duration: const Duration(milliseconds: 200),
                       opacity: isInitOpacity ? 1 : 0,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        controller: scrollController,
-                        itemCount: MainConfigApp.tagColors.length,
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              onTap(index);
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 57.h,
-                              child: Align(
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        },),
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          controller: scrollController,
+                          itemCount: MainConfigApp.tagColors.length,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                onTap(index);
+                              },
+                              child: Container(
                                 alignment: Alignment.center,
-                                child: SvgPicture.asset(
-                                  MainConfigApp.tagColors[index].assetPath,
+                                height: 57.h,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: SvgPicture.asset(
+                                    MainConfigApp.tagColors[index].assetPath,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
