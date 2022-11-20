@@ -59,6 +59,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
   Widget build(BuildContext context) {
     EventsBloc eventsBloc = context.read<EventsBloc>();
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Padding(

@@ -78,6 +78,7 @@ class _HomePageState extends State<HomePage> {
           // Loader.hide();
           return Scaffold(
             bottomNavigationBar: bottomNavigator(),
+            backgroundColor: currentIndex == 1 ? Colors.white : null,
             body: Stack(
               alignment: Alignment.bottomCenter,
               children: [

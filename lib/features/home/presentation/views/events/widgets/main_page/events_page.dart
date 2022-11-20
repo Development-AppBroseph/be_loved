@@ -208,7 +208,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                                       elevation: 0,
                                       radius: BorderRadius.circular(37.r),
                                       margin: EdgeInsets.all(1.w),
-                                      color: ColorStyles.backgroundColorGrey,
+                                      color: Colors.white,
                                     ),
                                   ),
                                   Padding(
