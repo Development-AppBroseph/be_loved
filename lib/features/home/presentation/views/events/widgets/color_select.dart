@@ -86,7 +86,7 @@ void colorSelectModal(
                         shrinkWrap: true,
                         controller: scrollController,
                         itemCount: MainConfigApp.tagColors.length,
-                        physics: const BouncingScrollPhysics(parent: ClampingScrollPhysics()),
+                        physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
