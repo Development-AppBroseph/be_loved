@@ -55,7 +55,7 @@ class ProfileRemoteDataSourceImpl
   Future<String> editRelation(int id, String relationName) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.put(Endpoints.editRelations.getPath(),
-        data: jsonEncode({
+        data: FormData.fromMap({
           'relation_id': id,
           'name': relationName
         }),

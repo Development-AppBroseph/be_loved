@@ -20,6 +20,7 @@ import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationship
 import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -564,31 +565,41 @@ class _RelationShipsPageState extends State<RelationShipsPage>
     return Stack(
       children: [
         if (path != null && path.trim() != '')
-          ClipRRect(
-            borderRadius: BorderRadius.all(
-              Radius.circular(40.r),
-            ),
-            child: Container(
-              decoration: const BoxDecoration(color: Colors.white),
-              child: CachedNetworkImage(
-                imageUrl: Config.url.url + path,
-                fit: BoxFit.cover,
-                fadeInCurve: Curves.easeInOutQuint,
-                fadeOutCurve: Curves.easeInOutQuint,
-                fadeInDuration: const Duration(milliseconds: 300),
-                fadeOutDuration: const Duration(milliseconds: 300),
-                width: 134.h,
-                height: 134.h,
-              ),
+        ClipRRect(
+          borderRadius: BorderRadius.all(
+            Radius.circular(38.r),
+          ),
+          child: Container(
+            decoration: const BoxDecoration(color: Colors.white),
+            child: CachedNetworkImage(
+              imageUrl: Config.url.url + path,
+              fit: BoxFit.cover,
+              fadeInCurve: Curves.easeInOutQuint,
+              fadeOutCurve: Curves.easeInOutQuint,
+              fadeInDuration: const Duration(milliseconds: 300),
+              fadeOutDuration: const Duration(milliseconds: 300),
+              width: 134.h,
+              height: 134.h,
             ),
           ),
+        ),
+        // SizedBox(
+        //   width: 134.h,
+        //   height: 134.h,
+        //   child: CupertinoCard(
+        //     elevation: 0,
+        //     margin: EdgeInsets.zero,
+        //     radius: BorderRadius.circular(80.r),
+        //     color: Colors.white,
+        //   ),
+        // ),
         Container(
           width: 134.h,
           height: 134.h,
           decoration: BoxDecoration(
             // color: Colors.white,
             borderRadius: BorderRadius.all(
-              Radius.circular(40.r),
+              Radius.circular(38.r),
             ),
             border: Border.all(width: 5.h, color: Colors.white),
             image: path == null || path.trim() == ''

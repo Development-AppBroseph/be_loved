@@ -99,9 +99,7 @@ class UserEventItem extends StatelessWidget {
                     : Align(
                         alignment: Alignment.center,
                         child: Text(
-                          editorState == EditorState.just
-                          ? getTextFromDate(eventEntity.datetimeString)
-                          : DateFormat('dd.MM').format(eventEntity.start),
+                          getTextFromDate(eventEntity.datetimeString, null, editorState != EditorState.just),
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 15.sp,

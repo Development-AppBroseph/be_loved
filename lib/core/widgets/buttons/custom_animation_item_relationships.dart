@@ -5,6 +5,7 @@ import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/text_size.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/widgets/texts/next_text_widget.dart';
 import 'package:be_loved/core/widgets/texts/today_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
@@ -195,29 +196,9 @@ class _CustomAnimationItemRelationshipsState
                                               milliseconds: 1000),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
-                                        widget.index == 0 && context.read<EventsBloc>().events.any((element) => element.datetimeString == '1')
-                                        ? Row(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              'Завтра:',
-                                              style: TextStyle(
-                                                  color: ColorStyles.greyColor,
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w700,
-                                                  ),
-                                            ),
-                                            SizedBox(width: 10.w),
-                                            Text(
-                                              context.read<EventsBloc>().events.where((element) => element.datetimeString == '1')
-                                              .first.title,
-                                              style: TextStyle(
-                                                  color: ColorStyles.greyColor,
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                          ],
-                                        ) : SizedBox(height: 10.h,),
+                                        widget.index == 0
+                                        ? NextEventTextWidget(eventEntity: widget.events)
+                                        : SizedBox(height: 10.h,)
                                       ],
                                     ),
                                   ),
