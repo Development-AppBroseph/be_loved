@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+enum WhichScroll { top, down, middle }
+
 void colorSelectModal(
   BuildContext context,
   Offset offset,
   Function(int index) onTap,
+  WhichScroll whichScroll,
   int iconIndex,
 ) =>
     showDialog(
@@ -16,12 +19,26 @@ void colorSelectModal(
       context: context,
       builder: (context) {
         bool isInit = false;
+        int load = 0;
         bool isInitOpacity = false;
         ScrollController scrollController = ScrollController(
             initialScrollOffset: iconIndex == 0 ? 0 : (57.h * (iconIndex - 1)));
+        if (load == 0) {
+          load = 1;
+          Future.delayed(const Duration(milliseconds: 300), () {
+            scrollController.animateTo(
+              whichScroll == WhichScroll.down
+                  ? 100
+                  : whichScroll == WhichScroll.middle
+                      ? 0
+                      : -20,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOutQuint,
+            );
+          });
+        }
         return AlertDialog(
-          insetPadding:
-              EdgeInsets.only(top: offset.dy - 58.h, left: offset.dx),
+          insetPadding: EdgeInsets.only(top: offset.dy - 58.h, left: offset.dx),
           alignment: Alignment.topLeft,
           contentPadding: EdgeInsets.zero,
           backgroundColor: Colors.transparent,

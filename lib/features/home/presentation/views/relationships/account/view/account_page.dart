@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
@@ -59,7 +60,7 @@ class _AccountPageState extends State<AccountPage> {
   final _streamController = StreamController<int>();
 
   final _streamControllerCarousel = StreamController<double>();
-  
+
   final _streamControllerName = StreamController<int>();
 
   final _scrollController = ScrollController();
@@ -68,9 +69,9 @@ class _AccountPageState extends State<AccountPage> {
 
   TextEditingController codeController = TextEditingController();
 
-  TextEditingController nameController = TextEditingController(text: sl<AuthConfig>().user == null 
-    ? '' 
-    : sl<AuthConfig>().user!.me.username,
+  TextEditingController nameController = TextEditingController(
+    text:
+        sl<AuthConfig>().user == null ? '' : sl<AuthConfig>().user!.me.username,
   );
 
   PageController controller = PageController();
@@ -111,6 +112,7 @@ class _AccountPageState extends State<AccountPage> {
     if (codeController.text.length == 5) {
       if ((codeController.text[0] != '0')) {
         showLoaderWrapper(context);
+
         context
             .read<ProfileBloc>()
             .add(PutUserCodeEvent(code: int.parse(codeController.text)));
@@ -147,7 +149,7 @@ class _AccountPageState extends State<AccountPage> {
           duration: const Duration(milliseconds: 1200),
           curve: Curves.ease,
         );
-        Future.delayed(const Duration(milliseconds: 200), () {
+        Future.delayed(const Duration(milliseconds: 400), () {
           _scrollController.animateTo(
             _scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 200),
@@ -182,10 +184,13 @@ class _AccountPageState extends State<AccountPage> {
             GestureDetector(
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
-                if(sl<AuthConfig>().user!.me.username != nameController.text.trim()){
-                  sl<AuthConfig>().user!.me.username = nameController.text.trim();
+                if (sl<AuthConfig>().user!.me.username !=
+                    nameController.text.trim()) {
+                  sl<AuthConfig>().user!.me.username =
+                      nameController.text.trim();
                   showLoaderWrapper(context);
-                  context.read<ProfileBloc>().add(EditProfileEvent(user: sl<AuthConfig>().user!.me, avatar: null));
+                  context.read<ProfileBloc>().add(EditProfileEvent(
+                      user: sl<AuthConfig>().user!.me, avatar: null));
                 }
               },
               child: StreamBuilder<int>(
@@ -253,147 +258,7 @@ class _AccountPageState extends State<AccountPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          StreamBuilder<int>(
-                                            stream: _streamControllerName.stream,
-                                            initialData: 2,
-                                            builder: (context, snapshot) {
-                                              int data = snapshot.data??2;
-                                              return SizedBox(
-                                                width: (data < 7 ? 7 : data)*24.w,
-                                                // padding: EdgeInsets.only(
-                                                //     left: 89.w, right: 98.w),
-                                                child: SizedBox(
-                                                  height: 45.h,
-                                                  child: Stack(
-                                                    // mainAxisAlignment:
-                                                    //     MainAxisAlignment.center,
-                                                    children: [
-                                                      Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: SizedBox(
-                                                            height: 33.h,
-                                                            child: TextField(
-                                                              textAlign:
-                                                                  TextAlign.center,
-                                                              textCapitalization:
-                                                                  TextCapitalization
-                                                                      .words,
-                                                              onChanged: (value) {
-                                                                if (value.length <=
-                                                                    maxLength) {
-                                                                  text = value;
-                                                                } else {
-                                                                  nameController
-                                                                          .value =
-                                                                      TextEditingValue(
-                                                                    text: text,
-                                                                    selection:
-                                                                        TextSelection(
-                                                                      baseOffset:
-                                                                          maxLength,
-                                                                      extentOffset:
-                                                                          maxLength,
-                                                                      affinity:
-                                                                          TextAffinity
-                                                                              .upstream,
-                                                                      isDirectional:
-                                                                          false,
-                                                                    ),
-                                                                    composing:
-                                                                        TextRange(
-                                                                      start: 0,
-                                                                      end: maxLength,
-                                                                    ),
-                                                                  );
-                                                                }
-                                                                _streamControllerName.sink.add(nameController.text.length);
-                                                              },
-                                                              cursorColor:
-                                                                  Colors.black,
-                                                              cursorHeight: 30,
-                                                              textAlignVertical:
-                                                                  TextAlignVertical
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                color: Colors.black,
-                                                                fontSize: 30.sp,
-                                                                fontWeight:
-                                                                    FontWeight.w700,
-                                                              ),
-                                                              controller:
-                                                                  nameController,
-                                                              focusNode:
-                                                                  focusNodeName,
-                                                              scrollPadding:
-                                                                  EdgeInsets.zero,
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                contentPadding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        top: 20),
-                                                                border:
-                                                                    InputBorder.none,
-                                                                hintText: '',
-                                                                hintStyle: TextStyle(
-                                                                  color: Colors.black,
-                                                                  fontSize: 30.sp,
-                                                                  fontWeight:
-                                                                      FontWeight.w700,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                        ),
-                                                      ),
-                                                      Align(
-                                                        alignment: Alignment.centerRight,
-                                                        child: GestureDetector(
-                                                          onTap: () async {
-                                                            if (focusNodeName
-                                                                .hasFocus && nameController.text.length > 1) {
-                                                              focusNodeName.unfocus();
-                                                              sl<AuthConfig>().user!.me.username = nameController.text.trim();
-                                                              showLoaderWrapper(context);
-                                                              context.read<ProfileBloc>().add(EditProfileEvent(user: sl<AuthConfig>().user!.me, avatar: null));
-                                                            } else {
-                                                              FocusScope.of(context)
-                                                                  .requestFocus(
-                                                                      focusNodeName);
-                                                            }
-                                                          },
-                                                          behavior: HitTestBehavior.translucent,
-                                                          child: nameController.text
-                                                                      .isNotEmpty &&
-                                                                  focusNodeName
-                                                                      .hasFocus
-                                                              ? const Icon(
-                                                                  Icons.check_rounded,
-                                                                  color: Color(
-                                                                      0xff969696),
-                                                                )
-                                                              : !focusNodeName
-                                                                      .hasFocus
-                                                                  ? SvgPicture.asset(
-                                                                      SvgImg.edit,
-                                                                      height: 17.h,
-                                                                      width: 17.w,
-                                                                      color: const Color(
-                                                                          0xff969696),
-                                                                    )
-                                                                  : const Icon(
-                                                                      Icons
-                                                                          .check_rounded,
-                                                                      color: Color(
-                                                                          0xff969696),
-                                                                    ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            }
-                                          ),
+                                          _textField(),
                                           SizedBox(height: 5.h),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
@@ -561,7 +426,7 @@ class _AccountPageState extends State<AccountPage> {
                                                               Future.delayed(
                                                                 const Duration(
                                                                     milliseconds:
-                                                                        600),
+                                                                        570),
                                                                 () {
                                                                   _scrollController
                                                                       .animateTo(
@@ -574,7 +439,7 @@ class _AccountPageState extends State<AccountPage> {
                                                                           400,
                                                                     ),
                                                                     curve: Curves
-                                                                        .ease,
+                                                                        .easeInOutQuint,
                                                                   );
                                                                 },
                                                               );
@@ -814,6 +679,131 @@ class _AccountPageState extends State<AccountPage> {
         ),
       );
     });
+  }
+
+  StreamBuilder<int> _textField() {
+    return StreamBuilder<int>(
+        stream: _streamControllerName.stream,
+        initialData: 2,
+        builder: (context, snapshot) {
+          int data = snapshot.data ?? 2;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOutQuint,
+            width: (data < 7 ? 7.w : data.w) *
+                (data == 6
+                    ? 28.w
+                    : data == 7
+                        ? 28.w
+                        : data == 8
+                            ? 26.w
+                            : 25.w),
+            // padding: EdgeInsets.only(
+            //     left: 89.w, right: 98.w),
+            child: SizedBox(
+              height: 45.h,
+              child: Stack(
+                // mainAxisAlignment:
+                //     MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      height: 33.h,
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        textCapitalization: TextCapitalization.words,
+                        onChanged: (value) {
+                          if (value.length <= maxLength) {
+                            text = value;
+                          } else {
+                            nameController.value = TextEditingValue(
+                              text: text,
+                              selection: TextSelection(
+                                baseOffset: maxLength,
+                                extentOffset: maxLength,
+                                affinity: TextAffinity.upstream,
+                                isDirectional: false,
+                              ),
+                              composing: TextRange(
+                                start: 0,
+                                end: maxLength,
+                              ),
+                            );
+                          }
+                          _streamControllerName.sink
+                              .add(nameController.text.length);
+                        },
+                        inputFormatters: [LengthLimitingTextInputFormatter(12)],
+                        cursorColor: Colors.black,
+                        cursorHeight: 30,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.w700,
+                          decoration: TextDecoration.none,
+                        ),
+                        controller: nameController,
+                        focusNode: focusNodeName,
+                        scrollPadding: EdgeInsets.zero,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(top: 20),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          hintText: '',
+                          hintStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 30.sp,
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (focusNodeName.hasFocus &&
+                            nameController.text.length > 1) {
+                          focusNodeName.unfocus();
+                          sl<AuthConfig>().user!.me.username =
+                              nameController.text.trim();
+                          showLoaderWrapper(context);
+                          context.read<ProfileBloc>().add(EditProfileEvent(
+                              user: sl<AuthConfig>().user!.me, avatar: null));
+                        } else {
+                          FocusScope.of(context).requestFocus(focusNodeName);
+                        }
+                      },
+                      behavior: HitTestBehavior.translucent,
+                      child: nameController.text.isNotEmpty &&
+                              focusNodeName.hasFocus
+                          ? const Icon(
+                              Icons.check_rounded,
+                              color: Color(0xff969696),
+                            )
+                          : !focusNodeName.hasFocus
+                              ? SvgPicture.asset(
+                                  SvgImg.edit,
+                                  height: 17.h,
+                                  width: 17.w,
+                                  color: const Color(0xff969696),
+                                )
+                              : const Icon(
+                                  Icons.check_rounded,
+                                  color: Color(0xff969696),
+                                ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   // TextStyle style1 = TextStyle(

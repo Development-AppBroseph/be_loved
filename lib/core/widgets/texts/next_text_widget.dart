@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
-
 class NextEventTextWidget extends StatelessWidget {
   final EventEntity eventEntity;
   const NextEventTextWidget({required this.eventEntity});
@@ -16,32 +14,35 @@ class NextEventTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     EventsBloc eventsBloc = context.read<EventsBloc>();
     EventEntity? nextEvent;
-    if(eventsBloc.events.first.id != eventEntity.id){
+    if (eventsBloc.events.first.id != eventEntity.id) {
       nextEvent = eventsBloc.events.first;
-    }else if(eventsBloc.events.length >= 2){
+    } else if (eventsBloc.events.length >= 2) {
       nextEvent = eventsBloc.events[1];
     }
     return nextEvent != null
-      ? Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            getTextFromDate(nextEvent.datetimeString, ':'),
-            style: TextStyle(
-                color: ColorStyles.greyColor,
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w700,
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                getTextFromDate(nextEvent.datetimeString, ':'),
+                style: TextStyle(
+                  color: ColorStyles.greyColor,
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w700,
                 ),
-          ),
-          SizedBox(width: 10.w),
-          Text(
-            nextEvent.title,
-            style: TextStyle(
-                color: ColorStyles.greyColor,
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w700),
-          ),
-        ],
-      ) : SizedBox(height: 10.h,);
+              ),
+              SizedBox(width: 10.w),
+              Text(
+                nextEvent.title,
+                style: TextStyle(
+                    color: ColorStyles.greyColor,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w700),
+              ),
+            ],
+          )
+        : SizedBox(
+            height: 10.h,
+          );
   }
 }

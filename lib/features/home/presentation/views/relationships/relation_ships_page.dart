@@ -72,7 +72,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   @override
   void dispose() {
     super.dispose();
-    _controller.removeListener(() { });
+    _controller.removeListener(() {});
     _streamController.close();
     _streamControllerCarousel.close();
   }
@@ -105,7 +105,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if(state is GetUserSuccess){
+        if (state is GetUserSuccess) {
           print('GOT USER');
           Loader.hide();
           setState(() {
@@ -122,7 +122,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
         },
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          physics: const AlwaysScrollableScrollPhysics(parent: ClampingScrollPhysics()),
+          physics: const AlwaysScrollableScrollPhysics(
+              parent: ClampingScrollPhysics()),
           child: GestureDetector(
             onTap: () {
               // f1.unfocus();
@@ -156,10 +157,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                     Text(
                                       sl<AuthConfig>().user == null
                                           ? ''
-                                          : sl<AuthConfig>()
-                                              .user!
-                                              .me
-                                              .username,
+                                          : sl<AuthConfig>().user!.me.username,
                                       style: style1,
                                     ),
                                   ],
@@ -179,7 +177,13 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                   backgroundColor: Colors.transparent,
                                   builder: (context) =>
                                       const ParametrsUserBottomsheet(),
-                                ),
+                                ).then((value) {
+                                  if (value is String) {
+                                    if (value == 'account') {
+                                      widget.nextPage();
+                                    }
+                                  }
+                                }),
                                 child: Container(
                                   height: 55.h,
                                   width: 55.h,
@@ -196,8 +200,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                           itemBuilder:
                                               (BuildContext context, index) {
                                             return Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 5.57.h),
+                                              margin:
+                                                  EdgeInsets.only(left: 5.57.h),
                                               height: 5.57.h,
                                               width: 5.57.h,
                                               decoration: BoxDecoration(
@@ -247,13 +251,13 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                       child: SizedBox(
                                         height: 33.h,
                                         child: TextField(
-                                          onSubmitted: (s){
-                                            if(s.length > 1){
+                                          onSubmitted: (s) {
+                                            if (s.length > 1) {
                                               showLoaderWrapper(context);
-                                          context.read<ProfileBloc>().add(
-                                              EditRelationNameEvent(
-                                                  name: _controller.text
-                                                      .trim()));
+                                              context.read<ProfileBloc>().add(
+                                                  EditRelationNameEvent(
+                                                      name: _controller.text
+                                                          .trim()));
                                             }
                                           },
                                           textCapitalization:
@@ -293,8 +297,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                           scrollPadding: EdgeInsets.zero,
                                           decoration: InputDecoration(
                                             contentPadding:
-                                                const EdgeInsets.only(
-                                                    top: 20),
+                                                const EdgeInsets.only(top: 20),
                                             border: InputBorder.none,
                                             hintText: f1.hasFocus
                                                 ? " "
@@ -318,8 +321,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                           showLoaderWrapper(context);
                                           context.read<ProfileBloc>().add(
                                               EditRelationNameEvent(
-                                                  name: _controller.text
-                                                      .trim()));
+                                                  name:
+                                                      _controller.text.trim()));
                                         } else {
                                           FocusScope.of(context)
                                               .requestFocus(f1);
@@ -351,8 +354,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               sl<AuthConfig>().user!.fromYou ?? true
-                              ? _buildCurrentUser()
-                              : _buildLoveUser(),
+                                  ? _buildCurrentUser()
+                                  : _buildLoveUser(),
                               const Spacer(),
                               Padding(
                                 padding: EdgeInsets.only(top: 13.h),
@@ -373,8 +376,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                               ),
                               const Spacer(),
                               sl<AuthConfig>().user!.fromYou ?? true
-                              ? _buildLoveUser()
-                              : _buildCurrentUser()
+                                  ? _buildLoveUser()
+                                  : _buildCurrentUser()
                             ],
                           ),
                         ),
@@ -410,9 +413,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                   _streamControllerCarousel.sink.add(d ?? 0);
                                 },
                                 enableInfiniteScroll: false,
-                                height: data >= 1
-                                    ? 253.h
-                                    : (data * 138.h + 115.h),
+                                height:
+                                    data >= 1 ? 253.h : (data * 138.h + 115.h),
                               ),
                             );
                           },
@@ -464,15 +466,11 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                               }),
                               proxyDecorator: (child, index, animation) {
                                 return Container(
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            blurRadius: 20.h,
-                                            color:
-                                                Color.fromRGBO(0, 0, 0, 0.1))
-                                      ],
-                                      borderRadius:
-                                          BorderRadius.circular(20.r)),
+                                  decoration: BoxDecoration(boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 20.h,
+                                        color: Color.fromRGBO(0, 0, 0, 0.1))
+                                  ], borderRadius: BorderRadius.circular(20.r)),
                                   child: child,
                                 );
                               },
@@ -527,7 +525,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
               decoration: const BoxDecoration(color: Colors.white),
               child: CachedNetworkImage(
                 imageUrl: Config.url.url + path,
-                placeholder: (_, __){
+                placeholder: (_, __) {
                   return Container();
                 },
                 fit: BoxFit.cover,
@@ -565,24 +563,24 @@ class _RelationShipsPageState extends State<RelationShipsPage>
     return Stack(
       children: [
         if (path != null && path.trim() != '')
-        ClipRRect(
-          borderRadius: BorderRadius.all(
-            Radius.circular(38.r),
-          ),
-          child: Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            child: CachedNetworkImage(
-              imageUrl: Config.url.url + path,
-              fit: BoxFit.cover,
-              fadeInCurve: Curves.easeInOutQuint,
-              fadeOutCurve: Curves.easeInOutQuint,
-              fadeInDuration: const Duration(milliseconds: 300),
-              fadeOutDuration: const Duration(milliseconds: 300),
-              width: 134.h,
-              height: 134.h,
+          ClipRRect(
+            borderRadius: BorderRadius.all(
+              Radius.circular(38.r),
+            ),
+            child: Container(
+              decoration: const BoxDecoration(color: Colors.white),
+              child: CachedNetworkImage(
+                imageUrl: Config.url.url + path,
+                fit: BoxFit.cover,
+                fadeInCurve: Curves.easeInOutQuint,
+                fadeOutCurve: Curves.easeInOutQuint,
+                fadeInDuration: const Duration(milliseconds: 300),
+                fadeOutDuration: const Duration(milliseconds: 300),
+                width: 134.h,
+                height: 134.h,
+              ),
             ),
           ),
-        ),
         // SizedBox(
         //   width: 134.h,
         //   height: 134.h,
@@ -625,8 +623,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
-
-  Widget _buildCurrentUser(){
+  Widget _buildCurrentUser() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -643,25 +640,19 @@ class _RelationShipsPageState extends State<RelationShipsPage>
     );
   }
 
-
-
-  Widget _buildLoveUser(){
+  Widget _buildLoveUser() {
     return Column(
       children: [
-        photo(sl<AuthConfig>().user == null ||
-                sl<AuthConfig>().user!.love == null
-            ? null
-            : sl<AuthConfig>().user!.love!.photo),
+        photo(
+            sl<AuthConfig>().user == null || sl<AuthConfig>().user!.love == null
+                ? null
+                : sl<AuthConfig>().user!.love!.photo),
         SizedBox(height: 10.h),
         TextWidget(
           text: sl<AuthConfig>().user == null ||
-                  sl<AuthConfig>().user?.love ==
-                      null
+                  sl<AuthConfig>().user?.love == null
               ? ''
-              : sl<AuthConfig>()
-                  .user!
-                  .love!
-                  .username,
+              : sl<AuthConfig>().user!.love!.username,
         )
       ],
     );
