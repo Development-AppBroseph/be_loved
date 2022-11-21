@@ -16,11 +16,13 @@ class UserEventItem extends StatelessWidget {
   final Function() onTapDelete;
   final Function(bool val) onSelect;
   final Function() onLongPress;
+  final Function() onTap;
 
   UserEventItem({
     required this.editorState, 
     required this.isSelected,
     required this.onLongPress,
+    required this.onTap,
     required this.onTapDelete,
     required this.onSelect,
     required this.eventEntity
@@ -42,6 +44,7 @@ class UserEventItem extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) => scrollToBottom());
     return GestureDetector(
       onLongPress: onLongPress,
+      onTap: onTap,
       behavior: HitTestBehavior.translucent,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8.h),

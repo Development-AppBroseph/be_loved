@@ -482,10 +482,10 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                           padding: EdgeInsets.symmetric(horizontal: 25.w),
                           child: CustomAddAnimationButton(func: () {
                             if (eventsBloc.eventsInHome.length < 3) {
-                              if(eventsBloc.eventsInHome.isEmpty){
+                              if(!eventsBloc.eventsInHome.any((element) => element.id == eventsBloc.events.first.id)){
                                 context.read<EventsBloc>().add(EventChangeToHomeEvent(
                                   eventEntity: eventsBloc.events.first,
-                                  position: 0
+                                  position: eventsBloc.eventsInHome.isEmpty ? 0 : eventsBloc.eventsInHome.length+1
                                 ));
                               }else{
                                 showModalAddEvent(context, () {});

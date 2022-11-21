@@ -59,45 +59,45 @@ class TagsRepositoryImpl implements TagsRepository {
 
 
 
-  // @override
-  // Future<Either<Failure, TagEntity>> editTag(params) async {
-  //   if (await networkInfo.isConnected) {
-  //     try {
-  //       final items = await remoteDataSource.editTag(params.eventEntity);
-  //       return Right(items);
-  //     } catch (e) {
-  //       print(e);
-  //       if(e is ServerException){
-  //         return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
-  //       }
-  //       return Left(ServerFailure(e.toString()));
-  //     }
-  //   } else {
-  //     return Left(NetworkFailure());
-  //   }
-  // }
+  @override
+  Future<Either<Failure, TagEntity>> editTag(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.editTag(params.tagEntity);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
 
 
 
 
 
 
-  // @override
-  // Future<Either<Failure, void>> deleteTag(params) async {
-  //   if (await networkInfo.isConnected) {
-  //     try {
-  //       final items = await remoteDataSource.deleteTag(params.ids);
-  //       return Right(items);
-  //     } catch (e) {
-  //       print(e);
-  //       if(e is ServerException){
-  //         return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
-  //       }
-  //       return Left(ServerFailure(e.toString()));
-  //     }
-  //   } else {
-  //     return Left(NetworkFailure());
-  //   }
-  // }
+  @override
+  Future<Either<Failure, void>> deleteTag(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.deleteTag(params.id);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
 }
 

@@ -52,7 +52,7 @@ String checkDays(String days) {
   }
   if(lastNumber > 5 && lastNumber < 10) return 'Через $days дней';
   if(_days % 5 == 0) return 'Через $days дней';
-  if(_days == 11) return 'Через $days дней';
+  if(_days >= 11 && _days <= 20) return 'Через $days дней';
   if(lastNumber == 1) return 'Через $days день';
   return 'Через $days дня';
 }

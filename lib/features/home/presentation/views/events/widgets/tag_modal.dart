@@ -1,5 +1,6 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/main_config_app.dart';
+import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
@@ -25,7 +26,8 @@ import 'color_select.dart';
 
 class TagModal extends StatefulWidget {
   final bool isCreate;
-  const TagModal({Key? key, required this.isCreate}) : super(key: key);
+  final TagEntity? editingTag;
+  const TagModal({Key? key, required this.isCreate, required this.editingTag}) : super(key: key);
 
   @override
   State<TagModal> createState() => _TagModalState();
@@ -39,9 +41,9 @@ class _TagModalState extends State<TagModal> {
   List<int> selectedItems = [];
 
   showColorModal(WhichScroll? whichScroll) async {
-    await scrollController.animateTo(scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOutQuint);
+    // await scrollController.animateTo(scrollController.position.maxScrollExtent,
+    //     duration: const Duration(milliseconds: 200),
+    //     curve: Curves.easeInOutQuint);
     // ignore: use_build_context_synchronously
     colorSelectModal(
       context,
@@ -64,13 +66,42 @@ class _TagModalState extends State<TagModal> {
   void onComplete() {
     if (isValidate()) {
       showLoaderWrapper(context);
-      context.read<TagsBloc>().add(TagAddEvent(
-          tagEntity: TagEntity(
-              color: MainConfigApp.tagColors[iconIndex],
-              title: titleController.text.trim(),
-              relationId: sl<AuthConfig>().user!.relationId ?? 0,
-              events: selectedItems,
-              id: 0)));
+      TagEntity newTag = TagEntity(
+        color: MainConfigApp.tagColors[iconIndex],
+        title: titleController.text.trim(),
+        relationId: sl<AuthConfig>().user!.relationId ?? 0,
+        events: selectedItems,
+        important: false,
+        id: widget.editingTag != null ? widget.editingTag!.id : 0
+      );
+      if(widget.editingTag != null){
+        context.read<TagsBloc>().add(TagEditEvent(
+          tagEntity: newTag));
+      }else{
+        context.read<TagsBloc>().add(TagAddEvent(
+          tagEntity: newTag));
+      }
+
+    }
+  }
+
+
+  void onDelete() {
+    showLoaderWrapper(context);
+    context.read<TagsBloc>().add(TagDeleteEvent(id: widget.editingTag!.id));
+    context.read<EventsBloc>().add(ResetSortEvent());
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if(widget.editingTag != null){
+      TagEntity model = widget.editingTag!;
+      titleController.text = model.title;
+      iconIndex = MainConfigApp.tagColors.indexOf(model.color);
+      selectedItems = model.events;
     }
   }
 
@@ -89,7 +120,7 @@ class _TagModalState extends State<TagModal> {
             Loader.hide();
             showAlertToast('Проверьте соединение с интернетом!');
           }
-          if (state is TagAddedState) {
+          if (state is TagAddedState || state is TagDeletedState) {
             Loader.hide();
             Navigator.pop(context);
           }
@@ -300,35 +331,71 @@ class _TagModalState extends State<TagModal> {
                       })),
                   Padding(
                     padding: EdgeInsets.only(top: 17.h),
-                    child: Row(
+                    child: Column(
                       children: [
-                        SizedBox(
-                          width: 60.h,
-                          child: CustomButton(
-                            color: ColorStyles.redColor,
-                            text: 'Создать событие',
-                            validate: true,
-                            code: false,
-                            textColor: Colors.white,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            svg: 'assets/icons/close_event_create.svg',
-                            svgHeight: 22.h,
+                        if(widget.editingTag != null)
+                        ...[
+                          InkWell(
+                            onTap: onDelete,
+                            child: CupertinoCard(
+                              color: ColorStyles.redColor,
+                              elevation: 0,
+                              margin: EdgeInsets.zero,
+                              radius: BorderRadius.circular(20.r),
+                              child: Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: CupertinoCard(
+                                      elevation: 0,
+                                      margin: EdgeInsets.all(1.w),
+                                      radius: BorderRadius.circular(17.r),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 60.h,
+                                    alignment: Alignment.center,
+                                    child: Text('Удалить тег', style: TextStyles(context).black_20_w700.copyWith(color: ColorStyles.redColor)),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
+                          SizedBox(height: 17.h,),
+                        ],
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 60.h,
+                              child: CustomButton(
+                                color: ColorStyles.redColor,
+                                text: 'Создать событие',
+                                validate: true,
+                                code: false,
+                                textColor: Colors.white,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                svg: 'assets/icons/close_event_create.svg',
+                                svgHeight: 22.h,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Expanded(
+                              child: CustomButton(
+                                  color: ColorStyles.accentColor,
+                                  text: widget.editingTag != null ? 'Готово' : 'Создать тег',
+                                  validate: isValidate(),
+                                  code: false,
+                                  textColor: Colors.white,
+                                  onPressed: onComplete),
+                            )
+                          ],
                         ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        Expanded(
-                          child: CustomButton(
-                              color: ColorStyles.accentColor,
-                              text: 'Создать тег',
-                              validate: isValidate(),
-                              code: false,
-                              textColor: Colors.white,
-                              onPressed: onComplete),
-                        )
+                        SizedBox(height: 60.h,),
                       ],
                     ),
                   ),

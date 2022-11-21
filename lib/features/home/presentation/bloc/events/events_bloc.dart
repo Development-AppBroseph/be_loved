@@ -5,6 +5,7 @@ import 'package:be_loved/features/home/domain/entities/events/tag_entity.dart';
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
 import 'package:be_loved/features/home/domain/usecases/change_position_event.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
+import 'package:be_loved/features/home/domain/usecases/edit_event.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -14,15 +15,18 @@ part 'events_state.dart';
 class EventsBloc extends Bloc<EventsEvent, EventsState> {
   final GetEvents getEvents;
   final AddEvent addEvent;
+  final EditEvent editEvent;
   final DeleteEvent deleteEvent;
   final ChangePositionEvent changePositionEvent;
 
-  EventsBloc(this.addEvent, this.getEvents, this.deleteEvent, this.changePositionEvent) : super(EventInitialState()) {
+  EventsBloc(this.addEvent, this.getEvents, this.deleteEvent, this.changePositionEvent, this.editEvent) : super(EventInitialState()) {
     on<GetEventsEvent>(_getEvents);
     on<EventAddEvent>(_addEvents);
+    on<EventEditEvent>(_editEvents);
     on<EventChangeToHomeEvent>(_addHomeEvents);
     on<SortByTagEvent>(_sortEvents);
     on<EventDeleteEvent>(_deleteEvent);
+    on<ResetSortEvent>(_resetEvents);
   }
 
   List<EventEntity> events = [];
@@ -76,6 +80,45 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
         events = newSortedList;
         selectedTag = null;
         eventsSorted = events;
+        return EventAddedState(eventEntity: event.eventEntity);
+      },
+    );
+    emit(state);
+  }
+
+
+
+
+  void _editEvents(EventEditEvent event, Emitter<EventsState> emit) async {
+    emit(EventLoadingState());
+    final data = await editEvent.call(EditEventParams(eventEntity: event.eventEntity));
+    EventsState state = data.fold(
+      (error) => errorCheck(error),
+      (data) {
+        events.removeWhere((element) => element.id == event.eventEntity.id);
+        List<EventEntity> newSortedList = [];
+        bool isAdded = false;
+        for(EventEntity eventItem in events){
+          print('TEST: ${eventItem.start.millisecondsSinceEpoch >= data.start.millisecondsSinceEpoch}');
+          if(!isAdded && eventItem.start.millisecondsSinceEpoch >= data.start.millisecondsSinceEpoch){
+            newSortedList.add(data);
+            isAdded = true;
+          }
+          newSortedList.add(eventItem);
+        }
+        if(!isAdded){
+          newSortedList.add(data);
+        }
+        events = newSortedList;
+        selectedTag = null;
+        eventsSorted = events;
+        if(eventsInHome.any((element) => element.id == event.eventEntity.id,)){
+          for(int i = 0; i < eventsInHome.length; i++){
+            if(eventsInHome[i].id == event.eventEntity.id){
+              eventsInHome[i] = data;
+            }
+          }
+        }
         return EventAddedState(eventEntity: event.eventEntity);
       },
     );
@@ -142,6 +185,15 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
         }
       }
     }
+    emit(GotSuccessEventsState());
+  }
+
+
+
+  void _resetEvents(ResetSortEvent event, Emitter<EventsState> emit) async {
+    emit(EventBlankState());
+    eventsSorted = events;
+    selectedTag = null;
     emit(GotSuccessEventsState());
   }
 

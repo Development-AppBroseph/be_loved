@@ -45,10 +45,12 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
   
 
   selectEvent(EventEntity event){
-    context.read<EventsBloc>().add(EventChangeToHomeEvent(
-      eventEntity: event,
-      position: 0
-    ));
+    if(!context.read<EventsBloc>().eventsInHome.any((element) => element.id == event.id)){
+      context.read<EventsBloc>().add(EventChangeToHomeEvent(
+        eventEntity: event,
+        position: context.read<EventsBloc>().eventsInHome.length+1
+      ));
+    }
     Navigator.pop(context);
   }
 

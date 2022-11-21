@@ -13,7 +13,12 @@ class TagAddEvent extends TagsEvent{
   TagAddEvent({required this.tagEntity});
 }
 
-// class TagDeleteEvent extends TagsEvent{
-//   final List<int> ids;
-//   TagDeleteEvent({required this.ids});
-// }
+class TagEditEvent extends TagsEvent{
+  final TagEntity tagEntity;
+  TagEditEvent({required this.tagEntity});
+}
+
+class TagDeleteEvent extends TagsEvent{
+  final int id;
+  TagDeleteEvent({required this.id});
+}

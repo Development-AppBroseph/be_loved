@@ -12,6 +12,8 @@ import 'package:be_loved/features/home/domain/usecases/add_event.dart';
 import 'package:be_loved/features/home/domain/usecases/add_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/change_position_event.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
+import 'package:be_loved/features/home/domain/usecases/delete_tag.dart';
+import 'package:be_loved/features/home/domain/usecases/edit_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
@@ -31,6 +33,7 @@ import 'constants/main_config_app.dart';
 import 'core/services/database/auth_params.dart';
 import 'core/services/network/config.dart';
 import 'core/services/network/network_info.dart';
+import 'features/home/domain/usecases/edit_event.dart';
 import 'features/profile/data/repositories/profile_repository_impl.dart';
 
 final sl = GetIt.instance;
@@ -98,13 +101,14 @@ void setupInjections() {
 
   // //UseCases
   sl.registerLazySingleton(() => AddEvent(sl()));
+  sl.registerLazySingleton(() => EditEvent(sl()));
   sl.registerLazySingleton(() => DeleteEvent(sl()));
   sl.registerLazySingleton(() => ChangePositionEvent(sl()));
   sl.registerLazySingleton(() => GetEvents(sl()));
 
   //Blocs
   sl.registerFactory<EventsBloc>(
-    () => EventsBloc(sl(), sl(), sl(), sl()),
+    () => EventsBloc(sl(), sl(), sl(), sl(), sl()),
   );
 
 
@@ -151,9 +155,11 @@ void setupInjections() {
   // //UseCases
   sl.registerLazySingleton(() => AddTag(sl()));
   sl.registerLazySingleton(() => GetTags(sl()));
+  sl.registerLazySingleton(() => EditTag(sl()));
+  sl.registerLazySingleton(() => DeleteTag(sl()));
 
   //Blocs
   sl.registerFactory<TagsBloc>(
-    () => TagsBloc(sl(), sl()),
+    () => TagsBloc(sl(), sl(), sl(), sl()),
   );
 }

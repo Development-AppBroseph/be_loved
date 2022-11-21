@@ -41,7 +41,7 @@ class EventEntity extends Equatable {
       // 'id': id,
       'name': title,
       'description': description,
-      'important': important,
+      // 'important': important,
       'start': start.toString(),
       'finish': finish.toString(),
       'married': married,
@@ -49,7 +49,7 @@ class EventEntity extends Equatable {
       'all_day': allDays,
       'repeat': repeat,
       'notification': notification,
-      'main_position': mainPosition
+      // 'main_position': mainPosition
       // 'event_creator': eventCreator
     };
   }

@@ -32,7 +32,7 @@ class TagsListBlock extends StatelessWidget {
         Loader.hide();
         showAlertToast('Проверьте соединение с интернетом!');
       }
-      if (state is TagAddedState) {
+      if (state is TagAddedState || state is TagDeletedState) {
         Loader.hide();
       }
     }, builder: (context, state) {
@@ -60,7 +60,9 @@ class TagsListBlock extends StatelessWidget {
                 }
               },
               onLongPress: () {
-                // showModalCreateTag(context, isLast);
+                if(!tagsBloc.tags[index].important){
+                  showModalCreateTag(context, isLast, tagsBloc.tags[index]);
+                }
               },
               child: Padding(
                 padding: EdgeInsets.only(

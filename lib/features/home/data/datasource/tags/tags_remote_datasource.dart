@@ -11,8 +11,8 @@ import '../../../../../locator.dart';
 abstract class TagsRemoteDataSource {
   Future<List<TagEntity>> getTags();
   Future<TagEntity> addTag(TagEntity tagEntity);
-  // Future<TagEntity> editTag(TagEntity tagEntity);
-  // Future<void> deleteTag(int id);
+  Future<TagEntity> editTag(TagEntity tagEntity);
+  Future<void> deleteTag(int id);
 
 }
 
@@ -72,43 +72,40 @@ class TagsRemoteDataSourceImpl
 
 
 
-  // @override
-  // Future<TagEntity> editTag(TagEntity tagEntity) async {
-  //   headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-  //   Response response = await dio.patch(Endpoints.editTag.getPath(params: [tagEntity.id]),
-  //       data: jsonEncode(tagEntity.toMap()),
-  //       options: Options(
-  //           followRedirects: false,
-  //           validateStatus: (status) => status! < 699,
-  //           headers: headers));
-  //   printRes(response);
-  //   if (response.statusCode == 200) {
-  //     return TagModel.fromJson(response.data);
-  //   } else {
-  //     throw ServerException(message: 'Ошибка с сервером');
-  //   }
-  // }
+  @override
+  Future<TagEntity> editTag(TagEntity tagEntity) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.patch(Endpoints.editTag.getPath(params: [tagEntity.id]),
+        data: jsonEncode(tagEntity.toMap()),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 699,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 200) {
+      return TagModel.fromJson(response.data);
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
 
 
 
 
 
-  // @override
-  // Future<void> deleteTag(List<int> ids) async {
-  //   headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-  //   Response response = await dio.delete(Endpoints.deleteTag.getPath(),
-  //       data: jsonEncode({
-  //         'tag_list': ids
-  //       }),
-  //       options: Options(
-  //           followRedirects: false,
-  //           validateStatus: (status) => status! < 699,
-  //           headers: headers));
-  //   printRes(response);
-  //   if (response.statusCode == 204 || response.statusCode == 200) {
-  //     return;
-  //   } else {
-  //     throw ServerException(message: 'Ошибка с сервером');
-  //   }
-  // }
+  @override
+  Future<void> deleteTag(int id) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.delete(Endpoints.deleteTag.getPath(params: [id]),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 699,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 204 || response.statusCode == 200) {
+      return;
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
 }

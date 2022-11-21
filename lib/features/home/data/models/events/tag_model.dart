@@ -9,13 +9,15 @@ class TagModel extends TagEntity{
     required int relationId,
     required TagColor color,
     required List<int> events,
+    required bool important,
 
   }) : super(
     id: id, 
     title: title,
     relationId: relationId,
     color: color,
-    events: events
+    events: events,
+    important: important
   );
 
   factory TagModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class TagModel extends TagEntity{
       id: json['id'],
       title: json['name'],
       relationId: json['relation'],
+      important: json['important'],
       color: MainConfigApp.tagColors.any((element) => element.colorHex == json['color'])
       ? MainConfigApp.tagColors.where((element) => element.colorHex == json['color']).first
       : MainConfigApp.tagColors.first,

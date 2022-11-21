@@ -7,6 +7,7 @@ class TagEntity extends Equatable {
   final String title;
   final TagColor color;
   final List<int> events;
+  final bool important;
 
   TagEntity({
     required this.id,
@@ -14,6 +15,7 @@ class TagEntity extends Equatable {
     required this.relationId,
     required this.color,
     required this.events,
+    required this.important,
   });
 
 
@@ -35,5 +37,6 @@ class TagEntity extends Equatable {
         relationId,
         color,
         events,
+        important
       ];
 }

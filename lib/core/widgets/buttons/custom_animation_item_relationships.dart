@@ -57,6 +57,7 @@ class _CustomAnimationItemRelationshipsState
 
   @override
   Widget build(BuildContext context) {
+    EventsBloc eventsBloc = context.read<EventsBloc>();
     return StreamBuilder<bool>(
       stream: streamController.stream,
       initialData: true,
@@ -136,11 +137,13 @@ class _CustomAnimationItemRelationshipsState
                             children: [
                               SingleChildScrollView(
                                 physics: NeverScrollableScrollPhysics(),
-                                child: Padding(
+                                child: Container(
+                                  height: 140.h,
                                   padding: EdgeInsets.symmetric(
                                       vertical: 11.h, horizontal: 20.w),
                                   child: SizedBox(
                                     width: 338.w,
+                                    height: double.infinity,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -167,7 +170,7 @@ class _CustomAnimationItemRelationshipsState
                                               ? 'Сегодня'
                                               : '${checkDays(widget.events.datetimeString)}',
                                               style: TextStyle(
-                                                color: getColorFromDays(widget.events.datetimeString, false),
+                                                color: getColorFromDays(widget.events.datetimeString, widget.events.important),
                                                 fontSize: 15.sp,
                                                 fontWeight: FontWeight.w800,
                                                 height: 1,
@@ -179,7 +182,13 @@ class _CustomAnimationItemRelationshipsState
                                           curve: Curves.easeInOutQuint,
                                           duration: const Duration(
                                               milliseconds: 1000),
-                                          height: snapshot.data! ? 19.h : 0.h,
+                                          height: snapshot.data! 
+                                          ? (widget.events.datetimeString == '0' && eventsBloc.events.first.id == widget.events.id 
+                                            ? 10.h 
+                                            : eventsBloc.events.first.id == widget.events.id  
+                                            ? 19.h 
+                                            : (widget.events.datetimeString == '0' ? 23.h : 36.h)+4.h) 
+                                          : 0.h,
                                         ),
                                         Text(
                                           widget.events.title,
@@ -196,9 +205,10 @@ class _CustomAnimationItemRelationshipsState
                                               milliseconds: 1000),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
-                                        widget.index == 0
-                                        ? NextEventTextWidget(eventEntity: widget.events)
-                                        : SizedBox(height: 10.h,)
+                                        // widget.index == 0
+                                        // ? 
+                                        NextEventTextWidget(eventEntity: widget.events)
+                                        //  SizedBox(height: 10.h,)
                                       ],
                                     ),
                                   ),

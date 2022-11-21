@@ -19,7 +19,7 @@ class NextEventTextWidget extends StatelessWidget {
     } else if (eventsBloc.events.length >= 2) {
       nextEvent = eventsBloc.events[1];
     }
-    return nextEvent != null
+    return nextEvent != null && eventEntity.id == eventsBloc.events.first.id
         ? Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -41,8 +41,6 @@ class NextEventTextWidget extends StatelessWidget {
               ),
             ],
           )
-        : SizedBox(
-            height: 10.h,
-          );
+        : SizedBox.shrink();
   }
 }

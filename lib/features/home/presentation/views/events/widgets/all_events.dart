@@ -302,6 +302,11 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                   physics: const ClampingScrollPhysics(),
                   itemBuilder: (context, index) {
                     return UserEventItem(
+                      onTap: (){
+                        if(!eventsBloc.eventsSorted[index].important){
+                          showModalCreateEvent(context, (){}, eventsBloc.eventsSorted[index]);
+                        }
+                      },
                       editorState: isSelectedAll
                           ? EditorState.groupSelect
                           : countPage == 0

@@ -6,11 +6,16 @@ abstract class EventsEvent extends Equatable {
 }
 
 
-class GetEventsEvent extends EventsEvent{
-}
+class GetEventsEvent extends EventsEvent{}
+
 class EventAddEvent extends EventsEvent{
   final EventEntity eventEntity;
   EventAddEvent({required this.eventEntity});
+}
+
+class EventEditEvent extends EventsEvent{
+  final EventEntity eventEntity;
+  EventEditEvent({required this.eventEntity});
 }
 
 class EventChangeToHomeEvent extends EventsEvent{
@@ -29,3 +34,5 @@ class SortByTagEvent extends EventsEvent{
   final TagEntity tagEntity;
   SortByTagEvent({required this.tagEntity});
 }
+
+class ResetSortEvent extends EventsEvent{}

@@ -32,7 +32,8 @@ import 'icon_select_modal.dart';
 
 class CreateEventWidget extends StatefulWidget {
   final Function() onTap;
-  const CreateEventWidget({Key? key, required this.onTap}) : super(key: key);
+  final EventEntity? editingEvent;
+  const CreateEventWidget({Key? key, required this.onTap, required this.editingEvent}) : super(key: key);
   @override
   State<CreateEventWidget> createState() => _CreateEventWidgetState();
 }
@@ -69,6 +70,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   final CustomPopupMenuController _customPopupMenuController2 =
       CustomPopupMenuController();
 
+  String title = 'Создать событие';
+
   validateTextFields() {
     setState(() {
       timeTextHelper(_controllerFromTime.text)
@@ -80,8 +83,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
 
   bool isValidate() {
     return _controllerName.text.length > 3 &&
-        _controllerFromTime.text.length > 3 &&
-        _controllerToTime.text.length > 3;
+        (_controllerFromTime.text.length > 3 || allDays) &&
+        (_controllerToTime.text.length > 3 || allDays);
   }
 
   bool keyboardOpened = false;
@@ -105,32 +108,93 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
         showAlertToast('Максимум кол-во событии 30');
       }
       showLoaderWrapper(context);
-      context.read<EventsBloc>().add(EventAddEvent(eventEntity: EventEntity(
-        id: 0,
-        title: _controllerName.text,
-        description: _controllerDescription.text,
-        important: false,
-        start: DateTime(fromDate.year, fromDate.month, fromDate.day, 
-          int.parse(_controllerFromTime.text.split(":")[0]), int.parse(_controllerFromTime.text.split(":")[1])
-        ),
-        finish: DateTime(toDate.year, toDate.month, toDate.day, 
-          int.parse(_controllerToTime.text.split(":")[0]), int.parse(_controllerToTime.text.split(":")[1])
-        ),
-        datetimeString: '',
-        married: false,
-        relationId: sl<AuthConfig>().user!.relationId!,
-        notification: notification,
-        repeat: repeat,
-        allDays: allDays,
-        eventCreator: sl<AuthConfig>().user!.me,
-        mainPosition: 0
-      )));
+      if(widget.editingEvent != null){
+        context.read<EventsBloc>().add(EventEditEvent(eventEntity: EventEntity(
+          id: widget.editingEvent!.id,
+          title: _controllerName.text,
+          description: _controllerDescription.text,
+          important: false,
+          start: DateTime(fromDate.year, fromDate.month, fromDate.day, 
+            _controllerFromTime.text.length > 4
+            ? int.parse(_controllerFromTime.text.split(":")[0])
+            : 0, 
+            _controllerFromTime.text.length > 4
+            ? int.parse(_controllerFromTime.text.split(":")[1])
+            : 0
+          ),
+          finish: DateTime(toDate.year, toDate.month, toDate.day, 
+            _controllerToTime.text.length > 4
+            ? int.parse(_controllerToTime.text.split(":")[0])
+            : 0, 
+            _controllerToTime.text.length > 4
+            ? int.parse(_controllerToTime.text.split(":")[1])
+            : 0
+          ),
+          datetimeString: '',
+          married: widget.editingEvent!.married,
+          relationId: sl<AuthConfig>().user!.relationId!,
+          notification: notification,
+          repeat: repeat,
+          allDays: allDays,
+          eventCreator: sl<AuthConfig>().user!.me,
+          mainPosition: widget.editingEvent!.mainPosition
+          ))
+        );
+      }else{
+        context.read<EventsBloc>().add(EventAddEvent(eventEntity: EventEntity(
+          id: 0,
+          title: _controllerName.text,
+          description: _controllerDescription.text,
+          important: false,
+          start: DateTime(fromDate.year, fromDate.month, fromDate.day, 
+            _controllerFromTime.text.length > 4
+            ? int.parse(_controllerFromTime.text.split(":")[0])
+            : 0, 
+            _controllerFromTime.text.length > 4
+            ? int.parse(_controllerFromTime.text.split(":")[1])
+            : 0
+          ),
+          finish: DateTime(toDate.year, toDate.month, toDate.day, 
+            _controllerToTime.text.length > 4
+            ? int.parse(_controllerToTime.text.split(":")[0])
+            : 0, 
+            _controllerToTime.text.length > 4
+            ? int.parse(_controllerToTime.text.split(":")[1])
+            : 0
+          ),
+          datetimeString: '',
+          married: false,
+          relationId: sl<AuthConfig>().user!.relationId!,
+          notification: notification,
+          repeat: repeat,
+          allDays: allDays,
+          eventCreator: sl<AuthConfig>().user!.me,
+          mainPosition: 0
+          ))
+        );
+      }
+      
     }
   }
 
   @override
   void initState() {
     super.initState();
+    if(widget.editingEvent != null){
+      EventEntity model = widget.editingEvent!;
+      _controllerName.text = model.title;
+      _controllerDescription.text = model.description;
+      print('TSSS: ${model.start}');
+      _controllerFromTime.text = DateFormat('HH:mm').format(model.start);
+      _controllerToTime.text = DateFormat('HH:mm').format(model.finish);
+      fromDate = model.start;
+      toDate = model.finish;
+      allDays = model.allDays;
+      notification = model.notification;
+      repeat = model.repeat;
+
+      title = 'Редактировать событие';
+    }
     keyboardSub = KeyboardVisibilityController().onChange.listen((event) {
       validateTextFields();
       setState(() {
@@ -302,24 +366,27 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                   text: DateFormat(
                                                           'd MMM yyyy г.', 'RU')
                                                       .format(fromDate))),
-                                          SizedBox(
-                                            width: 15.w,
-                                          ),
-                                          TimeItemTextFieldWidget(
-                                            controller: _controllerFromTime,
-                                            validateText: validateTextFields,
-                                            onChanged: (text) {
-                                              if (text != null &&
-                                                  text.isNotEmpty) {
-                                                if (text.length == 2 &&
-                                                    int.parse(text[0]) == 2 &&
-                                                    int.parse(text[1]) > 3) {
-                                                  _controllerFromTime.text = '';
-                                                  setState(() {});
+                                          if(!allDays)
+                                          ...[
+                                            SizedBox(
+                                              width: 15.w,
+                                            ),
+                                            TimeItemTextFieldWidget(
+                                              controller: _controllerFromTime,
+                                              validateText: validateTextFields,
+                                              onChanged: (text) {
+                                                if (text != null &&
+                                                    text.isNotEmpty) {
+                                                  if (text.length == 2 &&
+                                                      int.parse(text[0]) == 2 &&
+                                                      int.parse(text[1]) > 3) {
+                                                    _controllerFromTime.text = '';
+                                                    setState(() {});
+                                                  }
                                                 }
-                                              }
-                                            },
-                                          )
+                                              },
+                                            )
+                                          ],
                                         ],
                                       )
                                     ],
@@ -364,24 +431,27 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                   text: DateFormat(
                                                           'd MMM yyyy г.', 'RU')
                                                       .format(toDate))),
-                                          SizedBox(
-                                            width: 15.w,
-                                          ),
-                                          TimeItemTextFieldWidget(
-                                            controller: _controllerToTime,
-                                            validateText: validateTextFields,
-                                            onChanged: (text) {
-                                              if (text != null &&
-                                                  text.isNotEmpty) {
-                                                if (text.length == 2 &&
-                                                    int.parse(text[0]) == 2 &&
-                                                    int.parse(text[1]) > 3) {
-                                                  _controllerToTime.text = '';
-                                                  setState(() {});
+                                          if(!allDays)
+                                          ...[
+                                            SizedBox(
+                                              width: 15.w,
+                                            ),
+                                            TimeItemTextFieldWidget(
+                                              controller: _controllerToTime,
+                                              validateText: validateTextFields,
+                                              onChanged: (text) {
+                                                if (text != null &&
+                                                    text.isNotEmpty) {
+                                                  if (text.length == 2 &&
+                                                      int.parse(text[0]) == 2 &&
+                                                      int.parse(text[1]) > 3) {
+                                                    _controllerToTime.text = '';
+                                                    setState(() {});
+                                                  }
                                                 }
-                                              }
-                                            },
-                                          )
+                                              },
+                                            )
+                                          ]
                                         ],
                                       )
                                     ],
@@ -507,7 +577,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   width: 60.h,
                                   child: CustomButton(
                                     color: ColorStyles.redColor,
-                                    text: 'Создать событие',
+                                    text: title,
                                     validate: true,
                                     code: false,
                                     textColor: Colors.white,
@@ -524,7 +594,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 Expanded(
                                   child: CustomButton(
                                     color: ColorStyles.accentColor,
-                                    text: 'Создать событие',
+                                    text: widget.editingEvent != null
+                                    ? 'Готово'
+                                    : title,
                                     validate: isValidate(),
                                     code: false,
                                     textColor: Colors.white,
@@ -570,7 +642,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 height: 10.h,
                               ),
                               Text(
-                                'Создать событие',
+                                title,
                                 style: style1,
                               )
                             ],

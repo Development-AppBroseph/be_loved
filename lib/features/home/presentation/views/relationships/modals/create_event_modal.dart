@@ -1,9 +1,10 @@
+import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-showModalCreateEvent(BuildContext context, Function() onTap) {
+showModalCreateEvent(BuildContext context, Function() onTap, [EventEntity? eventEntity]) {
   showMaterialModalBottomSheet(
     animationCurve: Curves.easeInOutQuint,
       elevation: 12,
@@ -17,7 +18,7 @@ showModalCreateEvent(BuildContext context, Function() onTap) {
       // ),
       context: context,
       builder: (context) {
-        return CreateEventWidget(onTap: onTap,);
+        return CreateEventWidget(onTap: onTap, editingEvent: eventEntity,);
       });
 }
 
