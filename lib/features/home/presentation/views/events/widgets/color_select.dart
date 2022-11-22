@@ -38,7 +38,7 @@ void colorSelectModal(
         //   });
         // }
         return AlertDialog(
-          insetPadding: EdgeInsets.only(top: offset.dy - 58.h, left: offset.dx),
+          insetPadding: EdgeInsets.only(top: offset.dy - 58.h, left: offset.dx + 1.w),
           alignment: Alignment.topLeft,
           contentPadding: EdgeInsets.zero,
           backgroundColor: Colors.transparent,

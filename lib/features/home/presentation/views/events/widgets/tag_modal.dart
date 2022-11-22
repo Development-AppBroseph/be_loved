@@ -87,9 +87,9 @@ class _TagModalState extends State<TagModal> {
 
 
   void onDelete() {
-    showLoaderWrapper(context);
     context.read<TagsBloc>().add(TagDeleteEvent(id: widget.editingTag!.id));
     context.read<EventsBloc>().add(ResetSortEvent());
+    Navigator.pop(context);
   }
 
   @override
@@ -122,7 +122,9 @@ class _TagModalState extends State<TagModal> {
           }
           if (state is TagAddedState || state is TagDeletedState) {
             Loader.hide();
-            Navigator.pop(context);
+            if(state is TagAddedState){
+              Navigator.pop(context);
+            }
           }
         },
         child: CupertinoCard(
@@ -155,7 +157,7 @@ class _TagModalState extends State<TagModal> {
                         fontFamily: "Inter",
                         color: const Color(0xff969696),
                         fontSize: 15.sp,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
@@ -163,7 +165,7 @@ class _TagModalState extends State<TagModal> {
                     hint: 'Название',
                     maxLines: 1,
                     controller: titleController,
-                    maxLength: 40,
+                    maxLength: 12,
                     hideCounter: true,
                     onChange: (s) {
                       setState(() {});
@@ -186,7 +188,7 @@ class _TagModalState extends State<TagModal> {
                               fontFamily: "Inter",
                               fontSize: 18.sp,
                               color: const Color(0xff2C2C2E),
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.w800),
                         ),
                         Container(
                           alignment: Alignment.centerRight,
@@ -215,6 +217,7 @@ class _TagModalState extends State<TagModal> {
                                 SvgPicture.asset(
                                   MainConfigApp.tagColors[iconIndex].assetPath,
                                   key: iconBtn,
+                                  height: 58.h,
                                 ),
                                 SizedBox(
                                   width: 7.w,
@@ -241,7 +244,7 @@ class _TagModalState extends State<TagModal> {
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                                 color: const Color(0xff171717),
                               ),
                             ),
@@ -250,7 +253,7 @@ class _TagModalState extends State<TagModal> {
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                                 color: const Color(0xff969696),
                               ),
                             ),

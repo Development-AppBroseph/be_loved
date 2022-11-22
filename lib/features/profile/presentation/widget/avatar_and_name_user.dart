@@ -16,31 +16,43 @@ class AvatarAndNameUser extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        UserAvatar(
-          title: sl<AuthConfig>().user == null
-              ? ''
-              : sl<AuthConfig>().user!.me.username,
-          fontSize: 25.sp,
-          image: sl<AuthConfig>().user == null
-              ? null
-              : sl<AuthConfig>().user!.me.photo,
-        ),
+        sl<AuthConfig>().user!.fromYou ?? true
+          ? _buildCurrentUser()
+          : _buildLoveUser(),
         SvgPicture.asset(
           SvgImg.logov2,
           color: const Color(0xff171717),
         ),
-        UserAvatar(
-          title: sl<AuthConfig>().user == null ||
-                  sl<AuthConfig>().user?.love == null
-              ? ''
-              : sl<AuthConfig>().user!.love!.username,
-          fontSize: 18.sp,
-          image: sl<AuthConfig>().user == null ||
-                  sl<AuthConfig>().user!.love == null
-              ? null
-              : sl<AuthConfig>().user!.love!.photo,
-        ),
+        sl<AuthConfig>().user!.fromYou ?? true
+          ? _buildLoveUser()
+          : _buildCurrentUser()
       ],
+    );
+  }
+
+  Widget _buildCurrentUser(){
+    return UserAvatar(
+      title: sl<AuthConfig>().user == null
+          ? ''
+          : sl<AuthConfig>().user!.me.username,
+      fontSize: 25.sp,
+      image: sl<AuthConfig>().user == null
+          ? null
+          : sl<AuthConfig>().user!.me.photo,
+    );
+  }
+
+  Widget _buildLoveUser(){
+    return UserAvatar(
+      title: sl<AuthConfig>().user == null ||
+              sl<AuthConfig>().user?.love == null
+          ? ''
+          : sl<AuthConfig>().user!.love!.username,
+      fontSize: 18.sp,
+      image: sl<AuthConfig>().user == null ||
+              sl<AuthConfig>().user!.love == null
+          ? null
+          : sl<AuthConfig>().user!.love!.photo,
     );
   }
 }

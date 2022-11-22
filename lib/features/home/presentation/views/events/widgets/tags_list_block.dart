@@ -78,7 +78,9 @@ class TagsListBlock extends StatelessWidget {
                   return AnimatedOpacity(
                     duration: const Duration(milliseconds: 400),
                     curve: Curves.easeInOutQuint,
-                    opacity: context.read<EventsBloc>().selectedTag != null &&
+                    opacity: isLast
+                    ? 1
+                    : context.read<EventsBloc>().selectedTag != null &&
                             !isSelected
                         ? 0.5
                         : 1,

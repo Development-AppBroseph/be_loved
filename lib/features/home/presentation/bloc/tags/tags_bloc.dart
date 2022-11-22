@@ -76,7 +76,7 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
 
 
   void _deleteTag(TagDeleteEvent event, Emitter<TagsState> emit) async {
-    emit(TagLoadingState());
+    emit(TagBlankState());
     final data = await deleteTag.call(DeleteTagParams(id: event.id));
     TagsState state = data.fold(
       (error) => errorCheck(error),

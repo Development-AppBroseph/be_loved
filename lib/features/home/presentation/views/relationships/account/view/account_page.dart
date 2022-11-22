@@ -102,7 +102,8 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   _sendCode() {
-    if (phoneController.text.length == 13) {
+    if (phoneController.text.length == 13 
+      && sl<AuthConfig>().user!.me.phoneNumber != phoneNumber) {
       showLoaderWrapper(context);
       context.read<ProfileBloc>().add(PostPhoneNumberEvent(phone: phoneNumber));
     }
@@ -469,6 +470,7 @@ class _AccountPageState extends State<AccountPage> {
                                                                 // BlocProvider.of<AuthBloc>(context)
                                                                 //     .add(TextFieldFilled(false));
                                                               }
+                                                              _streamController.sink.add(1);
                                                             },
                                                             focusNode:
                                                                 focusNodePhone,
@@ -517,7 +519,8 @@ class _AccountPageState extends State<AccountPage> {
                                                     padding: EdgeInsets.only(
                                                         top: 35.h),
                                                     child: CustomButton(
-                                                        validate: true,
+                                                        validate: phoneController.text.length == 13 
+                                                          && sl<AuthConfig>().user!.me.phoneNumber != phoneNumber,
                                                         color: const Color
                                                                 .fromRGBO(
                                                             32, 203, 131, 1.0),
