@@ -26,7 +26,8 @@ import '../../../relationships/modals/add_event_modal.dart';
 
 class MainEventsPage extends StatefulWidget {
   final VoidCallback nextPage;
-  const MainEventsPage({Key? key, required this.nextPage}) : super(key: key);
+  final Function(int id) toDetailPage;
+  const MainEventsPage({Key? key, required this.nextPage, required this.toDetailPage}) : super(key: key);
 
   @override
   State<MainEventsPage> createState() => _MainEventsPageState();
@@ -545,33 +546,40 @@ class _MainEventsPageState extends State<MainEventsPage> {
         fontWeight: FontWeight.w800,
         fontSize: 15.sp);
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: 20.h),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                truncateWithEllipsis(22, eventEntity.title), 
-                style: style1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(height: 5.h),
-              eventEntity.important
-              ? ImportantTextWidget()
-              : RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: 'Добавил(а): ${eventEntity.eventCreator.username}',
-                      style: style2),
-                ]),
-              )
-            ],
-          ),
-          const Spacer(),
-          DayTextWidget(eventEntity: eventEntity)
-        ],
+    return GestureDetector(
+      onTap: (){
+        print('TAPP');
+        widget.toDetailPage(eventEntity.id);
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 20.h),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  truncateWithEllipsis(22, eventEntity.title), 
+                  style: style1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 5.h),
+                eventEntity.important
+                ? ImportantTextWidget()
+                : RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: 'Добавил(а): ${eventEntity.eventCreator.username}',
+                        style: style2),
+                  ]),
+                )
+              ],
+            ),
+            const Spacer(),
+            DayTextWidget(eventEntity: eventEntity)
+          ],
+        ),
       ),
     );
   }

@@ -23,7 +23,8 @@ import 'tag_modal.dart';
 
 class AllEeventsPage extends StatefulWidget {
   final VoidCallback prevPage;
-  const AllEeventsPage({Key? key, required this.prevPage}) : super(key: key);
+  final Function(int id) toDetailPage;
+  const AllEeventsPage({Key? key, required this.prevPage, required this.toDetailPage}) : super(key: key);
 
   @override
   State<AllEeventsPage> createState() => _AllEeventsPageState();
@@ -303,8 +304,10 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                   itemBuilder: (context, index) {
                     return UserEventItem(
                       onTap: (){
-                        if(!eventsBloc.eventsSorted[index].important){
+                        if(!eventsBloc.eventsSorted[index].important && countPage != 0){
                           showModalCreateEvent(context, (){}, eventsBloc.eventsSorted[index]);
+                        }else{
+                          widget.toDetailPage(eventsBloc.eventsSorted[index].id);
                         }
                       },
                       editorState: isSelectedAll

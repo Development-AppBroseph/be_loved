@@ -1,19 +1,19 @@
+import 'package:be_loved/features/home/presentation/views/events/view/event_detail_view.dart';
+import 'package:be_loved/features/home/presentation/views/events/view/event_page.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/all_events.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/events_page.dart';
 import 'package:flutter/material.dart';
 
-class EventPage extends StatefulWidget {
-  final Function(int id) nextPage;
-  const EventPage({
+class MainEventPage extends StatefulWidget {
+  const MainEventPage({
     Key? key,
-    required this.nextPage,
   }) : super(key: key);
 
   @override
-  State<EventPage> createState() => _EventPageState();
+  State<MainEventPage> createState() => _MainEventPageState();
 }
 
-class _EventPageState extends State<EventPage> {
+class _MainEventPageState extends State<MainEventPage> {
   final PageController controller = PageController();
   @override
   void dispose() {
@@ -34,15 +34,17 @@ class _EventPageState extends State<EventPage> {
         setState(() {});
       },
       children: [
-        MainEventsPage(nextPage: nextPage, toDetailPage: widget.nextPage,),
-        AllEeventsPage(prevPage: prevPage, toDetailPage: widget.nextPage,),
+        EventPage(nextPage: nextPage,),
+        EventDetailView(prevPage: prevPage),
       ],
     );
   }
 
-  void nextPage() => controller.nextPage(
+  void nextPage(int id) {
+    controller.nextPage(
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInOutQuint);
+  }
 
   void prevPage() => controller.previousPage(
       duration: const Duration(milliseconds: 600),
