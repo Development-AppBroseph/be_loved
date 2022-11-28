@@ -63,7 +63,7 @@ class EventsRepositoryImpl implements EventsRepository {
   Future<Either<Failure, EventEntity>> editEvent(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.editEvent(params.eventEntity);
+        final items = await remoteDataSource.editEvent(params.eventEntity, params.photo, params.isDeletePhoto);
         return Right(items);
       } catch (e) {
         print(e);

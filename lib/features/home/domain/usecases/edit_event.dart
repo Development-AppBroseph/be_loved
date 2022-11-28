@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/domain/repositories/events_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -18,7 +20,9 @@ class EditEvent implements UseCase<EventEntity, EditEventParams> {
 
 class EditEventParams extends Equatable {
   final EventEntity eventEntity;
-  const EditEventParams({required this.eventEntity});
+  final File? photo;
+  final bool isDeletePhoto;
+  const EditEventParams({required this.eventEntity, this.photo, this.isDeletePhoto = false});
 
   @override
   List<Object> get props => [eventEntity];

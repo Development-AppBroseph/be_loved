@@ -10,6 +10,7 @@ class EventEntity extends Equatable {
   final DateTime start;
   final DateTime finish;
   final String datetimeString;
+  final String? photo;
   final bool married;
   final bool allDays;
   final bool repeat;
@@ -17,9 +18,11 @@ class EventEntity extends Equatable {
   final int relationId;
   final int mainPosition;
   final User eventCreator;
+  final List<int> tagIds;
 
   EventEntity({
     required this.id,
+    required this.tagIds,
     required this.title,
     required this.description,
     required this.important,
@@ -29,6 +32,7 @@ class EventEntity extends Equatable {
     required this.married,
     required this.relationId,
     required this.mainPosition,
+    required this.photo,
     required this.notification,
     required this.repeat,
     required this.allDays,
@@ -49,6 +53,7 @@ class EventEntity extends Equatable {
       'all_day': allDays,
       'repeat': repeat,
       'notification': notification,
+      'tags': tagIds
       // 'main_position': mainPosition
       // 'event_creator': eventCreator
     };

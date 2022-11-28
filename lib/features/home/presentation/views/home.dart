@@ -7,6 +7,7 @@ import 'package:be_loved/features/home/presentation/views/archive/archive.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/main_event_page.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/events_page.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/purposes_page.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/main_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,8 +35,8 @@ class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
 
   List<Widget> pages = [
-    const MainRelationShipsPage(),
-    EventPage(nextPage: (int id) {  },),//MainEventPage
+    const MainPage(),
+    const MainEventPage(),//(nextPage: (int id) {  },),//MainEventPage
     PurposesPage(),
     ArchivePage(),
   ];

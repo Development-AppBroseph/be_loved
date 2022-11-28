@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/core/usecases/usecase.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
@@ -34,6 +36,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   List<EventEntity> eventsDeleted = [];
   List<EventEntity> eventsSorted = [];
   TagEntity? selectedTag;
+  int eventDetailSelectedId = 0;
 
 
   void _getEvents(GetEventsEvent event, Emitter<EventsState> emit) async {
@@ -91,7 +94,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
   void _editEvents(EventEditEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
-    final data = await editEvent.call(EditEventParams(eventEntity: event.eventEntity));
+    final data = await editEvent.call(EditEventParams(eventEntity: event.eventEntity, photo: event.photo, isDeletePhoto: event.isDeletePhoto));
     EventsState state = data.fold(
       (error) => errorCheck(error),
       (data) {
@@ -119,7 +122,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
             }
           }
         }
-        return EventAddedState(eventEntity: event.eventEntity);
+        return EventAddedState(eventEntity: data);
       },
     );
     emit(state);

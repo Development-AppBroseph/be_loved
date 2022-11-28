@@ -66,6 +66,13 @@ class TextStyles {
       fontWeight: FontWeight.w300,
       color: ColorStyles.blackColor);
   
+  TextStyle black_20_w800 = TextStyle(
+      fontFamily: MainConfigApp.fontFamily1,
+      fontStyle: FontStyle.normal,
+      fontSize: 20.sp,
+      fontWeight: FontWeight.w800,
+      color: ColorStyles.blackColor);
+
   TextStyle black_20_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
@@ -342,6 +349,13 @@ class TextStyles {
       fontWeight: FontWeight.w800,
       color: ColorStyles.greyColor);
   
+  TextStyle grey_15_w700 = TextStyle(
+      fontFamily: MainConfigApp.fontFamily1,
+      fontStyle: FontStyle.normal,
+      fontSize: 15.sp,
+      fontWeight: FontWeight.w700,
+      color: ColorStyles.greyColor);
+  
   TextStyle grey_15_w800 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
@@ -453,6 +467,13 @@ class TextStyles {
 
 
   // WHITE
+  TextStyle white_25_w800 = TextStyle(
+      fontFamily: MainConfigApp.fontFamily1,
+      fontStyle: FontStyle.normal,
+      fontSize: 25.sp,
+      fontWeight: FontWeight.w800,
+      color: Colors.white);
+
   TextStyle white_24_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
@@ -507,6 +528,13 @@ class TextStyles {
       fontStyle: FontStyle.normal,
       fontSize: 14.sp,
       fontWeight: FontWeight.w700,
+      color: Colors.white);
+  
+  TextStyle white_15_w800 = TextStyle(
+      fontFamily: MainConfigApp.fontFamily1,
+      fontStyle: FontStyle.normal,
+      fontSize: 15.sp,
+      fontWeight: FontWeight.w800,
       color: Colors.white);
   
   TextStyle white_15_w700 = TextStyle(

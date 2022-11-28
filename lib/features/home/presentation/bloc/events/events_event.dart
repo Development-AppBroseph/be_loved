@@ -15,7 +15,9 @@ class EventAddEvent extends EventsEvent{
 
 class EventEditEvent extends EventsEvent{
   final EventEntity eventEntity;
-  EventEditEvent({required this.eventEntity});
+  File? photo;
+  bool isDeletePhoto;
+  EventEditEvent({required this.eventEntity, this.photo, this.isDeletePhoto = false});
 }
 
 class EventChangeToHomeEvent extends EventsEvent{

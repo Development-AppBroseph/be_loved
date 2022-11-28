@@ -32,7 +32,8 @@ import 'modals/create_event_modal.dart';
 
 class RelationShipsPage extends StatefulWidget {
   final VoidCallback nextPage;
-  const RelationShipsPage({Key? key, required this.nextPage}) : super(key: key);
+  final Function(int id) toDetailPage;
+  const RelationShipsPage({Key? key, required this.nextPage, required this.toDetailPage}) : super(key: key);
 
   @override
   State<RelationShipsPage> createState() => _RelationShipsPageState();
@@ -462,6 +463,9 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                         eventEntity: null, position: i));
                                   },
                                   index: index,
+                                  onDetail:(id) {
+                                    widget.toDetailPage(id);
+                                  },
                                 );
                               }),
                               proxyDecorator: (child, index, animation) {

@@ -112,6 +112,7 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                 pressType: PressType.singleClick,
                 child: MirrorImage(
                   path: _image,
+                  isBorder: false,
                 ),
                 verticalMargin: 14.h,
                 menuBuilder: () {

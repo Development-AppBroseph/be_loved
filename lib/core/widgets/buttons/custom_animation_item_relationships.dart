@@ -9,6 +9,7 @@ import 'package:be_loved/core/widgets/texts/next_text_widget.dart';
 import 'package:be_loved/core/widgets/texts/today_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,12 +18,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAnimationItemRelationships extends StatefulWidget {
   final Function(int) delete;
+  final Function(int id) onDetail;
   final int index;
   final EventEntity events;
   const CustomAnimationItemRelationships({
     Key? key,
     required this.delete,
     required this.index,
+    required this.onDetail,
     required this.events,
   }) : super(key: key);
 
@@ -60,7 +63,7 @@ class _CustomAnimationItemRelationshipsState
     EventsBloc eventsBloc = context.read<EventsBloc>();
     return StreamBuilder<bool>(
       stream: streamController.stream,
-      initialData: true,
+      initialData: false,
       builder: (context, snapshot) {
         return GestureDetector(
           onHorizontalDragStart: (details) {
@@ -96,12 +99,12 @@ class _CustomAnimationItemRelationshipsState
             }
           },
           child: AnimatedOpacity(
-            duration: const Duration(milliseconds: 1000),
+            duration: const Duration(milliseconds: 600),
             opacity: snapshot.data! ? 1 : 0,
             curve: Curves.easeInOutQuint,
             child: AnimatedContainer(
               curve: Curves.easeInOutQuint,
-              duration: const Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 600),
               height: snapshot.data! ? 155.h : 0.h,
               width: 378.w,
               // decoration: BoxDecoration(
@@ -112,7 +115,7 @@ class _CustomAnimationItemRelationshipsState
                 padding: EdgeInsets.only(bottom: 15.h),
                 child: AnimatedContainer(
                   curve: Curves.easeInOutQuint,
-                  duration: const Duration(milliseconds: 1000),
+                  duration: const Duration(milliseconds: 600),
                   height: snapshot.data! ? 155.h : 0.h,
                   width: 378.w,
                   // decoration: BoxDecoration(
@@ -181,7 +184,7 @@ class _CustomAnimationItemRelationshipsState
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
                                           duration: const Duration(
-                                              milliseconds: 1000),
+                                              milliseconds: 600),
                                           height: snapshot.data! 
                                           ? (widget.events.datetimeString == '0' && eventsBloc.events.first.id == widget.events.id 
                                             ? 10.h 
@@ -202,7 +205,7 @@ class _CustomAnimationItemRelationshipsState
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
                                           duration: const Duration(
-                                              milliseconds: 1000),
+                                              milliseconds: 600),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
                                         // widget.index == 0
@@ -218,15 +221,20 @@ class _CustomAnimationItemRelationshipsState
                                 physics: NeverScrollableScrollPhysics(),
                                 child: Column(
                                   children: [
-                                    Container(
-                                      height: 70.h,
-                                      width: 55.w,
-                                      color: ColorStyles.greyColor2,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          SvgPicture.asset(SvgImg.setting),
-                                        ],
+                                    GestureDetector(
+                                      onTap: (){
+                                        widget.onDetail(widget.events.id);
+                                      },
+                                      child: Container(
+                                        height: 70.h,
+                                        width: 55.w,
+                                        color: ColorStyles.greyColor2,
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            SvgPicture.asset(SvgImg.setting),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
@@ -234,10 +242,10 @@ class _CustomAnimationItemRelationshipsState
                                         streamController.add(false);
                                         scrollController.animateTo(0,
                                             duration: const Duration(
-                                                milliseconds: 1000),
+                                                milliseconds: 600),
                                             curve: Curves.easeInOutQuint);
                                         Future.delayed(
-                                                Duration(milliseconds: 1000))
+                                                Duration(milliseconds: 600))
                                             .then((value) {
                                           widget.delete(widget.index);
                                         });

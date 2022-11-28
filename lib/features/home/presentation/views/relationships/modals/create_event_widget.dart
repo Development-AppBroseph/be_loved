@@ -4,6 +4,7 @@ import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/time_text.dart';
+import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -112,6 +113,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
         context.read<EventsBloc>().add(EventEditEvent(eventEntity: EventEntity(
           id: widget.editingEvent!.id,
           title: _controllerName.text,
+          photo: null,
           description: _controllerDescription.text,
           important: false,
           start: DateTime(fromDate.year, fromDate.month, fromDate.day, 
@@ -131,6 +133,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
             : 0
           ),
           datetimeString: '',
+          tagIds: [],
           married: widget.editingEvent!.married,
           relationId: sl<AuthConfig>().user!.relationId!,
           notification: notification,
@@ -146,6 +149,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
           title: _controllerName.text,
           description: _controllerDescription.text,
           important: false,
+          tagIds: [],
+          photo: null,
           start: DateTime(fromDate.year, fromDate.month, fromDate.day, 
             _controllerFromTime.text.length > 4
             ? int.parse(_controllerFromTime.text.split(":")[0])
@@ -884,11 +889,4 @@ extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
-}
-
-Offset getWidgetPosition(GlobalKey key) {
-  final RenderBox renderBox =
-      key.currentContext?.findRenderObject() as RenderBox;
-
-  return renderBox.localToGlobal(Offset.zero);
 }

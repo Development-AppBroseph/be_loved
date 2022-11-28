@@ -1,22 +1,21 @@
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/event_detail_view.dart';
-import 'package:be_loved/features/home/presentation/views/events/view/event_page.dart';
-import 'package:be_loved/features/home/presentation/views/events/widgets/all_events.dart';
-import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/events_page.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/account/view/account_page.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MainEventPage extends StatefulWidget {
-  const MainEventPage({
-    Key? key,
-  }) : super(key: key);
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
 
   @override
-  State<MainEventPage> createState() => _MainEventPageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MainEventPageState extends State<MainEventPage> {
+class _MainPageState extends State<MainPage> {
   final PageController controller = PageController();
+
   @override
   void dispose() {
     controller.dispose();
@@ -24,6 +23,7 @@ class _MainEventPageState extends State<MainEventPage> {
   }
 
   ScrollPhysics physics = const NeverScrollableScrollPhysics();
+
   @override
   Widget build(BuildContext context) {
     return PageView(
@@ -36,7 +36,7 @@ class _MainEventPageState extends State<MainEventPage> {
         setState(() {});
       },
       children: [
-        EventPage(nextPage: nextPage,),
+        MainRelationShipsPage(nextPage: nextPage),
         EventDetailView(prevPage: prevPage),
       ],
     );

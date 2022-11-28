@@ -3,7 +3,8 @@ import 'package:be_loved/features/home/presentation/views/relationships/relation
 import 'package:flutter/material.dart';
 
 class MainRelationShipsPage extends StatefulWidget {
-  const MainRelationShipsPage({Key? key}) : super(key: key);
+  final Function(int id) nextPage;
+  const MainRelationShipsPage({Key? key, required this.nextPage}) : super(key: key);
 
   @override
   State<MainRelationShipsPage> createState() => _MainRelationShipsPageState();
@@ -25,14 +26,14 @@ class _MainRelationShipsPageState extends State<MainRelationShipsPage> {
     return PageView(
       physics: physics,
       controller: controller,
-      onPageChanged: (value) {
-        physics = value == 0
-            ? const NeverScrollableScrollPhysics()
-            : const ClampingScrollPhysics();
-        setState(() {});
-      },
+      // onPageChanged: (value) {
+      //   physics = value == 0
+      //       ? const NeverScrollableScrollPhysics()
+      //       : const ClampingScrollPhysics();
+      //   setState(() {});
+      // },
       children: [
-        RelationShipsPage(nextPage: nextPage),
+        RelationShipsPage(nextPage: nextPage, toDetailPage: widget.nextPage,),
         AccountPage(prevPage: prevPage),
       ],
     );

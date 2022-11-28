@@ -10,7 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MirrorImage extends StatelessWidget {
   final File? path;
   final String? urlToImage;
-  MirrorImage({this.path, this.urlToImage});
+  final bool isBorder;
+  MirrorImage({this.path, this.urlToImage, this.isBorder = true});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +21,18 @@ class MirrorImage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
-          Radius.circular(50.r),
+          Radius.circular(48.r),
         ),
-        border: Border.all(width: 5.h, color: Colors.white),
+        boxShadow:isBorder
+        ? const [
+          BoxShadow(
+            color: Colors.white, 
+            offset: Offset(0, 1)
+          )
+        ] : [],
+        border: isBorder
+        ? Border.all(width: 5.h, color: Colors.white)
+        : null,
         image: path != null
             ? DecorationImage(
                 image: FileImage(path!),
