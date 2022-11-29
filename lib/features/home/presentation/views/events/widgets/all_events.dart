@@ -70,9 +70,13 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
               child: SizedBox(
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      size: 28,
+                    // const Icon(
+                    //   Icons.arrow_back_ios_new_rounded,
+                    //   size: 28,
+                    // ),
+                    SvgPicture.asset(
+                      SvgImg.back,
+                      height: 26.32.h,
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 20.w),
@@ -82,7 +86,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                           fontFamily: 'Inter',
                           fontSize: 20.sp,
                           color: const Color(0xff2C2C2E),
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),

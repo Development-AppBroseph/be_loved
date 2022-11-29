@@ -13,12 +13,14 @@ import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_tag_icon.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/detail_tag_select_modal.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/event_detail_timer.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/event_settings_modal.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/photo_settings_modal.dart';
+import 'package:be_loved/features/home/presentation/views/events/widgets/show_create_tag_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_widget.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
@@ -167,44 +169,63 @@ class _EventDetailViewState extends State<EventDetailView> {
               padding: EdgeInsets.symmetric(horizontal: 25.w),
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 75.h, bottom: 46.h, left: 10.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () => widget.prevPage(),
-                          child: SizedBox(
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.arrow_back_ios_new_rounded,
-                                  size: 28,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 20.w),
-                                  child: Text(
-                                    'Назад',
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: 20.sp,
-                                      color: const Color(0xff2C2C2E),
-                                      fontWeight: FontWeight.w800,
+                  BlocBuilder<TagsBloc, TagsState>(
+                    builder: (context, state) {
+                      return Padding(
+                        padding: EdgeInsets.only(top: 75.h, bottom: 46.h, left: 10.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () => widget.prevPage(),
+                              child: SizedBox(
+                                child: Row(
+                                  children: [
+                                    // const Icon(
+                                    //   Icons.arrow_back_ios_new_rounded,
+                                    //   size: 28,
+                                    // ),
+                                    SvgPicture.asset(
+                                      SvgImg.back,
+                                      height: 26.32.h,
                                     ),
-                                  ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 20.w),
+                                      child: Text(
+                                        'Назад',
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 20.sp,
+                                          color: const Color(0xff2C2C2E),
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                            context.read<TagsBloc>().tags.any((element) => element.events.contains(event!.id))
+                            ? GestureDetector(
+                              onTap: (){
+                                showTagModal();
+                              },
+                              child: TagItemWidget(
+                                key: tagAddIconKey,
+                                tagEntity: context.read<TagsBloc>().tags.where((element) => element.events.contains(event!.id)).first
+                              ),
+                            )
+                            : AddTagIcon(
+                              key: tagAddIconKey,
+                              onTap: (){
+                                showModalCreateTag(context, true);
+                                // showTagModal();
+                              },
+                            )
+                          ],
                         ),
-                        AddTagIcon(
-                          key: tagAddIconKey,
-                          onTap: (){
-                            showTagModal();
-                          },
-                        )
-                      ],
-                    ),
+                      );
+                    }
                   ),
                   CupertinoCard(
                     elevation: 0,
@@ -308,6 +329,7 @@ class _EventDetailViewState extends State<EventDetailView> {
                           event!.photo!,
                           height: MediaQuery.of(context).size.width-80.w,
                           fit: BoxFit.cover,
+                          width: double.infinity,
                         ),
                         Positioned(
                           top: 21.h,

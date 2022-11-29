@@ -250,7 +250,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                                                         height: 1.1),
                                                     softWrap: false,
                                                     maxLines: 1,
-                                                    overflow: TextOverflow.fade,
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
                                                 ),
                                               ],
@@ -282,27 +282,45 @@ class _MainEventsPageState extends State<MainEventsPage> {
                     children: [
                       SizedBox(
                         height: 7.sp,
-                        width: 31,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: eventsSlider.length,
-                          itemBuilder: (BuildContext context, index) {
-                            return Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: eventsSlider.map((e) 
+                          => Container(
                               margin:
-                                  EdgeInsets.only(left: index == 0 ? 0 : 5.w),
+                                  EdgeInsets.only(left: eventsSlider.indexOf(e) == 0 ? 0 : 5.w),
                               height: 7.sp,
                               width: 7.sp,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(2.r),
                                 border: Border.all(
                                     color: ColorStyles.greyColor, width: 1.5.w),
-                                color: index == itemIndex
+                                color: eventsSlider.indexOf(e) == itemIndex
                                     ? ColorStyles.greyColor
                                     : null,
                               ),
-                            );
-                          },
-                        ),
+                            )
+                        ).toList(),
+                        )
+                        // ListView.builder(
+                        //   scrollDirection: Axis.horizontal,
+                        //   itemCount: eventsSlider.length,
+                        //   itemBuilder: (BuildContext context, index) {
+                        //     return Container(
+                        //       margin:
+                        //           EdgeInsets.only(left: index == 0 ? 0 : 5.w),
+                        //       height: 7.sp,
+                        //       width: 7.sp,
+                        //       decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(2.r),
+                        //         border: Border.all(
+                        //             color: ColorStyles.greyColor, width: 1.5.w),
+                        //         color: index == itemIndex
+                        //             ? ColorStyles.greyColor
+                        //             : null,
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
                       ),
                     ],
                   ),

@@ -43,26 +43,22 @@ void eventSettingsModal(
                 ),
                 
                 SizedBox(height: 5.h,),
-                Opacity(
-                  opacity: context.read<EventsBloc>().eventsInHome.length != 3
-                  ? 1
-                  : 0.8,
-                  child: SettingsItem(
-                    onTap: (){
-                      if(context.read<EventsBloc>().eventsInHome.length != 3){
-                        onAddToHome();
-                      }
-                    },  
-                    text: 'На главный экран',
-                    icon: SvgImg.smartphone,
-                    borderRadius: !isImportant
-                    ? BorderRadius.zero
-                    : BorderRadius.only(
-                      bottomLeft: Radius.circular(17.r),
-                      bottomRight: Radius.circular(17.r),
-                    ),
-                    iconSize: Size(16.w, 25.h),
+                SettingsItem(
+                  onTap: (){
+                    if(context.read<EventsBloc>().eventsInHome.length != 3){
+                      onAddToHome();
+                    }
+                  },  
+                  text: 'На главный экран',
+                  icon: SvgImg.smartphone,
+                  opacity: context.read<EventsBloc>().eventsInHome.length != 3 ? null : 0.8,
+                  borderRadius: !isImportant
+                  ? BorderRadius.zero
+                  : BorderRadius.only(
+                    bottomLeft: Radius.circular(34.r),
+                    bottomRight: Radius.circular(34.r),
                   ),
+                  iconSize: Size(16.w, 25.h),
                 ),
                 if(!isImportant)
                 ...[
@@ -73,8 +69,8 @@ void eventSettingsModal(
                     icon: SvgImg.trash,
                     color: ColorStyles.redColor,
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(17.r),
-                      bottomRight: Radius.circular(17.r),
+                      bottomLeft: Radius.circular(34.r),
+                      bottomRight: Radius.circular(34.r),
                     ),
                     iconSize: Size(16.w, 18.h),
                   )

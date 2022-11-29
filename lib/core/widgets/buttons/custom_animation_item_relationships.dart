@@ -66,6 +66,9 @@ class _CustomAnimationItemRelationshipsState
       initialData: false,
       builder: (context, snapshot) {
         return GestureDetector(
+          onTap: (){  
+            widget.onDetail(widget.events.id);
+          },
           onHorizontalDragStart: (details) {
             pos = details.localPosition.dx;
           },

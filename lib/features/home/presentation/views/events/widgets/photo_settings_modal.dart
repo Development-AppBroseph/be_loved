@@ -112,8 +112,8 @@ void photoSettingsModal(
                     iconSize: Size(20.w, 22.h),
                     icon: SvgImg.archive,
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(17.r),
-                      bottomRight: Radius.circular(17.r),
+                      bottomLeft: Radius.circular(34.r),
+                      bottomRight: Radius.circular(34.r),
                     ),
                   ),
                 ]
@@ -136,8 +136,8 @@ void photoSettingsModal(
                     icon: SvgImg.trash,
                     color: ColorStyles.redColor,
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(17.r),
-                      bottomRight: Radius.circular(17.r),
+                      bottomLeft: Radius.circular(34.r),
+                      bottomRight: Radius.circular(34.r),
                     ),
                     iconSize: Size(16.w, 18.h),
                   )

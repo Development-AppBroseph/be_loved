@@ -98,61 +98,81 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                     ),
                   ),
                   Container(
-                    height: 140.h,
-                    width: 378.w,
                     margin: EdgeInsets.only(top: 18.h, bottom: 34.h),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.r),
-                      color: Colors.white,
-                      border: Border.all(
-                        color: const Color(0xff2C2C2E),
-                        width: 1.w,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        left: 20.w,
-                        right: 20.w,
-                        top: 11.h,
-                        bottom: 22.h,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Например:',
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  color: const Color(0xff969696),
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                    child: CupertinoCard(
+                      elevation: 0,
+                      radius: BorderRadius.circular(40.r),
+                      color: ColorStyles.blackColor,
+                      margin: EdgeInsets.zero,
+                      child: SizedBox(
+                        height: 140.h,
+                        width: 378.w,
+                        // decoration: BoxDecoration(
+                        //   // borderRadius: BorderRadius.circular(20.r),
+                        //   color: Colors.white,
+                        //   // border: Border.all(
+                        //   //   color: const Color(0xff2C2C2E),
+                        //   //   width: 1.w,
+                        //   // ),
+                        // ),
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: CupertinoCard(
+                                elevation: 0,
+                                margin: EdgeInsets.all(1.w),
+                                radius: BorderRadius.circular(37.r),
+                                color: Colors.white,
                               ),
-                              const Spacer(),
-                              Text(
-                                'Завтра',
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  color: const Color(0xffFF1D1D),
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          Text(
-                            'Годовщина',
-                            style: TextStyle(
-                              fontFamily: "Inter",
-                              color: const Color(0xff171717),
-                              fontSize: 50.sp,
-                              fontWeight: FontWeight.bold,
                             ),
-                          )
-                        ],
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: 20.w,
+                                right: 20.w,
+                                top: 11.h,
+                                bottom: 22.h,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Например:',
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          color: const Color(0xff969696),
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        'Завтра',
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          color: const Color(0xffFF1D1D),
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    'Годовщина',
+                                    style: TextStyle(
+                                      fontFamily: "Inter",
+                                      color: const Color(0xff171717),
+                                      fontSize: 50.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
