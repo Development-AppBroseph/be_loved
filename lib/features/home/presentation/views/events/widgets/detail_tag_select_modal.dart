@@ -120,7 +120,7 @@ void tagSelectModal(
                                       return GestureDetector(
                                         onTap: () async {
                                           if(isLast){
-                                            showModalCreateTag(context, true);
+                                            showModalCreateTag(context, true, null, event.id);
                                           }else{
                                             await showModalCreateTag(context, false, tagOfEvent[index]);
                                             Navigator.pop(context);

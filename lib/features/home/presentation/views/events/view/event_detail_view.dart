@@ -218,7 +218,7 @@ class _EventDetailViewState extends State<EventDetailView> {
                             : AddTagIcon(
                               key: tagAddIconKey,
                               onTap: (){
-                                showModalCreateTag(context, true);
+                                showModalCreateTag(context, true, null, event!.id);
                                 // showTagModal();
                               },
                             )
@@ -327,9 +327,9 @@ class _EventDetailViewState extends State<EventDetailView> {
                       children: [
                         Image.network(
                           event!.photo!,
-                          height: MediaQuery.of(context).size.width-80.w,
+                          height: 378.w,
+                          width: 378.w,
                           fit: BoxFit.cover,
-                          width: double.infinity,
                         ),
                         Positioned(
                           top: 21.h,

@@ -28,7 +28,8 @@ import 'color_select.dart';
 class TagModal extends StatefulWidget {
   final bool isCreate;
   final TagEntity? editingTag;
-  const TagModal({Key? key, required this.isCreate, required this.editingTag}) : super(key: key);
+  final int? selectedEvent;
+  const TagModal({Key? key, this.selectedEvent, required this.isCreate, required this.editingTag}) : super(key: key);
 
   @override
   State<TagModal> createState() => _TagModalState();
@@ -61,7 +62,7 @@ class _TagModalState extends State<TagModal> {
   }
 
   bool isValidate() {
-    return titleController.text.length > 3;
+    return titleController.text.length > 3 && selectedItems.isNotEmpty;
   }
 
   void onComplete() {
@@ -103,6 +104,11 @@ class _TagModalState extends State<TagModal> {
       titleController.text = model.title;
       iconIndex = MainConfigApp.tagColors.indexOf(model.color);
       selectedItems = model.events;
+    }
+    if(widget.selectedEvent != null && widget.editingTag == null){
+      if(!selectedItems.contains(widget.selectedEvent)){
+        selectedItems.add(widget.selectedEvent!);
+      }
     }
   }
 
