@@ -19,6 +19,7 @@ import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
 import 'package:be_loved/features/home/domain/usecases/put_code.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
@@ -72,6 +73,11 @@ void setupInjections() {
   // sl.registerFactory<AuthBloc>(
   //   () => AuthBloc(sl(), sl(), sl(), sl(), sl()),
   // );
+
+
+  sl.registerFactory<MainScreenBloc>(
+    () => MainScreenBloc(),
+  );
 
   //Repository
   sl.registerLazySingleton<BelovedRepository>(

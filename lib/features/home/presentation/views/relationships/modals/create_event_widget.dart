@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
@@ -284,7 +285,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 onChange: (s) {
                                   setState(() {});
                                 }),
-                            SizedBox(
+                            if(!(widget.editingEvent != null && widget.editingEvent!.important))
+                            ...[SizedBox(
                               height: 20.h,
                             ),
                             Container(
@@ -493,7 +495,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                       value: repeat)
                                 ],
                               ),
-                            ),
+                            ),],
                             SizedBox(
                               height: 20.h,
                             ),
@@ -581,13 +583,16 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 SizedBox(
                                   width: 60.h,
                                   child: CustomButton(
-                                    color: ColorStyles.redColor,
+                                    color: widget.editingEvent == null || widget.editingEvent!.important ? Color(0xFF70C8A3) : ColorStyles.redColor,
                                     text: title,
-                                    validate: true,
+                                    validate: widget.editingEvent != null,
                                     code: false,
                                     textColor: Colors.white,
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      if(widget.editingEvent != null && !widget.editingEvent!.important){
+                                        context.read<EventsBloc>().add(EventDeleteEvent(ids: [widget.editingEvent!.id]));
+                                        Navigator.pop(context);
+                                      }
                                     },
                                     svg: 'assets/icons/close_event_create.svg',
                                     svgHeight: 22.h,
@@ -829,33 +834,6 @@ Widget _buildDatePicker(BuildContext context,
                   headerVisible: false,
                   pageAnimationCurve: Curves.easeInOutQuint,
                   daysOfWeekVisible: false,
-                  // startingDayOfWeek: _calendarStartDay.year == currentDate.year && _calendarStartDay.month == currentDate.month
-                  // ? (kToday.weekday == DateTime.monday
-                  // ? StartingDayOfWeek.monday
-                  // : kToday.weekday == DateTime.tuesday
-                  // ? StartingDayOfWeek.tuesday
-                  // : kToday.weekday == DateTime.wednesday
-                  // ? StartingDayOfWeek.wednesday
-                  // : kToday.weekday == DateTime.thursday
-                  // ? StartingDayOfWeek.thursday
-                  // : kToday.weekday == DateTime.friday
-                  // ? StartingDayOfWeek.friday
-                  // : kToday.weekday == DateTime.saturday
-                  // ? StartingDayOfWeek.saturday
-                  // : StartingDayOfWeek.sunday)
-                  // : (_calendarStartDay.weekday == DateTime.monday
-                  // ? StartingDayOfWeek.friday
-                  // : _calendarStartDay.weekday == DateTime.tuesday
-                  // ? StartingDayOfWeek.saturday
-                  // : _calendarStartDay.weekday == DateTime.wednesday
-                  // ? StartingDayOfWeek.sunday
-                  // : _calendarStartDay.weekday == DateTime.thursday
-                  // ? StartingDayOfWeek.monday
-                  // : _calendarStartDay.weekday == DateTime.friday
-                  // ? StartingDayOfWeek.tuesday
-                  // : _calendarStartDay.weekday == DateTime.saturday
-                  // ? StartingDayOfWeek.wednesday
-                  // : StartingDayOfWeek.thursday),
                   rangeSelectionMode: RangeSelectionMode.toggledOff,
                   onDaySelected: (date, events) {
                     if (date.millisecondsSinceEpoch >=

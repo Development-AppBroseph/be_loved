@@ -58,6 +58,8 @@ dependencies:
   flutter_overlay_loader: ^2.0.0
   loading_animation_widget: ^1.2.0+2
 
+  photo_view: ^0.14.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

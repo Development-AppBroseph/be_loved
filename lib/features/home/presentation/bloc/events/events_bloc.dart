@@ -67,8 +67,8 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
         List<EventEntity> newSortedList = [];
         bool isAdded = false;
         for(EventEntity eventItem in events){
-          print('TEST: ${eventItem.start.millisecondsSinceEpoch >= data.start.millisecondsSinceEpoch}');
-          if(!isAdded && eventItem.start.millisecondsSinceEpoch >= data.start.millisecondsSinceEpoch){
+          print('TEST: ${getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch}');
+          if(!isAdded && getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch){
             newSortedList.add(data);
             isAdded = true;
           }
@@ -102,8 +102,8 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
         List<EventEntity> newSortedList = [];
         bool isAdded = false;
         for(EventEntity eventItem in events){
-          print('TEST: ${eventItem.start.millisecondsSinceEpoch >= data.start.millisecondsSinceEpoch}');
-          if(!isAdded && eventItem.start.millisecondsSinceEpoch >= data.start.millisecondsSinceEpoch){
+          print('TEST: ${getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch}');
+          if(!isAdded && getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch){
             newSortedList.add(data);
             isAdded = true;
           }
@@ -271,6 +271,13 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       result.add(thirdItem);
     }
     return result;
+  }
+
+
+
+
+  DateTime getEventStart(EventEntity event){
+    return DateTime.now().add(Duration(days: int.parse(event.datetimeString)));
   }
 
 } 

@@ -1,5 +1,6 @@
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/profile/presentation/widget/avatar_and_name_user.dart';
+import 'package:be_loved/features/profile/presentation/widget/decor/decor_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/devides_settings.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -7,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ParametrsUserBottomsheet extends StatelessWidget {
-  const ParametrsUserBottomsheet({Key? key}) : super(key: key);
+  final Function() onRelationSettingsTap;
+  const ParametrsUserBottomsheet({Key? key, required this.onRelationSettingsTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class ParametrsUserBottomsheet extends StatelessWidget {
                 subtitle: "Настроить",
                 haveToggleSwitch: false,
                 icon: SvgImg.logov2,
+                onPressed: onRelationSettingsTap,
               ),
               DevideSettings(
                 title: "Виджеты",
@@ -52,6 +55,10 @@ class ParametrsUserBottomsheet extends StatelessWidget {
                 subtitle: "Изменить",
                 haveToggleSwitch: false,
                 icon: SvgImg.documents,
+                onPressed: () {
+                  Navigator.pop(context);
+                  showModalDecor(context, (){});
+                },
               ),
               SizedBox(
                 height: 87.h - 24.h,

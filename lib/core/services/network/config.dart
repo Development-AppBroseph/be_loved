@@ -4,7 +4,8 @@ const bool isDev = true;
 
 //http://194.58.69.88/
 // String myUrl = '';
-String myUrlIP = '158.160.40.127';
+// String myUrlIP = '158.160.40.127';
+String myUrlIP = '158.160.43.61';
 
 extension ConfigExtension on Config {
   String get value {

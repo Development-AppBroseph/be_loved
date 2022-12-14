@@ -308,7 +308,8 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                   itemBuilder: (context, index) {
                     return UserEventItem(
                       onTap: (){
-                        if(!eventsBloc.eventsSorted[index].important && countPage != 0){
+                        // if(!eventsBloc.eventsSorted[index].important && countPage != 0){
+                        if(countPage != 0){
                           showModalCreateEvent(context, (){}, eventsBloc.eventsSorted[index]);
                         }else{
                           widget.toDetailPage(eventsBloc.eventsSorted[index].id);

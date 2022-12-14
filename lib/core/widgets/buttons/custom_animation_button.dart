@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +9,7 @@ class CustomAnimationButton extends StatefulWidget {
   final Border? border;
   final String text;
   bool black;
+  bool red;
   final VoidCallback onPressed;
   bool? state;
 
@@ -15,6 +17,7 @@ class CustomAnimationButton extends StatefulWidget {
       {Key? key,
       required this.text,
       this.black = false,
+      this.red = false,
       required this.onPressed,
       this.border,
       this.state})
@@ -38,10 +41,13 @@ class CustomButtonState extends State<CustomAnimationButton>
   @override
   void initState() {
     super.initState();
+    if(widget.red){
+      color = ColorStyles.redColor;
+    }
     controller = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
     _colorAnim = ColorTween(
-            begin: const Color.fromRGBO(23, 23, 23, 1.0), end: Colors.white)
+            begin: widget.red ? ColorStyles.redColor : Color.fromRGBO(23, 23, 23, 1.0), end: Colors.white)
         .animate(controller);
     _colorAnim.addListener(() {
       setState(() {
@@ -65,7 +71,9 @@ class CustomButtonState extends State<CustomAnimationButton>
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: snapshot.data! < 0.1
+                  color: widget.red
+                  ? ColorStyles.redColor
+                  : snapshot.data! < 0.1
                       ? animation
                           ? const Color.fromRGBO(23, 23, 23, 1.0)
                           : widget.black
@@ -89,7 +97,9 @@ class CustomButtonState extends State<CustomAnimationButton>
                         height: 60.sp,
                         width: snapshot.data! > 0 ? 378.w : 0,
                         decoration: BoxDecoration(
-                          color: widget.black
+                          color: widget.red
+                          ? ColorStyles.redColor
+                          : widget.black
                               ? const Color.fromRGBO(23, 23, 23, 1.0)
                               : const Color.fromRGBO(32, 203, 131, 1.0),
                         ),

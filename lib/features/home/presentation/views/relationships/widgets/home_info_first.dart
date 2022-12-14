@@ -66,7 +66,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
 
       DateTime berlinWallFell = DateTime.now();
       DateTime moonLanding = DateTime(
-          int.parse(array[0]), int.parse(array[1]), int.parse(array[2]));
+          int.parse(array[0]), int.parse(array[1]), int.parse(array[2].substring(0, 2)));
 
       final difference = berlinWallFell.difference(moonLanding);
 

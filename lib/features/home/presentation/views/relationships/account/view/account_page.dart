@@ -695,12 +695,12 @@ class _AccountPageState extends State<AccountPage> {
             curve: Curves.easeInOutQuint,
             width: (data < 7 ? 7.w : data.w) *
                 (data == 6
-                    ? 28.w
+                    ? 30.w
                     : data == 7
-                        ? 28.w
+                        ? 30.w
                         : data == 8
-                            ? 26.w
-                            : 25.w),
+                            ? 29.w
+                            : 28.w),
             // padding: EdgeInsets.only(
             //     left: 89.w, right: 98.w),
             child: SizedBox(

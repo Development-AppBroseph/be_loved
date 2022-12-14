@@ -44,7 +44,7 @@ class EventModel extends EventEntity{
     int days = 0;
     DateTime startDate = DateTime.parse(json['start']).toLocal();
     days = calculateDifference(startDate);
-    if(json['important'] == true){
+    if(json['important'] == true || json['repeat']){
       int currentYearDays = calculateDifference(DateTime(DateTime.now().year, startDate.month, startDate.day));
       if(currentYearDays.isNegative){
         currentYearDays = calculateDifference(DateTime(DateTime.now().year+1, startDate.month, startDate.day));

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class MainRelationShipsPage extends StatefulWidget {
   final Function(int id) nextPage;
-  const MainRelationShipsPage({Key? key, required this.nextPage}) : super(key: key);
+  final Function() toRelationSettingsPage;
+  const MainRelationShipsPage({Key? key, required this.nextPage, required this.toRelationSettingsPage}) : super(key: key);
 
   @override
   State<MainRelationShipsPage> createState() => _MainRelationShipsPageState();
@@ -33,7 +34,7 @@ class _MainRelationShipsPageState extends State<MainRelationShipsPage> {
       //   setState(() {});
       // },
       children: [
-        RelationShipsPage(nextPage: nextPage, toDetailPage: widget.nextPage,),
+        RelationShipsPage(nextPage: nextPage, toDetailPage: widget.nextPage, toRelationSettingsPage: widget.toRelationSettingsPage),
         AccountPage(prevPage: prevPage),
       ],
     );

@@ -1,0 +1,61 @@
+import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/utils/images.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../../constants/colors/color_styles.dart';
+
+
+class NewEventBtn extends StatelessWidget {
+  final Function() onTap;
+  final bool isActive;
+  NewEventBtn({required this.onTap, required this.isActive});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        if(isActive) onTap();
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 25.w),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              height: 55.h,
+              decoration: BoxDecoration(
+                border: Border.all(color: isActive ? ColorStyles.accentColor : ColorStyles.greyColor, width: 1.w),
+                color: isActive ? ColorStyles.accentColor : Colors.transparent,
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+            ),
+            Align(
+                alignment: Alignment.center,
+                child: Text('Новое событие',
+                    style: TextStyles(context).white_20_w800.copyWith(color: isActive ? null : ColorStyles.greyColor))),
+            Align(
+              alignment: Alignment.centerRight,
+              child: SizedBox(
+                height: 55.h,
+                width: 55.w,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      SvgImg.addNewEvent,
+                      color: isActive ? Colors.white : ColorStyles.greyColor,
+                      width: 22.15.h,
+                      height: 22.15.h,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

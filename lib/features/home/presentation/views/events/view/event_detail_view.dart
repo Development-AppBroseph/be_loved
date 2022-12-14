@@ -14,6 +14,7 @@ import 'package:be_loved/features/home/data/models/home/hashTag.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_tag_icon.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/detail_tag_select_modal.dart';
@@ -95,7 +96,13 @@ class _EventDetailViewState extends State<EventDetailView> {
       event!.important,
       (){
         Navigator.pop(context);
-        showModalCreateEvent(context, (){}, event);
+        showModalCreateEvent(
+          context, 
+          (){
+            widget.prevPage();
+          }, 
+          event
+        );
       },
       (){
         Navigator.pop(context);
@@ -319,45 +326,78 @@ class _EventDetailViewState extends State<EventDetailView> {
                   ),
                   SizedBox(height: 15.h,),
                   event!.photo != null
-                  ? CupertinoCard(
-                    elevation: 0,
-                    margin: EdgeInsets.zero,
-                    radius: BorderRadius.circular(60.r),
-                    child: Stack(
-                      children: [
-                        Image.network(
-                          event!.photo!,
-                          height: 378.w,
-                          width: 378.w,
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          top: 21.h,
-                          left: 24.h,
-                          child: Text('Прикреплённое фото', style: TextStyles(context).white_25_w800,)
-                        ),
-                        Positioned(
-                          bottom: 30.h,
-                          right: 24.w,
-                          child: GestureDetector(
-                            onTap: (){
-                              showPhotoSettingsModal(true);
-                            },
-                            behavior: HitTestBehavior.translucent,
+                  ? GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PhotoFullScreenView(urlToImage: event!.photo!,)));
+                    },
+                    child: CupertinoCard(
+                      elevation: 0,
+                      margin: EdgeInsets.zero,
+                      radius: BorderRadius.circular(60.r),
+                      child: Stack(
+                        children: [
+                          Image.network(
+                            event!.photo!,
+                            height: 378.w,
+                            width: 378.w,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned.fill(
                             child: Container(
-                              width: 50.w,
-                              height: 27,
-                              alignment: Alignment.center,
-                              child: SvgPicture.asset(
-                                SvgImg.dots,
-                                height: 7.h,
-                                color: Colors.white,
-                                key: photoSettingsKey,
+                              decoration: BoxDecoration(
+                                
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    ColorStyles.blackColor.withOpacity(0.6),
+                                    ColorStyles.blackColor.withOpacity(0),
+                                  ]
+                                )
+                              ),
+                            )
+                          ),
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: RadialGradient(
+                                  radius: 0.8,
+                                  colors: [
+                                    ColorStyles.blackColor.withOpacity(0),
+                                    ColorStyles.blackColor.withOpacity(0.3),
+                                  ]
+                                )
+                              ),
+                            )
+                          ),
+                          Positioned(
+                            top: 21.h,
+                            left: 24.h,
+                            child: Text('Прикреплённое фото', style: TextStyles(context).white_25_w800,)
+                          ),
+                          Positioned(
+                            bottom: 30.h,
+                            right: 24.w,
+                            child: GestureDetector(
+                              onTap: (){
+                                showPhotoSettingsModal(true);
+                              },
+                              behavior: HitTestBehavior.translucent,
+                              child: Container(
+                                width: 50.w,
+                                height: 27,
+                                alignment: Alignment.center,
+                                child: SvgPicture.asset(
+                                  SvgImg.dots,
+                                  height: 7.h,
+                                  color: Colors.white,
+                                  key: photoSettingsKey,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   )
                   : AddPhotoCard(

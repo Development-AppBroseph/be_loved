@@ -6,11 +6,13 @@ import 'package:be_loved/core/utils/helpers/events_helper.dart';
 import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/core/widgets/buttons/new_event_btn.dart';
 import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
 import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_events_bottomsheet.dart';
+import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/widgets/events_list_widget.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -180,17 +182,6 @@ class _MainEventsPageState extends State<MainEventsPage> {
               return Column(
                 children: [
                   SizedBox(height: 37.h),
-                  // const Padding(
-                  //   padding: EdgeInsets.only(left: 25, bottom: 10),
-                  //   child: Text(
-                  //     'Совсем скоро',
-                  //     style: TextStyle(
-                  //         fontFamily: "Inter",
-                  //         fontWeight: FontWeight.w800,
-                  //         color: Colors.black,
-                  //         fontSize: 25),
-                  //   ),
-                  // ),
                   CarouselSlider.builder(
                       itemCount: eventsSlider.length,
                       itemBuilder: ((context, index, i) {
@@ -301,26 +292,6 @@ class _MainEventsPageState extends State<MainEventsPage> {
                             )
                         ).toList(),
                         )
-                        // ListView.builder(
-                        //   scrollDirection: Axis.horizontal,
-                        //   itemCount: eventsSlider.length,
-                        //   itemBuilder: (BuildContext context, index) {
-                        //     return Container(
-                        //       margin:
-                        //           EdgeInsets.only(left: index == 0 ? 0 : 5.w),
-                        //       height: 7.sp,
-                        //       width: 7.sp,
-                        //       decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(2.r),
-                        //         border: Border.all(
-                        //             color: ColorStyles.greyColor, width: 1.5.w),
-                        //         color: index == itemIndex
-                        //             ? ColorStyles.greyColor
-                        //             : null,
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
                       ),
                     ],
                   ),
@@ -382,118 +353,6 @@ class _MainEventsPageState extends State<MainEventsPage> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // const Padding(
-                //   padding: EdgeInsets.only(left: 25, bottom: 10),
-                //   child: Text(
-                //     'Совсем скоро',
-                //     style: TextStyle(
-                //         fontFamily: "Inter",
-                //         fontWeight: FontWeight.w800,
-                //         color: Colors.black,
-                //         fontSize: 25),
-                //   ),
-                // ),
-                // CarouselSlider.builder(
-                //     itemCount: eventsSlider.length,
-                //     itemBuilder: ((context, index, i) {
-                //       return Padding(
-                //         padding: EdgeInsets.only(left: i == 0 ? 0 : 20.w),
-                //         child: CupertinoCard(
-                //           elevation: 0,
-                //           margin: EdgeInsets.zero,
-                //           radius: BorderRadius.circular(40.r),
-                //           color: Colors.white,
-                //           child: Container(
-                //             // decoration: BoxDecoration(
-                //             //   borderRadius: BorderRadius.circular(20.r),
-                //             //   color: Colors.white,
-                //             // ),
-                //             child: Padding(
-                //               padding: EdgeInsets.symmetric(
-                //                   horizontal: 20.w, vertical: 11.h),
-                //               child: Row(
-                //                 crossAxisAlignment: CrossAxisAlignment.start,
-                //                 children: [
-                //                   Column(
-                //                     mainAxisSize: MainAxisSize.min,
-                //                     crossAxisAlignment: CrossAxisAlignment.start,
-                //                     children: [
-                //                       DayTextWidget(
-                //                         eventEntity: eventsSlider[i],
-                //                         additionString: ':',
-                //                         textStyle: TextStyle(
-                //                           fontFamily: 'Inter',
-                //                           fontSize: 25.sp,
-                //                           fontWeight: FontWeight.w800,
-                //                           color: getColorFromDays(eventsSlider[i].datetimeString),
-                //                         ),
-                //                       ),
-                //                       Row(
-                //                         children: [
-                //                           SizedBox(
-                //                             width:
-                //                                 (MediaQuery.of(context).size.width *
-                //                                         70) /
-                //                                     100,
-                //                             child: Text(
-                //                               eventsSlider[i].title,
-                //                               style: style6.copyWith(height: 1.1),
-                //                               softWrap: false,
-                //                               maxLines: 1,
-                //                               overflow: TextOverflow.fade,
-                //                             ),
-                //                           ),
-                //                         ],
-                //                       ),
-                //                     ],
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       );
-                //     }),
-                //     options: CarouselOptions(
-                //       onPageChanged: (index, reason) {
-                //         setState(() {
-                //           itemIndex = index;
-                //         });
-                //       },
-                //       viewportFraction: 0.9,
-                //       height: 113.h,
-                //       enableInfiniteScroll: false,
-                //     )),
-                // SizedBox(height: 22.h),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     SizedBox(
-                //       height: 7.sp,
-                //       width: 31,
-                //       child: ListView.builder(
-                //         scrollDirection: Axis.horizontal,
-                //         itemCount: eventsSlider.length,
-                //         itemBuilder: (BuildContext context, index) {
-                //           return Container(
-                //             margin: EdgeInsets.only(left: index == 0 ? 0 : 5.w),
-                //             height: 7.sp,
-                //             width: 7.sp,
-                //             decoration: BoxDecoration(
-                //               borderRadius: BorderRadius.circular(2.r),
-                //               border: Border.all(
-                //                   color: ColorStyles.greyColor, width: 1.5.w),
-                //               color: index == itemIndex
-                //                   ? ColorStyles.greyColor
-                //                   : null,
-                //             ),
-                //           );
-                //         },
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // SizedBox(height: 20.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.w),
                   child: Container(
@@ -501,29 +360,19 @@ class _MainEventsPageState extends State<MainEventsPage> {
                     color: ColorStyles.greyColor,
                   ),
                 ),
-                // SizedBox(height: 38.h),
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 25.w),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       Text('Предстоящие события', style: style2),
-                //       SizedBox(height: 8.h),
-                //       Text(countEventsText(eventsBloc.events), style: style3),
-                //     ],
-                //   ),
-                // ),
                 SizedBox(height: 25.h),
-                events(eventsBloc.eventsSorted),
+                EventsListWidget(events: eventsBloc.eventsSorted, onTap: (id){
+                  widget.toDetailPage(id);
+                })
               ],
             );
           }),
           SizedBox(height: 35.h),
-          GestureDetector(
+          NewEventBtn(
             onTap: () => showModalCreateEvent(context, () {
               Navigator.pop(context);
             }),
-            child: button(),
+            isActive: !(eventsBloc.events.length >= 30),
           ),
           SizedBox(height: 117.h),
         ],
@@ -531,141 +380,4 @@ class _MainEventsPageState extends State<MainEventsPage> {
     );
   }
 
-  Widget events(List<EventEntity> events) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25.w),
-      child: Column(children: eventsItem(events)),
-    );
-  }
-
-  List<Widget> eventsItem(List<EventEntity> events) {
-    List<Widget> list = [];
-    for (int i = 0; i < events.length; i++) {
-      list.add(itemEvent(events[i]));
-    }
-    return list;
-  }
-
-  Widget itemEvent(EventEntity eventEntity) {
-    TextStyle style1 = TextStyle(
-        color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.sp);
-    TextStyle style2 = TextStyle(
-        color: ColorStyles.greyColor,
-        fontWeight: FontWeight.w700,
-        fontSize: 15.sp);
-
-    Color? colorDays = checkColor(eventEntity.datetimeString);
-
-    TextStyle style3 = TextStyle(
-        color: colorDays, fontWeight: FontWeight.w800, fontSize: 15.sp);
-
-    TextStyle style4 = TextStyle(
-        color: ColorStyles.redColor,
-        fontWeight: FontWeight.w800,
-        fontSize: 15.sp);
-
-    return GestureDetector(
-      onTap: (){
-        print('TAPP');
-        widget.toDetailPage(eventEntity.id);
-      },
-      behavior: HitTestBehavior.translucent,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 20.h),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  truncateWithEllipsis(22, eventEntity.title), 
-                  style: style1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: 5.h),
-                eventEntity.important
-                ? ImportantTextWidget()
-                : RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: 'Добавил(а): ${eventEntity.eventCreator.username}',
-                        style: style2),
-                  ]),
-                )
-              ],
-            ),
-            const Spacer(),
-            DayTextWidget(eventEntity: eventEntity)
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget button() {
-    TextStyle style = TextStyle(
-        color: ColorStyles.greyColor,
-        fontWeight: FontWeight.w800,
-        fontSize: 20.sp);
-
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 25.w),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            height: 55.h,
-            decoration: BoxDecoration(
-              border: Border.all(color: ColorStyles.accentColor),
-              color: ColorStyles.accentColor,
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-          ),
-          Align(
-              alignment: Alignment.center,
-              child: Text('Новое событие',
-                  style: style.copyWith(color: Colors.white))),
-          Align(
-            alignment: Alignment.centerRight,
-            child: SizedBox(
-              height: 55.h,
-              width: 55.w,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  SvgPicture.asset(
-                    SvgImg.addNewEvent,
-                    color: Colors.white,
-                    width: 22.15.h,
-                    height: 22.15.h,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color checkColor(String value) {
-    Color? colorDays;
-
-    if (value.contains('Сегодня') ||
-        value.contains('Завтра') ||
-        value.contains('2')) {
-      colorDays = const Color.fromRGBO(255, 29, 29, 1);
-    } else if (value.contains('3')) {
-      colorDays = const Color.fromRGBO(191, 51, 85, 1);
-    } else if (value.contains('4')) {
-      colorDays = const Color.fromRGBO(128, 74, 142, 1);
-    } else if (value.contains('5')) {
-      colorDays = const Color.fromRGBO(64, 97, 199, 1);
-    } else if (value.contains('6')) {
-      colorDays = const Color.fromRGBO(1, 119, 255, 1);
-    } else {
-      colorDays = const Color.fromRGBO(150, 150, 150, 1);
-    }
-    return colorDays;
-  }
 }
