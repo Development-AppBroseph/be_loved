@@ -22,14 +22,19 @@ enum Endpoints {
   addTag,
   editTag,
   deleteTag,
+
+
+  //Archive
+  //Gallery
+  getGalleryFiles,
+  addGalleryFile, 
+  deleteGalleryFiles
 }
 
 extension EndpointsExtension on Endpoints {
   String getPath({
     List<dynamic>? params,
   }) {
-    var url = Config.url.url;
-    var ws = Config.ws.ws;
     switch (this) {
       case Endpoints.register:
         return "/auth/users/";
@@ -57,6 +62,12 @@ extension EndpointsExtension on Endpoints {
         return "/events/tags/${params![0]}"; 
       case Endpoints.changePositionEvent:
         return "/events/";  
+      case Endpoints.getGalleryFiles:
+        return "/archive/";  
+      case Endpoints.addGalleryFile:
+        return "/archive/";  
+      case Endpoints.deleteGalleryFiles:
+        return "/archive/del";  
       default:
         return '';
     }

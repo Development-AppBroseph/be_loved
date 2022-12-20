@@ -1,14 +1,16 @@
-import 'dart:async';
+import 'dart:ui';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
-import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
-import 'package:be_loved/core/utils/images.dart';
-import 'package:be_loved/features/home/presentation/views/archive/detail_gallery.dart';
+import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
+import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
+import 'package:be_loved/features/home/presentation/views/archive/gallery_page.dart';
+import 'package:be_loved/features/home/presentation/views/archive/helpers/gallery_helper.dart';
 import 'package:be_loved/features/home/presentation/views/archive/widgets/archive_wrapper.dart';
-import 'package:be_loved/features/home/presentation/views/archive/widgets/gallery_settings_modal.dart';
+import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class ArchivePage extends StatefulWidget {
   @override
@@ -17,244 +19,97 @@ class ArchivePage extends StatefulWidget {
 
 class _ArchivePageState extends State<ArchivePage> {
 
+  ScrollController scrollController = ScrollController();
+  bool showTop = false;
+  GalleryGroupFilesEntity? enitityPos;
+  String dateTime = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // scrollController.addListener(() {
+    //   double position = scrollController.position.pixels;
+    //   bool newVal = false;
+    //   if(position > 170){
+    //     newVal = true;
+    //   }else{
+    //     newVal = false;
+    //   }
+    //   if(showTopImage != newVal){
+    //     setState(() {
+    //       showTopImage = newVal;
+    //     });
+    //   }
+    // });
+  }
   @override
   Widget build(BuildContext context) {
-    return ArchiveWrapper(child: _buildMainList());
-  }
-
-  showGallerySettingsModal(Offset offset){
-    gallerySettingsModal(
-      context, 
-      offset,
-      (){},
-      (){}
-    );
-  }
-
-
-
-
-  Widget _buildMainList(){
-
-    return SingleChildScrollView(
-      child: Wrap(
-        spacing: 4.w,
-        runSpacing: 4.w,
-        children: List.generate(20, 
-          (index) => index % 5 == 0
-          ? _buildMainItem(GlobalKey(), index)
-          : index != 0 && (index-1) % 5 == 0
-          ? _buildVideoItem()
-          : _buildMiniItem()
-        ),
-      ),
-    );
-    
-    
-    // ListView.builder(
-    //   padding: EdgeInsets.zero,
-    //     physics: const BouncingScrollPhysics(),
-    //     shrinkWrap: true,
-    //     itemBuilder: ((context, index) {
-    //       if (index % 4 == 0) {
-    //         GlobalKey newKey = GlobalKey();
-    //         return GestureDetector(
-    //           onTap: (){
-    //             Navigator.of(context).push(
-    //               PageRouteBuilder(
-    //                 pageBuilder: (_, __, ___) => DetailGalleryPage(index: index),
-    //                 transitionDuration: Duration(milliseconds: 400),
-    //                 transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-    //             ));
-    //           },
-    //           child: Padding(
-    //             padding: EdgeInsets.only(bottom: 4.h),
-    //             child: Stack(
-    //               children: [
-    //                 Hero(
-    //                   tag: '#${index}',
-    //                   child: Image.asset('assets/images/gallery1.png', fit: BoxFit.cover,)
-    //                 ),
-    //                 Positioned(
-    //                   top: 25.h,
-    //                   left: 30.w,
-    //                   right: 40.w,
-    //                   child: Column(
-    //                     crossAxisAlignment: CrossAxisAlignment.start,
-    //                     children: [
-    //                       Row(
-    //                         crossAxisAlignment: CrossAxisAlignment.center,
-    //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                         children: [
-    //                           Text('28.11.2021', style: TextStyles(context).white_35_w800.copyWith(color: Colors.white.withOpacity(0.5),)),
-    //                           GestureDetector(
-    //                             onTap: (){
-    //                               showGallerySettingsModal(getWidgetPosition(newKey));
-    //                             },
-    //                             child: SvgPicture.asset(
-    //                               SvgImg.dots,
-    //                               height: 7.h,
-    //                               color: Colors.white,
-    //                               key: newKey,
-    //                             ),
-    //                           ),
-    //                         ],
-    //                       ),
-    //                       Text('г.Санкт-Петербург', style: TextStyles(context).white_15_w800.copyWith(color: Colors.white.withOpacity(0.5),)),
-    //                     ],
-    //                   )
-    //                 )
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       } else if(index != 0 && (index-1) % 4 == 0){
-    //         return Padding(
-    //           padding: EdgeInsets.only(bottom: 4.h),
-    //           child: Stack(
-    //             children: [
-    //               Container(
-    //                 height: 284.h,
-    //                 color: ColorStyles.greyColor2,
-    //                 child: Image.asset('assets/images/gallery2.png', fit: BoxFit.cover,),
-    //               ),
-    //               Positioned.fill(
-    //                 child: Center(child: SvgPicture.asset(SvgImg.play, ))
-    //               ),
-    //               Positioned(
-    //                 top: 30.h,
-    //                 right: 30.w,
-    //                 child: Text('0:40', style: TextStyles(context).white_15_w800)
-    //               )
-    //             ],
-    //           ),
-    //         );
-    //       } else {
-    //         return Padding(
-    //           padding: EdgeInsets.only(bottom: 4.h),
-    //           child: Row(
-    //             children: [
-    //               Container(
-    //                 height: 140.h,
-    //                 width: 140.w,
-    //                 color: ColorStyles.greyColor2,
-    //                 child: Image.asset('assets/images/gallery3.png', fit: BoxFit.cover,),
-    //               ),
-    //               SizedBox(width: 4.w),
-    //               Container(
-    //                 height: 140.h,
-    //                 width: 140.w,
-    //                 color: ColorStyles.greyColor2,
-    //                 child: Image.asset('assets/images/gallery4.png', fit: BoxFit.cover,),
-    //               ),
-    //               SizedBox(width: 4.w),
-    //               Container(
-    //                 height: 140.h,
-    //                 width: 140.w,
-    //                 color: ColorStyles.greyColor2,
-    //                 child: Image.asset('assets/images/gallery5.png', fit: BoxFit.cover,),
-    //               ),
-    //             ],
-    //           ),
-    //         );
-    //       }
-    //     }),
-    //     itemCount: 20);
-  }
-
-
-
-
-  Widget _buildVideoItem(){
     return Stack(
       children: [
-        Container(
-          height: 284.h,
-          color: ColorStyles.greyColor2,
-          child: Image.asset('assets/images/gallery2.png', fit: BoxFit.cover,),
-        ),
-        Positioned.fill(
-          child: Center(child: SvgPicture.asset(SvgImg.play, ))
+        ArchiveWrapper(
+          child: GalleryPage(
+            scrollController: scrollController,
+            onChangeShow: (show) {
+              setState(() {
+                if(show != null){
+                  dateTime = convertToRangeDates(show);
+                  showTop = true;
+                  enitityPos = show;
+                }else{
+                  showTop = false;
+                }
+              });
+            },
+          ),
+          scrollController: scrollController,
         ),
         Positioned(
-          top: 30.h,
-          right: 30.w,
-          child: Text('0:40', style: TextStyles(context).white_15_w800)
-        )
+            top: MediaQuery.of(context).padding.top+15.h,
+            left: 30.w,
+            right: 22.w,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.easeInOutQuint,
+              margin: EdgeInsets.only(top: showTop ? 10.h : 20.h),
+              child: AnimatedOpacity(
+                opacity: showTop ? 1 : 0,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeInOutQuint,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(dateTime, style: TextStyles(context).white_35_w800.copyWith(color: Colors.white.withOpacity(0.7),)),
+                        SizedBox(
+                          width: 120.w,
+                          height: 38.h,
+                          child: ClipPath.shape(
+                            shape: SquircleBorder(
+                              radius: BorderRadius.circular(30.r)
+                            ),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                              child: Container(
+                                color: Colors.white.withOpacity(0.7),
+                                alignment: Alignment.center,
+                                child: Text('Выбрать', style: TextStyles(context).black_18_w800.copyWith(color: ColorStyles.blackColor.withOpacity(0.7)),)
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Text(enitityPos == null ? '' : enitityPos!.mainPhoto.place, style: TextStyles(context).white_15_w800.copyWith(color: Colors.white.withOpacity(0.5),)),
+                  ],
+                ),
+              ),
+            )
+          )
       ],
     );
   }
-
-
-  Widget _buildMainItem(GlobalKey newKey, int index){
-    print('IND: ${index}');
-    return GestureDetector(
-      onTap: (){
-        Navigator.of(context).push(
-          PageRouteBuilder(
-            pageBuilder: (_, __, ___) => DetailGalleryPage(index: index),
-            transitionDuration: Duration(milliseconds: 400),
-            transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-        ));
-      },
-      child: Stack(
-        children: [
-          Hero(
-            tag: '#${index}',
-            child: Image.asset(
-              'assets/images/gallery1.png', 
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 428.w,  
-            )
-          ),
-          Positioned(
-            top: 25.h,
-            left: 30.w,
-            right: 40.w,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('28.11.2021', style: TextStyles(context).white_35_w800.copyWith(color: Colors.white.withOpacity(0.5),)),
-                    GestureDetector(
-                      onTap: (){
-                        showGallerySettingsModal(getWidgetPosition(newKey));
-                      },
-                      child: SvgPicture.asset(
-                        SvgImg.dots,
-                        height: 7.h,
-                        color: Colors.white,
-                        key: newKey,
-                      ),
-                    ),
-                  ],
-                ),
-                Text('г.Санкт-Петербург', style: TextStyles(context).white_15_w800.copyWith(color: Colors.white.withOpacity(0.5),)),
-              ],
-            )
-          )
-        ],
-      ),
-    );
-  }
-
-
-
-
-
-
-
-  _buildMiniItem(){
-    return Container(
-      height: 140.h,
-      width: 140.w,
-      color: ColorStyles.greyColor2,
-      child: Image.asset('assets/images/gallery5.png', fit: BoxFit.cover,),
-    );
-  }
-
 }

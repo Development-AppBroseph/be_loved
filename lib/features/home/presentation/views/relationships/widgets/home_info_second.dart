@@ -10,7 +10,8 @@ import 'package:intl/intl.dart';
 
 class HomeInfoSecond extends StatelessWidget {
   final double data;
-  HomeInfoSecond({required this.data});
+  final Function() onRelationTap;
+  HomeInfoSecond({required this.data, required this.onRelationTap});
 
   @override
   Widget build(BuildContext context) {
@@ -99,40 +100,44 @@ class HomeInfoSecond extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20.h,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(SvgImg.homeLogo, height: 34.h,),
-                    SizedBox(width: 26.w,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Отношения', style: TextStyle(
-                          color: Color(0xFF171717),
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w700
-                        ),),
-                        SizedBox(height: 2.h,),
-                        Text('Настроить', style: TextStyle(
-                          color: Color(0xFF969696),
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w500
-                        ),),
-                      ],
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 17.w),
-                  child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
-                )
-              ],
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: onRelationTap,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(SvgImg.homeLogo, height: 34.h,),
+                      SizedBox(width: 26.w,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Отношения', style: TextStyle(
+                            color: Color(0xFF171717),
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w700
+                          ),),
+                          SizedBox(height: 2.h,),
+                          Text('Настроить', style: TextStyle(
+                            color: Color(0xFF969696),
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w500
+                          ),),
+                        ],
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 17.w),
+                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
+                  )
+                ],
+              ),
             ),
             
           ],

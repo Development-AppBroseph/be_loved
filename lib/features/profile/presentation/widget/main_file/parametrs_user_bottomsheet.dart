@@ -20,7 +20,7 @@ class ParametrsUserBottomsheet extends StatelessWidget {
       elevation: 0,
       margin: EdgeInsets.zero,
       child: SizedBox(
-        height: 750.h,
+        height: 707.h,
         child: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
           child: Column(
@@ -44,12 +44,12 @@ class ParametrsUserBottomsheet extends StatelessWidget {
                 icon: SvgImg.logov2,
                 onPressed: onRelationSettingsTap,
               ),
-              DevideSettings(
-                title: "Виджеты",
-                subtitle: "Настроить",
-                haveToggleSwitch: false,
-                icon: SvgImg.widgets,
-              ),
+              // DevideSettings(
+              //   title: "Виджеты",
+              //   subtitle: "Настроить",
+              //   haveToggleSwitch: false,
+              //   icon: SvgImg.widgets,
+              // ),
               DevideSettings(
                 title: "Оформление",
                 subtitle: "Изменить",

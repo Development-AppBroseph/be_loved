@@ -10,6 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomeInfoFirst extends StatefulWidget {
+  final Function() onRelationTap;
+  HomeInfoFirst({required this.onRelationTap});
   @override
   State<HomeInfoFirst> createState() => _HomeInfoFirstState();
 }
@@ -115,12 +117,16 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5.h),
-                        child: SvgPicture.asset(
-                          SvgImg.settings,
-                          height: 18.67.h,
-                          width: 18.67.h,
+                      GestureDetector(
+                        onTap: widget.onRelationTap,
+                        behavior: HitTestBehavior.translucent,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 5.h),
+                          child: SvgPicture.asset(
+                            SvgImg.settings,
+                            height: 18.67.h,
+                            width: 18.67.h,
+                          ),
                         ),
                       ),
                     ],

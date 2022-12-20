@@ -15,7 +15,8 @@ import 'package:flutter_svg/svg.dart';
 
 class ArchiveWrapper extends StatelessWidget {
   final Widget child;
-  ArchiveWrapper({required this.child});
+  final ScrollController scrollController;
+  ArchiveWrapper({required this.child, required this.scrollController});
   final streamControllerPage = StreamController<int>();
 
   List<String> data = [
@@ -40,6 +41,7 @@ class ArchiveWrapper extends StatelessWidget {
         initialData: 1,
         builder: (context, snapshot) {
           return SingleChildScrollView(
+            controller: scrollController,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

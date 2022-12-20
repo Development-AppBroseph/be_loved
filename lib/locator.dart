@@ -1,24 +1,30 @@
+import 'package:be_loved/features/home/data/datasource/archive/archive_remote_datasource.dart';
 import 'package:be_loved/features/home/data/datasource/be_loved_remote_datasource.dart';
 import 'package:be_loved/features/home/data/datasource/be_loved_remote_datasource_impl.dart';
 import 'package:be_loved/features/home/data/datasource/events/events_remote_datasource.dart';
 import 'package:be_loved/features/home/data/datasource/tags/tags_remote_datasource.dart';
+import 'package:be_loved/features/home/data/repository/archive_repository_impl.dart';
 import 'package:be_loved/features/home/data/repository/be_loved_implement.dart';
 import 'package:be_loved/features/home/data/repository/events_repository_impl.dart';
 import 'package:be_loved/features/home/data/repository/tags_repository_impl.dart';
+import 'package:be_loved/features/home/domain/repositories/archive_repository.dart';
 import 'package:be_loved/features/home/domain/repositories/be_loved.dart';
 import 'package:be_loved/features/home/domain/repositories/events_repository.dart';
 import 'package:be_loved/features/home/domain/repositories/tags_repository.dart';
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
+import 'package:be_loved/features/home/domain/usecases/add_gallery_file.dart';
 import 'package:be_loved/features/home/domain/usecases/add_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/change_position_event.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/edit_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
+import 'package:be_loved/features/home/domain/usecases/get_gallery_files.dart';
 import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
 import 'package:be_loved/features/home/domain/usecases/put_code.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
@@ -167,5 +173,37 @@ void setupInjections() {
   //Blocs
   sl.registerFactory<TagsBloc>(
     () => TagsBloc(sl(), sl(), sl(), sl()),
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //Datasources
+  sl.registerLazySingleton<ArchiveRemoteDataSource>(
+    () => ArchiveRemoteDataSourceImpl(dio: sl()),
+  );
+
+  // //Repositories
+  sl.registerLazySingleton<ArchiveRepository>(
+    () => ArchiveRepositoryImpl(sl(), sl()),
+  );
+
+  // //UseCases
+  sl.registerLazySingleton(() => AddGalleryFile(sl()));
+  sl.registerLazySingleton(() => GetGalleryFiles(sl()));
+
+  //Blocs
+  sl.registerFactory<GalleryBloc>(
+    () => GalleryBloc(sl(), sl()),
   );
 }

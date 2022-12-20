@@ -20,7 +20,7 @@ class RelationStartDateWidget extends StatelessWidget {
   final Function() onTapStats;
   final Function() onTapEditDate;
   final Function(DateTime date) onChangeDate;
-  final DateTime datetime;
+  DateTime datetime;
   RelationStartDateWidget({required this.datetime, required this.onTapEditDate, required this.onChangeDate, required this.onTapStats});
 
   final CustomPopupMenuController _customPopupMenuController = CustomPopupMenuController();
@@ -117,16 +117,24 @@ class RelationStartDateWidget extends StatelessWidget {
               barrierColor: Colors.transparent,
               showArrow: false,
               controller: _customPopupMenuController,
+              menuOnChange: (p){
+                if(!p){
+                  onChangeDate(datetime);
+                }
+              },
               pressType: PressType.singleClick,
               menuBuilder: () {
                 onTapEditDate();
                 return _buildDatePicker(context,
                     (date, hide) {
-                    if (hide) _customPopupMenuController.hideMenu();
+                    if (hide){
+                      _customPopupMenuController.hideMenu();
+                    } 
                     // setState(() {
                     //   toDate = date;
                     // });
-                    onChangeDate(date);
+                    // onChangeDate(date);
+                    datetime = date;
                   }, 
                   datetime, 
                   fromDate: null,

@@ -51,7 +51,7 @@ class MirrorImage extends StatelessWidget {
       child: path == null && urlToImage != null
       ? ClipRRect(
         borderRadius: BorderRadius.all(
-          Radius.circular(50.r),
+          Radius.circular(48.r),
         ),
         child: CachedNetworkImage(
           imageUrl: Config.url.url + urlToImage!,
