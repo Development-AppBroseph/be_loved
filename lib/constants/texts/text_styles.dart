@@ -342,6 +342,13 @@ class TextStyles {
 
 
   // GREY
+  TextStyle grey_25_w800 = TextStyle(
+      fontFamily: MainConfigApp.fontFamily1,
+      fontStyle: FontStyle.normal,
+      fontSize: 25.sp,
+      fontWeight: FontWeight.w800,
+      color: ColorStyles.greyColor);
+
   TextStyle grey_18_w800 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,

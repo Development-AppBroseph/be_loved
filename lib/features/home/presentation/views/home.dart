@@ -4,7 +4,7 @@ import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
-import 'package:be_loved/features/home/presentation/views/archive/archive.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/archive.dart';
 import 'package:be_loved/features/home/presentation/views/bottom_navigation.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/main_event_page.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/events_page.dart';

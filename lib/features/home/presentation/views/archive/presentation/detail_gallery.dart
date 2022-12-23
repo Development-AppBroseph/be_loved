@@ -4,9 +4,8 @@ import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
-import 'package:be_loved/features/home/presentation/views/archive/helpers/gallery_helper.dart';
-import 'package:be_loved/features/home/presentation/views/archive/widgets/archive_wrapper.dart';
-import 'package:be_loved/features/home/presentation/views/archive/widgets/gallery_settings_modal.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/archive_wrapper.dart';
 import 'package:be_loved/features/home/presentation/views/bottom_navigation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +37,7 @@ class _DetailGalleryPageState extends State<DetailGalleryPage> {
             }
           },
           child: ArchiveWrapper(
+            currentIndex: 1,
             scrollController: ScrollController(),
             child: SingleChildScrollView(
               child: Column(

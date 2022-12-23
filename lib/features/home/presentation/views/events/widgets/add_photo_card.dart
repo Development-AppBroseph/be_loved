@@ -15,7 +15,8 @@ import '../../../../../../core/utils/images.dart';
 class AddPhotoCard extends StatelessWidget {
   final Function() onTap;
   final Key? keyAdd;
-  const AddPhotoCard({required this.onTap, this.keyAdd});
+  final Color? color;
+  const AddPhotoCard({this.color, required this.onTap, this.keyAdd});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class AddPhotoCard extends StatelessWidget {
         margin: EdgeInsets.zero,
         elevation: 0,
         radius: BorderRadius.circular(40.r),
+        color: color ?? Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,

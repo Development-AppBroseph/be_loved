@@ -10,13 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../modals/add_file/add_file_modal.dart';
+
 
 
 
 class ArchiveWrapper extends StatelessWidget {
   final Widget child;
   final ScrollController scrollController;
-  ArchiveWrapper({required this.child, required this.scrollController});
+  final Function(int index)? onChangePage;
+  final int currentIndex;
+  ArchiveWrapper({required this.currentIndex, required this.child, required this.scrollController, this.onChangePage});
   final streamControllerPage = StreamController<int>();
 
   List<String> data = [
@@ -28,19 +32,10 @@ class ArchiveWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle style2 = TextStyle(
-        color: ColorStyles.blackColor, fontWeight: FontWeight.w800, fontSize: 18.sp);
-
-    TextStyle style3 = TextStyle(
-        color: ColorStyles.greyColor, fontWeight: FontWeight.w800, fontSize: 18.sp);
         
     return Container(
       color: ColorStyles.backgroundColorGrey,
-      child: StreamBuilder<int>(
-        stream: streamControllerPage.stream,
-        initialData: 1,
-        builder: (context, snapshot) {
-          return SingleChildScrollView(
+      child: SingleChildScrollView(
             controller: scrollController,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +93,10 @@ class ArchiveWrapper extends StatelessWidget {
 
                       _buildAddBtn(
                         context,
-                        (){}
+                        (){
+                          print('add');
+                          showModalAddFile(context, (){});
+                        }
                       )
                     ],
                   )
@@ -114,23 +112,30 @@ class ArchiveWrapper extends StatelessWidget {
                       return Container(
                         margin: EdgeInsets.only(right: 15.w, left: index == 0 ? 25.w : 0),
                         height: 38.h,
-                        child: CupertinoCard(
-                          margin: EdgeInsets.zero,
-                          elevation: 0,
-                          padding: EdgeInsets.symmetric(horizontal: 15.w),
-                          color: index == snapshot.data 
-                          ? ColorStyles.blackColor
-                          : Colors.white,
-                          radius: BorderRadius.circular(20.r),
-                          child: Center(
-                            child: Text(
-                              data[index], 
-                              style: TextStyles(context).white_18_w800.copyWith(
-                                color: index == snapshot.data 
-                                ? Colors.white
-                                : ColorStyles.greyColor
+                        child: GestureDetector(
+                          onTap: (){
+                            if(onChangePage != null){
+                              onChangePage!(index);
+                            }
+                          },
+                          child: CupertinoCard(
+                            margin: EdgeInsets.zero,
+                            elevation: 0,
+                            padding: EdgeInsets.symmetric(horizontal: 15.w),
+                            color: index == currentIndex
+                            ? ColorStyles.blackColor
+                            : Colors.white,
+                            radius: BorderRadius.circular(20.r),
+                            child: Center(
+                              child: Text(
+                                data[index], 
+                                style: TextStyles(context).white_18_w800.copyWith(
+                                  color: index == currentIndex
+                                  ? Colors.white
+                                  : ColorStyles.greyColor
+                                )
                               )
-                            )
+                            ),
                           ),
                         ),
                       );
@@ -142,17 +147,17 @@ class ArchiveWrapper extends StatelessWidget {
                 child
               ],
             ),
-          );
-        }),
+        )
     );
   }
 
 
 
 
-  Widget _buildAddBtn(BuildContext context, Function() onTap){
+  Widget _buildAddBtn(BuildContext context, Function() tap){
     return GestureDetector(
-      onTap: onTap,
+      onTap: tap,
+      behavior: HitTestBehavior.translucent,
       child: SizedBox(
         height: 38.h,
         width: 65.w,

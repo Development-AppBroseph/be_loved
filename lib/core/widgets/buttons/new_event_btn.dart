@@ -10,7 +10,8 @@ import '../../../constants/colors/color_styles.dart';
 class NewEventBtn extends StatelessWidget {
   final Function() onTap;
   final bool isActive;
-  NewEventBtn({required this.onTap, required this.isActive});
+  final String? text;
+  NewEventBtn({this.text, required this.onTap, required this.isActive});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class NewEventBtn extends StatelessWidget {
             ),
             Align(
                 alignment: Alignment.center,
-                child: Text('Новое событие',
+                child: Text(text ?? 'Новое событие',
                     style: TextStyles(context).white_20_w800.copyWith(color: isActive ? null : ColorStyles.greyColor))),
             Align(
               alignment: Alignment.centerRight,
