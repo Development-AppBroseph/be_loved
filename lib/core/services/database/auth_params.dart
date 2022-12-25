@@ -2,6 +2,7 @@
 
 
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/features/home/domain/entities/archive/memory_entity.dart';
 
 enum AuthenticatedOption {
   unauthenticated, 
@@ -23,10 +24,12 @@ class AuthConfig {
   String? token;
   UserAnswer? user;
   AuthenticatedOption? authenticatedOption;
+  MemoryEntity? memoryEntity;
   
   AuthConfig({
     this.token, 
     this.user, 
+    this.memoryEntity,
     this.authenticatedOption = AuthenticatedOption.unauthenticated
   });
 }

@@ -20,6 +20,7 @@ import 'package:be_loved/features/home/domain/usecases/delete_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/edit_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:be_loved/features/home/domain/usecases/get_gallery_files.dart';
+import 'package:be_loved/features/home/domain/usecases/get_memory_info.dart';
 import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
 import 'package:be_loved/features/home/domain/usecases/put_code.dart';
@@ -41,6 +42,7 @@ import 'core/services/database/auth_params.dart';
 import 'core/services/network/config.dart';
 import 'core/services/network/network_info.dart';
 import 'features/home/domain/usecases/edit_event.dart';
+import 'features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'features/profile/data/repositories/profile_repository_impl.dart';
 
 final sl = GetIt.instance;
@@ -201,8 +203,12 @@ void setupInjections() {
   // //UseCases
   sl.registerLazySingleton(() => AddGalleryFile(sl()));
   sl.registerLazySingleton(() => GetGalleryFiles(sl()));
+  sl.registerLazySingleton(() => GetMemoryInfo(sl()));
 
   //Blocs
+  sl.registerFactory<ArchiveBloc>(
+    () => ArchiveBloc(sl()),
+  );
   sl.registerFactory<GalleryBloc>(
     () => GalleryBloc(sl(), sl()),
   );

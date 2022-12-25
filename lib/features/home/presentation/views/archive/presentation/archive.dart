@@ -1,12 +1,15 @@
 import 'dart:ui';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
+import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/albums_page.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/gallery_page.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/moments_page.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/archive_wrapper.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,12 +39,24 @@ class _ArchivePageState extends State<ArchivePage> {
     super.initState();
 
     GalleryBloc bloc = context.read<GalleryBloc>();
+    ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
 
     if(bloc.state is GalleryFilesInitialState){
       bloc.add(GetGalleryFilesEvent(isReset: false));
     }
+    if(archiveBloc.memoryEntity == null || sl<AuthConfig>().memoryEntity == null){
+      archiveBloc.add(GetMemoryInfoEvent());
+    }
 
     scrollController.addListener(() {
+      if(currentPageIndex != 1){
+        if(!hideTopBar){
+          setState(() {
+            hideTopBar = true;
+          });
+        }
+        return;
+      }
       double position = scrollController.position.pixels;
       int newHideGalleryFileID = 0;
       bool newHideFixedDate = false;

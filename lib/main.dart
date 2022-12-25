@@ -2,6 +2,7 @@ import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
+import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
@@ -63,6 +64,9 @@ void main() async {
         ),
         BlocProvider<GalleryBloc>(
           create: (context) => sl<GalleryBloc>(),
+        ),
+        BlocProvider<ArchiveBloc>(
+          create: (context) => sl<ArchiveBloc>(),
         ),
       ],
       child: OverlaySupport.global(

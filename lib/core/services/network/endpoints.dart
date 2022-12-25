@@ -28,7 +28,9 @@ enum Endpoints {
   //Gallery
   getGalleryFiles,
   addGalleryFile, 
-  deleteGalleryFiles
+  deleteGalleryFiles,
+  //Memory
+  getSizeOfMemory
 }
 
 extension EndpointsExtension on Endpoints {
@@ -68,6 +70,8 @@ extension EndpointsExtension on Endpoints {
         return "/archive/";  
       case Endpoints.deleteGalleryFiles:
         return "/archive/del";  
+      case Endpoints.getSizeOfMemory:
+        return "/archive/size"; 
       default:
         return '';
     }
