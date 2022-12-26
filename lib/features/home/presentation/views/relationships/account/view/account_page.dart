@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
@@ -13,6 +15,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/account/
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_state.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/avatar_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/mirror_image.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/modals/send_file/send_file_modal.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -33,7 +36,8 @@ class AccountPage extends StatefulWidget {
   State<AccountPage> createState() => _AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _AccountPageState extends State<AccountPage>
+    with SingleTickerProviderStateMixin {
   int countPage = 0;
 
   FocusNode focusNodePhone = FocusNode();
@@ -54,8 +58,10 @@ class _AccountPageState extends State<AccountPage> {
 
   String phoneNumber = '';
   // String userPhone = '';
-
+  bool phone = false;
   bool resendCode = false;
+  bool onPressed = false;
+  bool sendCode = false;
 
   final _streamController = StreamController<int>();
 
@@ -64,6 +70,7 @@ class _AccountPageState extends State<AccountPage> {
   final _streamControllerName = StreamController<int>();
 
   final _scrollController = ScrollController();
+  final codeScrollController = ScrollController();
 
   TextEditingController phoneController = TextEditingController();
 
@@ -76,6 +83,15 @@ class _AccountPageState extends State<AccountPage> {
 
   PageController controller = PageController();
 
+  late Animation<double> animation;
+  late AnimationController animationController;
+
+  void setRotation() {
+    final angle = 90 * pi / 180;
+    animation =
+        Tween<double>(begin: 0, end: angle).animate(animationController);
+  }
+
   @override
   void dispose() {
     focusNodePhone.dispose();
@@ -83,6 +99,7 @@ class _AccountPageState extends State<AccountPage> {
     _streamController.close();
     _streamControllerCarousel.close();
     _streamControllerName.close();
+    animationController.dispose();
     super.dispose();
   }
 
@@ -92,6 +109,11 @@ class _AccountPageState extends State<AccountPage> {
       setState(() {});
     });
     _streamControllerName.sink.add(nameController.text.length);
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    setRotation();
     super.initState();
   }
 
@@ -102,8 +124,8 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   _sendCode() {
-    if (phoneController.text.length == 13 
-      && sl<AuthConfig>().user!.me.phoneNumber != phoneNumber) {
+    if (phoneController.text.length == 13 &&
+        sl<AuthConfig>().user!.me.phoneNumber != phoneNumber) {
       showLoaderWrapper(context);
       context.read<ProfileBloc>().add(PostPhoneNumberEvent(phone: phoneNumber));
     }
@@ -308,367 +330,582 @@ class _AccountPageState extends State<AccountPage> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20.r),
                                   ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      SvgPicture.asset(SvgImg.vkLogo),
-                                      Text(
-                                        'Привязать страницу VK',
-                                        style: TextStyle(
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.w800,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        right: 26.w, left: 19.w),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        SvgPicture.asset(SvgImg.vkLogo),
+                                        const Spacer(),
+                                        Text(
+                                          'Привязать страницу VK',
+                                          style: TextStyle(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w800,
+                                          ),
                                         ),
-                                      ),
-                                      const Icon(
-                                        Icons.add,
-                                        color: Color(0xff0077FF),
-                                      ),
-                                    ],
+                                        const Spacer(),
+                                        const Icon(
+                                          Icons.add,
+                                          color: Color(0xff0077FF),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                            AnimatedContainer(
-                              height: countPage == 0 ? 310.h : 400.h,
-                              width: 430.w,
-                              duration: const Duration(milliseconds: 600),
-                              curve: Curves.easeInOutQuint,
+                            Padding(
                               padding: EdgeInsets.only(top: 15.h),
-                              child: CupertinoCard(
-                                margin: EdgeInsets.all(0.h),
-                                elevation: 0,
-                                padding: EdgeInsets.symmetric(horizontal: 25.w),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.r),
-                                ),
-                                child: SingleChildScrollView(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  controller: controller,
-                                  scrollDirection: Axis.vertical,
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 15.h),
-                                        child: SizedBox(
-                                          height: 309.h,
-                                          width: 428.w,
-                                          child: Padding(
-                                            padding: EdgeInsets.only(top: 5.h),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'Сменить номер телефона',
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    if (!onPressed) {
+                                      onPressed = true;
+                                      phone = true;
+                                      animationController.forward(from: 0);
+                                    } else {
+                                      onPressed = false;
+                                      phone = false;
+                                      sendCode = false;
+                                      animationController.animateBack(0);
+                                    }
+                                  });
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 600),
+                                  curve: Curves.easeInOutQuint,
+                                  height: onPressed && phone
+                                      ? 290.h
+                                      : sendCode
+                                          ? 375.h
+                                          : 65.h,
+                                  width: 428.w,
+                                  child: CupertinoCard(
+                                    margin: EdgeInsets.all(0.h),
+                                    elevation: 0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20.r),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 21.h,
+                                              right: 26.w,
+                                              left: 19.w),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SvgPicture.asset(
+                                                SvgImg.settings,
+                                                color: const Color(0xff2C2C2E),
+                                              ),
+                                              const Spacer(),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    right: 41.w, left: 20.w),
+                                                child: Text(
+                                                  sendCode
+                                                      ? 'Введи последние 4 цифры\nзвонка'
+                                                      : 'Сменить номер телефона',
                                                   style: TextStyle(
                                                     fontSize: 20.sp,
                                                     fontWeight: FontWeight.w800,
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 47.h, bottom: 5.h),
-                                                  child: Container(
-                                                    height: 70.h,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .horizontal(
-                                                        left:
-                                                            Radius.circular(10),
-                                                        right:
-                                                            Radius.circular(10),
-                                                      ),
-                                                      border: Border.all(
-                                                        width: 1,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        ClipRRect(
+                                              ),
+                                              const Spacer(),
+                                              AnimatedBuilder(
+                                                animation: animation,
+                                                child: SvgPicture.asset(
+                                                  SvgImg.goto,
+                                                  height: 20.41.h,
+                                                  width: 11.37.h,
+                                                ),
+                                                builder: (context, child) =>
+                                                    Transform.rotate(
+                                                  angle: animation.value,
+                                                  child: child,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            color: Colors.white,
+                                            child: ListView(
+                                              controller: codeScrollController,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 25.w),
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 47.h,
+                                                          bottom: 5.h),
+                                                      child: Container(
+                                                        height: 70.h,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white,
                                                           borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          child: Image.asset(
-                                                              'assets/images/code.png'),
-                                                        ),
-                                                        SizedBox(width: 12.w),
-                                                        Text(
-                                                          '+7',
-                                                          style:
-                                                              GoogleFonts.inter(
-                                                            fontSize: 25.sp,
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                              const BorderRadius
+                                                                  .horizontal(
+                                                            left:
+                                                                Radius.circular(
+                                                                    10),
+                                                            right:
+                                                                Radius.circular(
+                                                                    10),
+                                                          ),
+                                                          border: Border.all(
+                                                            width: 1,
+                                                            color: Colors.grey,
                                                           ),
                                                         ),
-                                                        SizedBox(width: 12.w),
-                                                        Container(
-                                                          height: 37.h,
-                                                          width: 1.w,
-                                                          color: const Color
-                                                                  .fromRGBO(224,
-                                                              224, 224, 1.0),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 12.w,
-                                                        ),
-                                                        Container(
-                                                          width: 0.6.sw,
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: TextField(
-                                                            onTap: () {
-                                                              Future.delayed(
-                                                                const Duration(
-                                                                    milliseconds:
-                                                                        570),
-                                                                () {
-                                                                  _scrollController
-                                                                      .animateTo(
-                                                                    _scrollController
-                                                                        .position
-                                                                        .maxScrollExtent,
-                                                                    duration:
-                                                                        const Duration(
-                                                                      milliseconds:
-                                                                          400,
-                                                                    ),
-                                                                    curve: Curves
-                                                                        .easeInOutQuint,
-                                                                  );
-                                                                },
-                                                              );
-                                                            },
-                                                            controller:
-                                                                phoneController,
-                                                            style: GoogleFonts
-                                                                .inter(
-                                                              fontSize: 25.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
+                                                        child: Row(
+                                                          children: [
+                                                            ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              child: Image.asset(
+                                                                  'assets/images/code.png'),
                                                             ),
-                                                            onChanged: (value) {
-                                                              phoneNumber =
-                                                                  '+7${value.replaceAll(RegExp(' '), '')}';
-                                                              if (value.length >
-                                                                      12 &&
-                                                                  value.substring(
-                                                                          0,
-                                                                          1) ==
-                                                                      '9') {
-                                                                // BlocProvider.of<AuthBloc>(context)
-                                                                //     .add(TextFieldFilled(true));
-                                                                // focusNode.unfocus();
-                                                              } else {
-                                                                // BlocProvider.of<AuthBloc>(context)
-                                                                //     .add(TextFieldFilled(false));
-                                                              }
-                                                              _streamController.sink.add(1);
-                                                            },
-                                                            focusNode:
-                                                                focusNodePhone,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              alignLabelWithHint:
-                                                                  true,
-                                                              border:
-                                                                  InputBorder
-                                                                      .none,
-                                                              hintText:
-                                                                  '900 000 00 00',
-                                                              hintStyle:
-                                                                  GoogleFonts
-                                                                      .inter(
+                                                            SizedBox(
+                                                                width: 12.w),
+                                                            Text(
+                                                              '+7',
+                                                              style: GoogleFonts
+                                                                  .inter(
                                                                 fontSize: 25.sp,
-                                                                color: const Color
-                                                                        .fromRGBO(
-                                                                    150,
-                                                                    150,
-                                                                    150,
-                                                                    1),
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w700,
+                                                                        .bold,
                                                               ),
-                                                              floatingLabelBehavior:
-                                                                  FloatingLabelBehavior
-                                                                      .never,
                                                             ),
-                                                            inputFormatters: [
-                                                              FilteringTextInputFormatter
-                                                                  .digitsOnly,
-                                                              CustomInputFormatter(),
-                                                            ],
-                                                            keyboardType:
-                                                                TextInputType
-                                                                    .number,
-                                                          ),
+                                                            SizedBox(
+                                                                width: 12.w),
+                                                            Container(
+                                                              height: 37.h,
+                                                              width: 1.w,
+                                                              color: const Color
+                                                                      .fromRGBO(
+                                                                  224,
+                                                                  224,
+                                                                  224,
+                                                                  1.0),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 12.w,
+                                                            ),
+                                                            Container(
+                                                              width: 0.6.sw,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: TextField(
+                                                                onTap: () {
+                                                                  Future
+                                                                      .delayed(
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            570),
+                                                                    () {
+                                                                      _scrollController
+                                                                          .animateTo(
+                                                                        _scrollController
+                                                                            .position
+                                                                            .maxScrollExtent,
+                                                                        duration:
+                                                                            const Duration(
+                                                                          milliseconds:
+                                                                              400,
+                                                                        ),
+                                                                        curve: Curves
+                                                                            .easeInOutQuint,
+                                                                      );
+                                                                    },
+                                                                  );
+                                                                },
+                                                                controller:
+                                                                    phoneController,
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontSize:
+                                                                      25.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                ),
+                                                                onChanged:
+                                                                    (value) {
+                                                                  phoneNumber =
+                                                                      '+7${value.replaceAll(RegExp(' '), '')}';
+                                                                  if (value.length >
+                                                                          12 &&
+                                                                      value.substring(
+                                                                              0,
+                                                                              1) ==
+                                                                          '9') {
+                                                                    // BlocProvider.of<AuthBloc>(context)
+                                                                    //     .add(TextFieldFilled(true));
+                                                                    // focusNode.unfocus();
+                                                                  } else {
+                                                                    // BlocProvider.of<AuthBloc>(context)
+                                                                    //     .add(TextFieldFilled(false));
+                                                                  }
+                                                                  _streamController
+                                                                      .sink
+                                                                      .add(1);
+                                                                },
+                                                                focusNode:
+                                                                    focusNodePhone,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  alignLabelWithHint:
+                                                                      true,
+                                                                  border:
+                                                                      InputBorder
+                                                                          .none,
+                                                                  hintText:
+                                                                      '900 000 00 00',
+                                                                  hintStyle:
+                                                                      GoogleFonts
+                                                                          .inter(
+                                                                    fontSize:
+                                                                        25.sp,
+                                                                    color: const Color
+                                                                            .fromRGBO(
+                                                                        150,
+                                                                        150,
+                                                                        150,
+                                                                        1),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                  ),
+                                                                  floatingLabelBehavior:
+                                                                      FloatingLabelBehavior
+                                                                          .never,
+                                                                ),
+                                                                inputFormatters: [
+                                                                  FilteringTextInputFormatter
+                                                                      .digitsOnly,
+                                                                  CustomInputFormatter(),
+                                                                ],
+                                                                keyboardType:
+                                                                    TextInputType
+                                                                        .number,
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 35.h,
+                                                          bottom: 27.h),
+                                                      child: CustomButton(
+                                                          validate: phoneController
+                                                                      .text
+                                                                      .length ==
+                                                                  13 &&
+                                                              sl<AuthConfig>()
+                                                                      .user!
+                                                                      .me
+                                                                      .phoneNumber !=
+                                                                  phoneNumber,
+                                                          color: const Color
+                                                                  .fromRGBO(32,
+                                                              203, 131, 1.0),
+                                                          text: 'Продолжить',
+                                                          // validate: state is TextFieldSuccess ? true : false,
+                                                          textColor:
+                                                              Colors.white,
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              sendCode = true;
+                                                              phone = false;
+                                                              codeScrollController
+                                                                  .animateTo(
+                                                                codeScrollController
+                                                                    .position
+                                                                    .maxScrollExtent,
+                                                                duration:
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            600),
+                                                                curve: Curves
+                                                                    .easeInOutQuint,
+                                                              );
+                                                            });
+                                                          }),
+                                                    ),
+                                                  ],
                                                 ),
                                                 Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 35.h),
-                                                    child: CustomButton(
-                                                        validate: phoneController.text.length == 13 
-                                                          && sl<AuthConfig>().user!.me.phoneNumber != phoneNumber,
-                                                        color: const Color
-                                                                .fromRGBO(
-                                                            32, 203, 131, 1.0),
-                                                        text: 'Продолжить',
-                                                        // validate: state is TextFieldSuccess ? true : false,
+                                                  padding: EdgeInsets.only(
+                                                      top: 15.h),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      // AnimatedContainer(
+                                                      //     curve: Curves.easeInOutQuint,
+                                                      //     duration:
+                                                      //         const Duration(milliseconds: 200),
+                                                      //     height: 17.h),
+                                                      SizedBox(
+                                                        height: 44.h,
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    9.75.w),
+                                                        height: 80.sp,
+                                                        child: Pinput(
+                                                          onTap: () {
+                                                            Future.delayed(
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        600),
+                                                                () {
+                                                              _scrollController
+                                                                  .animateTo(
+                                                                _scrollController
+                                                                    .position
+                                                                    .maxScrollExtent,
+                                                                duration:
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            500),
+                                                                curve:
+                                                                    Curves.ease,
+                                                              );
+                                                            });
+                                                          },
+                                                          pinAnimationType:
+                                                              PinAnimationType
+                                                                  .none,
+                                                          showCursor: false,
+                                                          length: 4,
+                                                          androidSmsAutofillMethod:
+                                                              AndroidSmsAutofillMethod
+                                                                  .smsRetrieverApi,
+                                                          controller:
+                                                              codeController,
+                                                          focusNode:
+                                                              focusNodeCode,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          onChanged: (value) {
+                                                            if (value.length ==
+                                                                    5 &&
+                                                                value ==
+                                                                    code.toString()) {
+                                                              // BlocProvider.of<AuthBloc>(context)
+                                                              //     .add(TextFieldFilled(true));
+                                                              focusNodeCode
+                                                                  .unfocus();
+                                                            } else {
+                                                              // BlocProvider.of<AuthBloc>(context)
+                                                              //     .add(TextFieldFilled(false));
+                                                            }
+                                                          },
+                                                          defaultPinTheme:
+                                                              PinTheme(
+                                                            width: 60.sp,
+                                                            height: 80.sp,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    )),
+                                                            textStyle:
+                                                                GoogleFonts
+                                                                    .inter(
+                                                              fontSize: 35.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: const Color
+                                                                      .fromRGBO(
+                                                                  23,
+                                                                  23,
+                                                                  23,
+                                                                  1.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 51.h,
+                                                      ),
+                                                      CustomButton(
+                                                          validate: true,
+                                                          color: const Color
+                                                                  .fromRGBO(32,
+                                                              203, 131, 1.0),
+                                                          text: 'Готово',
+                                                          textColor:
+                                                              Colors.white,
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              sendCode = false;
+                                                              phone = true;
+                                                              codeScrollController
+                                                                  .animateTo(
+                                                                0,
+                                                                duration:
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            600),
+                                                                curve: Curves
+                                                                    .easeInOutQuint,
+                                                              );
+                                                            });
+                                                          }),
+                                                      // CustomAnimationButton(
+                                                      //   text: 'Продолжить',
+                                                      //   border: Border.all(
+                                                      //       color:
+                                                      //       width: 2.sp),
+                                                      //   onPressed: () => _checkCode(context),
+                                                      // ),
+                                                      SizedBox(
+                                                        height: 17.h,
+                                                      ),
+                                                      CustomButton(
+                                                        // black: true,
+                                                        validate: true,
+                                                        code: true,
+                                                        text:
+                                                            'Отправить код снова',
+                                                        border: Border.all(
+                                                            color: const Color
+                                                                    .fromRGBO(
+                                                                23,
+                                                                23,
+                                                                23,
+                                                                1.0),
+                                                            width: 2.sp),
+                                                        onPressed: () {
+                                                          if (textEditingControllerUp
+                                                                  .text
+                                                                  .length ==
+                                                              5) {
+                                                            // BlocProvider.of<AuthBloc>(context).add(
+                                                            //   TextFieldFilled(true),
+                                                            // );
+                                                          }
+                                                          resendCode = false;
+                                                          // if (_timer?.isActive == false) {
+                                                          //   startTimer();
+                                                          // }
+                                                        },
+                                                        color: Colors.black,
                                                         textColor: Colors.white,
-                                                        onPressed: _sendCode)),
+                                                      ),
+                                                      SizedBox(height: 30.h),
+                                                    ],
+                                                  ),
+                                                )
                                               ],
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 0.w),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            // AnimatedContainer(
-                                            //     curve: Curves.easeInOutQuint,
-                                            //     duration:
-                                            //         const Duration(milliseconds: 200),
-                                            //     height: 17.h),
-                                            Text(
-                                              'Введи код подтверждения',
-                                              style: GoogleFonts.inter(
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.w800,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 44.h,
-                                            ),
-                                            SizedBox(
-                                              height: 70.sp,
-                                              child: Pinput(
-                                                onTap: () {
-                                                  Future.delayed(
-                                                      const Duration(
-                                                          milliseconds: 600),
-                                                      () {
-                                                    _scrollController.animateTo(
-                                                      _scrollController.position
-                                                          .maxScrollExtent,
-                                                      duration: const Duration(
-                                                          milliseconds: 500),
-                                                      curve: Curves.ease,
-                                                    );
-                                                  });
-                                                },
-                                                pinAnimationType:
-                                                    PinAnimationType.none,
-                                                showCursor: false,
-                                                length: 5,
-                                                androidSmsAutofillMethod:
-                                                    AndroidSmsAutofillMethod
-                                                        .smsRetrieverApi,
-                                                controller: codeController,
-                                                focusNode: focusNodeCode,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                onChanged: (value) {
-                                                  if (value.length == 5 &&
-                                                      value ==
-                                                          code.toString()) {
-                                                    // BlocProvider.of<AuthBloc>(context)
-                                                    //     .add(TextFieldFilled(true));
-                                                    focusNodeCode.unfocus();
-                                                  } else {
-                                                    // BlocProvider.of<AuthBloc>(context)
-                                                    //     .add(TextFieldFilled(false));
-                                                  }
-                                                },
-                                                defaultPinTheme: PinTheme(
-                                                  width: 60.sp,
-                                                  height: 80.sp,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      border: Border.all(
-                                                        color: Colors.grey,
-                                                      )),
-                                                  textStyle: GoogleFonts.inter(
-                                                    fontSize: 35.sp,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: const Color.fromRGBO(
-                                                        23, 23, 23, 1.0),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 51.h,
-                                            ),
-                                            CustomButton(
-                                                validate: true,
-                                                color: const Color.fromRGBO(
-                                                    32, 203, 131, 1.0),
-                                                text: 'Готово',
-                                                textColor: Colors.white,
-                                                onPressed: _confirmCode),
-                                            // CustomAnimationButton(
-                                            //   text: 'Продолжить',
-                                            //   border: Border.all(
-                                            //       color:
-                                            //       width: 2.sp),
-                                            //   onPressed: () => _checkCode(context),
-                                            // ),
-                                            SizedBox(
-                                              height: 17.h,
-                                            ),
-                                            CustomButton(
-                                              // black: true,
-                                              validate: true,
-                                              code: true,
-                                              text: 'Отправить код снова',
-                                              border: Border.all(
-                                                  color: const Color.fromRGBO(
-                                                      23, 23, 23, 1.0),
-                                                  width: 2.sp),
-                                              onPressed: () {
-                                                if (textEditingControllerUp
-                                                        .text.length ==
-                                                    5) {
-                                                  // BlocProvider.of<AuthBloc>(context).add(
-                                                  //   TextFieldFilled(true),
-                                                  // );
-                                                }
-                                                resendCode = false;
-                                                // if (_timer?.isActive == false) {
-                                                //   startTimer();
-                                                // }
-                                              },
-                                              color: Colors.black,
-                                              textColor: Colors.white,
-                                            ),
-                                            SizedBox(height: 47.h),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 15.h),
+                              child: GestureDetector(
+                                onTap: () {
+                                  showModalSendFile(context);
+                                },
+                                child: SizedBox(
+                                  height: 65.h,
+                                  width: 428.w,
+                                  child: CupertinoCard(
+                                    margin: EdgeInsets.all(0.h),
+                                    elevation: 0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20.r),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          right: 26.w, left: 19.w),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          SvgPicture.asset(SvgImg.gallery),
+                                          const Spacer(),
+                                          Text(
+                                            'Выгрузить данные',
+                                            style: TextStyle(
+                                              fontSize: 20.sp,
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          SvgPicture.asset(
+                                            SvgImg.goto,
+                                            width: 13.w,
+                                            height: 24.h,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 73.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 25.w),
+                              child: CustomAnimationButton(
+                                text: 'Зажми, чтобы принять',
+                                onPressed: () async {},
+                                red: true,
+                              ),
+                            ),
+                             SizedBox(
+                              height: 30.h,
                             ),
                           ],
                         ),

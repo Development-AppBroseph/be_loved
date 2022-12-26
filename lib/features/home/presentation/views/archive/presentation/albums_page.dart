@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'widgets/new_album_modal.dart/new_album_modal.dart';
+
 class AlbumsPage extends StatefulWidget {
   @override
   State<AlbumsPage> createState() => _AlbumsPageState();
@@ -81,9 +83,11 @@ class _AlbumsPageState extends State<AlbumsPage> {
               SizedBox(height: 15.h,),
 
               NewEventBtn(
-                onTap: (){}, 
+                onTap: (){
+                  showModalNewAlbum(context);
+                }, 
                 text: 'Новый альбом',
-                isActive: false
+                isActive: true
               )
 
             ]

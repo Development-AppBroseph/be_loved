@@ -77,4 +77,5 @@ abstract class SvgImg {
     "assets/icons/black.svg",
     "assets/icons/perpul.svg",
   ];
+  static const String goto = 'assets/icons/goto.svg';
 }
