@@ -26,7 +26,6 @@ class _MomentsPageState extends State<MomentsPage> {
 
   @override
   Widget build(BuildContext context) {
-    GalleryBloc galleryBloc = context.read<GalleryBloc>();
     EventsBloc eventsBloc = context.read<EventsBloc>();
 
     return BlocConsumer<GalleryBloc, GalleryState>(

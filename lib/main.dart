@@ -6,6 +6,7 @@ import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.da
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
@@ -67,6 +68,9 @@ void main() async {
         ),
         BlocProvider<ArchiveBloc>(
           create: (context) => sl<ArchiveBloc>(),
+        ),
+        BlocProvider<PurposeBloc>(
+          create: (context) => sl<PurposeBloc>(),
         ),
       ],
       child: OverlaySupport.global(
