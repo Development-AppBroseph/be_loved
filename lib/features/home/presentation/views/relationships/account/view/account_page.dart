@@ -336,11 +336,12 @@ class _AccountPageState extends State<AccountPage>
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      // mainAxisAlignment:
-                                      //     MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        SvgPicture.asset(SvgImg.vkLogo),
-                                        const Spacer(),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 20.w),
+                                          child:
+                                              SvgPicture.asset(SvgImg.vkLogo),
+                                        ),
                                         Text(
                                           'Привязать страницу VK',
                                           style: TextStyle(
@@ -349,9 +350,11 @@ class _AccountPageState extends State<AccountPage>
                                           ),
                                         ),
                                         const Spacer(),
-                                        const Icon(
-                                          Icons.add,
-                                          color: Color(0xff0077FF),
+                                        SvgPicture.asset(
+                                          SvgImg.addNewEvent,
+                                          width: 22.w,
+                                          height: 22.h,
+                                          color: const Color(0xff0077FF),
                                         ),
                                       ],
                                     ),
@@ -395,29 +398,32 @@ class _AccountPageState extends State<AccountPage>
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(
-                                              top: 21.h,
-                                              right: 26.w,
-                                              left: 19.w),
+                                            top: 21.h,
+                                            right: 26.w,
+                                            left: 19.w,
+                                          ),
                                           child: Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              SvgPicture.asset(
-                                                SvgImg.settings,
-                                                color: const Color(0xff2C2C2E),
-                                              ),
-                                              const Spacer(),
                                               Padding(
                                                 padding: EdgeInsets.only(
-                                                    right: 41.w, left: 20.w),
-                                                child: Text(
-                                                  sendCode
-                                                      ? 'Введи последние 4 цифры\nзвонка'
-                                                      : 'Сменить номер телефона',
-                                                  style: TextStyle(
-                                                    fontSize: 20.sp,
-                                                    fontWeight: FontWeight.w800,
-                                                  ),
+                                                    right: 20.w),
+                                                child: SvgPicture.asset(
+                                                  SvgImg.settings,
+                                                  height: 23.33.h,
+                                                  width: 23.33.h,
+                                                  color:
+                                                      const Color(0xff2C2C2E),
+                                                ),
+                                              ),
+                                              Text(
+                                                sendCode
+                                                    ? 'Введи последние 4 цифры\nзвонка'
+                                                    : 'Сменить номер телефона',
+                                                style: TextStyle(
+                                                  fontSize: 20.sp,
+                                                  fontWeight: FontWeight.w800,
                                                 ),
                                               ),
                                               const Spacer(),
@@ -425,8 +431,8 @@ class _AccountPageState extends State<AccountPage>
                                                 animation: animation,
                                                 child: SvgPicture.asset(
                                                   SvgImg.goto,
-                                                  height: 20.41.h,
-                                                  width: 11.37.h,
+                                                  height: 24.h,
+                                                  width: 13.37.h,
                                                 ),
                                                 builder: (context, child) =>
                                                     Transform.rotate(
@@ -868,11 +874,16 @@ class _AccountPageState extends State<AccountPage>
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          SvgPicture.asset(SvgImg.gallery),
-                                          const Spacer(),
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 20.w),
+                                            child: SvgPicture.asset(
+                                              SvgImg.galleryWithLine,
+                                              height: 24.h,
+                                              width: 22.w,
+                                            ),
+                                          ),
                                           Text(
                                             'Выгрузить данные',
                                             style: TextStyle(
@@ -904,7 +915,7 @@ class _AccountPageState extends State<AccountPage>
                                 red: true,
                               ),
                             ),
-                             SizedBox(
+                            SizedBox(
                               height: 30.h,
                             ),
                           ],
