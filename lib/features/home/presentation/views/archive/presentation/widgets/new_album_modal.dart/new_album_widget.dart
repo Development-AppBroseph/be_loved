@@ -144,13 +144,15 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                SvgPicture.asset(
-                                  SvgImg.camera,
-                                  height: 23.h,
-                                  width: 26.w,
-                                  color: Colors.black,
+                                Padding(
+                                  padding: EdgeInsets.only(right: 20.w),
+                                  child: SvgPicture.asset(
+                                    SvgImg.camera,
+                                    height: 23.h,
+                                    width: 26.w,
+                                    color: Colors.black,
+                                  ),
                                 ),
-                                const Spacer(),
                                 Text(
                                   'Добавить файлы',
                                   style: TextStyle(

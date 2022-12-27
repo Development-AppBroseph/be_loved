@@ -78,4 +78,5 @@ abstract class SvgImg {
     "assets/icons/perpul.svg",
   ];
   static const String goto = 'assets/icons/goto.svg';
+  static const String galleryWithLine = 'assets/icons/GallaryWithLine.svg';
 }
