@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/home/data/models/purposes/full_purpose_model.dart';
 import 'package:be_loved/features/home/data/models/purposes/purpose_model.dart';
@@ -14,6 +16,7 @@ abstract class PurposeRemoteDataSource {
   Future<List<PurposeEntity>> getAvailablePurposes(double lat, double long);
   Future<List<FullPurposeEntity>> getInProcessPurposes();
   Future<void> completePurpose(int target);
+  Future<void> sendPhotoPurpose(String path, int target);
 
 }
 
@@ -103,6 +106,31 @@ class PurposeRemoteDataSourceImpl
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.post(Endpoints.sendPurpose.getPath(),
         data: FormData.fromMap({'target': target}),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 599,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 201) {
+      return;
+    } else if(response.statusCode == 401){
+      throw ServerException(message: 'token_error');
+    }else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
+
+
+  //Send photo purpose
+  @override
+  Future<void> sendPhotoPurpose(String path, int target) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.patch(Endpoints.sendPhotoPurpose.getPath(params: [target]),
+        data: FormData.fromMap({'photo': MultipartFile.fromFile(path)}),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 599,

@@ -11,3 +11,9 @@ class CompletePurposeEvent extends PurposeEvent{
   final int target;
   CompletePurposeEvent({required this.target});
 }
+
+class SendPhotoPurposeEvent extends PurposeEvent{
+  final String path;
+  final int target;
+  SendPhotoPurposeEvent({required this.path, required this.target});
+}

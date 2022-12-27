@@ -15,10 +15,9 @@ import 'package:image_picker/image_picker.dart';
 
 class PurposeCard extends StatelessWidget {
   final PurposeEntity purposeEntity;
-  final bool inProcess;
   final Function()? onCompleteTap;
   final Function(File file)? onPickFile;
-  PurposeCard({required this.purposeEntity, this.inProcess = false, this.onCompleteTap, this.onPickFile});
+  PurposeCard({required this.purposeEntity, this.onCompleteTap, this.onPickFile});
 
 
   pickImage(ImageSource source) async{
@@ -107,7 +106,7 @@ class PurposeCard extends StatelessWidget {
                     ),
                     SizedBox(width: 4.w,),
 
-                    !inProcess
+                    !purposeEntity.inProcess
                     ? GestureDetector(
                       onTap: (){
                         if(onCompleteTap != null){
@@ -134,14 +133,14 @@ class PurposeCard extends StatelessWidget {
                         _buildSvgBtn(
                           svg: SvgImg.gallery,
                           onTap: (){
-
+                            pickImage(ImageSource.gallery);
                           }
                         ),
                         SizedBox(width: 24.w,),
                         _buildSvgBtn(
                           svg: SvgImg.camera,
                           onTap: (){
-                            
+                            pickImage(ImageSource.camera);
                           }
                         ),
                         SizedBox(width: 12.w,)

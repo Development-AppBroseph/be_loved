@@ -36,7 +36,8 @@ enum Endpoints {
   getSeasonPurpose,
   getAvailablePurposes,
   getInProcessPurposes,
-  sendPurpose
+  sendPurpose,
+  sendPhotoPurpose,
 }
 
 extension EndpointsExtension on Endpoints {
@@ -86,6 +87,8 @@ extension EndpointsExtension on Endpoints {
         return "/targets/main"; 
       case Endpoints.getInProcessPurposes:
         return "/targets/main"; 
+      case Endpoints.sendPhotoPurpose:
+        return "/targets/main/${params![0]}"; 
       default:
         return '';
     }

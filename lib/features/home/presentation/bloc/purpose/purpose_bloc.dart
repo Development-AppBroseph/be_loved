@@ -6,6 +6,7 @@ import 'package:be_loved/features/home/domain/usecases/complete_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_available_purposes.dart';
 import 'package:be_loved/features/home/domain/usecases/get_in_process_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_season_purpose.dart';
+import 'package:be_loved/features/home/domain/usecases/send_photo_purpose.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 part 'purpose_event.dart';
@@ -16,10 +17,12 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
   final GetAvailablePurposes getAvailablePurposes;
   final GetInProcessPurpose getInProcessPurpose;
   final CompletePurpose completePurpose;
+  final SendPhotoPurpose sendPhotoPurpose;
 
-  PurposeBloc(this.getSeasonPurpose, this.getAvailablePurposes, this.getInProcessPurpose, this.completePurpose) : super(PurposeInitialState()) {
+  PurposeBloc(this.getSeasonPurpose, this.getAvailablePurposes, this.getInProcessPurpose, this.completePurpose, this.sendPhotoPurpose) : super(PurposeInitialState()) {
     on<GetAllPurposeDataEvent>(_getAllPurposeData);
     on<CompletePurposeEvent>(_completePurpose);
+    on<SendPhotoPurposeEvent>(_sendPhotoPurpose);
   }
 
   List<PurposeEntity> allPurposes = [];
@@ -82,8 +85,26 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     print('COMPLETE PURPOSE DATA');
     emit(PurposeLoadingState());
 
-    //Getting season purpsose(target)
+    //Complete and to in process
     final gotPurpose = await completePurpose.call(CompletePurposeParams(target: event.target));
+    PurposeState state = gotPurpose.fold(
+      (error) => errorCheck(error),
+      (data) => CompletedPurposeState()
+    );
+    emit(state);
+  }
+
+
+
+
+
+
+  void _sendPhotoPurpose(SendPhotoPurposeEvent event, Emitter<PurposeState> emit) async {
+    print('COMPLETE PURPOSE DATA');
+    emit(PurposeLoadingState());
+
+    //Send photo of purpose and complete)
+    final gotPurpose = await sendPhotoPurpose.call(SendPhotoPurposeParams(path: event.path, target: event.target));
     PurposeState state = gotPurpose.fold(
       (error) => errorCheck(error),
       (data) => CompletedPurposeState()
@@ -113,6 +134,7 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
   List<PurposeEntity> getPurposeListFromFullData(List<FullPurposeEntity> list){
     List<PurposeEntity> result = [];
     for(var item in list){
+      item.purpose.inProcess = true;
       result.add(item.purpose);
     }
     return result; 

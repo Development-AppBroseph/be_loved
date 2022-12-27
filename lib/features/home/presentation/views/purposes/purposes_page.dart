@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
@@ -35,6 +36,12 @@ class _PurposesPageState extends State<PurposesPage> {
   void completePurpose(int id){
     showLoaderWrapper(context);
     context.read<PurposeBloc>().add(CompletePurposeEvent(target: id));
+  }
+
+
+  void sendPhotoPurpose(int id, File file){
+    showLoaderWrapper(context);
+    context.read<PurposeBloc>().add(SendPhotoPurposeEvent(path: file.path, target: id));
   }
 
   @override
@@ -98,6 +105,9 @@ class _PurposesPageState extends State<PurposesPage> {
                         bloc.seasonPurpose == null
                         ? const SizedBox.shrink()
                         : PurposeCard(
+                          onCompleteTap: (){
+                            completePurpose(bloc.seasonPurpose!.id);
+                          },
                           purposeEntity: bloc.seasonPurpose!,
                         )
                       ],
@@ -155,7 +165,9 @@ class _PurposesPageState extends State<PurposesPage> {
                   margin: EdgeInsets.only(bottom: 15.h),
                   child: PurposeCard(
                     purposeEntity: e,
-                    inProcess: selectedType == 2,
+                    onPickFile: (f){
+                      sendPhotoPurpose(e.id, f);
+                    },
                     onCompleteTap: (){
                       completePurpose(e.id);
                     },

@@ -97,5 +97,28 @@ class PurposeRepositoryImpl implements PurposeRepository {
     }
   }
 
+
+
+
+
+
+  @override
+  Future<Either<Failure, void>> sendPhotoPurpose(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.sendPhotoPurpose(params.path, params.target);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
 }
 

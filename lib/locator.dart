@@ -31,6 +31,7 @@ import 'package:be_loved/features/home/domain/usecases/get_season_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
 import 'package:be_loved/features/home/domain/usecases/put_code.dart';
+import 'package:be_loved/features/home/domain/usecases/send_photo_purpose.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
@@ -248,9 +249,10 @@ void setupInjections() {
   sl.registerLazySingleton(() => GetSeasonPurpose(sl()));
   sl.registerLazySingleton(() => GetInProcessPurpose(sl()));
   sl.registerLazySingleton(() => CompletePurpose(sl()));
+  sl.registerLazySingleton(() => SendPhotoPurpose(sl()));
 
   //Blocs
   sl.registerFactory<PurposeBloc>(
-    () => PurposeBloc(sl(), sl(), sl(), sl()),
+    () => PurposeBloc(sl(), sl(), sl(), sl(), sl()),
   );
 }
