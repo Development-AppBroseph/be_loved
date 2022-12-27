@@ -24,6 +24,12 @@ class TextStyles {
 
 
   // black
+  TextStyle black_50_w800 = TextStyle(
+      fontFamily: MainConfigApp.fontFamily1,
+      fontStyle: FontStyle.normal,
+      fontSize: 50.sp,
+      fontWeight: FontWeight.w800,
+      color: ColorStyles.blackColor);
   TextStyle black_30_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
