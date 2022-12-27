@@ -174,7 +174,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
                       ),
                     ),
                     SizedBox(
-                      height: 77.h,
+                      height: 30.h,
                     ),
                     CustomButton(
                       color: ColorStyles.primarySwath,
