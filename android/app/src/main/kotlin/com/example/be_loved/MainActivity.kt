@@ -1,4 +1,4 @@
-package com.example.be_loved
+package dev.broseph.beloved
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-void iconSelectModal(BuildContext context, Offset offset,
-        Function(int index) onTap, int iconIndex,) =>
+void iconSelectModal(
+  BuildContext context,
+  Offset offset,
+  Function(int index) onTap,
+  int iconIndex,
+) =>
     showDialog(
       useSafeArea: false,
       barrierColor: Colors.transparent,
@@ -21,7 +25,7 @@ void iconSelectModal(BuildContext context, Offset offset,
           contentPadding: EdgeInsets.zero,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          iconColor: Colors.transparent,
+          // iconColor: Colors.transparent,
           content: Container(
             height: 140.h,
             child: StatefulBuilder(builder: ((context, setState) {
@@ -72,7 +76,7 @@ void iconSelectModal(BuildContext context, Offset offset,
                             },
                             child: Container(
                               alignment: Alignment.center,
-                              height: 57.h, 
+                              height: 57.h,
                               child: index == 15
                                   ? Padding(
                                       padding:

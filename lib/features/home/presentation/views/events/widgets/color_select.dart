@@ -38,12 +38,13 @@ void colorSelectModal(
         //   });
         // }
         return AlertDialog(
-          insetPadding: EdgeInsets.only(top: offset.dy - 58.h, left: offset.dx + 1.w),
+          insetPadding:
+              EdgeInsets.only(top: offset.dy - 58.h, left: offset.dx + 1.w),
           alignment: Alignment.topLeft,
           contentPadding: EdgeInsets.zero,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          iconColor: Colors.transparent,
+          // iconColor: Colors.transparent,
           content: SizedBox(
             height: 140.h,
             child: StatefulBuilder(builder: ((context, setState) {
@@ -72,8 +73,9 @@ void colorSelectModal(
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                              blurRadius: 20.h,
-                              color: Colors.black.withOpacity(0.1))
+                            blurRadius: 20.h,
+                            color: Colors.black.withOpacity(0.1),
+                          )
                         ],
                         borderRadius: BorderRadius.circular(15.r)),
                     height: isInit ? 140.h : 100.h,

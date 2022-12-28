@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 void gallerySettingsModal(
   BuildContext context,
   Offset offset,
@@ -22,38 +21,39 @@ void gallerySettingsModal(
       context: context,
       builder: (context) {
         return AlertDialog(
-          insetPadding: EdgeInsets.only(top: offset.dy+25.h, left: offset.dx - 195.h),
-          alignment: Alignment.topLeft,
-          contentPadding: EdgeInsets.zero,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          iconColor: Colors.transparent,
-          content: SizedBox(
-            height: 200.h,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SettingsItem(
-                  onTap: onEdit,  
-                  text: 'Редактировать',
-                  icon: SvgImg.edit,
-                ),
-                
-                SizedBox(height: 5.h,),
-                SettingsItem(
-                  onTap: onDelete,
-                  text: 'Удалить файл',
-                  icon: SvgImg.trash,
-                  color: ColorStyles.redColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(34.r),
-                    bottomRight: Radius.circular(34.r),
+            insetPadding:
+                EdgeInsets.only(top: offset.dy + 25.h, left: offset.dx - 195.h),
+            alignment: Alignment.topLeft,
+            contentPadding: EdgeInsets.zero,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            // iconColor: Colors.transparent,
+            content: SizedBox(
+              height: 200.h,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SettingsItem(
+                    onTap: onEdit,
+                    text: 'Редактировать',
+                    icon: SvgImg.edit,
                   ),
-                  iconSize: Size(16.w, 18.h),
-                )
-              ],
-            ),
-          )
-        );
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  SettingsItem(
+                    onTap: onDelete,
+                    text: 'Удалить файл',
+                    icon: SvgImg.trash,
+                    color: ColorStyles.redColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(34.r),
+                      bottomRight: Radius.circular(34.r),
+                    ),
+                    iconSize: Size(16.w, 18.h),
+                  )
+                ],
+              ),
+            ));
       },
     );
