@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-=======
-import 'dart:math';
-import 'dart:typed_data';
-
->>>>>>> b72728dee028c9e61c00291c7ede4b384bc4d0d8
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
@@ -22,7 +16,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-<<<<<<< HEAD
 
 import '../../../../../bloc/gallery/gallery_bloc.dart';
 
@@ -32,16 +25,6 @@ class AddFileWidget extends StatefulWidget {
     Key? key,
     required this.onTap,
   }) : super(key: key);
-=======
-import 'package:get/get_connect/http/src/utils/utils.dart';
-
-class AddFileWidget extends StatefulWidget {
-  final Function() onTap;
-  final EventEntity? editingEvent;
-  const AddFileWidget(
-      {Key? key, required this.onTap, required this.editingEvent})
-      : super(key: key);
->>>>>>> b72728dee028c9e61c00291c7ede4b384bc4d0d8
   @override
   State<AddFileWidget> createState() => _AddFileWidgetState();
 }
@@ -91,7 +74,6 @@ class _AddFileWidgetState extends State<AddFileWidget> {
   Widget build(BuildContext context) {
     return BlocListener<GalleryBloc, GalleryState>(
       listener: (context, state) {
-<<<<<<< HEAD
         if (state is GalleryFilesErrorState) {
           Loader.hide();
           showAlertToast(state.message);
@@ -101,17 +83,6 @@ class _AddFileWidgetState extends State<AddFileWidget> {
           showAlertToast('Проверьте соединение с интернетом!');
         }
         if (state is GalleryFilesAddedState) {
-=======
-        if (state is EventErrorState) {
-          Loader.hide();
-          showAlertToast(state.message);
-        }
-        if (state is EventInternetErrorState) {
-          Loader.hide();
-          showAlertToast('Проверьте соединение с интернетом!');
-        }
-        if (state is EventAddedState) {
->>>>>>> b72728dee028c9e61c00291c7ede4b384bc4d0d8
           Loader.hide();
           Navigator.pop(context);
         }
@@ -239,7 +210,6 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                                 text: 'Готово',
                                 textColor: Colors.white,
                                 validate: isValidate(),
-<<<<<<< HEAD
                                 onPressed: () {
                                   context
                                       .read<GalleryBloc>()
@@ -256,9 +226,6 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                                                 size: platformFiles[index].size)),
                                       ));
                                 })
-=======
-                                onPressed: () {})
->>>>>>> b72728dee028c9e61c00291c7ede4b384bc4d0d8
                           ],
                         ),
                       ),
