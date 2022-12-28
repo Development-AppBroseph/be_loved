@@ -120,5 +120,49 @@ class PurposeRepositoryImpl implements PurposeRepository {
     }
   }
 
+
+
+
+
+  @override
+  Future<Either<Failure, void>> cancelPurpose(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.cancelPurpose(params.target);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+  @override
+  Future<Either<Failure, List<FullPurposeEntity>>> getHistoryPurposes() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.getHistoryPurposes();
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
 }
 

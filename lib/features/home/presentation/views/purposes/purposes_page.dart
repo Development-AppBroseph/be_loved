@@ -75,6 +75,8 @@ class _PurposesPageState extends State<PurposesPage> {
             listPurposes = bloc.availablePurposes;
           }else if(selectedType == 2){
             listPurposes = bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
+          }else if(selectedType == 3){
+            listPurposes = bloc.getPurposeListFromFullData(bloc.historyPurposes);
           }
           return Column(
             children: [
