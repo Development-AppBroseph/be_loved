@@ -4,6 +4,7 @@ import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/archive.dart';
 import 'package:be_loved/features/home/presentation/views/bottom_navigation.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/main_event_page.dart';
@@ -66,6 +67,9 @@ class _HomePageState extends State<HomePage> {
           return BlocConsumer<MainScreenBloc, MainScreenState>(
             listener: (context, state) {
               if(state is MainScreenChangedState){
+                if(state.currentView == 2 && context.read<PurposeBloc>().state is PurposeInitialState){
+                  context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
+                }
                 pageController.jumpToPage(state.currentView);
               }
               if(state is MainScreenSetStateState){

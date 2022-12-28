@@ -194,28 +194,19 @@ class _GalleryPageState extends State<GalleryPage> {
 
 
   Widget _buildMainItem(GlobalKey mainKey, GlobalKey newKey, int index, GalleryFileEntity file, GalleryGroupFilesEntity group){
+    //Setting position of group
     if(group.topPosition == 0){
       Future.delayed(Duration(milliseconds: 100), (){
         GalleryBloc bloc = context.read<GalleryBloc>();
         for(var gItem in bloc.groupedFiles){
           if(gItem.mainPhoto.id == file.id){
             bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition = getWidgetPosition(mainKey).dy;
-            print('SETTING: ${bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition}');
+            // print('SETTING: ${bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition}');
             break;
           }
         }
       });
     }
-    // WidgetsFlutterBinding().addPostFrameCallback((_){
-    //   GalleryBloc bloc = context.read<GalleryBloc>();
-    //   for(var gItem in bloc.groupedFiles){
-    //     if(gItem.mainPhoto.id == file.id){
-    //       bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition = getWidgetPosition(newKey).dy;
-    //       print('SETTING: ${bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition}');
-    //       break;
-    //     }
-    //   }
-    // });
     return GestureDetector(
       onTap: (){
         Navigator.of(context).push(

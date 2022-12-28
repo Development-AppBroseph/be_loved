@@ -16,6 +16,8 @@ class EventPhotoCard extends StatelessWidget {
   final String url;
   final String? title;
   final double? height;
+  final bool? isFavorite;
+  final Function()? onFavoriteTap;
 
   const EventPhotoCard({
     required this.additionKey,
@@ -23,6 +25,8 @@ class EventPhotoCard extends StatelessWidget {
     required this.onAdditionTap,
     required this.onTap,
     required this.url,
+    this.isFavorite, 
+    this.onFavoriteTap,
     this.title
   });
 
@@ -82,20 +86,41 @@ class EventPhotoCard extends StatelessWidget {
             Positioned(
               bottom: 30.h,
               right: 24.w,
-              child: GestureDetector(
-                onTap: onAdditionTap,
-                behavior: HitTestBehavior.translucent,
-                child: Container(
-                  width: 50.w,
-                  height: 27,
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset(
-                    SvgImg.dots,
-                    height: 7.h,
-                    color: Colors.white,
-                    key: additionKey,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if(isFavorite != null)
+                  GestureDetector(
+                    onTap: onFavoriteTap,
+                    behavior: HitTestBehavior.translucent,
+                    child: Container(
+                      width: 50.w,
+                      height: 27,
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(
+                        isFavorite! ? SvgImg.favoriteFilled : SvgImg.favorite,
+                        height: 22.5.h,
+                        color: Colors.white,
+                        key: additionKey,
+                      ),
+                    ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: onAdditionTap,
+                    behavior: HitTestBehavior.translucent,
+                    child: Container(
+                      width: 50.w,
+                      height: 27,
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(
+                        SvgImg.dots,
+                        height: 7.h,
+                        color: Colors.white,
+                        key: additionKey,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             )
           ],
