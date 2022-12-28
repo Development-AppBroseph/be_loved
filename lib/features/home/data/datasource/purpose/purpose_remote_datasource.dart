@@ -15,7 +15,9 @@ abstract class PurposeRemoteDataSource {
   Future<PurposeEntity> getSeasonPurpose();
   Future<List<PurposeEntity>> getAvailablePurposes(double lat, double long);
   Future<List<FullPurposeEntity>> getInProcessPurposes();
+  Future<List<FullPurposeEntity>> getHistoryPurposes();
   Future<void> completePurpose(int target);
+  Future<void> cancelPurpose(int target);
   Future<void> sendPhotoPurpose(String path, int target);
 
 }
@@ -123,6 +125,29 @@ class PurposeRemoteDataSourceImpl
 
 
 
+  //History purposes
+  @override
+  Future<List<FullPurposeEntity>> getHistoryPurposes() async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token d232dfc78ec938eacc832b0b23aa20c63eaab7ae7c544a63658cb0e2cbed2c7d";
+    Response response = await dio.get(Endpoints.getHistoryPurposes.getPath(),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 599,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 200) {
+      return (response.data as List).map((json) => FullPurposeModel.fromJson(json)).toList();
+    } else if(response.statusCode == 401){
+      throw ServerException(message: 'token_error');
+    }else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
 
 
   //Send photo purpose
@@ -136,7 +161,30 @@ class PurposeRemoteDataSourceImpl
             validateStatus: (status) => status! < 599,
             headers: headers));
     printRes(response);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      return;
+    } else if(response.statusCode == 401){
+      throw ServerException(message: 'token_error');
+    }else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
+
+  //Cancel purpose
+  @override
+  Future<void> cancelPurpose(int target) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.delete(Endpoints.sendPhotoPurpose.getPath(params: [target]),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 599,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 201 || response.statusCode == 200) {
       return;
     } else if(response.statusCode == 401){
       throw ServerException(message: 'token_error');

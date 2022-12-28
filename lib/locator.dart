@@ -17,6 +17,7 @@ import 'package:be_loved/features/home/domain/repositories/tags_repository.dart'
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
 import 'package:be_loved/features/home/domain/usecases/add_gallery_file.dart';
 import 'package:be_loved/features/home/domain/usecases/add_tag.dart';
+import 'package:be_loved/features/home/domain/usecases/cancel_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/change_position_event.dart';
 import 'package:be_loved/features/home/domain/usecases/complete_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
@@ -25,6 +26,7 @@ import 'package:be_loved/features/home/domain/usecases/edit_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/get_available_purposes.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:be_loved/features/home/domain/usecases/get_gallery_files.dart';
+import 'package:be_loved/features/home/domain/usecases/get_history_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_in_process_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_memory_info.dart';
 import 'package:be_loved/features/home/domain/usecases/get_season_purpose.dart';
@@ -250,9 +252,11 @@ void setupInjections() {
   sl.registerLazySingleton(() => GetInProcessPurpose(sl()));
   sl.registerLazySingleton(() => CompletePurpose(sl()));
   sl.registerLazySingleton(() => SendPhotoPurpose(sl()));
+  sl.registerLazySingleton(() => CancelPurpose(sl()));
+  sl.registerLazySingleton(() => GetHistoryPurpose(sl()));
 
   //Blocs
   sl.registerFactory<PurposeBloc>(
-    () => PurposeBloc(sl(), sl(), sl(), sl(), sl()),
+    () => PurposeBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()),
   );
 }

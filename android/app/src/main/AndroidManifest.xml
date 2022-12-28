@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.be_loved">
+    package="dev.broseph.beloved">
     
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -8,6 +8,10 @@
         android:label="BeLoved"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+       android:name="com.google.firebase.messaging.default_notification_icon"
+       android:resource="@drawable/ic_notification_icon"
+       />
         <activity
             android:name=".MainActivity"
             android:exported="true"
