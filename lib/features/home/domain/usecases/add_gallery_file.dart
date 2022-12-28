@@ -18,9 +18,8 @@ class AddGalleryFile implements UseCase<GalleryFileEntity, AddGalleryFileParams>
 }
 
 class AddGalleryFileParams extends Equatable {
-  final GalleryFileEntity galleryFileEntity;
-  final File? file;
-  const AddGalleryFileParams({required this.galleryFileEntity, required this.file});
+  final List<GalleryFileEntity> galleryFileEntity;
+  const AddGalleryFileParams({required this.galleryFileEntity, });
 
   @override
   List<Object> get props => [galleryFileEntity];
