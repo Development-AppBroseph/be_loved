@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/home/data/models/archive/gallery_file_model.dart';
-import 'package:be_loved/features/home/data/models/archive/memory_model.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
-import 'package:be_loved/features/home/domain/entities/archive/memory_entity.dart';
 import 'package:dio/dio.dart';
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/services/database/auth_params.dart';
@@ -14,7 +12,6 @@ import '../../../../../locator.dart';
 abstract class ArchiveRemoteDataSource {
   Future<List<GalleryFileEntity>> getGalleryFiles(int page);
   Future<GalleryFileEntity> addGalleryFile(GalleryFileEntity galleryFileEntity, File? file);
-  Future<MemoryEntity> getMemoryInfo();
   // Future<EventEntity> editEvent(EventEntity eventEntity, File? photo, bool isDeletePhoto);
   // Future<void> deleteEvent(List<int> ids);
   // Future<void> homeChangePosition(Map<String, int> items);
@@ -70,29 +67,6 @@ class ArchiveRemoteDataSourceImpl
     if (response.statusCode == 201) {
       return GalleryFileModel.fromJson(response.data);
     } else {
-      throw ServerException(message: 'Ошибка с сервером');
-    }
-  }
-
-
-
-
-  @override
-  Future<MemoryEntity> getMemoryInfo() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.get(Endpoints.getSizeOfMemory.getPath(),
-        options: Options(
-            followRedirects: false,
-            validateStatus: (status) => status! < 599,
-            headers: headers));
-    printRes(response);
-    if (response.statusCode == 200) {
-      MemoryEntity memoryEntity = MemoryModel.fromJson(response.data);
-      sl<AuthConfig>().memoryEntity = memoryEntity;
-      return memoryEntity;
-    } else if(response.statusCode == 401){
-      throw ServerException(message: 'token_error');
-    }else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }

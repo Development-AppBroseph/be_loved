@@ -42,7 +42,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   void _getEvents(GetEventsEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
     final gotEvents = await getEvents.call(NoParams());
-    // await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 3));
     EventsState state = gotEvents.fold(
       (error) => errorCheck(error),
       (data) {

@@ -26,6 +26,7 @@ class _MomentsPageState extends State<MomentsPage> {
 
   @override
   Widget build(BuildContext context) {
+    GalleryBloc galleryBloc = context.read<GalleryBloc>();
     EventsBloc eventsBloc = context.read<EventsBloc>();
 
     return BlocConsumer<GalleryBloc, GalleryState>(
@@ -67,7 +68,6 @@ class _MomentsPageState extends State<MomentsPage> {
                       child: EventPhotoCard(
                         additionKey: null, 
                         onAdditionTap: (){}, 
-                        isFavorite: true,
                         height: 471.w,
                         onTap: (){
 
@@ -103,7 +103,6 @@ class _MomentsPageState extends State<MomentsPage> {
                 child: EventPhotoCard(
                   additionKey: null, 
                   onAdditionTap: (){}, 
-                  isFavorite: false,
                   onTap: (){
                   }, 
                   url: 'http://158.160.43.61/files/nyc_tower_smaller_bK51vN6.jpeg',

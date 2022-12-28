@@ -28,16 +28,7 @@ enum Endpoints {
   //Gallery
   getGalleryFiles,
   addGalleryFile, 
-  deleteGalleryFiles,
-  //Memory
-  getSizeOfMemory,
-
-  //Purposes
-  getSeasonPurpose,
-  getAvailablePurposes,
-  getInProcessPurposes,
-  sendPurpose,
-  sendPhotoPurpose,
+  deleteGalleryFiles
 }
 
 extension EndpointsExtension on Endpoints {
@@ -77,18 +68,6 @@ extension EndpointsExtension on Endpoints {
         return "/archive/";  
       case Endpoints.deleteGalleryFiles:
         return "/archive/del";  
-      case Endpoints.getSizeOfMemory:
-        return "/archive/size"; 
-      case Endpoints.getSeasonPurpose:
-        return "/targets/season"; 
-      case Endpoints.getAvailablePurposes:
-        return "/targets/"; 
-      case Endpoints.sendPurpose:
-        return "/targets/main"; 
-      case Endpoints.getInProcessPurposes:
-        return "/targets/main"; 
-      case Endpoints.sendPhotoPurpose:
-        return "/targets/main/${params![0]}"; 
       default:
         return '';
     }

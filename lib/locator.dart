@@ -2,40 +2,30 @@ import 'package:be_loved/features/home/data/datasource/archive/archive_remote_da
 import 'package:be_loved/features/home/data/datasource/be_loved_remote_datasource.dart';
 import 'package:be_loved/features/home/data/datasource/be_loved_remote_datasource_impl.dart';
 import 'package:be_loved/features/home/data/datasource/events/events_remote_datasource.dart';
-import 'package:be_loved/features/home/data/datasource/purpose/purpose_remote_datasource.dart';
 import 'package:be_loved/features/home/data/datasource/tags/tags_remote_datasource.dart';
 import 'package:be_loved/features/home/data/repository/archive_repository_impl.dart';
 import 'package:be_loved/features/home/data/repository/be_loved_implement.dart';
 import 'package:be_loved/features/home/data/repository/events_repository_impl.dart';
-import 'package:be_loved/features/home/data/repository/purpose_repository_impl.dart';
 import 'package:be_loved/features/home/data/repository/tags_repository_impl.dart';
 import 'package:be_loved/features/home/domain/repositories/archive_repository.dart';
 import 'package:be_loved/features/home/domain/repositories/be_loved.dart';
 import 'package:be_loved/features/home/domain/repositories/events_repository.dart';
-import 'package:be_loved/features/home/domain/repositories/purpose_repository.dart';
 import 'package:be_loved/features/home/domain/repositories/tags_repository.dart';
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
 import 'package:be_loved/features/home/domain/usecases/add_gallery_file.dart';
 import 'package:be_loved/features/home/domain/usecases/add_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/change_position_event.dart';
-import 'package:be_loved/features/home/domain/usecases/complete_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/edit_tag.dart';
-import 'package:be_loved/features/home/domain/usecases/get_available_purposes.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:be_loved/features/home/domain/usecases/get_gallery_files.dart';
-import 'package:be_loved/features/home/domain/usecases/get_in_process_purpose.dart';
-import 'package:be_loved/features/home/domain/usecases/get_memory_info.dart';
-import 'package:be_loved/features/home/domain/usecases/get_season_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
 import 'package:be_loved/features/home/domain/usecases/put_code.dart';
-import 'package:be_loved/features/home/domain/usecases/send_photo_purpose.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
-import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
@@ -51,7 +41,6 @@ import 'core/services/database/auth_params.dart';
 import 'core/services/network/config.dart';
 import 'core/services/network/network_info.dart';
 import 'features/home/domain/usecases/edit_event.dart';
-import 'features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'features/profile/data/repositories/profile_repository_impl.dart';
 
 final sl = GetIt.instance;
@@ -212,47 +201,9 @@ void setupInjections() {
   // //UseCases
   sl.registerLazySingleton(() => AddGalleryFile(sl()));
   sl.registerLazySingleton(() => GetGalleryFiles(sl()));
-  sl.registerLazySingleton(() => GetMemoryInfo(sl()));
 
   //Blocs
-  sl.registerFactory<ArchiveBloc>(
-    () => ArchiveBloc(sl()),
-  );
   sl.registerFactory<GalleryBloc>(
     () => GalleryBloc(sl(), sl()),
-  );
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //Datasources
-  sl.registerLazySingleton<PurposeRemoteDataSource>(
-    () => PurposeRemoteDataSourceImpl(dio: sl()),
-  );
-
-  // //Repositories
-  sl.registerLazySingleton<PurposeRepository>(
-    () => PurposeRepositoryImpl(sl(), sl()),
-  );
-
-  // //UseCases
-  sl.registerLazySingleton(() => GetAvailablePurposes(sl()));
-  sl.registerLazySingleton(() => GetSeasonPurpose(sl()));
-  sl.registerLazySingleton(() => GetInProcessPurpose(sl()));
-  sl.registerLazySingleton(() => CompletePurpose(sl()));
-  sl.registerLazySingleton(() => SendPhotoPurpose(sl()));
-
-  //Blocs
-  sl.registerFactory<PurposeBloc>(
-    () => PurposeBloc(sl(), sl(), sl(), sl(), sl()),
   );
 }

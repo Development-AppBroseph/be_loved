@@ -96,34 +96,3 @@ getTextFromDate(String days, [String? additionString, bool showAllDate = false])
       ? 'Сегодня${additionString ?? ''}'
       : '${checkDays(days)}${additionString ?? ''}';
 }
-
-
-
-
-
-
-String purposeDays(String days) {
-  int _days = int.parse(days);
-  int lastNumber = int.parse(days[days.length - 1]);
-  if(_days <= 1){
-    return 'Остался день';
-  }
-  if(_days >= 29 && _days <= 31){
-    return 'Остался 1 месяц';
-  }
-  if(lastNumber > 5 && lastNumber < 10) return 'Осталось $days дней';
-  if(_days % 5 == 0) return 'Осталось $days дней';
-  if(_days >= 11 && _days <= 20) return 'Осталось $days дней';
-  if(lastNumber == 1) return 'Остался $days день';
-  return 'Осталось $days дня';
-}
-
-String purposeTimes(Duration time) {
-  if(time.inHours >= 1){
-    return 'Осталось ${time.inHours} час.';
-  }
-  if(time.inMinutes <= 1){
-    return 'Осталось 1 минута';
-  }
-  return 'Осталось ${time.inMinutes} минут';
-}

@@ -84,7 +84,7 @@ class _DetailGalleryPageState extends State<DetailGalleryPage> {
                       )
                     )
                   ),
-                  SizedBox(height: 450.h,)
+                  SizedBox(height: 400.h,)
                 ],
               ),
             )

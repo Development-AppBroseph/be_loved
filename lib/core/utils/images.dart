@@ -66,7 +66,6 @@ abstract class SvgImg {
   static const String bin = "assets/icons/bin.svg";
   static const String dots = "assets/icons/dots.svg";
   static const String favorite = "assets/icons/favorite.svg";
-  static const String favoriteFilled = "assets/icons/favorite_filled.svg";
   static const String gallery = "assets/icons/gallery.svg";
   static const String smartphone = "assets/icons/smartphone.svg";
   static const String play = 'assets/icons/play.svg';
@@ -77,6 +76,4 @@ abstract class SvgImg {
     "assets/icons/black.svg",
     "assets/icons/perpul.svg",
   ];
-  static const String goto = 'assets/icons/goto.svg';
-  static const String galleryWithLine = 'assets/icons/GallaryWithLine.svg';
 }

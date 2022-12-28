@@ -79,7 +79,7 @@ class CustomButtonState extends State<CustomAnimationButton>
                           : widget.black
                               ? const Color.fromRGBO(23, 23, 23, 1.0)
                               : const Color.fromRGBO(32, 203, 131, 1.0)
-                      : const Color.fromRGBO(32, 203, 131, 1.0),  
+                      : const Color.fromRGBO(32, 203, 131, 1.0),
                   width: 1.sp,
                 ),
               ),

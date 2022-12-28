@@ -249,7 +249,6 @@ class _EventDetailViewState extends State<EventDetailView> {
                           children: [
                             Text('Предстоящее событие', style: TextStyles(context).grey_15_w700,),
                             Text(
-                              // "",
                               DateFormat('dd.MM.yy').format(DateTime.now().add(Duration(days: int.parse(event!.datetimeString)))),
                               style: TextStyle(
                                 color: getColorFromDays(event!.datetimeString, event!.important),

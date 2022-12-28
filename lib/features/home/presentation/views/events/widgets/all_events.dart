@@ -213,6 +213,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                     curve: Curves.easeInOutQuint);
                               });
                               showLoaderWrapper(context);
+                              print('SENT: ${selectedEvents}');
                               eventsBloc
                                   .add(EventDeleteEvent(ids: selectedEvents));
                               isSelectedAll = false;
