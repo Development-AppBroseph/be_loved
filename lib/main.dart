@@ -11,6 +11,8 @@ import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/locator.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +28,17 @@ void main() async {
   setupInjections();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   var user = await MySharedPrefs().user;
+  await Firebase.initializeApp();
+
+  await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
   // MySharedPrefs().setUser(
   //   '123123123123123213',
   //   UserAnswer(

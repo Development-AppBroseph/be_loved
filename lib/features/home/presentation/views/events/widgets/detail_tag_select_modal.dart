@@ -20,13 +20,8 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-
-void tagSelectModal(
-  BuildContext context,
-  Offset offset,
-  EventEntity event,
-  Function(EventEntity id) onSelectTag
-) =>
+void tagSelectModal(BuildContext context, Offset offset, EventEntity event,
+        Function(EventEntity id) onSelectTag) =>
     showDialog(
       useSafeArea: false,
       barrierColor: Colors.transparent,
@@ -36,13 +31,14 @@ void tagSelectModal(
         bool isInit = false;
         bool isInitOpacity = false;
         return AlertDialog(
-          insetPadding: EdgeInsets.only(top: offset.dy + 47.h, left: offset.dx - 45.h),
+          insetPadding:
+              EdgeInsets.only(top: offset.dy + 47.h, left: offset.dx - 45.h),
           // insetPadding: EdgeInsets.only(top: offset.dy + 47.h, left: offset.dx - 80.h),
           alignment: Alignment.topLeft,
           contentPadding: EdgeInsets.zero,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          iconColor: Colors.transparent,
+          // iconColor: Colors.transparent,
           content: SizedBox(
             height: 140.h,
             child: StatefulBuilder(builder: ((context, setState) {
@@ -51,7 +47,7 @@ void tagSelectModal(
                   setState(() {
                     isInit = true;
                   });
-                  Future.delayed(const Duration(milliseconds: 300-100), () {
+                  Future.delayed(const Duration(milliseconds: 300 - 100), () {
                     setState(() {
                       isInitOpacity = true;
                     });
@@ -61,38 +57,43 @@ void tagSelectModal(
 
               WidgetsBinding.instance
                   .addPostFrameCallback((_) => initWidgets());
-                return BlocConsumer<TagsBloc, TagsState>(listener: (context, state) {
-                  if (state is TagErrorState) {
-                    Loader.hide();
-                    showAlertToast(state.message);
+              return BlocConsumer<TagsBloc, TagsState>(
+                  listener: (context, state) {
+                if (state is TagErrorState) {
+                  Loader.hide();
+                  showAlertToast(state.message);
+                }
+                if (state is TagInternetErrorState) {
+                  Loader.hide();
+                  showAlertToast('Проверьте соединение с интернетом!');
+                }
+                if (state is TagAddedState || state is TagDeletedState) {
+                  Loader.hide();
+                  if (state is TagAddedState) {
+                    state.tagEntity.events.contains(event.id);
+                    context.read<EventsBloc>().add(GetEventsEvent());
+                    setState(() {
+                      event.tagIds.add(state.tagEntity.id);
+                    });
                   }
-                  if (state is TagInternetErrorState) {
-                    Loader.hide();
-                    showAlertToast('Проверьте соединение с интернетом!');
-                  }
-                  if (state is TagAddedState || state is TagDeletedState) {
-                    Loader.hide();
-                    if(state is TagAddedState){
-                      state.tagEntity.events.contains(event.id);
-                      context.read<EventsBloc>().add(GetEventsEvent());
-                      setState((){
-                        event.tagIds.add(state.tagEntity.id);
-                      });
-                    }
-                  }
-                }, builder: (context, state) {
-                  if (state is TagLoadingState) {
-                    return Container();
-                  }
+                }
+              }, builder: (context, state) {
+                if (state is TagLoadingState) {
+                  return Container();
+                }
 
-                  List<TagEntity> tagOfEvent = tagsBloc.tags.where((element) => element.events.contains(event.id),).toList();
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200-100),
-                        decoration: BoxDecoration(
+                List<TagEntity> tagOfEvent = tagsBloc.tags
+                    .where(
+                      (element) => element.events.contains(event.id),
+                    )
+                    .toList();
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200 - 100),
+                      decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.9),
                           boxShadow: [
                             BoxShadow(
@@ -100,125 +101,129 @@ void tagSelectModal(
                                 color: Colors.black.withOpacity(0.1))
                           ],
                           borderRadius: BorderRadius.circular(15.r)),
-                          height: isInit ? (tagOfEvent.length == 1 ? (140.h-25.h) : 140.h): 100.h,
-                          width: 160.w,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15.r),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-                              child: AnimatedOpacity(
-                                duration: const Duration(milliseconds: 200-100),
-                                opacity: isInitOpacity ? 1 : 0,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 23.w),
-                                  child: ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    itemCount: tagOfEvent.length + 1,
-                                    itemBuilder: (context, index) {
-                                      bool isLast = tagOfEvent.isEmpty || tagOfEvent.length==index;
-                                      return GestureDetector(
-                                        onTap: () async {
-                                          if(isLast){
-                                            showModalCreateTag(context, true, null, event.id);
-                                          }else{
-                                            await showModalCreateTag(context, false, tagOfEvent[index]);
-                                            Navigator.pop(context);
-                                          }
-                                        },
-                                        child: isLast
-                                        ? Padding(
-                                          padding: EdgeInsets.symmetric(vertical: 9.h),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(width: 1.w, color: ColorStyles.greyColor),
-                                              borderRadius: BorderRadius.circular(10.r)
-                                            ),
-                                            height: 38.h,
-                                            width: 113.w,
-                                            child: Center(
-                                                child: Transform.rotate(
-                                                      angle: pi / 4,
-                                                      child:
-                                                          SvgPicture.asset(SvgImg.add, height: 14.h,))
-                                              )
-                                          ),
-                                        )
-                                        : TagItemWidget(tagEntity: tagOfEvent[index]),
-                                      );
-                                      // return GestureDetector(
-                                      //   onTap: () {
-                                      //     if(isLast){
-                                      //       showModalCreateTag(context, true);
-                                      //     }else{
-                                      //       setState((){
-                                      //         if(event.tagIds.contains(tagsBloc.tags[index].id)){
-                                      //           event.tagIds.remove(tagsBloc.tags[index].id);
-                                      //         }else{
-                                      //           event.tagIds.add(tagsBloc.tags[index].id);
-                                      //         }
-                                      //       });
-                                      //       for(int i = 0; i < tagsBloc.tags.length; i++){
-                                      //         if(tagsBloc.tags[i].id == tagsBloc.tags[index].id){
-                                      //           if(tagsBloc.tags[i].events.contains(event.id)){
-                                      //             tagsBloc.tags[i].events.remove(event.id);
-                                      //           }else{
-                                      //             tagsBloc.tags[i].events.add(event.id);
-                                      //           }
-                                      //         }
-                                      //       }
-                                      //       onSelectTag(event);
-                                      //     }
-                                      //   },
-                                      //   child: isLast
-                                      //   ? Padding(
-                                      //     padding: EdgeInsets.symmetric(vertical: 9.h),
-                                      //     child: Container(
-                                      //       decoration: BoxDecoration(
-                                      //         border: Border.all(width: 1.w, color: ColorStyles.greyColor),
-                                      //         borderRadius: BorderRadius.circular(10.r)
-                                      //       ),
-                                      //       height: 38.h,
-                                      //       width: 113.w,
-                                      //       child: Center(
-                                      //           child: Transform.rotate(
-                                      //                 angle: pi / 4,
-                                      //                 child:
-                                      //                     SvgPicture.asset(SvgImg.add, height: 14.h,))
-                                      //         )
-                                      //     ),
-                                      //   )
-                                      //   : AnimatedOpacity(
-                                      //     duration: const Duration(milliseconds: 400-100),
-                                      //     curve: Curves.easeInOutQuint,
-                                      //     opacity: event.tagIds.contains(tagsBloc.tags[index].id)
-                                      //     ? 1
-                                      //     : 0.5,
-                                      //     child: _buildTagItem(context, tagsBloc.tags[index])
-                                      //   )
-                                      // );
+                      height: isInit
+                          ? (tagOfEvent.length == 1 ? (140.h - 25.h) : 140.h)
+                          : 100.h,
+                      width: 160.w,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15.r),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                          child: AnimatedOpacity(
+                            duration: const Duration(milliseconds: 200 - 100),
+                            opacity: isInitOpacity ? 1 : 0,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 23.w),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: tagOfEvent.length + 1,
+                                itemBuilder: (context, index) {
+                                  bool isLast = tagOfEvent.isEmpty ||
+                                      tagOfEvent.length == index;
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      if (isLast) {
+                                        showModalCreateTag(
+                                            context, true, null, event.id);
+                                      } else {
+                                        await showModalCreateTag(
+                                            context, false, tagOfEvent[index]);
+                                        Navigator.pop(context);
+                                      }
                                     },
-                                  ),
-                                ),
+                                    child: isLast
+                                        ? Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 9.h),
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        width: 1.w,
+                                                        color: ColorStyles
+                                                            .greyColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.r)),
+                                                height: 38.h,
+                                                width: 113.w,
+                                                child: Center(
+                                                    child: Transform.rotate(
+                                                        angle: pi / 4,
+                                                        child: SvgPicture.asset(
+                                                          SvgImg.add,
+                                                          height: 14.h,
+                                                        )))),
+                                          )
+                                        : TagItemWidget(
+                                            tagEntity: tagOfEvent[index]),
+                                  );
+                                  // return GestureDetector(
+                                  //   onTap: () {
+                                  //     if(isLast){
+                                  //       showModalCreateTag(context, true);
+                                  //     }else{
+                                  //       setState((){
+                                  //         if(event.tagIds.contains(tagsBloc.tags[index].id)){
+                                  //           event.tagIds.remove(tagsBloc.tags[index].id);
+                                  //         }else{
+                                  //           event.tagIds.add(tagsBloc.tags[index].id);
+                                  //         }
+                                  //       });
+                                  //       for(int i = 0; i < tagsBloc.tags.length; i++){
+                                  //         if(tagsBloc.tags[i].id == tagsBloc.tags[index].id){
+                                  //           if(tagsBloc.tags[i].events.contains(event.id)){
+                                  //             tagsBloc.tags[i].events.remove(event.id);
+                                  //           }else{
+                                  //             tagsBloc.tags[i].events.add(event.id);
+                                  //           }
+                                  //         }
+                                  //       }
+                                  //       onSelectTag(event);
+                                  //     }
+                                  //   },
+                                  //   child: isLast
+                                  //   ? Padding(
+                                  //     padding: EdgeInsets.symmetric(vertical: 9.h),
+                                  //     child: Container(
+                                  //       decoration: BoxDecoration(
+                                  //         border: Border.all(width: 1.w, color: ColorStyles.greyColor),
+                                  //         borderRadius: BorderRadius.circular(10.r)
+                                  //       ),
+                                  //       height: 38.h,
+                                  //       width: 113.w,
+                                  //       child: Center(
+                                  //           child: Transform.rotate(
+                                  //                 angle: pi / 4,
+                                  //                 child:
+                                  //                     SvgPicture.asset(SvgImg.add, height: 14.h,))
+                                  //         )
+                                  //     ),
+                                  //   )
+                                  //   : AnimatedOpacity(
+                                  //     duration: const Duration(milliseconds: 400-100),
+                                  //     curve: Curves.easeInOutQuint,
+                                  //     opacity: event.tagIds.contains(tagsBloc.tags[index].id)
+                                  //     ? 1
+                                  //     : 0.5,
+                                  //     child: _buildTagItem(context, tagsBloc.tags[index])
+                                  //   )
+                                  // );
+                                },
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    );
-                  }
-              );
+                      ),
+                    ),
+                  ],
+                );
+              });
             })),
           ),
         );
       },
     );
-
-
-
-
-
-
 
 class TagItemWidget extends StatelessWidget {
   final TagEntity tagEntity;
@@ -230,20 +235,21 @@ class TagItemWidget extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       height: 57.h,
-
       child: CupertinoCard(
-        color: tagEntity.color.color,
-        elevation: 0,
-        margin: EdgeInsets.zero,
-        radius: BorderRadius.circular(20.r),
-        child: Container(
-          width: 113.w,
-          height: 38.h,
-          padding: EdgeInsets.symmetric(horizontal: 10.w),
-          alignment: Alignment.center,
-          child: Text('#${tagEntity.title}', style: TextStyles(context).white_15_w800, overflow: TextOverflow.ellipsis,)
-          )
-      ),
+          color: tagEntity.color.color,
+          elevation: 0,
+          margin: EdgeInsets.zero,
+          radius: BorderRadius.circular(20.r),
+          child: Container(
+              width: 113.w,
+              height: 38.h,
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              alignment: Alignment.center,
+              child: Text(
+                '#${tagEntity.title}',
+                style: TextStyles(context).white_15_w800,
+                overflow: TextOverflow.ellipsis,
+              ))),
     );
   }
 }
