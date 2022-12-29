@@ -368,6 +368,13 @@ class _AccountPageState extends State<AccountPage>
                                 onTap: () {
                                   setState(() {
                                     if (!onPressed) {
+                                      codeScrollController.animateTo(
+                                        codeScrollController
+                                            .initialScrollOffset,
+                                        duration:
+                                            const Duration(milliseconds: 600),
+                                        curve: Curves.easeInOutQuint,
+                                      );
                                       onPressed = true;
                                       phone = true;
                                       animationController.forward(from: 0);
@@ -772,7 +779,7 @@ class _AccountPageState extends State<AccountPage>
                                                         ),
                                                       ),
                                                       SizedBox(
-                                                        height: 51.h,
+                                                        height: 34.h,
                                                       ),
                                                       CustomButton(
                                                           validate: true,
