@@ -62,8 +62,9 @@ class ArchiveRemoteDataSourceImpl
   @override
   Future<GalleryFileEntity> addGalleryFile(List<GalleryFileEntity> galleryFileEntity) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    var map = Map.fromIterable(galleryFileEntity, value:  (element) => element);
     Response response = await dio.post(Endpoints.addGalleryFile.getPath(),
-        data: jsonEncode(galleryFileEntity.toList()),
+        data: jsonEncode(map),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,
