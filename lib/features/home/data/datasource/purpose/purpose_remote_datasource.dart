@@ -82,7 +82,7 @@ class PurposeRemoteDataSourceImpl
   @override
   Future<List<FullPurposeEntity>> getInProcessPurposes() async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    headers["Authorization"] = "Token d232dfc78ec938eacc832b0b23aa20c63eaab7ae7c544a63658cb0e2cbed2c7d";
+    // headers["Authorization"] = "Token d232dfc78ec938eacc832b0b23aa20c63eaab7ae7c544a63658cb0e2cbed2c7d";
     Response response = await dio.get(Endpoints.getInProcessPurposes.getPath(),
         options: Options(
             followRedirects: false,
@@ -129,7 +129,7 @@ class PurposeRemoteDataSourceImpl
   @override
   Future<List<FullPurposeEntity>> getHistoryPurposes() async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    headers["Authorization"] = "Token d232dfc78ec938eacc832b0b23aa20c63eaab7ae7c544a63658cb0e2cbed2c7d";
+    // headers["Authorization"] = "Token d232dfc78ec938eacc832b0b23aa20c63eaab7ae7c544a63658cb0e2cbed2c7d";
     Response response = await dio.get(Endpoints.getHistoryPurposes.getPath(),
         options: Options(
             followRedirects: false,
@@ -154,8 +154,9 @@ class PurposeRemoteDataSourceImpl
   @override
   Future<void> sendPhotoPurpose(String path, int target) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    // headers["Authorization"] = "Token d232dfc78ec938eacc832b0b23aa20c63eaab7ae7c544a63658cb0e2cbed2c7d";
     Response response = await dio.patch(Endpoints.sendPhotoPurpose.getPath(params: [target]),
-        data: FormData.fromMap({'photo': MultipartFile.fromFile(path)}),
+        data: FormData.fromMap({'photo': await MultipartFile.fromFile(path)}),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 599,
@@ -184,7 +185,7 @@ class PurposeRemoteDataSourceImpl
             validateStatus: (status) => status! < 599,
             headers: headers));
     printRes(response);
-    if (response.statusCode == 201 || response.statusCode == 200) {
+    if (!(response.statusCode! < 200 || response.statusCode! > 204)) {
       return;
     } else if(response.statusCode == 401){
       throw ServerException(message: 'token_error');

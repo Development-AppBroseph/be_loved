@@ -7,6 +7,7 @@ class PurposeEntity extends Equatable {
   final DateTime? dateTime;
   final bool ifSeason;
   bool inProcess;
+  bool inHistory;
 
   PurposeEntity({
     required this.id,
@@ -14,7 +15,8 @@ class PurposeEntity extends Equatable {
     required this.photo,
     required this.dateTime,
     required this.ifSeason,
-    this.inProcess = false
+    this.inProcess = false,
+    required this.inHistory
   });
 
 
@@ -24,6 +26,7 @@ class PurposeEntity extends Equatable {
     name,
     photo,
     ifSeason,
-    inProcess
+    inProcess,
+    inHistory
   ];
 }

@@ -1,10 +1,12 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -30,7 +32,7 @@ class _EventPageInArchiveState extends State<EventPageInArchive> {
             30,
             (index) => GestureDetector(
               onTap: (){
-                widget.nextPage(index);
+                widget.nextPage(context.read<EventsBloc>().events.isNotEmpty ? context.read<EventsBloc>().events.first.id : 1);
               },
               child: CupertinoCard(
                 margin: EdgeInsets.symmetric(horizontal: 25.w, vertical: 10.h),

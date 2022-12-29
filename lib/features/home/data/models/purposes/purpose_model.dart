@@ -7,13 +7,15 @@ class PurposeModel extends PurposeEntity{
     required String photo,
     required DateTime? dateTime,
     required bool ifSeason,
+    required bool inHistory
 
   }) : super(
     id: id, 
     dateTime: dateTime,
     name: name,
     ifSeason: ifSeason,
-    photo: photo
+    photo: photo,
+    inHistory: inHistory
   );
 
   factory PurposeModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,9 @@ class PurposeModel extends PurposeEntity{
       photo: json['photo'],
       ifSeason: json['if_season'] ?? false,
       name: json['name'],
+      inHistory: json['verdict'] == 'Принято' 
+      ? true
+      : false,
       dateTime: json['time'] == null ? null : DateTime.parse(json['time']).toLocal(),
     );
   }
