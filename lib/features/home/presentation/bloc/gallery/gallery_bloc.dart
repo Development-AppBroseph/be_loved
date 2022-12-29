@@ -13,7 +13,8 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   final GetGalleryFiles getGalleryFiles;
   final AddGalleryFile addGalleryFile;
 
-  GalleryBloc(this.addGalleryFile, this.getGalleryFiles) : super(GalleryFilesInitialState()) {
+  GalleryBloc(this.addGalleryFile, this.getGalleryFiles)
+      : super(GalleryFilesInitialState()) {
     on<GetGalleryFilesEvent>(_getGallery);
     on<GalleryFileAddEvent>(_addGallery);
     // on<GalleryFileEditEvent>(_editGallery);
@@ -24,9 +25,10 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   List<GalleryGroupFilesEntity> groupedFiles = [];
   int page = 0;
 
-  void _getGallery(GetGalleryFilesEvent event, Emitter<GalleryState> emit) async {
+  void _getGallery(
+      GetGalleryFilesEvent event, Emitter<GalleryState> emit) async {
     emit(GalleryFilesLoadingState());
-    if(event.isReset){
+    if (event.isReset) {
       page = 0;
     }
     page++;
@@ -36,9 +38,9 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     GalleryState state = gotGallery.fold(
       (error) => errorCheck(error),
       (data) {
-        if(event.isReset){
+        if (event.isReset) {
           files = data;
-        }else{
+        } else {
           files.addAll(data);
         }
         groupedFiles = getGroupedFiles(files);
@@ -49,11 +51,11 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     emit(state);
   }
 
-
-
-  void _addGallery(GalleryFileAddEvent event, Emitter<GalleryState> emit) async {
+  void _addGallery(
+      GalleryFileAddEvent event, Emitter<GalleryState> emit) async {
     emit(GalleryFilesLoadingState());
-    final data = await addGalleryFile.call(AddGalleryFileParams(galleryFileEntity: event.galleryFileEntity, file: event.file));
+    final data = await addGalleryFile.call(AddGalleryFileParams(
+        galleryFileEntity: event.galleryFileEntity, ));
     GalleryState state = data.fold(
       (error) => errorCheck(error),
       (data) {
@@ -65,7 +67,6 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     );
     emit(state);
   }
-
 
   // void _editGallery(GalleryFileEditEvent event, Emitter<GalleryState> emit) async {
   //   emit(GalleryFileLoadingState());
@@ -83,8 +84,6 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   //   emit(state);
   // }
 
-
-
   // void _deleteGalleryFile(GalleryFileDeleteEvent event, Emitter<GalleryState> emit) async {
   //   emit(GalleryFileBlankState());
   //   final data = await deleteGalleryFile.call(DeleteGalleryFileParams(id: event.id));
@@ -98,76 +97,74 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   //   emit(state);
   // }
 
-
-
-
-  GalleryState errorCheck(Failure failure){
+  GalleryState errorCheck(Failure failure) {
     print('FAIL: $failure');
-    if(failure == ConnectionFailure() || failure == NetworkFailure()){
+    if (failure == ConnectionFailure() || failure == NetworkFailure()) {
       return GalleryFilesInternetErrorState();
-    }else if(failure is ServerFailure){
-      if(failure.message == 'token_error'){
+    } else if (failure is ServerFailure) {
+      if (failure.message == 'token_error') {
         print('token_error');
-        return GalleryFilesErrorState(message: failure.message.length < 100 ? failure.message : 'Вы не авторизованы', isTokenError: true);
+        return GalleryFilesErrorState(
+            message: failure.message.length < 100
+                ? failure.message
+                : 'Вы не авторизованы',
+            isTokenError: true);
       }
-      return GalleryFilesErrorState(message: failure.message.length < 100 ? failure.message : 'Ошибка сервера', isTokenError: false);
-    }else{
-      return GalleryFilesErrorState(message: 'Повторите попытку', isTokenError: false);
+      return GalleryFilesErrorState(
+          message:
+              failure.message.length < 100 ? failure.message : 'Ошибка сервера',
+          isTokenError: false);
+    } else {
+      return GalleryFilesErrorState(
+          message: 'Повторите попытку', isTokenError: false);
     }
   }
 
-
-
-
-
-  List<GalleryGroupFilesEntity> getGroupedFiles(List<GalleryFileEntity> list){
+  List<GalleryGroupFilesEntity> getGroupedFiles(List<GalleryFileEntity> list) {
     List<GalleryGroupFilesEntity> listItems = [];
 
-    for(int i = 0; i < list.length; i++){
+    for (int i = 0; i < list.length; i++) {
       //FIrst file(first group)
-      if(i == 0){
-        listItems.add(
-          GalleryGroupFilesEntity(
-            mainPhoto: list[i], 
-            mainVideo: null, 
+      if (i == 0) {
+        listItems.add(GalleryGroupFilesEntity(
+            mainPhoto: list[i],
+            mainVideo: null,
             additionalFiles: [],
             startDate: list[i].dateTime,
-            toDate: null
-          )
-        );
+            toDate: null));
       }
 
-      if(i != 0){
+      if (i != 0) {
         bool isAdded = false;
-        for(GalleryGroupFilesEntity gItem in listItems){
+        for (GalleryGroupFilesEntity gItem in listItems) {
           //Files in 3 days
-          if(!isAdded && gItem.startDate.add(const Duration(days: 3)).millisecondsSinceEpoch > list[i].dateTime.millisecondsSinceEpoch){
+          if (!isAdded &&
+              gItem.startDate
+                      .add(const Duration(days: 3))
+                      .millisecondsSinceEpoch >
+                  list[i].dateTime.millisecondsSinceEpoch) {
             //If video file
-            if(listItems[listItems.indexOf(gItem)].additionalFiles.isEmpty && list[i].urlToFile.contains('.mp4')){
+            if (listItems[listItems.indexOf(gItem)].additionalFiles.isEmpty &&
+                list[i].urlToFile.contains('.mp4')) {
               listItems[listItems.indexOf(gItem)].mainVideo = list[i];
-            }else{
+            } else {
               listItems[listItems.indexOf(gItem)].additionalFiles.add(list[i]);
             }
             isAdded = true;
             break;
           }
         }
-        if(!isAdded){
-          listItems.add(
-            GalleryGroupFilesEntity(
-              mainPhoto: list[i], 
-              mainVideo: null, 
+        if (!isAdded) {
+          listItems.add(GalleryGroupFilesEntity(
+              mainPhoto: list[i],
+              mainVideo: null,
               additionalFiles: [],
               startDate: list[i].dateTime,
-              toDate: null
-            )
-          );
+              toDate: null));
         }
       }
     }
 
-
-
     return listItems;
   }
-} 
+}

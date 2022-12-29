@@ -13,8 +13,10 @@ import '../../../../../locator.dart';
 
 abstract class ArchiveRemoteDataSource {
   Future<List<GalleryFileEntity>> getGalleryFiles(int page);
-  Future<GalleryFileEntity> addGalleryFile(GalleryFileEntity galleryFileEntity, File? file);
+  Future<GalleryFileEntity> addGalleryFile(List<GalleryFileEntity> galleryFileEntity,);
   Future<MemoryEntity> getMemoryInfo();
+
+  
   // Future<EventEntity> editEvent(EventEntity eventEntity, File? photo, bool isDeletePhoto);
   // Future<void> deleteEvent(List<int> ids);
   // Future<void> homeChangePosition(Map<String, int> items);
@@ -58,10 +60,10 @@ class ArchiveRemoteDataSourceImpl
 
 
   @override
-  Future<GalleryFileEntity> addGalleryFile(GalleryFileEntity galleryFileEntity, File? file) async {
+  Future<GalleryFileEntity> addGalleryFile(List<GalleryFileEntity> galleryFileEntity) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.post(Endpoints.addGalleryFile.getPath(),
-        data: jsonEncode(galleryFileEntity.toMap()),
+        data: jsonEncode(galleryFileEntity.toList()),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,
@@ -96,4 +98,7 @@ class ArchiveRemoteDataSourceImpl
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
+
+
+
 }

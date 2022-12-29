@@ -12,9 +12,8 @@ class GetGalleryFilesEvent extends GalleryEvent{
 }
 
 class GalleryFileAddEvent extends GalleryEvent{
-  final GalleryFileEntity galleryFileEntity;
-  final File? file;
-  GalleryFileAddEvent({required this.galleryFileEntity, required this.file});
+  final List<GalleryFileEntity> galleryFileEntity;
+  GalleryFileAddEvent({required this.galleryFileEntity,});
 }
 
 class GalleryFileEditEvent extends GalleryEvent{
