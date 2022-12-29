@@ -80,7 +80,7 @@ class PurposeRepositoryImpl implements PurposeRepository {
 
 
   @override
-  Future<Either<Failure, PurposeEntity>> getSeasonPurpose() async {
+  Future<Either<Failure, FullPurposeEntity>> getSeasonPurpose() async {
     if (await networkInfo.isConnected) {
       try {
         final items = await remoteDataSource.getSeasonPurpose();

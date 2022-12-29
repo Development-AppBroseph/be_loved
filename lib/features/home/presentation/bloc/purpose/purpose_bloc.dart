@@ -31,7 +31,7 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
   }
 
   List<PurposeEntity> allPurposes = [];
-  PurposeEntity? seasonPurpose;
+  FullPurposeEntity? seasonPurpose;
   List<PurposeEntity> availablePurposes = [];
   List<FullPurposeEntity> inProcessPurposes = [];
   List<FullPurposeEntity> historyPurposes = [];
@@ -46,6 +46,9 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
       (error) => errorCheck(error),
       (data) {
         seasonPurpose = data;
+        seasonPurpose!.purpose.inHistory = seasonPurpose!.verdict != null
+          ? true
+          : false;
         return GotPurposeDataState();
       },
     );
@@ -101,7 +104,7 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
 
 
   void _completePurpose(CompletePurposeEvent event, Emitter<PurposeState> emit) async {
-    print('COMPLETE PURPOSE DATA');
+    print('COMPLETE PURPOSE DATA ID: ${event.target}');
     emit(PurposeLoadingState());
 
     //Complete and to in process

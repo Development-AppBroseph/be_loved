@@ -62,6 +62,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
         final data = await readExifFromBytes(file.bytes!);
         for (var item in data.entries) {
           print('ENTRY: ${item.key} : ${item.value}');
+        print('DATA: ${item.key == 'Image DateTime' ? item.value.toString() : null}');
         }
         files.add(file.bytes!);
         platformFiles.add(file);

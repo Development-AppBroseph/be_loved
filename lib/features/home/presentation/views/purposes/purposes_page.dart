@@ -112,9 +112,9 @@ class _PurposesPageState extends State<PurposesPage> {
                         ? const SizedBox.shrink()
                         : PurposeCard(
                           onCompleteTap: (){
-                            completePurpose(bloc.seasonPurpose!.id);
+                            completePurpose(bloc.seasonPurpose!.purpose.id);
                           },
-                          purposeEntity: bloc.seasonPurpose!,
+                          purposeEntity: bloc.seasonPurpose!.purpose,
                         )
                       ],
                     )

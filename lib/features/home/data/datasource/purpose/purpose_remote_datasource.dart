@@ -12,7 +12,7 @@ import '../../../../../core/services/network/endpoints.dart';
 import '../../../../../locator.dart';
 
 abstract class PurposeRemoteDataSource {
-  Future<PurposeEntity> getSeasonPurpose();
+  Future<FullPurposeEntity> getSeasonPurpose();
   Future<List<PurposeEntity>> getAvailablePurposes(double lat, double long);
   Future<List<FullPurposeEntity>> getInProcessPurposes();
   Future<List<FullPurposeEntity>> getHistoryPurposes();
@@ -34,7 +34,7 @@ class PurposeRemoteDataSourceImpl
 
   //Get season main purpose
   @override
-  Future<PurposeEntity> getSeasonPurpose() async {
+  Future<FullPurposeEntity> getSeasonPurpose() async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.get(Endpoints.getSeasonPurpose.getPath(),
         options: Options(
@@ -42,8 +42,9 @@ class PurposeRemoteDataSourceImpl
             validateStatus: (status) => status! < 599,
             headers: headers));
     printRes(response);
+    print('DATA SEAS: ${response.data}');
     if (response.statusCode == 200) {
-      return PurposeModel.fromJson(response.data);
+      return FullPurposeModel.fromJson(response.data);
     } else if(response.statusCode == 401){
       throw ServerException(message: 'token_error');
     }else {

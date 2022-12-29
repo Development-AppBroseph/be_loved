@@ -12,7 +12,7 @@ abstract class PurposeRepository {
   Future<Either<Failure, List<PurposeEntity>>> getAvailablePurposes(GetAvailablePurposesParams params);
   Future<Either<Failure, List<FullPurposeEntity>>> getInProcessPurposes();
   Future<Either<Failure, List<FullPurposeEntity>>> getHistoryPurposes();
-  Future<Either<Failure, PurposeEntity>> getSeasonPurpose();
+  Future<Either<Failure, FullPurposeEntity>> getSeasonPurpose();
   Future<Either<Failure, void>> completePurpose(CompletePurposeParams params);
   Future<Either<Failure, void>> cancelPurpose(CancelPurposeParams params);
   Future<Either<Failure, void>> sendPhotoPurpose(SendPhotoPurposeParams params);
