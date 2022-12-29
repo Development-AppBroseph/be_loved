@@ -62,7 +62,17 @@ class _AddFileWidgetState extends State<AddFileWidget> {
         final data = await readExifFromBytes(file.bytes!);
         for (var item in data.entries) {
           print('ENTRY: ${item.key} : ${item.value}');
-        print('DATA: ${item.key == 'Image DateTime' ? item.value.toString() : null}');
+          filesFromGallery.add(
+            GalleryFileEntity(
+              id: 0,
+              urlToFile: file.path!,
+              place: file.identifier!,
+              dateTime: item.key == 'Image DateTime'
+                  ? DateTime.parse(item.value.printable)
+                  : DateTime.now(),
+              size: file.size,
+            ),
+          );
         }
         files.add(file.bytes!);
         platformFiles.add(file);
@@ -207,26 +217,17 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                               ),
                             ],
                             CustomButton(
-                                color: ColorStyles.primarySwath,
-                                text: 'Готово',
-                                textColor: Colors.white,
-                                validate: isValidate(),
-                                onPressed: () {
-                                  context
-                                      .read<GalleryBloc>()
-                                      .add(GalleryFileAddEvent(
-                                        galleryFileEntity: List.generate(
-                                            platformFiles.length,
-                                            (index) => GalleryFileEntity(
-                                                id: index,
-                                                urlToFile:
-                                                    platformFiles[index].path!,
-                                                place: platformFiles[index]
-                                                    .identifier!,
-                                                dateTime: DateTime.now(),
-                                                size: platformFiles[index].size)),
-                                      ));
-                                })
+                              color: ColorStyles.primarySwath,
+                              text: 'Готово',
+                              textColor: Colors.white,
+                              validate: isValidate(),
+                              onPressed: () {
+                                context.read<GalleryBloc>().add(
+                                      GalleryFileAddEvent(
+                                          galleryFileEntity: filesFromGallery),
+                                    );
+                              },
+                            ),
                           ],
                         ),
                       ),
