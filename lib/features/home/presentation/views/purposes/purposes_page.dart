@@ -114,6 +114,12 @@ class _PurposesPageState extends State<PurposesPage> {
                           onCompleteTap: (){
                             completePurpose(bloc.seasonPurpose!.purpose.id);
                           },
+                          onPickFile: (f){
+                            sendPhotoPurpose(bloc.seasonPurpose!.purpose.id, f);
+                          },
+                          onCancelTap: (){
+                            cancelPurpose(bloc.seasonPurpose!.purpose.id);
+                          },
                           purposeEntity: bloc.seasonPurpose!.purpose,
                         )
                       ],

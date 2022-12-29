@@ -236,7 +236,7 @@ class _ArchivePageState extends State<ArchivePage> {
                           ],
                         ),
                         Text(
-                          enitityPos == null ? '' : enitityPos!.mainPhoto.place,
+                          enitityPos == null ? '' : (enitityPos!.mainPhoto.place ?? ''),
                           style: TextStyles(context).white_15_w800.copyWith(
                                 color: Colors.white.withOpacity(0.5),
                               ),

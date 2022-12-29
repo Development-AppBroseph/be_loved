@@ -106,6 +106,7 @@ class _GalleryPageState extends State<GalleryPage> {
         }
         if(state is GalleryFilesAddedState){
           Loader.hide();
+          bloc.add(GetGalleryFilesEvent(isReset: true));
         }
       },
       builder: (context, state) {
@@ -280,7 +281,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         ),
                       ],
                     ),
-                    Text(file.place, style: TextStyles(context).white_15_w800.copyWith(color: Colors.white.withOpacity(0.7),)),
+                    Text(file.place ?? '', style: TextStyles(context).white_15_w800.copyWith(color: Colors.white.withOpacity(0.7),)),
                   ],
                 // ),
               )

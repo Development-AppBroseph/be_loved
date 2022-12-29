@@ -67,6 +67,7 @@ dependencies:
   photo_view: ^0.14.0
   file_picker: ^5.2.4
   exif: ^3.1.2
+  geocoding: ^2.0.5
 
 dev_dependencies:
   flutter_test:

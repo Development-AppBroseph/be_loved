@@ -3,7 +3,7 @@ import 'package:be_loved/features/home/domain/entities/archive/gallery_file_enti
 class GalleryFileModel extends GalleryFileEntity{
   GalleryFileModel({
     required int id,
-    required String place,
+    required String? place,
     required int size,
     required DateTime dateTime,
     required String urlToFile,

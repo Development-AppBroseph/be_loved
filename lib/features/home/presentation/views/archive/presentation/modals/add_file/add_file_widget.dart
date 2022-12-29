@@ -6,6 +6,7 @@ import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:exif/exif.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../bloc/gallery/gallery_bloc.dart';
 
@@ -38,7 +40,6 @@ class _AddFileWidgetState extends State<AddFileWidget> {
 
   List<Uint8List> files = [];
   List<GalleryFileEntity> filesFromGallery = [];
-  List<PlatformFile> platformFiles = [];
 
   bool isValidate() {
     return true;
@@ -47,6 +48,9 @@ class _AddFileWidgetState extends State<AddFileWidget> {
   complete() {
     if (isValidate()) {
       showLoaderWrapper(context);
+      context.read<GalleryBloc>().add(
+        GalleryFileAddEvent(galleryFileEntity: filesFromGallery),
+      );
     }
   }
 
@@ -60,22 +64,38 @@ class _AddFileWidgetState extends State<AddFileWidget> {
     if (result != null) {
       for (var file in result.files) {
         final data = await readExifFromBytes(file.bytes!);
+        String? dateTimeShooting;
+        double? lat;
+        double? long;
         for (var item in data.entries) {
           print('ENTRY: ${item.key} : ${item.value}');
-          filesFromGallery.add(
-            GalleryFileEntity(
-              id: 0,
-              urlToFile: file.path!,
-              place: file.identifier!,
-              dateTime: item.key == 'Image DateTime'
-                  ? DateTime.parse(item.value.printable)
-                  : DateTime.now(),
-              size: file.size,
-            ),
-          );
+          //Get datetime from metadata
+          if(item.key == 'Image DateTime'){
+            dateTimeShooting = '${item.value}';
+            print('DATETIME PHOTO: $dateTimeShooting');
+          //Get latitude from metadata
+          }else if(item.key == 'GPS GPSLatitude'){
+            lat = getCoordinateFromExifString(item.value.toString());
+            print('COORDINATES LAT: $lat');
+          //Get longitude from metadata
+          }else if(item.key == 'GPS GPSLongitude'){
+            long = getCoordinateFromExifString(item.value.toString());
+            print('COORDINATES LONG: $long');
+          }
+          
         }
+        filesFromGallery.add(
+          GalleryFileEntity(
+            id: 0,
+            urlToFile: file.path!,
+            place: 'Алматы, где то!',
+            dateTime: dateTimeShooting != null
+                ? DateFormat("yyyy:MM:dd hh:mm:ss").parse(dateTimeShooting)
+                : DateTime.now(),
+            size: file.size,
+          ),
+        );
         files.add(file.bytes!);
-        platformFiles.add(file);
       }
       setState(() {});
     }
@@ -221,12 +241,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                               text: 'Готово',
                               textColor: Colors.white,
                               validate: isValidate(),
-                              onPressed: () {
-                                context.read<GalleryBloc>().add(
-                                      GalleryFileAddEvent(
-                                          galleryFileEntity: filesFromGallery),
-                                    );
-                              },
+                              onPressed: complete,
                             ),
                           ],
                         ),

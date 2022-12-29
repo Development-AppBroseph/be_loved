@@ -59,10 +59,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     GalleryState state = data.fold(
       (error) => errorCheck(error),
       (data) {
-        files = files.reversed.toList();
-        files.add(data);
-        files = files.reversed.toList();
-        return GalleryFilesAddedState(galleryFileEntity: data);
+        return GalleryFilesAddedState();
       },
     );
     emit(state);

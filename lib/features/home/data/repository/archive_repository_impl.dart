@@ -38,7 +38,7 @@ class ArchiveRepositoryImpl implements ArchiveRepository {
 
 
   @override
-  Future<Either<Failure, GalleryFileEntity>> addGalleryFile(params) async {
+  Future<Either<Failure, void>> addGalleryFile(params) async {
     if (await networkInfo.isConnected) {
       try {
         final items = await remoteDataSource.addGalleryFile(params.galleryFileEntity);

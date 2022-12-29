@@ -13,7 +13,7 @@ import '../../../../../locator.dart';
 
 abstract class ArchiveRemoteDataSource {
   Future<List<GalleryFileEntity>> getGalleryFiles(int page);
-  Future<GalleryFileEntity> addGalleryFile(List<GalleryFileEntity> galleryFileEntity,);
+  Future<void> addGalleryFile(List<GalleryFileEntity> galleryFileEntity,);
   Future<MemoryEntity> getMemoryInfo();
 
   
@@ -60,19 +60,37 @@ class ArchiveRemoteDataSourceImpl
 
 
   @override
-  Future<GalleryFileEntity> addGalleryFile(List<GalleryFileEntity> galleryFileEntity) async {
-    print('DATA: ${jsonEncode(galleryFileEntity.toList())}');
+  Future<void> addGalleryFile(List<GalleryFileEntity> list) async {
+    print('DATA: ${list.length}');
+    headers["Content-Type"] = "multipart/form-data";
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    var map = Map.fromIterable(galleryFileEntity, value:  (element) => element);
+    // Map<String, Map<String, dynamic>> mapDataList = {};
+    // for(int i = 0; i < list.length; i++){
+    //   mapDataList.addAll({i.toString(): await list[i].toMap()});
+    // }
+    List<MultipartFile> files = [];
+    List<DateTime> times = [];
+    List<String?> places = [];
+    for(int i = 0; i < list.length; i++){
+      files.add(await MultipartFile.fromFile(list[i].urlToFile));
+      places.add(list[i].place);
+      times.add(list[i].dateTime);
+    }
+    Map<String, dynamic> mapDataList = {
+      'files': files,
+      'places': places,
+      'dates': times
+    };
+    print('mapDATA: ${mapDataList}');
     Response response = await dio.post(Endpoints.addGalleryFile.getPath(),
-        data: jsonEncode(map),
+        data: FormData.fromMap(mapDataList),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,
             headers: headers));
     printRes(response);
     if (response.statusCode == 201) {
-      return GalleryFileModel.fromJson(response.data);
+      return;
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }

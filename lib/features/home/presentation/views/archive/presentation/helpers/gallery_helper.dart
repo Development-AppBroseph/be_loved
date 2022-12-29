@@ -53,3 +53,14 @@ int galleryGroupingCount(GalleryGroupFilesEntity entity){
   }
   return files; 
 }
+
+
+
+
+
+
+double getCoordinateFromExifString(String item){
+  List<String> coordinates = item.replaceAll(RegExp('\\['), '').replaceAll(RegExp('\\]'), '').split(', ');
+  List<String> crds = coordinates.last.split('/');
+  return int.parse(coordinates[0]) + int.parse(coordinates[1])/60;
+}

@@ -46,7 +46,10 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
       (error) => errorCheck(error),
       (data) {
         seasonPurpose = data;
-        seasonPurpose!.purpose.inHistory = seasonPurpose!.verdict != null
+        seasonPurpose!.purpose.inHistory = seasonPurpose!.verdict == 'Принято' 
+          ? true
+          : false;
+        seasonPurpose!.purpose.inProcess = seasonPurpose!.verdict == 'Ожидание' 
           ? true
           : false;
         return GotPurposeDataState();
@@ -126,7 +129,12 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     emit(PurposeLoadingState());
 
     //Cancel and to available
-    final gotPurpose = await cancelPurpose.call(CancelPurposeParams(target: inProcessPurposes.where((element) => element.purpose.id == event.target).first.id));
+    final gotPurpose = await cancelPurpose.call(CancelPurposeParams(
+        target: seasonPurpose!.purpose.id == event.target
+          ? seasonPurpose!.id
+          : inProcessPurposes.where((element) => element.purpose.id == event.target).first.id
+      )
+    );
     PurposeState state = gotPurpose.fold(
       (error) => errorCheck(error),
       (data) => CompletedPurposeState()
@@ -146,7 +154,9 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     //Send photo of purpose and complete)(history)
     final gotPurpose = await sendPhotoPurpose.call(SendPhotoPurposeParams(
       path: event.path, 
-      target: inProcessPurposes.where((element) => element.purpose.id == event.target).first.id
+      target: seasonPurpose!.purpose.id == event.target
+        ? seasonPurpose!.id
+        : inProcessPurposes.where((element) => element.purpose.id == event.target).first.id
       )
     );
     PurposeState state = gotPurpose.fold(
