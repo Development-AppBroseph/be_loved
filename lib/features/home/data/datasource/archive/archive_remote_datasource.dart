@@ -13,6 +13,7 @@ import '../../../../../locator.dart';
 
 abstract class ArchiveRemoteDataSource {
   Future<List<GalleryFileEntity>> getGalleryFiles(int page);
+  Future<void> deleteGalleryFiles(List<int> ids);
   Future<void> addGalleryFile(List<GalleryFileEntity> galleryFileEntity,);
   Future<MemoryEntity> getMemoryInfo();
 
@@ -36,6 +37,7 @@ class ArchiveRemoteDataSourceImpl
 
   @override
   Future<List<GalleryFileEntity>> getGalleryFiles(int page) async {
+    headers["Content-Type"] = "application/json";
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.get(Endpoints.getGalleryFiles.getPath(),
         queryParameters: {
@@ -57,6 +59,32 @@ class ArchiveRemoteDataSourceImpl
     }
   }
 
+
+
+
+
+
+  @override
+  Future<void> deleteGalleryFiles(List<int> ids) async {
+    print('DELETE IDS: ${ids}');
+    headers["Content-Type"] = "application/json";
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.delete(Endpoints.deleteGalleryFiles.getPath(),
+        data: jsonEncode({'file_list': ids}),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 599,
+            headers: headers));
+    printRes(response);
+    if (!(response.statusCode! < 200 || response.statusCode! > 204)) {
+      return;
+    } else if(response.statusCode == 401){
+      throw ServerException(message: 'token_error');
+    }else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+  
 
 
   @override

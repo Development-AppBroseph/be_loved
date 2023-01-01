@@ -1,16 +1,16 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
-import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
-import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/archive_wrapper.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/mini_media_card.dart';
 import 'package:be_loved/features/home/presentation/views/bottom_navigation.dart';
+import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DetailGalleryPage extends StatefulWidget {
   GalleryGroupFilesEntity group;
@@ -51,9 +51,9 @@ class _DetailGalleryPageState extends State<DetailGalleryPage> {
                         onTap: () => Navigator.pop(context),
                         child: Stack(
                           children: [
-                            Hero(tag: '#${widget.group.mainPhoto.id}', child: _buildMiniItem(
-                              widget.group.mainPhoto
-                            )),
+                            Hero(tag: '#${widget.group.mainPhoto.id}', 
+                              child: _buildMiniItem(widget.group.mainPhoto)
+                            ),
                             Container(
                               width: 140.w,
                               height: 70.h,
@@ -77,63 +77,23 @@ class _DetailGalleryPageState extends State<DetailGalleryPage> {
                           ],
                         ),
                       )
-                      : _buildMiniItem(
-                        index == 1 && widget.group.mainVideo != null
-                        ? widget.group.mainVideo!
-                        : widget.group.additionalFiles[index - 1 + (widget.group.mainVideo == null ? 0 : 1)]
+                      : MiniMediaCard(
+                        file: index == 1 && widget.group.mainVideo != null
+                          ? widget.group.mainVideo!
+                          : widget.group.additionalFiles[index - 1 + (widget.group.mainVideo == null ? 0 : 1)], 
+                        onTap: (){
+                          Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PhotoFullScreenView(urlToImage: (index == 1 && widget.group.mainVideo != null
+                            ? widget.group.mainVideo!
+                            : widget.group.additionalFiles[index - 1 + (widget.group.mainVideo == null ? 0 : 1)]).urlToFile)));
+                        }, 
+                        isSelected: false
                       )
                     )
                   ),
-                  SizedBox(height: 450.h,)
+                  SizedBox(height: 470.h,)
                 ],
               ),
             )
-            
-            // ListView.builder(
-            //   padding: EdgeInsets.zero,
-            //     physics: const BouncingScrollPhysics(),
-            //     shrinkWrap: true,
-            //     itemBuilder: ((context, index) {
-            //       return Padding(
-            //         padding: EdgeInsets.only(bottom: 4.h),
-            //         child: Row(
-            //           children: [
-            //             if(index == 0)
-            //             Hero(
-            //               tag: '#${index}',
-            //               child: Container(
-            //                 height: 140.h,
-            //                 width: 140.w,
-            //                 color: ColorStyles.greyColor2,
-            //                 child: Image.asset(index == 0 ? 'assets/images/gallery1.png' : 'assets/images/gallery3.png', fit: BoxFit.cover,),
-            //               ),
-            //             ),
-            //             if(index != 0)
-            //             Container(
-            //                 height: 140.h,
-            //                 width: 140.w,
-            //                 color: ColorStyles.greyColor2,
-            //                 child: Image.asset(index == 0 ? 'assets/images/gallery1.png' : 'assets/images/gallery3.png', fit: BoxFit.cover,),
-            //               ),
-            //             SizedBox(width: 4.w),
-            //             Container(
-            //               height: 140.h,
-            //               width: 140.w,
-            //               color: ColorStyles.greyColor2,
-            //               child: Image.asset('assets/images/gallery4.png', fit: BoxFit.cover,),
-            //             ),
-            //             SizedBox(width: 4.w),
-            //             Container(
-            //               height: 140.h,
-            //               width: 140.w,
-            //               color: ColorStyles.greyColor2,
-            //               child: Image.asset('assets/images/gallery5.png', fit: BoxFit.cover,),
-            //             ),
-            //           ],
-            //         ),
-            //       );
-            //     }),
-            //     itemCount: 20),
           ),
         ),
       ),
@@ -145,6 +105,7 @@ class _DetailGalleryPageState extends State<DetailGalleryPage> {
 
 
   _buildMiniItem(GalleryFileEntity file){
+
     return Container(
       height: 140.h,
       width: 140.w,

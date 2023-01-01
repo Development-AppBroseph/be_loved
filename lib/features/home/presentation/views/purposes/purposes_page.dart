@@ -112,15 +112,15 @@ class _PurposesPageState extends State<PurposesPage> {
                         ? const SizedBox.shrink()
                         : PurposeCard(
                           onCompleteTap: (){
-                            completePurpose(bloc.seasonPurpose!.purpose.id);
+                            completePurpose(bloc.seasonPurpose!.id);
                           },
                           onPickFile: (f){
-                            sendPhotoPurpose(bloc.seasonPurpose!.purpose.id, f);
+                            sendPhotoPurpose(bloc.seasonPurpose!.id, f);
                           },
                           onCancelTap: (){
-                            cancelPurpose(bloc.seasonPurpose!.purpose.id);
+                            cancelPurpose(bloc.seasonPurpose!.id);
                           },
-                          purposeEntity: bloc.seasonPurpose!.purpose,
+                          purposeEntity: bloc.seasonPurpose!,
                         )
                       ],
                     )

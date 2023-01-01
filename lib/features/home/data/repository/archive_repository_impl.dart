@@ -37,6 +37,28 @@ class ArchiveRepositoryImpl implements ArchiveRepository {
 
 
 
+
+
+  @override
+  Future<Either<Failure, void>> deleteGalleryFiles(ids) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.deleteGalleryFiles(ids);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
   @override
   Future<Either<Failure, void>> addGalleryFile(params) async {
     if (await networkInfo.isConnected) {

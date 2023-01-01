@@ -3,6 +3,7 @@ import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
 import 'package:be_loved/features/home/domain/usecases/add_gallery_file.dart';
+import 'package:be_loved/features/home/domain/usecases/delete_gallery_files.dart';
 import 'package:be_loved/features/home/domain/usecases/get_gallery_files.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -12,13 +13,14 @@ part 'gallery_state.dart';
 class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   final GetGalleryFiles getGalleryFiles;
   final AddGalleryFile addGalleryFile;
+  final DeleteGalleryFiles deleteGalleryFiles;
 
-  GalleryBloc(this.addGalleryFile, this.getGalleryFiles)
+  GalleryBloc(this.addGalleryFile, this.getGalleryFiles, this.deleteGalleryFiles)
       : super(GalleryFilesInitialState()) {
     on<GetGalleryFilesEvent>(_getGallery);
     on<GalleryFileAddEvent>(_addGallery);
     // on<GalleryFileEditEvent>(_editGallery);
-    // on<GalleryFileDeleteEvent>(_deleteGalleryFile);
+    on<GalleryFileDeleteEvent>(_deleteGalleryFile);
   }
 
   List<GalleryFileEntity> files = [];
@@ -81,18 +83,17 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   //   emit(state);
   // }
 
-  // void _deleteGalleryFile(GalleryFileDeleteEvent event, Emitter<GalleryState> emit) async {
-  //   emit(GalleryFileBlankState());
-  //   final data = await deleteGalleryFile.call(DeleteGalleryFileParams(id: event.id));
-  //   GalleryState state = data.fold(
-  //     (error) => errorCheck(error),
-  //     (data) {
-  //       tags.removeWhere(((element) => element.id == event.id));
-  //       return GalleryFileDeletedState();
-  //     },
-  //   );
-  //   emit(state);
-  // }
+  void _deleteGalleryFile(GalleryFileDeleteEvent event, Emitter<GalleryState> emit) async {
+    emit(GalleryFilesBlankState());
+    final data = await deleteGalleryFiles.call(event.ids);
+    GalleryState state = data.fold(
+      (error) => errorCheck(error),
+      (data) {
+        return GalleryFilesDeletedState();
+      },
+    );
+    emit(state);
+  }
 
   GalleryState errorCheck(Failure failure) {
     print('FAIL: $failure');

@@ -22,6 +22,6 @@ class GalleryFileEditEvent extends GalleryEvent{
 }
 
 class GalleryFileDeleteEvent extends GalleryEvent{
-  final int id;
-  GalleryFileDeleteEvent({required this.id});
+  final List<int> ids;
+  GalleryFileDeleteEvent({required this.ids});
 }

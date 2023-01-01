@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class ArchiveRepository {
   Future<Either<Failure, List<GalleryFileEntity>>> getGalleryFiles(int page);
+  Future<Either<Failure, void>> deleteGalleryFiles(List<int> ids);
   Future<Either<Failure, void>> addGalleryFile(AddGalleryFileParams params);
   Future<Either<Failure, MemoryEntity>> getMemoryInfo();
   // Future<Either<Failure, EventEntity>> editGalleryFile(EditEventParams params);

@@ -66,7 +66,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 60.h,
+                      height: 60.h+27.h,
                     ),
                     DefaultTextFormField(
                       hint: 'Название',

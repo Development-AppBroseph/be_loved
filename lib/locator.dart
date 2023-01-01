@@ -21,6 +21,7 @@ import 'package:be_loved/features/home/domain/usecases/cancel_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/change_position_event.dart';
 import 'package:be_loved/features/home/domain/usecases/complete_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
+import 'package:be_loved/features/home/domain/usecases/delete_gallery_files.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/edit_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/get_available_purposes.dart';
@@ -215,13 +216,14 @@ void setupInjections() {
   sl.registerLazySingleton(() => AddGalleryFile(sl()));
   sl.registerLazySingleton(() => GetGalleryFiles(sl()));
   sl.registerLazySingleton(() => GetMemoryInfo(sl()));
+  sl.registerLazySingleton(() => DeleteGalleryFiles(sl()));
 
   //Blocs
   sl.registerFactory<ArchiveBloc>(
     () => ArchiveBloc(sl()),
   );
   sl.registerFactory<GalleryBloc>(
-    () => GalleryBloc(sl(), sl()),
+    () => GalleryBloc(sl(), sl(), sl()),
   );
 
 
