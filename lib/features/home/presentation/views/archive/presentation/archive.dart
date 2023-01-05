@@ -4,6 +4,7 @@ import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
+import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/albums_page.dart';
@@ -42,6 +43,43 @@ class _ArchivePageState extends State<ArchivePage> {
   int hideGalleryFileID = 0;
   bool hideFixedDate = false;
   List<int> galleryDeleteIds = [];
+  double currentScrollPosition = 0;
+
+  // Map<String, dynamic> inGroupPositionCalcID(double position){
+  //   GalleryBloc bloc = context.read<GalleryBloc>();
+  //   int newHideGalleryFileID = 0;
+  //   bool newHideFixedDate = false;
+  //   for (int i = 0; i < bloc.groupedFiles.length; i++) {
+  //     print('POST: ${position}');
+  //     print('TPPPOS: ${bloc.groupedFiles[i].topPosition} ||| id: ${bloc.groupedFiles[i].mainPhoto.id}');
+  //     double widgetTopPos = bloc.groupedFiles[i].topPosition -
+  //         MediaQuery.of(context).padding.top -
+  //         20.h;
+  //     print('NEW POST: ${widgetTopPos}');
+  //     if (widgetTopPos == 0) {
+  //       break;
+  //     }
+  //     if (position >= widgetTopPos) {
+  //       newHideGalleryFileID = bloc.groupedFiles[i].mainPhoto.id;
+  //     }
+  //     if (i != bloc.groupedFiles.length - 1) {
+  //       if (80.h <=
+  //           ((bloc.groupedFiles[i + 1].topPosition -
+  //                   MediaQuery.of(context).padding.top -
+  //                   20.h) -
+  //               position)) {
+  //         newHideFixedDate = true;
+  //       } else {
+  //         newHideFixedDate = false;
+  //       }
+  //     }
+  //   }
+
+  //   return {
+  //     'newHideFixedDate': newHideFixedDate,
+  //     'newHideGalleryFileID': newHideGalleryFileID
+  //   };
+  // }
 
   @override
   void initState() {
@@ -49,9 +87,13 @@ class _ArchivePageState extends State<ArchivePage> {
 
     GalleryBloc bloc = context.read<GalleryBloc>();
     ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
+    AlbumsBloc albumsBloc = context.read<AlbumsBloc>();
 
     if (bloc.state is GalleryFilesInitialState) {
       bloc.add(GetGalleryFilesEvent(isReset: false));
+    }
+    if (albumsBloc.state is AlbumInitialState) {
+      albumsBloc.add(GetAlbumsEvent());
     }
     if (archiveBloc.memoryEntity == null ||
         sl<AuthConfig>().memoryEntity == null) {
@@ -59,6 +101,14 @@ class _ArchivePageState extends State<ArchivePage> {
     }
 
     scrollController.addListener(() {
+      double position = scrollController.position.pixels;
+      currentScrollPosition = position;
+      if(position > (scrollController.position.maxScrollExtent-100) && currentPageIndex == 1){
+        GalleryBloc galleryBloc = context.read<GalleryBloc>();
+        if(!galleryBloc.isEnd && !galleryBloc.isLoading){
+          galleryBloc.add(GetGalleryFilesEvent(isReset: false));
+        }
+      }
       if (currentPageIndex != 1) {
         if (!hideTopBar) {
           setState(() {
@@ -67,7 +117,6 @@ class _ArchivePageState extends State<ArchivePage> {
         }
         return;
       }
-      double position = scrollController.position.pixels;
       int newHideGalleryFileID = 0;
       bool newHideFixedDate = false;
       if (position > 170) {
@@ -143,6 +192,7 @@ class _ArchivePageState extends State<ArchivePage> {
     setState(() {
       galleryDeleteIds = [];
       showTop = false;
+      hideTopBar = true;
     });
   }
 
@@ -160,6 +210,7 @@ class _ArchivePageState extends State<ArchivePage> {
 
   @override
   Widget build(BuildContext context) {
+    GalleryBloc galleryBloc = context.read<GalleryBloc>();
     return PageView(
       controller: pageController,
       physics: physics,
@@ -184,6 +235,7 @@ class _ArchivePageState extends State<ArchivePage> {
                   ? MomentsPage()
                   : currentPageIndex == 1
                       ? GalleryPage(
+                          position: currentScrollPosition,
                           hideGalleryFileID: hideGalleryFileID,
                           deletingIds: galleryDeleteIds,
                           onSelectForDeleting: (id){

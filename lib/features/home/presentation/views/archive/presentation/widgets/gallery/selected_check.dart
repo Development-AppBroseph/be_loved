@@ -10,12 +10,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 
 class SelectedCheck extends StatelessWidget {
+  final bool isMiniCard;
+  SelectedCheck({this.isMiniCard = false});
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: 30.w,
-      bottom: 30.h,
+      right: 12.w,
+      bottom: isMiniCard ? 12.h : 16.h,
       child: SizedBox(
         width: 38.h,
         height: 38.h,

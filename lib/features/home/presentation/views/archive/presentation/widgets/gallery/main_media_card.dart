@@ -4,6 +4,7 @@ import 'package:be_loved/features/home/domain/entities/archive/gallery_file_enti
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/selected_check.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/video_file_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,11 +17,13 @@ class MainMediaCard extends StatelessWidget {
   final Key mainKey;
   final bool showTopBar;
   final bool isDeleting;
+  final bool isForSelecting;
   final Key dotsKey;
   final Function() onDotsTap;
   final Function() onTap;
   MainMediaCard({
     required this.file,
+    required this.isForSelecting,
     required this.mainKey,
     required this.dotsKey,
     required this.onDotsTap,
@@ -32,18 +35,23 @@ class MainMediaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = file.isVideo ? 284.h : 428.w;
     return GestureDetector(
       onTap: onTap,
       key: mainKey,
       child: Padding(
-        padding: EdgeInsets.only(top: 4.w),
+        padding: EdgeInsets.only(top: group.mainVideo != null && group.mainVideo!.id == file.id ? 0 : 4.w),
         child: Stack(
           children: [
             Hero(
               tag: '#${file.id}',
-              child: CachedNetworkImage(
-                imageUrl: file.urlToFile,
-                height: 428.w,
+              child: 
+              // file.isVideo
+              // ? VideoFileImage(file: file)
+              // : 
+              CachedNetworkImage(
+                imageUrl: file.isVideo ? (file.urlToPreviewVideoImage ?? '') : file.urlToFile,
+                height: height,
                 width: double.infinity,
                 fit: BoxFit.cover,
               )
@@ -51,7 +59,7 @@ class MainMediaCard extends StatelessWidget {
               //   'assets/images/gallery1.png', 
               //   fit: BoxFit.cover,
               //   width: double.infinity,
-              //   height: 428.w,  
+              //   height: height,  
               // )
             ),
             Container(
@@ -71,12 +79,12 @@ class MainMediaCard extends StatelessWidget {
             if(isDeleting)
             Container(
               width: double.infinity,
-              height: 428.w,
+              height: height,
               color: Colors.white.withOpacity(0.3),
             ),
             if(isDeleting)
             SelectedCheck(),
-            if(showTopBar)
+            if(showTopBar && file.id == group.mainPhoto.id && !isForSelecting) //&& !file.isVideo)
             Positioned(
               top: 25.h,
               left: 30.w,
@@ -93,13 +101,24 @@ class MainMediaCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(convertToRangeDates(group), style: TextStyles(context).white_35_w800.copyWith(color: Colors.white.withOpacity(0.7),)),
+                        if(!file.isVideo)
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: onDotsTap,
-                          child: SvgPicture.asset(
-                            SvgImg.dots,
-                            height: 7.h,
-                            color: Colors.white,
-                            key: dotsKey,
+                          child: SizedBox(
+                            height: 40.h,
+                            width: 50.w,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                SvgPicture.asset(
+                                  SvgImg.dots,
+                                  height: 7.h,
+                                  color: Colors.white,
+                                  key: dotsKey,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -109,9 +128,31 @@ class MainMediaCard extends StatelessWidget {
                 // ),
               )
             ),
+
+
+
+
+
+            if(file.isVideo)
+            Positioned.fill(
+              child: Center(child: SvgPicture.asset(SvgImg.play, ))
+            ),
+            if(file.isVideo && file.duration != null)
+            Positioned(
+              top: 30.h,
+              right: 30.w,
+              child: Text(formatDuration(Duration(seconds: file.duration!)), style: TextStyles(context).white_15_w800)
+            )
           ],
         ),
       ),
     );
   }
+}
+
+String formatDuration(Duration duration) {
+  String hours = duration.inHours.toString().padLeft(0, '2');
+  String minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+  String seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+  return "${hours == '0' ? '' : '$hours:'}${minutes[0] == '0' ? minutes.substring(1) : minutes}:$seconds";
 }

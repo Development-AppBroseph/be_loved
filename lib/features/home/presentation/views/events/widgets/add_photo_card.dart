@@ -16,7 +16,8 @@ class AddPhotoCard extends StatelessWidget {
   final Function() onTap;
   final Key? keyAdd;
   final Color? color;
-  const AddPhotoCard({this.color, required this.onTap, this.keyAdd});
+  final String? text;
+  const AddPhotoCard({this.text, this.color, required this.onTap, this.keyAdd});
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +43,10 @@ class AddPhotoCard extends StatelessWidget {
                   color: ColorStyles.blackColor,
                 ),
                 SizedBox(width: 19.w,),
-                Text('Добавить фото', style: TextStyles(context).black_20_w800,)
+                Text(text ?? 'Добавить фото', style: TextStyles(context).black_20_w800,)
               ],
             ),
+            if(text == null || text == 'Добавить файлы')
             Transform.rotate(
                 angle: pi / 4,
                 child: SvgPicture.asset(
@@ -54,6 +56,8 @@ class AddPhotoCard extends StatelessWidget {
                   color: ColorStyles.blackColor,
                 )
             )
+            else 
+            SizedBox()
           ],
         ),
       ),

@@ -12,6 +12,7 @@ import 'package:be_loved/features/home/presentation/views/events/widgets/main_pa
 import 'package:be_loved/features/home/presentation/views/purposes/purposes_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
+import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -46,6 +47,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     context.read<EventsBloc>().add(GetEventsEvent());
+    context.read<DecorBloc>().add(GetBackgroundEvent());
     context.read<AuthBloc>().add(GetUser());
     context.read<TagsBloc>().add(GetTagsEvent());
   }

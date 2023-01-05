@@ -69,6 +69,12 @@ dependencies:
   exif: ^3.1.2
   geocoding: ^2.0.5
 
+  video_player: ^2.4.10
+  chewie: ^1.3.6
+  video_thumbnail: ^0.5.3
+  path_provider: ^2.0.11
+  yandex_geocoder: ^2.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -79,6 +85,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/animations/
+    - assets/backgrounds/
 
   uses-material-design: true
 

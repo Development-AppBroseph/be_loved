@@ -25,11 +25,13 @@ class AuthConfig {
   UserAnswer? user;
   AuthenticatedOption? authenticatedOption;
   MemoryEntity? memoryEntity;
+  int selectedBackgroundIndex;
   
   AuthConfig({
     this.token, 
     this.user, 
     this.memoryEntity,
+    this.selectedBackgroundIndex = 0,
     this.authenticatedOption = AuthenticatedOption.unauthenticated
   });
 }

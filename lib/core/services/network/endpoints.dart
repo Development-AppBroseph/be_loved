@@ -39,6 +39,12 @@ enum Endpoints {
   getHistoryPurposes,
   sendPurpose,
   sendPhotoPurpose,
+
+  //Albums
+  getAlbums,
+  createAlbum,
+  updateFilesAlbum,
+  deleteAlbum,
 }
 
 extension EndpointsExtension on Endpoints {
@@ -92,6 +98,14 @@ extension EndpointsExtension on Endpoints {
         return "/targets/completed"; 
       case Endpoints.sendPhotoPurpose:
         return "/targets/main/${params![0]}"; 
+      case Endpoints.getAlbums:
+        return "/archive/album"; 
+      case Endpoints.createAlbum:
+        return "/archive/album"; 
+      case Endpoints.updateFilesAlbum:
+        return "/archive/album/${params![0]}"; 
+      case Endpoints.deleteAlbum:
+        return "/archive/album/${params![0]}"; 
       default:
         return '';
     }

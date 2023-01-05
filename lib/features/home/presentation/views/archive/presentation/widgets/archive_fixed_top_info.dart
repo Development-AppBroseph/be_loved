@@ -17,11 +17,15 @@ class ArchiveFixedTopInfo extends StatelessWidget {
   final bool isDeleting;
   final Function() onTap;
   final Function() onDeleteTap;
+  final Function()? onBackTap;
+  final bool isForSelecting;
   const ArchiveFixedTopInfo({
     required this.showTop,
     required this.enitityPos,
     required this.onDeleteTap,
     required this.onTap,
+    this.isForSelecting = false,
+    this.onBackTap,
     required this.dateTime,
     required this.isDeleting,
   });
@@ -43,6 +47,34 @@ class ArchiveFixedTopInfo extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if(isForSelecting)
+                GestureDetector(
+                  onTap: onBackTap,
+                  behavior: HitTestBehavior.opaque,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        SvgImg.back,
+                        height: 26.32.h,
+                        color: Colors.white,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 20.w),
+                        child: Text(
+                          'Назад',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 20.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                else
                 Text(
                   dateTime,
                   style: TextStyles(context).white_35_w800.copyWith(
@@ -55,14 +87,16 @@ class ArchiveFixedTopInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     _buildSelectBtn('Отменить', context),
-                    SizedBox(width: 10.w,),
-                    _buildDeleteBtn()
+                    if(!isForSelecting)
+                    ...[SizedBox(width: 10.w,),
+                    _buildDeleteBtn()]
                   ],
                 ) 
                 : _buildSelectBtn('Выбрать', context),
                 
               ],
             ),
+            if(!isForSelecting)
             Text(
               enitityPos == null ? '' : (enitityPos!.mainPhoto.place ?? ''),
               style: TextStyles(context).white_15_w800.copyWith(

@@ -10,8 +10,6 @@ abstract class Img {
   static const String android12SplashScreen =
       "assets/images/android12splash.png";
   static const String splashScreen = "assets/images/splash.png";
-  static const String backgroungProfile =
-      "assets/images/background_profile.png";
   static const String smile = "assets/images/smile.png";
 }
 

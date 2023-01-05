@@ -22,7 +22,19 @@ class MemoryEntity extends Equatable {
     }
     return res.toString();
   }
+
+  String getFilledMemoryInPercent(){
+    double onePercent = maxSize/100;
+    double res = currentSize/onePercent;
+    res = res.toPrecision(1);
+    return res.toString();
+  }
   
+
+
+  bool fullFilled(){
+    return maxSize <= currentSize;
+  }
 
 
   @override

@@ -5,6 +5,7 @@ import 'package:be_loved/features/home/domain/entities/archive/gallery_group_fil
 import 'package:be_loved/features/home/domain/usecases/add_gallery_file.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_gallery_files.dart';
 import 'package:be_loved/features/home/domain/usecases/get_gallery_files.dart';
+import 'package:be_loved/features/home/presentation/views/archive/helpers/video_helper.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 part 'gallery_event.dart';
@@ -26,30 +27,41 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   List<GalleryFileEntity> files = [];
   List<GalleryGroupFilesEntity> groupedFiles = [];
   int page = 0;
+  bool isLoading = false;
+  bool isEnd = false;
 
   void _getGallery(
       GetGalleryFilesEvent event, Emitter<GalleryState> emit) async {
-    emit(GalleryFilesLoadingState());
+    print('GET GALLERY FILES BLOC page: ${page}; isEnd: ${isEnd}');
+    isLoading = true;
     if (event.isReset) {
+      emit(GalleryFilesLoadingState());
       page = 0;
+      isEnd = false;
+      files = [];
+    }else{
+      emit(GalleryFilesBlankState());
     }
     page++;
-
     final gotGallery = await getGalleryFiles.call(page);
-    await Future.delayed(Duration(seconds: 3));
     GalleryState state = gotGallery.fold(
       (error) => errorCheck(error),
       (data) {
-        if (event.isReset) {
-          files = data;
-        } else {
-          files.addAll(data);
+        print('DATA GOT: ${data}');
+        if(data.any((element) => files.any((file) => file.id == element.id))){
+          isEnd = true;
+        }else{
+          if (event.isReset) {
+            files = data;
+          } else {
+            files.addAll(data);
+          }
+          groupedFiles = getGroupedFiles(files);
         }
-        groupedFiles = getGroupedFiles(files);
-        print('GROUPED FILES: ${groupedFiles}');
         return GotSuccessGalleryState();
       },
     );
+    isLoading = false;
     emit(state);
   }
 
@@ -143,7 +155,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
                   list[i].dateTime.millisecondsSinceEpoch) {
             //If video file
             if (listItems[listItems.indexOf(gItem)].additionalFiles.isEmpty &&
-                list[i].urlToFile.contains('.mp4')) {
+                checkIsVideo(list[i].urlToFile)) {
               listItems[listItems.indexOf(gItem)].mainVideo = list[i];
             } else {
               listItems[listItems.indexOf(gItem)].additionalFiles.add(list[i]);
