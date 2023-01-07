@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
+import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
@@ -16,7 +17,9 @@ import 'package:be_loved/features/home/presentation/views/relationships/account/
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/avatar_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/mirror_image.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/send_file/send_file_modal.dart';
+import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
+import 'package:be_loved/features/profile/presentation/widget/decor/sliding_background_card.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -147,6 +150,7 @@ class _AccountPageState extends State<AccountPage>
 
   @override
   Widget build(BuildContext context) {
+    DecorBloc decorBloc = context.read<DecorBloc>();
     // LinearGradient gradientText = const LinearGradient(
     //   colors: [
     //     Color.fromRGBO(255, 255, 255, 1),
@@ -222,7 +226,9 @@ class _AccountPageState extends State<AccountPage>
                 builder: (context, snapshot) {
                   return Stack(
                     children: [
-                      Image.asset(Img.backgroungProfile),
+                      SlidingBackgroundCard(
+                        height: 350.h,
+                      ),
                       Padding(
                         padding: EdgeInsets.only(left: 15.w, top: 76.h),
                         child: GestureDetector(
@@ -368,6 +374,13 @@ class _AccountPageState extends State<AccountPage>
                                 onTap: () {
                                   setState(() {
                                     if (!onPressed) {
+                                      codeScrollController.animateTo(
+                                        codeScrollController
+                                            .initialScrollOffset,
+                                        duration:
+                                            const Duration(milliseconds: 600),
+                                        curve: Curves.easeInOutQuint,
+                                      );
                                       onPressed = true;
                                       phone = true;
                                       animationController.forward(from: 0);
@@ -772,7 +785,7 @@ class _AccountPageState extends State<AccountPage>
                                                         ),
                                                       ),
                                                       SizedBox(
-                                                        height: 51.h,
+                                                        height: 34.h,
                                                       ),
                                                       CustomButton(
                                                           validate: true,

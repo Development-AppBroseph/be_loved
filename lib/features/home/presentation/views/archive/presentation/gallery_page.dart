@@ -1,96 +1,55 @@
 import 'dart:ui';
-
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
-import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/detail_gallery.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/video_view_v2.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/main_media_card.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/mini_media_card.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery_settings_modal.dart';
+import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 
 class GalleryPage extends StatefulWidget {
   final int hideGalleryFileID;
-  GalleryPage({required this.hideGalleryFileID});
+  final List<int> deletingIds;
+  final Function(int id) onSelectForDeleting;
+  final double position;
+  final bool isForSelecting;
+  GalleryPage({required this.position, this.isForSelecting = false, required this.hideGalleryFileID, required this.deletingIds, required this.onSelectForDeleting});
   @override
   State<GalleryPage> createState() => _GalleryPageState();
 }
 
 class _GalleryPageState extends State<GalleryPage> {
 
-  showGallerySettingsModal(Offset offset){
+  showGallerySettingsModal(Offset offset, int id){
     gallerySettingsModal(
       context, 
       offset,
-      (){},
-      (){}
+      (){
+        Navigator.pop(context);
+        showLoaderWrapper(context);
+        context.read<GalleryBloc>().add(GalleryFileDeleteEvent(ids: [id]));
+      },
     );
   }
 
+  bool isDeleting = false;
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
 
-  //   GalleryBloc bloc = context.read<GalleryBloc>();
-
-  //   if(bloc.state is GalleryFilesInitialState){
-  //     bloc.add(GetGalleryFilesEvent(isReset: false));
-  //   }
-
-  //   widget.scrollController.addListener(() {
-  //     double position = widget.scrollController.position.pixels;
-  //     int newHideGalleryFileID = 0;
-  //     bool newHideFixedDate = false;
-  //     if(position > 170){
-  //       newHideFixedDate = false;
-  //       for(int i = 0; i < bloc.groupedFiles.length; i++){
-  //         double widgetTopPos = bloc.groupedFiles[i].topPosition-MediaQuery.of(context).padding.top-20.h;
-  //         if(widgetTopPos == 0){
-  //           break;
-  //         }
-  //         if(position >= widgetTopPos){
-  //           newHideGalleryFileID = bloc.groupedFiles[i].mainPhoto.id;
-  //         }
-  //         if(i != bloc.groupedFiles.length-1){
-  //           if(80.h <= ((bloc.groupedFiles[i+1].topPosition-MediaQuery.of(context).padding.top-20.h) - position)){
-  //             newHideFixedDate = true;
-  //           }else{
-  //             newHideFixedDate = false;
-  //           }
-  //         }
-  //         if(!(i != bloc.groupedFiles.length-1 && position >= bloc.groupedFiles[i+1].topPosition-MediaQuery.of(context).padding.top-20.h)){
-  //           break;
-  //         }
-  //       }
-  //     }else{
-  //       newHideGalleryFileID = 0;
-  //     }
-  //     if(hideGalleryFileID != newHideGalleryFileID || newHideFixedDate != hideFixedDate){
-  //       setState(() {
-  //         print('NEWID: ${newHideGalleryFileID}');
-  //         print('NEW HIDE: ${newHideFixedDate}');
-  //         hideGalleryFileID = newHideGalleryFileID;
-  //         hideFixedDate = newHideFixedDate;
-  //         widget.onChangeShow(hideGalleryFileID == 0 || !hideFixedDate ? null : bloc.groupedFiles.where((element) => element.mainPhoto.id == hideGalleryFileID).first, hideGalleryFileID == 0);
-  //       });
-  //     }
-  //   });
-  // }
-
-  
   @override
   Widget build(BuildContext context) {
     GalleryBloc bloc = context.read<GalleryBloc>();
@@ -104,8 +63,9 @@ class _GalleryPageState extends State<GalleryPage> {
           Loader.hide();
           showAlertToast('Проверьте соединение с интернетом!');
         }
-        if(state is GalleryFilesAddedState){
+        if(state is GalleryFilesDeletedState){
           Loader.hide();
+          bloc.add(GetGalleryFilesEvent(isReset: true));
         }
       },
       builder: (context, state) {
@@ -123,15 +83,25 @@ class _GalleryPageState extends State<GalleryPage> {
                     children: [
                       _buildMainItem(GlobalKey(),GlobalKey(), bloc.groupedFiles.indexOf(group), group.mainPhoto, group),
                       if(group.mainVideo != null)
-                      _buildVideoItem(),
+                      _buildMainItem(GlobalKey(),GlobalKey(), bloc.groupedFiles.indexOf(group), group.mainVideo!, group),
                       ...List.generate(galleryGroupingCount(group), (index) 
-                        => _buildMiniItem(group.additionalFiles[index])
+                        => MiniMediaCard(
+                          file: group.additionalFiles[index],
+                          isSelected: widget.deletingIds.contains(group.additionalFiles[index].id),
+                          onTap: (){
+                            if(widget.deletingIds.isNotEmpty || widget.isForSelecting){
+                              widget.onSelectForDeleting(group.additionalFiles[index].id);
+                            }else{
+                              Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PhotoFullScreenView(urlToImage: group.additionalFiles[index].urlToFile,)));
+                            }
+                          },
+                        )
                       ).toList()
                     ],
                   ),
 
 
-                  if(group.additionalFiles.length - galleryGroupingCount(group) != 0)
+                  if(group.additionalFiles.length - galleryGroupingCount(group) != 0 && !widget.isForSelecting)
                   Positioned(
                     bottom: 12.h,
                     right: 12.h,
@@ -149,10 +119,10 @@ class _GalleryPageState extends State<GalleryPage> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               )
-            ).toList()
+            ).toList(),
             // List.generate(20, 
             //   (index) => index % 5 == 0
             //   ? _buildMainItem(GlobalKey(), index)
@@ -169,146 +139,50 @@ class _GalleryPageState extends State<GalleryPage> {
 
 
 
-
-
-
-  Widget _buildVideoItem(){
-    return Stack(
-      children: [
-        Container(
-          height: 284.h,
-          color: ColorStyles.greyColor2,
-          child: Image.asset('assets/images/gallery2.png', fit: BoxFit.cover,),
-        ),
-        Positioned.fill(
-          child: Center(child: SvgPicture.asset(SvgImg.play, ))
-        ),
-        Positioned(
-          top: 30.h,
-          right: 30.w,
-          child: Text('0:40', style: TextStyles(context).white_15_w800)
-        )
-      ],
-    );
-  }
-
-
-  Widget _buildMainItem(GlobalKey mainKey, GlobalKey newKey, int index, GalleryFileEntity file, GalleryGroupFilesEntity group){
+  Widget _buildMainItem(GlobalKey mainKey, GlobalKey dotsKey, int index, GalleryFileEntity file, GalleryGroupFilesEntity group){
     //Setting position of group
     if(group.topPosition == 0){
       Future.delayed(Duration(milliseconds: 100), (){
         GalleryBloc bloc = context.read<GalleryBloc>();
         for(var gItem in bloc.groupedFiles){
           if(gItem.mainPhoto.id == file.id){
-            bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition = getWidgetPosition(mainKey).dy;
+            bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition = getWidgetPosition(mainKey).dy+((widget.position == 0) ? 0 : (widget.position-10.h));
             // print('SETTING: ${bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition}');
             break;
           }
         }
       });
     }
-    return GestureDetector(
-      onTap: (){
-        Navigator.of(context).push(
-          PageRouteBuilder(
-            pageBuilder: (_, __, ___) => DetailGalleryPage(group: group,),
-            transitionDuration: Duration(milliseconds: 400),
-            transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
-        ));
+    return MainMediaCard(
+      dotsKey: dotsKey,
+      isForSelecting: widget.isForSelecting,
+      isDeleting: widget.deletingIds.contains(file.id),
+      mainKey: mainKey,
+      onDotsTap: (){
+        showGallerySettingsModal(getWidgetPosition(dotsKey), file.id);
       },
-      key: mainKey,
-      child: Padding(
-        padding: EdgeInsets.only(top: 4.w),
-        child: Stack(
-          children: [
-            Hero(
-              tag: '#${file.id}',
-              child: CachedNetworkImage(
-                imageUrl: file.urlToFile,
-                height: 428.w,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              )
-              // Image.asset(
-              //   'assets/images/gallery1.png', 
-              //   fit: BoxFit.cover,
-              //   width: double.infinity,
-              //   height: 428.w,  
-              // )
-            ),
-            Container(
-              width: double.infinity,
-              height: 151.h,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF2C2C2E).withOpacity(0.5),
-                    Color(0xFF2C2C2E).withOpacity(0),
-                  ]
-                )
-              ),
-            ),
-            if(file.id != widget.hideGalleryFileID)
-            Positioned(
-              top: 25.h,
-              left: 30.w,
-              right: 40.w,
-              // child: AnimatedOpacity(
-                // opacity: file.id != hideGalleryFileID ? 1 : 0,
-                // duration: const Duration(milliseconds: 800),
-                // curve: Curves.easeInOutQuint,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(convertToRangeDates(group), style: TextStyles(context).white_35_w800.copyWith(color: Colors.white.withOpacity(0.7),)),
-                        GestureDetector(
-                          onTap: (){
-                            showGallerySettingsModal(getWidgetPosition(newKey));
-                          },
-                          child: SvgPicture.asset(
-                            SvgImg.dots,
-                            height: 7.h,
-                            color: Colors.white,
-                            key: newKey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(file.place, style: TextStyles(context).white_15_w800.copyWith(color: Colors.white.withOpacity(0.7),)),
-                  ],
-                // ),
-              )
-            ),
-          ],
-        ),
-      ),
+      onTap: (){
+        if(widget.deletingIds.isEmpty && !widget.isForSelecting){
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => file.isVideo && file.id != group.mainPhoto.id
+                ? VideoView(url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', duration: const Duration(seconds: 0)) 
+                : DetailGalleryPage(group: group,),
+              transitionDuration: Duration(milliseconds: 400),
+              transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+          ));
+        }else{
+          widget.onSelectForDeleting(file.id);
+        }
+      },
+      file: file,
+      group: group,
+      showTopBar: file.id != widget.hideGalleryFileID,
+
     );
+    
   }
 
 
-
-
-
-
-
-  _buildMiniItem(GalleryFileEntity file){
-    return Container(
-      height: 140.h,
-      width: 140.w,
-      color: ColorStyles.greyColor2,
-      child: CachedNetworkImage(
-        imageUrl: file.urlToFile,
-        height: double.infinity,
-        width: double.infinity,
-        fit: BoxFit.cover,
-      )
-    );
-  }
 
 }

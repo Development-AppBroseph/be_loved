@@ -3,7 +3,9 @@ import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
 import 'package:be_loved/features/home/domain/usecases/add_gallery_file.dart';
+import 'package:be_loved/features/home/domain/usecases/delete_gallery_files.dart';
 import 'package:be_loved/features/home/domain/usecases/get_gallery_files.dart';
+import 'package:be_loved/features/home/presentation/views/archive/helpers/video_helper.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 part 'gallery_event.dart';
@@ -12,60 +14,70 @@ part 'gallery_state.dart';
 class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   final GetGalleryFiles getGalleryFiles;
   final AddGalleryFile addGalleryFile;
+  final DeleteGalleryFiles deleteGalleryFiles;
 
-  GalleryBloc(this.addGalleryFile, this.getGalleryFiles) : super(GalleryFilesInitialState()) {
+  GalleryBloc(this.addGalleryFile, this.getGalleryFiles, this.deleteGalleryFiles)
+      : super(GalleryFilesInitialState()) {
     on<GetGalleryFilesEvent>(_getGallery);
     on<GalleryFileAddEvent>(_addGallery);
     // on<GalleryFileEditEvent>(_editGallery);
-    // on<GalleryFileDeleteEvent>(_deleteGalleryFile);
+    on<GalleryFileDeleteEvent>(_deleteGalleryFile);
   }
 
   List<GalleryFileEntity> files = [];
   List<GalleryGroupFilesEntity> groupedFiles = [];
   int page = 0;
+  bool isLoading = false;
+  bool isEnd = false;
 
-  void _getGallery(GetGalleryFilesEvent event, Emitter<GalleryState> emit) async {
-    emit(GalleryFilesLoadingState());
-    if(event.isReset){
+  void _getGallery(
+      GetGalleryFilesEvent event, Emitter<GalleryState> emit) async {
+    print('GET GALLERY FILES BLOC page: ${page}; isEnd: ${isEnd}');
+    isLoading = true;
+    if (event.isReset) {
+      emit(GalleryFilesLoadingState());
       page = 0;
+      isEnd = false;
+      files = [];
+    }else{
+      emit(GalleryFilesBlankState());
     }
     page++;
-
     final gotGallery = await getGalleryFiles.call(page);
-    await Future.delayed(Duration(seconds: 3));
     GalleryState state = gotGallery.fold(
       (error) => errorCheck(error),
       (data) {
-        if(event.isReset){
-          files = data;
+        print('DATA GOT: ${data}');
+        if(data.any((element) => files.any((file) => file.id == element.id))){
+          isEnd = true;
         }else{
-          files.addAll(data);
+          if (event.isReset) {
+            files = data;
+          } else {
+            files.addAll(data);
+          }
+          groupedFiles = getGroupedFiles(files);
         }
-        groupedFiles = getGroupedFiles(files);
-        print('GROUPED FILES: ${groupedFiles}');
         return GotSuccessGalleryState();
       },
     );
+    isLoading = false;
     emit(state);
   }
 
-
-
-  void _addGallery(GalleryFileAddEvent event, Emitter<GalleryState> emit) async {
+  void _addGallery(
+      GalleryFileAddEvent event, Emitter<GalleryState> emit) async {
     emit(GalleryFilesLoadingState());
-    final data = await addGalleryFile.call(AddGalleryFileParams(galleryFileEntity: event.galleryFileEntity, file: event.file));
+    final data = await addGalleryFile.call(AddGalleryFileParams(
+        galleryFileEntity: event.galleryFileEntity, ));
     GalleryState state = data.fold(
       (error) => errorCheck(error),
       (data) {
-        files = files.reversed.toList();
-        files.add(data);
-        files = files.reversed.toList();
-        return GalleryFilesAddedState(galleryFileEntity: data);
+        return GalleryFilesAddedState();
       },
     );
     emit(state);
   }
-
 
   // void _editGallery(GalleryFileEditEvent event, Emitter<GalleryState> emit) async {
   //   emit(GalleryFileLoadingState());
@@ -83,91 +95,86 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   //   emit(state);
   // }
 
+  void _deleteGalleryFile(GalleryFileDeleteEvent event, Emitter<GalleryState> emit) async {
+    emit(GalleryFilesBlankState());
+    final data = await deleteGalleryFiles.call(event.ids);
+    GalleryState state = data.fold(
+      (error) => errorCheck(error),
+      (data) {
+        return GalleryFilesDeletedState();
+      },
+    );
+    emit(state);
+  }
 
-
-  // void _deleteGalleryFile(GalleryFileDeleteEvent event, Emitter<GalleryState> emit) async {
-  //   emit(GalleryFileBlankState());
-  //   final data = await deleteGalleryFile.call(DeleteGalleryFileParams(id: event.id));
-  //   GalleryState state = data.fold(
-  //     (error) => errorCheck(error),
-  //     (data) {
-  //       tags.removeWhere(((element) => element.id == event.id));
-  //       return GalleryFileDeletedState();
-  //     },
-  //   );
-  //   emit(state);
-  // }
-
-
-
-
-  GalleryState errorCheck(Failure failure){
+  GalleryState errorCheck(Failure failure) {
     print('FAIL: $failure');
-    if(failure == ConnectionFailure() || failure == NetworkFailure()){
+    if (failure == ConnectionFailure() || failure == NetworkFailure()) {
       return GalleryFilesInternetErrorState();
-    }else if(failure is ServerFailure){
-      if(failure.message == 'token_error'){
+    } else if (failure is ServerFailure) {
+      if (failure.message == 'token_error') {
         print('token_error');
-        return GalleryFilesErrorState(message: failure.message.length < 100 ? failure.message : 'Вы не авторизованы', isTokenError: true);
+        return GalleryFilesErrorState(
+            message: failure.message.length < 100
+                ? failure.message
+                : 'Вы не авторизованы',
+            isTokenError: true);
       }
-      return GalleryFilesErrorState(message: failure.message.length < 100 ? failure.message : 'Ошибка сервера', isTokenError: false);
-    }else{
-      return GalleryFilesErrorState(message: 'Повторите попытку', isTokenError: false);
+      return GalleryFilesErrorState(
+          message:
+              failure.message.length < 100 ? failure.message : 'Ошибка сервера',
+          isTokenError: false);
+    } else {
+      return GalleryFilesErrorState(
+          message: 'Повторите попытку', isTokenError: false);
     }
   }
 
-
-
-
-
-  List<GalleryGroupFilesEntity> getGroupedFiles(List<GalleryFileEntity> list){
+  List<GalleryGroupFilesEntity> getGroupedFiles(List<GalleryFileEntity> list) {
     List<GalleryGroupFilesEntity> listItems = [];
 
-    for(int i = 0; i < list.length; i++){
+    for (int i = 0; i < list.length; i++) {
       //FIrst file(first group)
-      if(i == 0){
-        listItems.add(
-          GalleryGroupFilesEntity(
-            mainPhoto: list[i], 
-            mainVideo: null, 
+      if (i == 0) {
+        listItems.add(GalleryGroupFilesEntity(
+            mainPhoto: list[i],
+            mainVideo: null,
             additionalFiles: [],
             startDate: list[i].dateTime,
-            toDate: null
-          )
-        );
+            toDate: null));
       }
 
-      if(i != 0){
+      if (i != 0) {
         bool isAdded = false;
-        for(GalleryGroupFilesEntity gItem in listItems){
+        for (GalleryGroupFilesEntity gItem in listItems) {
           //Files in 3 days
-          if(!isAdded && gItem.startDate.add(const Duration(days: 3)).millisecondsSinceEpoch > list[i].dateTime.millisecondsSinceEpoch){
+          if (!isAdded &&
+              gItem.startDate
+                      .add(const Duration(days: 3))
+                      .millisecondsSinceEpoch >
+                  list[i].dateTime.millisecondsSinceEpoch) {
             //If video file
-            if(listItems[listItems.indexOf(gItem)].additionalFiles.isEmpty && list[i].urlToFile.contains('.mp4')){
+            if (listItems[listItems.indexOf(gItem)].additionalFiles.isEmpty &&
+                checkIsVideo(list[i].urlToFile)) {
               listItems[listItems.indexOf(gItem)].mainVideo = list[i];
-            }else{
+            } else {
               listItems[listItems.indexOf(gItem)].additionalFiles.add(list[i]);
             }
             isAdded = true;
             break;
           }
         }
-        if(!isAdded){
-          listItems.add(
-            GalleryGroupFilesEntity(
-              mainPhoto: list[i], 
-              mainVideo: null, 
+        if (!isAdded) {
+          listItems.add(GalleryGroupFilesEntity(
+              mainPhoto: list[i],
+              mainVideo: null,
               additionalFiles: [],
               startDate: list[i].dateTime,
-              toDate: null
-            )
-          );
+              toDate: null));
         }
       }
     }
 
-
-
     return listItems;
   }
-} 
+}

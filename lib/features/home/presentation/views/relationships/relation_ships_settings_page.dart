@@ -5,7 +5,6 @@ import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
-import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
@@ -19,6 +18,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/modals/c
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/relation_start_date_widget.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
+import 'package:be_loved/features/profile/presentation/widget/decor/sliding_background_card.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -135,10 +135,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                   children: [
                     Stack(
                       children: [
-                        Container(
-                          height: 448.h,
-                          color: Colors.black,
-                        ),
+                        SlidingBackgroundCard(),
                         Column(
                           children: [
                             Padding(

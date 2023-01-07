@@ -1,15 +1,20 @@
-import 'dart:math';
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
+import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
-import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/archive/helpers/video_helper.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/video_file_image.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/memory_info_card.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:exif/exif.dart';
 import 'package:file_picker/file_picker.dart';
@@ -19,14 +24,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:intl/intl.dart';
+
+import '../../../../../bloc/gallery/gallery_bloc.dart';
 
 class AddFileWidget extends StatefulWidget {
   final Function() onTap;
-  final EventEntity? editingEvent;
-  const AddFileWidget(
-      {Key? key, required this.onTap, required this.editingEvent})
-      : super(key: key);
+  const AddFileWidget({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
   @override
   State<AddFileWidget> createState() => _AddFileWidgetState();
 }
@@ -38,15 +45,18 @@ class _AddFileWidgetState extends State<AddFileWidget> {
 
   String title = 'Загрузить файлы';
 
-  List<Uint8List> files = [];
+  List<GalleryFileEntity> filesFromGallery = [];
 
   bool isValidate() {
-    return false;
+    return true;
   }
 
   complete() {
     if (isValidate()) {
       showLoaderWrapper(context);
+      context.read<GalleryBloc>().add(
+        GalleryFileAddEvent(galleryFileEntity: filesFromGallery),
+      );
     }
   }
 
@@ -60,10 +70,45 @@ class _AddFileWidgetState extends State<AddFileWidget> {
     if (result != null) {
       for (var file in result.files) {
         final data = await readExifFromBytes(file.bytes!);
+        String? dateTimeShooting;
+        double? lat;
+        double? long;
         for (var item in data.entries) {
           print('ENTRY: ${item.key} : ${item.value}');
+          //Get datetime from metadata
+          if(item.key == 'Image DateTime'){
+            dateTimeShooting = '${item.value}';
+            print('DATETIME PHOTO: $dateTimeShooting');
+          //Get latitude from metadata
+          }else if(item.key == 'GPS GPSLatitude'){
+            lat = getCoordinateFromExifString(item.value.toString());
+            print('COORDINATES LAT: $lat');
+          //Get longitude from metadata
+          }else if(item.key == 'GPS GPSLongitude'){
+            long = getCoordinateFromExifString(item.value.toString());
+            print('COORDINATES LONG: $long');
+          }
+          
         }
-        files.add(file.bytes!);
+        filesFromGallery.add(
+          GalleryFileEntity(
+            id: 0,
+            isVideo: checkIsVideo(file.path!),
+            urlToFile: file.path!,
+            // place: 'Алматы, где то!',
+            place: long != null && lat != null
+            ? (await getPlaceFromCoordinate(lat, long))
+            : 'undefined',
+            // dateTime: dateTimeShooting != null
+            //     ? DateFormat("yyyy:MM:dd hh:mm:ss").parse(dateTimeShooting)
+            //     : DateTime.now(),
+            dateTime: DateTime.parse('2012-02-02T20:54:47.266980'),
+            size: file.size,
+            urlToPreviewVideoImage: null,
+            memoryFilePhotoForVideo: await getVideoFrame(file.path!),
+            duration: checkIsVideo(file.path!) ? (await getVideoDuration(file.path!)).inSeconds : null
+          ),
+        );
       }
       setState(() {});
     }
@@ -71,19 +116,21 @@ class _AddFileWidgetState extends State<AddFileWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<EventsBloc, EventsState>(
+    return BlocListener<GalleryBloc, GalleryState>(
       listener: (context, state) {
-        if (state is EventErrorState) {
+        if (state is GalleryFilesErrorState) {
           Loader.hide();
           showAlertToast(state.message);
         }
-        if (state is EventInternetErrorState) {
+        if (state is GalleryFilesInternetErrorState) {
           Loader.hide();
           showAlertToast('Проверьте соединение с интернетом!');
         }
-        if (state is EventAddedState) {
+        if (state is GalleryFilesAddedState) {
           Loader.hide();
           Navigator.pop(context);
+          Loader.hide();
+          context.read<GalleryBloc>().add(GetGalleryFilesEvent(isReset: true));
         }
       },
       child: GestureDetector(
@@ -101,11 +148,11 @@ class _AddFileWidgetState extends State<AddFileWidget> {
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOutQuint,
               height: 455.h +
-                  (files.isEmpty
+                  (filesFromGallery.isEmpty
                       ? 0
-                      : files.length <= 3
+                      : filesFromGallery.length <= 3
                           ? 45.h
-                          : files.length <= 6
+                          : filesFromGallery.length <= 6
                               ? 175.h
                               : 295.h),
               width: MediaQuery.of(context).size.width,
@@ -126,58 +173,22 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                             SizedBox(
                               height: 57.h,
                             ),
+                            MemoryInfoCard(),
                             SizedBox(
-                              width: 378.w,
-                              height: 38.h,
-                              child: ClipPath.shape(
-                                  shape: SquircleBorder(
-                                      radius: BorderRadius.circular(20.r)),
-                                  child: Stack(
-                                    children: [
-                                      Positioned.fill(
-                                        child: Container(
-                                          color: ColorStyles.blackColor,
-                                        ),
-                                      ),
-                                      Positioned.fill(
-                                        right: 240.w,
-                                        child: Container(
-                                          color: ColorStyles.primarySwath,
-                                        ),
-                                      ),
-                                      Positioned.fill(
-                                        left: 20.w,
-                                        right: 20.w,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              'Хранилище:',
-                                              style: TextStyles(context)
-                                                  .white_15_w800,
-                                            ),
-                                            Text(
-                                              '10/100 ГБ',
-                                              style: TextStyles(context)
-                                                  .white_15_w800,
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                            ),
-                            SizedBox(
-                              height: files.isEmpty ? 48.h : 20.h,
+                              height: filesFromGallery.isEmpty ? 48.h : 20.h,
                             ),
                             AddPhotoCard(
                               onTap: addFiles,
                               color: ColorStyles.backgroundColorGrey,
+                              text: filesFromGallery.length == 0
+                              ? 'Добавить файлы'
+                              : filesFromGallery.length == 1
+                              ? 'Добавлено 1 файл'
+                              : filesFromGallery.length < 5 
+                              ? 'Добавлено ${filesFromGallery.length} файла'
+                              : 'Добавлено ${filesFromGallery.length} файлов',
                             ),
-                            if (files.isEmpty) ...[
+                            if (filesFromGallery.isEmpty) ...[
                               SizedBox(
                                 height: 30.h,
                               ),
@@ -196,20 +207,21 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                                 spacing: 4.w,
                                 runSpacing: 4.w,
                                 children: List.generate(
-                                    files.length >= 9 ? 9 : files.length,
+                                    filesFromGallery.length >= 9 ? 9 : filesFromGallery.length,
                                     (index) =>
-                                        _buildFileItem(index, files[index])),
+                                        _buildFileItem(index, filesFromGallery[index])),
                               ),
                               SizedBox(
                                 height: 62.h,
                               ),
                             ],
                             CustomButton(
-                                color: ColorStyles.primarySwath,
-                                text: 'Готово',
-                                textColor: Colors.white,
-                                validate: isValidate(),
-                                onPressed: () {})
+                              color: ColorStyles.primarySwath,
+                              text: 'Готово',
+                              textColor: Colors.white,
+                              validate: isValidate(),
+                              onPressed: complete,
+                            ),
                           ],
                         ),
                       ),
@@ -255,7 +267,8 @@ class _AddFileWidgetState extends State<AddFileWidget> {
     );
   }
 
-  Widget _buildFileItem(int index, Uint8List file) {
+  Widget _buildFileItem(int index, GalleryFileEntity e) {
+    print('PATHL ${e.urlToFile}');
     return SizedBox(
       width: 123.w,
       height: 124.w,
@@ -274,16 +287,21 @@ class _AddFileWidgetState extends State<AddFileWidget> {
           child: Stack(
             children: [
               Positioned.fill(
-                  child: Image(
-                image: MemoryImage(file),
-                fit: BoxFit.cover,
+                  child: e.isVideo && e.memoryFilePhotoForVideo != null
+                  ? Image(
+                    image: MemoryImage(e.memoryFilePhotoForVideo!),
+                    fit: BoxFit.cover,
+                  )
+                  : Image(
+                    image: FileImage(File(e.urlToFile)),
+                    fit: BoxFit.cover,
               )),
               Positioned.fill(
                 child: Center(
                     child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      files.removeAt(files.indexOf(file));
+                      filesFromGallery.removeAt(filesFromGallery.indexOf(e));
                     });
                   },
                   child: ClipPath.shape(

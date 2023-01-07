@@ -10,8 +10,6 @@ abstract class Img {
   static const String android12SplashScreen =
       "assets/images/android12splash.png";
   static const String splashScreen = "assets/images/splash.png";
-  static const String backgroungProfile =
-      "assets/images/background_profile.png";
   static const String smile = "assets/images/smile.png";
 }
 
@@ -35,6 +33,7 @@ abstract class SvgImg {
   static const String calendar = "assets/icons/calendar.svg";
   static const String camera = "assets/icons/camera.svg";
   static const String check = "assets/icons/check.svg";
+  static const String check2 = "assets/icons/check_2.svg";
   static const String closeEventCreate = "assets/icons/close_event_create.svg";
   static const String data = "assets/icons/data.svg";
   static const String edit = "assets/icons/edit.svg";

@@ -18,7 +18,5 @@ class GalleryFilesInternetErrorState extends GalleryState{}
 class GotSuccessGalleryState extends GalleryState{}
 class GalleryFilesBlankState extends GalleryState{}
 class GalleryFilesAddedState extends GalleryState{
-  final GalleryFileEntity galleryFileEntity;
-  GalleryFilesAddedState({required this.galleryFileEntity});
 }
 class GalleryFilesDeletedState extends GalleryState{}

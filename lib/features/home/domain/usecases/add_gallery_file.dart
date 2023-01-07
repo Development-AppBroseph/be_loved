@@ -6,21 +6,20 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 
-class AddGalleryFile implements UseCase<GalleryFileEntity, AddGalleryFileParams> {
+class AddGalleryFile implements UseCase<void, AddGalleryFileParams> {
   final ArchiveRepository repository;
 
   AddGalleryFile(this.repository);
 
   @override
-  Future<Either<Failure, GalleryFileEntity>> call(AddGalleryFileParams params) async {
+  Future<Either<Failure, void>> call(AddGalleryFileParams params) async {
     return await repository.addGalleryFile(params);
   }
 }
 
 class AddGalleryFileParams extends Equatable {
-  final GalleryFileEntity galleryFileEntity;
-  final File? file;
-  const AddGalleryFileParams({required this.galleryFileEntity, required this.file});
+  final List<GalleryFileEntity> galleryFileEntity;
+  const AddGalleryFileParams({required this.galleryFileEntity, });
 
   @override
   List<Object> get props => [galleryFileEntity];

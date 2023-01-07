@@ -10,22 +10,26 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 
 class EventPhotoCard extends StatelessWidget {
-  final Key? additionKey;
+  final GlobalKey? additionKey;
   final Function() onAdditionTap;
+  final Function(GlobalKey? g)? onAdditionWithKeyTap;
   final Function() onTap;
   final String url;
   final String? title;
   final double? height;
   final bool? isFavorite;
+  final bool isVideo;
   final Function()? onFavoriteTap;
 
   const EventPhotoCard({
     required this.additionKey,
     this.height,
     required this.onAdditionTap,
+    this.onAdditionWithKeyTap,
     required this.onTap,
     required this.url,
     this.isFavorite, 
+    this.isVideo = false,
     this.onFavoriteTap,
     this.title
   });
@@ -106,7 +110,13 @@ class EventPhotoCard extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: onAdditionTap,
+                    onTap: (){
+                      if(onAdditionWithKeyTap != null){
+                        onAdditionWithKeyTap!(additionKey);
+                      }else{
+                        onAdditionTap();
+                      }
+                    },
                     behavior: HitTestBehavior.translucent,
                     child: Container(
                       width: 50.w,
@@ -122,7 +132,16 @@ class EventPhotoCard extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
+
+
+
+
+
+            if(isVideo)
+            Positioned.fill(
+              child: Center(child: SvgPicture.asset(SvgImg.play, ))
+            ),
           ],
         ),
       ),

@@ -38,6 +38,10 @@ class _PurposesPageState extends State<PurposesPage> {
     context.read<PurposeBloc>().add(CompletePurposeEvent(target: id));
   }
 
+  void cancelPurpose(int id){
+    showLoaderWrapper(context);
+    context.read<PurposeBloc>().add(CancelPurposeEvent(target: id));
+  }
 
   void sendPhotoPurpose(int id, File file){
     showLoaderWrapper(context);
@@ -76,7 +80,7 @@ class _PurposesPageState extends State<PurposesPage> {
           }else if(selectedType == 2){
             listPurposes = bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
           }else if(selectedType == 3){
-            listPurposes = bloc.getPurposeListFromFullData(bloc.historyPurposes);
+            listPurposes = bloc.getPurposeListFromFullData(bloc.historyPurposes, isHistory: true);
           }
           return Column(
             children: [
@@ -109,6 +113,12 @@ class _PurposesPageState extends State<PurposesPage> {
                         : PurposeCard(
                           onCompleteTap: (){
                             completePurpose(bloc.seasonPurpose!.id);
+                          },
+                          onPickFile: (f){
+                            sendPhotoPurpose(bloc.seasonPurpose!.id, f);
+                          },
+                          onCancelTap: (){
+                            cancelPurpose(bloc.seasonPurpose!.id);
                           },
                           purposeEntity: bloc.seasonPurpose!,
                         )
@@ -173,6 +183,9 @@ class _PurposesPageState extends State<PurposesPage> {
                     onCompleteTap: (){
                       completePurpose(e.id);
                     },
+                    onCancelTap: (){
+                      cancelPurpose(e.id);
+                    },
                   ),
                 ),
               ).toList()
@@ -196,7 +209,7 @@ class _PurposesPageState extends State<PurposesPage> {
                         )
                       ),
                       Center(
-                        child: Text('Доступных целей нет :(', style: TextStyles(context).grey_20_w700,)
+                        child: Text(selectedType == 1 ? 'Доступных целей нет :(' : 'Целей нет :(', style: TextStyles(context).grey_20_w700,)
                       ),
                     ],
                   )

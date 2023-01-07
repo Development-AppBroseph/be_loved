@@ -2,12 +2,15 @@ import 'dart:ui';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
+import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/albums_page.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/gallery_page.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/moments_page.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/archive_fixed_top_info.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/archive_wrapper.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/event_detail_view.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/event_page.dart';
@@ -36,8 +39,47 @@ class _ArchivePageState extends State<ArchivePage> {
 
   int currentPageIndex = 1;
 
+  //Gallery
   int hideGalleryFileID = 0;
   bool hideFixedDate = false;
+  List<int> galleryDeleteIds = [];
+  double currentScrollPosition = 0;
+
+  // Map<String, dynamic> inGroupPositionCalcID(double position){
+  //   GalleryBloc bloc = context.read<GalleryBloc>();
+  //   int newHideGalleryFileID = 0;
+  //   bool newHideFixedDate = false;
+  //   for (int i = 0; i < bloc.groupedFiles.length; i++) {
+  //     print('POST: ${position}');
+  //     print('TPPPOS: ${bloc.groupedFiles[i].topPosition} ||| id: ${bloc.groupedFiles[i].mainPhoto.id}');
+  //     double widgetTopPos = bloc.groupedFiles[i].topPosition -
+  //         MediaQuery.of(context).padding.top -
+  //         20.h;
+  //     print('NEW POST: ${widgetTopPos}');
+  //     if (widgetTopPos == 0) {
+  //       break;
+  //     }
+  //     if (position >= widgetTopPos) {
+  //       newHideGalleryFileID = bloc.groupedFiles[i].mainPhoto.id;
+  //     }
+  //     if (i != bloc.groupedFiles.length - 1) {
+  //       if (80.h <=
+  //           ((bloc.groupedFiles[i + 1].topPosition -
+  //                   MediaQuery.of(context).padding.top -
+  //                   20.h) -
+  //               position)) {
+  //         newHideFixedDate = true;
+  //       } else {
+  //         newHideFixedDate = false;
+  //       }
+  //     }
+  //   }
+
+  //   return {
+  //     'newHideFixedDate': newHideFixedDate,
+  //     'newHideGalleryFileID': newHideGalleryFileID
+  //   };
+  // }
 
   @override
   void initState() {
@@ -45,9 +87,13 @@ class _ArchivePageState extends State<ArchivePage> {
 
     GalleryBloc bloc = context.read<GalleryBloc>();
     ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
+    AlbumsBloc albumsBloc = context.read<AlbumsBloc>();
 
     if (bloc.state is GalleryFilesInitialState) {
       bloc.add(GetGalleryFilesEvent(isReset: false));
+    }
+    if (albumsBloc.state is AlbumInitialState) {
+      albumsBloc.add(GetAlbumsEvent());
     }
     if (archiveBloc.memoryEntity == null ||
         sl<AuthConfig>().memoryEntity == null) {
@@ -55,6 +101,14 @@ class _ArchivePageState extends State<ArchivePage> {
     }
 
     scrollController.addListener(() {
+      double position = scrollController.position.pixels;
+      currentScrollPosition = position;
+      if(position > (scrollController.position.maxScrollExtent-100) && currentPageIndex == 1){
+        GalleryBloc galleryBloc = context.read<GalleryBloc>();
+        if(!galleryBloc.isEnd && !galleryBloc.isLoading){
+          galleryBloc.add(GetGalleryFilesEvent(isReset: false));
+        }
+      }
       if (currentPageIndex != 1) {
         if (!hideTopBar) {
           setState(() {
@@ -63,7 +117,6 @@ class _ArchivePageState extends State<ArchivePage> {
         }
         return;
       }
-      double position = scrollController.position.pixels;
       int newHideGalleryFileID = 0;
       bool newHideFixedDate = false;
       if (position > 170) {
@@ -133,6 +186,16 @@ class _ArchivePageState extends State<ArchivePage> {
     });
   }
 
+  onDeleteFiles(){
+    showLoaderWrapper(context);
+    context.read<GalleryBloc>().add(GalleryFileDeleteEvent(ids: galleryDeleteIds));
+    setState(() {
+      galleryDeleteIds = [];
+      showTop = false;
+      hideTopBar = true;
+    });
+  }
+
   void nextPage(int id) {
     context.read<EventsBloc>().eventDetailSelectedId = id;
     pageController.nextPage(
@@ -147,6 +210,7 @@ class _ArchivePageState extends State<ArchivePage> {
 
   @override
   Widget build(BuildContext context) {
+    GalleryBloc galleryBloc = context.read<GalleryBloc>();
     return PageView(
       controller: pageController,
       physics: physics,
@@ -171,7 +235,17 @@ class _ArchivePageState extends State<ArchivePage> {
                   ? MomentsPage()
                   : currentPageIndex == 1
                       ? GalleryPage(
+                          position: currentScrollPosition,
                           hideGalleryFileID: hideGalleryFileID,
+                          deletingIds: galleryDeleteIds,
+                          onSelectForDeleting: (id){
+                            if(galleryDeleteIds.contains(id)){
+                              galleryDeleteIds.remove(id);
+                            }else{
+                              galleryDeleteIds.add(id);
+                            }
+                            setState(() {});
+                          },
                         )
                       : currentPageIndex == 2
                           ? AlbumsPage()
@@ -188,63 +262,21 @@ class _ArchivePageState extends State<ArchivePage> {
                 top: MediaQuery.of(context).padding.top + 15.h,
                 left: 30.w,
                 right: 22.w,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 600),
-                  curve: Curves.easeInOutQuint,
-                  margin: EdgeInsets.only(top: showTop ? 10.h : 20.h),
-                  child: AnimatedOpacity(
-                    opacity: showTop ? 1 : 0,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeInOutQuint,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              dateTime,
-                              style: TextStyles(context).white_35_w800.copyWith(
-                                    color: Colors.white.withOpacity(0.7),
-                                  ),
-                            ),
-                            SizedBox(
-                              width: 120.w,
-                              height: 38.h,
-                              child: ClipPath.shape(
-                                shape: SquircleBorder(
-                                    radius: BorderRadius.circular(30.r)),
-                                child: BackdropFilter(
-                                  filter:
-                                      ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                                  child: Container(
-                                    color: Colors.white.withOpacity(0.7),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'Выбрать',
-                                      style: TextStyles(context)
-                                          .black_18_w800
-                                          .copyWith(
-                                              color: ColorStyles.blackColor
-                                                  .withOpacity(0.7)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Text(
-                          enitityPos == null ? '' : enitityPos!.mainPhoto.place,
-                          style: TextStyles(context).white_15_w800.copyWith(
-                                color: Colors.white.withOpacity(0.5),
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                child: ArchiveFixedTopInfo(
+                  showTop: showTop,
+                  enitityPos: enitityPos,
+                  dateTime: dateTime,
+                  isDeleting: galleryDeleteIds.isNotEmpty,
+                  onTap: (){
+                    if(enitityPos != null && galleryDeleteIds.isEmpty){
+                      galleryDeleteIds.add(enitityPos!.mainPhoto.id);
+                    }else{
+                      galleryDeleteIds = [];
+                    }
+                    setState(() {});
+                  },
+                  onDeleteTap: onDeleteFiles,
+                )
               ),
           ],
         ),

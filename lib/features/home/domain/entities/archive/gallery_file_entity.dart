@@ -1,11 +1,17 @@
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 class GalleryFileEntity extends Equatable {
   final int id;
   final String urlToFile;
-  final String place;
+  final String? place;
   final DateTime dateTime;
   final int size;
+  final bool isVideo;
+  Uint8List? memoryFilePhotoForVideo;
+  final String? urlToPreviewVideoImage;
+  final int? duration;
 
   GalleryFileEntity({
     required this.id,
@@ -13,12 +19,17 @@ class GalleryFileEntity extends Equatable {
     required this.place,
     required this.dateTime,
     required this.size,
+    required this.isVideo,
+    this.memoryFilePhotoForVideo,
+    required this.duration,
+    required this.urlToPreviewVideoImage
   });
 
 
-  Map<String, dynamic> toMap() {
+  Future<Map<String, dynamic>> toMap() async{
     return {
       'place': place,
+      'file': await MultipartFile.fromFile(urlToFile),
       'date': dateTime.toString(),
     };
   }

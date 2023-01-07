@@ -6,7 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'add_file_widget.dart';
 
-showModalAddFile(BuildContext context, Function() onTap, [EventEntity? eventEntity]) {
+showModalAddFile(BuildContext context, Function() onTap,) {
   showMaterialModalBottomSheet(
     animationCurve: Curves.easeInOutQuint,
       elevation: 12,
@@ -20,7 +20,7 @@ showModalAddFile(BuildContext context, Function() onTap, [EventEntity? eventEnti
       // ),
       context: context,
       builder: (context) {
-        return AddFileWidget(onTap: onTap, editingEvent: eventEntity,);
+        return AddFileWidget(onTap: onTap, );
       });
 }
 
