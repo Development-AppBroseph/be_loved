@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
 import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
@@ -15,6 +17,8 @@ import 'package:be_loved/features/home/presentation/views/events/widgets/add_eve
 import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/widgets/events_list_widget.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -76,25 +80,15 @@ class _MainEventsPageState extends State<MainEventsPage> {
         color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
 
     TextStyle style2 = TextStyle(
-        color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.sp);
+        color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx], fontWeight: FontWeight.w700, fontSize: 20.sp);
 
     TextStyle style3 = TextStyle(
         color: ColorStyles.greyColor,
         fontWeight: FontWeight.w700,
         fontSize: 15.sp);
 
-    TextStyle style4 = TextStyle(
-        color: ColorStyles.redColor,
-        fontWeight: FontWeight.w800,
-        fontSize: 25.sp);
-
-    TextStyle style5 = TextStyle(
-        color: ColorStyles.accentColor,
-        fontWeight: FontWeight.w800,
-        fontSize: 15.sp);
-
     TextStyle style6 = TextStyle(
-        color: Colors.black, fontWeight: FontWeight.w800, fontSize: 50.sp);
+        color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx], fontWeight: FontWeight.w800, fontSize: 50.sp);
 
     EventsBloc eventsBloc = context.read<EventsBloc>();
 
@@ -108,15 +102,19 @@ class _MainEventsPageState extends State<MainEventsPage> {
             padding: EdgeInsets.only(top: 59.h, left: 15.w, right: 15.w),
             child: Row(
               children: [
-                SizedBox(
-                  width: 55.h,
-                  height: 55.h,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SvgPicture.asset(SvgImg.calendar),
-                    ],
-                  ),
+                // SizedBox(
+                //   width: 55.h,
+                //   height: 55.h,
+                //   child: Stack(
+                //     alignmСобытияent: Alignment.center,
+                //     children: [
+                //       SvgPicture.asset(SvgImg.calendar),
+                //     ],
+                //   ),
+                // ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10.w),
+                  child: Text('События', style: TextStyles(context).black_25_w800,),
                 ),
                 const Spacer(),
                 GestureDetector(
@@ -200,7 +198,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                                       elevation: 0,
                                       radius: BorderRadius.circular(37.r),
                                       margin: EdgeInsets.all(1.w),
-                                      color: Colors.white,
+                                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                     ),
                                   ),
                                   Padding(
@@ -300,7 +298,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
             }),
           ),
           SizedBox(height: 45.h),
-          TagsListBlock(),
+          TagsListBlock(isBlack2C: true,),
           SizedBox(height: 25.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -327,6 +325,7 @@ class _MainEventsPageState extends State<MainEventsPage> {
                               SvgImg.back,
                               height: 20.41.h,
                               width: 11.37.h,
+                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             )),
                       )
                     ],

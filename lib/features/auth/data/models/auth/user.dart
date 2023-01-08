@@ -15,6 +15,7 @@ class UserAnswer {
     required this.relationId,
     required this.status,
     required this.name,
+    required this.theme,
     required this.fromYou,
     required this.date,
   });
@@ -24,6 +25,7 @@ class UserAnswer {
   int? relationId;
   String? status;
   String? name;
+  String? theme;
   bool? fromYou;
   String? date;
 
@@ -33,6 +35,7 @@ class UserAnswer {
         relationId: json["relation_id"],
         status: json["status"],
         name: json["name"],
+        theme: json["theme"],
         fromYou: json["from_you"],
         date: json["date"],
       );

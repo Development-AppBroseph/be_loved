@@ -1,6 +1,7 @@
 import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/core/usecases/usecase.dart';
 import 'package:be_loved/features/home/domain/entities/archive/album_entity.dart';
+import 'package:be_loved/features/home/domain/entities/archive/album_full_entity.dart';
 import 'package:be_loved/features/home/domain/usecases/create_album.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_album.dart';
 import 'package:be_loved/features/home/domain/usecases/get_albums.dart';
@@ -20,16 +21,22 @@ class AlbumsBloc extends Bloc<AlbumsEvent, AlbumsState> {
     on<DeleteAlbumEvent>(_deleteAlbum);
   }
 
-  List<AlbumEntity> albums = [];
+  AlbumFullEntity album = AlbumFullEntity(favorites: [], otherAlbums: []);
+
+  bool isResetAll = false;
 
   void _getAlbums(GetAlbumsEvent event, Emitter<AlbumsState> emit) async {
+    isResetAll = false;
     emit(AlbumLoadingState());
     final gotAlbums = await getAlbums.call(NoParams());
     await Future.delayed(Duration(seconds: 3));
     AlbumsState state = gotAlbums.fold(
       (error) => errorCheck(error),
       (data) {
-        albums = data.where((element) => element.files.isNotEmpty).toList();
+        album = AlbumFullEntity(
+          favorites: data.favorites, 
+          otherAlbums: data.otherAlbums.where((element) => element.files.isNotEmpty).toList()
+        );
         return GotSuccessAlbumsState();
       },
     );

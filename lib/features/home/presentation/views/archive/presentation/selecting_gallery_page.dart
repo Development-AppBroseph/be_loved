@@ -1,11 +1,15 @@
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/gallery_page.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/archive_fixed_top_info.dart';
 import 'package:be_loved/features/home/presentation/views/bottom_navigation.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../../theme/data/entities/clr_style.dart';
 
 class SelectingGalleryPage extends StatefulWidget {
   List<int> files;
@@ -98,6 +102,7 @@ class _SelectingGalleryPageState extends State<SelectingGalleryPage> {
   Widget build(BuildContext context) {
     GalleryBloc galleryBloc = context.read<GalleryBloc>();
     return Scaffold(
+      backgroundColor: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
       bottomNavigationBar: BottomNavigation(
         onTap: (){
           Navigator.pop(context);

@@ -7,13 +7,11 @@ class AlbumModel extends AlbumEntity{
     required int relationId,
     required String name,
     required List<GalleryFileModel> files,
-    required bool isFavorite,
 
   }) : super(
     id: id, 
     name: name,
     files: files,
-    isFavorite: isFavorite,
     relationId: relationId
   );
 
@@ -22,7 +20,6 @@ class AlbumModel extends AlbumEntity{
       id: json['id'],
       relationId: json['relation'],
       name: json['name'],
-      isFavorite: json['if_favor'],
       files: (json['files_detail'] as List).map((jsonE) => GalleryFileModel.fromJson(jsonE)).toList(),
     );
   }

@@ -10,7 +10,7 @@ import '../../../../../locator.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<User> editProfile(User user, File? file);
-  Future<String> editRelation(int id, String relationName);
+  Future<String> editRelation(int id, String relationName, String theme);
 
 }
 
@@ -52,12 +52,13 @@ class ProfileRemoteDataSourceImpl
 
 
   @override
-  Future<String> editRelation(int id, String relationName) async {
+  Future<String> editRelation(int id, String relationName, String theme) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.put(Endpoints.editRelations.getPath(),
         data: FormData.fromMap({
           'relation_id': id,
-          'name': relationName
+          'name': relationName,
+          'theme': theme
         }),
         options: Options(
             followRedirects: false,

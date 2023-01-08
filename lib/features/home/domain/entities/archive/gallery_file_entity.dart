@@ -9,6 +9,7 @@ class GalleryFileEntity extends Equatable {
   final DateTime dateTime;
   final int size;
   final bool isVideo;
+  bool isFavorite;
   Uint8List? memoryFilePhotoForVideo;
   final String? urlToPreviewVideoImage;
   final int? duration;
@@ -19,6 +20,7 @@ class GalleryFileEntity extends Equatable {
     required this.place,
     required this.dateTime,
     required this.size,
+    required this.isFavorite,
     required this.isVideo,
     this.memoryFilePhotoForVideo,
     required this.duration,

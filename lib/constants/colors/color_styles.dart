@@ -15,25 +15,29 @@ const Map<int, Color> color =
 class ColorStyles {
   static const MaterialColor primarySwath = MaterialColor(0xFF20CB83, color);
 
-  static const Color accentColor = Color.fromRGBO(32, 203, 131, 1.0);
+  static const Color accentColor = Color(0xFF20CB83);
 
-  static const Color redColor = Color.fromRGBO(255, 29, 29, 1.0);
+  static const Color redColor = Color(0xFFFF1D1D);
 
-  static const Color blueColor = Color.fromRGBO(1, 119, 255, 1.0);
+  static const Color blueColor = Color(0xFF0177FF);
 
-  static const Color blackColor = Color.fromRGBO(44, 44, 46, 1);
+  static const Color blackColor = Color(0xFF2C2C2E);
+  static const Color black2Color = Color(0xFF171717);
 
-  static const Color greyColor = Color.fromRGBO(150, 150, 150, 1.0);
+  static const Color greyColor = Color(0xFF969696);
 
-  static const Color greyColor2 = Color.fromRGBO(218, 218, 218, 1.0);
+  static const Color greyColor2 = Color(0xFFdadada);
 
-  static const Color greyColor3 = Color.fromRGBO(180, 180, 180, 1.0);
+  static const Color greyColor3 = Color(0xFFb4b4b4);
 
-  static const Color whiteColor = Color.fromRGBO(0, 0, 0, 1.0);
+  static const Color greyColorD8D8D8 = Color(0xFFD8D8D8);
+  static const Color greyColorE4E4E4 = Color(0xFFE4E4E4);
 
   static const Color backgroundColorGrey = Color(0xF0F0F0F0);
 
   static const Color violetColor = Color(0xFF804A8E);
 
   static const Color violet2Color = Color(0xFFBF3355);
+
+  static const Color white = Color(0xFFFFFFFF);
 }

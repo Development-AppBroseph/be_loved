@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +31,7 @@ class AddPhotoCard extends StatelessWidget {
         margin: EdgeInsets.zero,
         elevation: 0,
         radius: BorderRadius.circular(40.r),
-        color: color ?? Colors.white,
+        color: color ?? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,7 +43,7 @@ class AddPhotoCard extends StatelessWidget {
                   SvgImg.camera,
                   height: 23.4.h,
                   width: 26.w,
-                  color: ColorStyles.blackColor,
+                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                 ),
                 SizedBox(width: 19.w,),
                 Text(text ?? 'Добавить фото', style: TextStyles(context).black_20_w800,)
@@ -53,7 +56,7 @@ class AddPhotoCard extends StatelessWidget {
                   SvgImg.add,
                   key: keyAdd,
                   width: 19.w,
-                  color: ColorStyles.blackColor,
+                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                 )
             )
             else 

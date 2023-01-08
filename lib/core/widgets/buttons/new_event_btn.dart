@@ -1,5 +1,8 @@
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -35,7 +38,7 @@ class NewEventBtn extends StatelessWidget {
             Align(
                 alignment: Alignment.center,
                 child: Text(text ?? 'Новое событие',
-                    style: TextStyles(context).white_20_w800.copyWith(color: isActive ? null : ColorStyles.greyColor))),
+                    style: TextStyles(context).white_20_w800.copyWith(color: isActive ? ClrStyle.whiteTo17[sl<AuthConfig>().idx] : ColorStyles.greyColor))),
             Align(
               alignment: Alignment.centerRight,
               child: SizedBox(
@@ -46,7 +49,7 @@ class NewEventBtn extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       SvgImg.addNewEvent,
-                      color: isActive ? Colors.white : ColorStyles.greyColor,
+                      color: isActive ? ClrStyle.whiteTo17[sl<AuthConfig>().idx] : ColorStyles.greyColor,
                       width: 22.15.h,
                       height: 22.15.h,
                     ),

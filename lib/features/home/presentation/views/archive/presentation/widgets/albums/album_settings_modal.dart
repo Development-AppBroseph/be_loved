@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 void albumItemSettingsModal(
   BuildContext context,
   Offset offset,
+  bool isFavor,
   Function() onDeleteAlbum,
   Function() onDeleteFile,
 ) =>
@@ -28,11 +29,12 @@ void albumItemSettingsModal(
           // iconColor: Colors.transparent,
           content: StatefulBuilder(builder: ((context, setState) {
             return SizedBox(
-              height: 220.h,
+              height: 120.h,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SettingsItem(
+                  if(!isFavor)
+                  ...[SettingsItem(
                     onTap: () {
                       onDeleteAlbum();
                     },
@@ -47,7 +49,7 @@ void albumItemSettingsModal(
                   ),
                   SizedBox(
                     height: 5.h,
-                  ),
+                  )],
                   SettingsItem(
                     onTap: () {
                       onDeleteFile();
@@ -55,7 +57,9 @@ void albumItemSettingsModal(
                     text: 'Удалить файл',
                     icon: SvgImg.trash,
                     color: ColorStyles.redColor,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: isFavor 
+                    ? BorderRadius.circular(34.r)
+                    : BorderRadius.only(
                       bottomLeft: Radius.circular(34.r),
                       bottomRight: Radius.circular(34.r),
                     ),

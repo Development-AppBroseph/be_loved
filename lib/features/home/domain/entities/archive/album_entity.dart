@@ -5,14 +5,12 @@ class AlbumEntity extends Equatable {
   final int id;
   final int relationId;
   final String name;
-  final bool isFavorite;
   final List<GalleryFileEntity> files;
 
   AlbumEntity({
     required this.id,
     required this.relationId,
     required this.name,
-    required this.isFavorite,
     required this.files,
   });
 

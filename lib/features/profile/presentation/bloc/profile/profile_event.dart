@@ -31,5 +31,6 @@ class PutUserCodeEvent extends ProfileEvent{
 
 class EditRelationNameEvent extends ProfileEvent{
   final String name;
-  EditRelationNameEvent({required this.name});
+  final int? theme;
+  EditRelationNameEvent({required this.name, this.theme});
 }

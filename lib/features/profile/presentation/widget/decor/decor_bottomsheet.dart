@@ -5,10 +5,14 @@ import 'dart:ui';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/option_black_btn.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
+import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,61 +43,66 @@ class _DecorBottomsheetState extends State<DecorBottomsheet> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoCard(
-      radius: BorderRadius.vertical(
-        top: Radius.circular(40.r),
-      ),
-      elevation: 0,
-      margin: EdgeInsets.zero,
-      child: SizedBox(
-        height: 415.h,
-        child: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 25.w, top: 28.h, bottom: 31.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    OptionBlackBtn(
-                      text: 'Фоновое фото',
-                      isSelected: isSelectBackground,
-                      onTap: (){
-                        setState(() {
-                          isSelectBackground = true;
-                        });
-                      },
-                    ),
-                    SizedBox(width: 15.w,),
-                    OptionBlackBtn(
-                      text: 'Тема',
-                      isSelected: !isSelectBackground,
-                      onTap: (){
-                        setState(() {
-                          isSelectBackground = false;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 31.h,
-              ),
-              if(isSelectBackground)
-              _buildBackgroundContent(context)
-              else
-              _buildThemeContent(),
-              SizedBox(
-                height: 60.h,
-              ),
-            ],
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return CupertinoCard(
+          radius: BorderRadius.vertical(
+            top: Radius.circular(40.r),
           ),
-        ),
-      ),
+          elevation: 0,
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+          margin: EdgeInsets.zero,
+          child: SizedBox(
+            height: 415.h,
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 25.w, top: 28.h, bottom: 31.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        OptionBlackBtn(
+                          text: 'Фоновое фото',
+                          isSelected: isSelectBackground,
+                          onTap: (){
+                            setState(() {
+                              isSelectBackground = true;
+                            });
+                          },
+                        ),
+                        SizedBox(width: 15.w,),
+                        OptionBlackBtn(
+                          text: 'Тема',
+                          isSelected: !isSelectBackground,
+                          onTap: (){
+                            setState(() {
+                              isSelectBackground = false;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 31.h,
+                  ),
+                  if(isSelectBackground)
+                  _buildBackgroundContent(context)
+                  else
+                  _buildThemeContent(),
+                  SizedBox(
+                    height: 60.h,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
     );
   }
 
@@ -116,87 +125,110 @@ class _DecorBottomsheetState extends State<DecorBottomsheet> {
 
   // Theme content
   Widget _buildThemeContent(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 25.w),
-          child: Text('Тема', style: TextStyles(context).black_25_w800,),
-        ),
-        SizedBox(
-          height: 13.h,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25.w),
-          child: Row(
-            children: [
-              _buildThemeItem(isDarkTheme: false),
-              SizedBox(width: 18.w,),
-              _buildThemeItem(isDarkTheme: true, isSelected: true)
-            ],
-          ),
-        )
-      ],
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 25.w),
+              child: Text('Тема', style: TextStyles(context).black_25_w800,),
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25.w),
+              child: Row(
+                children: [
+                  _buildThemeItem(context, isDarkTheme: false, isSelected: sl<AuthConfig>().idx == 0),
+                  SizedBox(width: 18.w,),
+                  _buildThemeItem(context, isDarkTheme: true, isSelected: sl<AuthConfig>().idx == 1)
+                ],
+              ),
+            )
+          ],
+        );
+      }
     );
   }
 
 
-  _buildThemeItem({required bool isDarkTheme, bool isSelected = false}){
+  _buildThemeItem(BuildContext context, {required bool isDarkTheme, bool isSelected = false}){
     return Expanded(
-      child: SizedBox(
-        height: 150.h,
-        child: CupertinoCard(
-          margin: EdgeInsets.zero,
-          elevation: 0,
-          color: ColorStyles.greyColor,
-          radius: BorderRadius.circular(40.r),
-          child: Stack(
-            children: [
-              if(!isDarkTheme)
-              Positioned.fill(
-                child: CupertinoCard(
-                  margin: EdgeInsets.all(2.w),
-                  elevation: 0, 
-                  color: Colors.transparent,
-                  radius: BorderRadius.circular(37.r),
-                  child: Image.asset(
-                    'assets/images/gallery1.png',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
+        child: GestureDetector(
+          onTap: (){
+          context.read<ThemeBloc>().add(UpdateThemeEvent(index: isDarkTheme ? 1 : 0));
+        },
+        child: SizedBox(
+          height: 150.h,
+          child: CupertinoCard(
+            margin: EdgeInsets.zero,
+            elevation: 0,
+            color: isSelected ? Colors.white : ColorStyles.greyColor,
+            radius: BorderRadius.circular(40.r),
+            child: Stack(
+              children: [
+                // if(!isDarkTheme)
+                Positioned.fill(
+                  child: CupertinoCard(
+                    margin: EdgeInsets.all(2.w),
+                    elevation: 0, 
+                    color: Colors.transparent,
+                    radius: BorderRadius.circular(37.r),
+                    child: Stack(
+                      children: [
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOutQuint,
+                          width: double.infinity,
+                          height: 180.h,
+                          child: Image.asset(
+                            isDarkTheme
+                            ? MainConfigApp.decorBackgrounds[0]
+                            : MainConfigApp.decorBackgrounds[1],
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              )
-              else
-              Image.asset(
-                'assets/images/gallery1.png',
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
-              
-              Positioned.fill(
-                bottom: isSelected ? 10.h : 20.h,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      isDarkTheme ? 'Темная' : 'Светлая', 
-                      style: isDarkTheme
-                      ? TextStyles(context).white_18_w800
-                      : TextStyles(context).black_18_w800,
-                    ),
-                    if(isSelected)
-                    Padding(
-                      padding: EdgeInsets.only(top: 6.h),
-                      child: _buildSelectedBtn()
-                    )
-                  ],
+                // else
+                // Image.asset(
+                //   'assets/images/gallery1.png',
+                //   fit: BoxFit.cover,
+                //   width: double.infinity,
+                //   height: double.infinity,
+                // ),
+                
+                Positioned.fill(
+                  bottom: isSelected ? 10.h : 20.h,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        isDarkTheme ? 'Темная' : 'Светлая', 
+                        style: 
+                        // isDarkTheme
+                        // ? 
+                        TextStyles(context).white_18_w800
+                        // : TextStyles(context).black_18_w800,
+                      ),
+                      if(isSelected)
+                      Padding(
+                        padding: EdgeInsets.only(top: 6.h),
+                        child: _buildSelectedBtn()
+                      )
+                    ],
+                  )
                 )
-              )
-            ],
-          )
+              ],
+            )
+          ),
         ),
       ),
     );
@@ -340,7 +372,7 @@ class _DecorBottomsheetState extends State<DecorBottomsheet> {
                   elevation: 0,
                   margin: EdgeInsets.all(1.w),
                   radius: BorderRadius.circular(37.r),
-                  color: Colors.white
+                  color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
                 ),
               ),
               Center(

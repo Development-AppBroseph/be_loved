@@ -35,7 +35,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<Failure, String>> editRelation(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.editRelation(params.relationId, params.nameRelation);
+        final items = await remoteDataSource.editRelation(params.relationId, params.nameRelation, params.theme);
         return Right(items);
       } catch (e) {
         print(e);

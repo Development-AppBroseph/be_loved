@@ -20,6 +20,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/modals/s
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/sliding_background_card.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -276,8 +277,9 @@ class _AccountPageState extends State<AccountPage>
                                     child: CupertinoCard(
                                       margin: EdgeInsets.all(0.h),
                                       elevation: 0,
+                                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                         borderRadius:
                                             BorderRadius.circular(20.r),
                                       ),
@@ -308,7 +310,7 @@ class _AccountPageState extends State<AccountPage>
                                                             .phoneNumber),
                                                     style: style3.copyWith(
                                                       fontSize: 15.sp,
-                                                      color: Colors.black,
+                                                      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                                       height: 1.h,
                                                     ),
                                                   ),
@@ -333,6 +335,7 @@ class _AccountPageState extends State<AccountPage>
                                 child: CupertinoCard(
                                   margin: EdgeInsets.all(0.h),
                                   elevation: 0,
+                                  color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20.r),
                                   ),
@@ -346,13 +349,14 @@ class _AccountPageState extends State<AccountPage>
                                         Padding(
                                           padding: EdgeInsets.only(right: 20.w),
                                           child:
-                                              SvgPicture.asset(SvgImg.vkLogo),
+                                              SvgPicture.asset(SvgImg.vkLogo,),
                                         ),
                                         Text(
                                           'Привязать страницу VK',
                                           style: TextStyle(
                                             fontSize: 20.sp,
                                             fontWeight: FontWeight.w800,
+                                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx]
                                           ),
                                         ),
                                         const Spacer(),
@@ -360,7 +364,7 @@ class _AccountPageState extends State<AccountPage>
                                           SvgImg.addNewEvent,
                                           width: 22.w,
                                           height: 22.h,
-                                          color: const Color(0xff0077FF),
+                                          color: ClrStyle.blueToWhite[sl<AuthConfig>().idx],
                                         ),
                                       ],
                                     ),
@@ -403,6 +407,7 @@ class _AccountPageState extends State<AccountPage>
                                   width: 428.w,
                                   child: CupertinoCard(
                                     margin: EdgeInsets.all(0.h),
+                                    color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                     elevation: 0,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.r),
@@ -426,8 +431,7 @@ class _AccountPageState extends State<AccountPage>
                                                   SvgImg.settings,
                                                   height: 23.33.h,
                                                   width: 23.33.h,
-                                                  color:
-                                                      const Color(0xff2C2C2E),
+                                                  color:ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                                 ),
                                               ),
                                               Text(
@@ -437,6 +441,7 @@ class _AccountPageState extends State<AccountPage>
                                                 style: TextStyle(
                                                   fontSize: 20.sp,
                                                   fontWeight: FontWeight.w800,
+                                                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]
                                                 ),
                                               ),
                                               const Spacer(),
@@ -458,7 +463,7 @@ class _AccountPageState extends State<AccountPage>
                                         ),
                                         Expanded(
                                           child: Container(
-                                            color: Colors.white,
+                                            color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                             child: ListView(
                                               controller: codeScrollController,
                                               physics:
@@ -478,7 +483,7 @@ class _AccountPageState extends State<AccountPage>
                                                         height: 70.h,
                                                         decoration:
                                                             BoxDecoration(
-                                                          color: Colors.white,
+                                                          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                                           borderRadius:
                                                               const BorderRadius
                                                                   .horizontal(
@@ -511,6 +516,7 @@ class _AccountPageState extends State<AccountPage>
                                                               style: GoogleFonts
                                                                   .inter(
                                                                 fontSize: 25.sp,
+                                                                color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -567,6 +573,7 @@ class _AccountPageState extends State<AccountPage>
                                                                         .inter(
                                                                   fontSize:
                                                                       25.sp,
+                                                                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
@@ -608,12 +615,7 @@ class _AccountPageState extends State<AccountPage>
                                                                           .inter(
                                                                     fontSize:
                                                                         25.sp,
-                                                                    color: const Color
-                                                                            .fromRGBO(
-                                                                        150,
-                                                                        150,
-                                                                        150,
-                                                                        1),
+                                                                    color: ClrStyle.greyToWhite[sl<AuthConfig>().idx],
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w700,
@@ -656,7 +658,7 @@ class _AccountPageState extends State<AccountPage>
                                                           text: 'Продолжить',
                                                           // validate: state is TextFieldSuccess ? true : false,
                                                           textColor:
-                                                              Colors.white,
+                                                              ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                                           onPressed: () {
                                                             setState(() {
                                                               sendCode = true;
@@ -756,8 +758,7 @@ class _AccountPageState extends State<AccountPage>
                                                             height: 80.sp,
                                                             decoration:
                                                                 BoxDecoration(
-                                                                    color: Colors
-                                                                        .white,
+                                                                    color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             10),
@@ -774,12 +775,7 @@ class _AccountPageState extends State<AccountPage>
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                              color: const Color
-                                                                      .fromRGBO(
-                                                                  23,
-                                                                  23,
-                                                                  23,
-                                                                  1.0),
+                                                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                                             ),
                                                           ),
                                                         ),
@@ -828,12 +824,7 @@ class _AccountPageState extends State<AccountPage>
                                                         text:
                                                             'Отправить код снова',
                                                         border: Border.all(
-                                                            color: const Color
-                                                                    .fromRGBO(
-                                                                23,
-                                                                23,
-                                                                23,
-                                                                1.0),
+                                                            color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                                             width: 2.sp),
                                                         onPressed: () {
                                                           if (textEditingControllerUp
@@ -849,8 +840,8 @@ class _AccountPageState extends State<AccountPage>
                                                           //   startTimer();
                                                           // }
                                                         },
-                                                        color: Colors.black,
-                                                        textColor: Colors.white,
+                                                        color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                                        textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                                       ),
                                                       SizedBox(height: 30.h),
                                                     ],
@@ -877,6 +868,7 @@ class _AccountPageState extends State<AccountPage>
                                   width: 428.w,
                                   child: CupertinoCard(
                                     margin: EdgeInsets.all(0.h),
+                                    color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                     elevation: 0,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.r),
@@ -895,6 +887,7 @@ class _AccountPageState extends State<AccountPage>
                                               SvgImg.galleryWithLine,
                                               height: 24.h,
                                               width: 22.w,
+                                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                             ),
                                           ),
                                           Text(
@@ -902,6 +895,7 @@ class _AccountPageState extends State<AccountPage>
                                             style: TextStyle(
                                               fontSize: 20.sp,
                                               fontWeight: FontWeight.w800,
+                                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx]
                                             ),
                                           ),
                                           const Spacer(),
@@ -999,11 +993,11 @@ class _AccountPageState extends State<AccountPage>
                               .add(nameController.text.length);
                         },
                         inputFormatters: [LengthLimitingTextInputFormatter(12)],
-                        cursorColor: Colors.black,
+                        cursorColor: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                         cursorHeight: 30,
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                           fontSize: 30.sp,
                           fontWeight: FontWeight.w700,
                           decoration: TextDecoration.none,
@@ -1018,7 +1012,7 @@ class _AccountPageState extends State<AccountPage>
                           enabledBorder: InputBorder.none,
                           hintText: '',
                           hintStyle: TextStyle(
-                            color: Colors.black,
+                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 30.sp,
                             decoration: TextDecoration.none,
                             fontWeight: FontWeight.w700,

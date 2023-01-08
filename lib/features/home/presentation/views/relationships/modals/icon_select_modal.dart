@@ -1,4 +1,7 @@
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -51,7 +54,7 @@ void iconSelectModal(
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                         boxShadow: [
                           BoxShadow(
                               blurRadius: 20.h,
@@ -86,7 +89,7 @@ void iconSelectModal(
                                         height: 28.h,
                                       ))
                                   : Container(
-                                      color: Colors.white,
+                                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                       margin: EdgeInsets.symmetric(
                                           horizontal: 13.w),
                                       child: Align(

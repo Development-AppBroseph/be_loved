@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/enums.dart';
 import 'package:be_loved/core/utils/images.dart';
@@ -8,6 +10,8 @@ import 'package:be_loved/features/auth/presentation/views/login/create_account_i
 import 'package:be_loved/features/auth/presentation/views/login/invite_relation.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -141,7 +145,7 @@ class _CodePageState extends State<CodePage> {
         appBar: AppBar(
           elevation: 0,
           toolbarHeight: 80,
-          backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+          backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
           title: Padding(
             padding: EdgeInsets.only(top: 30.h, right: 6.w),
             child: Align(
@@ -154,6 +158,7 @@ class _CodePageState extends State<CodePage> {
                   icon: SvgPicture.asset(
                     SvgImg.back,
                     width: 15,
+                    color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                   ),
                   hoverColor: Colors.transparent,
                   splashColor: Colors.transparent,
@@ -168,6 +173,7 @@ class _CodePageState extends State<CodePage> {
           ),
           automaticallyImplyLeading: false,
         ),
+        backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : null,
         body: StreamBuilder<bool>(
             initialData: false,
             stream: _streamController.stream,
@@ -193,6 +199,7 @@ class _CodePageState extends State<CodePage> {
                             fontSize: 35.sp,
                             height: 1.1,
                             fontWeight: FontWeight.w800,
+                            color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]
                           ),
                         ),
                         const SizedBox(height: 3),
@@ -266,7 +273,7 @@ class _CodePageState extends State<CodePage> {
                           code: true,
                           text: resendCode ? 'Отправить код снова' : _getTime(),
                           border: Border.all(
-                              color: const Color.fromRGBO(23, 23, 23, 1.0),
+                              color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                               width: 2.sp),
                           onPressed: () {
                             if (textEditingControllerUp.text.length == 5) {
@@ -279,8 +286,8 @@ class _CodePageState extends State<CodePage> {
                               startTimer();
                             }
                           },
-                          color: Colors.black,
-                          textColor: Colors.white,
+                          color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                          textColor: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
                         ),
                         SizedBox(height: 20.h),
                       ],

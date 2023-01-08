@@ -11,6 +11,7 @@ class GalleryFileModel extends GalleryFileEntity{
     required String? urlToPreviewVideoImage,
     required int? duration,
     required bool isVideo,
+    required bool isFavorite,
 
   }) : super(
     id: id, 
@@ -19,6 +20,7 @@ class GalleryFileModel extends GalleryFileEntity{
     dateTime: dateTime,
     urlToFile: urlToFile,
     isVideo: isVideo,
+    isFavorite: isFavorite,
     urlToPreviewVideoImage: urlToPreviewVideoImage,
     duration: duration
   );
@@ -30,6 +32,7 @@ class GalleryFileModel extends GalleryFileEntity{
       isVideo: checkIsVideo((json['file'] as String)),
       urlToFile: json['file'],
       place: json['place'] == 'undefined' ? null : json['place'],
+      isFavorite: json['if_favor'] ?? false,
       duration: json['duration'],
       urlToPreviewVideoImage: json['image'],
       dateTime: DateTime.parse(json['date']).toLocal(),

@@ -2,10 +2,13 @@ import 'dart:io';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +52,7 @@ class PurposeCard extends StatelessWidget {
         margin: EdgeInsets.zero,
         elevation: 0,
         radius: BorderRadius.circular(40.r),
+        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
         child: Column(
           children: [
             Stack(
@@ -127,7 +131,7 @@ class PurposeCard extends StatelessWidget {
                         elevation: 0,
                         color: ColorStyles.primarySwath,
                         radius: BorderRadius.circular(20.r),
-                        child: Center(child: Text('Достигнуть', style: TextStyles(context).white_18_w800,)),
+                        child: Center(child: Text('Достигнуть', style: TextStyles(context).white_18_w800.copyWith(color: sl<AuthConfig>().idx == 1 ? ColorStyles.black2Color : null))),
                       ),
                     ),
                   )
@@ -173,7 +177,7 @@ class PurposeCard extends StatelessWidget {
           elevation: 0,
           color: ColorStyles.primarySwath,
           radius: BorderRadius.circular(20.r),
-          child: Center(child: SvgPicture.asset(svg, width: 19.w, color: Colors.white,)),
+          child: Center(child: SvgPicture.asset(svg, width: 19.w, color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],)),
         ),
       ),
     );
@@ -195,10 +199,10 @@ class PurposeCard extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: horizontalPadding ?? 17.w),
             height: 33.h,
             alignment: Alignment.center,
-            color: Colors.white.withOpacity(0.9),
+            color: sl<AuthConfig>().idx == 0 ? Colors.white.withOpacity(0.9) : ColorStyles.black2Color.withOpacity(0.9),
             child: Text(
               text, 
-            style: TextStyles(context).black_15_w800.copyWith(color: ColorStyles.blackColor.withOpacity(0.7)),),
+            style: TextStyles(context).black_15_w800.copyWith(color: sl<AuthConfig>().idx == 0 ? ColorStyles.blackColor.withOpacity(0.7) : ColorStyles.white.withOpacity(0.7)),),
           )
         ],
       )
@@ -216,12 +220,12 @@ class PurposeCard extends StatelessWidget {
         ),
         child: Container(
           height: 33.h,
-          color: Colors.white.withOpacity(0.9),
+          color: sl<AuthConfig>().idx == 0 ? Colors.white.withOpacity(0.9) : ColorStyles.black2Color.withOpacity(0.9),
           width: 33.h,
           child: Stack(
             children: [
               Center(
-                child: SvgPicture.asset(SvgImg.add, height: 14.h, color: ColorStyles.blackColor.withOpacity(0.7),)
+                child: SvgPicture.asset(SvgImg.add, height: 14.h, color: sl<AuthConfig>().idx == 0 ? ColorStyles.blackColor.withOpacity(0.7) : ColorStyles.white.withOpacity(0.7),)
               )
             ],
           ),

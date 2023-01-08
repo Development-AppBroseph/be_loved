@@ -4,12 +4,16 @@ import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
+import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -126,6 +130,9 @@ class _InviteForState extends State<InviteFor> {
         // }
         if (current is GetUserSuccess) {
           love = current.user.love;
+          if(context.read<ThemeBloc>().state is ThemeInitialState){
+            context.read<ThemeBloc>().add(SetThemeEvent(index: current.user.theme == 'dark' ? 1 : 0));
+          }
           return true;
         }
         // // if (current is InviteAccepted) {
@@ -163,7 +170,7 @@ class _InviteForState extends State<InviteFor> {
         // }
         var bloc = BlocProvider.of<AuthBloc>(context);
         return Scaffold(
-          backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+          backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
           body: Stack(
             children: [
               AnimatedOpacity(
@@ -227,11 +234,11 @@ class _InviteForState extends State<InviteFor> {
                               children: <TextSpan>[
                                 TextSpan(
                                   text: 'Приглашение от\n',
+                                  
                                   style: GoogleFonts.inter(
                                     fontSize: 35.sp,
                                     fontWeight: FontWeight.w800,
-                                    color:
-                                        const Color.fromRGBO(23, 23, 23, 1.0),
+                                    color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                   ),
                                 ),
                                 TextSpan(

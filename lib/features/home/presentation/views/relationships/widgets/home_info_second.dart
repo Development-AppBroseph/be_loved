@@ -1,5 +1,6 @@
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class HomeInfoSecond extends StatelessWidget {
       //     borderRadius: BorderRadius.circular(20.r), color: Colors.white),
       child: CupertinoCard(
         radius: BorderRadius.circular(40.r),
-        color: Colors.white,
+        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
         elevation: 0,
         margin: EdgeInsets.zero,
         padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 30.w),
@@ -44,13 +45,13 @@ class HomeInfoSecond extends StatelessWidget {
             Row(
               children: [
                 Text(DateFormat('dd MMMM', 'RU').format(date), style: TextStyle(
-                  color: Color(0xFF171717),
+                  color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                   fontSize: 35.sp,
                   fontWeight: FontWeight.w700
                 ),),
                 SizedBox(width: 10.w,),
                 Text(DateFormat('yyyy', 'RU').format(date), style: TextStyle(
-                  color: Color(0xFF171717),
+                  color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                   fontSize: 35.sp,
                   fontWeight: FontWeight.w700
                 ),),
@@ -79,7 +80,7 @@ class HomeInfoSecond extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Статистика', style: TextStyle(
-                          color: Color(0xFF171717),
+                          color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w700
                         ),),
@@ -95,7 +96,7 @@ class HomeInfoSecond extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 17.w),
-                  child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
+                  child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h, color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],),
                 )
               ],
             ),
@@ -118,7 +119,7 @@ class HomeInfoSecond extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Отношения', style: TextStyle(
-                            color: Color(0xFF171717),
+                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w700
                           ),),
@@ -134,7 +135,7 @@ class HomeInfoSecond extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 17.w),
-                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
+                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h, color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],),
                   )
                 ],
               ),

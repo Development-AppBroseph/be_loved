@@ -1,5 +1,7 @@
+import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
@@ -7,11 +9,14 @@ import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.da
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/old_events/old_events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
+import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:be_loved/locator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -93,6 +98,15 @@ void main() async {
         BlocProvider<AlbumsBloc>(
           create: (context) => sl<AlbumsBloc>(),
         ),
+        BlocProvider<MomentsBloc>(
+          create: (context) => sl<MomentsBloc>(),
+        ),
+        BlocProvider<ThemeBloc>(
+          create: (context) => sl<ThemeBloc>()..add(GetThemeLocalEvent()),
+        ),
+        BlocProvider<OldEventsBloc>(
+          create: (context) => sl<OldEventsBloc>(),
+        ),
       ],
       child: OverlaySupport.global(
         child: MyApp(user: user),
@@ -108,27 +122,42 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // MySharedPrefs().logOut(context);
+    // if(context.read<ThemeBloc>().state is ThemeInitialState){
+    //   context.read<ThemeBloc>().add(GetThemeLocalEvent());
+    // }
     FlutterNativeSplash.remove();
     return ScreenUtilInit(
       designSize: const Size(428, 926),
       builder: (context, child) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [Locale('ru')],
-          theme: ThemeData(
-              scaffoldBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-              fontFamily: 'Inter'),
-          home: user != null
-              ? user?.date != null
-                  ? HomePage()
-                  : const PhonePage()
-              : const PhonePage(),
-          // home: HomePage(),
+        return BlocConsumer<ThemeBloc, ThemeState>(
+            listener: (context, state) {
+              if(state is ThemeEditedSuccessState && sl<AuthConfig>().user != null){
+                if(state.isChanges){
+                  print('UPDATE THEME -------');
+                  context.read<ProfileBloc>().add(EditRelationNameEvent(name: sl<AuthConfig>().user!.name ?? '', theme: sl<AuthConfig>().idx));
+                }
+              }
+            },
+            builder: (context, state) {
+            return GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [Locale('ru')],
+              theme: ThemeData(
+                  scaffoldBackgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+                  fontFamily: 'Inter'),
+              home: user != null
+                  ? user?.date != null
+                      ? HomePage()
+                      : const PhonePage()
+                : const PhonePage()
+              // home: HomePage(),
+            );
+          }
         );
       },
     );

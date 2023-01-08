@@ -1,5 +1,6 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
@@ -15,6 +16,8 @@ import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart
 import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,6 +68,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
         radius: BorderRadius.vertical(
           top: Radius.circular(80.r),
         ),
+        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
         elevation: 0,
         margin: EdgeInsets.zero,
         child: AnimatedContainer(
@@ -102,7 +106,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                     child: CupertinoCard(
                       elevation: 0,
                       radius: BorderRadius.circular(40.r),
-                      color: ColorStyles.blackColor,
+                      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                       margin: EdgeInsets.zero,
                       child: SizedBox(
                         height: 140.h,
@@ -122,7 +126,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                 elevation: 0,
                                 margin: EdgeInsets.all(1.w),
                                 radius: BorderRadius.circular(37.r),
-                                color: Colors.white,
+                                color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                               ),
                             ),
                             Padding(
@@ -163,7 +167,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                     'Годовщина',
                                     style: TextStyle(
                                       fontFamily: "Inter",
-                                      color: const Color(0xff171717),
+                                      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                       fontSize: 50.sp,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -182,7 +186,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                       'Выбрать событие',
                       style: TextStyle(
                         fontFamily: "Inter",
-                        color: const Color(0xff171717),
+                        color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                         fontSize: 25.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -220,7 +224,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                       'Предстоящее событие:',
                                       style: TextStyle(
                                         fontFamily: "Inter",
-                                        color: const Color(0xff171717),
+                                        color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                         fontSize: 20.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -240,11 +244,11 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                   ],
                                 ),
                                 const Spacer(),
-                                const Align(
+                                Align(
                                   alignment: Alignment.centerRight,
                                   child: Icon(
                                     Icons.arrow_forward_ios_rounded,
-                                    color: Color(0xff171717),
+                                    color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                   ),
                                 ),
                               ],
@@ -281,7 +285,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                                   truncateWithEllipsis(22, '${eventsBloc.eventsSorted[index].title}'),
                                                   style: TextStyle(
                                                     fontFamily: "Inter",
-                                                    color: const Color(0xff171717),
+                                                    color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                                     fontSize: 20.sp,
                                                     fontWeight: FontWeight.bold,
                                                   ),

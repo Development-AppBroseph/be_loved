@@ -19,6 +19,8 @@ import 'package:be_loved/features/home/presentation/views/relationships/widgets/
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/sliding_background_card.dart';
+import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -95,6 +97,9 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is GetUserSuccess) {
+          if(context.read<ThemeBloc>().state is ThemeInitialState){
+            context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
+          }
           Loader.hide();
           setState(() {
             _controller.text = sl<AuthConfig>().user!.name ?? '';
@@ -365,7 +370,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                       width: double.infinity,
                       child: CupertinoCard(
                         radius: BorderRadius.circular(40.r),
-                        color: Colors.white,
+                        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                         elevation: 0,
                         margin: EdgeInsets.zero,
                         padding: EdgeInsets.only(top: 25.h, bottom: 50.h),
@@ -398,6 +403,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                 SvgImg.back,
                                                 height: 20.41.h,
                                                 width: 11.37.h,
+                                                color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                               )),
                                         )
                                       ],

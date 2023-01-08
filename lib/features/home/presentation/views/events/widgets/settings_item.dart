@@ -64,7 +64,7 @@ class SettingsItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(text, style: TextStyles(context).black_15_w700.copyWith(color: color),),
+                        Text(text, style: TextStyles(context).black_15_w700.copyWith(color: color ?? ColorStyles.blackColor),),
                         Padding(
                           padding: EdgeInsets.only(right: 10.w),
                           child: SvgPicture.asset(

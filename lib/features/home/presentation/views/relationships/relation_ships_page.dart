@@ -16,6 +16,7 @@ import 'package:be_loved/features/profile/presentation/widget/decor/sliding_back
 import 'package:be_loved/features/profile/presentation/widget/main_file/parametrs_user_bottomsheet.dart';
 import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
+import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -96,442 +97,442 @@ class _RelationShipsPageState extends State<RelationShipsPage>
         color: Colors.white,
         fontSize: 15.sp,
         height: 1);
-    TextStyle style2 = TextStyle(
-      fontWeight: FontWeight.w700,
-      color: Colors.white,
-      fontSize: 30.sp,
-    );
-    TextStyle style3 = TextStyle(
-        fontWeight: FontWeight.w800, color: Colors.white, fontSize: 18.sp);
-
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is GetUserSuccess) {
-          print('GOT USER');
-          Loader.hide();
-          setState(() {
-            _controller.text = sl<AuthConfig>().user!.name ?? '';
-          });
-        }
-      },
-      child: BlocConsumer<ProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileErrorState) {
-            Loader.hide();
-            showAlertToast(state.message);
-          }
-          if (state is ProfileInternetErrorState) {
-            Loader.hide();
-            showAlertToast('Проверьте соединение с интернетом!');
-          }
-          if (state is ProfileEditedSuccessState) {
-            Loader.hide();
-          }
-        }, builder: (context, state) {
-          return RefreshIndicator(
-            color: ColorStyles.accentColor,
-            onRefresh: () async {
-              showLoaderWrapper(context);
-              context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
-              return;
-            },
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              physics: const AlwaysScrollableScrollPhysics(
-                  parent: ClampingScrollPhysics()),
-              child: GestureDetector(
-                onTap: () {
-                  // f1.unfocus();
+        
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is GetUserSuccess) {
+              if(context.read<ThemeBloc>().state is ThemeInitialState){
+                context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
+              }
+              print('GOT USER');
+              Loader.hide();
+              setState(() {
+                _controller.text = sl<AuthConfig>().user!.name ?? '';
+              });
+            }
+          },
+          child: BlocConsumer<ProfileBloc, ProfileState>(
+            listener: (context, state) {
+              if (state is ProfileErrorState) {
+                Loader.hide();
+                showAlertToast(state.message);
+              }
+              if (state is ProfileInternetErrorState) {
+                Loader.hide();
+                showAlertToast('Проверьте соединение с интернетом!');
+              }
+              if (state is ProfileEditedSuccessState) {
+                Loader.hide();
+              }
+            }, builder: (context, state) {
+              return RefreshIndicator(
+                color: ColorStyles.accentColor,
+                onRefresh: () async {
+                  showLoaderWrapper(context);
+                  context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
+                  return;
                 },
-                child: Column(
-                  children: [
-                    Stack(
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  physics: const AlwaysScrollableScrollPhysics(
+                      parent: ClampingScrollPhysics()),
+                  child: GestureDetector(
+                    onTap: () {
+                      // f1.unfocus();
+                    },
+                    child: Column(
                       children: [
-                        SlidingBackgroundCard(),
-                        Column(
+                        Stack(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                right: 25.w,
-                                left: 25.w,
-                                top: 59.h,
-                              ),
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: widget.nextPage,
-                                    child: Row(
-                                      children: [
-                                        photoMini(sl<AuthConfig>().user == null
-                                            ? null
-                                            : sl<AuthConfig>().user!.me.photo),
-                                        SizedBox(width: 12.w),
-                                        Text(
-                                          sl<AuthConfig>().user == null
-                                              ? ''
-                                              : sl<AuthConfig>().user!.me.username,
-                                          style: style1,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  GestureDetector(
-                                    onTap: () => showMaterialModalBottomSheet(
-                                      animationCurve: Curves.easeInOutQuint,
-                                      duration: const Duration(milliseconds: 600),
-                                      context: context,
-                                      // shape: RoundedRectangleBorder(
-                                      //   borderRadius: BorderRadius.vertical(
-                                      //     top: Radius.circular(50.r),
-                                      //   ),
-                                      // ),
-                                      backgroundColor: Colors.transparent,
-                                      builder: (context) =>
-                                          ParametrsUserBottomsheet(
-                                            onRelationSettingsTap: (){
-                                              Navigator.pop(context);
-                                              widget.toRelationSettingsPage();
-                                            },
-                                          ),
-                                    ).then((value) {
-                                      if (value is String) {
-                                        if (value == 'account') {
-                                          widget.nextPage();
-                                        }
-                                      }
-                                    }),
-                                    child: Container(
-                                      height: 55.h,
-                                      width: 55.h,
-                                      color: Colors.transparent,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          SizedBox(
-                                            height: 5.57.h,
-                                            width: 33.43.h,
-                                            child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: 3,
-                                              itemBuilder:
-                                                  (BuildContext context, index) {
-                                                return Container(
-                                                  margin:
-                                                      EdgeInsets.only(left: 5.57.h),
-                                                  height: 5.57.h,
-                                                  width: 5.57.h,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            1.5.r),
-                                                    color: Colors.white,
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 30.h),
-                            BlocConsumer<ProfileBloc, ProfileState>(
-                              listener: (context, state) {
-                                if (state is ProfileErrorState) {
-                                  Loader.hide();
-                                  showAlertToast(state.message);
-                                }
-                                if (state is ProfileInternetErrorState) {
-                                  Loader.hide();
-                                  showAlertToast(
-                                      'Проверьте соединение с интернетом!');
-                                }
-                                if (state is ProfileRelationNameChangedState) {
-                                  // Loader.hide();
-                                  // showLoaderWrapper(context);
-                                  context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
-                                }
-                              },
-                              builder: (context, state) {
-                                return Padding(
+                            SlidingBackgroundCard(),
+                            Column(
+                              children: [
+                                Padding(
                                   padding: EdgeInsets.only(
+                                    right: 25.w,
                                     left: 25.w,
-                                    right: 38.w,
+                                    top: 59.h,
                                   ),
-                                  child: SizedBox(
-                                    height: 45.h,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: 33.h,
-                                            child: TextField(
-                                              onSubmitted: (s) {
-                                                if (s.length > 1) {
-                                                  showLoaderWrapper(context);
-                                                  context.read<ProfileBloc>().add(
-                                                      EditRelationNameEvent(
-                                                          name: _controller.text
-                                                              .trim()));
-                                                }
-                                              },
-                                              textCapitalization:
-                                                  TextCapitalization.words,
-                                              onChanged: (value) {
-                                                if (value.length <= maxLength) {
-                                                  text = value;
-                                                } else {
-                                                  _controller.value =
-                                                      TextEditingValue(
-                                                    text: text,
-                                                    selection: TextSelection(
-                                                      baseOffset: maxLength,
-                                                      extentOffset: maxLength,
-                                                      affinity:
-                                                          TextAffinity.upstream,
-                                                      isDirectional: false,
-                                                    ),
-                                                    composing: TextRange(
-                                                      start: 0,
-                                                      end: maxLength,
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              cursorColor: Colors.white,
-                                              cursorHeight: 30,
-                                              textAlignVertical:
-                                                  TextAlignVertical.center,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 30.sp,
-                                                fontWeight: FontWeight.w700,
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: widget.nextPage,
+                                        child: Row(
+                                          children: [
+                                            photoMini(sl<AuthConfig>().user == null
+                                                ? null
+                                                : sl<AuthConfig>().user!.me.photo),
+                                            SizedBox(width: 12.w),
+                                            Text(
+                                              sl<AuthConfig>().user == null
+                                                  ? ''
+                                                  : sl<AuthConfig>().user!.me.username,
+                                              style: style1,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      GestureDetector(
+                                        onTap: () => showMaterialModalBottomSheet(
+                                          animationCurve: Curves.easeInOutQuint,
+                                          duration: const Duration(milliseconds: 600),
+                                          context: context,
+                                          // shape: RoundedRectangleBorder(
+                                          //   borderRadius: BorderRadius.vertical(
+                                          //     top: Radius.circular(50.r),
+                                          //   ),
+                                          // ),
+                                          backgroundColor: Colors.transparent,
+                                          builder: (context) =>
+                                              ParametrsUserBottomsheet(
+                                                onRelationSettingsTap: (){
+                                                  Navigator.pop(context);
+                                                  widget.toRelationSettingsPage();
+                                                },
                                               ),
-                                              controller: _controller,
-                                              focusNode: f1,
-                                              scrollPadding: EdgeInsets.zero,
-                                              decoration: InputDecoration(
-                                                contentPadding:
-                                                    const EdgeInsets.only(top: 20),
-                                                border: InputBorder.none,
-                                                hintText: f1.hasFocus
-                                                    ? " "
-                                                    : 'Назовите отношения',
-                                                hintStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 30.sp,
-                                                  fontWeight: FontWeight.w700,
+                                        ).then((value) {
+                                          if (value is String) {
+                                            if (value == 'account') {
+                                              widget.nextPage();
+                                            }
+                                          }
+                                        }),
+                                        child: Container(
+                                          height: 55.h,
+                                          width: 55.h,
+                                          color: Colors.transparent,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              SizedBox(
+                                                height: 5.57.h,
+                                                width: 33.43.h,
+                                                child: ListView.builder(
+                                                  scrollDirection: Axis.horizontal,
+                                                  itemCount: 3,
+                                                  itemBuilder:
+                                                      (BuildContext context, index) {
+                                                    return Container(
+                                                      margin:
+                                                          EdgeInsets.only(left: 5.57.h),
+                                                      height: 5.57.h,
+                                                      width: 5.57.h,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                1.5.r),
+                                                        color: Colors.white,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 30.h),
+                                BlocConsumer<ProfileBloc, ProfileState>(
+                                  listener: (context, state) {
+                                    if (state is ProfileErrorState) {
+                                      Loader.hide();
+                                      showAlertToast(state.message);
+                                    }
+                                    if (state is ProfileInternetErrorState) {
+                                      Loader.hide();
+                                      showAlertToast(
+                                          'Проверьте соединение с интернетом!');
+                                    }
+                                    if (state is ProfileRelationNameChangedState) {
+                                      // Loader.hide();
+                                      // showLoaderWrapper(context);
+                                      context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
+                                    }
+                                  },
+                                  builder: (context, state) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                        left: 25.w,
+                                        right: 38.w,
+                                      ),
+                                      child: SizedBox(
+                                        height: 45.h,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: SizedBox(
+                                                height: 33.h,
+                                                child: TextField(
+                                                  onSubmitted: (s) {
+                                                    if (s.length > 1) {
+                                                      showLoaderWrapper(context);
+                                                      context.read<ProfileBloc>().add(
+                                                          EditRelationNameEvent(
+                                                              name: _controller.text
+                                                                  .trim()));
+                                                    }
+                                                  },
+                                                  textCapitalization:
+                                                      TextCapitalization.words,
+                                                  onChanged: (value) {
+                                                    if (value.length <= maxLength) {
+                                                      text = value;
+                                                    } else {
+                                                      _controller.value =
+                                                          TextEditingValue(
+                                                        text: text,
+                                                        selection: TextSelection(
+                                                          baseOffset: maxLength,
+                                                          extentOffset: maxLength,
+                                                          affinity:
+                                                              TextAffinity.upstream,
+                                                          isDirectional: false,
+                                                        ),
+                                                        composing: TextRange(
+                                                          start: 0,
+                                                          end: maxLength,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                  cursorColor: Colors.white,
+                                                  cursorHeight: 30,
+                                                  textAlignVertical:
+                                                      TextAlignVertical.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 30.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                  controller: _controller,
+                                                  focusNode: f1,
+                                                  scrollPadding: EdgeInsets.zero,
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        const EdgeInsets.only(top: 20),
+                                                    border: InputBorder.none,
+                                                    hintText: f1.hasFocus
+                                                        ? " "
+                                                        : 'Назовите отношения',
+                                                    hintStyle: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 30.sp,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            if (f1.hasFocus) {
-                                              f1.unfocus();
-                                              // MySharedPrefs().setNameRelationShips(
-                                              //     _controller.text);
-                                              // getNameRelationShips();
-                                              showLoaderWrapper(context);
-                                              context.read<ProfileBloc>().add(
-                                                  EditRelationNameEvent(
-                                                      name:
-                                                          _controller.text.trim()));
-                                            } else {
-                                              FocusScope.of(context)
-                                                  .requestFocus(f1);
-                                            }
-                                          },
-                                          child: _controller.text.isNotEmpty &&
-                                                  f1.hasFocus
-                                              ? const Icon(
-                                                  Icons.check_rounded,
-                                                  color: Colors.white,
-                                                )
-                                              : !f1.hasFocus
-                                                  ? SvgPicture.asset(SvgImg.edit)
-                                                  : const Icon(
+                                            GestureDetector(
+                                              onTap: () async {
+                                                if (f1.hasFocus) {
+                                                  f1.unfocus();
+                                                  // MySharedPrefs().setNameRelationShips(
+                                                  //     _controller.text);
+                                                  // getNameRelationShips();
+                                                  showLoaderWrapper(context);
+                                                  context.read<ProfileBloc>().add(
+                                                      EditRelationNameEvent(
+                                                          name:
+                                                              _controller.text.trim()));
+                                                } else {
+                                                  FocusScope.of(context)
+                                                      .requestFocus(f1);
+                                                }
+                                              },
+                                              child: _controller.text.isNotEmpty &&
+                                                      f1.hasFocus
+                                                  ? const Icon(
                                                       Icons.check_rounded,
                                                       color: Colors.white,
-                                                    ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(height: 25.h),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 25.w),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  sl<AuthConfig>().user!.fromYou ?? true
-                                      ? _buildCurrentUser()
-                                      : _buildLoveUser(),
-                                  const Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 13.h),
-                                    child: SizedBox(
-                                      height: 108.h,
-                                      width: 108.w,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                            SvgImg.heart,
-                                            height: 59.h,
-                                            width: 70.w,
-                                          ),
-                                        ],
+                                                    )
+                                                  : !f1.hasFocus
+                                                      ? SvgPicture.asset(SvgImg.edit)
+                                                      : const Icon(
+                                                          Icons.check_rounded,
+                                                          color: Colors.white,
+                                                        ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  sl<AuthConfig>().user!.fromYou ?? true
-                                      ? _buildLoveUser()
-                                      : _buildCurrentUser()
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 26.h),
-                            StreamBuilder<double>(
-                              stream: _streamControllerCarousel.stream,
-                              builder: (context, snapshot) {
-                                double data = snapshot.data ?? 0;
-                                return CarouselSlider(
-                                  items: [
-                                    Column(
-                                      children: [
-                                        SizedBox(
-                                          width: 378.w,
-                                          height: 115.h,
-                                          child: HomeInfoFirst(
-                                            onRelationTap: widget.toRelationSettingsPage,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        SizedBox(
-                                          width: 378.w,
-                                          height: (data * 138.h + 115.h),
-                                          child: HomeInfoSecond(
-                                            data: data,
-                                            onRelationTap: widget.toRelationSettingsPage,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                  options: CarouselOptions(
-                                    viewportFraction: 0.91,
-                                    onScrolled: (d) {
-                                      _streamControllerCarousel.sink.add(d ?? 0);
-                                    },
-                                    enableInfiniteScroll: false,
-                                    height:
-                                        data >= 1 ? 253.h : (data * 138.h + 115.h),
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(height: 15.h),
-                            BlocConsumer<EventsBloc, EventsState>(
-                                listener: (context, state) {
-                              if (state is EventErrorState) {
-                                showAlertToast(state.message);
-                                if (state.isTokenError) {
-                                  print('TOKEN ERROR, LOGOUT...');
-                                  context.read<AuthBloc>().add(LogOut(context));
-                                }
-                              }
-                              if (state is EventInternetErrorState) {
-                                showAlertToast(
-                                    'Проверьте соединение с интернетом!');
-                              }
-                            }, builder: (context, state) {
-                              if (state is EventLoadingState) {
-                                return Container();
-                              }
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 25.w),
-                                child: ReorderableListView.builder(
-                                  onReorder: (oldIndex, newIndex) {
-                                    context.read<EventsBloc>().add(
-                                        EventChangeToHomeEvent(
-                                            eventEntity:
-                                                eventsBloc.eventsInHome[oldIndex],
-                                            position: newIndex));
-                                  },
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding: const EdgeInsets.all(0),
-                                  shrinkWrap: true,
-                                  itemCount: eventsBloc.eventsInHome.length,
-                                  itemBuilder: ((context, index) {
-                                    return CustomAnimationItemRelationships(
-                                      events: eventsBloc.eventsInHome[index],
-                                      // func: func,
-                                      key: ValueKey(
-                                          '${eventsBloc.eventsInHome[index].id}'),
-                                      delete: (i) {
-                                        eventsBloc.add(EventChangeToHomeEvent(
-                                            eventEntity: null, position: i));
-                                      },
-                                      index: index,
-                                      onDetail:(id) {
-                                        widget.toDetailPage(id);
-                                      },
-                                    );
-                                  }),
-                                  proxyDecorator: (child, index, animation) {
-                                    return Container(
-                                      decoration: BoxDecoration(boxShadow: [
-                                        BoxShadow(
-                                            blurRadius: 20.h,
-                                            color: Color.fromRGBO(0, 0, 0, 0.1))
-                                      ], borderRadius: BorderRadius.circular(20.r)),
-                                      child: child,
                                     );
                                   },
                                 ),
-                              );
-                            }),
-                            // if (events.isEmpty) SizedBox(height: 15.h),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 25.w),
-                              child: CustomAddAnimationButton(func: () {
-                                if (eventsBloc.eventsInHome.length < 3) {
-                                  if(!eventsBloc.eventsInHome.any((element) => element.id == eventsBloc.events.first.id)){
-                                    context.read<EventsBloc>().add(EventChangeToHomeEvent(
-                                      eventEntity: eventsBloc.events.first,
-                                      position: eventsBloc.eventsInHome.isEmpty ? 0 : eventsBloc.eventsInHome.length+1
-                                    ));
-                                  }else{
-                                    showModalAddEvent(context, () {});
+                                SizedBox(height: 25.h),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      sl<AuthConfig>().user!.fromYou ?? true
+                                          ? _buildCurrentUser()
+                                          : _buildLoveUser(),
+                                      const Spacer(),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 13.h),
+                                        child: SizedBox(
+                                          height: 108.h,
+                                          width: 108.w,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                SvgImg.heart,
+                                                height: 59.h,
+                                                width: 70.w,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      sl<AuthConfig>().user!.fromYou ?? true
+                                          ? _buildLoveUser()
+                                          : _buildCurrentUser()
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 26.h),
+                                StreamBuilder<double>(
+                                  stream: _streamControllerCarousel.stream,
+                                  builder: (context, snapshot) {
+                                    double data = snapshot.data ?? 0;
+                                    return CarouselSlider(
+                                      items: [
+                                        Column(
+                                          children: [
+                                            SizedBox(
+                                              width: 378.w,
+                                              height: 115.h,
+                                              child: HomeInfoFirst(
+                                                onRelationTap: widget.toRelationSettingsPage,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            SizedBox(
+                                              width: 378.w,
+                                              height: (data * 138.h + 115.h),
+                                              child: HomeInfoSecond(
+                                                data: data,
+                                                onRelationTap: widget.toRelationSettingsPage,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                      options: CarouselOptions(
+                                        viewportFraction: 0.91,
+                                        onScrolled: (d) {
+                                          _streamControllerCarousel.sink.add(d ?? 0);
+                                        },
+                                        enableInfiniteScroll: false,
+                                        height:
+                                            data >= 1 ? 253.h : (data * 138.h + 115.h),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                SizedBox(height: 15.h),
+                                BlocConsumer<EventsBloc, EventsState>(
+                                    listener: (context, state) {
+                                  if (state is EventErrorState) {
+                                    showAlertToast(state.message);
+                                    if (state.isTokenError) {
+                                      print('TOKEN ERROR, LOGOUT...');
+                                      context.read<AuthBloc>().add(LogOut(context));
+                                    }
                                   }
-                                }
-                              }),
-                            ),
-                            SizedBox(height: 200.h)
+                                  if (state is EventInternetErrorState) {
+                                    showAlertToast(
+                                        'Проверьте соединение с интернетом!');
+                                  }
+                                }, builder: (context, state) {
+                                  if (state is EventLoadingState) {
+                                    return Container();
+                                  }
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                    child: ReorderableListView.builder(
+                                      onReorder: (oldIndex, newIndex) {
+                                        context.read<EventsBloc>().add(
+                                            EventChangeToHomeEvent(
+                                                eventEntity:
+                                                    eventsBloc.eventsInHome[oldIndex],
+                                                position: newIndex));
+                                      },
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      padding: const EdgeInsets.all(0),
+                                      shrinkWrap: true,
+                                      itemCount: eventsBloc.eventsInHome.length,
+                                      itemBuilder: ((context, index) {
+                                        return CustomAnimationItemRelationships(
+                                          events: eventsBloc.eventsInHome[index],
+                                          // func: func,
+                                          key: ValueKey(
+                                              '${eventsBloc.eventsInHome[index].id}'),
+                                          delete: (i) {
+                                            eventsBloc.add(EventChangeToHomeEvent(
+                                                eventEntity: null, position: i));
+                                          },
+                                          index: index,
+                                          onDetail:(id) {
+                                            widget.toDetailPage(id);
+                                          },
+                                        );
+                                      }),
+                                      proxyDecorator: (child, index, animation) {
+                                        return Container(
+                                          decoration: BoxDecoration(boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 20.h,
+                                                color: Color.fromRGBO(0, 0, 0, 0.1))
+                                          ], borderRadius: BorderRadius.circular(20.r)),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }),
+                                // if (events.isEmpty) SizedBox(height: 15.h),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                  child: CustomAddAnimationButton(func: () {
+                                    if (eventsBloc.eventsInHome.length < 3) {
+                                      if(!eventsBloc.eventsInHome.any((element) => element.id == eventsBloc.events.first.id)){
+                                        context.read<EventsBloc>().add(EventChangeToHomeEvent(
+                                          eventEntity: eventsBloc.events.first,
+                                          position: eventsBloc.eventsInHome.isEmpty ? 0 : eventsBloc.eventsInHome.length+1
+                                        ));
+                                      }else{
+                                        showModalAddEvent(context, () {});
+                                      }
+                                    }
+                                  }),
+                                ),
+                                SizedBox(height: 200.h)
+                              ],
+                            )
                           ],
-                        )
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        }
-      )
+              );
+            }
+          )
+        );
+      }
     );
   }
 

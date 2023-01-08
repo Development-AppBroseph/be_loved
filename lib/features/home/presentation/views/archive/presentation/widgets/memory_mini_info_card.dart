@@ -3,6 +3,7 @@ import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -42,13 +43,13 @@ class MemoryMiniInfoCard extends StatelessWidget {
                 children: [
                   Positioned.fill(
                     child: Container(
-                      color: ColorStyles.blackColor,
+                      color: sl<AuthConfig>().idx == 1 ? ColorStyles.accentColor :ColorStyles.blackColor,
                     ),
                   ),
                   Positioned.fill(
                     left: 119.w-(119.w/100 * double.parse(archiveBloc.memoryEntity!.getFilledMemoryInPercent())),
                     child: Container(
-                      color: ColorStyles.primarySwath,
+                      color: sl<AuthConfig>().idx == 1 ? ColorStyles.white :ColorStyles.primarySwath,
                     ),
                   ),
 
@@ -60,7 +61,7 @@ class MemoryMiniInfoCard extends StatelessWidget {
                             ? '0/10 ГБ'
                             : '${sl<AuthConfig>().memoryEntity!.getInGigabytesCurrentSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
                         style: TextStyles(context)
-                            .white_15_w800)),
+                            .white_15_w800.copyWith(color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]))),
                 ]
               )
             )

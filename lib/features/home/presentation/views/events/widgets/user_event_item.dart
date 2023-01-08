@@ -1,9 +1,12 @@
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/all_events.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -72,7 +75,7 @@ class UserEventItem extends StatelessWidget {
                           fontFamily: 'Inter',
                           fontSize: 20.sp,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xff171717),
+                          color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                         ),
                       ),
                       eventEntity.important

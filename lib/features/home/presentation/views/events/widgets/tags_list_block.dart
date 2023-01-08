@@ -1,10 +1,13 @@
 import 'dart:math';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/show_create_tag_modal.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,9 +19,10 @@ import '../../../bloc/tags/tags_bloc.dart';
 
 class TagsListBlock extends StatelessWidget {
   bool isLeftPadding;
-  TagsListBlock({this.isLeftPadding = true});
+  bool isBlack2C;
+  TagsListBlock({this.isLeftPadding = true, this.isBlack2C = false});
   TextStyle style1 = TextStyle(
-      color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
+      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx], fontWeight: FontWeight.w800, fontSize: 15.sp);
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +103,7 @@ class TagsListBlock extends StatelessWidget {
                                 elevation: 0,
                                 margin: EdgeInsets.all(1.w),
                                 radius: BorderRadius.circular(17.r),
-                                // color: ColorStyles.backgroundColorGrey,
+                                color: isBlack2C ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx] : ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                               ),
                             ),
                           Container(

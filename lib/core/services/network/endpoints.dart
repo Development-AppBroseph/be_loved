@@ -45,6 +45,13 @@ enum Endpoints {
   createAlbum,
   updateFilesAlbum,
   deleteAlbum,
+
+  //Moments
+  getMoments,
+  addFavorites,
+
+  //Events
+  oldEvents
 }
 
 extension EndpointsExtension on Endpoints {
@@ -106,6 +113,12 @@ extension EndpointsExtension on Endpoints {
         return "/archive/album/${params![0]}"; 
       case Endpoints.deleteAlbum:
         return "/archive/album/${params![0]}"; 
+      case Endpoints.getMoments:
+        return "/archive/moments"; 
+      case Endpoints.addFavorites:
+        return "/archive/${params![0]}"; 
+      case Endpoints.oldEvents:
+        return "/events/prev";  
       default:
         return '';
     }

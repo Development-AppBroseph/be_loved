@@ -79,7 +79,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProfileLoadingState());
     final data = await editRelation.call(EditRelationParams(
       relationId: sl<AuthConfig>().user!.relationId!,
-      nameRelation: event.name
+      nameRelation: event.name,
+      theme: event.theme == null 
+        ? (sl<AuthConfig>().idx == 0 ? 'light' : 'dark')
+        : (event.theme == 0 ? 'light' : 'dark')
     ));
     ProfileState state = data.fold(
       (error) => errorCheck(error),

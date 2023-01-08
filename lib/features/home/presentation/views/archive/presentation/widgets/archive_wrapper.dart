@@ -9,6 +9,7 @@ import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/option_black_btn.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/memory_mini_info_card.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class ArchiveWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: ColorStyles.backgroundColorGrey,
+      color: ClrStyle.backToBlack17[sl<AuthConfig>().idx],
       child: SingleChildScrollView(
         controller: scrollController,
         child: Column(
@@ -129,7 +130,7 @@ class ArchiveWrapper extends StatelessWidget {
                   child: SvgPicture.asset(
                     SvgImg.add,
                     height: 16.h,
-                    color: Colors.white,
+                    color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                   ))),
         ),
       ),

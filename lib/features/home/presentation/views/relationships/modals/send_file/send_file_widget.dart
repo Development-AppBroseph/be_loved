@@ -1,7 +1,11 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/text_fields/default_text_form_field.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/memory_info_card.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,6 +25,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
       radius: BorderRadius.vertical(
         top: Radius.circular(80.r),
       ),
+      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
       elevation: 0,
       margin: EdgeInsets.zero,
       child: SizedBox(
@@ -35,47 +40,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                   SizedBox(
                     height: 60.h,
                   ),
-                  SizedBox(
-                    width: 378.w,
-                    height: 38.h,
-                    child: ClipPath.shape(
-                        shape:
-                            SquircleBorder(radius: BorderRadius.circular(20.r)),
-                        child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: Container(
-                                color: ColorStyles.blackColor,
-                              ),
-                            ),
-                            Positioned.fill(
-                              right: 240.w,
-                              child: Container(
-                                color: ColorStyles.primarySwath,
-                              ),
-                            ),
-                            Positioned.fill(
-                              left: 20.w,
-                              right: 20.w,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Хранилище:',
-                                    style: TextStyles(context).white_15_w800,
-                                  ),
-                                  Text(
-                                    '10/100 ГБ',
-                                    style: TextStyles(context).white_15_w800,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        )),
-                  ),
+                  MemoryInfoCard(),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -103,6 +68,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                   CustomButton(
                     color: ColorStyles.primarySwath,
                     text: 'Готово',
+                    border: sl<AuthConfig>().idx == 0 ? null : Border.all(width: 2.w, color: ColorStyles.white),
                     textColor: Colors.white,
                     onPressed: () {},
                   ),
@@ -119,7 +85,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                     topLeft: Radius.circular(28.h),
                     topRight: Radius.circular(28.h),
                   ),
-                  color: Colors.white,
+                  color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
                 ),
                 padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
                 child: Column(

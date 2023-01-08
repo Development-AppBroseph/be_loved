@@ -1,3 +1,6 @@
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,7 +23,7 @@ class TextStyles {
       fontStyle: FontStyle.normal,
       fontSize: 17.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
 
   // black
@@ -29,160 +32,160 @@ class TextStyles {
       fontStyle: FontStyle.normal,
       fontSize: 50.sp,
       fontWeight: FontWeight.w800,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   TextStyle black_30_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 30.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_30_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 30.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_28_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 28.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_27_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 27.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_27_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 27.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_20_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 20.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_20_w800 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 20.sp,
       fontWeight: FontWeight.w800,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_20_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 20.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_22_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 22.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_26_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 26.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_26_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 26.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_23_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 23.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_24_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 24.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_24_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 24.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_25_w800 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 25.sp,
       fontWeight: FontWeight.w800,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_25_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 25.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_26_w500 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 26.sp,
       fontWeight: FontWeight.w500,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_19_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 19.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_19_w400 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 19.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_18_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 18.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_18_w400 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 18.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_18_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 18.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
 
   TextStyle black_17_w700 = TextStyle(
@@ -190,126 +193,126 @@ class TextStyles {
       fontStyle: FontStyle.normal,
       fontSize: 17.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_17_w400 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 17.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_17_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 17.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
       
   TextStyle black_16_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 16.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_15_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 15.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_15_w500 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 15.sp,
       fontWeight: FontWeight.w500,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_15_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 15.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_15_w400 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 15.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_16_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 16.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_16_w400 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 16.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_16_w500 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 16.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_14_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 14.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_14_w400 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 14.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_14_w300 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 14.sp,
       fontWeight: FontWeight.w300,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_13_w400 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 13.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_12_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 12.sp,
       fontWeight: FontWeight.w700,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
   TextStyle black_12_w400 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 12.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
     
   TextStyle black_11_w400 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 11.sp,
       fontWeight: FontWeight.w400,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
 
 
@@ -318,14 +321,14 @@ class TextStyles {
       fontStyle: FontStyle.normal,
       fontSize: 18.sp,
       fontWeight: FontWeight.w800,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
   TextStyle black_16_w800 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
       fontSize: 16.sp,
       fontWeight: FontWeight.w800,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
 
     
   TextStyle black_15_w800 = TextStyle(
@@ -333,7 +336,7 @@ class TextStyles {
       fontStyle: FontStyle.normal,
       fontSize: 15.sp,
       fontWeight: FontWeight.w800,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
 
   TextStyle black_14_w800 = TextStyle(
@@ -341,7 +344,7 @@ class TextStyles {
       fontStyle: FontStyle.normal,
       fontSize: 14.sp,
       fontWeight: FontWeight.w800,
-      color: ColorStyles.blackColor);
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
   
 
 

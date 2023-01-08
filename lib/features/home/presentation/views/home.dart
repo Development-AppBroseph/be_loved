@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
+import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
@@ -13,6 +15,9 @@ import 'package:be_loved/features/home/presentation/views/purposes/purposes_page
 import 'package:be_loved/features/home/presentation/views/relationships/main_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
+import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -50,6 +55,11 @@ class _HomePageState extends State<HomePage> {
     context.read<DecorBloc>().add(GetBackgroundEvent());
     context.read<AuthBloc>().add(GetUser());
     context.read<TagsBloc>().add(GetTagsEvent());
+
+    if (context.read<ArchiveBloc>().memoryEntity == null ||
+        sl<AuthConfig>().memoryEntity == null) {
+      context.read<ArchiveBloc>().add(GetMemoryInfoEvent());
+    }
   }
 
   @override
@@ -65,6 +75,11 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         // var loader = showLoaderWrapper(context);
         if (state is GetUserSuccess || state is GetUserError || state is RefreshUser) {
+          if(state is GetUserSuccess){
+            if(context.read<ThemeBloc>().state is ThemeInitialState){
+              context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
+            }
+          }
           // Loader.hide();
           return BlocConsumer<MainScreenBloc, MainScreenState>(
             listener: (context, state) {
@@ -81,7 +96,8 @@ class _HomePageState extends State<HomePage> {
             builder: (context, state) {
               return Scaffold(
                 bottomNavigationBar: BottomNavigation(),
-                backgroundColor: mainScreenBloc.currentView == 1 ? Colors.white : null,
+                // mainScreenBloc.currentView == 1 ? Colors.white : null
+                backgroundColor: mainScreenBloc.currentView == 1 ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx] : sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : null,
                 body: Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
@@ -100,7 +116,7 @@ class _HomePageState extends State<HomePage> {
           );
         } else {
           return Container(
-            color: Colors.white,
+            color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
             alignment: Alignment.center,
             child: SvgPicture.asset(
               'assets/icons/heart.svg',

@@ -1,7 +1,10 @@
 import 'dart:math';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,7 +35,7 @@ class AddTagIcon extends StatelessWidget {
                   elevation: 0,
                   margin: EdgeInsets.all(1.w),
                   radius: BorderRadius.circular(17.r),
-                  color: ColorStyles.backgroundColorGrey,
+                  color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
                 ),
               ),
             Container(

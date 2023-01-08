@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
@@ -13,6 +14,8 @@ import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.da
 import 'package:be_loved/features/home/presentation/views/archive/presentation/selecting_gallery_page.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/icon_select_modal.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +55,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
   }
 
   TextStyle style2 = TextStyle(
-      color: ColorStyles.blackColor,
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
       fontSize: 18.sp,
       fontWeight: FontWeight.w800);
 
@@ -74,7 +77,6 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
         id: 0,
         relationId: 0,
         name: _controller.text.trim(),
-        isFavorite: false,
         files: selectedFiles
       )
     ));
@@ -139,6 +141,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
           radius: BorderRadius.vertical(
             top: Radius.circular(80.r),
           ),
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
           elevation: 0,
           margin: EdgeInsets.zero,
           child: SizedBox(
@@ -170,7 +173,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
                           height: 57.h,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15.r),
-                              color: ColorStyles.backgroundColorGrey),
+                              color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
                           padding: EdgeInsets.symmetric(horizontal: 20.w),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,6 +210,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
                                       ),
                                       SvgPicture.asset(
                                         SvgImg.upDownIcon,
+                                        color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                       ),
                                     ],
                                   ),
@@ -219,7 +223,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
                           padding: EdgeInsets.only(top: 20.h),
                           child: AddPhotoCard(
                             onTap: addFiles,
-                            color: ColorStyles.backgroundColorGrey,
+                            color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
                             text: selectedFiles.length == 0
                             ? 'Добавить файлы'
                             : selectedFiles.length == 1
@@ -235,7 +239,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
                         CustomButton(
                           color: ColorStyles.primarySwath,
                           text: 'Создать альбом',
-                          textColor: Colors.white,
+                          textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                           validate: isValidate(),
                           onPressed: createAlbum,
                         ),
@@ -253,7 +257,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
                         topLeft: Radius.circular(28.h),
                         topRight: Radius.circular(28.h),
                       ),
-                      color: Colors.white,
+                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                     ),
                     padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
                     child: Column(

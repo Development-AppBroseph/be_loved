@@ -3,6 +3,7 @@ import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
       //     borderRadius: BorderRadius.circular(20.r), color: Colors.white),
       child: CupertinoCard(
         radius: BorderRadius.circular(40.r),
-        color: Colors.white,
+        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
         elevation: 0,
         margin: EdgeInsets.zero,
         padding: EdgeInsets.only(top: 11.h, left: 20.w, right: 25.w),
@@ -137,7 +138,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                       Text(
                         '$days',
                         style: TextStyle(
-                            color: const Color(0xFF171717),
+                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 50.sp,
                             fontWeight: FontWeight.w700),
                       ),
@@ -157,7 +158,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                       Text(
                         '$hour',
                         style: TextStyle(
-                            color: const Color(0xFF171717),
+                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 50.sp,
                             fontWeight: FontWeight.w700),
                       ),
@@ -177,7 +178,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                       Text(
                         '$minute',
                         style: TextStyle(
-                            color: const Color(0xFF171717),
+                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 50.sp,
                             fontWeight: FontWeight.w700),
                       ),

@@ -1,6 +1,9 @@
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/text_size.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,7 +87,7 @@ class UserAvatar extends StatelessWidget {
   TextStyle getStyle() {
     return TextStyle(
       fontFamily: 'Inter',
-      color: Colors.black,
+      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
       fontWeight: FontWeight.bold,
       fontSize: textSizeByLength(title).sp,
     );

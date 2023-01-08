@@ -1,8 +1,11 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
 import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
 import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -33,21 +36,13 @@ class EventsListWidget extends StatelessWidget {
 
   Widget itemEvent(EventEntity eventEntity) {
     TextStyle style1 = TextStyle(
-        color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.sp);
+        color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx], fontWeight: FontWeight.w700, fontSize: 20.sp);
     TextStyle style2 = TextStyle(
         color: ColorStyles.greyColor,
         fontWeight: FontWeight.w700,
         fontSize: 15.sp);
 
     Color? colorDays = checkColor(eventEntity.datetimeString);
-
-    TextStyle style3 = TextStyle(
-        color: colorDays, fontWeight: FontWeight.w800, fontSize: 15.sp);
-
-    TextStyle style4 = TextStyle(
-        color: ColorStyles.redColor,
-        fontWeight: FontWeight.w800,
-        fontSize: 15.sp);
 
     return GestureDetector(
       onTap: (){

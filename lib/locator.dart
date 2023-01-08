@@ -15,6 +15,7 @@ import 'package:be_loved/features/home/domain/repositories/events_repository.dar
 import 'package:be_loved/features/home/domain/repositories/purpose_repository.dart';
 import 'package:be_loved/features/home/domain/repositories/tags_repository.dart';
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
+import 'package:be_loved/features/home/domain/usecases/add_favorites.dart';
 import 'package:be_loved/features/home/domain/usecases/add_gallery_file.dart';
 import 'package:be_loved/features/home/domain/usecases/add_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/cancel_purpose.dart';
@@ -33,6 +34,8 @@ import 'package:be_loved/features/home/domain/usecases/get_gallery_files.dart';
 import 'package:be_loved/features/home/domain/usecases/get_history_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_in_process_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_memory_info.dart';
+import 'package:be_loved/features/home/domain/usecases/get_moments.dart';
+import 'package:be_loved/features/home/domain/usecases/get_old_events.dart';
 import 'package:be_loved/features/home/domain/usecases/get_season_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
@@ -42,6 +45,8 @@ import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/old_events/old_events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
@@ -51,6 +56,7 @@ import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_relation.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
+import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -228,6 +234,9 @@ void setupInjections() {
   sl.registerLazySingleton(() => GetAlbums(sl()));
   sl.registerLazySingleton(() => CreateAlbum(sl()));
   sl.registerLazySingleton(() => DeleteAlbum(sl()));
+  sl.registerLazySingleton(() => GetMoments(sl()));
+  sl.registerLazySingleton(() => AddFavorites(sl()));
+  sl.registerLazySingleton(() => GetOldEvents(sl()));
 
   //Blocs
   sl.registerFactory<ArchiveBloc>(
@@ -239,7 +248,12 @@ void setupInjections() {
   sl.registerFactory<AlbumsBloc>(
     () => AlbumsBloc(sl(), sl(), sl()),
   );
-
+  sl.registerFactory<MomentsBloc>(
+    () => MomentsBloc(sl(), sl()),
+  );
+  sl.registerFactory<OldEventsBloc>(
+    () => OldEventsBloc(sl(), sl()),
+  );
 
 
 
@@ -276,6 +290,15 @@ void setupInjections() {
     () => PurposeBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()),
   );
 
+
+
+
+
+
+  //Theme
+  sl.registerFactory<ThemeBloc>(
+    () => ThemeBloc(),
+  );
 
 
 
