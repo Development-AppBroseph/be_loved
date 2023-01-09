@@ -129,7 +129,7 @@ void tagSelectModal(BuildContext context, Offset offset, EventEntity event,
                                       if (isLast) {
                                         showModalCreateTag(
                                             context, true, null, event.id);
-                                      } else {
+                                      } else if(!tagOfEvent[index].important) {
                                         await showModalCreateTag(
                                             context, false, tagOfEvent[index]);
                                         Navigator.pop(context);

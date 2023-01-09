@@ -123,7 +123,8 @@ class _EventDetailViewState extends State<EventDetailView> {
             position: context.read<EventsBloc>().eventsInHome.isEmpty ? 0 : (context.read<EventsBloc>().eventsInHome.length+1)
           ));
         }
-      }
+      },
+      isOld: widget.isOld
     );
   }
 
@@ -147,7 +148,7 @@ class _EventDetailViewState extends State<EventDetailView> {
   @override
   void initState() {
     if(widget.isOld){
-      event = context.read<OldEventsBloc>().selectedEvent;
+      event = context.read<EventsBloc>().eventsOld.where((element) => element.id == context.read<EventsBloc>().eventDetailSelectedId).first;
     }else{
       event = context.read<EventsBloc>().events.where((element) => element.id == context.read<EventsBloc>().eventDetailSelectedId).first;
     }
@@ -351,6 +352,7 @@ class _EventDetailViewState extends State<EventDetailView> {
                     url: event!.photo!,
                   )
                   : AddPhotoCard(
+                    color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                     onTap: (){
                       showPhotoSettingsModal(false);
                     },

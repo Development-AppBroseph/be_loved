@@ -33,7 +33,8 @@ import 'package:intl/intl.dart';
 
 class RelationShipsSettingsPage extends StatefulWidget {
   final VoidCallback prevPage;
-  const RelationShipsSettingsPage({Key? key, required this.prevPage}) : super(key: key);
+  final Function() toStaticsPage;
+  const RelationShipsSettingsPage({Key? key, required this.prevPage, required this.toStaticsPage}) : super(key: key);
 
   @override
   State<RelationShipsSettingsPage> createState() => _RelationShipsSettingsPageState();
@@ -97,9 +98,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is GetUserSuccess) {
-          if(context.read<ThemeBloc>().state is ThemeInitialState){
-            context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
-          }
+          context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
           Loader.hide();
           setState(() {
             _controller.text = sl<AuthConfig>().user!.name ?? '';
@@ -348,9 +347,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                               onTapEditDate: (){
                                 // controller.animateTo(controller.position.pixels+100.h, duration: Duration(milliseconds: 300), curve: Curves.easeInOutQuint);
                               },
-                              onTapStats: (){
-
-                              },
+                              onTapStats: widget.toStaticsPage,
                               onChangeDate: (newDate){
                                 setState(() {
                                   datetime = newDate;

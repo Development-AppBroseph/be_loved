@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/features/home/data/models/statics/statics_model.dart';
+import 'package:be_loved/features/home/domain/entities/statics/statics_entity.dart';
 import 'package:dio/dio.dart';
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/services/database/auth_params.dart';
@@ -11,6 +13,8 @@ import '../../../../../locator.dart';
 abstract class ProfileRemoteDataSource {
   Future<User> editProfile(User user, File? file);
   Future<String> editRelation(int id, String relationName, String theme);
+
+  Future<StaticsEntity> getStats();
 
 }
 
@@ -67,6 +71,26 @@ class ProfileRemoteDataSourceImpl
     printRes(response);
     if (response.statusCode == 200) {
       return relationName;
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
+  @override
+  Future<StaticsEntity> getStats() async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.get(Endpoints.getStats.getPath(),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 599,
+            headers: headers));
+    printRes(response);
+    print('RES: ${response.data}');
+    if (response.statusCode == 200) {
+      return StaticsModel.fromJson(response.data);
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }

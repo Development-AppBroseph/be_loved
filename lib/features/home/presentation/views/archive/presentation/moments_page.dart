@@ -242,7 +242,7 @@ class _MomentsPageState extends State<MomentsPage> {
                     ));
                   }, 
                   url: albumEntity.files[index].isVideo ? (albumEntity.files[index].urlToPreviewVideoImage ?? '') : albumEntity.files[index].urlToFile,
-                  title: albumEntity.files[index].place,
+                  title: albumEntity.files[index].place ?? '',
                 ),
               );
             },

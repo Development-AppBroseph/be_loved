@@ -302,36 +302,42 @@ class _MainEventsPageState extends State<MainEventsPage> {
           SizedBox(height: 25.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.w),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Предстоящие события', style: style2),
-                    SizedBox(height: 8.h),
-                    Text(countEventsText(eventsBloc.eventsSorted), style: style3),
-                  ],
-                ),
-                const Spacer(),
-                SizedBox(
-                  height: 45.w,
-                  width: 45.w,
-                  child: Stack(
+            child: GestureDetector(
+              onTap: (){
+                widget.nextPage();
+              },
+              behavior: HitTestBehavior.translucent,
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Align(
-                        child: Transform.rotate(
-                            angle: pi,
-                            child: SvgPicture.asset(
-                              SvgImg.back,
-                              height: 20.41.h,
-                              width: 11.37.h,
-                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                            )),
-                      )
+                      Text('Предстоящие события', style: style2),
+                      SizedBox(height: 8.h),
+                      Text(countEventsText(eventsBloc.eventsSorted), style: style3),
                     ],
                   ),
-                )
-              ],
+                  const Spacer(),
+                  SizedBox(
+                    height: 45.w,
+                    width: 45.w,
+                    child: Stack(
+                      children: [
+                        Align(
+                          child: Transform.rotate(
+                              angle: pi,
+                              child: SvgPicture.asset(
+                                SvgImg.back,
+                                height: 20.41.h,
+                                width: 11.37.h,
+                                color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                              )),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           SizedBox(height: 17.h),

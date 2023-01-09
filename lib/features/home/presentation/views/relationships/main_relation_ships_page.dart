@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class MainRelationShipsPage extends StatefulWidget {
   final Function(int id) nextPage;
   final Function() toRelationSettingsPage;
-  const MainRelationShipsPage({Key? key, required this.nextPage, required this.toRelationSettingsPage}) : super(key: key);
+  final Function() toStaticsPage;
+  const MainRelationShipsPage({Key? key, required this.nextPage, required this.toRelationSettingsPage, required this.toStaticsPage}) : super(key: key);
 
   @override
   State<MainRelationShipsPage> createState() => _MainRelationShipsPageState();
@@ -27,14 +28,8 @@ class _MainRelationShipsPageState extends State<MainRelationShipsPage> {
     return PageView(
       physics: physics,
       controller: controller,
-      // onPageChanged: (value) {
-      //   physics = value == 0
-      //       ? const NeverScrollableScrollPhysics()
-      //       : const ClampingScrollPhysics();
-      //   setState(() {});
-      // },
       children: [
-        RelationShipsPage(nextPage: nextPage, toDetailPage: widget.nextPage, toRelationSettingsPage: widget.toRelationSettingsPage),
+        RelationShipsPage(nextPage: nextPage, toDetailPage: widget.nextPage, toRelationSettingsPage: widget.toRelationSettingsPage, toStaticsPage: widget.toStaticsPage,),
         AccountPage(prevPage: prevPage),
       ],
     );

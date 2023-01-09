@@ -53,7 +53,7 @@ class _EventPageInArchiveState extends State<EventPageInArchive> {
       },
       (){
         Navigator.pop(context);
-        context.read<OldEventsBloc>().add(DeleteOldEventEvent(id: event.id));
+        context.read<EventsBloc>().add(EventDeleteEvent(ids: [event.id]));
       },
       (){
       },
@@ -65,9 +65,9 @@ class _EventPageInArchiveState extends State<EventPageInArchive> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    OldEventsBloc oldEventsBloc = context.read<OldEventsBloc>();
-    if(oldEventsBloc.state is OldEventInitialState){
-      oldEventsBloc.add(GetOldEventsEvent());
+    EventsBloc eventsBloc = context.read<EventsBloc>();
+    if(eventsBloc.eventsOld.isEmpty && !eventsBloc.isLoading){
+      eventsBloc.add(GetOldEventsEvent(isReset: true));
     }
     
   }
@@ -78,39 +78,39 @@ class _EventPageInArchiveState extends State<EventPageInArchive> {
 
   @override
   Widget build(BuildContext context) {
-    OldEventsBloc oldEventsBloc = context.read<OldEventsBloc>();
+    EventsBloc eventsBloc = context.read<EventsBloc>();
     return SingleChildScrollView(
-      child: BlocConsumer<OldEventsBloc, OldEventsState>(
+      child: BlocConsumer<EventsBloc, EventsState>(
         listener: (context, state) {
-          if(state is OldEventErrorState){
+          if(state is EventErrorState){
             Loader.hide();
             showAlertToast(state.message);
           }
-          if(state is OldEventInternetErrorState){
+          if(state is EventInternetErrorState){
             Loader.hide();
             showAlertToast('Проверьте соединение с интернетом!');
           }
-          if(state is OldEventDeletedState){
-            Loader.hide();
-            oldEventsBloc.add(GetOldEventsEvent());
-          }
+          // if(state is EventDeletedState){
+          //   Loader.hide();
+          //   eventsBloc.add(GetOldEventsEvent());
+          // }
         },
         builder: (context, state) {
-          if(state is OldEventInitialState || state is OldEventLoadingState){
+          if(state is EventInitialState || state is OldEventLoadingState){
             return Container();
           }
           return  Column(
             children: [
               ...List.generate(
-                oldEventsBloc.events.length,
+                eventsBloc.eventsOld.length,
                 (index) => GestureDetector(
                   onTap: (){
-                    print('DDD: ${oldEventsBloc.events[index]}');
-                    widget.nextPage(oldEventsBloc.events[index].id);
-                    oldEventsBloc.selectedEvent = oldEventsBloc.events[index];
+                    print('DDD: ${eventsBloc.eventsOld[index]}');
+                    widget.nextPage(eventsBloc.eventsOld[index].id);
+                    // eventsBloc.selectedEvent = eventsBloc.eventsOld[index];
                     // widget.nextPage(context.read<EventsBloc>().events.isNotEmpty ? context.read<EventsBloc>().events.first.id : 1);
                   },
-                  child: _buildEvent(context, oldEventsBloc.events[index], GlobalKey())
+                  child: _buildEvent(context, eventsBloc.eventsOld[index], GlobalKey())
                 ),
               )
             ]

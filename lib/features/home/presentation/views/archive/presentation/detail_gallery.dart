@@ -15,7 +15,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DetailGalleryPage extends StatefulWidget {
   GalleryGroupFilesEntity group;
-  DetailGalleryPage({required this.group});
+  final Function(int i) onPageChange;
+  DetailGalleryPage({required this.group, required this.onPageChange});
   @override
   State<DetailGalleryPage> createState() => _DetailGalleryPageState();
 }
@@ -40,6 +41,10 @@ class _DetailGalleryPageState extends State<DetailGalleryPage> {
           child: ArchiveWrapper(
             currentIndex: 1,
             scrollController: ScrollController(),
+            onChangePage:(index) {
+              Navigator.pop(context);
+              widget.onPageChange(index);
+            },
             child: SingleChildScrollView(
               child: Column(
                 children: [

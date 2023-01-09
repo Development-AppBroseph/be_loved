@@ -37,6 +37,9 @@ void eventSettingsModal(
                     onTap: onEdit,
                     text: 'Редактировать',
                     icon: SvgImg.edit,
+                    borderRadius: isOld && isImportant
+                      ? BorderRadius.circular(34.r)
+                      : null,
                   ),
                   if(!isOld)
                   ...[SizedBox(

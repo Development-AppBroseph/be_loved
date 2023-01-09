@@ -48,12 +48,14 @@ import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen
 import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/old_events/old_events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/stats/stats_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_relation.dart';
+import 'package:be_loved/features/profile/domain/usecases/get_stats.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
@@ -142,10 +144,11 @@ void setupInjections() {
   sl.registerLazySingleton(() => DeleteEvent(sl()));
   sl.registerLazySingleton(() => ChangePositionEvent(sl()));
   sl.registerLazySingleton(() => GetEvents(sl()));
+  sl.registerLazySingleton(() => GetOldEvents(sl()));
 
   //Blocs
   sl.registerFactory<EventsBloc>(
-    () => EventsBloc(sl(), sl(), sl(), sl(), sl()),
+    () => EventsBloc(sl(), sl(), sl(), sl(), sl(), sl()),
   );
 
 
@@ -166,6 +169,7 @@ void setupInjections() {
   // //UseCases
   sl.registerLazySingleton(() => EditProfile(sl()));
   sl.registerLazySingleton(() => EditRelation(sl()));
+  sl.registerLazySingleton(() => GetStatics(sl()));
 
   //Blocs
   sl.registerFactory<ProfileBloc>(
@@ -173,6 +177,9 @@ void setupInjections() {
   );
   sl.registerFactory<DecorBloc>(
     () => DecorBloc(),
+  );
+  sl.registerFactory<StaticsBloc>(
+    () => StaticsBloc(sl()),
   );
 
 
@@ -236,7 +243,6 @@ void setupInjections() {
   sl.registerLazySingleton(() => DeleteAlbum(sl()));
   sl.registerLazySingleton(() => GetMoments(sl()));
   sl.registerLazySingleton(() => AddFavorites(sl()));
-  sl.registerLazySingleton(() => GetOldEvents(sl()));
 
   //Blocs
   sl.registerFactory<ArchiveBloc>(
@@ -251,9 +257,9 @@ void setupInjections() {
   sl.registerFactory<MomentsBloc>(
     () => MomentsBloc(sl(), sl()),
   );
-  sl.registerFactory<OldEventsBloc>(
-    () => OldEventsBloc(sl(), sl()),
-  );
+  // sl.registerFactory<OldEventsBloc>(
+  //   () => OldEventsBloc(sl(), sl()),
+  // );
 
 
 

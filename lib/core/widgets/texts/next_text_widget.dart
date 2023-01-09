@@ -19,7 +19,7 @@ class NextEventTextWidget extends StatelessWidget {
     } else if (eventsBloc.events.length >= 2) {
       nextEvent = eventsBloc.events[1];
     }
-    bool isNextMonth = int.parse(nextEvent!.datetimeString) >= 29 || DateTime.now().year != DateTime.now().add(Duration(days: int.parse(nextEvent.datetimeString))).year;
+    bool isNextMonth = nextEvent == null ? false : int.parse(nextEvent.datetimeString) >= 29 || DateTime.now().year != DateTime.now().add(Duration(days: int.parse(nextEvent.datetimeString))).year;
     return nextEvent != null && eventEntity.id == eventsBloc.events.first.id
         ? Row(
             crossAxisAlignment: CrossAxisAlignment.end,

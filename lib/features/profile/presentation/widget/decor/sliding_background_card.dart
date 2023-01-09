@@ -72,19 +72,19 @@ class SlidingBackgroundCard extends StatelessWidget {
             ).toList(),
           ),
         );
-        return decorBloc.images[decorBloc.selectedIndex].contains('assets/')
-          ? Image(
-            width: double.infinity,
-            height: height ?? 448.h,
-            image: AssetImage(decorBloc.images[decorBloc.selectedIndex]),
-            fit: BoxFit.cover,
-          )
-          : Image(
-            width: double.infinity,
-            height: 448.h,
-            image: FileImage(File(decorBloc.images[decorBloc.selectedIndex])),
-            fit: BoxFit.cover,
-          );
+        // return decorBloc.images[decorBloc.selectedIndex].contains('assets/')
+        //   ? Image(
+        //     width: double.infinity,
+        //     height: height ?? 448.h,
+        //     image: AssetImage(decorBloc.images[decorBloc.selectedIndex]),
+        //     fit: BoxFit.cover,
+        //   )
+        //   : Image(
+        //     width: double.infinity,
+        //     height: 448.h,
+        //     image: FileImage(File(decorBloc.images[decorBloc.selectedIndex])),
+        //     fit: BoxFit.cover,
+        //   );
       }
     );
   }

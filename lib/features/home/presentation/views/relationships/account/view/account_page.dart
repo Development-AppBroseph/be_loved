@@ -136,7 +136,7 @@ class _AccountPageState extends State<AccountPage>
   }
 
   _confirmCode() {
-    if (codeController.text.length == 5) {
+    if (codeController.text.length == 4) {
       if ((codeController.text[0] != '0')) {
         showLoaderWrapper(context);
 
@@ -338,6 +338,7 @@ class _AccountPageState extends State<AccountPage>
                                   color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20.r),
+                                    color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.only(
@@ -411,6 +412,7 @@ class _AccountPageState extends State<AccountPage>
                                     elevation: 0,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.r),
+                                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
                                     ),
                                     child: Column(
                                       children: [
@@ -676,6 +678,7 @@ class _AccountPageState extends State<AccountPage>
                                                                     .easeInOutQuint,
                                                               );
                                                             });
+                                                            _sendCode();
                                                           }),
                                                     ),
                                                   ],
@@ -806,6 +809,7 @@ class _AccountPageState extends State<AccountPage>
                                                                     .easeInOutQuint,
                                                               );
                                                             });
+                                                            _confirmCode();
                                                           }),
                                                       // CustomAnimationButton(
                                                       //   text: 'Продолжить',
@@ -872,6 +876,7 @@ class _AccountPageState extends State<AccountPage>
                                     elevation: 0,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20.r),
+                                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
                                     ),
                                     child: Padding(
                                       padding: EdgeInsets.only(
@@ -911,17 +916,17 @@ class _AccountPageState extends State<AccountPage>
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 73.h,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 25.w),
-                              child: CustomAnimationButton(
-                                text: 'Зажми, чтобы принять',
-                                onPressed: () async {},
-                                red: true,
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 73.h,
+                            // ),
+                            // Padding(
+                            //   padding: EdgeInsets.symmetric(horizontal: 25.w),
+                            //   child: CustomAnimationButton(
+                            //     text: 'Зажми, чтобы расстаться',
+                            //     onPressed: () async {},
+                            //     red: true,
+                            //   ),
+                            // ),
                             SizedBox(
                               height: 30.h,
                             ),

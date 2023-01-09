@@ -93,6 +93,9 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
         radius: BorderRadius.circular(40.r),
         color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
         elevation: 0,
+        decoration: BoxDecoration(
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
+        ),
         margin: EdgeInsets.zero,
         padding: EdgeInsets.only(top: 11.h, left: 20.w, right: 25.w),
         child: StreamBuilder<bool>(

@@ -85,6 +85,7 @@ class _ArchivePageState extends State<ArchivePage> {
     ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
     AlbumsBloc albumsBloc = context.read<AlbumsBloc>();
     MomentsBloc momentsBloc = context.read<MomentsBloc>();
+    EventsBloc eventsBloc = context.read<EventsBloc>();
 
     if (bloc.state is GalleryFilesInitialState) {
       bloc.add(GetGalleryFilesEvent(isReset: false));
@@ -113,6 +114,13 @@ class _ArchivePageState extends State<ArchivePage> {
         MomentsBloc momentsBloc = context.read<MomentsBloc>();
         if(!momentsBloc.isEnd && !momentsBloc.isLoading){
           momentsBloc.add(GetMomentsEvent(isReset: false));
+        }
+      }
+
+      //Pagination old events
+      if(position > (scrollController.position.maxScrollExtent-100) && currentPageIndex == 3){
+        if(!eventsBloc.isEnd && !eventsBloc.isLoading){
+          eventsBloc.add(GetOldEventsEvent(isReset: false));
         }
       }
 
@@ -205,7 +213,7 @@ class _ArchivePageState extends State<ArchivePage> {
   }
 
   void nextPage(int id) {
-    // context.read<EventsBloc>().eventDetailSelectedId = id;
+    context.read<EventsBloc>().eventDetailSelectedId = id;
     
     pageController.nextPage(
         duration: const Duration(milliseconds: 600),
@@ -217,6 +225,11 @@ class _ArchivePageState extends State<ArchivePage> {
       curve: Curves.easeInOutQuint);
   ScrollPhysics physics = const NeverScrollableScrollPhysics();
 
+  changePage(int newPage){
+    setState(() {
+      currentPageIndex = newPage;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     GalleryBloc galleryBloc = context.read<GalleryBloc>();
@@ -235,15 +248,12 @@ class _ArchivePageState extends State<ArchivePage> {
           children: [
             ArchiveWrapper(
               currentIndex: currentPageIndex,
-              onChangePage: (newPage) {
-                setState(() {
-                  currentPageIndex = newPage;
-                });
-              },
+              onChangePage: changePage,
               child: currentPageIndex == 0
                   ? MomentsPage()
                   : currentPageIndex == 1
                       ? GalleryPage(
+                        onPageChange: changePage,
                           position: currentScrollPosition,
                           hideGalleryFileID: hideGalleryFileID,
                           deletingIds: galleryDeleteIds,

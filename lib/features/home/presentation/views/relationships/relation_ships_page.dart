@@ -34,7 +34,8 @@ class RelationShipsPage extends StatefulWidget {
   final VoidCallback nextPage;
   final Function(int id) toDetailPage;
   final Function() toRelationSettingsPage;
-  const RelationShipsPage({Key? key, required this.nextPage, required this.toDetailPage, required this.toRelationSettingsPage}) : super(key: key);
+  final Function() toStaticsPage;
+  const RelationShipsPage({Key? key, required this.nextPage, required this.toDetailPage, required this.toRelationSettingsPage, required this.toStaticsPage}) : super(key: key);
 
   @override
   State<RelationShipsPage> createState() => _RelationShipsPageState();
@@ -103,9 +104,9 @@ class _RelationShipsPageState extends State<RelationShipsPage>
         return BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is GetUserSuccess) {
-              if(context.read<ThemeBloc>().state is ThemeInitialState){
+              // if(context.read<ThemeBloc>().state is ThemeInitialState){
                 context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
-              }
+              // }
               print('GOT USER');
               Loader.hide();
               setState(() {
@@ -423,6 +424,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                               width: 378.w,
                                               height: (data * 138.h + 115.h),
                                               child: HomeInfoSecond(
+                                                onStatsTap: widget.toStaticsPage,
                                                 data: data,
                                                 onRelationTap: widget.toRelationSettingsPage,
                                               ),

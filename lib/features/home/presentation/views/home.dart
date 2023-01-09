@@ -97,7 +97,13 @@ class _HomePageState extends State<HomePage> {
               return Scaffold(
                 bottomNavigationBar: BottomNavigation(),
                 // mainScreenBloc.currentView == 1 ? Colors.white : null
-                backgroundColor: mainScreenBloc.currentView == 1 ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx] : sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : null,
+                backgroundColor: mainScreenBloc.currentView == 1 
+                  ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx] 
+                  : mainScreenBloc.currentView == 3 
+                  ? ClrStyle.whiteTo17[sl<AuthConfig>().idx] 
+                  : sl<AuthConfig>().idx == 1 
+                  ? ColorStyles.blackColor 
+                  : null,
                 body: Stack(
                   alignment: Alignment.bottomCenter,
                   children: [

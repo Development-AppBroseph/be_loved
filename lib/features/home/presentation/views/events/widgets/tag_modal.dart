@@ -227,7 +227,7 @@ class _TagModalState extends State<TagModal> {
                                   MainConfigApp.tagColors[iconIndex].assetPath,
                                   key: iconBtn,
                                   height: 58.h,
-                                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                  // color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                 ),
                                 SizedBox(
                                   width: 7.w,

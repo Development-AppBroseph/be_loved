@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
@@ -12,6 +13,7 @@ import 'package:be_loved/features/home/presentation/views/purposes/widgets/purpo
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/purpose_menu_card.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,8 +91,15 @@ class _PurposesPageState extends State<PurposesPage> {
             children: [
               Stack(
                 children: [
-                  Image.asset(
-                    'assets/images/purpose1.png',
+                  // Image.asset(
+                  //   'assets/images/purpose1.png',
+                  //   width: double.infinity,
+                  //   height: 416.h+MediaQuery.of(context).padding.top,
+                  //   fit: BoxFit.cover,
+                  // ),
+                  if(bloc.seasonPurpose != null)
+                  CachedNetworkImage(
+                    imageUrl: bloc.seasonPurpose!.photo.contains('http') ? bloc.seasonPurpose!.photo : Config.url.url + bloc.seasonPurpose!.photo,
                     width: double.infinity,
                     height: 416.h+MediaQuery.of(context).padding.top,
                     fit: BoxFit.cover,

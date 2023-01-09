@@ -116,6 +116,7 @@ class _SelectingGalleryPageState extends State<SelectingGalleryPage> {
             child: Padding(
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
               child: GalleryPage(
+                onPageChange: (i) {},
                 isForSelecting: true,
                 position: currentScrollPosition,
                 hideGalleryFileID: 0,

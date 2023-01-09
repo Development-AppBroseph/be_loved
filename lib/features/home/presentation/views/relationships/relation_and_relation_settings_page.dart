@@ -1,13 +1,12 @@
-import 'package:be_loved/features/home/presentation/views/relationships/account/view/account_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';
 import 'package:flutter/material.dart';
 
 import 'relation_ships_settings_page.dart';
 
 class RelationAndRelationSettingsPage extends StatefulWidget {
   final Function(int id) nextPage;
-  const RelationAndRelationSettingsPage({Key? key, required this.nextPage}) : super(key: key);
+  final Function() toStaticsPage;
+  const RelationAndRelationSettingsPage({Key? key, required this.nextPage, required this.toStaticsPage}) : super(key: key);
 
   @override
   State<RelationAndRelationSettingsPage> createState() => _RelationAndRelationSettingsPageState();
@@ -36,8 +35,8 @@ class _RelationAndRelationSettingsPageState extends State<RelationAndRelationSet
       //   setState(() {});
       // },
       children: [
-        MainRelationShipsPage(nextPage: widget.nextPage, toRelationSettingsPage: nextPage),
-        RelationShipsSettingsPage(prevPage: prevPage),
+        MainRelationShipsPage(nextPage: widget.nextPage, toRelationSettingsPage: nextPage, toStaticsPage: widget.toStaticsPage,),
+        RelationShipsSettingsPage(prevPage: prevPage, toStaticsPage: widget.toStaticsPage,),
       ],
     );
   }

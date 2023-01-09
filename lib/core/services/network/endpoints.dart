@@ -51,7 +51,10 @@ enum Endpoints {
   addFavorites,
 
   //Events
-  oldEvents
+  oldEvents,
+
+  //Statics
+  getStats
 }
 
 extension EndpointsExtension on Endpoints {
@@ -119,6 +122,8 @@ extension EndpointsExtension on Endpoints {
         return "/archive/${params![0]}"; 
       case Endpoints.oldEvents:
         return "/events/prev";  
+      case Endpoints.getStats:
+        return "/auth/stat";  
       default:
         return '';
     }

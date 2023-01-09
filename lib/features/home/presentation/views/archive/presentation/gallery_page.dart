@@ -28,7 +28,8 @@ class GalleryPage extends StatefulWidget {
   final Function(int id) onSelectForDeleting;
   final double position;
   final bool isForSelecting;
-  GalleryPage({required this.position, this.isForSelecting = false, required this.hideGalleryFileID, required this.deletingIds, required this.onSelectForDeleting});
+  final Function(int i) onPageChange;
+  GalleryPage({required this.position, required this.onPageChange, this.isForSelecting = false, required this.hideGalleryFileID, required this.deletingIds, required this.onSelectForDeleting});
   @override
   State<GalleryPage> createState() => _GalleryPageState();
 }
@@ -167,7 +168,7 @@ class _GalleryPageState extends State<GalleryPage> {
             PageRouteBuilder(
               pageBuilder: (_, __, ___) => file.isVideo && file.id != group.mainPhoto.id
                 ? VideoView(url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', duration: const Duration(seconds: 0)) 
-                : DetailGalleryPage(group: group,),
+                : DetailGalleryPage(group: group, onPageChange: widget.onPageChange,),
               transitionDuration: Duration(milliseconds: 400),
               transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
           ));

@@ -296,7 +296,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
               selectedEvents.clear();
               setState(() {});
             }
-            if (state is GotSuccessEventsState || state is EventDeletedState) {
+            if (state is GotSuccessEventsState) {
               setState(() {});
             }
           }, builder: (context, state) {

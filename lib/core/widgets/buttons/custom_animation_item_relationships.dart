@@ -133,6 +133,9 @@ class _CustomAnimationItemRelationshipsState
                     radius: BorderRadius.circular(40.r),
                     color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                     elevation: 0,
+                    decoration: BoxDecoration(
+                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
+                    ),
                     margin: EdgeInsets.zero,
                     padding: EdgeInsets.zero,
                     child: SingleChildScrollView(

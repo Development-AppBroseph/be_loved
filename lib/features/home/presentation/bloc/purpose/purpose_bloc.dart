@@ -216,4 +216,37 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     }
     return result; 
   }
+
+
+
+
+
+
+  getCurrentLocation(){
+    // LocationPermission permission = await Geolocator.checkPermission();
+    //   bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    //   if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever || !isLocationEnabled){
+    //     permission = await Geolocator.requestPermission();
+    //   }
+    //   if(permission != LocationPermission.denied && permission != LocationPermission.deniedForever){
+    //     if(isLocationEnabled){
+    //       setState(() {
+    //         isSelectedCurrentPosition = true;
+    //       });
+    //       Position _position = await Geolocator.getCurrentPosition();
+    //       currentPosition = LatLng(_position.latitude, _position.longitude);
+    //       findPlace(_position.latitude, _position.longitude);
+
+    //       if(MainConfigApp.mapKitUsed == MapKitUsed.yandex){
+    //         yandexMapController!.moveCamera(
+    //           yandexMap.CameraUpdate.newCameraPosition(
+    //             yandexMap.CameraPosition(target: yandexMap.Point(latitude: _position.latitude, longitude: _position.longitude))
+    //           )
+    //         );
+    //       }else{
+    //         osMapController!.move(currentPosition, 15);
+    //       }
+    //     }
+    //   }
+  }
 } 
