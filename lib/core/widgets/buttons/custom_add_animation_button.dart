@@ -12,7 +12,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAddAnimationButton extends StatefulWidget {
   final VoidCallback func;
-  const CustomAddAnimationButton({Key? key, required this.func})
+  final VoidCallback funcArchive;
+  final VoidCallback funcPurpose;
+  const CustomAddAnimationButton({Key? key, required this.func, required this.funcPurpose, required this.funcArchive})
       : super(key: key);
 
   @override
@@ -140,6 +142,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                             widget.func();
                             closeOpen(snapshot.data!);
                           },
+                          behavior: HitTestBehavior.translucent,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -161,6 +164,11 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                         width: 70.h,
                         height: 70.w,
                         child: GestureDetector(
+                          onTap: () {
+                            widget.funcPurpose();
+                            closeOpen(snapshot.data!);
+                          },
+                          behavior: HitTestBehavior.translucent,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -182,6 +190,11 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                         width: 70.h,
                         height: 70.w,
                         child: GestureDetector(
+                          onTap: () {
+                            widget.funcArchive();
+                            closeOpen(snapshot.data!);
+                          },
+                          behavior: HitTestBehavior.translucent,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,

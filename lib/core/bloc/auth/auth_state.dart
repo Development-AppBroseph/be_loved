@@ -13,6 +13,21 @@ class PhoneError extends AuthState {
 
   PhoneError(this.error);
 }
+class VKError extends AuthState {
+  String error;
+
+  VKError(this.error);
+}
+class VKLoggin extends AuthState {
+  String code;
+  String token;
+
+  VKLoggin({required this.token, required this.code});
+}
+class VKRequiredRegister extends AuthState {
+  String code;
+  VKRequiredRegister({required this.code});
+}
 
 class PhoneSuccess extends AuthState {
   String phone;

@@ -6,7 +6,8 @@ import 'relation_ships_settings_page.dart';
 class RelationAndRelationSettingsPage extends StatefulWidget {
   final Function(int id) nextPage;
   final Function() toStaticsPage;
-  const RelationAndRelationSettingsPage({Key? key, required this.nextPage, required this.toStaticsPage}) : super(key: key);
+  final Function() toAllEvents;
+  const RelationAndRelationSettingsPage({Key? key, required this.toAllEvents, required this.nextPage, required this.toStaticsPage}) : super(key: key);
 
   @override
   State<RelationAndRelationSettingsPage> createState() => _RelationAndRelationSettingsPageState();
@@ -36,7 +37,7 @@ class _RelationAndRelationSettingsPageState extends State<RelationAndRelationSet
       // },
       children: [
         MainRelationShipsPage(nextPage: widget.nextPage, toRelationSettingsPage: nextPage, toStaticsPage: widget.toStaticsPage,),
-        RelationShipsSettingsPage(prevPage: prevPage, toStaticsPage: widget.toStaticsPage,),
+        RelationShipsSettingsPage(prevPage: prevPage, toStaticsPage: widget.toStaticsPage, toAllEvents: widget.toAllEvents,),
       ],
     );
   }

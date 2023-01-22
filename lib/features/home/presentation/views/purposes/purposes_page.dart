@@ -9,6 +9,7 @@ import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/purposes/widgets/empty_card.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/purpose_card.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/purpose_menu_card.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
@@ -202,31 +203,8 @@ class _PurposesPageState extends State<PurposesPage> {
                 ),
               ).toList()
               else
-              SizedBox(
-                width: 378.w,
-                height: 70.w,
-                child: CupertinoCard(
-                  margin: EdgeInsets.zero,
-                  radius: BorderRadius.circular(40.r),
-                  color: ColorStyles.greyColor,
-                  elevation: 0,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: CupertinoCard(
-                          margin: EdgeInsets.all(1.w),
-                          radius: BorderRadius.circular(37.r),
-                          color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
-                          elevation: 0,
-                        )
-                      ),
-                      Center(
-                        child: Text(selectedType == 1 ? 'Доступных целей нет :(' : 'Целей нет :(', style: TextStyles(context).grey_20_w700,)
-                      ),
-                    ],
-                  )
-                ),
-              ),
+              EmptyCard(isAvailable: selectedType == 1,),
+              
 
 
               SizedBox(

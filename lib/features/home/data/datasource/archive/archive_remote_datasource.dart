@@ -63,7 +63,7 @@ class ArchiveRemoteDataSourceImpl
       return (response.data as List)
             .map((json) => GalleryFileModel.fromJson(json))
             .toList();
-    } else if(response.statusCode == 401){
+    } else if(response.statusCode == 401 || response.statusCode == 403){
       throw ServerException(message: 'token_error');
     }else {
       throw ServerException(message: 'Ошибка с сервером');
@@ -96,7 +96,7 @@ class ArchiveRemoteDataSourceImpl
         otherAlbums: albums,
         favorites: favorites
       );
-    } else if(response.statusCode == 401){
+    } else if(response.statusCode == 401 || response.statusCode == 403){
       throw ServerException(message: 'token_error');
     }else {
       throw ServerException(message: 'Ошибка с сервером');
@@ -121,7 +121,7 @@ class ArchiveRemoteDataSourceImpl
     printRes(response);
     if (!(response.statusCode! < 200 || response.statusCode! > 204)) {
       return;
-    } else if(response.statusCode == 401){
+    } else if(response.statusCode == 401 || response.statusCode == 403){
       throw ServerException(message: 'token_error');
     }else {
       throw ServerException(message: 'Ошибка с сервером');
@@ -242,7 +242,7 @@ class ArchiveRemoteDataSourceImpl
       MemoryEntity memoryEntity = MemoryModel.fromJson(response.data);
       sl<AuthConfig>().memoryEntity = memoryEntity;
       return memoryEntity;
-    } else if(response.statusCode == 401){
+    } else if(response.statusCode == 401 || response.statusCode == 403){
       throw ServerException(message: 'token_error');
     }else {
       throw ServerException(message: 'Ошибка с сервером');
@@ -280,7 +280,7 @@ class ArchiveRemoteDataSourceImpl
         forYou: forYou,
         groupedOtherFiles: []
       );
-    } else if(response.statusCode == 401){
+    } else if(response.statusCode == 401 || response.statusCode == 403){
       throw ServerException(message: 'token_error');
     }else {
       throw ServerException(message: 'Ошибка с сервером');
@@ -329,7 +329,7 @@ class ArchiveRemoteDataSourceImpl
       return (response.data as List)
             .map((json) => EventModel.fromJson(json))
             .toList();
-    } else if(response.statusCode == 401){
+    } else if(response.statusCode == 401 || response.statusCode == 403){
       throw ServerException(message: 'token_error');
     }else {
       throw ServerException(message: 'Ошибка с сервером');

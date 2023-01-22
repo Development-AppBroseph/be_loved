@@ -10,6 +10,7 @@ class GalleryFileModel extends GalleryFileEntity{
     required String urlToFile,
     required String? urlToPreviewVideoImage,
     required int? duration,
+    required int? widgetId,
     required bool isVideo,
     required bool isFavorite,
 
@@ -22,7 +23,8 @@ class GalleryFileModel extends GalleryFileEntity{
     isVideo: isVideo,
     isFavorite: isFavorite,
     urlToPreviewVideoImage: urlToPreviewVideoImage,
-    duration: duration
+    duration: duration,
+    widgetId: widgetId
   );
 
   factory GalleryFileModel.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class GalleryFileModel extends GalleryFileEntity{
       isFavorite: json['if_favor'] ?? false,
       duration: json['duration'],
       urlToPreviewVideoImage: json['image'],
+      widgetId: json['widget_id'],
       dateTime: DateTime.parse(json['date']).toLocal(),
     );
   }

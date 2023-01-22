@@ -33,6 +33,14 @@ class TextStyles {
       fontSize: 50.sp,
       fontWeight: FontWeight.w800,
       color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
+  
+  TextStyle black_35_w800 = TextStyle(
+      fontFamily: MainConfigApp.fontFamily1,
+      fontStyle: FontStyle.normal,
+      fontSize: 35.sp,
+      fontWeight: FontWeight.w800,
+      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]);
+
   TextStyle black_30_w700 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,
       fontStyle: FontStyle.normal,
@@ -511,6 +519,12 @@ class TextStyles {
       fontWeight: FontWeight.w800,
       color: Colors.white);
   
+  TextStyle white_20_w700 = TextStyle(
+      fontFamily: MainConfigApp.fontFamily1,
+      fontStyle: FontStyle.normal,
+      fontSize: 20.sp,
+      fontWeight: FontWeight.w700,
+      color: Colors.white);
 
   TextStyle white_20_w800 = TextStyle(
       fontFamily: MainConfigApp.fontFamily1,

@@ -3,6 +3,7 @@ import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.d
 class PurposeModel extends PurposeEntity{
   PurposeModel({
     required int id,
+    required int? widgetId,
     required String name,
     required String photo,
     required String? verdict,
@@ -19,7 +20,8 @@ class PurposeModel extends PurposeEntity{
     photo: photo,
     inHistory: inHistory,
     verdict: verdict,
-    forPhotoId: forPhotoId
+    forPhotoId: forPhotoId,
+    widgetId: widgetId
   );
 
   factory PurposeModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class PurposeModel extends PurposeEntity{
       name: json['name'],
       verdict: json['verdict'], 
       forPhotoId: json['answer_id'], 
+      widgetId: json['widget_id'], 
       inHistory: json['verdict'] == 'Принято' 
       ? true
       : false,

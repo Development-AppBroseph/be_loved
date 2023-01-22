@@ -32,6 +32,77 @@ class MainConfigApp {
     'Ноя',
     'Дек',
   ];
+  
+  static List<AvatarsGridModel> avatars = [
+    AvatarsGridModel(
+      dirName: 'men',
+      avatars: [
+        'ava_14__kopia.png',
+        'ava_serdechki.png',
+        'ava_19.png',
+        'ava_13.png',        
+        'ava_8.png',        
+        'ava_10.png',        
+        'ava_17.png',        
+        'ava_6.png',        
+        'ava_4.png',        
+        'kolch.png',        
+        'kostya.png',        
+        'IBRA.png',        
+      ]
+    ),
+    AvatarsGridModel(
+      dirName: 'girls',
+      avatars: [
+        'ava_15__kopia.png',
+        'ava3.png',
+        'ava_2.png',
+        'ava_12.png',
+        'ava_18.png',
+        'ava_9.png',
+        'ava_16.png',
+        'ava_5.png',
+        'ava_21.png',
+        'sestra_koli.png',
+        'ava_dob_2.png',
+        '25.png',
+      ]
+    ),
+    AvatarsGridModel(
+      dirName: 'animals',
+      avatars: [
+        'kit.png',
+        'chkot_4.png',
+        'akula_kontrastnaya.png',
+        'kot_pukh_2.png',
+        'lyagushka_kontrastnaya.png',
+        'ovechka_2.png',
+        'ping.png',
+        'ptitsa.png',
+        'tigor.png',
+        'zayChIK.png',
+        'krokodil_kontrastny.png',
+        'enot_samy_finalny.png',
+      ]
+    ),
+    AvatarsGridModel(
+      dirName: 'additions',
+      avatars: [
+        'arbuz_2.png',
+        'kot_muzh.png',
+        'kotost.png',
+        'mr_inkredibil_3.png',
+        'robert_tsel.png',
+        'skalaaa.png',
+        'kolobok.png',
+        'serdtsekot_1.png',
+        'zlaya_tykva_2.png',
+        'medved_ob.png',
+        'khomyak_mem_2.png',
+        'serdtse.png',
+      ]
+    ),
+  ];
 
   static List<TagColor> tagColors = [
     TagColor(
@@ -73,5 +144,14 @@ class TagColor {
     required this.color,
     required this.colorHex,
     required this.assetPath
+  });
+}
+
+class AvatarsGridModel {
+  final List<String> avatars;
+  final String dirName;
+  AvatarsGridModel({
+    required this.avatars,
+    required this.dirName
   });
 }

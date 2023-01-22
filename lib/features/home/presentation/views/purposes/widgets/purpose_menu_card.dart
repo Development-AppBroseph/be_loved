@@ -14,7 +14,8 @@ class PurposeMenuCard extends StatelessWidget {
   final String text;
   final int index;
   final int selectedType;
-  const PurposeMenuCard({required this.text, required this.index, required this.selectedType});
+  final bool isGrey;
+  const PurposeMenuCard({required this.text, required this.index, required this.selectedType, this.isGrey = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class PurposeMenuCard extends StatelessWidget {
           ? ClrStyle.black2CToWhite[sl<AuthConfig>().idx]
           : index == selectedType  
           ? ColorStyles.primarySwath 
-          : ClrStyle.whiteTo17[sl<AuthConfig>().idx]
+          : (isGrey ? ColorStyles.greyColorE4E4E4 : ClrStyle.whiteTo17[sl<AuthConfig>().idx])
       ),
       color: index == selectedType && index == 0
       ? ClrStyle.black2CToWhite[sl<AuthConfig>().idx]
@@ -41,7 +42,7 @@ class PurposeMenuCard extends StatelessWidget {
           style: TextStyles(context).white_18_w800.copyWith(
             color: index == selectedType
             ? ClrStyle.whiteTo17[sl<AuthConfig>().idx]
-            : ColorStyles.greyColor
+            : (isGrey ? ColorStyles.blackColor : ColorStyles.greyColor)
           )
         )
       ),

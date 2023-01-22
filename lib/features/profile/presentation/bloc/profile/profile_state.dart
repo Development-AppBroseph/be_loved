@@ -23,3 +23,8 @@ class ProfileAddedState extends ProfileState{
 class ProfileSentCodeState extends ProfileState{}
 class ProfileConfirmedSuccessState extends ProfileState{}
 class ProfileRelationNameChangedState extends ProfileState{}
+class ProfileVKConnectedState extends ProfileState{}
+class FilesSentState extends ProfileState{
+  final bool isParting;
+  FilesSentState({required this.isParting});
+}

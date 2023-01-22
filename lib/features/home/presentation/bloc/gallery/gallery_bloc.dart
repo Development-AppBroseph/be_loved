@@ -58,7 +58,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
           }
           groupedFiles = getGroupedFiles(files);
         }
-        return GotSuccessGalleryState();
+        return GotSuccessGalleryState(isReset: event.isReset);
       },
     );
     isLoading = false;
@@ -79,21 +79,6 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     emit(state);
   }
 
-  // void _editGallery(GalleryFileEditEvent event, Emitter<GalleryState> emit) async {
-  //   emit(GalleryFileLoadingState());
-  //   final data = await editGalleryFile.call(EditGalleryFileParams(tagEntity: event.tagEntity));
-  //   GalleryState state = data.fold(
-  //     (error) => errorCheck(error),
-  //     (data) {
-  //       tags.removeWhere(((element) => element.id == event.tagEntity.id));
-  //       tags = tags.reversed.toList();
-  //       tags.add(data);
-  //       tags = tags.reversed.toList();
-  //       return GalleryFileAddedState(tagEntity: data);
-  //     },
-  //   );
-  //   emit(state);
-  // }
 
   void _deleteGalleryFile(GalleryFileDeleteEvent event, Emitter<GalleryState> emit) async {
     emit(GalleryFilesBlankState());
@@ -101,6 +86,9 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     GalleryState state = data.fold(
       (error) => errorCheck(error),
       (data) {
+        for(int i = 0; i < groupedFiles.length; i++){
+          groupedFiles[i].topPosition = 0;
+        }
         return GalleryFilesDeletedState();
       },
     );

@@ -22,7 +22,9 @@ class PurposeCard extends StatelessWidget {
   final Function()? onCompleteTap;
   final Function()? onCancelTap;
   final Function(File file)? onPickFile;
-  PurposeCard({required this.purposeEntity, this.onCompleteTap, this.onPickFile, this.onCancelTap});
+  final bool isMainWidget;
+  final Function()? deleteTap;
+  PurposeCard({required this.purposeEntity, this.onCompleteTap, this.onPickFile, this.onCancelTap, this.isMainWidget = false, this.deleteTap});
 
 
   pickImage(ImageSource source) async{
@@ -89,6 +91,16 @@ class PurposeCard extends StatelessWidget {
                         context,
                         horizontalPadding: purposeEntity.inProcess ? 26.w : 17.w
                       ),
+                    ],
+                  )
+                ),
+                if(isMainWidget)
+                Positioned(
+                  top: 18.h,
+                  right: 20.w,
+                  child: Row(
+                    children: [
+                      _buildCloseBtn((){deleteTap != null ? deleteTap!() : (){};}),
                     ],
                   )
                 ),

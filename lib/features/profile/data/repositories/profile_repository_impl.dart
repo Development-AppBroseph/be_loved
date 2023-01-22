@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:be_loved/core/services/network/network_info.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/domain/entities/statics/statics_entity.dart';
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
+import 'package:be_loved/features/profile/domain/entities/back_entity.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
@@ -36,7 +39,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<Failure, String>> editRelation(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.editRelation(params.relationId, params.nameRelation, params.theme);
+        final items = await remoteDataSource.editRelation(params.relationId, params.nameRelation, params.date);
         return Right(items);
       } catch (e) {
         print(e);
@@ -58,6 +61,86 @@ class ProfileRepositoryImpl implements ProfileRepository {
     if (await networkInfo.isConnected) {
       try {
         final items = await remoteDataSource.getStats();
+        return Right(items);
+      } catch (e) {
+        print(e);
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+
+  @override
+  Future<Either<Failure, String>> connectVK(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.connectVK(params.code);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+  @override
+  Future<Either<Failure, void>> sendFilesToMail(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.sendFilesToMail(params.email, params.isParting);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+
+
+
+  @override
+  Future<Either<Failure, BackEntity>> getBackgroundsInfo() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.getBackgroundInfo();
+        return Right(items);
+      } catch (e) {
+        print(e);
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+  @override
+  Future<Either<Failure, void>> editBackgroundsInfo(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.editBackgroundInfo(params.back, params.filePath == null ? null : File(params.filePath!));
         return Right(items);
       } catch (e) {
         print(e);

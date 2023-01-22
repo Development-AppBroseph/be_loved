@@ -37,7 +37,7 @@ class ArchiveFixedTopInfo extends StatelessWidget {
       curve: Curves.easeInOutQuint,
       margin: EdgeInsets.only(top: showTop ? 10.h : 20.h),
       child: AnimatedOpacity(
-        opacity: showTop ? 1 : 0,
+        opacity: isForSelecting || showTop ? 1 : 0,
         duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOutQuint,
         child: Column(
@@ -81,7 +81,7 @@ class ArchiveFixedTopInfo extends StatelessWidget {
                         color: Colors.white.withOpacity(0.7),
                       ),
                 ),
-
+                if(showTop)
                 isDeleting
                 ? Row(
                   mainAxisAlignment: MainAxisAlignment.end,

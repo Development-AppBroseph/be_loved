@@ -110,19 +110,51 @@ class Repository {
     }
   }
 
+  //VK Auth
+  Future<String> authVK(String code) async {
+    try {
+      var response = await dio.post(
+        '/auth/vk',
+        data: FormData.fromMap({
+          'code': code,
+        }),
+      );
+      print('RES VK: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      //Уже акк есть и сразу вход
+      if (response.statusCode == 200 && response.data['token'] != null) {
+        return response.data['token'];
+      }
+      //Аккаунта нет можно продолжать регу
+      if (response.statusCode == 201) {
+        return 'register';
+      }
+      //Аккаунт уже есть
+      // if (response.statusCode == 403) {
+      //   return 'exist';
+      // }
+      return 'retry';
+    } catch (e) {
+      return 'retry';
+    }
+  }
+
   Future<String?> initUser(
-      String secretKey, String nickname, File? xFile) async {
+      String secretKey, String nickname, File? xFile, String? vkCode) async {
     try {
       final data = xFile != null
           ? {
               'secret_key': secretKey,
               'username': nickname,
+              if(vkCode != null)
+              'code': vkCode,
               'photo':
                   MultipartFile.fromFileSync(xFile.path, filename: xFile.path),
             }
           : {
               'secret_key': secretKey,
               'username': nickname,
+              if(vkCode != null)
+              'code': vkCode
             };
       var response = await dio.post(
         'auth/users',

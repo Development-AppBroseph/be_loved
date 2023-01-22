@@ -14,4 +14,5 @@ class ClrStyle{
   static List<Color> greyToBlack2C = [ColorStyles.greyColor, ColorStyles.blackColor];
   static List<Color> greyD8ToBlack2C = [ColorStyles.greyColorD8D8D8, ColorStyles.blackColor];
   static List<Color> greyE4ToBlack2C = [ColorStyles.greyColorE4E4E4, ColorStyles.blackColor];
+  static List<Color> greyE4ToBlack17 = [ColorStyles.greyColorE4E4E4, ColorStyles.black2Color];
 }

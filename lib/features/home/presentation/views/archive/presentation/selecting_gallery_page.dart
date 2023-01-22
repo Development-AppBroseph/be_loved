@@ -13,7 +13,8 @@ import '../../../../../theme/data/entities/clr_style.dart';
 
 class SelectingGalleryPage extends StatefulWidget {
   List<int> files;
-  SelectingGalleryPage({required this.files});
+  final bool isOneItemSelecting;
+  SelectingGalleryPage({required this.files, this.isOneItemSelecting = false});
   @override
   State<SelectingGalleryPage> createState() => _SelectingGalleryPageState();
 }
@@ -122,6 +123,12 @@ class _SelectingGalleryPageState extends State<SelectingGalleryPage> {
                 hideGalleryFileID: 0,
                 deletingIds: gallerySelectedIds,
                 onSelectForDeleting: (id){
+                  if(widget.isOneItemSelecting){
+                    gallerySelectedIds.clear();
+                    gallerySelectedIds.add(id);
+                    setState(() {});
+                    return;
+                  }
                   if(gallerySelectedIds.contains(id)){
                     gallerySelectedIds.remove(id);
                   }else{

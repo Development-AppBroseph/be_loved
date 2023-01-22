@@ -17,8 +17,8 @@ class EditRelation implements UseCase<String, EditRelationParams> {
 class EditRelationParams extends Equatable {
   final int relationId;
   final String nameRelation;
-  final String theme;
-  const EditRelationParams({required this.relationId, required this.nameRelation, required this.theme});
+  final String date;
+  const EditRelationParams({required this.relationId, required this.nameRelation, required this.date});
 
   @override
   List<Object> get props => [relationId, nameRelation];

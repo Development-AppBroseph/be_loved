@@ -4,14 +4,22 @@ import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
+import 'package:be_loved/core/utils/helpers/sync_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/selecting_gallery_page.dart';
+import 'package:be_loved/features/home/presentation/views/purposes/widgets/modals/widget_purposes_modal.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/modals/file_widget_delete_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/widgets/main_widgets.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
+import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/sliding_background_card.dart';
 import 'package:be_loved/features/profile/presentation/widget/main_file/parametrs_user_bottomsheet.dart';
 import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
@@ -21,6 +29,7 @@ import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -80,6 +89,14 @@ class _RelationShipsPageState extends State<RelationShipsPage>
     _streamControllerCarousel.close();
   }
 
+  resetPositions(){
+    GalleryBloc bloc = context.read<GalleryBloc>();
+    for(int i = 0; i < bloc.groupedFiles.length; i++){
+      bloc.groupedFiles[i].topPosition = 0;
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -105,7 +122,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
           listener: (context, state) {
             if (state is GetUserSuccess) {
               // if(context.read<ThemeBloc>().state is ThemeInitialState){
-                context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
+                // context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
               // }
               print('GOT USER');
               Loader.hide();
@@ -133,6 +150,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                 onRefresh: () async {
                   showLoaderWrapper(context);
                   context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
+                  allSync(context);
                   return;
                 },
                 child: SingleChildScrollView(
@@ -505,21 +523,67 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                     ),
                                   );
                                 }),
+                                MainWidgets(),
                                 // if (events.isEmpty) SizedBox(height: 15.h),
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 25.w),
-                                  child: CustomAddAnimationButton(func: () {
-                                    if (eventsBloc.eventsInHome.length < 3) {
-                                      if(!eventsBloc.eventsInHome.any((element) => element.id == eventsBloc.events.first.id)){
-                                        context.read<EventsBloc>().add(EventChangeToHomeEvent(
-                                          eventEntity: eventsBloc.events.first,
-                                          position: eventsBloc.eventsInHome.isEmpty ? 0 : eventsBloc.eventsInHome.length+1
-                                        ));
-                                      }else{
-                                        showModalAddEvent(context, () {});
+                                  child: CustomAddAnimationButton(
+
+                                    //On event tap
+                                    func: () {
+                                      if (eventsBloc.eventsInHome.length < 3) {
+                                        if(!eventsBloc.eventsInHome.any((element) => element.id == eventsBloc.events.first.id)){
+                                          context.read<EventsBloc>().add(EventChangeToHomeEvent(
+                                            eventEntity: eventsBloc.events.first,
+                                            position: eventsBloc.eventsInHome.isEmpty ? 0 : eventsBloc.eventsInHome.length+1
+                                          ));
+                                        }else{
+                                          showModalAddEvent(context, () {});
+                                        }
                                       }
-                                    }
-                                  }),
+                                    },
+
+                                    //On archive tap
+                                    funcArchive: () async {
+                                      if(context.read<MainWidgetsBloc>().mainWidgets == null || context.read<MainWidgetsBloc>().mainWidgets.file != null){
+                                        return;
+                                      }
+
+                                      int? fileId;
+                                      GalleryBloc bloc = context.read<GalleryBloc>();
+                                      bloc.add(GetGalleryFilesEvent(isReset: false));
+                                      resetPositions();
+                                      List<int>? files = await Navigator.of(context).push(
+                                        PageRouteBuilder(
+                                          pageBuilder: (_, __, ___) => SelectingGalleryPage(
+                                            files: fileId != null ? [fileId] : [],
+                                            isOneItemSelecting: true,
+                                          ),
+                                          transitionDuration: Duration(milliseconds: 400),
+                                          transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+                                      ));
+                                      resetPositions();
+                                      if(files != null){
+                                        fileId = files.first;
+                                        context.read<MainWidgetsBloc>().add(AddFileWidgetEvent(file: bloc.files.where((element) => element.id == fileId).first));
+                                      }
+                                    },
+
+                                    //On purpose tap
+                                    funcPurpose: (){
+                                      if(context.read<MainWidgetsBloc>().mainWidgets == null || context.read<MainWidgetsBloc>().mainWidgets.purposes.length >= 3){
+                                        return;
+                                      }
+
+                                      showModalWidgetPurposes(context,
+                                        (p){
+                                          Navigator.pop(context);
+                                          context.read<MainWidgetsBloc>().add(AddPurposeWidgetEvent(purpose: p));
+                                        }
+                                      );
+                                    },
+
+                                  ),
                                 ),
                                 SizedBox(height: 200.h)
                               ],

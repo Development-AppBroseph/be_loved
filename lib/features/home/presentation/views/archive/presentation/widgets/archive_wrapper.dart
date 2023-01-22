@@ -60,7 +60,9 @@ class ArchiveWrapper extends StatelessWidget {
                     MemoryMiniInfoCard(),
                     _buildAddBtn(context, () {
                       print('add');
-                      showModalAddFile(context, () {});
+                      if(context.read<ArchiveBloc>().memoryEntity != null && !context.read<ArchiveBloc>().memoryEntity!.fullFilled()){
+                        showModalAddFile(context, () {});
+                      }
                     })
                   ],
                 )),

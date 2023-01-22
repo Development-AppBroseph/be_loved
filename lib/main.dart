@@ -3,12 +3,14 @@ import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
+import 'package:be_loved/features/auth/presentation/views/login/auth_page.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/old_events/old_events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
@@ -111,6 +113,9 @@ void main() async {
         BlocProvider<StaticsBloc>(
           create: (context) => sl<StaticsBloc>(),
         ),
+        BlocProvider<MainWidgetsBloc>(
+          create: (context) => sl<MainWidgetsBloc>(),
+        ),
       ],
       child: OverlaySupport.global(
         child: MyApp(user: user),
@@ -138,7 +143,7 @@ class MyApp extends StatelessWidget {
               if(state is ThemeEditedSuccessState && sl<AuthConfig>().user != null){
                 if(state.isChanges){
                   print('UPDATE THEME -------');
-                  context.read<ProfileBloc>().add(EditRelationNameEvent(name: sl<AuthConfig>().user!.name ?? '', theme: sl<AuthConfig>().idx));
+                  context.read<ProfileBloc>().add(EditRelationNameEvent(name: sl<AuthConfig>().user!.name ?? '',));
                 }
               }
             },
@@ -157,8 +162,8 @@ class MyApp extends StatelessWidget {
               home: user != null
                   ? user?.date != null
                       ? HomePage()
-                      : const PhonePage()
-                : const PhonePage()
+                      : const AuthPage()
+                : const AuthPage()
               // home: HomePage(),
             );
           }

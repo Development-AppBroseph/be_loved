@@ -1,11 +1,10 @@
 import 'dart:io';
-
-import 'package:be_loved/constants/colors/color_styles.dart';
-import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/constants/main_config_app.dart';
+import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/features/profile/domain/entities/back_entity.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
-import 'package:be_loved/features/theme/data/entities/clr_style.dart';
-import 'package:be_loved/locator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -20,7 +19,13 @@ class SlidingBackgroundCard extends StatelessWidget {
 
   PageController pageController = PageController(); 
 
-  animateToPage(int index, [bool isJump = false]){
+  animateToPage(BackEntity back, [bool isJump = false]){
+    int index = 0;
+    if(back.backPhoto != null){
+      index = back.photos.indexOf(back.photos.where((element) => element.id == back.backPhoto!).first);
+    }else{
+      index = (back.photos.isNotEmpty ? (back.photos.length) : 0)+(back.assetPhoto >= 2 ? 2 : back.assetPhoto);
+    }
     if(isJump){
       pageController.jumpToPage(index);
     }else{
@@ -30,7 +35,7 @@ class SlidingBackgroundCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DecorBloc decorBloc = context.read<DecorBloc>();
-    WidgetsBinding.instance.addPostFrameCallback((_) => animateToPage(decorBloc.selectedIndex, true));
+    // WidgetsBinding.instance.addPostFrameCallback((_) => animateToPage(decorBloc.back, true));
     return BlocConsumer<DecorBloc, DecorState>(
       listener: (context, state) {
         if (state is DecorErrorState) {
@@ -44,47 +49,57 @@ class SlidingBackgroundCard extends StatelessWidget {
         }
         if(state is DecorEditedSuccessState){
           print('ANIMATE');
-          animateToPage(decorBloc.selectedIndex);
+          animateToPage(decorBloc.back!);
+        }
+        if(state is DecorGotSuccessState){
+          print('ANIMATE INIT');
+          Future.delayed(const Duration(milliseconds: 400), (){
+            animateToPage(decorBloc.back!, true);
+          });
         }
       },
       builder: (context, state) {
-
+        if(state is DecorInitialState || decorBloc.back == null){
+          return Container(
+            color: Colors.black,
+            width: double.infinity,
+            height: height ?? 448.h,
+          );
+        }
         return SizedBox(
           width: double.infinity,
           height: height ?? 448.h,
           child: PageView(
             physics: NeverScrollableScrollPhysics(),
             controller: pageController,
-            children: decorBloc.images.map((e) 
-              => e.contains('assets/')
-                ? Image(
+            children: [
+              ...decorBloc.back!.photos.map((e) 
+                => Stack(
+                    children: [
+                      CachedNetworkImage(
+                        width: double.infinity,
+                        height: 448.h,
+                        fit: BoxFit.cover,
+                        imageUrl: Config.url.url + e.file,
+                      ),
+                      Container(
+                        color: Colors.black.withOpacity(0.24),
+                      )
+                    ],
+                  )
+              ).toList(),
+
+              ...MainConfigApp.decorBackgrounds.map((e) 
+                => Image(
                   width: double.infinity,
                   height: height ?? 448.h,
                   image: AssetImage(e),
                   fit: BoxFit.cover,
                 )
-                : Image(
-                  width: double.infinity,
-                  height: 448.h,
-                  image: FileImage(File(e)),
-                  fit: BoxFit.cover,
-                )
-            ).toList(),
+              ).toList(),
+            ]
           ),
         );
-        // return decorBloc.images[decorBloc.selectedIndex].contains('assets/')
-        //   ? Image(
-        //     width: double.infinity,
-        //     height: height ?? 448.h,
-        //     image: AssetImage(decorBloc.images[decorBloc.selectedIndex]),
-        //     fit: BoxFit.cover,
-        //   )
-        //   : Image(
-        //     width: double.infinity,
-        //     height: 448.h,
-        //     image: FileImage(File(decorBloc.images[decorBloc.selectedIndex])),
-        //     fit: BoxFit.cover,
-        //   );
       }
     );
   }

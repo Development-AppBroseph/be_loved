@@ -21,7 +21,8 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     setTheme(event.index);
     idx = event.index;
     sl<AuthConfig>().idx = idx;
-    emit(ThemeEditedSuccessState(isChanges: true));
+    emit(ThemeEditedSuccessState(isChanges: false));
+    // emit(ThemeEditedSuccessState(isChanges: true));
   }
 
   void _setTheme(SetThemeEvent event, Emitter<ThemeState> emit) async {

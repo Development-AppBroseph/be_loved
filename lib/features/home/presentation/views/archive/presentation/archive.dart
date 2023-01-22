@@ -233,74 +233,81 @@ class _ArchivePageState extends State<ArchivePage> {
   @override
   Widget build(BuildContext context) {
     GalleryBloc galleryBloc = context.read<GalleryBloc>();
-    return PageView(
-      controller: pageController,
-      physics: physics,
-      scrollDirection: Axis.horizontal,
-      onPageChanged: (value) {
-        physics = value == 0
-            ? const NeverScrollableScrollPhysics()
-            : const ClampingScrollPhysics();
-        setState(() {});
+    return BlocListener<GalleryBloc, GalleryState>(
+      listener: (context, state) {
+        if(state is GalleryFilesDeletedState || state is GalleryFilesAddedState){
+          currentScrollPosition = 0;
+        }
       },
-      children: [
-        Stack(
-          children: [
-            ArchiveWrapper(
-              currentIndex: currentPageIndex,
-              onChangePage: changePage,
-              child: currentPageIndex == 0
-                  ? MomentsPage()
-                  : currentPageIndex == 1
-                      ? GalleryPage(
-                        onPageChange: changePage,
-                          position: currentScrollPosition,
-                          hideGalleryFileID: hideGalleryFileID,
-                          deletingIds: galleryDeleteIds,
-                          onSelectForDeleting: (id){
-                            if(galleryDeleteIds.contains(id)){
-                              galleryDeleteIds.remove(id);
-                            }else{
-                              galleryDeleteIds.add(id);
-                            }
-                            setState(() {});
-                          },
-                        )
-                      : currentPageIndex == 2
-                          ? AlbumsPage()
-                          : currentPageIndex == 3
-                              ? EventPageInArchive(
-                                  pageController: pageController,
-                                  nextPage: nextPage,
-                                )
-                              : SizedBox.shrink(),
-              scrollController: scrollController,
-            ),
-            if (!hideTopBar)
-              Positioned(
-                top: MediaQuery.of(context).padding.top + 15.h,
-                left: 30.w,
-                right: 22.w,
-                child: ArchiveFixedTopInfo(
-                  showTop: showTop,
-                  enitityPos: enitityPos,
-                  dateTime: dateTime,
-                  isDeleting: galleryDeleteIds.isNotEmpty,
-                  onTap: (){
-                    if(enitityPos != null && galleryDeleteIds.isEmpty){
-                      galleryDeleteIds.add(enitityPos!.mainPhoto.id);
-                    }else{
-                      galleryDeleteIds = [];
-                    }
-                    setState(() {});
-                  },
-                  onDeleteTap: onDeleteFiles,
-                )
+      child: PageView(
+        controller: pageController,
+        physics: physics,
+        scrollDirection: Axis.horizontal,
+        onPageChanged: (value) {
+          physics = value == 0
+              ? const NeverScrollableScrollPhysics()
+              : const ClampingScrollPhysics();
+          setState(() {});
+        },
+        children: [
+          Stack(
+            children: [
+              ArchiveWrapper(
+                currentIndex: currentPageIndex,
+                onChangePage: changePage,
+                child: currentPageIndex == 0
+                    ? MomentsPage()
+                    : currentPageIndex == 1
+                        ? GalleryPage(
+                          onPageChange: changePage,
+                            position: currentScrollPosition,
+                            hideGalleryFileID: hideGalleryFileID,
+                            deletingIds: galleryDeleteIds,
+                            onSelectForDeleting: (id){
+                              if(galleryDeleteIds.contains(id)){
+                                galleryDeleteIds.remove(id);
+                              }else{
+                                galleryDeleteIds.add(id);
+                              }
+                              setState(() {});
+                            },
+                          )
+                        : currentPageIndex == 2
+                            ? AlbumsPage()
+                            : currentPageIndex == 3
+                                ? EventPageInArchive(
+                                    pageController: pageController,
+                                    nextPage: nextPage,
+                                  )
+                                : SizedBox.shrink(),
+                scrollController: scrollController,
               ),
-          ],
-        ),
-        EventDetailView(prevPage: prevPage, isOld: true,),
-      ],
+              if (!hideTopBar && currentPageIndex == 1)
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + 15.h,
+                  left: 30.w,
+                  right: 22.w,
+                  child: ArchiveFixedTopInfo(
+                    showTop: showTop,
+                    enitityPos: enitityPos,
+                    dateTime: dateTime,
+                    isDeleting: galleryDeleteIds.isNotEmpty,
+                    onTap: (){
+                      if(enitityPos != null && galleryDeleteIds.isEmpty){
+                        galleryDeleteIds.add(enitityPos!.mainPhoto.id);
+                      }else{
+                        galleryDeleteIds = [];
+                      }
+                      setState(() {});
+                    },
+                    onDeleteTap: onDeleteFiles,
+                  )
+                ),
+            ],
+          ),
+          EventDetailView(prevPage: prevPage, isOld: true,),
+        ],
+      ),
     );
   }
 }

@@ -17,6 +17,7 @@ class UserAnswer {
     required this.name,
     required this.theme,
     required this.fromYou,
+    required this.vkPID,
     required this.date,
   });
 
@@ -26,6 +27,7 @@ class UserAnswer {
   String? status;
   String? name;
   String? theme;
+  int? vkPID;
   bool? fromYou;
   String? date;
 
@@ -38,6 +40,7 @@ class UserAnswer {
         theme: json["theme"],
         fromYou: json["from_you"],
         date: json["date"],
+        vkPID: json["vk_pid"]
       );
 
   Map<String, dynamic> toJson() => {
