@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class RelationAndStatsPage extends StatefulWidget {
   final Function(int id) nextPage;
-  const RelationAndStatsPage({Key? key, required this.nextPage}) : super(key: key);
+  final Function() toAllEvents;
+  const RelationAndStatsPage({Key? key, required this.nextPage, required this.toAllEvents}) : super(key: key);
 
   @override
   State<RelationAndStatsPage> createState() => _RelationAndStatsPageState();
@@ -27,7 +28,7 @@ class _RelationAndStatsPageState extends State<RelationAndStatsPage> {
       physics: physics,
       controller: controller,
       children: [
-        RelationAndRelationSettingsPage(nextPage: widget.nextPage, toStaticsPage: nextPage),
+        RelationAndRelationSettingsPage(nextPage: widget.nextPage, toStaticsPage: nextPage, toAllEvents: widget.toAllEvents,),
         StaticsView(prevPage: prevPage),
       ],
     );

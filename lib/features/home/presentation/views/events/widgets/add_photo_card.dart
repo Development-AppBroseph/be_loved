@@ -49,18 +49,18 @@ class AddPhotoCard extends StatelessWidget {
                 Text(text ?? 'Добавить фото', style: TextStyles(context).black_20_w800,)
               ],
             ),
-            if(text == null || text == 'Добавить файлы')
-            Transform.rotate(
-                angle: pi / 4,
-                child: SvgPicture.asset(
-                  SvgImg.add,
-                  key: keyAdd,
-                  width: 19.w,
-                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
-                )
+            Opacity(
+              opacity: text == null || text == 'Добавить файлы' ? 1 : 0,
+              child: Transform.rotate(
+                  angle: pi / 4,
+                  child: SvgPicture.asset(
+                    SvgImg.add,
+                    key: keyAdd,
+                    width: 19.w,
+                    color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                  )
+              ),
             )
-            else 
-            SizedBox()
           ],
         ),
       ),

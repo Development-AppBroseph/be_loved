@@ -112,7 +112,12 @@ class _EventPageInArchiveState extends State<EventPageInArchive> {
                   },
                   child: _buildEvent(context, eventsBloc.eventsOld[index], GlobalKey())
                 ),
-              )
+              ),
+              SizedBox(height: eventsBloc.eventsOld.isEmpty 
+                ? 0 
+                : eventsBloc.eventsOld.length == 1
+                ? 340.h
+                : 140.h)
             ]
           );
         }

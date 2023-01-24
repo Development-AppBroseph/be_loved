@@ -7,6 +7,7 @@ import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/detail_gallery.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/video_view_v2.dart';
@@ -26,7 +27,7 @@ class GalleryPage extends StatefulWidget {
   final int hideGalleryFileID;
   final List<int> deletingIds;
   final Function(int id) onSelectForDeleting;
-  final double position;
+  double position;
   final bool isForSelecting;
   final Function(int i) onPageChange;
   GalleryPage({required this.position, required this.onPageChange, this.isForSelecting = false, required this.hideGalleryFileID, required this.deletingIds, required this.onSelectForDeleting});
@@ -67,6 +68,14 @@ class _GalleryPageState extends State<GalleryPage> {
         if(state is GalleryFilesDeletedState){
           Loader.hide();
           bloc.add(GetGalleryFilesEvent(isReset: true));
+          context.read<MainWidgetsBloc>().add(GetMainWidgetsEvent());
+        }
+        if(state is GalleryFilesDeletedState){
+          for(int i = 0; i < bloc.groupedFiles.length; i++){
+            bloc.groupedFiles[i].topPosition = 0;
+          }
+          widget.position = 0;
+          setState(() {});
         }
       },
       builder: (context, state) {
@@ -89,11 +98,28 @@ class _GalleryPageState extends State<GalleryPage> {
                         => MiniMediaCard(
                           file: group.additionalFiles[index],
                           isSelected: widget.deletingIds.contains(group.additionalFiles[index].id),
+                          onLongTap: (){
+                            widget.onSelectForDeleting(group.additionalFiles[index].id);
+                          },
                           onTap: (){
                             if(widget.deletingIds.isNotEmpty || widget.isForSelecting){
                               widget.onSelectForDeleting(group.additionalFiles[index].id);
                             }else{
-                              Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PhotoFullScreenView(urlToImage: group.additionalFiles[index].urlToFile,)));
+                              if(group.additionalFiles[index].isVideo){
+                                Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) =>
+                                  VideoView(
+                                    url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                                    // url: index == 0
+                                    // ? widget.group.mainPhoto.urlToFile
+                                    // : index == 1
+                                    // ? widget.group.mainVideo!.urlToFile
+                                    // : widget.group.additionalFiles[index - 1 + (widget.group.mainVideo == null ? 0 : 1)].urlToFile, 
+                                    duration: null
+                                  )
+                                ));
+                              }else{
+                                Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PhotoFullScreenView(urlToImage: group.additionalFiles[index].urlToFile,)));
+                              }
                             }
                           },
                         )
@@ -143,12 +169,13 @@ class _GalleryPageState extends State<GalleryPage> {
   Widget _buildMainItem(GlobalKey mainKey, GlobalKey dotsKey, int index, GalleryFileEntity file, GalleryGroupFilesEntity group){
     //Setting position of group
     if(group.topPosition == 0){
-      Future.delayed(Duration(milliseconds: 100), (){
+      print('SET POSITIONS: ${widget.position}');
+      Future.delayed(Duration(milliseconds: 150), (){
         GalleryBloc bloc = context.read<GalleryBloc>();
         for(var gItem in bloc.groupedFiles){
           if(gItem.mainPhoto.id == file.id){
             bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition = getWidgetPosition(mainKey).dy+((widget.position == 0) ? 0 : (widget.position-10.h));
-            // print('SETTING: ${bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition}');
+            print('SETTING: ${bloc.groupedFiles[bloc.groupedFiles.indexOf(gItem)].topPosition}');
             break;
           }
         }
@@ -159,16 +186,39 @@ class _GalleryPageState extends State<GalleryPage> {
       isForSelecting: widget.isForSelecting,
       isDeleting: widget.deletingIds.contains(file.id),
       mainKey: mainKey,
+      onLongTap: (){
+        if(widget.deletingIds.isEmpty){
+          widget.onSelectForDeleting(file.id);
+        }
+      },
       onDotsTap: (){
         showGallerySettingsModal(getWidgetPosition(dotsKey), file.id);
       },
-      onTap: (){
+      onTapTop: (){
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => DetailGalleryPage(
+              group: group, 
+              onPageChange: widget.onPageChange,
+              onSelectForDeleting: widget.onSelectForDeleting,
+              deletingIds: widget.deletingIds,
+            ),
+            transitionDuration: Duration(milliseconds: 400),
+            transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+        ));
+      },
+      onTapBottom: (){
         if(widget.deletingIds.isEmpty && !widget.isForSelecting){
           Navigator.of(context).push(
             PageRouteBuilder(
               pageBuilder: (_, __, ___) => file.isVideo && file.id != group.mainPhoto.id
                 ? VideoView(url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', duration: const Duration(seconds: 0)) 
-                : DetailGalleryPage(group: group, onPageChange: widget.onPageChange,),
+                : DetailGalleryPage(
+                  group: group, 
+                  onPageChange: widget.onPageChange,
+                  onSelectForDeleting: widget.onSelectForDeleting,
+                  deletingIds: widget.deletingIds,
+                ),
               transitionDuration: Duration(milliseconds: 400),
               transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
           ));

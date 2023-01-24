@@ -11,13 +11,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MiniMediaCard extends StatelessWidget {
   final GalleryFileEntity file;
-  final Function() onTap;
+  final Function()? onTap;
+  final Function() onLongTap;
   final bool isSelected;
-  const MiniMediaCard({required this.file, required this.onTap, required this.isSelected});
+  const MiniMediaCard({required this.file, required this.onLongTap, this.onTap, required this.isSelected});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onLongPress: onLongTap,
       onTap: onTap,
       child: Stack(
         children: [
@@ -31,6 +33,20 @@ class MiniMediaCard extends StatelessWidget {
               width: double.infinity,
               fit: BoxFit.cover,
             )
+          ),
+          Container(
+            width: 140.w,
+            height: 140.h,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  ColorStyles.blackColor.withOpacity(0.3),
+                  ColorStyles.blackColor.withOpacity(0),
+                ]
+              )
+            ),
           ),
           if(isSelected)
           Container(
@@ -46,7 +62,8 @@ class MiniMediaCard extends StatelessWidget {
             top: 12.h,
             right: 12.w,
             child: Text(formatDuration(Duration(seconds: file.duration!)), style: TextStyles(context).white_15_w800)
-          )
+          ),
+
         ],
       ),
     );

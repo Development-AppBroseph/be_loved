@@ -20,15 +20,19 @@ class MainMediaCard extends StatelessWidget {
   final bool isForSelecting;
   final Key dotsKey;
   final Function() onDotsTap;
-  final Function() onTap;
+  final Function() onTapBottom;
+  final Function() onTapTop;
+  final Function() onLongTap;
   MainMediaCard({
     required this.file,
     required this.isForSelecting,
     required this.mainKey,
+    required this.onLongTap,
     required this.dotsKey,
     required this.onDotsTap,
     required this.group,
-    required this.onTap,
+    required this.onTapTop,
+    required this.onTapBottom,
     required this.showTopBar,
     required this.isDeleting
   });
@@ -37,7 +41,6 @@ class MainMediaCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = file.isVideo ? 284.h : 428.w;
     return GestureDetector(
-      onTap: onTap,
       key: mainKey,
       child: Padding(
         padding: EdgeInsets.only(top: group.mainVideo != null && group.mainVideo!.id == file.id ? 0 : 4.w),
@@ -142,7 +145,28 @@ class MainMediaCard extends StatelessWidget {
               top: 30.h,
               right: 30.w,
               child: Text(formatDuration(Duration(seconds: file.duration!)), style: TextStyles(context).white_15_w800)
-            )
+            ),
+
+
+
+            Positioned.fill(
+              bottom: height*0.6,
+              top: 0,
+              child: GestureDetector(
+                onLongPress: onLongTap,
+                onTap: onTapTop,
+                behavior: HitTestBehavior.opaque,
+              ),
+            ),
+            Positioned.fill(
+              bottom: 0,
+              top: height*0.4,
+              child: GestureDetector(
+                onLongPress: onLongTap,
+                onTap: onTapBottom,
+                behavior: HitTestBehavior.opaque,
+              ),
+            ),
           ],
         ),
       ),

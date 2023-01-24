@@ -28,7 +28,6 @@ class TagsBloc extends Bloc<TagsEvent, TagsState> {
   void _getTags(GetTagsEvent event, Emitter<TagsState> emit) async {
     emit(TagLoadingState());
     final gotTags = await getTags.call(NoParams());
-    await Future.delayed(Duration(seconds: 3));
     TagsState state = gotTags.fold(
       (error) => errorCheck(error),
       (data) {

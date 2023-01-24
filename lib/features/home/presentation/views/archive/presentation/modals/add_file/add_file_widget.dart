@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -12,6 +13,7 @@ import 'package:be_loved/features/home/domain/entities/events/event_entity.dart'
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/helpers/video_helper.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/modals/add_file/file_type_modal.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/video_file_image.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/memory_info_card.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
@@ -26,6 +28,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../bloc/gallery/gallery_bloc.dart';
@@ -45,12 +48,14 @@ class _AddFileWidgetState extends State<AddFileWidget> {
 
   final ScrollController scrollController = ScrollController();
 
+  GlobalKey selectKey = GlobalKey();
+
   String title = 'Загрузить файлы';
 
   List<GalleryFileEntity> filesFromGallery = [];
 
   bool isValidate() {
-    return true;
+    return filesFromGallery.isNotEmpty;
   }
 
   complete() {
@@ -62,62 +67,95 @@ class _AddFileWidgetState extends State<AddFileWidget> {
     }
   }
 
-  addFiles() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowMultiple: true,
-        allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'mov'],
-        allowCompression: true,
-        withData: true);
-    if (result != null) {
-      for (var file in result.files) {
-        if(filesFromGallery.length >= 10){
-          break;
-        }
-        final data = await readExifFromBytes(file.bytes!);
-        String? dateTimeShooting;
-        double? lat;
-        double? long;
-        for (var item in data.entries) {
-          print('ENTRY: ${item.key} : ${item.value}');
-          //Get datetime from metadata
-          if(item.key == 'Image DateTime'){
-            dateTimeShooting = '${item.value}';
-            print('DATETIME PHOTO: $dateTimeShooting');
-          //Get latitude from metadata
-          }else if(item.key == 'GPS GPSLatitude'){
-            lat = getCoordinateFromExifString(item.value.toString());
-            print('COORDINATES LAT: $lat');
-          //Get longitude from metadata
-          }else if(item.key == 'GPS GPSLongitude'){
-            long = getCoordinateFromExifString(item.value.toString());
-            print('COORDINATES LONG: $long');
-          }
-          
-        }
-        filesFromGallery.add(
-          GalleryFileEntity(
-            id: 0,
-            isFavorite: false,
-            isVideo: checkIsVideo(file.path!),
-            urlToFile: file.path!,
-            // place: 'Алматы, где то!',
-            place: long != null && lat != null
-            ? (await getPlaceFromCoordinate(lat, long))
-            : 'undefined',
-            dateTime: dateTimeShooting != null
-                ? DateFormat("yyyy:MM:dd hh:mm:ss").parse(dateTimeShooting)
-                : DateTime.now(),
-            // dateTime: DateTime.parse('2013-03-02T20:54:47.266980'),
-            size: file.size,
-            urlToPreviewVideoImage: null,
-            memoryFilePhotoForVideo: await getVideoFrame(file.path!),
-            duration: checkIsVideo(file.path!) ? (await getVideoDuration(file.path!)).inSeconds : null
-          ),
-        );
+
+
+  showModal(){
+    FileTypeModal(
+      context, 
+      getWidgetPosition(selectKey), 
+      (){
+        Navigator.pop(context);
+        addFiles(false);
+      }, 
+      (){
+        Navigator.pop(context);
+        addFiles(true);
       }
-      setState(() {});
+    );
+  }
+
+
+
+  addFiles(bool isVideo) async {
+    List<XFile> result = [];
+    if(!isVideo){
+      result = await ImagePicker().pickMultiImage(imageQuality: 70);
+    }else{
+      var file = await ImagePicker().pickVideo(source: ImageSource.gallery);
+      if(file != null){
+        result = [file];
+      }
     }
+    // FilePickerResult? result = await FilePicker.platform.pickFiles(
+    //     type: FileType.custom,
+    //     allowMultiple: true,
+    //     allowedExtensions: ['jpg', 'jpeg', 'png', 'mp4', 'mov'],
+    //     allowCompression: true,
+    //     withData: true);
+    for (var file in result) {
+      if(filesFromGallery.length >= 10){
+        break;
+      }
+      Uint8List nf = await file.readAsBytes();
+      await getAndSetFile(nf, file.path);
+    }
+    setState(() {});
+  }
+
+
+  Future<void> getAndSetFile(Uint8List file, String path) async {
+    final data = await readExifFromBytes(file);
+    String? dateTimeShooting;
+    double? lat;
+    double? long;
+    for (var item in data.entries) {
+      print('ENTRY: ${item.key} : ${item.value}');
+      //Get datetime from metadata
+      if(item.key == 'Image DateTime'){
+        dateTimeShooting = '${item.value}';
+        print('DATETIME PHOTO: $dateTimeShooting');
+      //Get latitude from metadata
+      }else if(item.key == 'GPS GPSLatitude'){
+        lat = getCoordinateFromExifString(item.value.toString());
+        print('COORDINATES LAT: $lat');
+      //Get longitude from metadata
+      }else if(item.key == 'GPS GPSLongitude'){
+        long = getCoordinateFromExifString(item.value.toString());
+        print('COORDINATES LONG: $long');
+      }
+      
+    }
+    filesFromGallery.add(
+      GalleryFileEntity(
+        id: 0,
+        isFavorite: false,
+        isVideo: checkIsVideo(path),
+        widgetId: null,
+        urlToFile: path,
+        // place: 'Алматы, где то!',
+        place: long != null && lat != null
+        ? (await getPlaceFromCoordinate(lat, long))
+        : 'undefined',
+        dateTime: dateTimeShooting != null
+            ? DateFormat("yyyy:MM:dd hh:mm:ss").parse(dateTimeShooting)
+            : DateTime.now(),
+        // dateTime: DateTime.parse('2015-01-15T20:54:47.266980'),
+        size: file.buffer.lengthInBytes,
+        urlToPreviewVideoImage: null,
+        memoryFilePhotoForVideo: await getVideoFrame(path),
+        duration: checkIsVideo(path) ? (await getVideoDuration(path)).inSeconds : null
+      ),
+    );
   }
 
   @override
@@ -186,11 +224,12 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                               height: filesFromGallery.isEmpty ? 48.h : 20.h,
                             ),
                             AddPhotoCard(
+                              keyAdd: selectKey,
                               onTap: (){
                                 if(filesFromGallery.length >= 10){
                                   showAlertToast('Максимум можно выбрать 10 файлов');
                                 }else{  
-                                  addFiles();
+                                  showModal();
                                 }
                               },
                               color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],

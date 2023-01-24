@@ -13,6 +13,13 @@ class EditProfileEvent extends ProfileEvent{
 }
 
 
+//VK
+class ConnectVKEvent extends ProfileEvent{
+  final String code;
+  ConnectVKEvent({required this.code});
+}
+
+
 class PostPhoneNumberEvent extends ProfileEvent{
   final String phone;
   PostPhoneNumberEvent({required this.phone});
@@ -31,6 +38,14 @@ class PutUserCodeEvent extends ProfileEvent{
 
 class EditRelationNameEvent extends ProfileEvent{
   final String name;
-  final int? theme;
-  EditRelationNameEvent({required this.name, this.theme});
+  final String? date;
+  EditRelationNameEvent({required this.name, this.date});
+}
+
+
+
+class PartingOrSendFilesEvent extends ProfileEvent{
+  final String email;
+  final bool isParting;
+  PartingOrSendFilesEvent({required this.email, this.isParting = false});
 }

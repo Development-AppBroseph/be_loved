@@ -15,7 +15,10 @@ class GalleryFilesErrorState extends GalleryState {
 }
 class GalleryFilesInternetErrorState extends GalleryState{}
 
-class GotSuccessGalleryState extends GalleryState{}
+class GotSuccessGalleryState extends GalleryState{
+  bool isReset;
+  GotSuccessGalleryState({required this.isReset});
+}
 class GalleryFilesBlankState extends GalleryState{}
 class GalleryFilesAddedState extends GalleryState{
 }

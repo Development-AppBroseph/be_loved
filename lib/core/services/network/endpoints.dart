@@ -9,6 +9,7 @@ enum Endpoints {
   
   //Releation
   editRelations,
+  sendFilesToMail,
 
   //Events
   getEvents,
@@ -54,7 +55,22 @@ enum Endpoints {
   oldEvents,
 
   //Statics
-  getStats
+  getStats,
+
+  //Backs
+  getBacks,
+  setBacks,
+
+  //Main widgets
+  getMainWidgets,
+  addFileWidget,
+  addPurposeWidget,
+  deleteFileWidget,
+  deletePurposeWidget,
+
+
+  //VK
+  vkAuth
 }
 
 extension EndpointsExtension on Endpoints {
@@ -124,6 +140,24 @@ extension EndpointsExtension on Endpoints {
         return "/events/prev";  
       case Endpoints.getStats:
         return "/auth/stat";  
+      case Endpoints.getMainWidgets:
+        return "/auth/widgets";
+      case Endpoints.addFileWidget:
+        return "/archive/pos";
+      case Endpoints.addPurposeWidget:
+        return "/targets/pos";
+      case Endpoints.deleteFileWidget:
+        return "/archive/pos/${params![0]}";
+      case Endpoints.deletePurposeWidget:
+        return "/targets/pos/${params![0]}";
+      case Endpoints.vkAuth:
+        return "/auth/vk";
+      case Endpoints.sendFilesToMail:
+        return "/relations/send";
+      case Endpoints.getBacks:
+        return "/relations/background";
+      case Endpoints.setBacks:
+        return "/relations/background";
       default:
         return '';
     }

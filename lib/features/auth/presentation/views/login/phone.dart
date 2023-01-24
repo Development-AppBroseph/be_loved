@@ -1,6 +1,7 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/auth/presentation/views/login/code.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
@@ -10,11 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 
 class PhonePage extends StatefulWidget {
-  const PhonePage({Key? key}) : super(key: key);
+  final String? vkCode;
+  const PhonePage({Key? key, this.vkCode}) : super(key: key);
 
   @override
   State<PhonePage> createState() => _PhonePageState();
@@ -64,11 +67,37 @@ class _PhonePageState extends State<PhonePage> {
       var bloc = BlocProvider.of<AuthBloc>(context);
 
       return Scaffold(
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   toolbarHeight: 80.sp,
-        //   backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-        // ),
+        appBar: AppBar(
+          elevation: 0,
+          toolbarHeight: 80,
+          backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+          title: Padding(
+            padding: EdgeInsets.only(top: 30.h, right: 6.w),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                height: 55.h,
+                width: 55.h,
+                alignment: Alignment.center,
+                child: IconButton(
+                  icon: SvgPicture.asset(
+                    SvgImg.back,
+                    width: 15,
+                    color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                  ),
+                  hoverColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ),
+          ),
+          automaticallyImplyLeading: false,
+        ),
         backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : null,
         body: StreamBuilder<bool>(
             initialData: false,
@@ -90,7 +119,7 @@ class _PhonePageState extends State<PhonePage> {
                           AnimatedContainer(
                             curve: Curves.easeInOutQuint,
                             duration: const Duration(milliseconds: 600),
-                            height: snapshot.data! ? 131.h : 303.h,
+                            height: (snapshot.data! ? 101.h : 203.h),
                           ),
                           Text(
                             'Войти по номеру телефона',

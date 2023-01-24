@@ -136,7 +136,13 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                     color: ClrStyle.greyE4ToBlack2C[sl<AuthConfig>().idx],
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: AvatarMenu(),
+                  child: AvatarMenu(
+                    onSelectAvatar: (file) {
+                      setState(() {
+                        _image = file;
+                      });
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: 53.h),

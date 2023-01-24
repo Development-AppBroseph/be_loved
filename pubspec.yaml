@@ -75,6 +75,9 @@ dependencies:
   path_provider: ^2.0.11
   yandex_geocoder: ^2.0.2
 
+  # WebView
+  webview_flutter: ^4.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -86,6 +89,10 @@ flutter:
     - assets/icons/
     - assets/animations/
     - assets/backgrounds/
+    - assets/avatars/men/
+    - assets/avatars/girls/
+    - assets/avatars/animals/
+    - assets/avatars/additions/
 
   uses-material-design: true
 

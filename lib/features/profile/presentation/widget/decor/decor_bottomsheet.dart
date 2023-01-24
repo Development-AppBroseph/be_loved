@@ -6,13 +6,16 @@ import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/option_black_btn.dart';
+import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -114,6 +117,7 @@ class _DecorBottomsheetState extends State<DecorBottomsheet> {
       final String path = (await getApplicationDocumentsDirectory()).path;
       final int epoch = DateTime.now().millisecondsSinceEpoch;
       final File newImage = await File(newFile.path).copy('$path/image_$epoch.png');
+      showLoaderWrapper(context);
       context.read<DecorBloc>().add(AddBackgroundEvent(path: newImage.path));
     }
   }
@@ -285,8 +289,14 @@ class _DecorBottomsheetState extends State<DecorBottomsheet> {
                 showAlertToast(
                     'Проверьте соединение с интернетом!');
               }
+              if(state is DecorGotSuccessState){
+                Loader.hide();
+              }
             },
             builder: (context, state) {
+              if(state is DecorLoadingState || state is DecorInitialState || decorBloc.back == null){
+                return Container();
+              }
               return ListView(
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
@@ -296,10 +306,13 @@ class _DecorBottomsheetState extends State<DecorBottomsheet> {
                     padding: EdgeInsets.only(left: 25.w, right: 10.w),
                     child: _buildAddItem(addImageBack),
                   ),
-                  ...decorBloc.images.map(
+                  ...decorBloc.back!.photos.map(
                     (e) => GestureDetector(
                       onTap: (){
-                        decorBloc.add(EditBackgroundEvent(index: decorBloc.images.indexOf(e)));
+                        decorBloc.add(EditBackgroundEvent(
+                          backFileEntity: e,
+                          assetPhoto: 0
+                        ));
                       },
                       child: Container(
                         margin: EdgeInsets.only(right: 10.w),
@@ -312,21 +325,55 @@ class _DecorBottomsheetState extends State<DecorBottomsheet> {
                               elevation: 0,
                               color: ColorStyles.greyColor,
                               radius: BorderRadius.circular(40.r),
-                              child: e.contains('assets/') 
-                              ? Image.asset(
-                                e,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              )
-                              : Image.file(
-                                File(e),
+                              child: CachedNetworkImage(
+                                imageUrl: Config.url.url + e.file,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: double.infinity,
                               )
                             ),
-                            if(e == decorBloc.images[decorBloc.selectedIndex])
+                            if(e.id == decorBloc.back!.backPhoto)
+                            Positioned(
+                              bottom: 10.h,
+                              right: 0,
+                              left: 0,
+                              child: Center(child: _buildSelectedBtn())
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ).toList(),
+
+
+
+                  ...MainConfigApp.decorBackgrounds.map(
+                    (e) => GestureDetector(
+                      onTap: (){
+                        decorBloc.add(EditBackgroundEvent(
+                          backFileEntity: null,
+                          assetPhoto: MainConfigApp.decorBackgrounds.indexOf(e)
+                        ));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10.w),
+                        height: 150.h,
+                        width: 150.h,
+                        child: Stack(
+                          children: [
+                            CupertinoCard(
+                              margin: EdgeInsets.zero,
+                              elevation: 0,
+                              color: ColorStyles.greyColor,
+                              radius: BorderRadius.circular(40.r),
+                              child: Image.asset(
+                                e,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              )
+                            ),
+                            if( MainConfigApp.decorBackgrounds.indexOf(e) == decorBloc.back!.assetPhoto && decorBloc.back!.backPhoto == null)
                             Positioned(
                               bottom: 10.h,
                               right: 0,

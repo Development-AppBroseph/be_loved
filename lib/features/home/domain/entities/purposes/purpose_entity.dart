@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class PurposeEntity extends Equatable {
   final int id;
+  final int? widgetId;
   final String name;
   final String photo;
   final String? verdict;
@@ -13,6 +14,7 @@ class PurposeEntity extends Equatable {
 
   PurposeEntity({
     required this.id,
+    required this.widgetId,
     required this.name,
     required this.forPhotoId,
     required this.verdict,

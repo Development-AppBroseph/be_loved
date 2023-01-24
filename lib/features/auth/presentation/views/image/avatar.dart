@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/utils/helpers/image_helper.dart';
 import 'package:be_loved/core/utils/helpers/small_image.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -132,7 +134,11 @@ class AvatarPage extends StatelessWidget {
                         color: const Color.fromRGBO(228, 228, 228, 1.0),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: AvatarMenu(),
+                      child: AvatarMenu(
+                        onSelectAvatar:(file) {
+                          bloc.add(PickImage(file: file));
+                        },
+                      ),
                     ),
                     SizedBox(
                       height: 30.h,
@@ -232,7 +238,8 @@ class AvatarPage extends StatelessWidget {
 }
 
 class AvatarMenu extends StatefulWidget {
-  const AvatarMenu({Key? key}) : super(key: key);
+  final Function(File file) onSelectAvatar;
+  const AvatarMenu({Key? key, required this.onSelectAvatar}) : super(key: key);
 
   @override
   State<AvatarMenu> createState() => _AvatarMenuState();
@@ -244,6 +251,11 @@ class _AvatarMenuState extends State<AvatarMenu> {
   final pageController = PageController(viewportFraction: 1.0, keepPage: false);
 
   SelectImage selectImage = SelectImage();
+
+
+  onTapAvatar(String asset) async{
+    widget.onSelectAvatar(await getImageFileFromAssets(asset));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,12 +269,9 @@ class _AvatarMenuState extends State<AvatarMenu> {
               streamController.add(value);
               setState(() {});
             },
-            children: [
-              PageTest(page: 0, selectImage: selectImage),
-              PageTest(page: 1, selectImage: selectImage),
-              PageTest(page: 2, selectImage: selectImage),
-              PageTest(page: 3, selectImage: selectImage),
-            ],
+            children: MainConfigApp.avatars.map((e) 
+              => PageTest(avatarsGridModel: e, onAvatarTap: onTapAvatar,)
+            ).toList()
           ),
         ),
         Container(
@@ -407,12 +416,12 @@ class _AvatarMenuState extends State<AvatarMenu> {
 }
 
 class PageTest extends StatefulWidget {
-  SelectImage selectImage;
-  int page;
+  final AvatarsGridModel avatarsGridModel;
+  final Function(String asset) onAvatarTap;
   PageTest({
     Key? key,
-    required this.page,
-    required this.selectImage,
+    required this.avatarsGridModel,
+    required this.onAvatarTap,
   }) : super(key: key);
 
   @override
@@ -420,30 +429,15 @@ class PageTest extends StatefulWidget {
 }
 
 class _PageTestState extends State<PageTest> {
-  List<SmallImage> _images = [
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-    SmallImage('', false),
-  ];
 
   @override
   Widget build(BuildContext context) {
-    print('object ${widget.selectImage.page}|||${widget.selectImage.image}');
     return Container(
       height: 267.h,
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
       child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: _images.length,
+          itemCount: widget.avatarsGridModel.avatars.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4, mainAxisSpacing: 15.w, crossAxisSpacing: 20.w),
           itemBuilder: ((context, index) {
@@ -456,13 +450,14 @@ class _PageTestState extends State<PageTest> {
                     width: 67.w,
                     child: GestureDetector(
                       onTap: () {
-                        widget.selectImage.image = index;
-                        widget.selectImage.page = widget.page;
-                        // _images.forEach((element) {
-                        //   element.selected = false;
-                        // });
-                        // _images[index].selected = true;
-                        setState(() {});
+                        widget.onAvatarTap('assets/avatars/${widget.avatarsGridModel.dirName}/${widget.avatarsGridModel.avatars[index]}');
+                        // widget.selectImage.image = index;
+                        // widget.selectImage.page = widget.page;
+                        // // _images.forEach((element) {
+                        // //   element.selected = false;
+                        // // });
+                        // // _images[index].selected = true;
+                        // setState(() {});
                       },
                       child: CupertinoCard(
                         elevation: 0,
@@ -470,23 +465,23 @@ class _PageTestState extends State<PageTest> {
                         padding: EdgeInsets.zero,
                         color: Colors.white,
                         radius: BorderRadius.all(Radius.circular(40.r)),
-                        child: Container(
-                          color: Colors.grey,
-                        ),
+                        child: Image.asset(
+                          'assets/avatars/${widget.avatarsGridModel.dirName}/${widget.avatarsGridModel.avatars[index]}'
+                        )
                       ),
                     ),
                   ),
                 ),
-                if (widget.selectImage.page == widget.page &&
-                    widget.selectImage.image == index)
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: SvgPicture.asset(
-                      SvgImg.check,
-                      width: 20.w,
-                      height: 20.h,
-                    ),
-                  )
+                // if (widget.selectImage.page == widget.page &&
+                //     widget.selectImage.image == index)
+                //   Align(
+                //     alignment: Alignment.topRight,
+                //     child: SvgPicture.asset(
+                //       SvgImg.check,
+                //       width: 20.w,
+                //       height: 20.h,
+                //     ),
+                //   )
               ],
             );
             // return Container(

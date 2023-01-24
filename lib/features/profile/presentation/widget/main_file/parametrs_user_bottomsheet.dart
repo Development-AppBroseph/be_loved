@@ -1,3 +1,6 @@
+import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/profile/presentation/widget/avatar_and_name_user.dart';
@@ -8,7 +11,9 @@ import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ParametrsUserBottomsheet extends StatelessWidget {
   final Function() onRelationSettingsTap;
@@ -64,9 +69,9 @@ class ParametrsUserBottomsheet extends StatelessWidget {
                   showModalDecor(context, (){});
                 },
               ),
-              SizedBox(
-                height: 87.h - 24.h,
-              ),
+              // SizedBox(
+              //   height: 87.h - 24.h,
+              // ),
               DevideSettings(
                 title: "Подписка BeLoved+",
                 subtitle: "Подробнее",
@@ -80,7 +85,27 @@ class ParametrsUserBottomsheet extends StatelessWidget {
                 icon: SvgImg.notification,
               ),
               SizedBox(
-                height: 60.h,
+                height: 45.h,
+              ),
+
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 25.w, ),
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                    context.read<AuthBloc>().add(LogOut(context));
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(SvgImg.logout, height: 45.h,),
+                      SizedBox(width: 21.w,),
+                      Text('Выйти из аккаунта', style: TextStyles(context).black_20_w800.copyWith(color: ColorStyles.redColor),)
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 55.h,
               ),
             ],
           ),

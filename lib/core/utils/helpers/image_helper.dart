@@ -4,6 +4,8 @@ import 'package:image/image.dart' as IMG;
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
+import 'package:flutter/services.dart' show rootBundle;
+
 Future<File> flipHorizontalImage(File _image) async {
   final String tempPath = (await getTemporaryDirectory()).path;
   final int epoch = DateTime.now().millisecondsSinceEpoch;
@@ -46,4 +48,21 @@ Future<File?> downloadFile(String url) async {
     filePath = null;
   }
   return filePath == null ? null : File(filePath);
+}
+
+
+
+Future<File> getImageFileFromAssets(String p) async {
+  String path = p.replaceAll(RegExp('\\assets/'), '');
+  print('PATH: ${path}');
+  final byteData = await rootBundle.load('assets/$path');
+
+  final String tempPath = (await getTemporaryDirectory()).path;
+  final int epoch = DateTime.now().millisecondsSinceEpoch;
+  final String outputPath = "$tempPath/IMG_$epoch.jpg";
+  
+  final file = File(outputPath);
+  await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+  return file;
 }

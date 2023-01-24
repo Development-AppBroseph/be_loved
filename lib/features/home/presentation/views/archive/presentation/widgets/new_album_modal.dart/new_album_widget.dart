@@ -11,6 +11,7 @@ import 'package:be_loved/features/home/domain/entities/archive/album_entity.dart
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/modals/add_file/add_file_modal.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/selecting_gallery_page.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/icon_select_modal.dart';
@@ -95,6 +96,11 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
 
 
   addFiles() async{
+    GalleryBloc bloc = context.read<GalleryBloc>();
+    if(bloc.files.isEmpty){
+      showModalAddFile(context, (){});
+      return;
+    }
     resetPositions();
     List<int>? files = await Navigator.of(context).push(
       PageRouteBuilder(
@@ -106,7 +112,6 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
     ));
     resetPositions();
     if(files != null){
-      GalleryBloc bloc = context.read<GalleryBloc>();
 
       setState(() {
         selectedFiles = bloc.files.where((element) => files.contains(element.id)).toList();

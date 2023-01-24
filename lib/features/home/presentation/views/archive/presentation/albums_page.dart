@@ -7,6 +7,7 @@ import 'package:be_loved/features/home/domain/entities/archive/album_entity.dart
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/video_view_v2.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/albums/album_settings_modal.dart';
@@ -81,6 +82,7 @@ class _AlbumsPageState extends State<AlbumsPage> {
         if(state is GalleryFilesDeletedState){
           Loader.hide();
           bloc.add(GetAlbumsEvent());
+          context.read<MainWidgetsBloc>().add(GetMainWidgetsEvent());
           context.read<MomentsBloc>().add(GetMomentsEvent());
           context.read<GalleryBloc>().add(GetGalleryFilesEvent(isReset: true));
         }
@@ -131,7 +133,7 @@ class _AlbumsPageState extends State<AlbumsPage> {
                   text: 'Новый альбом',
                   isActive: true
                 ),
-                SizedBox(height: 50.h,),
+                SizedBox(height: bloc.album.favorites.isEmpty && bloc.album.otherAlbums.isEmpty ? (MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-330.h) : 140.h,),
 
 
               ]

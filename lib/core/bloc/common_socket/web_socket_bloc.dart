@@ -34,6 +34,7 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
   void _startRelationships(WebSocketStartRelationshipsMessage event, Emitter<WebSocketState> emit) =>
       emit(WebSocketStartRelatioinshipsState());
 
+  int trialsCount = 0;
   WebSocket? channel;
 
   void _initWebSocket(
@@ -67,6 +68,14 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
         onDone: () {
           _initWebSocket(event, emit);
         },
+        onError: (error){
+          print('SOCKET ERROR: $error');
+          if(trialsCount < 4){
+            channel!.close();
+            _initWebSocket(event, emit);
+            trialsCount++;
+          }
+        }
       );
     }
   }

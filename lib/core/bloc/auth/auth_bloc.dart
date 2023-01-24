@@ -27,6 +27,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   File? image;
   UserAnswer? user;
 
+  //VK
+  String? vkCode;
+
   AuthBloc() : super(AuthStated()) {
     on<SendPhone>((event, emit) => _sendPhone(event, emit));
     on<CheckUser>((event, emit) => _checkUser(event, emit));
@@ -43,6 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogOut>((event, emit) => _logOut(event, emit));
     on<EditUserInfo>((event, emit) => _editUserInfo(event, emit));
     on<TextFieldFilled>((event, emit) => _textFieldChangeState(event, emit));
+    on<TryAuthVK>((event, emit) => _tryAuthVK(event, emit));
   }
 
   void _sendPhone(SendPhone event, Emitter<AuthState> emit) async {
@@ -61,6 +65,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } else {
       emit(PhoneError('Введите номер телефона'));
+    }
+  }
+
+  //Send vk code
+  void _tryAuthVK(TryAuthVK event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    var result = await Repository().authVK(event.code);
+    if (result == 'retry') {
+      emit(VKError('Повторите попытку'));
+    } else if (result == 'register') {
+      vkCode = event.code;
+      emit(VKRequiredRegister(code: event.code));
+    }else{
+      print('SETTTING TOKEN VK $result');
+      await SharedPreferences.getInstance()
+        ..setString('token', result);
+      MySecureStorage().setToken(result);
+      token = result;
+      sl<AuthConfig>().token = result;
+      emit(VKLoggin(token: result, code: event.code));
     }
   }
 
@@ -89,6 +113,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  //DAR
   void _checkUser(CheckUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
@@ -148,12 +173,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _pickImage(PickImage event, Emitter<AuthState> emit) async {
-    var result = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
+    var result;
+    if(event.file == null){
+      result = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+      );
+    }
     //print(result);
-    if (result != null) {
-      var file = File(result.path);
+    if (result != null || event.file != null) {
+      var file = event.file ?? File(result.path);
       final filePath = file.absolute.path;
 
       final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
@@ -165,7 +193,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         outPath,
         quality: 30,
       );
-      emit(ImageSuccess(result));
+      emit(ImageSuccess(event.file != null ? XFile(event.file!.path) : result!));
       image = compressedImage;
     } else {
       emit(ImageError());
@@ -174,8 +202,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _initUser(InitUser event, Emitter<AuthState> emit) async {
     try {
+      print('INIT USER and VK CODE: ${vkCode} ----');
+      //VK
       var result = await Repository().initUser(secretKey ?? '', nickname ?? '',
-          image == null ? null : File(image!.path));
+          image == null ? null : File(image!.path), vkCode);
 
       if (result != null) {
         token = result;

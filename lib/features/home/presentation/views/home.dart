@@ -6,6 +6,7 @@ import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/archive.dart';
 import 'package:be_loved/features/home/presentation/views/bottom_navigation.dart';
@@ -55,6 +56,7 @@ class _HomePageState extends State<HomePage> {
     context.read<DecorBloc>().add(GetBackgroundEvent());
     context.read<AuthBloc>().add(GetUser());
     context.read<TagsBloc>().add(GetTagsEvent());
+    context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
 
     if (context.read<ArchiveBloc>().memoryEntity == null ||
         sl<AuthConfig>().memoryEntity == null) {
@@ -71,66 +73,73 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     MainScreenBloc mainScreenBloc = context.read<MainScreenBloc>();
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-        // var loader = showLoaderWrapper(context);
-        if (state is GetUserSuccess || state is GetUserError || state is RefreshUser) {
-          if(state is GetUserSuccess){
-            if(context.read<ThemeBloc>().state is ThemeInitialState){
-              context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
-            }
-          }
-          // Loader.hide();
-          return BlocConsumer<MainScreenBloc, MainScreenState>(
-            listener: (context, state) {
-              if(state is MainScreenChangedState){
-                if(state.currentView == 2 && context.read<PurposeBloc>().state is PurposeInitialState){
-                  context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
-                }
-                pageController.jumpToPage(state.currentView);
-              }
-              if(state is MainScreenSetStateState){
-                setState(() {});
-              }
-            },
-            builder: (context, state) {
-              return Scaffold(
-                bottomNavigationBar: BottomNavigation(),
-                // mainScreenBloc.currentView == 1 ? Colors.white : null
-                backgroundColor: mainScreenBloc.currentView == 1 
-                  ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx] 
-                  : mainScreenBloc.currentView == 3 
-                  ? ClrStyle.whiteTo17[sl<AuthConfig>().idx] 
-                  : sl<AuthConfig>().idx == 1 
-                  ? ColorStyles.blackColor 
-                  : null,
-                body: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    if(mainScreenBloc.currentWidget != null)
-                    mainScreenBloc.currentWidget!
-                    else
-                    PageView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: pageController,
-                      children: pages,
-                    ),
-                  ],
-                ),
-              );
-            }
-          );
-        } else {
-          return Container(
-            color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
-            alignment: Alignment.center,
-            child: SvgPicture.asset(
-              'assets/icons/heart.svg',
-              color: ColorStyles.redColor,
-            ),
-          );
+    return BlocListener<EventsBloc, EventsState>(
+      listener:(context, state) {
+        if(state is GotSuccessEventsState){
+          context.read<MainWidgetsBloc>().add(GetMainWidgetsEvent());
         }
       },
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          // var loader = showLoaderWrapper(context);
+          if (state is GetUserSuccess || state is GetUserError || state is RefreshUser) {
+            if(state is GetUserSuccess){
+              // if(context.read<ThemeBloc>().state is ThemeInitialState){
+              //   context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
+              // }
+            }
+            // Loader.hide();
+            return BlocConsumer<MainScreenBloc, MainScreenState>(
+              listener: (context, state) {
+                if(state is MainScreenChangedState){
+                  if(state.currentView == 2 && context.read<PurposeBloc>().state is PurposeInitialState){
+                    context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
+                  }
+                  pageController.jumpToPage(state.currentView);
+                }
+                if(state is MainScreenSetStateState){
+                  setState(() {});
+                }
+              },
+              builder: (context, state) {
+                return Scaffold(
+                  bottomNavigationBar: BottomNavigation(),
+                  // mainScreenBloc.currentView == 1 ? Colors.white : null
+                  backgroundColor: mainScreenBloc.currentView == 1 
+                    ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx] 
+                    : mainScreenBloc.currentView == 3 
+                    ? ClrStyle.whiteTo17[sl<AuthConfig>().idx] 
+                    : sl<AuthConfig>().idx == 1 
+                    ? ColorStyles.blackColor 
+                    : null,
+                  body: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      if(mainScreenBloc.currentWidget != null)
+                      mainScreenBloc.currentWidget!
+                      else
+                      PageView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: pageController,
+                        children: pages,
+                      ),
+                    ],
+                  ),
+                );
+              }
+            );
+          } else {
+            return Container(
+              color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
+              alignment: Alignment.center,
+              child: SvgPicture.asset(
+                'assets/icons/heart.svg',
+                color: ColorStyles.redColor,
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }

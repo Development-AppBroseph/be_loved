@@ -16,3 +16,4 @@ class DecorInternetErrorState extends DecorState{}
 
 class DecorBlankState extends DecorState{}
 class DecorEditedSuccessState extends DecorState{}
+class DecorGotSuccessState extends DecorState{}

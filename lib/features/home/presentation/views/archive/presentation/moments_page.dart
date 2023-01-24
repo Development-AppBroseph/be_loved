@@ -6,6 +6,7 @@ import 'package:be_loved/features/home/domain/entities/archive/album_entity.dart
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/video_view_v2.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/albums/album_settings_modal.dart';
@@ -72,6 +73,7 @@ class _MomentsPageState extends State<MomentsPage> {
         if(state is GalleryFilesDeletedState){
           Loader.hide();
           bloc.add(GetMomentsEvent());
+          context.read<MainWidgetsBloc>().add(GetMainWidgetsEvent());
           context.read<AlbumsBloc>().add(GetAlbumsEvent());
           context.read<GalleryBloc>().add(GetGalleryFilesEvent(isReset: true));
         }
@@ -109,7 +111,7 @@ class _MomentsPageState extends State<MomentsPage> {
                     => _buildAlbum(context, e)
                   ).toList(),
 
-                SizedBox(height: 50.h,),
+                SizedBox(height: bloc.moments.groupedOtherFiles.isEmpty && bloc.moments.forYou.isEmpty ? 0 : 140.h,),
 
               ]
             ),

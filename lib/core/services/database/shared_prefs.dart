@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/secure_storage.dart';
+import 'package:be_loved/features/auth/presentation/views/login/auth_page.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +41,7 @@ class MySharedPrefs {
     // ignore: use_build_context_synchronously
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => const PhonePage()),
+      MaterialPageRoute(builder: (context) => const AuthPage()),
       (route) => false,
     );
   }

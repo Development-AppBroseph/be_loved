@@ -15,6 +15,9 @@ abstract class Img {
 
 abstract class SvgImg {
   static const String logo = "assets/icons/logo.svg";
+  static const String vk = "assets/icons/vk.svg";
+  static const String phone = "assets/icons/phone.svg";
+  static const String logout = "assets/icons/logout.svg";
   static const String logov2 = "assets/icons/logov2.svg";
   static const String logov3 = "assets/icons/logov3.svg";
   static const String person = 'assets/icons/person.svg';

@@ -9,8 +9,9 @@ class GetBackgroundEvent extends DecorEvent{
 }
 
 class EditBackgroundEvent extends DecorEvent{
-  final int index;
-  EditBackgroundEvent({required this.index});
+  final BackFileEntity? backFileEntity;
+  final int assetPhoto;
+  EditBackgroundEvent({this.backFileEntity, this.assetPhoto = 0});
 }
 
 class AddBackgroundEvent extends DecorEvent{

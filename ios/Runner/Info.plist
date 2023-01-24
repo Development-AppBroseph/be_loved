@@ -30,6 +30,8 @@
 	<string>Разрешите доступ к камере, чтобы добавить или изменить фото профиля.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Разрешите доступ к галерее, чтобы добавить или изменить фото профиля.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>In order to take a audio or media, this app requires permission to access the media.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

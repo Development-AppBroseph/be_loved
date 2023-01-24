@@ -29,7 +29,6 @@ class AlbumsBloc extends Bloc<AlbumsEvent, AlbumsState> {
     isResetAll = false;
     emit(AlbumLoadingState());
     final gotAlbums = await getAlbums.call(NoParams());
-    await Future.delayed(Duration(seconds: 3));
     AlbumsState state = gotAlbums.fold(
       (error) => errorCheck(error),
       (data) {

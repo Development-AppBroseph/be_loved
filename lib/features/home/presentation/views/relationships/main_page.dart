@@ -1,6 +1,7 @@
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/event_detail_view.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/view/account_page.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/main_and_allevents_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_and_relation_settings_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_and_stats_page.dart';
@@ -38,7 +39,7 @@ class _MainPageState extends State<MainPage> {
         setState(() {});
       },
       children: [
-        RelationAndStatsPage(nextPage: nextPage),
+        MainAndAllPage(toDetail: nextPage),
         EventDetailView(prevPage: prevPage),
       ],
     );

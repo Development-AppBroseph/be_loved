@@ -104,6 +104,7 @@ class _InviteForState extends State<InviteFor> {
         widget.previewPage();
       }
       if (current is WebSocketStartRelatioinshipsState) {
+        print('DATE RELATION CHANGED');
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -130,9 +131,9 @@ class _InviteForState extends State<InviteFor> {
         // }
         if (current is GetUserSuccess) {
           love = current.user.love;
-          if(context.read<ThemeBloc>().state is ThemeInitialState){
-            context.read<ThemeBloc>().add(SetThemeEvent(index: current.user.theme == 'dark' ? 1 : 0));
-          }
+          // if(context.read<ThemeBloc>().state is ThemeInitialState){
+          //   context.read<ThemeBloc>().add(SetThemeEvent(index: current.user.theme == 'dark' ? 1 : 0));
+          // }
           return true;
         }
         // // if (current is InviteAccepted) {

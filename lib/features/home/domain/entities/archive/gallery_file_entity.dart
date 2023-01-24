@@ -13,6 +13,7 @@ class GalleryFileEntity extends Equatable {
   Uint8List? memoryFilePhotoForVideo;
   final String? urlToPreviewVideoImage;
   final int? duration;
+  final int? widgetId;
 
   GalleryFileEntity({
     required this.id,
@@ -24,7 +25,8 @@ class GalleryFileEntity extends Equatable {
     required this.isVideo,
     this.memoryFilePhotoForVideo,
     required this.duration,
-    required this.urlToPreviewVideoImage
+    required this.urlToPreviewVideoImage,
+    required this.widgetId,
   });
 
 

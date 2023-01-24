@@ -6,6 +6,7 @@ import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
+import 'package:be_loved/core/utils/helpers/sync_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
@@ -18,12 +19,14 @@ import 'package:be_loved/features/home/presentation/views/relationships/modals/c
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/relation_start_date_widget.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
+import 'package:be_loved/features/profile/presentation/views/parting_view.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/sliding_background_card.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -34,7 +37,8 @@ import 'package:intl/intl.dart';
 class RelationShipsSettingsPage extends StatefulWidget {
   final VoidCallback prevPage;
   final Function() toStaticsPage;
-  const RelationShipsSettingsPage({Key? key, required this.prevPage, required this.toStaticsPage}) : super(key: key);
+  final Function() toAllEvents;
+  const RelationShipsSettingsPage({Key? key, required this.toAllEvents, required this.prevPage, required this.toStaticsPage}) : super(key: key);
 
   @override
   State<RelationShipsSettingsPage> createState() => _RelationShipsSettingsPageState();
@@ -60,10 +64,10 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
   setNewRelationDate(){
     showLoaderWrapper(context);
     print('OLD DATE: ${sl<AuthConfig>().user!.date}');
-    sl<AuthConfig>().user!.date = datetime.toString();
+    sl<AuthConfig>().user!.date = DateFormat('yyyy-MM-dd').format(datetime);
     print('NEW DATE: ${sl<AuthConfig>().user!.date}');
-    context.read<ProfileBloc>().add(EditProfileEvent(
-        user: sl<AuthConfig>().user!.me, avatar: null));
+    context.read<ProfileBloc>().add(EditRelationNameEvent(
+        name: sl<AuthConfig>().user!.name ?? '', date: sl<AuthConfig>().user!.date));
   }
 
   @override
@@ -95,381 +99,391 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
     EventsBloc eventsBloc = context.read<EventsBloc>();
     print('RELREL: ${sl<AuthConfig>().user!.relationId}');
 
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is GetUserSuccess) {
-          context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
-          Loader.hide();
-          setState(() {
-            _controller.text = sl<AuthConfig>().user!.name ?? '';
-          });
-        }
-      },
-      child: BlocConsumer<ProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileErrorState) {
-            Loader.hide();
-            showAlertToast(state.message);
-          }
-          if (state is ProfileInternetErrorState) {
-            Loader.hide();
-            showAlertToast('Проверьте соединение с интернетом!');
-          }
-          if (state is ProfileEditedSuccessState) {
-            Loader.hide();
-          }
-        }, builder: (context, state) {
-          return RefreshIndicator(
-            color: ColorStyles.accentColor,
-            onRefresh: () async {
-              showLoaderWrapper(context);
-              context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
-              return;
-            },
-            child: SingleChildScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              controller: controller,
-              physics: const AlwaysScrollableScrollPhysics(
-                  parent: ClampingScrollPhysics()),
-              child: GestureDetector(
-                onTap: () {
-                  // f1.unfocus();
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, _) {
+        return BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is GetUserSuccess) {
+              // context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
+              Loader.hide();
+              setState(() {
+                _controller.text = sl<AuthConfig>().user!.name ?? '';
+              });
+            }
+          },
+          child: BlocConsumer<ProfileBloc, ProfileState>(
+            listener: (context, state) {
+              if (state is ProfileErrorState) {
+                Loader.hide();
+                showAlertToast(state.message);
+              }
+              if (state is ProfileInternetErrorState) {
+                Loader.hide();
+                showAlertToast('Проверьте соединение с интернетом!');
+              }
+              if (state is ProfileEditedSuccessState) {
+                Loader.hide();
+              }
+            }, builder: (context, state) {
+              return RefreshIndicator(
+                color: ColorStyles.accentColor,
+                onRefresh: () async {
+                  showLoaderWrapper(context);
+                  context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
+                  allSync(context);
+                  return;
                 },
-                child: Column(
-                  children: [
-                    Stack(
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  controller: controller,
+                  physics: const AlwaysScrollableScrollPhysics(
+                      parent: ClampingScrollPhysics()),
+                  child: GestureDetector(
+                    onTap: () {
+                      // f1.unfocus();
+                    },
+                    child: Column(
                       children: [
-                        SlidingBackgroundCard(),
-                        Column(
+                        Stack(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                right: 25.w,
-                                left: 25.w,
-                                top: 35.h+MediaQuery.of(context).padding.top,
-                              ),
-                              child: GestureDetector(
-                                onTap: () => widget.prevPage(),
-                                child: SizedBox(
-                                  child: Row(
-                                    children: [
-                                      // const Icon(
-                                      //   Icons.arrow_back_ios_new_rounded,
-                                      //   size: 28,
-                                      // ),
-                                      SvgPicture.asset(
-                                        SvgImg.back,
-                                        height: 26.32.h,
-                                        color: Colors.white,
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(left: 20.w),
-                                        child: Text(
-                                          'Назад',
-                                          style: TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontSize: 20.sp,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 42.h),
-                            BlocConsumer<ProfileBloc, ProfileState>(
-                              listener: (context, state) {
-                                if (state is ProfileErrorState) {
-                                  Loader.hide();
-                                  showAlertToast(state.message);
-                                }
-                                if (state is ProfileInternetErrorState) {
-                                  Loader.hide();
-                                  showAlertToast(
-                                      'Проверьте соединение с интернетом!');
-                                }
-                                if (state is ProfileRelationNameChangedState) {
-                                  // Loader.hide();
-                                  // showLoaderWrapper(context);
-                                  context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
-                                }
-                              },
-                              builder: (context, state) {
-                                return Padding(
+                            SlidingBackgroundCard(),
+                            Column(
+                              children: [
+                                Padding(
                                   padding: EdgeInsets.only(
+                                    right: 25.w,
                                     left: 25.w,
-                                    right: 38.w,
+                                    top: 35.h+MediaQuery.of(context).padding.top,
                                   ),
-                                  child: SizedBox(
-                                    height: 45.h,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: 33.h,
-                                            child: TextField(
-                                              onSubmitted: (s) {
-                                                if (s.length > 1) {
-                                                  showLoaderWrapper(context);
-                                                  context.read<ProfileBloc>().add(
-                                                      EditRelationNameEvent(
-                                                          name: _controller.text
-                                                              .trim()));
-                                                }
-                                              },
-                                              textCapitalization:
-                                                  TextCapitalization.words,
-                                              onChanged: (value) {
-                                                if (value.length <= maxLength) {
-                                                  text = value;
-                                                } else {
-                                                  _controller.value =
-                                                      TextEditingValue(
-                                                    text: text,
-                                                    selection: TextSelection(
-                                                      baseOffset: maxLength,
-                                                      extentOffset: maxLength,
-                                                      affinity:
-                                                          TextAffinity.upstream,
-                                                      isDirectional: false,
-                                                    ),
-                                                    composing: TextRange(
-                                                      start: 0,
-                                                      end: maxLength,
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              cursorColor: Colors.white,
-                                              cursorHeight: 30,
-                                              textAlignVertical:
-                                                  TextAlignVertical.center,
+                                  child: GestureDetector(
+                                    onTap: () => widget.prevPage(),
+                                    child: SizedBox(
+                                      child: Row(
+                                        children: [
+                                          // const Icon(
+                                          //   Icons.arrow_back_ios_new_rounded,
+                                          //   size: 28,
+                                          // ),
+                                          SvgPicture.asset(
+                                            SvgImg.back,
+                                            height: 26.32.h,
+                                            color: Colors.white,
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 20.w),
+                                            child: Text(
+                                              'Назад',
                                               style: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontSize: 20.sp,
                                                 color: Colors.white,
-                                                fontSize: 30.sp,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                              controller: _controller,
-                                              focusNode: f1,
-                                              scrollPadding: EdgeInsets.zero,
-                                              decoration: InputDecoration(
-                                                contentPadding:
-                                                    const EdgeInsets.only(top: 20),
-                                                border: InputBorder.none,
-                                                hintText: f1.hasFocus
-                                                    ? " "
-                                                    : 'Назовите отношения',
-                                                hintStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 30.sp,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
+                                                fontWeight: FontWeight.w800,
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            if (f1.hasFocus) {
-                                              f1.unfocus();
-                                              // MySharedPrefs().setNameRelationShips(
-                                              //     _controller.text);
-                                              // getNameRelationShips();
-                                              showLoaderWrapper(context);
-                                              context.read<ProfileBloc>().add(
-                                                  EditRelationNameEvent(
-                                                      name:
-                                                          _controller.text.trim()));
-                                            } else {
-                                              FocusScope.of(context)
-                                                  .requestFocus(f1);
-                                            }
-                                          },
-                                          child: _controller.text.isNotEmpty &&
-                                                  f1.hasFocus
-                                              ? const Icon(
-                                                  Icons.check_rounded,
-                                                  color: Colors.white,
-                                                )
-                                              : !f1.hasFocus
-                                                  ? SvgPicture.asset(SvgImg.edit)
-                                                  : const Icon(
-                                                      Icons.check_rounded,
-                                                      color: Colors.white,
-                                                    ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(height: 25.h),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 25.w),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  sl<AuthConfig>().user!.fromYou ?? true
-                                      ? _buildCurrentUser()
-                                      : _buildLoveUser(),
-                                  const Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 13.h),
-                                    child: SizedBox(
-                                      height: 108.h,
-                                      width: 108.w,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                            SvgImg.heart,
-                                            height: 59.h,
-                                            width: 70.w,
                                           ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                  const Spacer(),
-                                  sl<AuthConfig>().user!.fromYou ?? true
-                                      ? _buildLoveUser()
-                                      : _buildCurrentUser()
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 26.h),
-                            //CAROUSEL
-                            RelationStartDateWidget(
-                              onTapEditDate: (){
-                                // controller.animateTo(controller.position.pixels+100.h, duration: Duration(milliseconds: 300), curve: Curves.easeInOutQuint);
-                              },
-                              onTapStats: widget.toStaticsPage,
-                              onChangeDate: (newDate){
-                                setState(() {
-                                  datetime = newDate;
-                                });
-                                setNewRelationDate();
-                              },
-                              datetime: datetime,
-                            ),
-                            SizedBox(height: 15.h),
-                            //EVENTS
-                            
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CupertinoCard(
-                        radius: BorderRadius.circular(40.r),
-                        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
-                        elevation: 0,
-                        margin: EdgeInsets.zero,
-                        padding: EdgeInsets.only(top: 25.h, bottom: 50.h),
-                        child: Column(
-                          children: [
-                            TagsListBlock(),
-                            SizedBox(height: 25.h),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 25.w),
-                              child: Row(
-                                children: [
-                                  Column(
+                                ),
+                                SizedBox(height: 42.h),
+                                BlocConsumer<ProfileBloc, ProfileState>(
+                                  listener: (context, state) {
+                                    if (state is ProfileErrorState) {
+                                      Loader.hide();
+                                      showAlertToast(state.message);
+                                    }
+                                    if (state is ProfileInternetErrorState) {
+                                      Loader.hide();
+                                      showAlertToast(
+                                          'Проверьте соединение с интернетом!');
+                                    }
+                                    if (state is ProfileRelationNameChangedState) {
+                                      // Loader.hide();
+                                      // showLoaderWrapper(context);
+                                      context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
+                                    }
+                                  },
+                                  builder: (context, state) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                        left: 25.w,
+                                        right: 38.w,
+                                      ),
+                                      child: SizedBox(
+                                        height: 45.h,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: SizedBox(
+                                                height: 33.h,
+                                                child: TextField(
+                                                  onSubmitted: (s) {
+                                                    if (s.length > 1) {
+                                                      showLoaderWrapper(context);
+                                                      context.read<ProfileBloc>().add(
+                                                          EditRelationNameEvent(
+                                                              name: _controller.text
+                                                                  .trim()));
+                                                    }
+                                                  },
+                                                  textCapitalization:
+                                                      TextCapitalization.words,
+                                                  onChanged: (value) {
+                                                    if (value.length <= maxLength) {
+                                                      text = value;
+                                                    } else {
+                                                      _controller.value =
+                                                          TextEditingValue(
+                                                        text: text,
+                                                        selection: TextSelection(
+                                                          baseOffset: maxLength,
+                                                          extentOffset: maxLength,
+                                                          affinity:
+                                                              TextAffinity.upstream,
+                                                          isDirectional: false,
+                                                        ),
+                                                        composing: TextRange(
+                                                          start: 0,
+                                                          end: maxLength,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                  cursorColor: Colors.white,
+                                                  cursorHeight: 30,
+                                                  textAlignVertical:
+                                                      TextAlignVertical.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 30.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                  controller: _controller,
+                                                  focusNode: f1,
+                                                  scrollPadding: EdgeInsets.zero,
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        const EdgeInsets.only(top: 20),
+                                                    border: InputBorder.none,
+                                                    hintText: f1.hasFocus
+                                                        ? " "
+                                                        : 'Назовите отношения',
+                                                    hintStyle: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 30.sp,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () async {
+                                                if (f1.hasFocus) {
+                                                  f1.unfocus();
+                                                  // MySharedPrefs().setNameRelationShips(
+                                                  //     _controller.text);
+                                                  // getNameRelationShips();
+                                                  showLoaderWrapper(context);
+                                                  context.read<ProfileBloc>().add(
+                                                      EditRelationNameEvent(
+                                                          name:
+                                                              _controller.text.trim()));
+                                                } else {
+                                                  FocusScope.of(context)
+                                                      .requestFocus(f1);
+                                                }
+                                              },
+                                              child: _controller.text.isNotEmpty &&
+                                                      f1.hasFocus
+                                                  ? const Icon(
+                                                      Icons.check_rounded,
+                                                      color: Colors.white,
+                                                    )
+                                                  : !f1.hasFocus
+                                                      ? SvgPicture.asset(SvgImg.edit)
+                                                      : const Icon(
+                                                          Icons.check_rounded,
+                                                          color: Colors.white,
+                                                        ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                SizedBox(height: 25.h),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                  child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('Предстоящие события', style: TextStyles(context).black_20_w700),
-                                      SizedBox(height: 8.h),
-                                      Text(countEventsText(eventsBloc.eventsSorted), style: TextStyles(context).grey_15_w700),
+                                      sl<AuthConfig>().user!.fromYou ?? true
+                                          ? _buildCurrentUser()
+                                          : _buildLoveUser(),
+                                      const Spacer(),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 13.h),
+                                        child: SizedBox(
+                                          height: 108.h,
+                                          width: 108.w,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                SvgImg.heart,
+                                                height: 59.h,
+                                                width: 70.w,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      sl<AuthConfig>().user!.fromYou ?? true
+                                          ? _buildLoveUser()
+                                          : _buildCurrentUser()
                                     ],
                                   ),
-                                  const Spacer(),
-                                  SizedBox(
-                                    height: 45.w,
-                                    width: 45.w,
-                                    child: Stack(
+                                ),
+                                SizedBox(height: 26.h),
+                                //CAROUSEL
+                                RelationStartDateWidget(
+                                  onTapEditDate: (){
+                                    // controller.animateTo(controller.position.pixels+100.h, duration: Duration(milliseconds: 300), curve: Curves.easeInOutQuint);
+                                  },
+                                  onTapStats: widget.toStaticsPage,
+                                  onChangeDate: (newDate){
+                                    setState(() {
+                                      datetime = newDate;
+                                    });
+                                    setNewRelationDate();
+                                  },
+                                  datetime: datetime,
+                                ),
+                                SizedBox(height: 15.h),
+                                //EVENTS
+                                
+                              ],
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: CupertinoCard(
+                            radius: BorderRadius.circular(40.r),
+                            color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+                            elevation: 0,
+                            margin: EdgeInsets.zero,
+                            padding: EdgeInsets.only(top: 25.h, bottom: 50.h),
+                            child: Column(
+                              children: [
+                                TagsListBlock(),
+                                SizedBox(height: 25.h),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                  child: GestureDetector(
+                                    onTap: widget.toAllEvents,
+                                    behavior: HitTestBehavior.translucent,
+                                    child: Row(
                                       children: [
-                                        Align(
-                                          child: Transform.rotate(
-                                              angle: pi,
-                                              child: SvgPicture.asset(
-                                                SvgImg.back,
-                                                height: 20.41.h,
-                                                width: 11.37.h,
-                                                color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                                              )),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Предстоящие события', style: TextStyles(context).black_20_w700),
+                                            SizedBox(height: 8.h),
+                                            Text(countEventsText(eventsBloc.eventsSorted), style: TextStyles(context).grey_15_w700),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        SizedBox(
+                                          height: 45.w,
+                                          width: 45.w,
+                                          child: Stack(
+                                            children: [
+                                              Align(
+                                                child: Transform.rotate(
+                                                    angle: pi,
+                                                    child: SvgPicture.asset(
+                                                      SvgImg.back,
+                                                      height: 20.41.h,
+                                                      width: 11.37.h,
+                                                      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                                                    )),
+                                              )
+                                            ],
+                                          ),
                                         )
                                       ],
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 17.h),
-                            BlocConsumer<EventsBloc, EventsState>(listener: (context, state) {
-                              if (state is EventErrorState) {
-                                showAlertToast(state.message);
-                              }
-                              if (state is EventInternetErrorState) {
-                                showAlertToast('Проверьте соединение с интернетом!');
-                              }
-                              if(state is EventAddedState || state is GotSuccessEventsState){
-                                setState(() {});
-                              }
-                            }, builder: (context, state) {
-                              if (state is EventLoadingState) {
-                                return Container();
-                              }
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 25.w),
-                                    child: Container(
-                                      height: 1,
-                                      color: ColorStyles.greyColor,
-                                    ),
                                   ),
-                                  SizedBox(height: 25.h),
-                                  EventsListWidget(events: eventsBloc.eventsSorted, onTap: (id){}),
-                                ],
-                              );
-                            }),
-                            SizedBox(height: 35.h),
-                            NewEventBtn(
-                              onTap: () => showModalCreateEvent(context, () {
-                                Navigator.pop(context);
-                              }),
-                              isActive: !(eventsBloc.events.length >= 30),
+                                ),
+                                SizedBox(height: 17.h),
+                                BlocConsumer<EventsBloc, EventsState>(listener: (context, state) {
+                                  if (state is EventErrorState) {
+                                    showAlertToast(state.message);
+                                  }
+                                  if (state is EventInternetErrorState) {
+                                    showAlertToast('Проверьте соединение с интернетом!');
+                                  }
+                                  if(state is EventAddedState || state is GotSuccessEventsState){
+                                    setState(() {});
+                                  }
+                                }, builder: (context, state) {
+                                  if (state is EventLoadingState) {
+                                    return Container();
+                                  }
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                        child: Container(
+                                          height: 1,
+                                          color: ColorStyles.greyColor,
+                                        ),
+                                      ),
+                                      SizedBox(height: 25.h),
+                                      EventsListWidget(events: eventsBloc.eventsSorted, onTap: (id){}),
+                                    ],
+                                  );
+                                }),
+                                SizedBox(height: 35.h),
+                                NewEventBtn(
+                                  onTap: () => showModalCreateEvent(context, () {
+                                    Navigator.pop(context);
+                                  }),
+                                  isActive: !(eventsBloc.events.length >= 30),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
 
-                    SizedBox(height: 15.h,),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25.w),
-                      child: CustomAnimationButton(
-                        text: 'Зажми, чтобы расстаться',
-                        // color: ColorStyles.redColor,
-                        red: true,
-                        onPressed: () async {
-                        },
-                      ),
+                        SizedBox(height: 15.h,),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 25.w),
+                          child: CustomAnimationButton(
+                            text: 'Зажми, чтобы расстаться',
+                            // color: ColorStyles.redColor,
+                            red: true,
+                            onPressed: () async {
+                              Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PartingView()));
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 31.h,),
+                      ],
                     ),
-                    SizedBox(height: 31.h,),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        }
-      )
+              );
+            }
+          )
+        );
+      }
     );
   }
 

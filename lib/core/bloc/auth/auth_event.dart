@@ -31,7 +31,10 @@ class EditUserInfo extends AuthEvent {}
 
 // class SearchUser extends AuthEvent {}
 
-class PickImage extends AuthEvent {}
+class PickImage extends AuthEvent {
+  final File? file;
+  PickImage({this.file});
+}
 
 class InitUser extends AuthEvent {}
 
@@ -66,4 +69,10 @@ class LogOut extends AuthEvent {
 class TextFieldFilled extends AuthEvent {
   bool filled;
   TextFieldFilled(this.filled);
+}
+
+
+class TryAuthVK extends AuthEvent {
+  String code;
+  TryAuthVK(this.code);
 }
