@@ -12,6 +12,7 @@ import 'package:be_loved/features/auth/presentation/views/image/avatar.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/dialog_card.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/image_change_popup.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
@@ -77,6 +78,7 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
   Widget build(BuildContext context) {
     double height = (38.h-MediaQuery.of(context).padding.top);
     return CupertinoCard(
+      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
       radius: BorderRadius.vertical(
         top: Radius.circular(80.r),
       ),
@@ -131,7 +133,7 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                   width: 378.w,
                   height: 307.w,
                   decoration: BoxDecoration(
-                    color: const Color.fromRGBO(228, 228, 228, 1.0),
+                    color: ClrStyle.greyE4ToBlack2C[sl<AuthConfig>().idx],
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: AvatarMenu(),
@@ -145,7 +147,7 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                   text: 'Готово',
                   validate: true,
                   code: false,
-                  textColor: Colors.white,
+                  textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                   onPressed: (){
                     widget.onTap(
                       _image,

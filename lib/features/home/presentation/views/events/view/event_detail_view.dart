@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/text_size.dart';
@@ -13,6 +14,7 @@ import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/old_events/old_events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
@@ -26,6 +28,8 @@ import 'package:be_loved/features/home/presentation/views/events/widgets/show_cr
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_widget.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +42,8 @@ import 'package:intl/intl.dart';
 
 class EventDetailView extends StatefulWidget {
   final VoidCallback prevPage;
-  const EventDetailView({Key? key, required this.prevPage}) : super(key: key);
+  final bool isOld;
+  const EventDetailView({Key? key, required this.prevPage, this.isOld = false}) : super(key: key);
 
   @override
   State<EventDetailView> createState() => _EventDetailViewState();
@@ -118,7 +123,8 @@ class _EventDetailViewState extends State<EventDetailView> {
             position: context.read<EventsBloc>().eventsInHome.isEmpty ? 0 : (context.read<EventsBloc>().eventsInHome.length+1)
           ));
         }
-      }
+      },
+      isOld: widget.isOld
     );
   }
 
@@ -141,7 +147,11 @@ class _EventDetailViewState extends State<EventDetailView> {
 
   @override
   void initState() {
-    event = context.read<EventsBloc>().events.where((element) => element.id == context.read<EventsBloc>().eventDetailSelectedId).first;
+    if(widget.isOld){
+      event = context.read<EventsBloc>().eventsOld.where((element) => element.id == context.read<EventsBloc>().eventDetailSelectedId).first;
+    }else{
+      event = context.read<EventsBloc>().events.where((element) => element.id == context.read<EventsBloc>().eventDetailSelectedId).first;
+    }
     super.initState();
   }
 
@@ -149,7 +159,7 @@ class _EventDetailViewState extends State<EventDetailView> {
   Widget build(BuildContext context) {
     EventsBloc eventsBloc = context.read<EventsBloc>();
     return Scaffold(
-      backgroundColor: ColorStyles.backgroundColorGrey,
+      backgroundColor: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
       body: BlocConsumer<EventsBloc, EventsState>(
         listener: (context, state) {
           if(state is EventErrorState){
@@ -196,6 +206,7 @@ class _EventDetailViewState extends State<EventDetailView> {
                                     SvgPicture.asset(
                                       SvgImg.back,
                                       height: 26.32.h,
+                                      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(left: 20.w),
@@ -204,7 +215,7 @@ class _EventDetailViewState extends State<EventDetailView> {
                                         style: TextStyle(
                                           fontFamily: 'Inter',
                                           fontSize: 20.sp,
-                                          color: const Color(0xff2C2C2E),
+                                          color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
@@ -239,6 +250,7 @@ class _EventDetailViewState extends State<EventDetailView> {
                     elevation: 0,
                     padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
                     margin: EdgeInsets.zero,
+                    color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                     radius: BorderRadius.circular(40.r),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,9 +276,9 @@ class _EventDetailViewState extends State<EventDetailView> {
                         Text(
                           event!.title,
                           style: TextStyle(
-                              color: const Color.fromRGBO(
-                                  23, 23, 23, 1),
-                              fontSize: homeWidgetTextSize(eventsBloc.events.first.title).sp,
+                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                              fontSize: homeWidgetTextSize(event!.title).sp,
+                              // fontSize: homeWidgetTextSize(eventsBloc.events.first.title).sp,
                               fontWeight: FontWeight.w800,
                               height: 1),
                         ),
@@ -320,12 +332,13 @@ class _EventDetailViewState extends State<EventDetailView> {
                       ],
                     )
                   ),
-                  SizedBox(height: 15.h,),
+                  if(!widget.isOld)
+                  ...[SizedBox(height: 15.h,),
                   SizedBox(
                     height: 115.h,
                     width: 378.w,
                     child: EventDetailTimer(eventEntity: event!,)
-                  ),
+                  )],
                   SizedBox(height: 15.h,),
                   event!.photo != null
                   ? EventPhotoCard(
@@ -339,6 +352,7 @@ class _EventDetailViewState extends State<EventDetailView> {
                     url: event!.photo!,
                   )
                   : AddPhotoCard(
+                    color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                     onTap: (){
                       showPhotoSettingsModal(false);
                     },

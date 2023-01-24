@@ -1,26 +1,22 @@
-import 'dart:ui';
-import 'package:be_loved/constants/colors/color_styles.dart';
-import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/old_events/old_events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/albums_page.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/gallery_page.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/moments_page.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/archive_fixed_top_info.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/archive_wrapper.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/event_detail_view.dart';
-import 'package:be_loved/features/home/presentation/views/events/view/event_page.dart';
 import 'package:be_loved/locator.dart';
-import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../bloc/events/events_bloc.dart';
-import '../../events/view/events_page.dart';
 import 'event_page.dart';
 import 'helpers/gallery_helper.dart';
 
@@ -88,6 +84,8 @@ class _ArchivePageState extends State<ArchivePage> {
     GalleryBloc bloc = context.read<GalleryBloc>();
     ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
     AlbumsBloc albumsBloc = context.read<AlbumsBloc>();
+    MomentsBloc momentsBloc = context.read<MomentsBloc>();
+    EventsBloc eventsBloc = context.read<EventsBloc>();
 
     if (bloc.state is GalleryFilesInitialState) {
       bloc.add(GetGalleryFilesEvent(isReset: false));
@@ -103,12 +101,30 @@ class _ArchivePageState extends State<ArchivePage> {
     scrollController.addListener(() {
       double position = scrollController.position.pixels;
       currentScrollPosition = position;
+      //Pagination gallery
       if(position > (scrollController.position.maxScrollExtent-100) && currentPageIndex == 1){
         GalleryBloc galleryBloc = context.read<GalleryBloc>();
         if(!galleryBloc.isEnd && !galleryBloc.isLoading){
           galleryBloc.add(GetGalleryFilesEvent(isReset: false));
         }
       }
+
+      //Pagination moments
+      if(position > (scrollController.position.maxScrollExtent-100) && currentPageIndex == 0 && momentsBloc.state is! MomentInitialState){
+        MomentsBloc momentsBloc = context.read<MomentsBloc>();
+        if(!momentsBloc.isEnd && !momentsBloc.isLoading){
+          momentsBloc.add(GetMomentsEvent(isReset: false));
+        }
+      }
+
+      //Pagination old events
+      if(position > (scrollController.position.maxScrollExtent-100) && currentPageIndex == 3){
+        if(!eventsBloc.isEnd && !eventsBloc.isLoading){
+          eventsBloc.add(GetOldEventsEvent(isReset: false));
+        }
+      }
+
+
       if (currentPageIndex != 1) {
         if (!hideTopBar) {
           setState(() {
@@ -198,6 +214,7 @@ class _ArchivePageState extends State<ArchivePage> {
 
   void nextPage(int id) {
     context.read<EventsBloc>().eventDetailSelectedId = id;
+    
     pageController.nextPage(
         duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOutQuint);
@@ -208,6 +225,11 @@ class _ArchivePageState extends State<ArchivePage> {
       curve: Curves.easeInOutQuint);
   ScrollPhysics physics = const NeverScrollableScrollPhysics();
 
+  changePage(int newPage){
+    setState(() {
+      currentPageIndex = newPage;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     GalleryBloc galleryBloc = context.read<GalleryBloc>();
@@ -226,15 +248,12 @@ class _ArchivePageState extends State<ArchivePage> {
           children: [
             ArchiveWrapper(
               currentIndex: currentPageIndex,
-              onChangePage: (newPage) {
-                setState(() {
-                  currentPageIndex = newPage;
-                });
-              },
+              onChangePage: changePage,
               child: currentPageIndex == 0
                   ? MomentsPage()
                   : currentPageIndex == 1
                       ? GalleryPage(
+                        onPageChange: changePage,
                           position: currentScrollPosition,
                           hideGalleryFileID: hideGalleryFileID,
                           deletingIds: galleryDeleteIds,
@@ -280,7 +299,7 @@ class _ArchivePageState extends State<ArchivePage> {
               ),
           ],
         ),
-        EventDetailView(prevPage: prevPage),
+        EventDetailView(prevPage: prevPage, isOld: true,),
       ],
     );
   }

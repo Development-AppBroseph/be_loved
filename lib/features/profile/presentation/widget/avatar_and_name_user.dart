@@ -1,6 +1,7 @@
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/profile/presentation/widget/user_avatar.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,7 +22,7 @@ class AvatarAndNameUser extends StatelessWidget {
           : _buildLoveUser(),
         SvgPicture.asset(
           SvgImg.logov2,
-          color: const Color(0xff171717),
+          color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
         ),
         sl<AuthConfig>().user!.fromYou ?? true
           ? _buildLoveUser()

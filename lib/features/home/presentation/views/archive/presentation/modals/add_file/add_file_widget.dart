@@ -9,11 +9,13 @@ import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
+import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/helpers/video_helper.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/video_file_image.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/memory_info_card.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:exif/exif.dart';
@@ -69,6 +71,9 @@ class _AddFileWidgetState extends State<AddFileWidget> {
         withData: true);
     if (result != null) {
       for (var file in result.files) {
+        if(filesFromGallery.length >= 10){
+          break;
+        }
         final data = await readExifFromBytes(file.bytes!);
         String? dateTimeShooting;
         double? lat;
@@ -93,16 +98,17 @@ class _AddFileWidgetState extends State<AddFileWidget> {
         filesFromGallery.add(
           GalleryFileEntity(
             id: 0,
+            isFavorite: false,
             isVideo: checkIsVideo(file.path!),
             urlToFile: file.path!,
             // place: 'Алматы, где то!',
             place: long != null && lat != null
             ? (await getPlaceFromCoordinate(lat, long))
             : 'undefined',
-            // dateTime: dateTimeShooting != null
-            //     ? DateFormat("yyyy:MM:dd hh:mm:ss").parse(dateTimeShooting)
-            //     : DateTime.now(),
-            dateTime: DateTime.parse('2012-02-02T20:54:47.266980'),
+            dateTime: dateTimeShooting != null
+                ? DateFormat("yyyy:MM:dd hh:mm:ss").parse(dateTimeShooting)
+                : DateTime.now(),
+            // dateTime: DateTime.parse('2013-03-02T20:54:47.266980'),
             size: file.size,
             urlToPreviewVideoImage: null,
             memoryFilePhotoForVideo: await getVideoFrame(file.path!),
@@ -131,6 +137,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
           Navigator.pop(context);
           Loader.hide();
           context.read<GalleryBloc>().add(GetGalleryFilesEvent(isReset: true));
+          context.read<ArchiveBloc>().add(GetMemoryInfoEvent());
         }
       },
       child: GestureDetector(
@@ -142,6 +149,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
           radius: BorderRadius.vertical(
             top: Radius.circular(80.r),
           ),
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
           elevation: 0,
           margin: EdgeInsets.zero,
           child: AnimatedContainer(
@@ -178,8 +186,14 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                               height: filesFromGallery.isEmpty ? 48.h : 20.h,
                             ),
                             AddPhotoCard(
-                              onTap: addFiles,
-                              color: ColorStyles.backgroundColorGrey,
+                              onTap: (){
+                                if(filesFromGallery.length >= 10){
+                                  showAlertToast('Максимум можно выбрать 10 файлов');
+                                }else{  
+                                  addFiles();
+                                }
+                              },
+                              color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
                               text: filesFromGallery.length == 0
                               ? 'Добавить файлы'
                               : filesFromGallery.length == 1
@@ -218,7 +232,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                             CustomButton(
                               color: ColorStyles.primarySwath,
                               text: 'Готово',
-                              textColor: Colors.white,
+                              textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                               validate: isValidate(),
                               onPressed: complete,
                             ),
@@ -237,7 +251,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                               topLeft: Radius.circular(28.h),
                               topRight: Radius.circular(28.h),
                             ),
-                            color: Colors.white,
+                            color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                           ),
                           padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
                           child: Column(
@@ -301,7 +315,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                     child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      filesFromGallery.removeAt(filesFromGallery.indexOf(e));
+                      filesFromGallery.removeAt(index);
                     });
                   },
                   child: ClipPath.shape(

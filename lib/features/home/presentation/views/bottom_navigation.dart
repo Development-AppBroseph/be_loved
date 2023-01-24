@@ -1,6 +1,9 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,7 +29,7 @@ class BottomNavigation extends StatelessWidget {
       builder: (context, state) {
         return Container(
           height: 100.h,
-          color: Colors.white,
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
           child: Padding(
             padding: EdgeInsets.only(bottom: 26.h),
             child: Row(

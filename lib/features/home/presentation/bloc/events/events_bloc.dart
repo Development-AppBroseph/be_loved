@@ -9,6 +9,7 @@ import 'package:be_loved/features/home/domain/usecases/change_position_event.dar
 import 'package:be_loved/features/home/domain/usecases/delete_event.dart';
 import 'package:be_loved/features/home/domain/usecases/edit_event.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
+import 'package:be_loved/features/home/domain/usecases/get_old_events.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 part 'events_event.dart';
@@ -21,7 +22,9 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   final DeleteEvent deleteEvent;
   final ChangePositionEvent changePositionEvent;
 
-  EventsBloc(this.addEvent, this.getEvents, this.deleteEvent, this.changePositionEvent, this.editEvent) : super(EventInitialState()) {
+  final GetOldEvents getOldEvents;
+
+  EventsBloc(this.addEvent, this.getEvents, this.deleteEvent, this.changePositionEvent, this.editEvent, this.getOldEvents) : super(EventInitialState()) {
     on<GetEventsEvent>(_getEvents);
     on<EventAddEvent>(_addEvents);
     on<EventEditEvent>(_editEvents);
@@ -29,6 +32,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     on<SortByTagEvent>(_sortEvents);
     on<EventDeleteEvent>(_deleteEvent);
     on<ResetSortEvent>(_resetEvents);
+    on<GetOldEventsEvent>(_getOldEvents);
   }
 
   List<EventEntity> events = [];
@@ -38,6 +42,50 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   TagEntity? selectedTag;
   int eventDetailSelectedId = 0;
 
+
+  //Old events
+  List<EventEntity> eventsOld = [];
+  int page = 0;
+  bool isLoading = false;
+  bool isEnd = false;
+
+
+  void _getOldEvents(GetOldEventsEvent event, Emitter<EventsState> emit) async {
+
+    //pagination
+    isLoading = true;
+    if (event.isReset) {
+      emit(OldEventLoadingState());
+      page = 0;
+      isEnd = false;
+      eventsOld = [];
+    }else{
+      emit(EventBlankState());
+    }
+    page++;
+    print('OLD EVENTS GET PAGE: $page');
+
+    final gotOldEvents = await getOldEvents.call(page);
+    EventsState state = gotOldEvents.fold(
+      (error) => errorCheck(error),
+      (data) {
+        //pagination
+        if(data.any((element) => eventsOld.any((file) => file.id == element.id))){
+          isEnd = true;
+        }else{
+          if (event.isReset) {
+            eventsOld = data;
+          } else {
+            eventsOld.addAll(data);
+          }
+        }
+
+        return GotSuccessOldEventsState();
+      },
+    );
+    isLoading = false;
+    emit(state);
+  }
 
   void _getEvents(GetEventsEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
@@ -119,6 +167,15 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
           for(int i = 0; i < eventsInHome.length; i++){
             if(eventsInHome[i].id == event.eventEntity.id){
               eventsInHome[i] = data;
+            }
+          }
+        }
+
+        //Old
+        if(eventsOld.any((element) => element.id == event.eventEntity.id,)){
+          for(int i = 0; i < eventsOld.length; i++){
+            if(eventsOld[i].id == event.eventEntity.id){
+              eventsOld[i] = data;
             }
           }
         }
@@ -215,6 +272,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
           eventsInHome.removeWhere((element) => element.id == id);
           eventsDeleted.removeWhere((element) => element.id == id);
           eventsSorted.removeWhere((element) => element.id == id);
+          eventsOld.removeWhere((element) => element.id == id);
         }
         return EventDeletedState();
       },

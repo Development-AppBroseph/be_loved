@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +42,7 @@ class InputNamePage extends StatelessWidget {
       });
       return Scaffold(
         appBar: appBar(context),
-        backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+        backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
         body: StreamBuilder<bool>(
             initialData: false,
             stream: _streamController.stream,
@@ -66,7 +70,7 @@ class InputNamePage extends StatelessWidget {
                                 style: GoogleFonts.inter(
                                   fontSize: 35.sp,
                                   fontWeight: FontWeight.w800,
-                                  color: const Color.fromRGBO(23, 23, 23, 1.0),
+                                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                 )),
                             TextSpan(
                                 text: 'зовут?',
@@ -209,7 +213,7 @@ class InputNamePage extends StatelessWidget {
     return AppBar(
       elevation: 0,
       toolbarHeight: 80,
-      backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+      backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
         padding: EdgeInsets.only(top: 20.h, right: 6.w),
         child: Row(
@@ -223,6 +227,7 @@ class InputNamePage extends StatelessWidget {
                 icon: SvgPicture.asset(
                   SvgImg.back,
                   width: 15,
+                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                 ),
                 hoverColor: Colors.transparent,
                 splashColor: Colors.transparent,
@@ -249,8 +254,8 @@ class InputNamePage extends StatelessWidget {
                       color: indexPage == index
                           ? Colors.blue
                           : indexPage > index
-                              ? Colors.black
-                              : Colors.white,
+                              ? ClrStyle.black2CToWhite[sl<AuthConfig>().idx]
+                              : ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
                       border: indexPage + 1 > index
                           ? null
                           : Border.all(

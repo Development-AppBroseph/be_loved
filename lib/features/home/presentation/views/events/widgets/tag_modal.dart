@@ -14,6 +14,7 @@ import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_tag.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_widget.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -138,6 +139,7 @@ class _TagModalState extends State<TagModal> {
           radius: BorderRadius.vertical(
             top: Radius.circular(80.r),
           ),
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
           elevation: 0,
           margin: EdgeInsets.zero,
           child: SizedBox(
@@ -182,7 +184,7 @@ class _TagModalState extends State<TagModal> {
                     height: 57.h,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.r),
-                        color: ColorStyles.backgroundColorGrey),
+                        color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     margin: EdgeInsets.only(top: 18.h),
                     child: Row(
@@ -194,7 +196,7 @@ class _TagModalState extends State<TagModal> {
                           style: TextStyle(
                               fontFamily: "Inter",
                               fontSize: 18.sp,
-                              color: const Color(0xff2C2C2E),
+                              color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                               fontWeight: FontWeight.w800),
                         ),
                         Container(
@@ -225,12 +227,14 @@ class _TagModalState extends State<TagModal> {
                                   MainConfigApp.tagColors[iconIndex].assetPath,
                                   key: iconBtn,
                                   height: 58.h,
+                                  // color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                 ),
                                 SizedBox(
                                   width: 7.w,
                                 ),
                                 SvgPicture.asset(
                                   SvgImg.upDownIcon,
+                                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                 ),
                               ],
                             ),
@@ -252,7 +256,7 @@ class _TagModalState extends State<TagModal> {
                                 fontFamily: 'Inter',
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.w800,
-                                color: const Color(0xff171717),
+                                color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                               ),
                             ),
                             Text(
@@ -261,7 +265,7 @@ class _TagModalState extends State<TagModal> {
                                 fontFamily: 'Inter',
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w800,
-                                color: const Color(0xff969696),
+                                color: ClrStyle.greyToWhite[sl<AuthConfig>().idx],
                               ),
                             ),
                           ],
@@ -359,7 +363,7 @@ class _TagModalState extends State<TagModal> {
                                       elevation: 0,
                                       margin: EdgeInsets.all(1.w),
                                       radius: BorderRadius.circular(17.r),
-                                      color: Colors.white,
+                                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                     ),
                                   ),
                                   Container(
@@ -383,7 +387,7 @@ class _TagModalState extends State<TagModal> {
                                 text: 'Создать событие',
                                 validate: true,
                                 code: false,
-                                textColor: Colors.white,
+                                textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
@@ -400,7 +404,7 @@ class _TagModalState extends State<TagModal> {
                                   text: widget.editingTag != null ? 'Готово' : 'Создать тег',
                                   validate: isValidate(),
                                   code: false,
-                                  textColor: Colors.white,
+                                  textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                   onPressed: onComplete),
                             )
                           ],

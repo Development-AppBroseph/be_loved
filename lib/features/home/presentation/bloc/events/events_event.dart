@@ -38,3 +38,8 @@ class SortByTagEvent extends EventsEvent{
 }
 
 class ResetSortEvent extends EventsEvent{}
+
+class GetOldEventsEvent extends EventsEvent{
+  final bool isReset;
+  GetOldEventsEvent({required this.isReset});
+}

@@ -1,9 +1,11 @@
 import 'package:be_loved/core/error/exceptions.dart';
 import 'package:be_loved/core/services/network/network_info.dart';
 import 'package:be_loved/features/home/data/datasource/archive/archive_remote_datasource.dart';
-import 'package:be_loved/features/home/domain/entities/archive/album_entity.dart';
+import 'package:be_loved/features/home/domain/entities/archive/album_full_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/memory_entity.dart';
+import 'package:be_loved/features/home/domain/entities/archive/moment_entity.dart';
+import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/domain/repositories/archive_repository.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
@@ -110,7 +112,7 @@ class ArchiveRepositoryImpl implements ArchiveRepository {
 
   //Albums
   @override
-  Future<Either<Failure, List<AlbumEntity>>> getAlbums() async {
+  Future<Either<Failure, AlbumFullEntity>> getAlbums() async {
     if (await networkInfo.isConnected) {
       try {
         final items = await remoteDataSource.getAlbums();
@@ -159,6 +161,77 @@ class ArchiveRepositoryImpl implements ArchiveRepository {
     if (await networkInfo.isConnected) {
       try {
         final items = await remoteDataSource.deleteAlbum(params.albumEntity);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+  //Moments
+  @override
+  Future<Either<Failure, MomentEntity>> getMoments(int page) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.getMoments(page);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+  @override
+  Future<Either<Failure, void>> addFavoites(params) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.addFavorites(params.fileId, params.isFavor);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if(e is ServerException){
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+
+
+
+  //Events
+  @override
+  Future<Either<Failure, List<EventEntity>>> getOldEvents(int page) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.getOldEvents(page);
         return Right(items);
       } catch (e) {
         print(e);

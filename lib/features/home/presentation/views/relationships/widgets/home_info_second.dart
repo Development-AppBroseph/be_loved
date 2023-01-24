@@ -1,5 +1,6 @@
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,8 @@ import 'package:intl/intl.dart';
 class HomeInfoSecond extends StatelessWidget {
   final double data;
   final Function() onRelationTap;
-  HomeInfoSecond({required this.data, required this.onRelationTap});
+  final Function() onStatsTap;
+  HomeInfoSecond({required this.data, required this.onRelationTap, required this.onStatsTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,11 @@ class HomeInfoSecond extends StatelessWidget {
       //     borderRadius: BorderRadius.circular(20.r), color: Colors.white),
       child: CupertinoCard(
         radius: BorderRadius.circular(40.r),
-        color: Colors.white,
+        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
         elevation: 0,
+        decoration: BoxDecoration(
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
+        ),
         margin: EdgeInsets.zero,
         padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 30.w),
         child: ListView(
@@ -44,13 +49,13 @@ class HomeInfoSecond extends StatelessWidget {
             Row(
               children: [
                 Text(DateFormat('dd MMMM', 'RU').format(date), style: TextStyle(
-                  color: Color(0xFF171717),
+                  color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                   fontSize: 35.sp,
                   fontWeight: FontWeight.w700
                 ),),
                 SizedBox(width: 10.w,),
                 Text(DateFormat('yyyy', 'RU').format(date), style: TextStyle(
-                  color: Color(0xFF171717),
+                  color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                   fontSize: 35.sp,
                   fontWeight: FontWeight.w700
                 ),),
@@ -65,39 +70,43 @@ class HomeInfoSecond extends StatelessWidget {
               color: Color(0xFF969696),
             ),
             SizedBox(height: 24.h,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(SvgImg.homeStats, height: 34.h,),
-                    SizedBox(width: 26.w,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Статистика', style: TextStyle(
-                          color: Color(0xFF171717),
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w700
-                        ),),
-                        SizedBox(height: 2.h,),
-                        Text('Посмотреть', style: TextStyle(
-                          color: Color(0xFF969696),
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w500
-                        ),),
-                      ],
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 17.w),
-                  child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
-                )
-              ],
+            GestureDetector(
+              onTap: onStatsTap,
+              behavior: HitTestBehavior.translucent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(SvgImg.homeStats, height: 34.h,),
+                      SizedBox(width: 26.w,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Статистика', style: TextStyle(
+                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w700
+                          ),),
+                          SizedBox(height: 2.h,),
+                          Text('Посмотреть', style: TextStyle(
+                            color: Color(0xFF969696),
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w500
+                          ),),
+                        ],
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 17.w),
+                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h, color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],),
+                  )
+                ],
+              ),
             ),
             SizedBox(height: 20.h,),
             GestureDetector(
@@ -118,7 +127,7 @@ class HomeInfoSecond extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Отношения', style: TextStyle(
-                            color: Color(0xFF171717),
+                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w700
                           ),),
@@ -134,7 +143,7 @@ class HomeInfoSecond extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 17.w),
-                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
+                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h, color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],),
                   )
                 ],
               ),

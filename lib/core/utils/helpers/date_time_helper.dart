@@ -127,3 +127,10 @@ String purposeTimes(Duration time) {
   }
   return 'Осталось ${time.inMinutes} минут';
 }
+
+
+
+
+bool isOneDay(DateTime first, DateTime second){
+  return first.year == second.year && first.month == second.month && first.day == second.day;
+}

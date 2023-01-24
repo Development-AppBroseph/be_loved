@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/small_image.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/data/models/auth/select_image.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,7 +47,7 @@ class AvatarPage extends StatelessWidget {
       var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         appBar: appBar(context),
-        backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+        backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
         body: SafeArea(
             bottom: true,
             child: Padding(
@@ -63,7 +67,7 @@ class AvatarPage extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 35.sp,
                               fontWeight: FontWeight.w800,
-                              color: const Color.fromRGBO(23, 23, 23, 1.0),
+                              color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                             ),
                           ),
                           TextSpan(
@@ -165,7 +169,7 @@ class AvatarPage extends StatelessWidget {
     return AppBar(
       elevation: 0,
       toolbarHeight: 80,
-      backgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
+      backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
         padding: EdgeInsets.only(top: 20.h, right: 6.sp),
         child: Row(
@@ -179,6 +183,7 @@ class AvatarPage extends StatelessWidget {
                 icon: SvgPicture.asset(
                   SvgImg.back,
                   width: 15,
+                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                 ),
                 hoverColor: Colors.transparent,
                 splashColor: Colors.transparent,
@@ -205,8 +210,8 @@ class AvatarPage extends StatelessWidget {
                       color: indexPage == index
                           ? Colors.blue
                           : indexPage > index
-                              ? Colors.black
-                              : Colors.white,
+                              ? ClrStyle.black2CToWhite[sl<AuthConfig>().idx]
+                              : ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
                       border: indexPage + 1 > index
                           ? null
                           : Border.all(
@@ -262,8 +267,8 @@ class _AvatarMenuState extends State<AvatarMenu> {
         ),
         Container(
           height: 45.w,
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(216, 216, 216, 1.0),
+          decoration: BoxDecoration(
+            color: ClrStyle.greyD8ToBlack2C[sl<AuthConfig>().idx],
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 14.sp),
@@ -298,7 +303,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                               'assets/icons/men.svg',
                               height: 17,
                               width: 17,
-                              color: Colors.black,
+                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             ),
                           ),
                         ],
@@ -326,7 +331,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                               'assets/icons/women.svg',
                               height: 17,
                               width: 17,
-                              color: Colors.black,
+                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             ),
                           ),
                         ],
@@ -356,7 +361,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                               SvgImg.paw,
                               height: 17,
                               width: 17,
-                              color: Colors.black,
+                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             ),
                           ),
                         ],
@@ -384,7 +389,7 @@ class _AvatarMenuState extends State<AvatarMenu> {
                               SvgImg.rects,
                               height: 17,
                               width: 17,
-                              color: Colors.black,
+                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx]
                             ),
                           ),
                         ],

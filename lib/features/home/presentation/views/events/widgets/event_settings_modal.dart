@@ -1,14 +1,10 @@
-import 'dart:io';
-import 'dart:ui';
 import 'package:be_loved/constants/colors/color_styles.dart';
-import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/settings_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 
 void eventSettingsModal(
   BuildContext context,
@@ -17,6 +13,7 @@ void eventSettingsModal(
   Function() onEdit,
   Function() onDelete,
   Function() onAddToHome,
+  {bool isOld = false}
 ) =>
     showDialog(
       useSafeArea: false,
@@ -40,8 +37,12 @@ void eventSettingsModal(
                     onTap: onEdit,
                     text: 'Редактировать',
                     icon: SvgImg.edit,
+                    borderRadius: isOld && isImportant
+                      ? BorderRadius.circular(34.r)
+                      : null,
                   ),
-                  SizedBox(
+                  if(!isOld)
+                  ...[SizedBox(
                     height: 5.h,
                   ),
                   SettingsItem(
@@ -62,7 +63,7 @@ void eventSettingsModal(
                             bottomRight: Radius.circular(34.r),
                           ),
                     iconSize: Size(16.w, 25.h),
-                  ),
+                  )],
                   if (!isImportant) ...[
                     SizedBox(
                       height: 5.h,

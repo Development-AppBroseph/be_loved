@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,19 +22,19 @@ class MirrorImage extends StatelessWidget {
       width: 165.h,
       height: 165.h,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
         borderRadius: BorderRadius.all(
           Radius.circular(48.r),
         ),
         boxShadow:isBorder
-        ? const [
+        ? [
           BoxShadow(
-            color: Colors.white, 
+            color: ClrStyle.whiteTo17[sl<AuthConfig>().idx], 
             offset: Offset(0, 1)
           )
         ] : [],
         border: isBorder
-        ? Border.all(width: 5.h, color: Colors.white)
+        ? Border.all(width: 5.h, color: ClrStyle.whiteTo17[sl<AuthConfig>().idx])
         : null,
         image: path != null
             ? DecorationImage(

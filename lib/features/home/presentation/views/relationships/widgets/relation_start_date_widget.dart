@@ -5,6 +5,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/modals/c
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_just_item.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_selected_item.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/years_month_select_old_widget.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
@@ -33,7 +34,7 @@ class RelationStartDateWidget extends StatelessWidget {
       height: 243.h,
       child: CupertinoCard(
         radius: BorderRadius.circular(40.r),
-        color: Colors.white,
+        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
         elevation: 0,
         margin: EdgeInsets.zero,
         padding: EdgeInsets.only(top: 10.h, left: 25.w, right: 25.w),
@@ -51,13 +52,13 @@ class RelationStartDateWidget extends StatelessWidget {
             Row(
               children: [
                 Text(DateFormat('dd MMMM', 'RU').format(datetime), style: TextStyle(
-                  color: Color(0xFF171717),
+                  color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                   fontSize: 35.sp,
                   fontWeight: FontWeight.w700
                 ),),
                 SizedBox(width: 10.w,),
                 Text(DateFormat('yyyy', 'RU').format(datetime), style: TextStyle(
-                  color: Color(0xFF171717),
+                  color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                   fontSize: 35.sp,
                   fontWeight: FontWeight.w700
                 ),),
@@ -89,7 +90,7 @@ class RelationStartDateWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Статистика', style: TextStyle(
-                            color: Color(0xFF171717),
+                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w700
                           ),),
@@ -105,7 +106,7 @@ class RelationStartDateWidget extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 17.w),
-                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
+                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h, color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],),
                   )
                 ],
               ),
@@ -156,7 +157,7 @@ class RelationStartDateWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Редактировать дату', style: TextStyle(
-                            color: Color(0xFF171717),
+                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w700
                           ),),
@@ -172,7 +173,7 @@ class RelationStartDateWidget extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 17.w),
-                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h,),
+                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h, color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],),
                   )
                 ],
               ),

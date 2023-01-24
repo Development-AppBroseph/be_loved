@@ -1,8 +1,11 @@
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/profile/presentation/widget/avatar_and_name_user.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/decor_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/devides_settings.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +20,7 @@ class ParametrsUserBottomsheet extends StatelessWidget {
       radius: BorderRadius.vertical(
         top: Radius.circular(80.r),
       ),
+      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
       elevation: 0,
       margin: EdgeInsets.zero,
       child: SizedBox(

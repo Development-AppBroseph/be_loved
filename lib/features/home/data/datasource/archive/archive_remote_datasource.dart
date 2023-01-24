@@ -4,9 +4,13 @@ import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/home/data/models/archive/album_model.dart';
 import 'package:be_loved/features/home/data/models/archive/gallery_file_model.dart';
 import 'package:be_loved/features/home/data/models/archive/memory_model.dart';
+import 'package:be_loved/features/home/data/models/events/event_model.dart';
 import 'package:be_loved/features/home/domain/entities/archive/album_entity.dart';
+import 'package:be_loved/features/home/domain/entities/archive/album_full_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/memory_entity.dart';
+import 'package:be_loved/features/home/domain/entities/archive/moment_entity.dart';
+import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../../../core/error/exceptions.dart';
@@ -21,9 +25,14 @@ abstract class ArchiveRemoteDataSource {
   Future<MemoryEntity> getMemoryInfo();
 
   //Albums
-  Future<List<AlbumEntity>> getAlbums();
+  Future<AlbumFullEntity> getAlbums();
   Future<void> createAlbum(AlbumEntity albumEntity);
   Future<void> deleteAlbum(AlbumEntity albumEntity);
+
+  //Moments
+  Future<MomentEntity> getMoments(int page);
+  Future<void> addFavorites(int id, bool isFavor);
+  Future<List<EventEntity>> getOldEvents(int page);
 }
 
 class ArchiveRemoteDataSourceImpl
@@ -67,7 +76,7 @@ class ArchiveRemoteDataSourceImpl
 
 
   @override
-  Future<List<AlbumEntity>> getAlbums() async {
+  Future<AlbumFullEntity> getAlbums() async {
     headers["Content-Type"] = "application/json";
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.get(Endpoints.getAlbums.getPath(),
@@ -77,9 +86,16 @@ class ArchiveRemoteDataSourceImpl
             headers: headers));
     printRes(response);
     if (response.statusCode == 200) {
-      return (response.data as List)
+      final albums = (response.data['other'] as List)
             .map((json) => AlbumModel.fromJson(json))
             .toList();
+      final favorites = (response.data['favor'] as List)
+            .map((json) => GalleryFileModel.fromJson(json))
+            .toList();
+      return AlbumFullEntity(
+        otherAlbums: albums,
+        favorites: favorites
+      );
     } else if(response.statusCode == 401){
       throw ServerException(message: 'token_error');
     }else {
@@ -235,4 +251,88 @@ class ArchiveRemoteDataSourceImpl
 
 
 
+
+
+
+
+  @override
+  Future<MomentEntity> getMoments(int page) async {
+    headers["Content-Type"] = "application/json";
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.get(Endpoints.getMoments.getPath(),
+        queryParameters: {
+          'page': page
+        },
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 599,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 200) {
+      final others = (response.data['other'] as List)
+            .map((json) => GalleryFileModel.fromJson(json))
+            .toList();
+      final forYou = (response.data['for_you'] as List)
+            .map((json) => GalleryFileModel.fromJson(json))
+            .toList();
+      return MomentEntity(
+        otherFiles: others,
+        forYou: forYou,
+        groupedOtherFiles: []
+      );
+    } else if(response.statusCode == 401){
+      throw ServerException(message: 'token_error');
+    }else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
+
+
+  @override
+  Future<void> addFavorites(int id, bool isFavorite) async {
+    headers["Content-Type"] = "application/json";
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.patch(Endpoints.addFavorites.getPath(params: [id]),
+        data: FormData.fromMap({'if_favor': isFavorite}),
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 699,
+            headers: headers));
+    printRes(response);
+    if (!(response.statusCode! < 200 || response.statusCode! > 204)) {
+      return;
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+
+
+
+
+
+  @override
+  Future<List<EventEntity>> getOldEvents(int page) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.get(Endpoints.oldEvents.getPath(),
+        queryParameters: {'page': page},
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => status! < 599,
+            headers: headers));
+    printRes(response);
+    if (response.statusCode == 200) {
+      return (response.data as List)
+            .map((json) => EventModel.fromJson(json))
+            .toList();
+    } else if(response.statusCode == 401){
+      throw ServerException(message: 'token_error');
+    }else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
 }

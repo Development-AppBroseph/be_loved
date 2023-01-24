@@ -1,7 +1,11 @@
 import 'dart:io';
 
+import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -68,19 +72,19 @@ class SlidingBackgroundCard extends StatelessWidget {
             ).toList(),
           ),
         );
-        return decorBloc.images[decorBloc.selectedIndex].contains('assets/')
-          ? Image(
-            width: double.infinity,
-            height: height ?? 448.h,
-            image: AssetImage(decorBloc.images[decorBloc.selectedIndex]),
-            fit: BoxFit.cover,
-          )
-          : Image(
-            width: double.infinity,
-            height: 448.h,
-            image: FileImage(File(decorBloc.images[decorBloc.selectedIndex])),
-            fit: BoxFit.cover,
-          );
+        // return decorBloc.images[decorBloc.selectedIndex].contains('assets/')
+        //   ? Image(
+        //     width: double.infinity,
+        //     height: height ?? 448.h,
+        //     image: AssetImage(decorBloc.images[decorBloc.selectedIndex]),
+        //     fit: BoxFit.cover,
+        //   )
+        //   : Image(
+        //     width: double.infinity,
+        //     height: 448.h,
+        //     image: FileImage(File(decorBloc.images[decorBloc.selectedIndex])),
+        //     fit: BoxFit.cover,
+        //   );
       }
     );
   }

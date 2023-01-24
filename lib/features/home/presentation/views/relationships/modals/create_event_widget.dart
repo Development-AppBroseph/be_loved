@@ -17,6 +17,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/widgets/
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/calendar_selected_item.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/time_item_text_field_widget.dart';
 import 'package:be_loved/core/widgets/buttons/switch_btn.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
@@ -47,7 +48,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
       fontSize: 15.sp,
       fontWeight: FontWeight.w800);
   TextStyle style2 = TextStyle(
-      color: ColorStyles.blackColor,
+      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
       fontSize: 18.sp,
       fontWeight: FontWeight.w800);
 
@@ -242,6 +243,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
             top: Radius.circular(80.r),
           ),
           elevation: 0,
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
           margin: EdgeInsets.zero,
           child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
@@ -292,7 +294,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
-                                  color: ColorStyles.backgroundColorGrey),
+                                  color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
                               child: Column(
                                 children: [
@@ -475,7 +477,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
-                                  color: ColorStyles.backgroundColorGrey),
+                                  color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 20.w, vertical: 13.h),
                               child: Row(
@@ -502,7 +504,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
-                                  color: ColorStyles.backgroundColorGrey),
+                                  color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 20.w, vertical: 13.h),
                               child: Row(
@@ -530,7 +532,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               height: 57.h,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
-                                  color: ColorStyles.backgroundColorGrey),
+                                  color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -567,6 +569,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                           ),
                                           SvgPicture.asset(
                                             SvgImg.upDownIcon,
+                                            color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                                           ),
                                         ],
                                       ),
@@ -634,7 +637,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               topLeft: Radius.circular(28.h),
                               topRight: Radius.circular(28.h),
                             ),
-                            color: Colors.white,
+                            color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                           ),
                           padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
                           child: Column(

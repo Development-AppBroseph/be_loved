@@ -1,6 +1,8 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,32 +65,32 @@ class CustomButtonState extends State<CustomButton> {
           color: widget.validate == null
               ? state is TextFieldSuccess
                   ? widget.color
-                  : Colors.transparent
+                  : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
               : widget.code
                   ? widget.validate!
                       ? widget.color
-                      : Colors.transparent
+                      : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
                   : state is TextFieldSuccess || (widget.validate!)
                       ? widget.color
-                      : Colors.transparent,
+                      : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white),
           borderRadius: BorderRadius.circular(10),
           child: InkWell(
             borderRadius: BorderRadius.circular(10),
             highlightColor: widget.validate == null
                 ? state is TextFieldSuccess
                     ? const Color.fromRGBO(112, 200, 163, 1)
-                    : Colors.transparent
+                    : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
                 : widget.code
                     ? widget.validate! || state is TextFieldSuccess
                         ? widget.color != Colors.black
                             ? const Color.fromRGBO(112, 200, 163, 1)
-                            : Colors.transparent
-                        : Colors.transparent
+                            : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
+                        : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
                     : state is TextFieldSuccess || (widget.validate!)
                         ? widget.color != Colors.black
                             ? const Color.fromRGBO(112, 200, 163, 1)
-                            : Colors.transparent
-                        : Colors.transparent,
+                            : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
+                        : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white),
             child: AnimatedContainer(
               curve: Curves.easeInOutQuint,
               duration: const Duration(milliseconds: 200),

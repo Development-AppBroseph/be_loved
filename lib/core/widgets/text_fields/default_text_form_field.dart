@@ -1,5 +1,8 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,7 +51,7 @@ class DefaultTextFormField extends StatelessWidget {
           validator: validator,
           controller: controller,
           maxLines: maxLines,
-          style: TextStyles(context).black_18_w800,
+          style: TextStyles(context).black_18_w800.copyWith(color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx]),
           maxLength: maxLength,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(20.h),
@@ -59,8 +62,8 @@ class DefaultTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.r),
               borderSide: BorderSide.none,
             ),
-            fillColor: ColorStyles.backgroundColorGrey,
-            hintStyle: TextStyles(context).grey_18_w800
+            fillColor: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
+            hintStyle: TextStyles(context).grey_18_w800.copyWith(color: sl<AuthConfig>().idx == 1 ? ColorStyles.white : null)
           ),
         ),
         if(!hideCounter && maxLength != null && controller?.text.length == 0)

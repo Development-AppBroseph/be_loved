@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
@@ -11,6 +12,8 @@ import 'package:be_loved/features/home/presentation/views/events/widgets/tags_li
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_event_item.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_events.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +63,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
   Widget build(BuildContext context) {
     EventsBloc eventsBloc = context.read<EventsBloc>();
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
       body: Column(
         children: [
           Padding(
@@ -77,6 +80,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                     SvgPicture.asset(
                       SvgImg.back,
                       height: 26.32.h,
+                      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 20.w),
@@ -85,7 +89,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 20.sp,
-                          color: const Color(0xff2C2C2E),
+                          color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -156,6 +160,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                   SvgImg.edit,
                                   height: 19.h,
                                   width: 19.w,
+                                  color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                 ),
                               ),
                             ),
@@ -174,11 +179,11 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                 borderRadius: BorderRadius.circular(15.r),
                                 color: const Color(0xff20CB83),
                               ),
-                              child: const Center(
+                              child: Center(
                                 child: Icon(
                                   Icons.add,
                                   size: 35,
-                                  color: Colors.white,
+                                  color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                 ),
                               ),
                             ),
@@ -197,7 +202,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 20.sp,
-                          color: const Color(0xff2C2C2E),
+                          color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -230,7 +235,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                   SvgImg.bin,
                                   height: 22.h,
                                   width: 24.w,
-                                  color: Colors.white,
+                                  color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                 ),
                               ),
                             ),
@@ -276,7 +281,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
           SizedBox(
             height: 39.h,
           ),
-          TagsListBlock(),
+          TagsListBlock(isBlack2C: true,),
           BlocConsumer<EventsBloc, EventsState>(listener: (context, state) {
             if (state is EventErrorState) {
               Loader.hide();
@@ -291,7 +296,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
               selectedEvents.clear();
               setState(() {});
             }
-            if (state is GotSuccessEventsState || state is EventDeletedState) {
+            if (state is GotSuccessEventsState) {
               setState(() {});
             }
           }, builder: (context, state) {

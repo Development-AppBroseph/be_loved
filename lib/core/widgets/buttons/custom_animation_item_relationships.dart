@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/text_size.dart';
@@ -10,6 +11,8 @@ import 'package:be_loved/core/widgets/texts/today_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -128,8 +131,11 @@ class _CustomAnimationItemRelationshipsState
                   // clipBehavior: Clip.hardEdge,
                   child: CupertinoCard(
                     radius: BorderRadius.circular(40.r),
-                    color: Colors.white,
+                    color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                     elevation: 0,
+                    decoration: BoxDecoration(
+                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
+                    ),
                     margin: EdgeInsets.zero,
                     padding: EdgeInsets.zero,
                     child: SingleChildScrollView(
@@ -199,8 +205,7 @@ class _CustomAnimationItemRelationshipsState
                                         Text(
                                           widget.events.title,
                                           style: TextStyle(
-                                              color: const Color.fromRGBO(
-                                                  23, 23, 23, 1),
+                                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                               fontSize: homeWidgetTextSize(widget.events.title).sp,
                                               fontWeight: FontWeight.w800,
                                               height: 1),

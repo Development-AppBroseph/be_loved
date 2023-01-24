@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
@@ -13,6 +14,8 @@ import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_tag_icon.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/show_create_tag_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,7 +129,7 @@ void tagSelectModal(BuildContext context, Offset offset, EventEntity event,
                                       if (isLast) {
                                         showModalCreateTag(
                                             context, true, null, event.id);
-                                      } else {
+                                      } else if(!tagOfEvent[index].important) {
                                         await showModalCreateTag(
                                             context, false, tagOfEvent[index]);
                                         Navigator.pop(context);
@@ -247,7 +250,7 @@ class TagItemWidget extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 '#${tagEntity.title}',
-                style: TextStyles(context).white_15_w800,
+                style: TextStyles(context).white_15_w800.copyWith(color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]),
                 overflow: TextOverflow.ellipsis,
               ))),
     );

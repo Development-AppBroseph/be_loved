@@ -3,6 +3,7 @@ import 'package:be_loved/features/home/presentation/views/events/view/event_deta
 import 'package:be_loved/features/home/presentation/views/relationships/account/view/account_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_and_relation_settings_page.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/relation_and_stats_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,7 +38,7 @@ class _MainPageState extends State<MainPage> {
         setState(() {});
       },
       children: [
-        RelationAndRelationSettingsPage(nextPage: nextPage),
+        RelationAndStatsPage(nextPage: nextPage),
         EventDetailView(prevPage: prevPage),
       ],
     );

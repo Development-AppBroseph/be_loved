@@ -18,6 +18,7 @@ class EventPhotoCard extends StatelessWidget {
   final String? title;
   final double? height;
   final bool? isFavorite;
+  final bool isFavoriteVal;
   final bool isVideo;
   final Function()? onFavoriteTap;
 
@@ -31,6 +32,7 @@ class EventPhotoCard extends StatelessWidget {
     this.isFavorite, 
     this.isVideo = false,
     this.onFavoriteTap,
+    this.isFavoriteVal = false,
     this.title
   });
 
@@ -102,10 +104,9 @@ class EventPhotoCard extends StatelessWidget {
                       height: 27,
                       alignment: Alignment.center,
                       child: SvgPicture.asset(
-                        isFavorite! ? SvgImg.favoriteFilled : SvgImg.favorite,
+                        isFavoriteVal ? SvgImg.favoriteFilled : SvgImg.favorite,
                         height: 22.5.h,
                         color: Colors.white,
-                        key: additionKey,
                       ),
                     ),
                   ),

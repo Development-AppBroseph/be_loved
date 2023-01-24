@@ -1,5 +1,6 @@
 import 'package:be_loved/core/services/network/network_info.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/features/home/domain/entities/statics/statics_entity.dart';
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -35,7 +36,28 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<Failure, String>> editRelation(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.editRelation(params.relationId, params.nameRelation);
+        final items = await remoteDataSource.editRelation(params.relationId, params.nameRelation, params.theme);
+        return Right(items);
+      } catch (e) {
+        print(e);
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+
+
+
+
+
+
+  @override
+  Future<Either<Failure, StaticsEntity>> getStats() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.getStats();
         return Right(items);
       } catch (e) {
         print(e);

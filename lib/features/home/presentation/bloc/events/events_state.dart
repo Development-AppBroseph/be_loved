@@ -22,3 +22,5 @@ class EventAddedState extends EventsState{
   EventAddedState({required this.eventEntity});
 }
 class EventDeletedState extends EventsState{}
+class OldEventLoadingState extends EventsState{}
+class GotSuccessOldEventsState extends EventsState{}

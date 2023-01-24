@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/theme/data/entities/clr_style.dart';
+import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,7 +88,7 @@ class _CustomAddAnimationButtonState extends State<CustomAddAnimationButton>
                         elevation: 0,
                         radius: BorderRadius.circular(37.r),
                         margin: EdgeInsets.all(1.w),
-                        color: ColorStyles.backgroundColorGrey,
+                        color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
                       )),
                       Padding(
                         padding: EdgeInsets.only(left: 9.w, right: 9.w),

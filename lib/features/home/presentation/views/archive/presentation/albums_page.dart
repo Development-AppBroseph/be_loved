@@ -7,7 +7,10 @@ import 'package:be_loved/features/home/domain/entities/archive/album_entity.dart
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
+import 'package:be_loved/features/home/presentation/views/archive/presentation/video_view_v2.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/albums/album_settings_modal.dart';
+import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/event_photo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,11 +28,12 @@ class _AlbumsPageState extends State<AlbumsPage> {
   
   ScrollController scrollController = ScrollController();
 
-  showAlbumSettingsModal(GlobalKey key, AlbumEntity albumEntity, GalleryFileEntity galleryFileEntity) async {
+  showAlbumSettingsModal(GlobalKey key, AlbumEntity albumEntity, GalleryFileEntity galleryFileEntity, bool isFavor) async {
     Future.delayed(Duration(milliseconds: 300), (){
       albumItemSettingsModal(
         context,
         getWidgetPosition(key),
+        isFavor,
         () {
           Navigator.pop(context);
           showLoaderWrapper(context);
@@ -45,7 +49,7 @@ class _AlbumsPageState extends State<AlbumsPage> {
   }
 
 
-  void scrollToBottom(ScrollController controller, int index, AlbumEntity album) {
+  void scrollToCenter(ScrollController controller, int index, AlbumEntity album) {
     controller.animateTo(index == 0
     ? 0
     : (album.files.length-1) == index
@@ -54,6 +58,16 @@ class _AlbumsPageState extends State<AlbumsPage> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOutQuint
     );
+  }
+  
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(context.read<AlbumsBloc>().isResetAll){
+      context.read<AlbumsBloc>().add(GetAlbumsEvent());
+    }
   }
 
 
@@ -67,6 +81,7 @@ class _AlbumsPageState extends State<AlbumsPage> {
         if(state is GalleryFilesDeletedState){
           Loader.hide();
           bloc.add(GetAlbumsEvent());
+          context.read<MomentsBloc>().add(GetMomentsEvent());
           context.read<GalleryBloc>().add(GetGalleryFilesEvent(isReset: true));
         }
       },
@@ -95,8 +110,16 @@ class _AlbumsPageState extends State<AlbumsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                if(bloc.album.favorites.isNotEmpty)
+                _buildAlbum(context, AlbumEntity(
+                  id: 0, 
+                  relationId: 0, 
+                  name: 'Избранное', 
+                  files: bloc.album.favorites
+                )),
                 
-                ...bloc.albums.map((e) 
+                ...bloc.album.otherAlbums.map((e) 
                   => _buildAlbum(context, e)
                 ).toList(),
                 
@@ -121,7 +144,7 @@ class _AlbumsPageState extends State<AlbumsPage> {
 
 
 
-  Widget _buildAlbum(BuildContext context, AlbumEntity albumEntity){
+  Widget _buildAlbum(BuildContext context, AlbumEntity albumEntity, {bool isFavor = false}){
     AlbumsBloc bloc = context.read<AlbumsBloc>();
     ScrollController scrollController = ScrollController();
     print('ALBUM "${albumEntity.name}" files length is: ${albumEntity.files.length}');
@@ -149,14 +172,21 @@ class _AlbumsPageState extends State<AlbumsPage> {
                   onAdditionTap: (){
                   }, 
                   onAdditionWithKeyTap: (g){
-                    scrollToBottom(scrollController, index, albumEntity);
-                    showAlbumSettingsModal(g!, albumEntity, albumEntity.files[index]);
+                    scrollToCenter(scrollController, index, albumEntity);
+                    showAlbumSettingsModal(g!, albumEntity, albumEntity.files[index], albumEntity.id == 0);
                   },
                   onTap: (){
-
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => albumEntity.files[index].isVideo
+                          ? VideoView(url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', duration: const Duration(seconds: 0)) 
+                          : PhotoFullScreenView(urlToImage: albumEntity.files[index].urlToFile),
+                        transitionDuration: Duration(milliseconds: 400),
+                        transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: a, child: c),
+                    ));
                   }, 
                   url: albumEntity.files[index].isVideo ? (albumEntity.files[index].urlToPreviewVideoImage ?? '') : albumEntity.files[index].urlToFile,
-                  title: albumEntity.files[index].place,
+                  title: albumEntity.files[index].place ?? '',
                 ),
               );
             },
