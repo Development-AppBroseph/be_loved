@@ -102,28 +102,31 @@ class _ArchivePageState extends State<ArchivePage> {
       double position = scrollController.position.pixels;
       currentScrollPosition = position;
       //Pagination gallery
-      if(position > (scrollController.position.maxScrollExtent-100) && currentPageIndex == 1){
+      if (position > (scrollController.position.maxScrollExtent - 100) &&
+          currentPageIndex == 1) {
         GalleryBloc galleryBloc = context.read<GalleryBloc>();
-        if(!galleryBloc.isEnd && !galleryBloc.isLoading){
+        if (!galleryBloc.isEnd && !galleryBloc.isLoading) {
           galleryBloc.add(GetGalleryFilesEvent(isReset: false));
         }
       }
 
       //Pagination moments
-      if(position > (scrollController.position.maxScrollExtent-100) && currentPageIndex == 0 && momentsBloc.state is! MomentInitialState){
+      if (position > (scrollController.position.maxScrollExtent - 100) &&
+          currentPageIndex == 0 &&
+          momentsBloc.state is! MomentInitialState) {
         MomentsBloc momentsBloc = context.read<MomentsBloc>();
-        if(!momentsBloc.isEnd && !momentsBloc.isLoading){
+        if (!momentsBloc.isEnd && !momentsBloc.isLoading) {
           momentsBloc.add(GetMomentsEvent(isReset: false));
         }
       }
 
       //Pagination old events
-      if(position > (scrollController.position.maxScrollExtent-100) && currentPageIndex == 3){
-        if(!eventsBloc.isEnd && !eventsBloc.isLoading){
+      if (position > (scrollController.position.maxScrollExtent - 100) &&
+          currentPageIndex == 3) {
+        if (!eventsBloc.isEnd && !eventsBloc.isLoading) {
           eventsBloc.add(GetOldEventsEvent(isReset: false));
         }
       }
-
 
       if (currentPageIndex != 1) {
         if (!hideTopBar) {
@@ -202,9 +205,11 @@ class _ArchivePageState extends State<ArchivePage> {
     });
   }
 
-  onDeleteFiles(){
+  onDeleteFiles() {
     showLoaderWrapper(context);
-    context.read<GalleryBloc>().add(GalleryFileDeleteEvent(ids: galleryDeleteIds));
+    context
+        .read<GalleryBloc>()
+        .add(GalleryFileDeleteEvent(ids: galleryDeleteIds));
     setState(() {
       galleryDeleteIds = [];
       showTop = false;
@@ -214,7 +219,7 @@ class _ArchivePageState extends State<ArchivePage> {
 
   void nextPage(int id) {
     context.read<EventsBloc>().eventDetailSelectedId = id;
-    
+
     pageController.nextPage(
         duration: const Duration(milliseconds: 600),
         curve: Curves.easeInOutQuint);
@@ -225,17 +230,19 @@ class _ArchivePageState extends State<ArchivePage> {
       curve: Curves.easeInOutQuint);
   ScrollPhysics physics = const NeverScrollableScrollPhysics();
 
-  changePage(int newPage){
+  changePage(int newPage) {
     setState(() {
       currentPageIndex = newPage;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     GalleryBloc galleryBloc = context.read<GalleryBloc>();
     return BlocListener<GalleryBloc, GalleryState>(
       listener: (context, state) {
-        if(state is GalleryFilesDeletedState || state is GalleryFilesAddedState){
+        if (state is GalleryFilesDeletedState ||
+            state is GalleryFilesAddedState) {
           currentScrollPosition = 0;
         }
       },
@@ -259,14 +266,14 @@ class _ArchivePageState extends State<ArchivePage> {
                     ? MomentsPage()
                     : currentPageIndex == 1
                         ? GalleryPage(
-                          onPageChange: changePage,
+                            onPageChange: changePage,
                             position: currentScrollPosition,
                             hideGalleryFileID: hideGalleryFileID,
                             deletingIds: galleryDeleteIds,
-                            onSelectForDeleting: (id){
-                              if(galleryDeleteIds.contains(id)){
+                            onSelectForDeleting: (id) {
+                              if (galleryDeleteIds.contains(id)) {
                                 galleryDeleteIds.remove(id);
-                              }else{
+                              } else {
                                 galleryDeleteIds.add(id);
                               }
                               setState(() {});
@@ -284,28 +291,30 @@ class _ArchivePageState extends State<ArchivePage> {
               ),
               if (!hideTopBar && currentPageIndex == 1)
                 Positioned(
-                  top: MediaQuery.of(context).padding.top + 15.h,
-                  left: 30.w,
-                  right: 22.w,
-                  child: ArchiveFixedTopInfo(
-                    showTop: showTop,
-                    enitityPos: enitityPos,
-                    dateTime: dateTime,
-                    isDeleting: galleryDeleteIds.isNotEmpty,
-                    onTap: (){
-                      if(enitityPos != null && galleryDeleteIds.isEmpty){
-                        galleryDeleteIds.add(enitityPos!.mainPhoto.id);
-                      }else{
-                        galleryDeleteIds = [];
-                      }
-                      setState(() {});
-                    },
-                    onDeleteTap: onDeleteFiles,
-                  )
-                ),
+                    top: MediaQuery.of(context).padding.top + 15.h,
+                    left: 30.w,
+                    right: 22.w,
+                    child: ArchiveFixedTopInfo(
+                      showTop: showTop,
+                      enitityPos: enitityPos,
+                      dateTime: dateTime,
+                      isDeleting: galleryDeleteIds.isNotEmpty,
+                      onTap: () {
+                        if (enitityPos != null && galleryDeleteIds.isEmpty) {
+                          galleryDeleteIds.add(enitityPos!.mainPhoto.id);
+                        } else {
+                          galleryDeleteIds = [];
+                        }
+                        setState(() {});
+                      },
+                      onDeleteTap: onDeleteFiles,
+                    )),
             ],
           ),
-          EventDetailView(prevPage: prevPage, isOld: true,),
+          EventDetailView(
+            prevPage: prevPage,
+            isOld: true,
+          ),
         ],
       ),
     );

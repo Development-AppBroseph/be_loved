@@ -20,18 +20,24 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
     on<WebSocketStartRelationshipsMessage>(_startRelationships);
   }
 
-  void _getInvite(WebSocketGetInviteMessage event, Emitter<WebSocketState> emit) =>
+  void _getInvite(
+          WebSocketGetInviteMessage event, Emitter<WebSocketState> emit) =>
       emit(WebSocketInviteGetState());
-  void _sendInvite(WebSocketSendInviteMessage event, Emitter<WebSocketState> emit) =>
+  void _sendInvite(
+          WebSocketSendInviteMessage event, Emitter<WebSocketState> emit) =>
       emit(WebSocketInviteSendState());
-  void _closeInvite(WebSocketCloseInviteMessage event, Emitter<WebSocketState> emit) =>
+  void _closeInvite(
+          WebSocketCloseInviteMessage event, Emitter<WebSocketState> emit) =>
       emit(WebSocketInviteCloseState());
-  void _acceptInvite(WebSocketAcceptInviteMessage event, Emitter<WebSocketState> emit) async {
+  void _acceptInvite(
+      WebSocketAcceptInviteMessage event, Emitter<WebSocketState> emit) async {
     sl<AuthConfig>().user = await MySharedPrefs().user;
     sl<AuthConfig>().token = await MySecureStorage().getToken();
     emit(WebSocketInviteAcceptState());
   }
-  void _startRelationships(WebSocketStartRelationshipsMessage event, Emitter<WebSocketState> emit) =>
+
+  void _startRelationships(WebSocketStartRelationshipsMessage event,
+          Emitter<WebSocketState> emit) =>
       emit(WebSocketStartRelatioinshipsState());
 
   int trialsCount = 0;
@@ -46,37 +52,43 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
 
     if (channel != null) {
       print('websocket CONNECT');
-      channel!.listen(
-        (event) async {
+      channel!.listen((event) async {
+        try {
           print('websocket message ${jsonDecode(event)}');
-          print('object sokect statetyeteyte ${jsonDecode(event)['message'] == 'Дата отношений изменена!'}');
+          print('object sokect statetyeteyte ${jsonDecode(event)['message']}');
           // Приглашение в авторизации
           if (jsonDecode(event)['type'] == 'notification') {
-            if(jsonDecode(event)['message'] == 'Вам пришло приглашение') {
+            if (jsonDecode(event)['message'] == 'Вам пришло приглашение') {
               add(WebSocketGetInviteMessage());
-            } else if(jsonDecode(event)['message'] == 'Приглашение отправлено') {
+            } else if (jsonDecode(event)['message'] ==
+                'Приглашение отправлено') {
               add(WebSocketSendInviteMessage());
-            } else if(jsonDecode(event)['message'] == 'Отношения разрушены (может даже не начавшись') {
+            } else if (jsonDecode(event)['message'] ==
+                'Отношения разрушены (может даже не начавшись') {
               add(WebSocketCloseInviteMessage());
-            } else if(jsonDecode(event)['message'] == 'Поздравляю с началом отношений!') {
+            } else if (jsonDecode(event)['message'] ==
+                'Поздравляю с началом отношений!') {
               add(WebSocketAcceptInviteMessage());
-            } else if(jsonDecode(event)['message'] == 'Дата отношений изменена!') {
+            } else if (jsonDecode(event)['message'] ==
+                'Дата отношений изменена!') {
               add(WebSocketStartRelationshipsMessage());
             }
           }
-        },
-        onDone: () {
-          _initWebSocket(event, emit);
-        },
-        onError: (error){
-          print('SOCKET ERROR: $error');
-          if(trialsCount < 4){
-            channel!.close();
-            _initWebSocket(event, emit);
-            trialsCount++;
-          }
+        } catch (e) {
+          print(e);
         }
-      );
+      }, onDone: () {
+        print('hui sobaki');
+        _initWebSocket(event, emit);
+      }, onError: (error) {
+        print('hui sobaki 2');
+        print('SOCKET ERROR: $error');
+        if (trialsCount < 4) {
+          channel!.close();
+          _initWebSocket(event, emit);
+          trialsCount++;
+        }
+      });
     }
   }
 

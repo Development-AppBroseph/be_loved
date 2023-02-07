@@ -72,6 +72,7 @@ abstract class SvgImg {
   static const String gallery = "assets/icons/gallery.svg";
   static const String smartphone = "assets/icons/smartphone.svg";
   static const String play = 'assets/icons/play.svg';
+  static const String policy = 'assets/icons/policy.svg';
   static const List<String> colors = [
     "assets/icons/blue.svg",
     "assets/icons/red.svg",

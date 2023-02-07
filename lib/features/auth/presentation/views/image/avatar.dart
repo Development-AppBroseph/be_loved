@@ -49,7 +49,9 @@ class AvatarPage extends StatelessWidget {
       var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         appBar: appBar(context),
-        backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+        backgroundColor: sl<AuthConfig>().idx == 1
+            ? ColorStyles.blackColor
+            : const Color.fromRGBO(240, 240, 240, 1.0),
         body: SafeArea(
             bottom: true,
             child: Padding(
@@ -69,7 +71,8 @@ class AvatarPage extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 35.sp,
                               fontWeight: FontWeight.w800,
-                              color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                              color:
+                                  ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                             ),
                           ),
                           TextSpan(
@@ -135,7 +138,7 @@ class AvatarPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: AvatarMenu(
-                        onSelectAvatar:(file) {
+                        onSelectAvatar: (file) {
                           bloc.add(PickImage(file: file));
                         },
                       ),
@@ -175,7 +178,9 @@ class AvatarPage extends StatelessWidget {
     return AppBar(
       elevation: 0,
       toolbarHeight: 80,
-      backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+      backgroundColor: sl<AuthConfig>().idx == 1
+          ? ColorStyles.blackColor
+          : const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
         padding: EdgeInsets.only(top: 20.h, right: 6.sp),
         child: Row(
@@ -251,10 +256,11 @@ class _AvatarMenuState extends State<AvatarMenu> {
   final pageController = PageController(viewportFraction: 1.0, keepPage: false);
 
   SelectImage selectImage = SelectImage();
+  String _selectedImageAsset = '';
 
-
-  onTapAvatar(String asset) async{
+  onTapAvatar(String asset) async {
     widget.onSelectAvatar(await getImageFileFromAssets(asset));
+    _selectedImageAsset = asset;
   }
 
   @override
@@ -264,15 +270,25 @@ class _AvatarMenuState extends State<AvatarMenu> {
         SizedBox(
           height: 262.w,
           child: PageView(
-            controller: pageController,
-            onPageChanged: (value) {
-              streamController.add(value);
-              setState(() {});
-            },
-            children: MainConfigApp.avatars.map((e) 
-              => PageTest(avatarsGridModel: e, onAvatarTap: onTapAvatar,)
-            ).toList()
-          ),
+              controller: pageController,
+              onPageChanged: (value) {
+                streamController.add(value);
+                setState(() {});
+              },
+              children: MainConfigApp.avatars
+                  .map((e) => PageTest(
+                        avatarsGridModel: e,
+                        onAvatarTap: onTapAvatar,
+                        page: MainConfigApp.avatars.indexOf(e),
+                        selectedImage: SelectedImage(
+                          image: MainConfigApp
+                              .avatars[MainConfigApp.avatars.indexOf(e)]
+                              .avatars
+                              .first,
+                          page: MainConfigApp.avatars.indexOf(e),
+                        ),
+                      ))
+                  .toList()),
         ),
         Container(
           height: 45.w,
@@ -312,7 +328,8 @@ class _AvatarMenuState extends State<AvatarMenu> {
                               'assets/icons/men.svg',
                               height: 17,
                               width: 17,
-                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                              color:
+                                  ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             ),
                           ),
                         ],
@@ -340,7 +357,8 @@ class _AvatarMenuState extends State<AvatarMenu> {
                               'assets/icons/women.svg',
                               height: 17,
                               width: 17,
-                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                              color:
+                                  ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             ),
                           ),
                         ],
@@ -370,7 +388,8 @@ class _AvatarMenuState extends State<AvatarMenu> {
                               SvgImg.paw,
                               height: 17,
                               width: 17,
-                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                              color:
+                                  ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             ),
                           ),
                         ],
@@ -394,12 +413,11 @@ class _AvatarMenuState extends State<AvatarMenu> {
                             curve: Curves.easeInOutQuint,
                             duration: const Duration(milliseconds: 300),
                             opacity: page.data == 3 ? 1 : 0,
-                            child: SvgPicture.asset(
-                              SvgImg.rects,
-                              height: 17,
-                              width: 17,
-                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx]
-                            ),
+                            child: SvgPicture.asset(SvgImg.rects,
+                                height: 17,
+                                width: 17,
+                                color: ClrStyle
+                                    .black17ToWhite[sl<AuthConfig>().idx]),
                           ),
                         ],
                       ),
@@ -415,13 +433,24 @@ class _AvatarMenuState extends State<AvatarMenu> {
   }
 }
 
+class SelectedImage {
+  int page;
+  String image;
+
+  SelectedImage({required this.image, required this.page});
+}
+
 class PageTest extends StatefulWidget {
   final AvatarsGridModel avatarsGridModel;
   final Function(String asset) onAvatarTap;
+  SelectedImage selectedImage;
+  final int page;
   PageTest({
     Key? key,
     required this.avatarsGridModel,
     required this.onAvatarTap,
+    required this.selectedImage,
+    required this.page,
   }) : super(key: key);
 
   @override
@@ -429,7 +458,7 @@ class PageTest extends StatefulWidget {
 }
 
 class _PageTestState extends State<PageTest> {
-
+  String? selectedImage;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -439,8 +468,13 @@ class _PageTestState extends State<PageTest> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: widget.avatarsGridModel.avatars.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4, mainAxisSpacing: 15.w, crossAxisSpacing: 20.w),
+            crossAxisCount: 4,
+            mainAxisSpacing: 15.w,
+            crossAxisSpacing: 20.w,
+          ),
           itemBuilder: ((context, index) {
+            print(widget.selectedImage.page == widget.page &&
+                widget.selectedImage.image == index);
             return Stack(
               children: [
                 Align(
@@ -450,14 +484,15 @@ class _PageTestState extends State<PageTest> {
                     width: 67.w,
                     child: GestureDetector(
                       onTap: () {
-                        widget.onAvatarTap('assets/avatars/${widget.avatarsGridModel.dirName}/${widget.avatarsGridModel.avatars[index]}');
-                        // widget.selectImage.image = index;
-                        // widget.selectImage.page = widget.page;
-                        // // _images.forEach((element) {
-                        // //   element.selected = false;
-                        // // });
-                        // // _images[index].selected = true;
-                        // setState(() {});
+                        widget.onAvatarTap(
+                            'assets/avatars/${widget.avatarsGridModel.dirName}/${widget.avatarsGridModel.avatars[index]}');
+                        selectedImage = widget.avatarsGridModel.avatars[index];
+                        widget.selectedImage.page = widget.page;
+                        // _images.forEach((element) {
+                        //   element.selected = false;
+                        // });
+                        // _images[index].selected = true;
+                        setState(() {});
                       },
                       child: CupertinoCard(
                         elevation: 0,
@@ -466,22 +501,21 @@ class _PageTestState extends State<PageTest> {
                         color: Colors.white,
                         radius: BorderRadius.all(Radius.circular(40.r)),
                         child: Image.asset(
-                          'assets/avatars/${widget.avatarsGridModel.dirName}/${widget.avatarsGridModel.avatars[index]}'
-                        )
+                            'assets/avatars/${widget.avatarsGridModel.dirName}/${widget.avatarsGridModel.avatars[index]}'),
                       ),
                     ),
                   ),
                 ),
-                // if (widget.selectImage.page == widget.page &&
-                //     widget.selectImage.image == index)
-                //   Align(
-                //     alignment: Alignment.topRight,
-                //     child: SvgPicture.asset(
-                //       SvgImg.check,
-                //       width: 20.w,
-                //       height: 20.h,
-                //     ),
-                //   )
+                if (selectedImage != null)
+                  if (selectedImage == widget.avatarsGridModel.avatars[index])
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: SvgPicture.asset(
+                        SvgImg.check,
+                        width: 20.w,
+                        height: 20.h,
+                      ),
+                    )
               ],
             );
             // return Container(

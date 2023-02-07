@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> pages = [
     const MainPage(),
-    const MainEventPage(),//(nextPage: (int id) {  },),//MainEventPage
+    const MainEventPage(), //(nextPage: (int id) {  },),//MainEventPage
     PurposesPage(),
     ArchivePage(),
   ];
@@ -53,7 +53,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     context.read<EventsBloc>().add(GetEventsEvent());
+
     context.read<DecorBloc>().add(GetBackgroundEvent());
+
     context.read<AuthBloc>().add(GetUser());
     context.read<TagsBloc>().add(GetTagsEvent());
     context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
@@ -69,65 +71,66 @@ class _HomePageState extends State<HomePage> {
     pageController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     MainScreenBloc mainScreenBloc = context.read<MainScreenBloc>();
     return BlocListener<EventsBloc, EventsState>(
-      listener:(context, state) {
-        if(state is GotSuccessEventsState){
+      listener: (context, state) {
+        if (state is GotSuccessEventsState) {
           context.read<MainWidgetsBloc>().add(GetMainWidgetsEvent());
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           // var loader = showLoaderWrapper(context);
-          if (state is GetUserSuccess || state is GetUserError || state is RefreshUser) {
-            if(state is GetUserSuccess){
+          if (state is GetUserSuccess ||
+              state is GetUserError ||
+              state is RefreshUser) {
+            if (state is GetUserSuccess) {
               // if(context.read<ThemeBloc>().state is ThemeInitialState){
               //   context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
               // }
             }
             // Loader.hide();
             return BlocConsumer<MainScreenBloc, MainScreenState>(
-              listener: (context, state) {
-                if(state is MainScreenChangedState){
-                  if(state.currentView == 2 && context.read<PurposeBloc>().state is PurposeInitialState){
-                    context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
-                  }
-                  pageController.jumpToPage(state.currentView);
+                listener: (context, state) {
+              if (state is MainScreenChangedState) {
+                if (state.currentView == 2 &&
+                    context.read<PurposeBloc>().state is PurposeInitialState) {
+                  context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
                 }
-                if(state is MainScreenSetStateState){
-                  setState(() {});
-                }
-              },
-              builder: (context, state) {
-                return Scaffold(
-                  bottomNavigationBar: BottomNavigation(),
-                  // mainScreenBloc.currentView == 1 ? Colors.white : null
-                  backgroundColor: mainScreenBloc.currentView == 1 
-                    ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx] 
-                    : mainScreenBloc.currentView == 3 
-                    ? ClrStyle.whiteTo17[sl<AuthConfig>().idx] 
-                    : sl<AuthConfig>().idx == 1 
-                    ? ColorStyles.blackColor 
-                    : null,
-                  body: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      if(mainScreenBloc.currentWidget != null)
+                pageController.jumpToPage(state.currentView);
+              }
+              if (state is MainScreenSetStateState) {
+                setState(() {});
+              }
+            }, builder: (context, state) {
+              return Scaffold(
+                bottomNavigationBar: BottomNavigation(),
+                // mainScreenBloc.currentView == 1 ? Colors.white : null
+                backgroundColor: mainScreenBloc.currentView == 1
+                    ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx]
+                    : mainScreenBloc.currentView == 3
+                        ? ClrStyle.whiteTo17[sl<AuthConfig>().idx]
+                        : sl<AuthConfig>().idx == 1
+                            ? ColorStyles.blackColor
+                            : null,
+                body: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    if (mainScreenBloc.currentWidget != null)
                       mainScreenBloc.currentWidget!
-                      else
+                    else
                       PageView(
                         physics: const NeverScrollableScrollPhysics(),
                         controller: pageController,
                         children: pages,
                       ),
-                    ],
-                  ),
-                );
-              }
-            );
+                  ],
+                ),
+              );
+            });
           } else {
             return Container(
               color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],

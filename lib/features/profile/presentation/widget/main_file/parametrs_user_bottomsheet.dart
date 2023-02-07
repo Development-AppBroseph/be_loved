@@ -3,6 +3,7 @@ import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
 import 'package:be_loved/features/profile/presentation/widget/avatar_and_name_user.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/decor_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/devides_settings.dart';
@@ -17,7 +18,9 @@ import 'package:flutter_svg/svg.dart';
 
 class ParametrsUserBottomsheet extends StatelessWidget {
   final Function() onRelationSettingsTap;
-  const ParametrsUserBottomsheet({Key? key, required this.onRelationSettingsTap}) : super(key: key);
+  const ParametrsUserBottomsheet(
+      {Key? key, required this.onRelationSettingsTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,18 +69,27 @@ class ParametrsUserBottomsheet extends StatelessWidget {
                 icon: SvgImg.documents,
                 onPressed: () {
                   Navigator.pop(context);
-                  showModalDecor(context, (){});
+                  showModalDecor(context, () {});
                 },
               ),
               // SizedBox(
               //   height: 87.h - 24.h,
               // ),
-              DevideSettings(
-                title: "Подписка BeLoved+",
-                subtitle: "Подробнее",
-                haveToggleSwitch: false,
-                icon: SvgImg.person,
-              ),
+              // DevideSettings(
+              //   title: "Подписка BeLoved+",
+              //   subtitle: "Подробнее",
+              //   haveToggleSwitch: false,
+              //   icon: SvgImg.person,
+              //   onPressed: () {
+              //     Navigator.pop(context);
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => SubscriptionView(),
+              //       ),
+              //     );
+              //   },
+              // ),
               DevideSettings(
                 title: "Уведомления",
                 subtitle: "от приложения",
@@ -89,17 +101,29 @@ class ParametrsUserBottomsheet extends StatelessWidget {
               ),
 
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 25.w, ),
+                margin: EdgeInsets.symmetric(
+                  horizontal: 25.w,
+                ),
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pop(context);
                     context.read<AuthBloc>().add(LogOut(context));
                   },
                   child: Row(
                     children: [
-                      SvgPicture.asset(SvgImg.logout, height: 45.h,),
-                      SizedBox(width: 21.w,),
-                      Text('Выйти из аккаунта', style: TextStyles(context).black_20_w800.copyWith(color: ColorStyles.redColor),)
+                      SvgPicture.asset(
+                        SvgImg.logout,
+                        height: 45.h,
+                      ),
+                      SizedBox(
+                        width: 21.w,
+                      ),
+                      Text(
+                        'Выйти из аккаунта',
+                        style: TextStyles(context)
+                            .black_20_w800
+                            .copyWith(color: ColorStyles.redColor),
+                      )
                     ],
                   ),
                 ),

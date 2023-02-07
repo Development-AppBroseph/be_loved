@@ -92,7 +92,7 @@ class _CodePageState extends State<CodePage> {
             ),
           ).then((value) {
             BlocProvider.of<WebSocketBloc>(context).add(WebSocketCloseEvent());
-            if (textEditingControllerUp.text.length == 5) {
+            if (textEditingControllerUp.text.length == 4) {
               BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
             }
           });
@@ -110,13 +110,13 @@ class _CodePageState extends State<CodePage> {
               ).then((value) {
                 BlocProvider.of<WebSocketBloc>(context)
                     .add(WebSocketCloseEvent());
-                if (textEditingControllerUp.text.length == 5) {
+                if (textEditingControllerUp.text.length == 4) {
                   BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
                 }
               });
             } else {
-              BlocProvider.of<WebSocketBloc>(context)
-                  .add(WebSocketEvent(current.token));
+              // BlocProvider.of<WebSocketBloc>(context)
+              //     .add(WebSocketEvent(current.token));
               MySharedPrefs().setUser(current.token,
                   BlocProvider.of<AuthBloc>(context, listen: false).user!);
               Navigator.pushAndRemoveUntil(
@@ -145,7 +145,9 @@ class _CodePageState extends State<CodePage> {
         appBar: AppBar(
           elevation: 0,
           toolbarHeight: 80,
-          backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+          backgroundColor: sl<AuthConfig>().idx == 1
+              ? ColorStyles.blackColor
+              : const Color.fromRGBO(240, 240, 240, 1.0),
           title: Padding(
             padding: EdgeInsets.only(top: 30.h, right: 6.w),
             child: Align(
@@ -173,7 +175,8 @@ class _CodePageState extends State<CodePage> {
           ),
           automaticallyImplyLeading: false,
         ),
-        backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : null,
+        backgroundColor:
+            sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : null,
         body: StreamBuilder<bool>(
             initialData: false,
             stream: _streamController.stream,
@@ -194,37 +197,38 @@ class _CodePageState extends State<CodePage> {
                           height: snapshot.data! ? 17.h : 161.h,
                         ),
                         Text(
-                          'Введи код подтверждения',
+                          'Введи последние цифры звонка',
                           style: GoogleFonts.inter(
-                            fontSize: 35.sp,
-                            height: 1.1,
-                            fontWeight: FontWeight.w800,
-                            color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx]
-                          ),
+                              fontSize: 35.sp,
+                              height: 1.1,
+                              fontWeight: FontWeight.w800,
+                              color: ClrStyle
+                                  .black2CToWhite[sl<AuthConfig>().idx]),
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          'В ближайшее время вам придёт sms-\nсообщение с кодом подтверждения',
+                          'Введи последние 4 цифры номера',
                           style: GoogleFonts.inter(
                               fontSize: 15.sp,
                               color: const Color.fromRGBO(137, 137, 137, 1.0),
                               fontWeight: FontWeight.w600),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 44.h),
+                          padding: EdgeInsets.only(
+                              top: 44.h, left: 39.75.w, right: 39.75.w),
                           child: SizedBox(
-                            height: 70.sp,
+                            height: 80.sp,
                             child: Pinput(
                               pinAnimationType: PinAnimationType.none,
                               showCursor: false,
-                              length: 5,
+                              length: 4,
                               androidSmsAutofillMethod:
                                   AndroidSmsAutofillMethod.smsRetrieverApi,
                               controller: textEditingControllerUp,
                               focusNode: focusNode,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               onChanged: (value) {
-                                if (value.length == 5 &&
+                                if (value.length == 4 &&
                                     value == code.toString()) {
                                   BlocProvider.of<AuthBloc>(context)
                                       .add(TextFieldFilled(true));
@@ -273,10 +277,11 @@ class _CodePageState extends State<CodePage> {
                           code: true,
                           text: resendCode ? 'Отправить код снова' : _getTime(),
                           border: Border.all(
-                              color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                              color:
+                                  ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                               width: 2.sp),
                           onPressed: () {
-                            if (textEditingControllerUp.text.length == 5) {
+                            if (textEditingControllerUp.text.length == 4) {
                               BlocProvider.of<AuthBloc>(context).add(
                                 TextFieldFilled(true),
                               );
@@ -287,7 +292,8 @@ class _CodePageState extends State<CodePage> {
                             }
                           },
                           color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
-                          textColor: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
+                          textColor:
+                              ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
                         ),
                         SizedBox(height: 20.h),
                       ],

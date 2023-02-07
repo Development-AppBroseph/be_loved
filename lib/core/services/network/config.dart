@@ -4,8 +4,8 @@ const bool isDev = true;
 
 //http://194.58.69.88/
 // String myUrl = '';
-// String myUrlIP = '158.160.40.127';
-String myUrlIP = '158.160.43.61';
+// String myUrlIP = '158.160.44.207';
+String myUrlIP = 'beloved-app.ru';
 
 extension ConfigExtension on Config {
   String get value {
@@ -19,7 +19,7 @@ extension ConfigExtension on Config {
       case Config.url:
         return url;
       default:
-        return 'http';
+        return 'https';
     }
   }
 

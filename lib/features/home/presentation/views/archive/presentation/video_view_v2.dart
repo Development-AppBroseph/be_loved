@@ -23,27 +23,28 @@ class _VideoViewState extends State<VideoView> {
     _initPlayer();
   }
 
-  _initPlayer() async{
+  _initPlayer() async {
     videoPlayerController = VideoPlayerController.network(widget.url);
     await videoPlayerController.initialize();
 
     chewieController = ChewieController(
-      videoPlayerController: videoPlayerController,
-      autoPlay: true,
-      looping: true,
-      deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
-      customControls: const MaterialControls(showPlayButton: true,)
-    );
+        videoPlayerController: videoPlayerController,
+        autoPlay: true,
+        looping: true,
+        deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
+        customControls: const MaterialControls(
+          showPlayButton: true,
+        ));
     seekTo(widget.duration);
     setState(() {});
   }
 
-  seekTo(Duration? duration) async{
+  seekTo(Duration? duration) async {
     await Future.delayed(Duration(seconds: 1));
-    if(widget.duration != null){
-     setState(() {
+    if (widget.duration != null) {
+      setState(() {
         chewieController!.videoPlayerController.seekTo(duration!);
-     });
+      });
     }
   }
 
@@ -54,41 +55,43 @@ class _VideoViewState extends State<VideoView> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: chewieController!=null? Padding(
-        padding: EdgeInsets.symmetric(vertical: 20.h),
-        child: Stack(
-          children: [
-            Chewie(
-              controller: chewieController!,
-            ),
-            Positioned(
-              top: 5.h,
-              left: 0,
-              child: GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Row(
+        child: chewieController != null
+            ? Padding(
+                padding: EdgeInsets.symmetric(vertical: 20.h),
+                child: Stack(
                   children: [
-                    SizedBox(width: 20.w,),
-                    Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 30.w,
+                    Chewie(
+                      controller: chewieController!,
                     ),
+                    Positioned(
+                      top: 5.h,
+                      left: 0,
+                      child: GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 30.w,
+                              ),
+                            ],
+                          )),
+                    )
                   ],
-                )
+                ),
+              )
+            : Center(
+                child: CircularProgressIndicator(),
               ),
-            )
-          ],
-        ),
-        ) : Center(
-          child: CircularProgressIndicator(),
-        ),
       ),
     );
   }

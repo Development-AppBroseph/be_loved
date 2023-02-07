@@ -22,7 +22,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final EditRelation editRelation;
   final ConnectVK connectVK;
   final SendFilesToMail sendFilesToMail;
-  ProfileBloc(this.editProfile, this.postNumber, this.putCode, this.editRelation, this.connectVK, this.sendFilesToMail) : super(ProfileInitialState()) {
+  ProfileBloc(this.editProfile, this.postNumber, this.putCode,
+      this.editRelation, this.connectVK, this.sendFilesToMail)
+      : super(ProfileInitialState()) {
     on<EditProfileEvent>(_editProfile);
     on<PostPhoneNumberEvent>(_postPhone);
     on<PutUserCodeEvent>(_putCode);
@@ -33,7 +35,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   String? newPhone;
   void _editProfile(EditProfileEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoadingState());
-    final data = await editProfile.call(EditProfileParams(user: event.user, file: event.avatar));
+    final data = await editProfile
+        .call(EditProfileParams(user: event.user, file: event.avatar));
     ProfileState state = data.fold(
       (error) => errorCheck(error),
       (data) {
@@ -41,14 +44,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         return ProfileEditedSuccessState();
       },
     );
-    await MySharedPrefs().setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
+    await MySharedPrefs()
+        .setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
     emit(state);
   }
 
-  void _postPhone(PostPhoneNumberEvent event, Emitter<ProfileState> emit) async {
+  void _postPhone(
+      PostPhoneNumberEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoadingState());
     newPhone = event.phone;
-    final data = await postNumber.call(PhoneNumberParams(phoneNumber: event.phone));
+    final data =
+        await postNumber.call(PhoneNumberParams(phoneNumber: event.phone));
     ProfileState state = data.fold(
       (error) => errorCheck(error),
       (data) {
@@ -58,7 +64,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state);
   }
 
-
   //VK
   void _connectVK(ConnectVKEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoadingState());
@@ -67,8 +72,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (error) => errorCheck(error),
       (data) {
         print('VK CONNECT: $data');
-        if(data.contains('Выйдите')){
-          return ProfileErrorState(message: 'Этот аккаунт в VK уже привязан к другому пользователю');
+        if (data.contains('Выйдите')) {
+          return ProfileErrorState(
+              message: 'Этот аккаунт в VK уже привязан к другому пользователю');
         }
         return ProfileVKConnectedState();
       },
@@ -83,31 +89,27 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (error) => errorCheck(error),
       (data) {
         print('NEW PHONE SETTING: $newPhone');
-        if(newPhone != null){
+        if (newPhone != null) {
           sl<AuthConfig>().user!.me.phoneNumber = newPhone!;
         }
         return ProfileConfirmedSuccessState();
       },
     );
-    await MySharedPrefs().setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
+    await MySharedPrefs()
+        .setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
     emit(state);
   }
 
-
-
-
-
-
-  void _editRelationName(EditRelationNameEvent event, Emitter<ProfileState> emit) async {
+  void _editRelationName(
+      EditRelationNameEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoadingState());
     final data = await editRelation.call(EditRelationParams(
-      relationId: sl<AuthConfig>().user!.relationId!,
-      nameRelation: event.name,
-      // theme: event.theme == null 
-      //   ? (sl<AuthConfig>().idx == 0 ? 'light' : 'dark')
-      //   : (event.theme == 0 ? 'light' : 'dark')
-      date: event.date ?? sl<AuthConfig>().user!.date!
-    ));
+        relationId: sl<AuthConfig>().user!.relationId!,
+        nameRelation: event.name,
+        // theme: event.theme == null
+        //   ? (sl<AuthConfig>().idx == 0 ? 'light' : 'dark')
+        //   : (event.theme == 0 ? 'light' : 'dark')
+        date: event.date ?? sl<AuthConfig>().user!.date!));
     ProfileState state = data.fold(
       (error) => errorCheck(error),
       (data) {
@@ -115,19 +117,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         return ProfileRelationNameChangedState();
       },
     );
-    await MySharedPrefs().setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
+    await MySharedPrefs()
+        .setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
     emit(state);
   }
 
-
-
-
-
-
-
-  void _partingOrSendFiles(PartingOrSendFilesEvent event, Emitter<ProfileState> emit) async {
+  void _partingOrSendFiles(
+      PartingOrSendFilesEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoadingState());
-    final data = await sendFilesToMail.call(SendFilesToMailParams(email: event.email, isParting: event.isParting));
+    final data = await sendFilesToMail.call(
+        SendFilesToMailParams(email: event.email, isParting: event.isParting));
     ProfileState state = data.fold(
       (error) => errorCheck(error),
       (data) {
@@ -137,22 +136,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state);
   }
 
-
-
-
-
-
-
-
-
-  ProfileState errorCheck(Failure failure){
+  ProfileState errorCheck(Failure failure) {
     print('FAIL: $failure');
-    if(failure == ConnectionFailure() || failure == NetworkFailure()){
+    if (failure == ConnectionFailure() || failure == NetworkFailure()) {
       return ProfileInternetErrorState();
-    }else if(failure is ServerFailure){
-      return ProfileErrorState(message: failure.message.length < 100 ? failure.message : 'Ошибка сервера');
-    }else{
+    } else if (failure is ServerFailure) {
+      return ProfileErrorState(
+          message: failure.message.length < 100
+              ? failure.message
+              : 'Ошибка сервера');
+    } else {
       return ProfileErrorState(message: 'Повторите попытку');
     }
   }
-} 
+}

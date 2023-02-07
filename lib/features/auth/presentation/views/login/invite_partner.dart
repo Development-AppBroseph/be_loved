@@ -64,11 +64,11 @@ class _InvitePartnerState extends State<InvitePartner> {
     _timer?.cancel();
     // _startSearch(context);
     BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-    if(widget.isParting){
+    if (widget.isParting) {
       BlocProvider.of<AuthBloc>(context).user!.love = null;
       BlocProvider.of<AuthBloc>(context).token = sl<AuthConfig>().token!;
       BlocProvider.of<WebSocketBloc>(context)
-              .add(WebSocketEvent(sl<AuthConfig>().token!));
+          .add(WebSocketEvent(sl<AuthConfig>().token!));
     }
     super.initState();
   }
@@ -124,10 +124,11 @@ class _InvitePartnerState extends State<InvitePartner> {
         buildWhen: (previous, current) {
       if (current is WebSocketInviteGetState) {
         widget.nextPage();
+        print('huuuuuuuuuy');
         return false;
       }
       if (current is WebSocketInviteCloseState) {
-        BlocProvider.of<AuthBloc>(context).user = null;
+        BlocProvider.of<AuthBloc>(context).user?.love = null;
         setState(() {
           timerIsStarted = false;
           isValidate = true;
@@ -150,6 +151,7 @@ class _InvitePartnerState extends State<InvitePartner> {
           _timer?.cancel();
           // start = 30;
           BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+          BlocProvider.of<AuthBloc>(context).user?.love = null;
         });
       }
       return false;
@@ -266,13 +268,15 @@ class _InvitePartnerState extends State<InvitePartner> {
         var bloc = BlocProvider.of<AuthBloc>(context);
         return Scaffold(
           appBar: appBar(context),
-          backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+          backgroundColor: sl<AuthConfig>().idx == 1
+              ? ColorStyles.blackColor
+              : const Color.fromRGBO(240, 240, 240, 1.0),
           body: StreamBuilder<bool>(
               initialData: false,
               stream: _streamController.stream,
               builder: (context, snapshot) {
                 return GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
                   child: SafeArea(
@@ -302,7 +306,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                           style: GoogleFonts.inter(
                                             fontSize: 35.sp,
                                             fontWeight: FontWeight.w800,
-                                            color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                            color: ClrStyle.black2CToWhite[
+                                                sl<AuthConfig>().idx],
                                           ),
                                         ),
                                         TextSpan(
@@ -350,13 +355,15 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                 color: const Color.fromRGBO(
                                                     150, 150, 150, 1),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
+                                                  borderRadius:
+                                                      BorderRadius.all(
                                                     Radius.circular(40.r),
                                                   ),
                                                 ),
                                                 clipBehavior: Clip.hardEdge,
                                                 child: bloc.user != null
-                                                    ? bloc.user?.me.photo != null
+                                                    ? bloc.user?.me.photo !=
+                                                            null
                                                         ? Image.network(
                                                             Config.url.url +
                                                                 bloc.user!.me
@@ -369,8 +376,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                             margin:
                                                                 EdgeInsets.all(
                                                                     43.h),
-                                                            child:
-                                                                SvgPicture.asset(
+                                                            child: SvgPicture
+                                                                .asset(
                                                               SvgImg.camera,
                                                             ),
                                                           )
@@ -379,14 +386,13 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                             margin:
                                                                 EdgeInsets.all(
                                                                     43.h),
-                                                            child:
-                                                                SvgPicture.asset(
-                                                                    SvgImg
-                                                                        .camera),
+                                                            child: SvgPicture
+                                                                .asset(SvgImg
+                                                                    .camera),
                                                           )
                                                         : Image.file(
-                                                            File(
-                                                                bloc.image!.path),
+                                                            File(bloc
+                                                                .image!.path),
                                                             width: 135.w,
                                                             height: 135.h,
                                                             fit: BoxFit.cover,
@@ -432,7 +438,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                   1,
                                                 ),
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
+                                                  borderRadius:
+                                                      BorderRadius.all(
                                                     Radius.circular(40.r),
                                                   ),
                                                 ),
@@ -450,8 +457,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                         fit: BoxFit.cover,
                                                       )
                                                     : Padding(
-                                                        padding:
-                                                            EdgeInsets.all(43.h),
+                                                        padding: EdgeInsets.all(
+                                                            43.h),
                                                         child: SvgPicture.asset(
                                                           SvgImg.camera,
                                                         ),
@@ -489,7 +496,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                     child: Row(
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           child: Image.asset(
                                               'assets/images/code.png'),
                                         ),
@@ -532,7 +540,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                               // });
                                             },
                                             onChanged: (value) {
-                                              if (_phoneController.length == 12) {
+                                              if (_phoneController.length ==
+                                                  12) {
                                                 print('123');
                                                 setState(() {
                                                   isValidate = true;
@@ -556,7 +565,8 @@ class _InvitePartnerState extends State<InvitePartner> {
                                                 if (value.length == 13) {
                                                   focusNode.unfocus();
                                                 }
-                                                bloc.add(TextFieldFilled(false));
+                                                bloc.add(
+                                                    TextFieldFilled(false));
                                               }
                                             },
                                             focusNode: focusNode,
@@ -759,46 +769,57 @@ class _InvitePartnerState extends State<InvitePartner> {
     return AppBar(
       elevation: 0,
       toolbarHeight: 80,
-      backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+      backgroundColor: sl<AuthConfig>().idx == 1
+          ? ColorStyles.blackColor
+          : const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
         padding: EdgeInsets.only(top: 20.h, right: 6.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if(widget.isParting)
-            GestureDetector(
-              onTap: (){
-                context.read<AuthBloc>().add(LogOut(context));
-              },
-              child: Row(
-                children: [
-                  SvgPicture.asset(SvgImg.logout, color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx], width: 46.w,),
-                  SizedBox(width: 5.w,),
-                  Text('Выйти', style: TextStyles(context).black_20_w800,)
-                ],
-              ),
-            )
-            else
-            Container(
-              height: 55.h,
-              width: 55.h,
-              margin: const EdgeInsets.only(top: 20),
-              alignment: Alignment.center,
-              child: IconButton(
-                icon: SvgPicture.asset(
-                  SvgImg.back,
-                  width: 15,
-                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
-                ),
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: () {
-                  Navigator.pop(context);
+            if (widget.isParting)
+              GestureDetector(
+                onTap: () {
+                  context.read<AuthBloc>().add(LogOut(context));
                 },
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      SvgImg.logout,
+                      color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                      width: 46.w,
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Text(
+                      'Выйти',
+                      style: TextStyles(context).black_20_w800,
+                    )
+                  ],
+                ),
+              )
+            else
+              Container(
+                height: 55.h,
+                width: 55.h,
+                margin: const EdgeInsets.only(top: 20),
+                alignment: Alignment.center,
+                child: IconButton(
+                  icon: SvgPicture.asset(
+                    SvgImg.back,
+                    width: 15,
+                    color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                  ),
+                  hoverColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
-            ),
             SizedBox(
               height: 5.sp,
               width: 55,

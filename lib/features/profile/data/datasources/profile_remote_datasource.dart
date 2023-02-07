@@ -24,11 +24,9 @@ abstract class ProfileRemoteDataSource {
 
   Future<BackEntity> getBackgroundInfo();
   Future<void> editBackgroundInfo(BackEntity back, File? file);
-
 }
 
-class ProfileRemoteDataSourceImpl
-    implements ProfileRemoteDataSource {
+class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   final Dio dio;
 
   ProfileRemoteDataSourceImpl({required this.dio});
@@ -42,7 +40,8 @@ class ProfileRemoteDataSourceImpl
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     headers["Content-Type"] = "multipart/form-data";
     Map<String, dynamic> map = user.toJson();
-    map['photo'] = file == null ? null : await MultipartFile.fromFile(file.path);
+    map['photo'] =
+        file == null ? null : await MultipartFile.fromFile(file.path);
     Response response = await dio.put(Endpoints.editProfile.getPath(),
         data: FormData.fromMap(map),
         options: Options(
@@ -52,17 +51,13 @@ class ProfileRemoteDataSourceImpl
     printRes(response);
     print('RES: ${response.statusCode}');
     print('RES: ${response.data}');
+
     if (response.statusCode == 200) {
       return User.fromJson(response.data['me']);
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
-
-
 
   @override
   Future<String> editRelation(int id, String relationName, String date) async {
@@ -71,7 +66,7 @@ class ProfileRemoteDataSourceImpl
         data: FormData.fromMap({
           'relation_id': id,
           'name': relationName,
-          'date': date
+          'date': date.substring(0, 10)
         }),
         options: Options(
             followRedirects: false,
@@ -85,9 +80,6 @@ class ProfileRemoteDataSourceImpl
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
 
   @override
   Future<StaticsEntity> getStats() async {
@@ -106,19 +98,12 @@ class ProfileRemoteDataSourceImpl
     }
   }
 
-
-
-
-
-
   //VK
   @override
   Future<String> connectVK(String code) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.post(Endpoints.vkAuth.getPath(),
-        data: FormData.fromMap({
-          'code': code
-        }),
+        data: FormData.fromMap({'code': code}),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 599,
@@ -128,27 +113,22 @@ class ProfileRemoteDataSourceImpl
     //Уже акк есть и сразу вход
     if (response.statusCode == 200 && response.data['token'] != null) {
       return response.data['token'];
-    }if (response.statusCode == 403) {
+    }
+    if (response.statusCode == 403) {
       return response.data;
-    }else {
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
 
-
-
-
-
-
   //Send files to email
   @override
-  Future<void> sendFilesToMail(String email, bool isParting)async {
+  Future<void> sendFilesToMail(String email, bool isParting) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    if(isParting){
+    if (isParting) {
       Response response = await dio.put(Endpoints.editRelations.getPath(),
           data: FormData.fromMap({
-            if(email != '')
-            'email': email,
+            if (email != '') 'email': email,
             'relation_id': sl<AuthConfig>().user!.relationId,
             'status': 'Отменено'
           }),
@@ -158,14 +138,12 @@ class ProfileRemoteDataSourceImpl
               headers: headers));
       printRes(response);
       print('EMAIL FILES: ${response.data}');
-      if (!(response.statusCode! < 200 || response.statusCode! > 204)){
+      if (!(response.statusCode! < 200 || response.statusCode! > 204)) {
         return;
-      }else {
+      } else {
         throw ServerException(message: 'Ошибка с сервером');
       }
     }
-
-
 
     Response response = await dio.post(Endpoints.sendFilesToMail.getPath(),
         data: FormData.fromMap({
@@ -177,25 +155,16 @@ class ProfileRemoteDataSourceImpl
             headers: headers));
     printRes(response);
     print('EMAIL FILES: ${response.data}');
-    if (!(response.statusCode! < 200 || response.statusCode! > 204)){
+    if (!(response.statusCode! < 200 || response.statusCode! > 204)) {
       return;
-    }else {
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
 
-
-
-
-
-
-
-
-
-
-
   @override
   Future<BackEntity> getBackgroundInfo() async {
+    print(sl<AuthConfig>().token);
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.get(Endpoints.getBacks.getPath(),
         options: Options(
@@ -203,14 +172,14 @@ class ProfileRemoteDataSourceImpl
             validateStatus: (status) => status! < 599,
             headers: headers));
     printRes(response);
-    print('RES: ${response.data}');
+    print('RES ${response.statusCode}: ${response.data}');
     if (response.statusCode == 200) {
-      if(response.data['relation'] == null){
+      if (response.data['relation'] == null) {
         Response response2 = await dio.post(Endpoints.setBacks.getPath(),
-          options: Options(
-              followRedirects: false,
-              validateStatus: (status) => status! < 599,
-              headers: headers));
+            options: Options(
+                followRedirects: false,
+                validateStatus: (status) => status! < 599,
+                headers: headers));
         printRes(response2);
       }
       return BackModel.fromJson(response.data);
@@ -219,21 +188,14 @@ class ProfileRemoteDataSourceImpl
     }
   }
 
-
-
-
-
-
-
   @override
-  Future<void> editBackgroundInfo(BackEntity back, File? file)async {
+  Future<void> editBackgroundInfo(BackEntity back, File? file) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.put(Endpoints.setBacks.getPath(),
         data: FormData.fromMap({
           'asset_photo': back.assetPhoto,
           'back_photo': back.backPhoto,
-          if(file != null)
-          'photos': [await MultipartFile.fromFile(file.path)]
+          if (file != null) 'photos': [await MultipartFile.fromFile(file.path)]
         }),
         options: Options(
             followRedirects: false,
@@ -248,5 +210,4 @@ class ProfileRemoteDataSourceImpl
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-  
 }

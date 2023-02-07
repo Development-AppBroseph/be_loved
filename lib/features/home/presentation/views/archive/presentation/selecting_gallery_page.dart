@@ -39,14 +39,12 @@ class _SelectingGalleryPageState extends State<SelectingGalleryPage> {
     scrollController.addListener(() {
       double position = scrollController.position.pixels;
       currentScrollPosition = position;
-      if(position > (scrollController.position.maxScrollExtent-100)){
+      if (position > (scrollController.position.maxScrollExtent - 100)) {
         GalleryBloc galleryBloc = context.read<GalleryBloc>();
-        if(!galleryBloc.isEnd && !galleryBloc.isLoading){
+        if (!galleryBloc.isEnd && !galleryBloc.isLoading) {
           galleryBloc.add(GetGalleryFilesEvent(isReset: false));
         }
       }
-
-
 
       int newHideGalleryFileID = 0;
       //Position of file
@@ -105,9 +103,9 @@ class _SelectingGalleryPageState extends State<SelectingGalleryPage> {
     return Scaffold(
       backgroundColor: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
       bottomNavigationBar: BottomNavigation(
-        onTap: (){
+        onTap: () {
           Navigator.pop(context);
-          Navigator.pop(context);
+          // Navigator.pop(context);
         },
       ),
       body: Stack(
@@ -122,16 +120,16 @@ class _SelectingGalleryPageState extends State<SelectingGalleryPage> {
                 position: currentScrollPosition,
                 hideGalleryFileID: 0,
                 deletingIds: gallerySelectedIds,
-                onSelectForDeleting: (id){
-                  if(widget.isOneItemSelecting){
+                onSelectForDeleting: (id) {
+                  if (widget.isOneItemSelecting) {
                     gallerySelectedIds.clear();
                     gallerySelectedIds.add(id);
                     setState(() {});
                     return;
                   }
-                  if(gallerySelectedIds.contains(id)){
+                  if (gallerySelectedIds.contains(id)) {
                     gallerySelectedIds.remove(id);
-                  }else{
+                  } else {
                     gallerySelectedIds.add(id);
                   }
                   setState(() {});
@@ -140,29 +138,28 @@ class _SelectingGalleryPageState extends State<SelectingGalleryPage> {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).padding.top + 15.h,
-            left: 30.w,
-            right: 22.w,
-            child: ArchiveFixedTopInfo(
-              showTop: showTop,
-              enitityPos: enitityPos,
-              onBackTap: (){
-                Navigator.pop(context, gallerySelectedIds);
-              },
-              dateTime: dateTime,
-              isForSelecting: true,
-              isDeleting: gallerySelectedIds.isNotEmpty,
-              onTap: (){
-                if(enitityPos != null && gallerySelectedIds.isEmpty){
-                  gallerySelectedIds.add(enitityPos!.mainPhoto.id);
-                }else{
-                  gallerySelectedIds = [];
-                }
-                setState(() {});
-              },
-              onDeleteTap: (){},
-            )
-          ),
+              top: MediaQuery.of(context).padding.top + 15.h,
+              left: 30.w,
+              right: 22.w,
+              child: ArchiveFixedTopInfo(
+                showTop: showTop,
+                enitityPos: enitityPos,
+                onBackTap: () {
+                  Navigator.pop(context, gallerySelectedIds);
+                },
+                dateTime: dateTime,
+                isForSelecting: true,
+                isDeleting: gallerySelectedIds.isNotEmpty,
+                onTap: () {
+                  if (enitityPos != null && gallerySelectedIds.isEmpty) {
+                    gallerySelectedIds.add(enitityPos!.mainPhoto.id);
+                  } else {
+                    gallerySelectedIds = [];
+                  }
+                  setState(() {});
+                },
+                onDeleteTap: () {},
+              )),
         ],
       ),
     );

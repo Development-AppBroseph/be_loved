@@ -1,9 +1,9 @@
+import 'dart:ui';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-
 
 class PreviewItem extends StatelessWidget {
   final String title;
@@ -12,35 +12,60 @@ class PreviewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          children: [
-            Container(
-              color: ColorStyles.greyColor,
-              width: MediaQuery.of(context).size.width,
-              height: 601.h,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              Expanded(
+                child: Container(
+                  color: ColorStyles.greyColor,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: title == 'Планируй события'
+                      ? Image.asset('assets/images/onboarding_second.png')
+                      : Image.asset('assets/images/onboarding_first.png'),
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              child: Container(
+                height: 111.h,
+                margin: EdgeInsets.only(bottom: 267.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 0.h),
+                      child: Text(
+                        title,
+                        style: TextStyles(context)
+                            .black_35_w800
+                            .copyWith(color: Colors.white),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    Text(
+                      text,
+                      style: TextStyles(context)
+                          .grey_15_w800
+                          .copyWith(color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
             ),
-            Positioned(
-              bottom: 4.h,
-              right: 0,
-              left: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(title, style: TextStyles(context).black_35_w800.copyWith(color: ColorStyles.black2Color),)
-                ],
-              )
-            )
-          ],
-        ),
-        SizedBox(height: 4.h,),
-        Text(
-          text,
-          style: TextStyles(context).grey_15_w800,
-          textAlign: TextAlign.center,
-        )
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

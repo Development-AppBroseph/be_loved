@@ -30,6 +30,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/route_manager.dart';
+import 'package:google_api_availability/google_api_availability.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'features/auth/data/models/auth/user.dart';
 
@@ -38,17 +39,23 @@ void main() async {
   setupInjections();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   var user = await MySharedPrefs().user;
-  await Firebase.initializeApp();
+  GooglePlayServicesAvailability availability = await GoogleApiAvailability
+      .instance
+      .checkGooglePlayServicesAvailability();
 
-  await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
+  if (availability.value == 0) {
+    await Firebase.initializeApp();
+
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+  }
   // MySharedPrefs().setUser(
   //   '123123123123123213',
   //   UserAnswer(
@@ -138,17 +145,18 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(428, 926),
       builder: (context, child) {
-        return BlocConsumer<ThemeBloc, ThemeState>(
-            listener: (context, state) {
-              if(state is ThemeEditedSuccessState && sl<AuthConfig>().user != null){
-                if(state.isChanges){
-                  print('UPDATE THEME -------');
-                  context.read<ProfileBloc>().add(EditRelationNameEvent(name: sl<AuthConfig>().user!.name ?? '',));
-                }
-              }
-            },
-            builder: (context, state) {
-            return GetMaterialApp(
+        return BlocConsumer<ThemeBloc, ThemeState>(listener: (context, state) {
+          if (state is ThemeEditedSuccessState &&
+              sl<AuthConfig>().user != null) {
+            if (state.isChanges) {
+              print('UPDATE THEME -------');
+              context.read<ProfileBloc>().add(EditRelationNameEvent(
+                    name: sl<AuthConfig>().user!.name ?? '',
+                  ));
+            }
+          }
+        }, builder: (context, state) {
+          return GetMaterialApp(
               debugShowCheckedModeBanner: false,
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
@@ -157,17 +165,18 @@ class MyApp extends StatelessWidget {
               ],
               supportedLocales: const [Locale('ru')],
               theme: ThemeData(
-                  scaffoldBackgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+                  scaffoldBackgroundColor: sl<AuthConfig>().idx == 1
+                      ? ColorStyles.blackColor
+                      : const Color.fromRGBO(240, 240, 240, 1.0),
                   fontFamily: 'Inter'),
               home: user != null
                   ? user?.date != null
                       ? HomePage()
                       : const AuthPage()
-                : const AuthPage()
+                  : const AuthPage()
               // home: HomePage(),
-            );
-          }
-        );
+              );
+        });
       },
     );
   }

@@ -18,170 +18,182 @@ class DetailGalleryPage extends StatefulWidget {
   final Function(int i) onPageChange;
   final Function(int id) onSelectForDeleting;
   final List<int> deletingIds;
-  DetailGalleryPage({required this.group, required this.onPageChange, required this.onSelectForDeleting, required this.deletingIds});
+  DetailGalleryPage(
+      {required this.group,
+      required this.onPageChange,
+      required this.onSelectForDeleting,
+      required this.deletingIds});
   @override
   State<DetailGalleryPage> createState() => _DetailGalleryPageState();
 }
 
 class _DetailGalleryPageState extends State<DetailGalleryPage> {
-
-
-  onMiniCardTap(GalleryFileEntity file){
-    if(widget.deletingIds.isNotEmpty && widget.group.mainPhoto.id != file.id){
+  onMiniCardTap(GalleryFileEntity file) {
+    if (widget.deletingIds.isNotEmpty && widget.group.mainPhoto.id != file.id) {
       widget.onSelectForDeleting(file.id);
-      setState(() {
-        
-      });
+      setState(() {});
       return;
     }
-    if(file.isVideo){
-      Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) =>
-        VideoView(
-          url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          // url: index == 0
-          // ? widget.group.mainPhoto.urlToFile
-          // : index == 1
-          // ? widget.group.mainVideo!.urlToFile
-          // : widget.group.additionalFiles[index - 1 + (widget.group.mainVideo == null ? 0 : 1)].urlToFile, 
-          duration: null
-        )
-      ));
-    }else{
-      Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PhotoFullScreenView(urlToImage: file.urlToFile)));
+    if (file.isVideo) {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (BuildContext context) => VideoView(
+            url: file.urlToFile,
+            // url: index == 0
+            // ? widget.group.mainPhoto.urlToFile
+            // : index == 1
+            // ? widget.group.mainVideo!.urlToFile
+            // : widget.group.additionalFiles[index - 1 + (widget.group.mainVideo == null ? 0 : 1)].urlToFile,
+            duration: null,
+          ),
+        ),
+      );
+    } else {
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (BuildContext context) =>
+                  PhotoFullScreenView(urlToImage: file.urlToFile)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigation(
-        onTap: () => Navigator.pop(context)
-      ),
+      bottomNavigationBar:
+          BottomNavigation(onTap: () => Navigator.pop(context)),
       backgroundColor: ColorStyles.backgroundColorGrey,
       body: Container(
         child: GestureDetector(
-          onHorizontalDragUpdate:(details) {
+          onHorizontalDragUpdate: (details) {
             print('DiR: ${details.delta.direction}');
-            if(details.delta.direction <= 0){
+            if (details.delta.direction <= 0) {
               Navigator.pop(context);
             }
           },
           child: ArchiveWrapper(
-            currentIndex: 1,
-            scrollController: ScrollController(),
-            onChangePage:(index) {
-              Navigator.pop(context);
-              widget.onPageChange(index);
-            },
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Wrap(
-                    spacing: 4.w,
-                    runSpacing: 4.w,
-                    children: List.generate(widget.group.additionalFiles.length + 1 + (widget.group.mainVideo == null ? 0 : 1), (index){
-                      if(index == 0){
-                        return GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: Stack(
-                            children: [
-                              Hero(tag: '#${widget.group.mainPhoto.id}', 
-                                child: _buildMiniItem(widget.group.mainPhoto)
-                              ),
-                              Container(
-                                width: 140.w,
-                                height: 70.h,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Color(0xFF2C2C2E).withOpacity(0.5),
-                                      Color(0xFF2C2C2E).withOpacity(0),
-                                    ]
+              currentIndex: 1,
+              scrollController: ScrollController(),
+              onChangePage: (index) {
+                Navigator.pop(context);
+                widget.onPageChange(index);
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Wrap(
+                        spacing: 4.w,
+                        runSpacing: 4.w,
+                        children: List.generate(
+                            widget.group.additionalFiles.length +
+                                1 +
+                                (widget.group.mainVideo == null ? 0 : 1),
+                            (index) {
+                          if (index == 0) {
+                            return GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: Stack(
+                                children: [
+                                  Hero(
+                                      tag: '#${widget.group.mainPhoto.id}',
+                                      child: _buildMiniItem(
+                                          widget.group.mainPhoto)),
+                                  Container(
+                                    width: 140.w,
+                                    height: 70.h,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                          Color(0xFF2C2C2E).withOpacity(0.5),
+                                          Color(0xFF2C2C2E).withOpacity(0),
+                                        ])),
+                                  ),
+                                  Positioned(
+                                      top: 12.h,
+                                      left: 12.h,
+                                      child: Text(
+                                        convertToRangeDates(widget.group),
+                                        style: TextStyles(context)
+                                            .white_18_w800
+                                            .copyWith(
+                                                color: Colors.white
+                                                    .withOpacity(0.7)),
+                                      )),
+                                  Positioned.fill(
+                                    bottom: 140.h * 0.5,
+                                    top: 0,
+                                    child: GestureDetector(
+                                      onLongPress: () {
+                                        widget.onSelectForDeleting(
+                                            widget.group.mainPhoto.id);
+                                        setState(() {});
+                                      },
+                                      onTap: () => Navigator.pop(context),
+                                      behavior: HitTestBehavior.opaque,
+                                    ),
+                                  ),
+                                  Positioned.fill(
+                                    bottom: 0,
+                                    top: 140.h * 0.5,
+                                    child: GestureDetector(
+                                      onLongPress: () {
+                                        widget.onSelectForDeleting(
+                                            widget.group.mainPhoto.id);
+                                        setState(() {});
+                                      },
+                                      onTap: () {
+                                        onMiniCardTap(widget.group.mainPhoto);
+                                      },
+                                      behavior: HitTestBehavior.opaque,
+                                    ),
                                   )
-                                ),
+                                ],
                               ),
-                              Positioned(
-                                top: 12.h,
-                                left: 12.h,
-                                child: Text(convertToRangeDates(widget.group), style: TextStyles(context).white_18_w800.copyWith(color: Colors.white.withOpacity(0.7)),)
-                              ),
-                              Positioned.fill(
-                                bottom: 140.h*0.5,
-                                top: 0,
-                                child: GestureDetector(
-                                  onLongPress: (){
-                                    widget.onSelectForDeleting(widget.group.mainPhoto.id);
-                                    setState(() {});
-                                  },
-                                  onTap: () => Navigator.pop(context),
-                                  behavior: HitTestBehavior.opaque,
-                                ),
-                              ),
-                              Positioned.fill(
-                                bottom: 0,
-                                top: 140.h*0.5,
-                                child: GestureDetector(
-                                  onLongPress: (){
-                                    widget.onSelectForDeleting(widget.group.mainPhoto.id);
-                                    setState(() {});
-                                  },
-                                  onTap: (){
-                                    onMiniCardTap(widget.group.mainPhoto);
-                                  },
-                                  behavior: HitTestBehavior.opaque,
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                      GalleryFileEntity currentFile = index == 1 && widget.group.mainVideo != null
-                          ? widget.group.mainVideo!
-                          : widget.group.additionalFiles[index - 1 - (widget.group.mainVideo == null ? 0 : 1)];
-                      return MiniMediaCard(
-                        file: currentFile, 
-                        onTap: (){
-                          onMiniCardTap(currentFile);
-                        },
-                        onLongTap: (){
-                          widget.onSelectForDeleting(currentFile.id);
-                          setState(() {});
-                        },
-                        isSelected: widget.deletingIds.contains(currentFile.id)
-                      );
-                    }
+                            );
+                          }
+                          GalleryFileEntity currentFile =
+                              index == 1 && widget.group.mainVideo != null
+                                  ? widget.group.mainVideo!
+                                  : widget.group.additionalFiles[index -
+                                      1 -
+                                      (widget.group.mainVideo == null ? 0 : 1)];
+                          return MiniMediaCard(
+                              file: currentFile,
+                              onTap: () {
+                                onMiniCardTap(currentFile);
+                              },
+                              onLongTap: () {
+                                widget.onSelectForDeleting(currentFile.id);
+                                setState(() {});
+                              },
+                              isSelected:
+                                  widget.deletingIds.contains(currentFile.id));
+                        })),
+                    SizedBox(
+                      height: 470.h,
                     )
-                  ),
-                  SizedBox(height: 470.h,)
-                ],
-              ),
-            )
-          ),
+                  ],
+                ),
+              )),
         ),
       ),
     );
   }
 
-
-
-
-
-  _buildMiniItem(GalleryFileEntity file){
-
+  _buildMiniItem(GalleryFileEntity file) {
     return Container(
-      height: 140.h,
-      width: 140.w,
-      color: ColorStyles.greyColor2,
-      child: CachedNetworkImage(
-        imageUrl: file.isVideo
-        ? file.urlToPreviewVideoImage ?? ''
-        : file.urlToFile,
-        height: double.infinity,
-        width: double.infinity,
-        fit: BoxFit.cover,
-      )
-    );
+        height: 140.h,
+        width: 140.w,
+        color: ColorStyles.greyColor2,
+        child: CachedNetworkImage(
+          imageUrl:
+              file.isVideo ? file.urlToPreviewVideoImage ?? '' : file.urlToFile,
+          height: double.infinity,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ));
   }
 }

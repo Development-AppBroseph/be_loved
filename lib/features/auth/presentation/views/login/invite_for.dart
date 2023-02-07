@@ -99,8 +99,9 @@ class _InviteForState extends State<InviteFor> {
   Widget build(BuildContext context) {
     return BlocBuilder<WebSocketBloc, WebSocketState>(
         buildWhen: (previous, current) {
-          print('object sokect state ${current}');
+      print('object sokect state ${current}');
       if (current is WebSocketInviteCloseState) {
+        BlocProvider.of<AuthBloc>(context).user?.love = null;
         widget.previewPage();
       }
       if (current is WebSocketStartRelatioinshipsState) {
@@ -171,7 +172,9 @@ class _InviteForState extends State<InviteFor> {
         // }
         var bloc = BlocProvider.of<AuthBloc>(context);
         return Scaffold(
-          backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+          backgroundColor: sl<AuthConfig>().idx == 1
+              ? ColorStyles.blackColor
+              : const Color.fromRGBO(240, 240, 240, 1.0),
           body: Stack(
             children: [
               AnimatedOpacity(
@@ -235,11 +238,11 @@ class _InviteForState extends State<InviteFor> {
                               children: <TextSpan>[
                                 TextSpan(
                                   text: 'Приглашение от\n',
-                                  
                                   style: GoogleFonts.inter(
                                     fontSize: 35.sp,
                                     fontWeight: FontWeight.w800,
-                                    color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                    color: ClrStyle
+                                        .black2CToWhite[sl<AuthConfig>().idx],
                                   ),
                                 ),
                                 TextSpan(

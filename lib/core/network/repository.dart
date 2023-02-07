@@ -5,6 +5,9 @@ import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/locator.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:google_api_availability/google_api_availability.dart';
 
 import '../../features/auth/data/models/auth/check_is_user_exist.dart';
 import '../../features/auth/data/models/auth/check_nickName.dart';
@@ -29,7 +32,8 @@ class Repository {
           data: FormData.fromMap({
             'photo': MultipartFile.fromFileSync(file!.path, filename: file.path)
           }));
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return true;
       }
@@ -44,7 +48,8 @@ class Repository {
     try {
       var response =
           await dio.post('auth/code_phone', data: {'phone_number': number});
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 204) {
         return 12345;
       }
@@ -56,13 +61,23 @@ class Repository {
   }
 
   Future<CheckIsUserExist?> checkIsUserExist(String number, int code) async {
+    GooglePlayServicesAvailability availability = await GoogleApiAvailability
+        .instance
+        .checkGooglePlayServicesAvailability();
     try {
       var response = await dio.put('auth/code_phone', data: {
         'phone_number': number,
         'code': code,
+        'fcm_token': availability.value == 0
+            ? await FirebaseMessaging.instance.getToken()
+            : '',
       });
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
+        return CheckIsUserExist.fromJson(response.data);
+      }
+      if (response.statusCode == 204) {
         return CheckIsUserExist.fromJson(response.data);
       }
       if (response.statusCode == 400) {}
@@ -80,7 +95,8 @@ class Repository {
           'username': name,
         },
       );
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return CheckNickName.fromJson(response.data).exists;
       }
@@ -99,7 +115,8 @@ class Repository {
           'phone_number': phone,
         },
       );
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         final bool res = response.data['exists'];
         return res;
@@ -119,7 +136,8 @@ class Repository {
           'code': code,
         }),
       );
-      print('RES VK: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES VK: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       //Уже акк есть и сразу вход
       if (response.statusCode == 200 && response.data['token'] != null) {
         return response.data['token'];
@@ -140,21 +158,28 @@ class Repository {
 
   Future<String?> initUser(
       String secretKey, String nickname, File? xFile, String? vkCode) async {
+    GooglePlayServicesAvailability availability = await GoogleApiAvailability
+        .instance
+        .checkGooglePlayServicesAvailability();
     try {
       final data = xFile != null
           ? {
               'secret_key': secretKey,
               'username': nickname,
-              if(vkCode != null)
-              'code': vkCode,
+              if (vkCode != null) 'code': vkCode,
               'photo':
                   MultipartFile.fromFileSync(xFile.path, filename: xFile.path),
+              'fcm_token': availability.value == 0
+                  ? await FirebaseMessaging.instance.getToken()
+                  : null,
             }
           : {
               'secret_key': secretKey,
               'username': nickname,
-              if(vkCode != null)
-              'code': vkCode
+              if (vkCode != null) 'code': vkCode,
+              'fcm_token': availability.value == 0
+                  ? await FirebaseMessaging.instance.getToken()
+                  : null
             };
       var response = await dio.post(
         'auth/users',
@@ -163,7 +188,8 @@ class Repository {
           validateStatus: (status) => status! <= 450,
         ),
       );
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
 
       if (response.statusCode == 200) {
         return InitUserAnswer.fromJson(response.data).authToken;
@@ -190,7 +216,8 @@ class Repository {
         }),
         options: options,
       );
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
@@ -213,7 +240,8 @@ class Repository {
         data: {"relation_id": relationId, "status": 'Отменено'},
         options: options,
       );
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
@@ -237,7 +265,8 @@ class Repository {
         options: options,
       );
 
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         sl<AuthConfig>().token = token;
         return UserAnswer.fromJson(response.data);
@@ -260,7 +289,8 @@ class Repository {
         options: options,
       );
 
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
@@ -282,7 +312,8 @@ class Repository {
         options: options,
       );
 
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
@@ -306,10 +337,11 @@ class Repository {
         options: options,
       );
 
-      print('RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+      print(
+          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         List<Events> events = [];
-        for(final val in response.data) {
+        for (final val in response.data) {
           events.add(Events.fromJson(val));
         }
         // sl<AuthConfig>().token = token;

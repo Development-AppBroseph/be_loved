@@ -13,7 +13,8 @@ class DecorBloc extends Bloc<DecorEvent, DecorState> {
   final GetBackgroundsInfo getBackgroundInfo;
   final EditBackgroundsInfo editBackgroundInfo;
 
-  DecorBloc(this.getBackgroundInfo, this.editBackgroundInfo) : super(DecorInitialState()) {
+  DecorBloc(this.getBackgroundInfo, this.editBackgroundInfo)
+      : super(DecorInitialState()) {
     on<EditBackgroundEvent>(_editDecorBackground);
     on<GetBackgroundEvent>(_getDecorBackground);
     on<AddBackgroundEvent>(_addDecorBackground);
@@ -22,10 +23,9 @@ class DecorBloc extends Bloc<DecorEvent, DecorState> {
   // List<String> images = [];
 
   BackEntity? back;
-  
 
-
-  void _editDecorBackground(EditBackgroundEvent event, Emitter<DecorState> emit) async {
+  void _editDecorBackground(
+      EditBackgroundEvent event, Emitter<DecorState> emit) async {
     // emit(DecorLoadingState());
     // // await setBackground(event.index);
     // // sl<AuthConfig>().selectedBackgroundIndex = event.index;
@@ -43,7 +43,8 @@ class DecorBloc extends Bloc<DecorEvent, DecorState> {
     back!.assetPhoto = event.assetPhoto;
     back!.backPhoto = event.backFileEntity?.id;
     emit(DecorEditedSuccessState());
-    final gotBack = await editBackgroundInfo.call(EditBackgroundsInfoParams(back: back!, filePath: null));
+    final gotBack = await editBackgroundInfo
+        .call(EditBackgroundsInfoParams(back: back!, filePath: null));
     // DecorState state = gotBack.fold(
     //   (error) => errorCheck(error),
     //   (data) {
@@ -54,16 +55,16 @@ class DecorBloc extends Bloc<DecorEvent, DecorState> {
     // emit(state);
   }
 
-
-
-  void _addDecorBackground(AddBackgroundEvent event, Emitter<DecorState> emit) async {
+  void _addDecorBackground(
+      AddBackgroundEvent event, Emitter<DecorState> emit) async {
     // emit(DecorBlankState());
     // await addBackground(event.path);
     // images = await getBackgrounds();
     // emit(DecorEditedSuccessState());
     print('ADD');
     emit(DecorBlankState());
-    final gotBack = await editBackgroundInfo.call(EditBackgroundsInfoParams(back: back!, filePath: event.path));
+    final gotBack = await editBackgroundInfo
+        .call(EditBackgroundsInfoParams(back: back!, filePath: event.path));
     DecorState state = gotBack.fold(
       (error) => errorCheck(error),
       (data) {
@@ -74,9 +75,8 @@ class DecorBloc extends Bloc<DecorEvent, DecorState> {
     add(GetBackgroundEvent());
   }
 
-
-
-  void _getDecorBackground(GetBackgroundEvent event, Emitter<DecorState> emit) async {
+  void _getDecorBackground(
+      GetBackgroundEvent event, Emitter<DecorState> emit) async {
     // emit(DecorBlankState());
     // // selectedIndex = await getBackgroundIndex();
     // // images = await getBackgrounds();
@@ -95,20 +95,17 @@ class DecorBloc extends Bloc<DecorEvent, DecorState> {
     emit(state);
   }
 
-
-
-
-
-
-
-  DecorState errorCheck(Failure failure){
+  DecorState errorCheck(Failure failure) {
     print('FAIL: $failure');
-    if(failure == ConnectionFailure() || failure == NetworkFailure()){
+    if (failure == ConnectionFailure() || failure == NetworkFailure()) {
       return DecorInternetErrorState();
-    }else if(failure is ServerFailure){
-      return DecorErrorState(message: failure.message.length < 100 ? failure.message : 'Ошибка сервера');
-    }else{
+    } else if (failure is ServerFailure) {
+      return DecorErrorState(
+          message: failure.message.length < 100
+              ? failure.message
+              : 'Ошибка сервера');
+    } else {
       return DecorErrorState(message: 'Повторите попытку');
     }
   }
-} 
+}

@@ -28,6 +28,9 @@ dependencies:
   dio: ^4.0.6
   lottie: ^1.4.2
   get: ^4.3.8
+  google_api_availability: ^3.0.1
+  custom_refresh_indicator: ^2.0.1
+  # sberbank_acquiring: ^2.0.1
   
   cached_network_image: ^3.2.1
   #Firebase
@@ -76,7 +79,10 @@ dependencies:
   yandex_geocoder: ^2.0.2
 
   # WebView
-  webview_flutter: ^4.0.1
+
+  webview_flutter: ^3.0.2+1
+  flutter_inappwebview: ^5.7.2+3
+  comparer: ^2.0.1
 
 dev_dependencies:
   flutter_test:
