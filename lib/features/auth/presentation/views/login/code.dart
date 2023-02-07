@@ -49,7 +49,7 @@ class _CodePageState extends State<CodePage> {
   }
 
   void _checkCode(BuildContext context) => BlocProvider.of<AuthBloc>(context)
-      .add(CheckUser(phone ?? '', textEditingControllerUp.text, code ?? 0));
+      .add(CheckUser(phone ?? '', textEditingControllerUp.text, int.tryParse('${code}5}') ?? 0));
 
   void startTimer() {
     start = 60;
@@ -228,6 +228,7 @@ class _CodePageState extends State<CodePage> {
                               focusNode: focusNode,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               onChanged: (value) {
+                                print('object ${value.length}--- ${code.toString()}');
                                 if (value.length == 4 &&
                                     value == code.toString()) {
                                   BlocProvider.of<AuthBloc>(context)

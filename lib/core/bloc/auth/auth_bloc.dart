@@ -117,7 +117,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _checkUser(CheckUser event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
-    if (event.codeUser.length == 5) {
+    if (event.codeUser.length == 4) {
       if (event.codeUser == code.toString()) {
         var result =
             await Repository().checkIsUserExist(event.phone, event.code);

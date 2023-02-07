@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:be_loved/core/models/subscriptions/subscription_variant.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
@@ -20,6 +21,55 @@ class Repository {
     BaseOptions(
         baseUrl: Config.url.url, validateStatus: (status) => status! <= 400),
   );
+
+  Future<bool?> sendPaymentSubscription(String orderId, int id) async {
+    var options = Options(headers: {
+      'Authorization': 'Token ${await MySharedPrefs().token}',
+    }, validateStatus: (status) => status! <= 500);
+
+    try {
+      var response = await dio.post(
+        '/sub/',
+        options: options,
+        data: {
+          "payment_id": orderId,
+          "sub_id": id,
+        },
+      );
+      print('RES: ${response.statusCode} ${response.data}');
+      if (response.statusCode == 200) {
+        return true;
+      }
+      if (response.statusCode == 400) {}
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<List<SubscriptionVariant>> getSuscriptionsList() async {
+    var options = Options(headers: {
+      'Authorization': 'Token ${await MySharedPrefs().token}',
+    }, validateStatus: (status) => status! <= 500);
+
+    try {
+      var response = await dio.get('/sub/', options: options);
+      print('RES: ${response.statusCode} ${response.data}');
+      if (response.statusCode == 200) {
+        List<SubscriptionVariant> list = [];
+        if (response.data != '' || response.data != []) {
+          for (var element in response.data) {
+            list.add(SubscriptionVariant.fromJson(element));
+          }
+        }
+        return list;
+      }
+      if (response.statusCode == 400) {}
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
 
   Future<bool?> editUser(File? file) async {
     var options = Options(headers: {
@@ -51,7 +101,7 @@ class Repository {
       print(
           'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 204) {
-        return 12345;
+        return 1234;
       }
       if (response.statusCode == 400) {}
       return null;

@@ -79,38 +79,41 @@ class _WebViewPaymentState extends State<WebViewPayment> {
       javascriptMode: JavascriptMode.unrestricted,
       onWebViewCreated: widget.onWebViewCreated,
       onPageStarted: (String url) {
-        widget.logger
-            .log(name: 'WebViewPayment', message: 'onPageStarted: $url');
+        print('object ${url}');
+        // widget.logger
+        //     .log(name: 'WebViewPayment', message: 'onPageStarted: $url');
 
-        if (url == widget.formUrl) {
-          widget.onLoad?.call(true);
-        }
+        // if (url == widget.formUrl) {
+        //   widget.onLoad?.call(true);
+        // }
 
-        if (url.contains(widget.returnUrl)) {
+        if (url.contains(widget.failUrl!)) {
           hasSent = true;
+          print('object orderId ${getOrderId(url)}');
           widget.onFinished?.call(getOrderId(url));
+          // Navigator.of(context).pop();
         }
 
-        if (failUrl != null && url.contains(failUrl)) {
-          hasSent = true;
-          widget.onError?.call();
-        }
+        // if (failUrl != null && url.contains(failUrl)) {
+        //   hasSent = true;
+        //   widget.onError?.call();
+        // }
       },
       onPageFinished: (String url) async {
-        widget.logger
-            .log(name: 'WebViewPayment', message: 'onPageFinished: $url');
+        // widget.logger
+        //     .log(name: 'WebViewPayment', message: 'onPageFinished: $url');
 
-        if (url == widget.formUrl) {
-          widget.onLoad?.call(false);
-        }
+        // if (url == widget.formUrl) {
+        //   widget.onLoad?.call(false);
+        // }
 
-        if (!hasSent && url.contains(widget.returnUrl)) {
-          widget.onFinished?.call(getOrderId(url));
-        }
+        // if (!hasSent && url.contains(widget.returnUrl)) {
+        //   widget.onFinished?.call(getOrderId(url));
+        // }
 
-        if (!hasSent && (failUrl != null && url.contains(failUrl))) {
-          widget.onError?.call();
-        }
+        // if (!hasSent && (failUrl != null && url.contains(failUrl))) {
+        //   widget.onError?.call();
+        // }
       },
     );
   }

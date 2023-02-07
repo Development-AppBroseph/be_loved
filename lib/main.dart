@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
@@ -37,6 +39,7 @@ import 'features/auth/data/models/auth/user.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   setupInjections();
+  HttpOverrides.global = MyHttpOverrides();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   var user = await MySharedPrefs().user;
   GooglePlayServicesAvailability availability = await GoogleApiAvailability
@@ -198,3 +201,12 @@ class MyApp extends StatelessWidget {
 // — А Крылов будет?
 // — Конечно будет, все собираются.
 // — Ну, увидишь — передай, что я его маму ебал.
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
