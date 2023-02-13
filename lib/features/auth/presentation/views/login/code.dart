@@ -29,7 +29,7 @@ class CodePage extends StatefulWidget {
 class _CodePageState extends State<CodePage> {
   final FocusNode focusNode = FocusNode();
 
-  int? code;
+  // int? code;
   int start = 60;
   Timer? _timer;
   String? phone;
@@ -48,8 +48,11 @@ class _CodePageState extends State<CodePage> {
     super.initState();
   }
 
-  void _checkCode(BuildContext context) => BlocProvider.of<AuthBloc>(context)
-      .add(CheckUser(phone ?? '', textEditingControllerUp.text, int.tryParse('${code}5}') ?? 0));
+  void _checkCode(BuildContext context) =>
+      BlocProvider.of<AuthBloc>(context).add(CheckUser(
+          phone ?? '',
+          textEditingControllerUp.text,
+          int.parse('${textEditingControllerUp.text}')));
 
   void startTimer() {
     start = 60;
@@ -138,7 +141,7 @@ class _CodePageState extends State<CodePage> {
         _streamController.sink.add(focusNode.hasFocus);
       });
       if (state is PhoneSuccess) {
-        code = state.code;
+        // code = state.code;
         phone = state.phone;
       }
       return Scaffold(
@@ -228,9 +231,8 @@ class _CodePageState extends State<CodePage> {
                               focusNode: focusNode,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               onChanged: (value) {
-                                print('object ${value.length}--- ${code.toString()}');
-                                if (value.length == 4 &&
-                                    value == code.toString()) {
+                                print('object ${value.length}---}');
+                                if (value.length == 4) {
                                   BlocProvider.of<AuthBloc>(context)
                                       .add(TextFieldFilled(true));
                                   focusNode.unfocus();

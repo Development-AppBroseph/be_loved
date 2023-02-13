@@ -19,7 +19,7 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  int? code;
+  // int? code;
   String? token;
   String? secretKey;
   String? nickname;
@@ -58,7 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event.phone.length == 12) {
       var result = await Repository().registration(event.phone);
       if (result != null) {
-        code = result;
+        // code = result;
         emit(PhoneSuccess(event.phone, result));
       } else {
         emit(PhoneError('Неверный формат номера'));
@@ -77,7 +77,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else if (result == 'register') {
       vkCode = event.code;
       emit(VKRequiredRegister(code: event.code));
-    }else{
+    } else {
       print('SETTTING TOKEN VK $result');
       await SharedPreferences.getInstance()
         ..setString('token', result);
@@ -118,40 +118,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
 
     if (event.codeUser.length == 4) {
-      if (event.codeUser == code.toString()) {
-        var result =
-            await Repository().checkIsUserExist(event.phone, event.code);
-        if (result != null) {
+      // if (event.codeUser == code.toString()) {
+      var result = await Repository().checkIsUserExist(event.phone, event.code);
+      if (result != null) {
+        print('SETTTING TOKEN ${result.token}');
+        if (result.token != null) {
           print('SETTTING TOKEN ${result.token}');
-          if (result.token != null) {
-            print('SETTTING TOKEN ${result.token}');
-            await SharedPreferences.getInstance()
-              ..setString('token', result.token!);
-            MySecureStorage().setToken(result.token!);
-            token = result.token;
-            sl<AuthConfig>().token = result.token;
-          }
-          secretKey = result.secretKey;
-          emit(
-            CodeSuccess(
-              result.token != null ? ExistUser.exist : ExistUser.notExist,
-              result.token != null ? result.token! : result.secretKey!,
-            ),
-          );
-          return;
-        } else {
-          emit(CodeError('Ошибка code: $result'));
-          return;
+          await SharedPreferences.getInstance()
+            ..setString('token', result.token!);
+          MySecureStorage().setToken(result.token!);
+          token = result.token;
+          sl<AuthConfig>().token = result.token;
         }
+        secretKey = result.secretKey;
+        emit(
+          CodeSuccess(
+            result.token != null ? ExistUser.exist : ExistUser.notExist,
+            result.token != null ? result.token! : result.secretKey!,
+          ),
+        );
+        return;
       } else {
-        if (code == null) {
-          emit(CodeError('Срок кода истёк'));
-          return;
-        } else {
-          emit(CodeError('Код введён неверно'));
-          return;
-        }
+        emit(CodeError('Ошибка code: $result'));
+        return;
       }
+      // } else {
+      //   if (code == null) {
+      //     emit(CodeError('Срок кода истёк'));
+      //     return;
+      //   } else {
+      //     emit(CodeError('Код введён неверно'));
+      //     return;
+      //   }
+      // }
     } else if (event.codeUser.isEmpty) {
       emit(CodeError('Введите код'));
     } else {
@@ -174,7 +173,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _pickImage(PickImage event, Emitter<AuthState> emit) async {
     var result;
-    if(event.file == null){
+    if (event.file == null) {
       result = await ImagePicker().pickImage(
         source: ImageSource.gallery,
       );
@@ -193,7 +192,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         outPath,
         quality: 30,
       );
-      emit(ImageSuccess(event.file != null ? XFile(event.file!.path) : result!));
+      emit(
+          ImageSuccess(event.file != null ? XFile(event.file!.path) : result!));
       image = compressedImage;
     } else {
       emit(ImageError());
@@ -222,9 +222,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _getUser(GetUser event, Emitter<AuthState> emit) async {
-    if(event.isJustRefresh){
+    if (event.isJustRefresh) {
       emit(RefreshUser());
-    }else{
+    } else {
       emit(AuthLoading());
     }
     var result = await Repository().getUser();

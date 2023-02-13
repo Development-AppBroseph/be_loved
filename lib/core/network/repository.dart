@@ -94,7 +94,7 @@ class Repository {
     }
   }
 
-  Future<int?> registration(String number) async {
+  Future registration(String number) async {
     try {
       var response =
           await dio.post('auth/code_phone', data: {'phone_number': number});
@@ -114,6 +114,7 @@ class Repository {
     GooglePlayServicesAvailability availability = await GoogleApiAvailability
         .instance
         .checkGooglePlayServicesAvailability();
+    print(code);
     try {
       var response = await dio.put('auth/code_phone', data: {
         'phone_number': number,
