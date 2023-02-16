@@ -1,4 +1,4 @@
-package dev.broseph.beloved
+package dev.broseph.belovedapp
 
 import io.flutter.embedding.android.FlutterActivity
 

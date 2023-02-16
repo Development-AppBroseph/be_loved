@@ -40,6 +40,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:749490272159:android:9c366ce18c5bf89d0d2faa",
+        "android_client_info": {
+          "package_name": "dev.broseph.belovedapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "749490272159-ck70dk2n8riqngmpstuvmu3nb6o43ivo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTirWHYqI29t8wVPrhzmgYrH_k6jXJqNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "749490272159-ck70dk2n8riqngmpstuvmu3nb6o43ivo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "749490272159-7dgmu6d9qgm4dft60o67j6vpn8fcmp9b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.broseph.beloved"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
