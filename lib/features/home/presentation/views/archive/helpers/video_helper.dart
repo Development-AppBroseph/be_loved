@@ -7,7 +7,8 @@ import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 Future<Uint8List?> getVideoFrame(String pathToVideo) async {
-  final Uint8List? file = await VideoThumbnail.thumbnailData(
+   print("filePath -- $pathToVideo");
+  final file = await VideoThumbnail.thumbnailData(
     imageFormat: ImageFormat.JPEG,
     video: pathToVideo,
     timeMs: 50,

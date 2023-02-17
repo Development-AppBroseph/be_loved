@@ -62,37 +62,28 @@ class _AddFileWidgetState extends State<AddFileWidget> {
     if (isValidate()) {
       showLoaderWrapper(context);
       context.read<GalleryBloc>().add(
-        GalleryFileAddEvent(galleryFileEntity: filesFromGallery),
-      );
+            GalleryFileAddEvent(galleryFileEntity: filesFromGallery),
+          );
     }
   }
 
-
-
-  showModal(){
-    FileTypeModal(
-      context, 
-      getWidgetPosition(selectKey), 
-      (){
-        Navigator.pop(context);
-        addFiles(false);
-      }, 
-      (){
-        Navigator.pop(context);
-        addFiles(true);
-      }
-    );
+  showModal() {
+    FileTypeModal(context, getWidgetPosition(selectKey), () {
+      Navigator.pop(context);
+      addFiles(false);
+    }, () {
+      Navigator.pop(context);
+      addFiles(true);
+    });
   }
-
-
 
   addFiles(bool isVideo) async {
     List<XFile> result = [];
-    if(!isVideo){
+    if (!isVideo) {
       result = await ImagePicker().pickMultiImage(imageQuality: 70);
-    }else{
+    } else {
       var file = await ImagePicker().pickVideo(source: ImageSource.gallery);
-      if(file != null){
+      if (file != null) {
         result = [file];
       }
     }
@@ -103,7 +94,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
     //     allowCompression: true,
     //     withData: true);
     for (var file in result) {
-      if(filesFromGallery.length >= 10){
+      if (filesFromGallery.length >= 10) {
         break;
       }
       Uint8List nf = await file.readAsBytes();
@@ -111,7 +102,6 @@ class _AddFileWidgetState extends State<AddFileWidget> {
     }
     setState(() {});
   }
-
 
   Future<void> getAndSetFile(Uint8List file, String path) async {
     final data = await readExifFromBytes(file);
@@ -121,40 +111,41 @@ class _AddFileWidgetState extends State<AddFileWidget> {
     for (var item in data.entries) {
       print('ENTRY: ${item.key} : ${item.value}');
       //Get datetime from metadata
-      if(item.key == 'Image DateTime'){
+      if (item.key == 'Image DateTime') {
         dateTimeShooting = '${item.value}';
         print('DATETIME PHOTO: $dateTimeShooting');
-      //Get latitude from metadata
-      }else if(item.key == 'GPS GPSLatitude'){
+        //Get latitude from metadata
+      } else if (item.key == 'GPS GPSLatitude') {
         lat = getCoordinateFromExifString(item.value.toString());
         print('COORDINATES LAT: $lat');
-      //Get longitude from metadata
-      }else if(item.key == 'GPS GPSLongitude'){
+        //Get longitude from metadata
+      } else if (item.key == 'GPS GPSLongitude') {
         long = getCoordinateFromExifString(item.value.toString());
         print('COORDINATES LONG: $long');
       }
-      
     }
     filesFromGallery.add(
       GalleryFileEntity(
-        id: 0,
-        isFavorite: false,
-        isVideo: checkIsVideo(path),
-        widgetId: null,
-        urlToFile: path,
-        // place: 'Алматы, где то!',
-        place: long != null && lat != null
-        ? (await getPlaceFromCoordinate(lat, long))
-        : 'undefined',
-        dateTime: dateTimeShooting != null
-            ? DateFormat("yyyy:MM:dd hh:mm:ss").parse(dateTimeShooting)
-            : DateTime.now(),
-        // dateTime: DateTime.parse('2015-01-15T20:54:47.266980'),
-        size: file.buffer.lengthInBytes,
-        urlToPreviewVideoImage: null,
-        memoryFilePhotoForVideo: await getVideoFrame(path),
-        duration: checkIsVideo(path) ? (await getVideoDuration(path)).inSeconds : null
-      ),
+          id: 0,
+          isFavorite: false,
+          isVideo: checkIsVideo(path),
+          widgetId: null,
+          urlToFile: path,
+          // place: 'Алматы, где то!',
+          place: long != null && lat != null
+              ? (await getPlaceFromCoordinate(lat, long))
+              : 'undefined',
+          dateTime: dateTimeShooting != null
+              ? DateFormat("yyyy:MM:dd hh:mm:ss").parse(dateTimeShooting)
+              : DateTime.now(),
+          // dateTime: DateTime.parse('2015-01-15T20:54:47.266980'),
+          size: file.buffer.lengthInBytes,
+          urlToPreviewVideoImage: null,
+          memoryFilePhotoForVideo:
+              !checkIsVideo(path) ? null : await getVideoFrame(path),
+          duration: checkIsVideo(path)
+              ? (await getVideoDuration(path)).inSeconds
+              : null),
     );
   }
 
@@ -225,21 +216,23 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                             ),
                             AddPhotoCard(
                               keyAdd: selectKey,
-                              onTap: (){
-                                if(filesFromGallery.length >= 10){
-                                  showAlertToast('Максимум можно выбрать 10 файлов');
-                                }else{  
+                              onTap: () {
+                                if (filesFromGallery.length >= 10) {
+                                  showAlertToast(
+                                      'Максимум можно выбрать 10 файлов');
+                                } else {
                                   showModal();
                                 }
                               },
-                              color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
+                              color:
+                                  ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
                               text: filesFromGallery.length == 0
-                              ? 'Добавить файлы'
-                              : filesFromGallery.length == 1
-                              ? 'Добавлено 1 файл'
-                              : filesFromGallery.length < 5 
-                              ? 'Добавлено ${filesFromGallery.length} файла'
-                              : 'Добавлено ${filesFromGallery.length} файлов',
+                                  ? 'Добавить файлы'
+                                  : filesFromGallery.length == 1
+                                      ? 'Добавлено 1 файл'
+                                      : filesFromGallery.length < 5
+                                          ? 'Добавлено ${filesFromGallery.length} файла'
+                                          : 'Добавлено ${filesFromGallery.length} файлов',
                             ),
                             if (filesFromGallery.isEmpty) ...[
                               SizedBox(
@@ -260,9 +253,11 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                                 spacing: 4.w,
                                 runSpacing: 4.w,
                                 children: List.generate(
-                                    filesFromGallery.length >= 9 ? 9 : filesFromGallery.length,
-                                    (index) =>
-                                        _buildFileItem(index, filesFromGallery[index])),
+                                    filesFromGallery.length >= 9
+                                        ? 9
+                                        : filesFromGallery.length,
+                                    (index) => _buildFileItem(
+                                        index, filesFromGallery[index])),
                               ),
                               SizedBox(
                                 height: 62.h,
@@ -271,7 +266,8 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                             CustomButton(
                               color: ColorStyles.primarySwath,
                               text: 'Готово',
-                              textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+                              textColor:
+                                  ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                               validate: isValidate(),
                               onPressed: complete,
                             ),
@@ -341,14 +337,14 @@ class _AddFileWidgetState extends State<AddFileWidget> {
             children: [
               Positioned.fill(
                   child: e.isVideo && e.memoryFilePhotoForVideo != null
-                  ? Image(
-                    image: MemoryImage(e.memoryFilePhotoForVideo!),
-                    fit: BoxFit.cover,
-                  )
-                  : Image(
-                    image: FileImage(File(e.urlToFile)),
-                    fit: BoxFit.cover,
-              )),
+                      ? Image(
+                          image: MemoryImage(e.memoryFilePhotoForVideo!),
+                          fit: BoxFit.cover,
+                        )
+                      : Image(
+                          image: FileImage(File(e.urlToFile)),
+                          fit: BoxFit.cover,
+                        )),
               Positioned.fill(
                 child: Center(
                     child: GestureDetector(

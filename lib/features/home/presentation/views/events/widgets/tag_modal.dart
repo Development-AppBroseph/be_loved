@@ -30,7 +30,12 @@ class TagModal extends StatefulWidget {
   final bool isCreate;
   final TagEntity? editingTag;
   final int? selectedEvent;
-  const TagModal({Key? key, this.selectedEvent, required this.isCreate, required this.editingTag}) : super(key: key);
+  const TagModal(
+      {Key? key,
+      this.selectedEvent,
+      required this.isCreate,
+      required this.editingTag})
+      : super(key: key);
 
   @override
   State<TagModal> createState() => _TagModalState();
@@ -63,31 +68,32 @@ class _TagModalState extends State<TagModal> {
   }
 
   bool isValidate() {
-    return titleController.text.length > 3 && selectedItems.isNotEmpty;
+    if (titleController.text.contains('#')) {
+      return false;
+    } else if (titleController.text.length > 3 && selectedItems.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void onComplete() {
     if (isValidate()) {
       showLoaderWrapper(context);
       TagEntity newTag = TagEntity(
-        color: MainConfigApp.tagColors[iconIndex],
-        title: titleController.text.trim(),
-        relationId: sl<AuthConfig>().user!.relationId ?? 0,
-        events: selectedItems,
-        important: false,
-        id: widget.editingTag != null ? widget.editingTag!.id : 0
-      );
-      if(widget.editingTag != null){
-        context.read<TagsBloc>().add(TagEditEvent(
-          tagEntity: newTag));
-      }else{
-        context.read<TagsBloc>().add(TagAddEvent(
-          tagEntity: newTag));
+          color: MainConfigApp.tagColors[iconIndex],
+          title: titleController.text.trim(),
+          relationId: sl<AuthConfig>().user!.relationId ?? 0,
+          events: selectedItems,
+          important: false,
+          id: widget.editingTag != null ? widget.editingTag!.id : 0);
+      if (widget.editingTag != null) {
+        context.read<TagsBloc>().add(TagEditEvent(tagEntity: newTag));
+      } else {
+        context.read<TagsBloc>().add(TagAddEvent(tagEntity: newTag));
       }
-
     }
   }
-
 
   void onDelete() {
     context.read<TagsBloc>().add(TagDeleteEvent(id: widget.editingTag!.id));
@@ -100,14 +106,14 @@ class _TagModalState extends State<TagModal> {
     // TODO: implement initState
     super.initState();
 
-    if(widget.editingTag != null){
+    if (widget.editingTag != null) {
       TagEntity model = widget.editingTag!;
       titleController.text = model.title;
       iconIndex = MainConfigApp.tagColors.indexOf(model.color);
       selectedItems = model.events;
     }
-    if(widget.selectedEvent != null && widget.editingTag == null){
-      if(!selectedItems.contains(widget.selectedEvent)){
+    if (widget.selectedEvent != null && widget.editingTag == null) {
+      if (!selectedItems.contains(widget.selectedEvent)) {
         selectedItems.add(widget.selectedEvent!);
       }
     }
@@ -130,7 +136,7 @@ class _TagModalState extends State<TagModal> {
           }
           if (state is TagAddedState || state is TagDeletedState) {
             Loader.hide();
-            if(state is TagAddedState){
+            if (state is TagAddedState) {
               Navigator.pop(context);
             }
           }
@@ -196,7 +202,8 @@ class _TagModalState extends State<TagModal> {
                           style: TextStyle(
                               fontFamily: "Inter",
                               fontSize: 18.sp,
-                              color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                              color:
+                                  ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                               fontWeight: FontWeight.w800),
                         ),
                         Container(
@@ -234,7 +241,8 @@ class _TagModalState extends State<TagModal> {
                                 ),
                                 SvgPicture.asset(
                                   SvgImg.upDownIcon,
-                                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                  color: ClrStyle
+                                      .black2CToWhite[sl<AuthConfig>().idx],
                                 ),
                               ],
                             ),
@@ -256,7 +264,8 @@ class _TagModalState extends State<TagModal> {
                                 fontFamily: 'Inter',
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.w800,
-                                color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                                color: ClrStyle
+                                    .black17ToWhite[sl<AuthConfig>().idx],
                               ),
                             ),
                             Text(
@@ -265,7 +274,8 @@ class _TagModalState extends State<TagModal> {
                                 fontFamily: 'Inter',
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w800,
-                                color: ClrStyle.greyToWhite[sl<AuthConfig>().idx],
+                                color:
+                                    ClrStyle.greyToWhite[sl<AuthConfig>().idx],
                               ),
                             ),
                           ],
@@ -347,8 +357,7 @@ class _TagModalState extends State<TagModal> {
                     padding: EdgeInsets.only(top: 17.h),
                     child: Column(
                       children: [
-                        if(widget.editingTag != null)
-                        ...[
+                        if (widget.editingTag != null) ...[
                           InkWell(
                             onTap: onDelete,
                             child: CupertinoCard(
@@ -363,20 +372,27 @@ class _TagModalState extends State<TagModal> {
                                       elevation: 0,
                                       margin: EdgeInsets.all(1.w),
                                       radius: BorderRadius.circular(17.r),
-                                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+                                      color: ClrStyle
+                                          .whiteTo17[sl<AuthConfig>().idx],
                                     ),
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.width,
                                     height: 60.h,
                                     alignment: Alignment.center,
-                                    child: Text('Удалить тег', style: TextStyles(context).black_20_w700.copyWith(color: ColorStyles.redColor)),
+                                    child: Text('Удалить тег',
+                                        style: TextStyles(context)
+                                            .black_20_w700
+                                            .copyWith(
+                                                color: ColorStyles.redColor)),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          SizedBox(height: 17.h,),
+                          SizedBox(
+                            height: 17.h,
+                          ),
                         ],
                         Row(
                           children: [
@@ -387,7 +403,8 @@ class _TagModalState extends State<TagModal> {
                                 text: 'Создать событие',
                                 validate: true,
                                 code: false,
-                                textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+                                textColor:
+                                    ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
@@ -401,15 +418,20 @@ class _TagModalState extends State<TagModal> {
                             Expanded(
                               child: CustomButton(
                                   color: ColorStyles.accentColor,
-                                  text: widget.editingTag != null ? 'Готово' : 'Создать тег',
+                                  text: widget.editingTag != null
+                                      ? 'Готово'
+                                      : 'Создать тег',
                                   validate: isValidate(),
                                   code: false,
-                                  textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+                                  textColor:
+                                      ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                   onPressed: onComplete),
                             )
                           ],
                         ),
-                        SizedBox(height: 60.h,),
+                        SizedBox(
+                          height: 60.h,
+                        ),
                       ],
                     ),
                   ),

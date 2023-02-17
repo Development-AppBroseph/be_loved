@@ -37,6 +37,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'modals/add_event_modal.dart';
 import 'modals/create_event_modal.dart';
@@ -69,7 +70,7 @@ class RelationShipsPage extends StatefulWidget {
 }
 
 class _RelationShipsPageState extends State<RelationShipsPage>
-    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   final int maxLength = 18;
   String text = '';
   final _streamController = StreamController<int>();
@@ -81,14 +82,23 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
   late AnimationController _spoonController;
   static final _spoonTween = CurveTween(curve: Curves.easeInOutQuint);
+  late final AnimationController animationController;
 
   final TextEditingController _controller = TextEditingController(
       text: sl<AuthConfig>().user == null ? '' : sl<AuthConfig>().user!.name);
   FocusNode f1 = FocusNode();
+  bool heartPressed = false;
 
   @override
   void initState() {
     super.initState();
+    animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600));
+    animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animationController.reverse();
+      }
+    });
     _spoonController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _controller.addListener(() {
@@ -110,6 +120,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   @override
   void dispose() {
     super.dispose();
+    animationController.dispose();
     _controller.removeListener(() {});
     _streamController.close();
     _streamControllerCarousel.close();
@@ -526,10 +537,22 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              SvgPicture.asset(
-                                                SvgImg.heart,
-                                                height: 59.h,
-                                                width: 70.w,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  if (heartPressed == false) {
+                                                    heartPressed = true;
+                                                    animationController
+                                                        .forward();
+                                                  } else {
+                                                    heartPressed = false;
+                                                    animationController.reset();
+                                                  }
+                                                },
+                                                child: Lottie.asset(
+                                                    'assets/animations/heart.json',
+                                                    repeat: false,
+                                                    controller:
+                                                        animationController),
                                               ),
                                             ],
                                           ),
@@ -568,7 +591,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
   Container _body(EventsBloc eventsBloc, BuildContext context, bool isVisible) {
     return Container(
-      color: !isVisible ? const Color.fromRGBO(240, 240, 240, 1.0) : null,
+      color: !isVisible ? ClrStyle.backToBlack2C[sl<AuthConfig>().idx] : null,
       child: Opacity(
         opacity: isVisible ? 1 : 0,
         child: Column(
@@ -834,31 +857,26 @@ class _RelationShipsPageState extends State<RelationShipsPage>
               ),
             ),
           ),
-        // SizedBox(
-        //   width: 134.h,
-        //   height: 134.h,
-        //   child: CupertinoCard(
-        //     elevation: 0,
-        //     margin: EdgeInsets.zero,
-        //     radius: BorderRadius.circular(80.r),
-        //     color: Colors.white,
-        //   ),
-        // ),
-        Container(
-          width: 134.h,
-          height: 134.h,
-          decoration: BoxDecoration(
-            // color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(38.r),
+        ClipRRect(
+          borderRadius: BorderRadius.all(
+            Radius.circular(38.r),
+          ),
+          child: Container(
+            width: 134.h,
+            height: 134.h,
+            decoration: BoxDecoration(
+              // color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(38.r),
+              ),
+              border: Border.all(width: 5.h, color: Colors.white),
+              image: path == null || path.trim() == ''
+                  ? DecorationImage(
+                      fit: BoxFit.cover,
+                      image: getImage(path),
+                    )
+                  : null,
             ),
-            border: Border.all(width: 5.h, color: Colors.white),
-            image: path == null || path.trim() == ''
-                ? DecorationImage(
-                    fit: BoxFit.cover,
-                    image: getImage(path),
-                  )
-                : null,
           ),
         ),
       ],

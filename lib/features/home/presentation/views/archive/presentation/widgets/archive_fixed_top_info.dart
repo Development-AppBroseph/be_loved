@@ -51,27 +51,29 @@ class ArchiveFixedTopInfo extends StatelessWidget {
                 GestureDetector(
                   onTap: onBackTap,
                   behavior: HitTestBehavior.opaque,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        SvgImg.back,
-                        height: 26.32.h,
-                        color: Colors.white,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 20.w),
-                        child: Text(
-                          'Назад',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 20.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
+                  child: SizedBox(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          SvgImg.back,
+                          height: 26.32.h,
+                          color: Colors.white,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 20.w),
+                          child: Text(
+                            'Назад',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 20.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
                 else

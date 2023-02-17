@@ -202,7 +202,7 @@ class ArchiveRemoteDataSourceImpl
     }
     Map<String, dynamic> mapDataList = {
       'files': files,
-      'places': places,
+      'places': places.isEmpty ? 'undefiend' : places,
       'dates': times,
       // 'images': images,
       'durations': durations

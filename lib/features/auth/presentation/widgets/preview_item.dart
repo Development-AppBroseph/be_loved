@@ -21,12 +21,22 @@ class PreviewItem extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  color: ColorStyles.greyColor,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  child: title == 'Планируй события'
-                      ? Image.asset('assets/images/onboarding_second.png')
-                      : Image.asset('assets/images/onboarding_first.png'),
+                  decoration: BoxDecoration(
+                    color: ColorStyles.greyColor,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: title == 'Планируй события'
+                          ? const AssetImage(
+                              'assets/images/onboarding_second.png')
+                          : title == "Сохраняй моменты"
+                              ? const AssetImage(
+                                  'assets/images/onboarding_first.png')
+                              : const AssetImage(
+                                  'assets/images/onboarding_third.png'),
+                    ),
+                  ),
                 ),
               ),
             ],
