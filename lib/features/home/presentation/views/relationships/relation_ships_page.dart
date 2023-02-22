@@ -547,6 +547,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                                     heartPressed = false;
                                                     animationController.reset();
                                                   }
+                                                  eventsBloc.sendNotification();
                                                 },
                                                 child: Lottie.asset(
                                                     'assets/animations/heart.json',

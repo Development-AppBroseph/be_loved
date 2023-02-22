@@ -70,7 +70,9 @@ enum Endpoints {
 
 
   //VK
-  vkAuth
+  vkAuth,
+  //SendNoti
+  sendNoti
 }
 
 extension EndpointsExtension on Endpoints {
@@ -158,6 +160,8 @@ extension EndpointsExtension on Endpoints {
         return "/relations/background";
       case Endpoints.setBacks:
         return "/relations/background";
+      case Endpoints.sendNoti:
+        return "/notifications/send_push";  
       default:
         return '';
     }

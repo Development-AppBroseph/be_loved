@@ -12,6 +12,8 @@ import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:be_loved/features/home/domain/usecases/get_old_events.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../domain/usecases/send_noti.dart';
 part 'events_event.dart';
 part 'events_state.dart';
 
@@ -21,10 +23,13 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   final EditEvent editEvent;
   final DeleteEvent deleteEvent;
   final ChangePositionEvent changePositionEvent;
+  final SendNoti sendNoti;
 
   final GetOldEvents getOldEvents;
 
-  EventsBloc(this.addEvent, this.getEvents, this.deleteEvent, this.changePositionEvent, this.editEvent, this.getOldEvents) : super(EventInitialState()) {
+  EventsBloc(this.addEvent, this.getEvents, this.deleteEvent,
+      this.changePositionEvent, this.editEvent, this.getOldEvents, this.sendNoti)
+      : super(EventInitialState()) {
     on<GetEventsEvent>(_getEvents);
     on<EventAddEvent>(_addEvents);
     on<EventEditEvent>(_editEvents);
@@ -42,16 +47,13 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   TagEntity? selectedTag;
   int eventDetailSelectedId = 0;
 
-
   //Old events
   List<EventEntity> eventsOld = [];
   int page = 0;
   bool isLoading = false;
   bool isEnd = false;
 
-
   void _getOldEvents(GetOldEventsEvent event, Emitter<EventsState> emit) async {
-
     //pagination
     isLoading = true;
     if (event.isReset) {
@@ -59,7 +61,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       page = 0;
       isEnd = false;
       eventsOld = [];
-    }else{
+    } else {
       emit(EventBlankState());
     }
     page++;
@@ -70,9 +72,10 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       (error) => errorCheck(error),
       (data) {
         //pagination
-        if(data.any((element) => eventsOld.any((file) => file.id == element.id))){
+        if (data
+            .any((element) => eventsOld.any((file) => file.id == element.id))) {
           isEnd = true;
-        }else{
+        } else {
           if (event.isReset) {
             eventsOld = data;
           } else {
@@ -93,7 +96,8 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     EventsState state = gotEvents.fold(
       (error) => errorCheck(error),
       (data) {
-        data.sort(((a, b) => int.parse(a.datetimeString).compareTo(int.parse(b.datetimeString))));
+        data.sort(((a, b) => int.parse(a.datetimeString)
+            .compareTo(int.parse(b.datetimeString))));
         events = data;
         eventsSorted = data;
         eventsInHome = getInHomeEvents(data);
@@ -103,25 +107,27 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     emit(state);
   }
 
-
-
   void _addEvents(EventAddEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
-    final data = await addEvent.call(AddEventParams(eventEntity: event.eventEntity));
+    final data =
+        await addEvent.call(AddEventParams(eventEntity: event.eventEntity));
     EventsState state = data.fold(
       (error) => errorCheck(error),
       (data) {
         List<EventEntity> newSortedList = [];
         bool isAdded = false;
-        for(EventEntity eventItem in events){
-          print('TEST: ${getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch}');
-          if(!isAdded && getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch){
+        for (EventEntity eventItem in events) {
+          print(
+              'TEST: ${getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch}');
+          if (!isAdded &&
+              getEventStart(eventItem).millisecondsSinceEpoch >=
+                  getEventStart(data).millisecondsSinceEpoch) {
             newSortedList.add(data);
             isAdded = true;
           }
           newSortedList.add(eventItem);
         }
-        if(!isAdded){
+        if (!isAdded) {
           newSortedList.add(data);
         }
         // events = events.reversed.toList();
@@ -136,44 +142,51 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     emit(state);
   }
 
-
-
-
   void _editEvents(EventEditEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
-    final data = await editEvent.call(EditEventParams(eventEntity: event.eventEntity, photo: event.photo, isDeletePhoto: event.isDeletePhoto));
+    final data = await editEvent.call(EditEventParams(
+        eventEntity: event.eventEntity,
+        photo: event.photo,
+        isDeletePhoto: event.isDeletePhoto));
     EventsState state = data.fold(
       (error) => errorCheck(error),
       (data) {
         events.removeWhere((element) => element.id == event.eventEntity.id);
         List<EventEntity> newSortedList = [];
         bool isAdded = false;
-        for(EventEntity eventItem in events){
-          print('TEST: ${getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch}');
-          if(!isAdded && getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch){
+        for (EventEntity eventItem in events) {
+          print(
+              'TEST: ${getEventStart(eventItem).millisecondsSinceEpoch >= getEventStart(data).millisecondsSinceEpoch}');
+          if (!isAdded &&
+              getEventStart(eventItem).millisecondsSinceEpoch >=
+                  getEventStart(data).millisecondsSinceEpoch) {
             newSortedList.add(data);
             isAdded = true;
           }
           newSortedList.add(eventItem);
         }
-        if(!isAdded){
+        if (!isAdded) {
           newSortedList.add(data);
         }
         events = newSortedList;
         selectedTag = null;
         eventsSorted = events;
-        if(eventsInHome.any((element) => element.id == event.eventEntity.id,)){
-          for(int i = 0; i < eventsInHome.length; i++){
-            if(eventsInHome[i].id == event.eventEntity.id){
+        if (eventsInHome.any(
+          (element) => element.id == event.eventEntity.id,
+        )) {
+          for (int i = 0; i < eventsInHome.length; i++) {
+            if (eventsInHome[i].id == event.eventEntity.id) {
               eventsInHome[i] = data;
             }
           }
         }
 
         //Old
-        if(eventsOld.any((element) => element.id == event.eventEntity.id,)){
-          for(int i = 0; i < eventsOld.length; i++){
-            if(eventsOld[i].id == event.eventEntity.id){
+        if (eventsOld.any(
+          (element) => element.id == event.eventEntity.id,
+        )) {
+          for (int i = 0; i < eventsOld.length; i++) {
+            if (eventsOld[i].id == event.eventEntity.id) {
               eventsOld[i] = data;
             }
           }
@@ -184,38 +197,42 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     emit(state);
   }
 
-
-
-  void _addHomeEvents(EventChangeToHomeEvent event, Emitter<EventsState> emit) async {
+  void _addHomeEvents(
+      EventChangeToHomeEvent event, Emitter<EventsState> emit) async {
     emit(EventBlankState());
-    if(event.eventEntity == null){
-      eventsDeleted.removeWhere((element) => element.id == eventsInHome[event.position].id);
+    if (event.eventEntity == null) {
+      eventsDeleted.removeWhere(
+          (element) => element.id == eventsInHome[event.position].id);
       eventsDeleted.add(eventsInHome[event.position]);
       eventsInHome.removeAt(event.position);
-    }else{
-      eventsDeleted.removeWhere((element) => element.id == event.eventEntity!.id);
-      if(eventsInHome.any((element) => element.id == event.eventEntity!.id)){
-        eventsInHome.removeWhere((element) => element.id == event.eventEntity!.id);
+    } else {
+      eventsDeleted
+          .removeWhere((element) => element.id == event.eventEntity!.id);
+      if (eventsInHome.any((element) => element.id == event.eventEntity!.id)) {
+        eventsInHome
+            .removeWhere((element) => element.id == event.eventEntity!.id);
       }
-      eventsInHome.insert(event.position == 0 
-        ? 0 
-        : event.position == 1
-        ? 1
-        : event.position-1, event.eventEntity!);
+      eventsInHome.insert(
+          event.position == 0
+              ? 0
+              : event.position == 1
+                  ? 1
+                  : event.position - 1,
+          event.eventEntity!);
     }
     print('DELETE LIST: ${eventsDeleted}');
     emit(GotSuccessEventsState());
 
-
     Map<String, int> items = {};
-    for(var deletedItem in eventsDeleted){
+    for (var deletedItem in eventsDeleted) {
       items['${deletedItem.id}'] = 0;
     }
-    for(var inHomeItem in eventsInHome){
-      items['${inHomeItem.id}'] = eventsInHome.indexOf(inHomeItem)+1;
+    for (var inHomeItem in eventsInHome) {
+      items['${inHomeItem.id}'] = eventsInHome.indexOf(inHomeItem) + 1;
     }
     print('DATA TO BACK: ${items}');
-    final data = await changePositionEvent.call(ChangePositionEventParams(items: items));
+    final data =
+        await changePositionEvent.call(ChangePositionEventParams(items: items));
     EventsState state = data.fold(
       (error) => errorCheck(error),
       (data) {
@@ -226,28 +243,22 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     emit(state);
   }
 
-
-
-
-
   void _sortEvents(SortByTagEvent event, Emitter<EventsState> emit) async {
     emit(EventBlankState());
     eventsSorted = [];
-    if(selectedTag != null && selectedTag!.id == event.tagEntity.id){
+    if (selectedTag != null && selectedTag!.id == event.tagEntity.id) {
       selectedTag = null;
       eventsSorted.addAll(events);
-    }else{
+    } else {
       selectedTag = event.tagEntity;
-      for(var eventItem in events){
-        if(event.tagEntity.events.contains(eventItem.id)){
+      for (var eventItem in events) {
+        if (event.tagEntity.events.contains(eventItem.id)) {
           eventsSorted.add(eventItem);
         }
       }
     }
     emit(GotSuccessEventsState());
   }
-
-
 
   void _resetEvents(ResetSortEvent event, Emitter<EventsState> emit) async {
     emit(EventBlankState());
@@ -256,17 +267,13 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     emit(GotSuccessEventsState());
   }
 
-
-
-
-
   void _deleteEvent(EventDeleteEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
     final data = await deleteEvent.call(DeleteEventParams(ids: event.ids));
     EventsState state = data.fold(
       (error) => errorCheck(error),
       (data) {
-        for(int id in event.ids){
+        for (int id in event.ids) {
           events.removeWhere((element) => element.id == id);
           eventsInHome.removeWhere((element) => element.id == id);
           eventsDeleted.removeWhere((element) => element.id == id);
@@ -279,62 +286,67 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     emit(state);
   }
 
+  Future<void> sendNotification() async {
+    // try {
+      emit(EventLoadingState());
+      final data = await sendNoti.call(SendNotiParams());
+    // } catch (e) {
+      emit(EventErrorState(message: '', isTokenError: false));
+    // }
+  }
 
-
-
-  EventsState errorCheck(Failure failure){
+  EventsState errorCheck(Failure failure) {
     print('FAIL: $failure');
-    if(failure == ConnectionFailure() || failure == NetworkFailure()){
+    if (failure == ConnectionFailure() || failure == NetworkFailure()) {
       return EventInternetErrorState();
-    }else if(failure is ServerFailure){
-      if(failure.message == 'token_error'){
+    } else if (failure is ServerFailure) {
+      if (failure.message == 'token_error') {
         print('token_error');
-        return EventErrorState(message: failure.message.length < 100 ? failure.message : 'Вы не авторизованы', isTokenError: true);
+        return EventErrorState(
+            message: failure.message.length < 100
+                ? failure.message
+                : 'Вы не авторизованы',
+            isTokenError: true);
       }
-      return EventErrorState(message: failure.message.length < 100 ? failure.message : 'Ошибка сервера', isTokenError: false);
-    }else{
+      return EventErrorState(
+          message:
+              failure.message.length < 100 ? failure.message : 'Ошибка сервера',
+          isTokenError: false);
+    } else {
       return EventErrorState(message: 'Повторите попытку', isTokenError: false);
     }
   }
 
-
-
-
-
-  List<EventEntity> getInHomeEvents(List<EventEntity> list){
+  List<EventEntity> getInHomeEvents(List<EventEntity> list) {
     EventEntity? firstItem;
     EventEntity? secondItem;
     EventEntity? thirdItem;
     List<EventEntity> result = [];
 
-    for(EventEntity item in list){
-      if(item.mainPosition != 0){
-        if(item.mainPosition == 1){
+    for (EventEntity item in list) {
+      if (item.mainPosition != 0) {
+        if (item.mainPosition == 1) {
           firstItem = item;
-        }else if(item.mainPosition == 2){
+        } else if (item.mainPosition == 2) {
           secondItem = item;
-        }else if(item.mainPosition == 3){
+        } else if (item.mainPosition == 3) {
           thirdItem = item;
         }
       }
     }
-    if(firstItem != null){
+    if (firstItem != null) {
       result.add(firstItem);
     }
-    if(secondItem != null){
+    if (secondItem != null) {
       result.add(secondItem);
     }
-    if(thirdItem != null){
+    if (thirdItem != null) {
       result.add(thirdItem);
     }
     return result;
   }
 
-
-
-
-  DateTime getEventStart(EventEntity event){
+  DateTime getEventStart(EventEntity event) {
     return DateTime.now().add(Duration(days: int.parse(event.datetimeString)));
   }
-
-} 
+}

@@ -14,11 +14,10 @@ abstract class MainWidgetsRemoteDataSource {
   Future<void> addPurposeWidget(int id);
   Future<void> deleteFileWidget(int id);
   Future<void> deletePurposeWidget(int id);
-
+  Future<void> sendNotification();
 }
 
-class MainWidgetsRemoteDataSourceImpl
-    implements MainWidgetsRemoteDataSource {
+class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
   final Dio dio;
 
   MainWidgetsRemoteDataSourceImpl({required this.dio});
@@ -26,7 +25,6 @@ class MainWidgetsRemoteDataSourceImpl
     "Accept": "application/json",
     "Content-Type": "application/json"
   };
-
 
   @override
   Future<MainWidgetsEntity> getMainWidgets() async {
@@ -38,33 +36,29 @@ class MainWidgetsRemoteDataSourceImpl
             headers: headers));
     printRes(response);
     if (response.statusCode == 200) {
+      final file = response.data['file'] == null
+          ? null
+          : GalleryFileModel.fromJson(response.data['file']);
+      final purposes = response.data['targets'] == null
+          ? null
+          : (response.data['targets'] as List)
+              .map((json) => PurposeModel.fromJson(json))
+              .toList();
 
-      final file = response.data['file'] == null ? null : GalleryFileModel.fromJson(response.data['file']);
-      final purposes = response.data['targets'] == null ? null : (response.data['targets'] as List)
-            .map((json) => PurposeModel.fromJson(json))
-            .toList();
-
-      return MainWidgetsEntity(
-        file: file, 
-        purposes: purposes ?? []
-      );
-    } else if(response.statusCode == 401){
+      return MainWidgetsEntity(file: file, purposes: purposes ?? []);
+    } else if (response.statusCode == 401) {
       throw ServerException(message: 'token_error');
-    }else {
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
 
   @override
   Future<void> addFileWidget(int id) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.post(Endpoints.addFileWidget.getPath(params: [id]),
-        data: FormData.fromMap({
-          'file': id
-        }),
+    Response response = await dio.post(
+        Endpoints.addFileWidget.getPath(params: [id]),
+        data: FormData.fromMap({'file': id}),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,
@@ -76,19 +70,13 @@ class MainWidgetsRemoteDataSourceImpl
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
-
-
 
   @override
   Future<void> addPurposeWidget(int id) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.post(Endpoints.addPurposeWidget.getPath(params: [id]),
-        data: FormData.fromMap({
-          'target': id
-        }),
+    Response response = await dio.post(
+        Endpoints.addPurposeWidget.getPath(params: [id]),
+        data: FormData.fromMap({'target': id}),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,
@@ -100,16 +88,12 @@ class MainWidgetsRemoteDataSourceImpl
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
-
-
 
   @override
   Future<void> deleteFileWidget(int id) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.delete(Endpoints.deleteFileWidget.getPath(params: [id]),
+    Response response = await dio.delete(
+        Endpoints.deleteFileWidget.getPath(params: [id]),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,
@@ -122,21 +106,36 @@ class MainWidgetsRemoteDataSourceImpl
     }
   }
 
-
-
-
-
-
   @override
   Future<void> deletePurposeWidget(int id) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.delete(Endpoints.deletePurposeWidget.getPath(params: [id]),
+    Response response = await dio.delete(
+        Endpoints.deletePurposeWidget.getPath(params: [id]),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,
             headers: headers));
     printRes(response);
     if (!(response.statusCode! < 200 || response.statusCode! > 204)) {
+      return;
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+  @override
+  Future<void> sendNotification() async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.post(
+      Endpoints.sendNoti.getPath(),
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 699,
+        headers: headers,
+      ),
+    );
+    print(response.statusCode);
+    if (response.statusCode! > 200 || response.statusCode! > 204) {
       return;
     } else {
       throw ServerException(message: 'Ошибка с сервером');

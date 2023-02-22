@@ -12,4 +12,5 @@ abstract class MainWidgetsRepository {
   Future<Either<Failure, void>> addPurposeWidget(AddPurposeWidgetParams params);
   Future<Either<Failure, void>> deleteFileWidget(DeleteFileWidgetParams params);
   Future<Either<Failure, void>> deletePurposeWidget(DeletePurposeWidgetParams params);
+  Future<Either<Failure, void>> sendNoti();
 }

@@ -6,15 +6,10 @@ import 'package:be_loved/features/home/domain/repositories/main_widgets_reposito
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 
-
 class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
   final MainWidgetsRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
-  MainWidgetsRepositoryImpl(
-      this.remoteDataSource, this.networkInfo);
-
-
-
+  MainWidgetsRepositoryImpl(this.remoteDataSource, this.networkInfo);
 
   @override
   Future<Either<Failure, MainWidgetsEntity>> getMainWidgets() async {
@@ -24,7 +19,7 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -33,8 +28,6 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
       return Left(NetworkFailure());
     }
   }
-
-
 
   @override
   Future<Either<Failure, void>> addFileWidget(params) async {
@@ -44,7 +37,7 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -53,11 +46,6 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
-
-
 
   @override
   Future<Either<Failure, void>> addPurposeWidget(params) async {
@@ -67,7 +55,7 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -76,11 +64,6 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
-
-
 
   @override
   Future<Either<Failure, void>> deletePurposeWidget(params) async {
@@ -90,7 +73,7 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -99,10 +82,6 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
-
 
   @override
   Future<Either<Failure, void>> deleteFileWidget(params) async {
@@ -112,7 +91,7 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -122,5 +101,20 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, void>> sendNoti() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.sendNotification();
+        return Right(items);
+      } catch (e) {
+        if (e is ServerException) {
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
 }
-

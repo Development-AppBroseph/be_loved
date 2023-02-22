@@ -48,6 +48,7 @@ import 'package:be_loved/features/home/domain/usecases/get_season_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
 import 'package:be_loved/features/home/domain/usecases/put_code.dart';
+import 'package:be_loved/features/home/domain/usecases/send_noti.dart';
 import 'package:be_loved/features/home/domain/usecases/send_photo_purpose.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
@@ -158,10 +159,11 @@ void setupInjections() {
   sl.registerLazySingleton(() => ChangePositionEvent(sl()));
   sl.registerLazySingleton(() => GetEvents(sl()));
   sl.registerLazySingleton(() => GetOldEvents(sl()));
+  sl.registerLazySingleton(() => SendNoti(mainWidgetsRepository: sl()));
 
   //Blocs
   sl.registerFactory<EventsBloc>(
-    () => EventsBloc(sl(), sl(), sl(), sl(), sl(), sl()),
+    () => EventsBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()),
   );
 
 
