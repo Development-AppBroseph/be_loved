@@ -35,9 +35,12 @@ import 'package:get/route_manager.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'features/auth/data/models/auth/user.dart';
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  AppMetrica.runZoneGuarded(() async {
+    AppMetrica.activate(const AppMetricaConfig("416e2567-76ea-42d1-adce-c786faf3ada5"));
+    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   setupInjections();
   HttpOverrides.global = MyHttpOverrides();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -131,6 +134,7 @@ void main() async {
         child: MyApp(user: user),
       ),
     ));
+  });
   });
 }
 

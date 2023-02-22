@@ -83,6 +83,7 @@ dependencies:
   flutter_inappwebview: ^5.7.2+3
   comparer: ^2.0.1
   webview_flutter: ^4.0.2
+  appmetrica_plugin: ^1.1.0
 
 dev_dependencies:
   flutter_test:
