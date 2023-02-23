@@ -135,7 +135,7 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
       ),
     );
     print(response.statusCode);
-    if (response.statusCode! > 200 || response.statusCode! > 204) {
+    if (response.statusCode! >= 200 || response.statusCode! > 204) {
       return;
     } else {
       throw ServerException(message: 'Ошибка с сервером');

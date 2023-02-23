@@ -287,12 +287,12 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   }
 
   Future<void> sendNotification() async {
-    // try {
+    try {
       emit(EventLoadingState());
-      final data = await sendNoti.call(SendNotiParams());
-    // } catch (e) {
+      await sendNoti.call(SendNotiParams());
+    } catch (e) {
       emit(EventErrorState(message: '', isTokenError: false));
-    // }
+    }
   }
 
   EventsState errorCheck(Failure failure) {

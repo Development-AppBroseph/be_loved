@@ -43,8 +43,7 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
   int trialsCount = 0;
   WebSocket? channel;
 
-  void _initWebSocket(
-      WebSocketEvent event, Emitter<WebSocketState> emit) async {
+  void _initWebSocket( WebSocketEvent event, Emitter<WebSocketState> emit) async {
     print('WEBSOCKET: ${'${Config.ws.ws}/ws/${event.token}'}');
     channel = await WebSocket.connect(
       '${'${Config.ws.ws}/ws/${event.token}'}',
