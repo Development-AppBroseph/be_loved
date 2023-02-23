@@ -49,7 +49,7 @@ void main() async {
       .instance
       .checkGooglePlayServicesAvailability();
 
-  if (availability.value == 0) {
+  if (availability.value == 0 || Platform.isIOS) {
     await Firebase.initializeApp();
 
     await FirebaseMessaging.instance.requestPermission(

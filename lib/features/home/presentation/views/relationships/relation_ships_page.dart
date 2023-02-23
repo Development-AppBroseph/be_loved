@@ -858,26 +858,20 @@ class _RelationShipsPageState extends State<RelationShipsPage>
               ),
             ),
           ),
-        ClipRRect(
-          borderRadius: BorderRadius.all(
-            Radius.circular(38.r),
-          ),
-          child: Container(
-            width: 134.h,
-            height: 134.h,
-            decoration: BoxDecoration(
-              // color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(38.r),
-              ),
-              border: Border.all(width: 5.h, color: Colors.white),
-              image: path == null || path.trim() == ''
-                  ? DecorationImage(
-                      fit: BoxFit.cover,
-                      image: getImage(path),
-                    )
-                  : null,
+        Container(
+          width: 134.h,
+          height: 134.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(38.r),
             ),
+            border: Border.all(width: 5.h, color: Colors.white),
+            image: path == null || path.trim() == ''
+                ? DecorationImage(
+                    fit: BoxFit.cover,
+                    image: getImage(path),
+                  )
+                : null,
           ),
         ),
       ],
