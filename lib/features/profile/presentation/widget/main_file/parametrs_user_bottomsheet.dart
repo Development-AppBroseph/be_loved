@@ -78,24 +78,24 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                   showModalDecor(context, () {});
                 },
               ),
-              // SizedBox(
-              //   height: 87.h - 24.h,
-              // ),
-              // DevideSettings(
-              //   title: "Подписка BeLoved+",
-              //   subtitle: "Подробнее",
-              //   haveToggleSwitch: false,
-              //   icon: SvgImg.person,
-              //   onPressed: () {
-              //     Navigator.pop(context);
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => SubscriptionView(),
-              //       ),
-              //     );
-              //   },
-              // ),
+              SizedBox(
+                height: 87.h - 24.h,
+              ),
+              DevideSettings(
+                title: "Подписка BeLoved+",
+                subtitle: "Подробнее",
+                haveToggleSwitch: false,
+                icon: SvgImg.person,
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SubscriptionView(),
+                    ),
+                  );
+                },
+              ),
               DevideSettings(
                 title: "Уведомления",
                 subtitle: "от приложения",

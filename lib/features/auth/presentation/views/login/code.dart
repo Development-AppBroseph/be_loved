@@ -224,7 +224,7 @@ class _CodePageState extends State<CodePage> {
                             child: Pinput(
                               pinAnimationType: PinAnimationType.none,
                               showCursor: false,
-                              length: 5,
+                              length: 4,
                               androidSmsAutofillMethod:
                                   AndroidSmsAutofillMethod.smsRetrieverApi,
                               controller: textEditingControllerUp,
@@ -232,7 +232,7 @@ class _CodePageState extends State<CodePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               onChanged: (value) {
                                 print('object ${value.length}---}');
-                                if (value.length == 5) {
+                                if (value.length == 4) {
                                   BlocProvider.of<AuthBloc>(context)
                                       .add(TextFieldFilled(true));
                                   focusNode.unfocus();

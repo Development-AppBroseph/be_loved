@@ -58,7 +58,7 @@ class MemoryMiniInfoCard extends StatelessWidget {
                     child: Text(
                         sl<AuthConfig>().memoryEntity ==
                                 null
-                            ? '0/10 ГБ'
+                            ? '0/2 ГБ'
                             : '${sl<AuthConfig>().memoryEntity!.getInGigabytesCurrentSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
                         style: TextStyles(context)
                             .white_15_w800.copyWith(color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]))),
@@ -91,7 +91,7 @@ class MemoryMiniInfoCard extends StatelessWidget {
             child: Text(
                 sl<AuthConfig>().memoryEntity ==
                         null
-                    ? '0/10 ГБ'
+                    ? '0/2 ГБ'
                     : '${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
                 style: TextStyles(context)
                     .white_18_w800

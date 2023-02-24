@@ -46,7 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogOut>((event, emit) => _logOut(event, emit));
     on<EditUserInfo>((event, emit) => _editUserInfo(event, emit));
     on<TextFieldFilled>((event, emit) => _textFieldChangeState(event, emit));
-    on<TryAuthVK>((event, emit) => _tryAuthVK(event, emit));
+    // on<TryAuthVK>((event, emit) => _tryAuthVK(event, emit));
   }
 
   void _sendPhone(SendPhone event, Emitter<AuthState> emit) async {
@@ -69,24 +69,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   //Send vk code
-  void _tryAuthVK(TryAuthVK event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    var result = await Repository().authVK(event.code);
-    if (result == 'retry') {
-      emit(VKError('Повторите попытку'));
-    } else if (result == 'register') {
-      vkCode = event.code;
-      emit(VKRequiredRegister(code: event.code));
-    } else {
-      print('SETTTING TOKEN VK $result');
-      await SharedPreferences.getInstance()
-        ..setString('token', result);
-      MySecureStorage().setToken(result);
-      token = result;
-      sl<AuthConfig>().token = result;
-      emit(VKLoggin(token: result, code: event.code));
-    }
-  }
+  // void _tryAuthVK(TryAuthVK event, Emitter<AuthState> emit) async {
+  //   emit(AuthLoading());
+  //   var result = await Repository().authVK(event.code);
+  //   if (result == 'retry') {
+  //     emit(VKError('Повторите попытку'));
+  //   } else if (result == 'register') {
+  //     vkCode = event.code;
+  //     emit(VKRequiredRegister(code: event.code));
+  //   } else {
+  //     print('SETTTING TOKEN VK $result');
+  //     await SharedPreferences.getInstance()
+  //       ..setString('token', result);
+  //     MySecureStorage().setToken(result);
+  //     token = result;
+  //     sl<AuthConfig>().token = result;
+  //     emit(VKLoggin(token: result, code: event.code));
+  //   }
+  // }
 
   void _editUserInfo(EditUserInfo event, Emitter<AuthState> emit) async {
     var result = await ImagePicker().pickImage(

@@ -1,3 +1,3 @@
-library sberbank_acquiring_ui;
+// library sberbank_acquiring_ui;
 
-export 'features/web_view_payment.dart';
+// export 'features/web_view_payment.dart';

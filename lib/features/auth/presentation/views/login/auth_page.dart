@@ -138,14 +138,14 @@ class _AuthPageState extends State<AuthPage> {
                           ),
                           OptionBtn(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (BuildContext context) =>
-                                            VKView(onCodeReturn: (code) {
-                                              Navigator.pop(context);
-                                              authBloc.add(TryAuthVK(code));
-                                            })));
+                                // Navigator.push(
+                                //     context,
+                                //     CupertinoPageRoute(
+                                //         builder: (BuildContext context) =>
+                                //             VKView(onCodeReturn: (code) {
+                                //               Navigator.pop(context);
+                                //               authBloc.add(TryAuthVK(code));
+                                //             })));
                               },
                               text: 'Через Вконтакте',
                               isPhone: false),

@@ -2,14 +2,14 @@
 // import 'package:flutter/widgets.dart';
 // import 'package:webview_flutter/webview_flutter.dart';
 
-// /// {@template on_finished}
+//  ///{@template on_finished}
 // /// Коллбэк при успешной оплате
 // /// {@endtemplate}
 // typedef OnFinished = void Function(String? orderId);
 
-// /// {@template on_load}
+//  ////{@template on_load}
 // /// Коллбэк при загрузки
-// /// {@endtemplate}
+// ///{@endtemplate}
 // typedef OnLoad = void Function(bool isLoading);
 
 // /// {@template on_error}
@@ -17,11 +17,11 @@
 // /// {@endtemplate}
 // typedef OnError = void Function();
 
-// /// {@template web_view_payment}
+// ///{@template web_view_payment}
 // /// WebView для оплаты транзакции и прохождения 3-D Secure
-// /// {@endtemplate}
+// ///{@endtemplate}
 // class WebViewPayment extends StatefulWidget {
-//   /// {@macro web_view_payment}
+//    ///{@macro web_view_payment}
 //   const WebViewPayment({
 //     Key? key,
 //     required this.logger,
@@ -34,7 +34,7 @@
 //     this.onWebViewCreated,
 //   }) : super(key: key);
 
-//   /// {@macro sberbank_acquiring_config}
+//   ///{@macro sberbank_acquiring_config}
 //   final BaseLogger logger;
 
 //   /// URL-адрес платёжной формы, на который нужно перенаправить браузер клиента.
@@ -50,7 +50,7 @@
 //   /// Можно получить из `RegisterRequest` поле `failUrl`.
 //   final String? failUrl;
 
-//   /// {@macro on_finished}
+//   ///{@macro on_finished}
 //   final OnFinished? onFinished;
 
 //   /// {@macro on_load}
@@ -80,40 +80,40 @@
 //       onWebViewCreated: widget.onWebViewCreated,
 //       onPageStarted: (String url) {
 //         print('object ${url}');
-//         // widget.logger
-//         //     .log(name: 'WebViewPayment', message: 'onPageStarted: $url');
+//         widget.logger
+//             .log(name: 'WebViewPayment', message: 'onPageStarted: $url');
 
-//         // if (url == widget.formUrl) {
-//         //   widget.onLoad?.call(true);
-//         // }
+//         if (url == widget.formUrl) {
+//           widget.onLoad?.call(true);
+//         }
 
 //         if (url.contains(widget.failUrl!)) {
 //           hasSent = true;
 //           print('object orderId ${getOrderId(url)}');
 //           widget.onFinished?.call(getOrderId(url));
-//           // Navigator.of(context).pop();
+//           Navigator.of(context).pop();
 //         }
 
-//         // if (failUrl != null && url.contains(failUrl)) {
-//         //   hasSent = true;
-//         //   widget.onError?.call();
-//         // }
+//         if (failUrl != null && url.contains(failUrl)) {
+//           hasSent = true;
+//           widget.onError?.call();
+//         }
 //       },
 //       onPageFinished: (String url) async {
-//         // widget.logger
-//         //     .log(name: 'WebViewPayment', message: 'onPageFinished: $url');
+//         widget.logger
+//             .log(name: 'WebViewPayment', message: 'onPageFinished: $url');
 
-//         // if (url == widget.formUrl) {
-//         //   widget.onLoad?.call(false);
-//         // }
+//         if (url == widget.formUrl) {
+//           widget.onLoad?.call(false);
+//         }
 
-//         // if (!hasSent && url.contains(widget.returnUrl)) {
-//         //   widget.onFinished?.call(getOrderId(url));
-//         // }
+//         if (!hasSent && url.contains(widget.returnUrl)) {
+//           widget.onFinished?.call(getOrderId(url));
+//         }
 
-//         // if (!hasSent && (failUrl != null && url.contains(failUrl))) {
-//         //   widget.onError?.call();
-//         // }
+//         if (!hasSent && (failUrl != null && url.contains(failUrl))) {
+//           widget.onError?.call();
+//         }
 //       },
 //     );
 //   }

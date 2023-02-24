@@ -72,7 +72,7 @@ class TextFieldFilled extends AuthEvent {
 }
 
 
-class TryAuthVK extends AuthEvent {
-  String code;
-  TryAuthVK(this.code);
-}
+// class TryAuthVK extends AuthEvent {
+//   String code;
+//   TryAuthVK(this.code);
+// }

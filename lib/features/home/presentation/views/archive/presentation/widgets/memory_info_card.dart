@@ -66,7 +66,7 @@ class MemoryInfoCard extends StatelessWidget {
                       Text(
                         sl<AuthConfig>().memoryEntity ==
                               null
-                          ? '0/10 ГБ'
+                          ? '0/2 ГБ'
                           : '${sl<AuthConfig>().memoryEntity!.getInGigabytesCurrentSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
                         style: TextStyles(context)
                             .white_15_w800,
@@ -117,7 +117,7 @@ class MemoryInfoCard extends StatelessWidget {
                 Text(
                   sl<AuthConfig>().memoryEntity ==
                         null
-                    ? '0/10 ГБ'
+                    ? '0/2 ГБ'
                     : '${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
                   style: TextStyles(context)
                       .black_15_w800,
