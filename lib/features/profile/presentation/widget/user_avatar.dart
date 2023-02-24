@@ -8,7 +8,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class UserAvatar extends StatelessWidget {
+class UserAvatar extends StatefulWidget {
   final String title;
   final double fontSize;
   final String? image;
@@ -20,6 +20,19 @@ class UserAvatar extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<UserAvatar> createState() => _UserAvatarState();
+}
+
+class _UserAvatarState extends State<UserAvatar> {
+  @override
+  void initState() {
+    Future.delayed(Duration(milliseconds: 100), () {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
@@ -29,24 +42,30 @@ class UserAvatar extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  if (image != null && image?.trim() != '')
-                    ClipRRect(
+                  if (widget.image != null && widget.image?.trim() != '')
+                    Material(
+                      type: MaterialType.transparency,
                       borderRadius: BorderRadius.all(
                         Radius.circular(40.r),
                       ),
-                      child: CachedNetworkImage(
-                        imageUrl: Config.url.url + image!,
-                        height: 135.h,
-                        fadeInCurve: Curves.easeInOutQuint,
-                        fadeOutCurve: Curves.easeInOutQuint,
-                        fit: BoxFit.cover,
-                        width: 135.w,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(40.r),
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: Config.url.url + widget.image!,
+                          height: 135.h,
+                          fadeInCurve: Curves.easeInOutQuint,
+                          fadeOutCurve: Curves.easeInOutQuint,
+                          fit: BoxFit.cover,
+                          width: 135.w,
+                        ),
                       ),
                     ),
                   Container(
                     height: 135.h,
                     width: 135.h,
-                    decoration: image == null
+                    decoration: widget.image == null
                         ? const BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,
@@ -59,10 +78,11 @@ class UserAvatar extends StatelessWidget {
                               Radius.circular(40.r),
                             ),
                             // border: Border.all(width: 5.h, color: Colors.white),
-                            image: image == null || image?.trim() == ''
+                            image: widget.image == null ||
+                                    widget.image?.trim() == ''
                                 ? DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: getImage(image),
+                                    image: getImage(widget.image),
                                   )
                                 : null,
                           ),
@@ -72,7 +92,7 @@ class UserAvatar extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 10.h),
                 child: Text(
-                  title,
+                  widget.title,
                   style: getStyle(),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -89,7 +109,7 @@ class UserAvatar extends StatelessWidget {
       fontFamily: 'Inter',
       color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
       fontWeight: FontWeight.bold,
-      fontSize: textSizeByLength(title).sp,
+      fontSize: textSizeByLength(widget.title).sp,
     );
   }
 

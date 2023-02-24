@@ -16,12 +16,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ParametrsUserBottomsheet extends StatelessWidget {
+class ParametrsUserBottomsheet extends StatefulWidget {
   final Function() onRelationSettingsTap;
   const ParametrsUserBottomsheet(
       {Key? key, required this.onRelationSettingsTap})
       : super(key: key);
 
+  @override
+  State<ParametrsUserBottomsheet> createState() =>
+      _ParametrsUserBottomsheetState();
+}
+
+class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
   @override
   Widget build(BuildContext context) {
     return CupertinoCard(
@@ -54,7 +60,7 @@ class ParametrsUserBottomsheet extends StatelessWidget {
                 subtitle: "Настроить",
                 haveToggleSwitch: false,
                 icon: SvgImg.logov2,
-                onPressed: onRelationSettingsTap,
+                onPressed: widget.onRelationSettingsTap,
               ),
               // DevideSettings(
               //   title: "Виджеты",

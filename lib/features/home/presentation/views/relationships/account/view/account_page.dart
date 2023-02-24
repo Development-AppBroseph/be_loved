@@ -124,6 +124,9 @@ class _AccountPageState extends State<AccountPage>
       duration: const Duration(milliseconds: 700),
     );
     setRotation();
+    Future.delayed(const Duration(milliseconds: 100), () {
+      setState(() {});
+    });
     super.initState();
   }
 

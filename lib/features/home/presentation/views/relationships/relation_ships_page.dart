@@ -84,6 +84,10 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   static final _spoonTween = CurveTween(curve: Curves.easeInOutQuint);
   late final AnimationController animationController;
 
+  final _borderRadius = BorderRadius.all(
+    Radius.circular(38.r),
+  );
+
   final TextEditingController _controller = TextEditingController(
       text: sl<AuthConfig>().user == null ? '' : sl<AuthConfig>().user!.name);
   FocusNode f1 = FocusNode();
@@ -102,6 +106,9 @@ class _RelationShipsPageState extends State<RelationShipsPage>
     _spoonController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _controller.addListener(() {
+      setState(() {});
+    });
+    Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {});
     });
 
@@ -841,11 +848,12 @@ class _RelationShipsPageState extends State<RelationShipsPage>
       children: [
         if (path != null && path.trim() != '')
           ClipRRect(
-            borderRadius: BorderRadius.all(
-              Radius.circular(38.r),
-            ),
+            borderRadius: _borderRadius,
             child: Container(
-              decoration: const BoxDecoration(color: Colors.white),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: _borderRadius,
+              ),
               child: CachedNetworkImage(
                 imageUrl: Config.url.url + path,
                 fit: BoxFit.cover,
@@ -862,9 +870,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
           width: 134.h,
           height: 134.h,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(38.r),
-            ),
+            borderRadius: _borderRadius,
             border: Border.all(width: 5.h, color: Colors.white),
             image: path == null || path.trim() == ''
                 ? DecorationImage(
