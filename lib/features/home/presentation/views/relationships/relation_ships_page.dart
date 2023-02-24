@@ -592,7 +592,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
   Container _body(EventsBloc eventsBloc, BuildContext context, bool isVisible) {
     return Container(
-      color: !isVisible ? ClrStyle.backToBlack2C[sl<AuthConfig>().idx] : null,
+      color: !isVisible ? ClrStyle.backgroundColor[sl<AuthConfig>().idx] : null,
       child: Opacity(
         opacity: isVisible ? 1 : 0,
         child: Column(

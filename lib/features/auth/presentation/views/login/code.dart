@@ -200,7 +200,7 @@ class _CodePageState extends State<CodePage> {
                           height: snapshot.data! ? 17.h : 161.h,
                         ),
                         Text(
-                          'Введи последние цифры звонка',
+                          'Введи код подтверждения',
                           style: GoogleFonts.inter(
                               fontSize: 35.sp,
                               height: 1.1,
@@ -210,7 +210,7 @@ class _CodePageState extends State<CodePage> {
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          'Введи последние 4 цифры номера',
+                          'В ближайшее время вам придёт sms-\nсообщение с кодом подтверждения',
                           style: GoogleFonts.inter(
                               fontSize: 15.sp,
                               color: const Color.fromRGBO(137, 137, 137, 1.0),
@@ -218,21 +218,21 @@ class _CodePageState extends State<CodePage> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              top: 44.h, left: 39.75.w, right: 39.75.w),
+                              top: 44.h),
                           child: SizedBox(
                             height: 80.sp,
                             child: Pinput(
                               pinAnimationType: PinAnimationType.none,
                               showCursor: false,
-                              length: 4,
+                              length: 5,
                               androidSmsAutofillMethod:
                                   AndroidSmsAutofillMethod.smsRetrieverApi,
                               controller: textEditingControllerUp,
                               focusNode: focusNode,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               onChanged: (value) {
                                 print('object ${value.length}---}');
-                                if (value.length == 4) {
+                                if (value.length == 5) {
                                   BlocProvider.of<AuthBloc>(context)
                                       .add(TextFieldFilled(true));
                                   focusNode.unfocus();

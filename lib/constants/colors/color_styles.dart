@@ -40,4 +40,6 @@ class ColorStyles {
   static const Color violet2Color = Color(0xFFBF3355);
 
   static const Color white = Color(0xFFFFFFFF);
+
+  static const Color mainBackgroundColor = Color.fromRGBO(240, 240, 240, 1.0);
 }
