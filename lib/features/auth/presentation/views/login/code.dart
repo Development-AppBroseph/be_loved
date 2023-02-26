@@ -224,7 +224,7 @@ class _CodePageState extends State<CodePage> {
                             child: Pinput(
                               pinAnimationType: PinAnimationType.none,
                               showCursor: false,
-                              length: 4,
+                              length: 5,
                               androidSmsAutofillMethod:
                                   AndroidSmsAutofillMethod.smsRetrieverApi,
                               controller: textEditingControllerUp,
