@@ -55,8 +55,8 @@ class RelationShipsSettingsPage extends StatefulWidget {
 class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
     with AutomaticKeepAliveClientMixin {
   final int maxLength = 18;
-   static const _indicatorSize = 30.0;
-   static const _imageSize = 30.0;
+  static const _indicatorSize = 30.0;
+  static const _imageSize = 30.0;
   String text = '';
   final _streamController = StreamController<int>();
 
@@ -109,6 +109,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
       ],
     );
   }
+
   Widget _buildImage(IndicatorController controller, ParalaxConfig asset) {
     return Transform.translate(
       offset: Offset(
@@ -174,51 +175,52 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                   CustomRefreshIndicator(
                     onRefresh: () async {
                       showLoaderWrapper(context);
-                      context.read<AuthBloc>().add(GetUser(isJustRefresh: true));
+                      context
+                          .read<AuthBloc>()
+                          .add(GetUser(isJustRefresh: true));
                       allSync(context);
                       return;
                     },
                     builder: (BuildContext context, Widget child,
-                              IndicatorController controller) {
-                            return Stack(
-                              children: <Widget>[
-                                AnimatedBuilder(
-                                  animation: controller,
-                                  builder: (BuildContext context, Widget? _) {
-                                    return SizedBox(
-                                      height: controller.value * _indicatorSize,
-                                      child: Stack(
-                                        children: <Widget>[
-                                          /// check if it is a spoon build animated builed and attach spoon controller
-
-                                          _buildImage(
-                                              controller,
-                                              ParalaxConfig(
-                                                  level: 5,
-                                                  image: 'assets/icons/add.svg')),
-                                        ],
+                        IndicatorController controller) {
+                      return Stack(
+                        children: <Widget>[
+                          AnimatedBuilder(
+                            animation: controller,
+                            builder: (BuildContext context, Widget? _) {
+                              return SizedBox(
+                                height: controller.value * _indicatorSize,
+                                child: Stack(
+                                  children: <Widget>[
+                                    _buildImage(
+                                      controller,
+                                      const ParalaxConfig(
+                                        level: 5,
+                                        image: 'assets/icons/add.svg',
                                       ),
-                                    );
-                                  },
+                                    ),
+                                  ],
                                 ),
-                                AnimatedBuilder(
-                                  builder: (context, _) {
-                                    return Transform.translate(
-                                      offset: Offset(0.0, controller.value * 0),
-                                      child: child,
-                                    );
-                                  },
-                                  animation: controller,
-                                ),
-                              ],
-                            );
-                          },
+                              );
+                            },
+                          ),
+                          AnimatedBuilder(
+                            builder: (context, _) {
+                              return Transform.translate(
+                                offset: Offset(0.0, controller.value * 0),
+                                child: child,
+                              );
+                            },
+                            animation: controller,
+                          ),
+                        ],
+                      );
+                    },
                     child: SingleChildScrollView(
                       keyboardDismissBehavior:
                           ScrollViewKeyboardDismissBehavior.onDrag,
-                      controller: controller,
-                      physics: const AlwaysScrollableScrollPhysics(
-                          parent: ClampingScrollPhysics()),
+                      // physics: const AlwaysScrollableScrollPhysics(
+                      //     parent: ClampingScrollPhysics()),
                       child: GestureDetector(
                         onTap: () {
                           // f1.unfocus();
@@ -227,15 +229,15 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                           children: [
                             Stack(
                               children: [
-                                SlidingBackgroundCard(),
+                                // SlidingBackgroundCard(),
                                 Column(
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.only(
                                         right: 25.w,
                                         left: 25.w,
-                                        top:
-                                            35.h + MediaQuery.of(context).padding.top,
+                                        top: 35.h +
+                                            MediaQuery.of(context).padding.top,
                                       ),
                                       child: GestureDetector(
                                         onTap: () => widget.prevPage(),
@@ -252,7 +254,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                 color: Colors.white,
                                               ),
                                               Container(
-                                                margin: EdgeInsets.only(left: 20.w),
+                                                margin:
+                                                    EdgeInsets.only(left: 20.w),
                                                 child: Text(
                                                   'Назад',
                                                   style: TextStyle(
@@ -275,7 +278,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                           Loader.hide();
                                           showAlertToast(state.message);
                                         }
-                                        if (state is ProfileInternetErrorState) {
+                                        if (state
+                                            is ProfileInternetErrorState) {
                                           Loader.hide();
                                           showAlertToast(
                                               'Проверьте соединение с интернетом!');
@@ -284,9 +288,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                             is ProfileRelationNameChangedState) {
                                           // Loader.hide();
                                           // showLoaderWrapper(context);
-                                          context
-                                              .read<AuthBloc>()
-                                              .add(GetUser(isJustRefresh: true));
+                                          context.read<AuthBloc>().add(
+                                              GetUser(isJustRefresh: true));
                                         }
                                       },
                                       builder: (context, state) {
@@ -305,9 +308,11 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                     child: TextField(
                                                       onSubmitted: (s) {
                                                         if (s.length > 1) {
-                                                          showLoaderWrapper(context);
+                                                          showLoaderWrapper(
+                                                              context);
                                                           context
-                                                              .read<ProfileBloc>()
+                                                              .read<
+                                                                  ProfileBloc>()
                                                               .add(EditRelationNameEvent(
                                                                   name: _controller
                                                                       .text
@@ -315,7 +320,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                         }
                                                       },
                                                       textCapitalization:
-                                                          TextCapitalization.words,
+                                                          TextCapitalization
+                                                              .words,
                                                       onChanged: (value) {
                                                         if (value.length <=
                                                             maxLength) {
@@ -324,14 +330,20 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                           _controller.value =
                                                               TextEditingValue(
                                                             text: text,
-                                                            selection: TextSelection(
-                                                              baseOffset: maxLength,
-                                                              extentOffset: maxLength,
-                                                              affinity: TextAffinity
-                                                                  .upstream,
-                                                              isDirectional: false,
+                                                            selection:
+                                                                TextSelection(
+                                                              baseOffset:
+                                                                  maxLength,
+                                                              extentOffset:
+                                                                  maxLength,
+                                                              affinity:
+                                                                  TextAffinity
+                                                                      .upstream,
+                                                              isDirectional:
+                                                                  false,
                                                             ),
-                                                            composing: TextRange(
+                                                            composing:
+                                                                TextRange(
                                                               start: 0,
                                                               end: maxLength,
                                                             ),
@@ -341,27 +353,33 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                       cursorColor: Colors.white,
                                                       cursorHeight: 30,
                                                       textAlignVertical:
-                                                          TextAlignVertical.center,
+                                                          TextAlignVertical
+                                                              .center,
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 30.sp,
-                                                        fontWeight: FontWeight.w700,
+                                                        fontWeight:
+                                                            FontWeight.w700,
                                                       ),
                                                       controller: _controller,
                                                       focusNode: f1,
-                                                      scrollPadding: EdgeInsets.zero,
-                                                      decoration: InputDecoration(
+                                                      scrollPadding:
+                                                          EdgeInsets.zero,
+                                                      decoration:
+                                                          InputDecoration(
                                                         contentPadding:
-                                                            const EdgeInsets.only(
-                                                                top: 20),
-                                                        border: InputBorder.none,
+                                                            const EdgeInsets
+                                                                .only(top: 20),
+                                                        border:
+                                                            InputBorder.none,
                                                         hintText: f1.hasFocus
                                                             ? " "
                                                             : 'Назовите отношения',
                                                         hintStyle: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 30.sp,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight:
+                                                              FontWeight.w700,
                                                         ),
                                                       ),
                                                     ),
@@ -374,30 +392,35 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                       // MySharedPrefs().setNameRelationShips(
                                                       //     _controller.text);
                                                       // getNameRelationShips();
-                                                      showLoaderWrapper(context);
-                                                      context.read<ProfileBloc>().add(
-                                                          EditRelationNameEvent(
-                                                              name: _controller.text
+                                                      showLoaderWrapper(
+                                                          context);
+                                                      context
+                                                          .read<ProfileBloc>()
+                                                          .add(EditRelationNameEvent(
+                                                              name: _controller
+                                                                  .text
                                                                   .trim()));
                                                     } else {
                                                       FocusScope.of(context)
                                                           .requestFocus(f1);
                                                     }
                                                   },
-                                                  child:
-                                                      _controller.text.isNotEmpty &&
-                                                              f1.hasFocus
-                                                          ? const Icon(
-                                                              Icons.check_rounded,
-                                                              color: Colors.white,
-                                                            )
-                                                          : !f1.hasFocus
-                                                              ? SvgPicture.asset(
-                                                                  SvgImg.edit)
-                                                              : const Icon(
-                                                                  Icons.check_rounded,
-                                                                  color: Colors.white,
-                                                                ),
+                                                  child: _controller.text
+                                                              .isNotEmpty &&
+                                                          f1.hasFocus
+                                                      ? const Icon(
+                                                          Icons.check_rounded,
+                                                          color: Colors.white,
+                                                        )
+                                                      : !f1.hasFocus
+                                                          ? SvgPicture.asset(
+                                                              SvgImg.edit)
+                                                          : const Icon(
+                                                              Icons
+                                                                  .check_rounded,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
                                                 )
                                               ],
                                             ),
@@ -407,9 +430,11 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                     ),
                                     SizedBox(height: 25.h),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 25.w),
                                       child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           sl<AuthConfig>().user!.fromYou ?? true
                                               ? _buildCurrentUser()
@@ -467,13 +492,15 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                 color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                 elevation: 0,
                                 margin: EdgeInsets.zero,
-                                padding: EdgeInsets.only(top: 25.h, bottom: 50.h),
+                                padding:
+                                    EdgeInsets.only(top: 25.h, bottom: 50.h),
                                 child: Column(
                                   children: [
                                     TagsListBlock(),
                                     SizedBox(height: 25.h),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 25.w),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 25.w),
                                       child: GestureDetector(
                                         onTap: widget.toAllEvents,
                                         behavior: HitTestBehavior.translucent,
@@ -488,8 +515,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                         .black_20_w700),
                                                 SizedBox(height: 8.h),
                                                 Text(
-                                                    countEventsText(
-                                                        eventsBloc.eventsSorted),
+                                                    countEventsText(eventsBloc
+                                                        .eventsSorted),
                                                     style: TextStyles(context)
                                                         .grey_15_w700),
                                               ],
@@ -508,8 +535,9 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                           height: 20.41.h,
                                                           width: 11.37.h,
                                                           color: ClrStyle
-                                                                  .black17ToWhite[
-                                                              sl<AuthConfig>().idx],
+                                                              .black17ToWhite[sl<
+                                                                  AuthConfig>()
+                                                              .idx],
                                                         )),
                                                   )
                                                 ],
@@ -538,7 +566,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                         return Container();
                                       }
                                       return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.symmetric(
@@ -557,10 +586,12 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                     }),
                                     SizedBox(height: 35.h),
                                     NewEventBtn(
-                                      onTap: () => showModalCreateEvent(context, () {
+                                      onTap: () =>
+                                          showModalCreateEvent(context, () {
                                         Navigator.pop(context);
                                       }),
-                                      isActive: !(eventsBloc.events.length >= 30),
+                                      isActive:
+                                          !(eventsBloc.events.length >= 30),
                                     ),
                                   ],
                                 ),

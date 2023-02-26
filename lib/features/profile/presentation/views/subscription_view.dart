@@ -44,13 +44,22 @@ class _SubscriptionViewState extends State<SubscriptionView> {
     final RegisterResponse register = await acquiring.register(
       RegisterRequest(
         amount: subscriptionVariant[index].price! * 100,
-        returnUrl:
-            'https://3dsec.sberbank.ru/sbersafe/anonymous/order/finishTds',
+        returnUrl: 'https://3dsec.sberbank.ru/payment/rest/register.do',
         failUrl: 'https://www.yandex.ru/',
         orderNumber: subscriptionVariant[index].id.toString() + Random().nextInt(10000).toString(),
         pageView: 'MOBILE',
       ),
     );
+    // final RegisterResponse register = await acquiring.register(
+    //   RegisterRequest(
+    //     amount: subscriptionVariant[index].price! * 100,
+    //     returnUrl:
+    //         'https://3dsec.sberbank.ru/sbersafe/anonymous/order/finishTds',
+    //     failUrl: 'https://www.yandex.ru/',
+    //     orderNumber: subscriptionVariant[index].id.toString() + Random().nextInt(10000).toString(),
+    //     pageView: 'MOBILE',
+    //   ),
+    // );
     final String? formUrl =
         register.formUrl?.replaceFirst('/www.3dsec.sberbank.ru', '');
     if (!register.hasError && formUrl != null) {
