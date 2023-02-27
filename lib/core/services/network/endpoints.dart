@@ -6,7 +6,7 @@ enum Endpoints {
   register,
   phoneNumber,
   editProfile,
-  
+
   //Releation
   editRelations,
   sendFilesToMail,
@@ -24,11 +24,10 @@ enum Endpoints {
   editTag,
   deleteTag,
 
-
   //Archive
   //Gallery
   getGalleryFiles,
-  addGalleryFile, 
+  addGalleryFile,
   deleteGalleryFiles,
   //Memory
   getSizeOfMemory,
@@ -68,80 +67,79 @@ enum Endpoints {
   deleteFileWidget,
   deletePurposeWidget,
 
-
   //VK
   vkAuth,
   //SendNoti
-  sendNoti
+  sendNoti,
+  //statusSub
+  statusSub
 }
 
 extension EndpointsExtension on Endpoints {
-  String getPath({
-    List<dynamic>? params,
-  }) {
+  String getPath({List<dynamic>? params}) {
     switch (this) {
       case Endpoints.register:
         return "/auth/users/";
       case Endpoints.phoneNumber:
-        return "/auth/change_number";  
+        return "/auth/change_number";
       case Endpoints.editProfile:
         return "/auth/users";
       case Endpoints.getEvents:
-        return "/events/";  
+        return "/events/";
       case Endpoints.addEvent:
-        return "/events/"; 
+        return "/events/";
       case Endpoints.deleteEvent:
-        return "/events/";  
+        return "/events/";
       case Endpoints.editEvent:
-        return "/events/${params![0]}";  
+        return "/events/${params![0]}";
       case Endpoints.editRelations:
-        return "/relations/";  
+        return "/relations/";
       case Endpoints.getTags:
-        return "/events/tags";  
+        return "/events/tags";
       case Endpoints.addTag:
-        return "/events/tags";  
+        return "/events/tags";
       case Endpoints.editTag:
-        return "/events/tags/${params![0]}"; 
+        return "/events/tags/${params![0]}";
       case Endpoints.deleteTag:
-        return "/events/tags/${params![0]}"; 
+        return "/events/tags/${params![0]}";
       case Endpoints.changePositionEvent:
-        return "/events/";  
+        return "/events/";
       case Endpoints.getGalleryFiles:
-        return "/archive/";  
+        return "/archive/";
       case Endpoints.addGalleryFile:
-        return "/archive/";  
+        return "/archive/";
       case Endpoints.deleteGalleryFiles:
-        return "/archive/del";  
+        return "/archive/del";
       case Endpoints.getSizeOfMemory:
-        return "/archive/size"; 
+        return "/archive/size";
       case Endpoints.getSeasonPurpose:
-        return "/targets/season"; 
+        return "/targets/season";
       case Endpoints.getAvailablePurposes:
-        return "/targets/"; 
+        return "/targets/";
       case Endpoints.sendPurpose:
-        return "/targets/main"; 
+        return "/targets/main";
       case Endpoints.getInProcessPurposes:
-        return "/targets/main"; 
+        return "/targets/main";
       case Endpoints.getHistoryPurposes:
-        return "/targets/completed"; 
+        return "/targets/completed";
       case Endpoints.sendPhotoPurpose:
-        return "/targets/main/${params![0]}"; 
+        return "/targets/main/${params![0]}";
       case Endpoints.getAlbums:
-        return "/archive/album"; 
+        return "/archive/album";
       case Endpoints.createAlbum:
-        return "/archive/album"; 
+        return "/archive/album";
       case Endpoints.updateFilesAlbum:
-        return "/archive/album/${params![0]}"; 
+        return "/archive/album/${params![0]}";
       case Endpoints.deleteAlbum:
-        return "/archive/album/${params![0]}"; 
+        return "/archive/album/${params![0]}";
       case Endpoints.getMoments:
-        return "/archive/moments"; 
+        return "/archive/moments";
       case Endpoints.addFavorites:
-        return "/archive/${params![0]}"; 
+        return "/archive/${params![0]}";
       case Endpoints.oldEvents:
-        return "/events/prev";  
+        return "/events/prev";
       case Endpoints.getStats:
-        return "/auth/stat";  
+        return "/auth/stat";
       case Endpoints.getMainWidgets:
         return "/auth/widgets";
       case Endpoints.addFileWidget:
@@ -161,7 +159,9 @@ extension EndpointsExtension on Endpoints {
       case Endpoints.setBacks:
         return "/relations/background";
       case Endpoints.sendNoti:
-        return "/notifications/send_push";  
+        return "/notifications/send_push";
+      case Endpoints.statusSub:
+        return '/sub/appstatus';
       default:
         return '';
     }
@@ -200,4 +200,3 @@ extension EndpointsExtension on Endpoints {
     return url;
   }
 }
-

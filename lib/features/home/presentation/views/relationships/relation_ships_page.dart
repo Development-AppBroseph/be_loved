@@ -18,6 +18,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/widgets/
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/main_widgets.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/sliding_background_card.dart';
@@ -226,6 +227,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                       context
                           .read<AuthBloc>()
                           .add(GetUser(isJustRefresh: true));
+                      context.read<SubCubit>().getStatus();
                       allSync(context);
                       return;
                     },

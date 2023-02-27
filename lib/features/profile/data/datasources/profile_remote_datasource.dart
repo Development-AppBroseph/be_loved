@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/data/models/statics/statics_model.dart';
 import 'package:be_loved/features/home/domain/entities/statics/statics_entity.dart';
 import 'package:be_loved/features/profile/data/models/back_model.dart';
+import 'package:be_loved/features/profile/data/models/subscription_model.dart';
 import 'package:be_loved/features/profile/domain/entities/back_entity.dart';
+import 'package:be_loved/features/profile/domain/entities/subscription_entiti.dart';
 import 'package:dio/dio.dart';
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/services/database/auth_params.dart';
@@ -24,6 +27,7 @@ abstract class ProfileRemoteDataSource {
 
   Future<BackEntity> getBackgroundInfo();
   Future<void> editBackgroundInfo(BackEntity back, File? file);
+  Future<SubEntiti> getStatusSub();
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -192,9 +196,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<void> editBackgroundInfo(BackEntity back, File? file) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.put(Endpoints.setBacks.getPath(),
-        data: FormData.fromMap({
+        data: jsonEncode({
           'asset_photo': back.assetPhoto,
-          'back_photo': back.backPhoto,
+          "main_photo": back.backPhoto,
           if (file != null) 'photos': [await MultipartFile.fromFile(file.path)]
         }),
         options: Options(
@@ -206,6 +210,25 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     print('RES STATUS CODE: ${response.statusCode}');
     if (response.statusCode == 201) {
       return;
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+  @override
+  Future<SubEntiti> getStatusSub() async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.get(
+      Endpoints.statusSub.getPath(),
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 599,
+        headers: headers,
+      ),
+    );
+    print('ResStatusCode: ${response.statusCode}\tResData: ${response.data}');
+    if (response.statusCode == 200) {
+      return SubModel.fromJson(response.data);
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }

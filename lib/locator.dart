@@ -69,8 +69,10 @@ import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_relation.dart';
 import 'package:be_loved/features/profile/domain/usecases/get_backgrounds_info.dart';
 import 'package:be_loved/features/profile/domain/usecases/get_stats.dart';
+import 'package:be_loved/features/profile/domain/usecases/get_status_sub.dart';
 import 'package:be_loved/features/profile/domain/usecases/send_files_to_mail.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:dio/dio.dart';
@@ -166,6 +168,7 @@ void setupInjections() {
     () => EventsBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()),
   );
 
+  sl.registerFactory(() => SubCubit(getStatusSub: sl()));
 
 
 
@@ -189,10 +192,11 @@ void setupInjections() {
   sl.registerLazySingleton(() => SendFilesToMail(sl()));
   sl.registerLazySingleton(() => GetBackgroundsInfo(sl()));
   sl.registerLazySingleton(() => EditBackgroundsInfo(sl()));
+  sl.registerLazySingleton(() => GetStatusSub(profileRepository: sl()));
 
   //Blocs
   sl.registerFactory<ProfileBloc>(
-    () => ProfileBloc(sl(), sl(), sl(), sl(), sl(), sl()),
+    () => ProfileBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()),
   );
   sl.registerFactory<DecorBloc>(
     () => DecorBloc(sl(), sl()),

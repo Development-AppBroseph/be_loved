@@ -3,6 +3,8 @@ import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_state.dart';
 import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
 import 'package:be_loved/features/profile/presentation/widget/avatar_and_name_user.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/decor_modal.dart';
@@ -30,117 +32,126 @@ class ParametrsUserBottomsheet extends StatefulWidget {
 class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoCard(
-      radius: BorderRadius.vertical(
-        top: Radius.circular(80.r),
-      ),
-      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
-      elevation: 0,
-      margin: EdgeInsets.zero,
-      child: SizedBox(
-        height: 707.h,
-        child: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          child: Column(
-            children: [
-              const BottomSheetGreyLine(),
-              const AvatarAndNameUser(),
-              SizedBox(
-                height: 16.h,
-              ),
-              DevideSettings(
-                title: "Аккаунт",
-                subtitle: "Информация",
-                haveToggleSwitch: false,
-                icon: SvgImg.person,
-                onPressed: () => Navigator.pop(context, 'account'),
-              ),
-              DevideSettings(
-                title: "Отношения",
-                subtitle: "Настроить",
-                haveToggleSwitch: false,
-                icon: SvgImg.logov2,
-                onPressed: widget.onRelationSettingsTap,
-              ),
-              // DevideSettings(
-              //   title: "Виджеты",
-              //   subtitle: "Настроить",
-              //   haveToggleSwitch: false,
-              //   icon: SvgImg.widgets,
-              // ),
-              DevideSettings(
-                title: "Оформление",
-                subtitle: "Изменить",
-                haveToggleSwitch: false,
-                icon: SvgImg.documents,
-                onPressed: () {
-                  Navigator.pop(context);
-                  showModalDecor(context, () {});
-                },
-              ),
-              SizedBox(
-                height: 87.h - 24.h,
-              ),
-              DevideSettings(
-                title: "Подписка BeLoved+",
-                subtitle: "Подробнее",
-                haveToggleSwitch: false,
-                icon: SvgImg.person,
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SubscriptionView(),
-                    ),
-                  );
-                },
-              ),
-              DevideSettings(
-                title: "Уведомления",
-                subtitle: "от приложения",
-                haveToggleSwitch: true,
-                icon: SvgImg.notification,
-              ),
-              SizedBox(
-                height: 45.h,
-              ),
-
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: 25.w,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.read<AuthBloc>().add(LogOut(context));
-                  },
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        SvgImg.logout,
-                        height: 45.h,
-                      ),
-                      SizedBox(
-                        width: 21.w,
-                      ),
-                      Text(
-                        'Выйти из аккаунта',
-                        style: TextStyles(context)
-                            .black_20_w800
-                            .copyWith(color: ColorStyles.redColor),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 55.h,
-              ),
-            ],
+    return BlocBuilder<SubCubit, SubState>(
+      builder: (context, state) {
+        if (state is SubEmptyState) {
+          context.read<SubCubit>().getStatus();
+        }
+        return CupertinoCard(
+          radius: BorderRadius.vertical(
+            top: Radius.circular(80.r),
           ),
-        ),
-      ),
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+          elevation: 0,
+          margin: EdgeInsets.zero,
+          child: SizedBox(
+            height: 707.h,
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: Column(
+                children: [
+                  const BottomSheetGreyLine(),
+                  const AvatarAndNameUser(),
+                  SizedBox(
+                    height: 16.h,
+                  ),
+                  DevideSettings(
+                    title: "Аккаунт",
+                    subtitle: "Информация",
+                    haveToggleSwitch: false,
+                    icon: SvgImg.person,
+                    onPressed: () => Navigator.pop(context, 'account'),
+                  ),
+                  DevideSettings(
+                    title: "Отношения",
+                    subtitle: "Настроить",
+                    haveToggleSwitch: false,
+                    icon: SvgImg.logov2,
+                    onPressed: widget.onRelationSettingsTap,
+                  ),
+                  // DevideSettings(
+                  //   title: "Виджеты",
+                  //   subtitle: "Настроить",
+                  //   haveToggleSwitch: false,
+                  //   icon: SvgImg.widgets,
+                  // ),
+                  DevideSettings(
+                    title: "Оформление",
+                    subtitle: "Изменить",
+                    haveToggleSwitch: false,
+                    icon: SvgImg.documents,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      showModalDecor(context, () {});
+                    },
+                  ),
+                  SizedBox(
+                    height: 87.h - 24.h,
+                  ),
+                  state is SubHaveState
+                      ? Container()
+                      : DevideSettings(
+                          title: "Подписка BeLoved+",
+                          subtitle: "Подробнее",
+                          haveToggleSwitch: false,
+                          icon: SvgImg.person,
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SubscriptionView(),
+                              ),
+                            );
+                          },
+                        ),
+                  DevideSettings(
+                    title: "Уведомления",
+                    subtitle: "от приложения",
+                    haveToggleSwitch: true,
+                    icon: SvgImg.notification,
+                  ),
+                  SizedBox(
+                    height: 45.h,
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 25.w,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.read<AuthBloc>().add(LogOut(context));
+                      },
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            SvgImg.logout,
+                            height: 45.h,
+                          ),
+                          SizedBox(
+                            width: 21.w,
+                          ),
+                          Text(
+                            'Выйти из аккаунта',
+                            style: TextStyles(context)
+                                .black_20_w800
+                                .copyWith(color: ColorStyles.redColor),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 55.h,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

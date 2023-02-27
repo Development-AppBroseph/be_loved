@@ -9,6 +9,8 @@ import 'package:be_loved/features/profile/domain/usecases/edit_relation.dart';
 import 'package:be_loved/features/profile/domain/usecases/send_files_to_mail.dart';
 import 'package:dartz/dartz.dart';
 
+import '../entities/subscription_entiti.dart';
+
 abstract class ProfileRepository {
   Future<Either<Failure, User>> editProfile(EditProfileParams params);
   Future<Either<Failure, String>> editRelation(EditRelationParams params);
@@ -16,5 +18,7 @@ abstract class ProfileRepository {
   Future<Either<Failure, String>> connectVK(ConnectVKParams params);
   Future<Either<Failure, void>> sendFilesToMail(SendFilesToMailParams params);
   Future<Either<Failure, BackEntity>> getBackgroundsInfo();
-  Future<Either<Failure, void>> editBackgroundsInfo(EditBackgroundsInfoParams params);
+  Future<Either<Failure, void>> editBackgroundsInfo(
+      EditBackgroundsInfoParams params);
+  Future<Either<Failure, SubEntiti>> getStatus();
 }

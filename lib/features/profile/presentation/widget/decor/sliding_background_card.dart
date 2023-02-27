@@ -10,10 +10,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SlidingBackgroundCard extends StatelessWidget {
+class SlidingBackgroundCard extends StatefulWidget {
   final double? height;
   SlidingBackgroundCard({this.height});
 
+  @override
+  State<SlidingBackgroundCard> createState() => _SlidingBackgroundCardState();
+}
+
+class _SlidingBackgroundCardState extends State<SlidingBackgroundCard> {
   PageController pageController = PageController();
 
   animateToPage(BackEntity back, [bool isJump = false]) {
@@ -58,16 +63,21 @@ class SlidingBackgroundCard extends StatelessWidget {
         });
       }
     }, builder: (context, state) {
-      if (state is DecorInitialState || decorBloc.back == null) {
+      if (state is DecorGotSuccessState) {
+        print('ANIMATE INIT');
+        Future.delayed(const Duration(milliseconds: 400), () {
+          animateToPage(decorBloc.back!, true);
+        });
+      } else if (state is DecorInitialState || decorBloc.back == null) {
         return Container(
           color: Colors.black,
           width: double.infinity,
-          height: height ?? 500.h,
+          height: widget.height ?? 500.h,
         );
       }
       return SizedBox(
         width: double.infinity,
-        height: height ?? 500.h,
+        height: widget.height ?? 500.h,
         child: PageView(
             physics: NeverScrollableScrollPhysics(),
             controller: pageController,
@@ -90,7 +100,7 @@ class SlidingBackgroundCard extends StatelessWidget {
               ...MainConfigApp.decorBackgrounds
                   .map((e) => Image(
                         width: double.infinity,
-                        height: height ?? 500.h,
+                        height: widget.height ?? 500.h,
                         image: AssetImage(e),
                         fit: BoxFit.cover,
                       ))

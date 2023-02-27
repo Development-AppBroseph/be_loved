@@ -16,7 +16,7 @@ class BackModel extends BackEntity {
   factory BackModel.fromJson(Map<String, dynamic> json) {
     return BackModel(
       assetPhoto: json['asset_photo'] ?? 0,
-      backPhoto: json['back_photo'],
+      backPhoto: json['back_photo'] == null ? null : json['back_photo']['id'],
       relationId: json['relation'],
       photos: json['photos_detail'] != null
           ? (json['photos_detail'] as List)

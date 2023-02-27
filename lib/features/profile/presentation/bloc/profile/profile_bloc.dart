@@ -12,6 +12,8 @@ import 'package:be_loved/features/profile/domain/usecases/send_files_to_mail.dar
 import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../domain/usecases/get_status_sub.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
 
@@ -22,8 +24,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final EditRelation editRelation;
   final ConnectVK connectVK;
   final SendFilesToMail sendFilesToMail;
+  final GetStatusSub getStatusSub;
   ProfileBloc(this.editProfile, this.postNumber, this.putCode,
-      this.editRelation, this.connectVK, this.sendFilesToMail)
+      this.editRelation, this.connectVK, this.sendFilesToMail, this.getStatusSub)
       : super(ProfileInitialState()) {
     on<EditProfileEvent>(_editProfile);
     on<PostPhoneNumberEvent>(_postPhone);
@@ -48,7 +51,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
     emit(state);
   }
-
   void _postPhone(
       PostPhoneNumberEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoadingState());

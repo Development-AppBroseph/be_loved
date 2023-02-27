@@ -5,22 +5,22 @@ import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/domain/entities/statics/statics_entity.dart';
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:be_loved/features/profile/domain/entities/back_entity.dart';
+import 'package:be_loved/features/profile/domain/entities/subscription_entiti.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 
-
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
-  ProfileRepositoryImpl(
-      this.remoteDataSource, this.networkInfo);
+  ProfileRepositoryImpl(this.remoteDataSource, this.networkInfo);
 
   @override
   Future<Either<Failure, User>> editProfile(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.editProfile(params.user, params.file);
+        final items =
+            await remoteDataSource.editProfile(params.user, params.file);
         return Right(items);
       } catch (e) {
         print(e);
@@ -30,16 +30,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
-
 
   @override
   Future<Either<Failure, String>> editRelation(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.editRelation(params.relationId, params.nameRelation, params.date);
+        final items = await remoteDataSource.editRelation(
+            params.relationId, params.nameRelation, params.date);
         return Right(items);
       } catch (e) {
         print(e);
@@ -49,12 +46,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
-
-
-
 
   @override
   Future<Either<Failure, StaticsEntity>> getStats() async {
@@ -71,11 +62,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
   }
 
-
-
-
-
-
   @override
   Future<Either<Failure, String>> connectVK(params) async {
     if (await networkInfo.isConnected) {
@@ -91,15 +77,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
   }
 
-
-
-
-
   @override
   Future<Either<Failure, void>> sendFilesToMail(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.sendFilesToMail(params.email, params.isParting);
+        final items = await remoteDataSource.sendFilesToMail(
+            params.email, params.isParting);
         return Right(items);
       } catch (e) {
         print(e);
@@ -109,13 +92,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
-
-
-
-
 
   @override
   Future<Either<Failure, BackEntity>> getBackgroundsInfo() async {
@@ -132,15 +108,27 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
   }
 
-
-
-
-
   @override
   Future<Either<Failure, void>> editBackgroundsInfo(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.editBackgroundInfo(params.back, params.filePath == null ? null : File(params.filePath!));
+        final items = await remoteDataSource.editBackgroundInfo(params.back,
+            params.filePath == null ? null : File(params.filePath!));
+        return Right(items);
+      } catch (e) {
+        print(e);
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, SubEntiti>> getStatus() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.getStatusSub();
         return Right(items);
       } catch (e) {
         print(e);
@@ -151,4 +139,3 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
   }
 }
-
