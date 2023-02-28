@@ -196,11 +196,16 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<void> editBackgroundInfo(BackEntity back, File? file) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.put(Endpoints.setBacks.getPath(),
-        data: jsonEncode({
-          'asset_photo': back.assetPhoto,
-          "main_photo": back.backPhoto,
-          if (file != null) 'photos': [await MultipartFile.fromFile(file.path)]
-        }),
+        data: file != null
+            ? FormData.fromMap({
+                'asset_photo': back.assetPhoto,
+                "main_photo": back.backPhoto,
+                'photos': [await MultipartFile.fromFile(file.path)]
+              })
+            : jsonEncode({
+                'asset_photo': back.assetPhoto,
+                "main_photo": back.backPhoto,
+              }),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 599,
