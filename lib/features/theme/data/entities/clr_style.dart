@@ -47,6 +47,6 @@ class ClrStyle {
   ];
   static List<Color> backgroundColor = [
     ColorStyles.mainBackgroundColor,
-    ColorStyles.black2Color
+    ColorStyles.blackColor
   ];
 }

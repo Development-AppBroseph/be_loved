@@ -547,16 +547,14 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                             alignment: Alignment.center,
                                             children: [
                                               GestureDetector(
-                                                onTap: () {
-                                                  if (heartPressed == false) {
-                                                    heartPressed = true;
-                                                    animationController
-                                                        .forward();
-                                                  } else {
-                                                    heartPressed = false;
-                                                    animationController.reset();
-                                                  }
-                                                  eventsBloc.sendNotification();
+                                                onLongPress: () async {
+                                                  await animationController
+                                                      .animateTo(2);
+                                                  animationController.stop();
+                                                },
+                                                onLongPressEnd: (details) {
+                                                  animationController
+                                                      .animateBack(0);
                                                 },
                                                 child: Lottie.asset(
                                                     'assets/animations/heart.json',
@@ -601,6 +599,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
   Container _body(EventsBloc eventsBloc, BuildContext context, bool isVisible) {
     return Container(
+      // color: Colors.transparent,
       color: !isVisible ? ClrStyle.backgroundColor[sl<AuthConfig>().idx] : null,
       child: Opacity(
         opacity: isVisible ? 1 : 0,
