@@ -551,6 +551,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                                   await animationController
                                                       .animateTo(2);
                                                   animationController.stop();
+                                                  await eventsBloc
+                                                      .sendNotification();
                                                 },
                                                 onLongPressEnd: (details) {
                                                   animationController
