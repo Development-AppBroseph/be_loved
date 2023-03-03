@@ -27,8 +27,8 @@ class _SlidingBackgroundCardState extends State<SlidingBackgroundCard> {
       index = back.photos.indexOf(
           back.photos.where((element) => element.id == back.backPhoto!).first);
     } else {
-      index = (back.photos.isNotEmpty ? (back.photos.length) : 0) +
-          (back.assetPhoto >= 2 ? 2 : back.assetPhoto);
+      index =
+          (back.photos.isNotEmpty ? (back.photos.length) : 0) + back.assetPhoto;
     }
     if (isJump) {
       pageController.jumpToPage(index);
@@ -79,33 +79,38 @@ class _SlidingBackgroundCardState extends State<SlidingBackgroundCard> {
         width: double.infinity,
         height: widget.height ?? 500.h,
         child: PageView(
-            physics: NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              ...decorBloc.back!.photos
-                  .map((e) => Stack(
-                        children: [
-                          CachedNetworkImage(
-                            width: double.infinity,
-                            height: 500.h,
-                            fit: BoxFit.cover,
-                            imageUrl: Config.url.url + e.file,
-                          ),
-                          Container(
-                            color: Colors.black.withOpacity(0.24),
-                          )
-                        ],
-                      ))
-                  .toList(),
-              ...MainConfigApp.decorBackgrounds
-                  .map((e) => Image(
+          physics: NeverScrollableScrollPhysics(),
+          controller: pageController,
+          children: [
+            ...decorBloc.back!.photos
+                .map(
+                  (e) => Stack(
+                    children: [
+                      CachedNetworkImage(
                         width: double.infinity,
-                        height: widget.height ?? 500.h,
-                        image: AssetImage(e),
+                        height: 500.h,
                         fit: BoxFit.cover,
-                      ))
-                  .toList(),
-            ]),
+                        imageUrl: Config.url.url + e.file,
+                      ),
+                      Container(
+                        color: Colors.black.withOpacity(0.24),
+                      )
+                    ],
+                  ),
+                )
+                .toList(),
+            ...MainConfigApp.decorBackgrounds
+                .map(
+                  (e) => Image(
+                    width: double.infinity,
+                    height: widget.height ?? 500.h,
+                    image: AssetImage(e),
+                    fit: BoxFit.cover,
+                  ),
+                )
+                .toList(),
+          ],
+        ),
       );
     });
   }

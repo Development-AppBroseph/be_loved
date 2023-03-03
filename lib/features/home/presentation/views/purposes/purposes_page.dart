@@ -87,7 +87,7 @@ class _PurposesPageState extends State<PurposesPage> {
     PurposeBloc bloc = context.read<PurposeBloc>();
     return SizedBox(
       height: MediaQuery.of(context).size.height,
-              width: double.infinity,
+      width: double.infinity,
       child: Stack(
         children: [
           CustomRefreshIndicator(

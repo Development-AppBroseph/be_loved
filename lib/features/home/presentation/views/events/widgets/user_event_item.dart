@@ -51,7 +51,7 @@ class UserEventItem extends StatelessWidget {
       behavior: HitTestBehavior.translucent,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8.h),
-        height: 44.h,
+        height: 45.h,
         child: ListView(
           reverse: true,
           controller: scrollController,

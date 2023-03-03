@@ -143,11 +143,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        content(context),
-      ],
-    );
+    return content(context);
   }
 
   Widget _buildImage(IndicatorController controller, ParalaxConfig asset) {
@@ -187,8 +183,9 @@ class _RelationShipsPageState extends State<RelationShipsPage>
         fontSize: 15.sp,
         height: 1);
 
-    return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
-      return BlocListener<AuthBloc, AuthState>(
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is GetUserSuccess) {
               // if(context.read<ThemeBloc>().state is ThemeInitialState){
@@ -202,401 +199,413 @@ class _RelationShipsPageState extends State<RelationShipsPage>
             }
           },
           child: BlocConsumer<ProfileBloc, ProfileState>(
-              listener: (context, state) {
-            if (state is ProfileErrorState) {
-              Loader.hide();
-              showAlertToast(state.message);
-            }
-            if (state is ProfileInternetErrorState) {
-              Loader.hide();
-              showAlertToast('Проверьте соединение с интернетом!');
-            }
-            if (state is ProfileEditedSuccessState) {
-              Loader.hide();
-            }
-          }, builder: (context, state) {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: double.infinity,
-              child: Stack(
-                children: [
-                  SlidingBackgroundCard(),
-                  CustomRefreshIndicator(
-                    onRefresh: () async {
-                      showLoaderWrapper(context);
-                      context
-                          .read<AuthBloc>()
-                          .add(GetUser(isJustRefresh: true));
-                      context.read<SubCubit>().getStatus();
-                      allSync(context);
-                      return;
-                    },
-                    builder: (BuildContext context, Widget child,
-                        IndicatorController controller) {
-                      return Stack(
-                        children: <Widget>[
-                          AnimatedBuilder(
-                            animation: controller,
-                            builder: (BuildContext context, Widget? _) {
-                              return SizedBox(
-                                height: controller.value * _indicatorSize,
-                                child: Stack(
-                                  children: <Widget>[
-                                    /// check if it is a spoon build animated builed and attach spoon controller
+            listener: (context, state) {
+              if (state is ProfileErrorState) {
+                Loader.hide();
+                showAlertToast(state.message);
+              }
+              if (state is ProfileInternetErrorState) {
+                Loader.hide();
+                showAlertToast('Проверьте соединение с интернетом!');
+              }
+              if (state is ProfileEditedSuccessState) {
+                Loader.hide();
+              }
+            },
+            builder: (context, state) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Stack(
+                  children: [
+                    SlidingBackgroundCard(),
+                    CustomRefreshIndicator(
+                      onRefresh: () async {
+                        showLoaderWrapper(context);
+                        context
+                            .read<AuthBloc>()
+                            .add(GetUser(isJustRefresh: true));
+                        context.read<SubCubit>().getStatus();
+                        allSync(context);
+                        return;
+                      },
+                      builder: (BuildContext context, Widget child,
+                          IndicatorController controller) {
+                        return Stack(
+                          children: <Widget>[
+                            AnimatedBuilder(
+                              animation: controller,
+                              builder: (BuildContext context, Widget? _) {
+                                return SizedBox(
+                                  height: controller.value * _indicatorSize,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      /// check if it is a spoon build animated builed and attach spoon controller
 
-                                    _buildImage(
-                                        controller,
-                                        ParalaxConfig(
-                                            level: 5,
-                                            image: 'assets/icons/add.svg')),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          AnimatedBuilder(
-                            builder: (context, _) {
-                              return Transform.translate(
-                                offset: Offset(0.0, controller.value * 0),
-                                child: child,
-                              );
-                            },
-                            animation: controller,
-                          ),
-                        ],
-                      );
-                    },
-                    child: SingleChildScrollView(
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      // physics: const AlwaysScrollableScrollPhysics(
-                      //     parent: ClampingScrollPhysics()),
-
-                      child: GestureDetector(
-                        onTap: () {
-                          // f1.unfocus();
-                        },
-                        child: Stack(
-                          children: [
-                            // SlidingBackgroundCard(),
-                            Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    right: 25.w,
-                                    left: 25.w,
-                                    top: 59.h,
+                                      _buildImage(
+                                          controller,
+                                          ParalaxConfig(
+                                              level: 5,
+                                              image: 'assets/icons/add.svg')),
+                                    ],
                                   ),
-                                  child: Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: widget.nextPage,
-                                        child: Row(
-                                          children: [
-                                            photoMini(
+                                );
+                              },
+                            ),
+                            AnimatedBuilder(
+                              builder: (context, _) {
+                                return Transform.translate(
+                                  offset: Offset(0.0, controller.value * 0),
+                                  child: child,
+                                );
+                              },
+                              animation: controller,
+                            ),
+                          ],
+                        );
+                      },
+                      child: SingleChildScrollView(
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        // physics: const AlwaysScrollableScrollPhysics(
+                        //     parent: ClampingScrollPhysics()),
+
+                        child: GestureDetector(
+                          onTap: () {
+                            // f1.unfocus();
+                          },
+                          child: Stack(
+                            children: [
+                              // SlidingBackgroundCard(),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      right: 25.w,
+                                      left: 25.w,
+                                      top: 59.h,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: widget.nextPage,
+                                          child: Row(
+                                            children: [
+                                              photoMini(
+                                                  sl<AuthConfig>().user == null
+                                                      ? null
+                                                      : sl<AuthConfig>()
+                                                          .user!
+                                                          .me
+                                                          .photo),
+                                              SizedBox(width: 12.w),
+                                              Text(
                                                 sl<AuthConfig>().user == null
-                                                    ? null
+                                                    ? ''
                                                     : sl<AuthConfig>()
                                                         .user!
                                                         .me
-                                                        .photo),
-                                            SizedBox(width: 12.w),
-                                            Text(
-                                              sl<AuthConfig>().user == null
-                                                  ? ''
-                                                  : sl<AuthConfig>()
-                                                      .user!
-                                                      .me
-                                                      .username,
-                                              style: style1,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      GestureDetector(
-                                        onTap: () =>
-                                            showMaterialModalBottomSheet(
-                                          animationCurve: Curves.easeInOutQuint,
-                                          duration:
-                                              const Duration(milliseconds: 600),
-                                          context: context,
-                                          // shape: RoundedRectangleBorder(
-                                          //   borderRadius: BorderRadius.vertical(
-                                          //     top: Radius.circular(50.r),
-                                          //   ),
-                                          // ),
-                                          backgroundColor: Colors.transparent,
-                                          builder: (context) =>
-                                              ParametrsUserBottomsheet(
-                                            onRelationSettingsTap: () {
-                                              Navigator.pop(context);
-                                              widget.toRelationSettingsPage();
-                                            },
-                                          ),
-                                        ).then((value) {
-                                          if (value is String) {
-                                            if (value == 'account') {
-                                              widget.nextPage();
-                                            }
-                                          }
-                                        }),
-                                        child: Container(
-                                          height: 55.h,
-                                          width: 55.h,
-                                          color: Colors.transparent,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              SizedBox(
-                                                height: 5.57.h,
-                                                width: 33.43.h,
-                                                child: ListView.builder(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemCount: 3,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          index) {
-                                                    return Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 5.57.h),
-                                                      height: 5.57.h,
-                                                      width: 5.57.h,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    1.5.r),
-                                                        color: Colors.white,
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
+                                                        .username,
+                                                style: style1,
                                               ),
                                             ],
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 30.h),
-                                BlocConsumer<ProfileBloc, ProfileState>(
-                                  listener: (context, state) {
-                                    if (state is ProfileErrorState) {
-                                      Loader.hide();
-                                      showAlertToast(state.message);
-                                    }
-                                    if (state is ProfileInternetErrorState) {
-                                      Loader.hide();
-                                      showAlertToast(
-                                          'Проверьте соединение с интернетом!');
-                                    }
-                                    if (state
-                                        is ProfileRelationNameChangedState) {
-                                      // Loader.hide();
-                                      // showLoaderWrapper(context);
-                                      context
-                                          .read<AuthBloc>()
-                                          .add(GetUser(isJustRefresh: true));
-                                    }
-                                  },
-                                  builder: (context, state) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 25.w,
-                                        right: 38.w,
-                                      ),
-                                      child: SizedBox(
-                                        height: 45.h,
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: SizedBox(
-                                                height: 33.h,
-                                                child: TextField(
-                                                  onSubmitted: (s) {
-                                                    if (s.length > 1) {
-                                                      showLoaderWrapper(
-                                                          context);
-                                                      context
-                                                          .read<ProfileBloc>()
-                                                          .add(EditRelationNameEvent(
-                                                              name: _controller
-                                                                  .text
-                                                                  .trim()));
-                                                    }
-                                                  },
-                                                  textCapitalization:
-                                                      TextCapitalization.words,
-                                                  onChanged: (value) {
-                                                    if (value.length <=
-                                                        maxLength) {
-                                                      text = value;
-                                                    } else {
-                                                      _controller.value =
-                                                          TextEditingValue(
-                                                        text: text,
-                                                        selection:
-                                                            TextSelection(
-                                                          baseOffset: maxLength,
-                                                          extentOffset:
-                                                              maxLength,
-                                                          affinity: TextAffinity
-                                                              .upstream,
-                                                          isDirectional: false,
-                                                        ),
-                                                        composing: TextRange(
-                                                          start: 0,
-                                                          end: maxLength,
+                                        const Spacer(),
+                                        GestureDetector(
+                                          onTap: () =>
+                                              showMaterialModalBottomSheet(
+                                            animationCurve:
+                                                Curves.easeInOutQuint,
+                                            duration: const Duration(
+                                                milliseconds: 600),
+                                            context: context,
+                                            // shape: RoundedRectangleBorder(
+                                            //   borderRadius: BorderRadius.vertical(
+                                            //     top: Radius.circular(50.r),
+                                            //   ),
+                                            // ),
+                                            backgroundColor: Colors.transparent,
+                                            builder: (context) =>
+                                                ParametrsUserBottomsheet(
+                                              onRelationSettingsTap: () {
+                                                Navigator.pop(context);
+                                                widget.toRelationSettingsPage();
+                                              },
+                                            ),
+                                          ).then((value) {
+                                            if (value is String) {
+                                              if (value == 'account') {
+                                                widget.nextPage();
+                                              }
+                                            }
+                                          }),
+                                          child: Container(
+                                            height: 55.h,
+                                            width: 55.h,
+                                            color: Colors.transparent,
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  height: 5.57.h,
+                                                  width: 33.43.h,
+                                                  child: ListView.builder(
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    itemCount: 3,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            index) {
+                                                      return Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 5.57.h),
+                                                        height: 5.57.h,
+                                                        width: 5.57.h,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      1.5.r),
+                                                          color: Colors.white,
                                                         ),
                                                       );
-                                                    }
-                                                  },
-                                                  cursorColor: Colors.white,
-                                                  cursorHeight: 30,
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 30.sp,
-                                                    fontWeight: FontWeight.w700,
+                                                    },
                                                   ),
-                                                  controller: _controller,
-                                                  focusNode: f1,
-                                                  scrollPadding:
-                                                      EdgeInsets.zero,
-                                                  decoration: InputDecoration(
-                                                    contentPadding:
-                                                        const EdgeInsets.only(
-                                                            top: 20),
-                                                    border: InputBorder.none,
-                                                    hintText: f1.hasFocus
-                                                        ? " "
-                                                        : 'Назовите отношения',
-                                                    hintStyle: TextStyle(
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 30.h),
+                                  BlocConsumer<ProfileBloc, ProfileState>(
+                                    listener: (context, state) {
+                                      if (state is ProfileErrorState) {
+                                        Loader.hide();
+                                        showAlertToast(state.message);
+                                      }
+                                      if (state is ProfileInternetErrorState) {
+                                        Loader.hide();
+                                        showAlertToast(
+                                            'Проверьте соединение с интернетом!');
+                                      }
+                                      if (state
+                                          is ProfileRelationNameChangedState) {
+                                        // Loader.hide();
+                                        // showLoaderWrapper(context);
+                                        context
+                                            .read<AuthBloc>()
+                                            .add(GetUser(isJustRefresh: true));
+                                      }
+                                    },
+                                    builder: (context, state) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 25.w,
+                                          right: 38.w,
+                                        ),
+                                        child: SizedBox(
+                                          height: 45.h,
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: SizedBox(
+                                                  height: 33.h,
+                                                  child: TextField(
+                                                    onSubmitted: (s) {
+                                                      if (s.length > 1) {
+                                                        showLoaderWrapper(
+                                                            context);
+                                                        context
+                                                            .read<ProfileBloc>()
+                                                            .add(EditRelationNameEvent(
+                                                                name: _controller
+                                                                    .text
+                                                                    .trim()));
+                                                      }
+                                                    },
+                                                    textCapitalization:
+                                                        TextCapitalization
+                                                            .words,
+                                                    onChanged: (value) {
+                                                      if (value.length <=
+                                                          maxLength) {
+                                                        text = value;
+                                                      } else {
+                                                        _controller.value =
+                                                            TextEditingValue(
+                                                          text: text,
+                                                          selection:
+                                                              TextSelection(
+                                                            baseOffset:
+                                                                maxLength,
+                                                            extentOffset:
+                                                                maxLength,
+                                                            affinity:
+                                                                TextAffinity
+                                                                    .upstream,
+                                                            isDirectional:
+                                                                false,
+                                                          ),
+                                                          composing: TextRange(
+                                                            start: 0,
+                                                            end: maxLength,
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                    cursorColor: Colors.white,
+                                                    cursorHeight: 30,
+                                                    textAlignVertical:
+                                                        TextAlignVertical
+                                                            .center,
+                                                    style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 30.sp,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                     ),
+                                                    controller: _controller,
+                                                    focusNode: f1,
+                                                    scrollPadding:
+                                                        EdgeInsets.zero,
+                                                    decoration: InputDecoration(
+                                                      contentPadding:
+                                                          const EdgeInsets.only(
+                                                              top: 20),
+                                                      border: InputBorder.none,
+                                                      hintText: f1.hasFocus
+                                                          ? " "
+                                                          : 'Назовите отношения',
+                                                      hintStyle: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 30.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () async {
-                                                if (f1.hasFocus) {
-                                                  f1.unfocus();
-                                                  // MySharedPrefs().setNameRelationShips(
-                                                  //     _controller.text);
-                                                  // getNameRelationShips();
-                                                  showLoaderWrapper(context);
-                                                  context
-                                                      .read<ProfileBloc>()
-                                                      .add(
-                                                          EditRelationNameEvent(
-                                                              name: _controller
-                                                                  .text
-                                                                  .trim()));
-                                                } else {
-                                                  FocusScope.of(context)
-                                                      .requestFocus(f1);
-                                                }
-                                              },
-                                              child: _controller
-                                                          .text.isNotEmpty &&
-                                                      f1.hasFocus
-                                                  ? const Icon(
-                                                      Icons.check_rounded,
-                                                      color: Colors.white,
-                                                    )
-                                                  : !f1.hasFocus
-                                                      ? SvgPicture.asset(
-                                                          SvgImg.edit)
-                                                      : const Icon(
-                                                          Icons.check_rounded,
-                                                          color: Colors.white,
-                                                        ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                SizedBox(height: 25.h),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 25.w),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      sl<AuthConfig>().user!.fromYou ?? true
-                                          ? _buildCurrentUser()
-                                          : _buildLoveUser(),
-                                      const Spacer(),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 13.h),
-                                        child: SizedBox(
-                                          height: 108.h,
-                                          width: 108.w,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
                                               GestureDetector(
-                                                onLongPress: () async {
-                                                  await animationController
-                                                      .animateTo(2);
-                                                  animationController.stop();
-                                                  await eventsBloc
-                                                      .sendNotification();
+                                                onTap: () async {
+                                                  if (f1.hasFocus) {
+                                                    f1.unfocus();
+                                                    // MySharedPrefs().setNameRelationShips(
+                                                    //     _controller.text);
+                                                    // getNameRelationShips();
+                                                    showLoaderWrapper(context);
+                                                    context
+                                                        .read<ProfileBloc>()
+                                                        .add(EditRelationNameEvent(
+                                                            name: _controller
+                                                                .text
+                                                                .trim()));
+                                                  } else {
+                                                    FocusScope.of(context)
+                                                        .requestFocus(f1);
+                                                  }
                                                 },
-                                                onLongPressEnd: (details) {
-                                                  animationController
-                                                      .animateBack(0);
-                                                },
-                                                child: Lottie.asset(
-                                                    'assets/animations/heart.json',
-                                                    repeat: false,
-                                                    controller:
-                                                        animationController),
-                                              ),
+                                                child: _controller
+                                                            .text.isNotEmpty &&
+                                                        f1.hasFocus
+                                                    ? const Icon(
+                                                        Icons.check_rounded,
+                                                        color: Colors.white,
+                                                      )
+                                                    : !f1.hasFocus
+                                                        ? SvgPicture.asset(
+                                                            SvgImg.edit)
+                                                        : const Icon(
+                                                            Icons.check_rounded,
+                                                            color: Colors.white,
+                                                          ),
+                                              )
                                             ],
                                           ),
                                         ),
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: 25.h),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 25.w),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        sl<AuthConfig>().user!.fromYou ?? true
+                                            ? _buildCurrentUser()
+                                            : _buildLoveUser(),
+                                        const Spacer(),
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 13.h),
+                                          child: SizedBox(
+                                            height: 108.h,
+                                            width: 108.w,
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                GestureDetector(
+                                                  onLongPress: () async {
+                                                    await animationController
+                                                        .animateTo(2);
+                                                    animationController.stop();
+                                                    await eventsBloc
+                                                        .sendNotification();
+                                                  },
+                                                  onLongPressEnd: (details) {
+                                                    animationController
+                                                        .animateBack(0);
+                                                  },
+                                                  child: Lottie.asset(
+                                                      'assets/animations/heart.json',
+                                                      repeat: false,
+                                                      controller:
+                                                          animationController),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        sl<AuthConfig>().user!.fromYou ?? true
+                                            ? _buildLoveUser()
+                                            : _buildCurrentUser()
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 26.h),
+                                  Stack(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 40.h),
+                                        child:
+                                            _body(eventsBloc, context, false),
                                       ),
-                                      const Spacer(),
-                                      sl<AuthConfig>().user!.fromYou ?? true
-                                          ? _buildLoveUser()
-                                          : _buildCurrentUser()
+                                      _body(eventsBloc, context, true),
                                     ],
                                   ),
-                                ),
-                                SizedBox(height: 26.h),
-                                Stack(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 40.h),
-                                      child: _body(eventsBloc, context, false),
-                                    ),
-                                    _body(eventsBloc, context, true),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          }));
-    });
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   Container _body(EventsBloc eventsBloc, BuildContext context, bool isVisible) {

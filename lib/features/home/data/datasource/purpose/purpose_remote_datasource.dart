@@ -90,6 +90,7 @@ class PurposeRemoteDataSourceImpl
             validateStatus: (status) => status! < 599,
             headers: headers));
     printRes(response);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return (response.data as List).map((json) => FullPurposeModel.fromJson(json)).toList();
     } else if(response.statusCode == 401){
@@ -114,6 +115,7 @@ class PurposeRemoteDataSourceImpl
             validateStatus: (status) => status! < 599,
             headers: headers));
     printRes(response);
+    print(response.statusCode);
     if (response.statusCode == 201) {
       return;
     } else if(response.statusCode == 401){
