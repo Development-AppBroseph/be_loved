@@ -101,14 +101,18 @@ class _GalleryPageState extends State<GalleryPage> {
                                 GlobalKey(),
                                 bloc.groupedFiles.indexOf(group),
                                 group.mainPhoto,
-                                group),
+                                group,
+                                bloc.groupedFiles
+                                ),
                             if (group.mainVideo != null)
                               _buildMainItem(
                                   GlobalKey(),
                                   GlobalKey(),
                                   bloc.groupedFiles.indexOf(group),
                                   group.mainVideo!,
-                                  group),
+                                  group,
+                                  bloc.groupedFiles
+                                  ),
                             ...List.generate(
                                 galleryGroupingCount(group),
                                 (index) => MiniMediaCard(
@@ -209,7 +213,7 @@ class _GalleryPageState extends State<GalleryPage> {
   }
 
   Widget _buildMainItem(GlobalKey mainKey, GlobalKey dotsKey, int index,
-      GalleryFileEntity file, GalleryGroupFilesEntity group) {
+      GalleryFileEntity file, GalleryGroupFilesEntity group, List<GalleryGroupFilesEntity>? groupList) {
     //Setting position of group
     if (group.topPosition == 0) {
       print('SET POSITIONS: ${widget.position}');
@@ -266,6 +270,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         onPageChange: widget.onPageChange,
                         onSelectForDeleting: widget.onSelectForDeleting,
                         deletingIds: widget.deletingIds,
+                        groupList: groupList,
                       ),
             transitionDuration: Duration(milliseconds: 400),
             transitionsBuilder: (_, a, __, c) =>

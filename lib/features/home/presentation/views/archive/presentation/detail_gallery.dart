@@ -15,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DetailGalleryPage extends StatefulWidget {
   GalleryGroupFilesEntity group;
+  List<GalleryGroupFilesEntity>? groupList;
   final Function(int i) onPageChange;
   final Function(int id) onSelectForDeleting;
   final List<int> deletingIds;
@@ -22,7 +23,9 @@ class DetailGalleryPage extends StatefulWidget {
       {required this.group,
       required this.onPageChange,
       required this.onSelectForDeleting,
-      required this.deletingIds});
+      required this.deletingIds,
+      this.groupList
+      });
   @override
   State<DetailGalleryPage> createState() => _DetailGalleryPageState();
 }
@@ -49,12 +52,12 @@ class _DetailGalleryPageState extends State<DetailGalleryPage> {
           ),
         ),
       );
-    } else {
+    } else {  
       Navigator.push(
           context,
           CupertinoPageRoute(
               builder: (BuildContext context) =>
-                  PhotoFullScreenView(urlToImage: file.urlToFile)));
+                  PhotoFullScreenView(urlToImage: file.urlToFile, listGroup: widget.group, file: file,)));
     }
   }
 
