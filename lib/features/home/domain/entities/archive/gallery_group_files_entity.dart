@@ -1,7 +1,7 @@
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:equatable/equatable.dart';
 
-class   GalleryGroupFilesEntity extends Equatable {
+class GalleryGroupFilesEntity extends Equatable {
   GalleryFileEntity mainPhoto;
   GalleryFileEntity? mainVideo;
   DateTime startDate;
