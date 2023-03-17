@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
 import 'package:be_loved/core/utils/toasts.dart';
@@ -23,6 +25,8 @@ class MomentsPage extends StatefulWidget {
 }
 
 class _MomentsPageState extends State<MomentsPage> {
+
+  final momentsController = StreamController<int>();
   @override
   void initState() {
     // TODO: implement initState
@@ -204,79 +208,87 @@ class _MomentsPageState extends State<MomentsPage> {
   Widget _buildAlbum(BuildContext context, AlbumEntity albumEntity) {
     MomentsBloc bloc = context.read<MomentsBloc>();
     ScrollController scrollController = ScrollController();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 25.w),
-          child: RichText(
-            text: TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                    text: albumEntity.name.substring(0, 6),
-                    style: TextStyles(context).black_25_w800),
-                TextSpan(
-                    text: albumEntity.name.substring(6),
-                    style: TextStyles(context).grey_25_w800),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 25.h,
-        ),
-        SizedBox(
-          height: 378.w,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: albumEntity.files.length,
-            controller: scrollController,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding:
-                    EdgeInsets.only(left: index == 0 ? 25.w : 0, right: 10.w),
-                child: EventPhotoCard(
-                  isVideo: albumEntity.files[index].isVideo,
-                  additionKey: GlobalKey(),
-                  isFavorite: true,
-                  isFavoriteVal: albumEntity.files[index].isFavorite,
-                  onFavoriteTap: () {
-                    bloc.add(
-                        AddFavoritesFileEvent(id: albumEntity.files[index].id));
-                  },
-                  onAdditionTap: () {},
-                  onAdditionWithKeyTap: (g) {
-                    scrollToCenter(scrollController, index, albumEntity);
-                    showAlbumSettingsModal(g!, albumEntity.files[index], true);
-                  },
-                  onTap: () {
-                    Navigator.of(context).push(PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => albumEntity
-                              .files[index].isVideo
-                          ? VideoView(
-                              url: albumEntity.files[index].urlToFile,
-                              duration: const Duration(seconds: 0))
-                          : PhotoFullScreenView(
-                              urlToImage: albumEntity.files[index].urlToFile),
-                      transitionDuration: Duration(milliseconds: 400),
-                      transitionsBuilder: (_, a, __, c) =>
-                          FadeTransition(opacity: a, child: c),
-                    ));
-                  },
-                  url: albumEntity.files[index].isVideo
-                      ? (albumEntity.files[index].urlToPreviewVideoImage ?? '')
-                      : albumEntity.files[index].urlToFile,
-                  title: albumEntity.files[index].place ?? '',
+    return StreamBuilder<int>(
+      stream: momentsController.stream,
+      builder: (context, snapshot) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 25.w),
+              child: RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: albumEntity.name.substring(0, 6),
+                        style: TextStyles(context).black_25_w800),
+                    TextSpan(
+                        text: albumEntity.name.substring(6),
+                        style: TextStyles(context).grey_25_w800),
+                  ],
                 ),
-              );
-            },
-          ),
-        ),
-        SizedBox(
-          height: 20.h,
-        ),
-      ],
+              ),
+            ),
+            SizedBox(
+              height: 25.h,
+            ),
+            SizedBox(
+              height: 378.w,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: albumEntity.files.length,
+                controller: scrollController,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding:
+                        EdgeInsets.only(left: index == 0 ? 25.w : 0, right: 10.w),
+                    child: EventPhotoCard(
+                      isVideo: albumEntity.files[index].isVideo,
+                      additionKey: GlobalKey(),
+                      isFavorite: true,
+                      isFavoriteVal: albumEntity.files[index].isFavorite,
+                      onFavoriteTap: () {
+                        bloc.add(
+                            AddFavoritesFileEvent(id: albumEntity.files[index].id));
+                      },
+                      onAdditionTap: () {},
+                      onAdditionWithKeyTap: (g) {
+                        scrollToCenter(scrollController, index, albumEntity);
+                        showAlbumSettingsModal(g!, albumEntity.files[index], true);
+                      },
+                      onTap: () {
+                        Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => albumEntity
+                                  .files[index].isVideo
+                              ? VideoView(
+                                  url: albumEntity.files[index].urlToFile,
+                                  duration: const Duration(seconds: 0))
+                              : PhotoFullScreenView(
+                                  file: albumEntity.files,
+                                  urlToImage: albumEntity.files[index].urlToFile,
+                                  index: index,
+                                ),
+                          transitionDuration: const Duration(milliseconds: 400),
+                          transitionsBuilder: (_, a, __, c) =>
+                              FadeTransition(opacity: a, child: c),
+                        ));
+                      },
+                      url: albumEntity.files[index].isVideo
+                          ? (albumEntity.files[index].urlToPreviewVideoImage ?? '')
+                          : albumEntity.files[index].urlToFile,
+                      title: albumEntity.files[index].place ?? '',
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+          ],
+        );
+      }
     );
   }
 }

@@ -188,7 +188,10 @@ class _AlbumsPageState extends State<AlbumsPage> {
                               duration: const Duration(seconds: 0),
                             )
                           : PhotoFullScreenView(
-                              urlToImage: albumEntity.files[index].urlToFile),
+                            file: albumEntity.files,
+                              urlToImage: albumEntity.files[index].urlToFile,
+                              index: index,
+                            ),
                       transitionDuration: Duration(milliseconds: 400),
                       transitionsBuilder: (_, a, __, c) =>
                           FadeTransition(opacity: a, child: c),
