@@ -39,11 +39,14 @@ class PhotoFullScreenView extends StatelessWidget {
           //   imageProvider: NetworkImage(urlToImage)
           // ),
           Positioned(
-              top: 30.h + MediaQuery.of(context).padding.top,
-              right: 30.w,
-              child: BackBtn(onTap: () {
+            top: 30.h + MediaQuery.of(context).padding.top,
+            right: 30.w,
+            child: BackBtn(
+              onTap: () {
                 Navigator.pop(context);
-              })),
+              },
+            ),
+          ),
         ],
       ),
     );

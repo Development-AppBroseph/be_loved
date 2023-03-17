@@ -84,6 +84,8 @@ dependencies:
   comparer: ^2.0.1
   appmetrica_plugin: ^1.1.0
   sberbank_acquiring: ^2.0.1
+  check_vpn_connection: ^0.0.2
+  flutter_smart_dialog: ^4.9.0+3
           
   # webview_flutter: ^4.0.2
 

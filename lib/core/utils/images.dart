@@ -82,4 +82,5 @@ abstract class SvgImg {
   ];
   static const String goto = 'assets/icons/goto.svg';
   static const String galleryWithLine = 'assets/icons/GallaryWithLine.svg';
+  static const String alertVpn = 'assets/icons/alertVpn.svg';
 }
