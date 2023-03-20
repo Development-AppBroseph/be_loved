@@ -8,6 +8,7 @@ import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
+import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/empty_card.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/purpose_card.dart';
@@ -41,6 +42,7 @@ class _PurposesPageState extends State<PurposesPage> {
   void completePurpose(int id) {
     showLoaderWrapper(context);
     context.read<PurposeBloc>().add(CompletePurposeEvent(target: id));
+    context.read<MomentsBloc>().add(GetMomentsEvent());
   }
 
   void cancelPurpose(int id) {
@@ -50,9 +52,10 @@ class _PurposesPageState extends State<PurposesPage> {
 
   void sendPhotoPurpose(int id, File file) {
     showLoaderWrapper(context);
-    context
-        .read<PurposeBloc>()
-        .add(SendPhotoPurposeEvent(path: file.path, target: id));
+    context.read<PurposeBloc>().add(
+          SendPhotoPurposeEvent(path: file.path, target: id),
+        );
+    context.read<MomentsBloc>().add(GetMomentsEvent());
   }
 
   Widget _buildImage(IndicatorController controller, ParalaxConfig asset) {

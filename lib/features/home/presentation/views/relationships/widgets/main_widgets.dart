@@ -5,6 +5,7 @@ import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/video_view_v2.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
@@ -32,6 +33,7 @@ class MainWidgets extends StatelessWidget {
     context
         .read<PurposeBloc>()
         .add(SendPhotoPurposeEvent(path: file.path, target: id));
+   
   }
 
   GlobalKey fileKey = GlobalKey();

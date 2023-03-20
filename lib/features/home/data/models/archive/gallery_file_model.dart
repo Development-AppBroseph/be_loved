@@ -1,7 +1,7 @@
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/presentation/views/archive/helpers/video_helper.dart';
 
-class GalleryFileModel extends GalleryFileEntity{
+class GalleryFileModel extends GalleryFileEntity {
   GalleryFileModel({
     required int id,
     required String? place,
@@ -13,32 +13,33 @@ class GalleryFileModel extends GalleryFileEntity{
     required int? widgetId,
     required bool isVideo,
     required bool isFavorite,
-
+    required String targetName,
   }) : super(
-    id: id, 
-    place: place,
-    size: size,
-    dateTime: dateTime,
-    urlToFile: urlToFile,
-    isVideo: isVideo,
-    isFavorite: isFavorite,
-    urlToPreviewVideoImage: urlToPreviewVideoImage,
-    duration: duration,
-    widgetId: widgetId
-  );
+          id: id,
+          place: place,
+          size: size,
+          dateTime: dateTime,
+          urlToFile: urlToFile,
+          isVideo: isVideo,
+          isFavorite: isFavorite,
+          urlToPreviewVideoImage: urlToPreviewVideoImage,
+          duration: duration,
+          widgetId: widgetId,
+          targetName: targetName,
+        );
 
   factory GalleryFileModel.fromJson(Map<String, dynamic> json) {
     return GalleryFileModel(
-      id: json['id'],
-      size: json['size'],
-      isVideo: checkIsVideo((json['file'] as String)),
-      urlToFile: json['file'],
-      place: json['place'] == 'undefined' ? null : json['place'],
-      isFavorite: json['if_favor'] ?? false,
-      duration: json['duration'],
-      urlToPreviewVideoImage: json['image'],
-      widgetId: json['widget_id'],
-      dateTime: DateTime.parse(json['date']).toLocal(),
-    );
+        id: json['id'],
+        size: json['size'],
+        isVideo: checkIsVideo((json['file'] as String)),
+        urlToFile: json['file'],
+        place: json['place'] == 'undefined' ? null : json['place'],
+        isFavorite: json['if_favor'] ?? false,
+        duration: json['duration'],
+        urlToPreviewVideoImage: json['image'],
+        widgetId: json['widget_id'],
+        dateTime: DateTime.parse(json['date']).toLocal(),
+        targetName: json['target_name'] ?? '');
   }
 }
