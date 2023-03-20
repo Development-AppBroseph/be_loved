@@ -81,6 +81,15 @@ class MomentsPhotoCard extends StatelessWidget {
               )
             ),
             Positioned(
+              top: 21.h,
+              left: 24.w,
+              right: 24.w,
+              child: Text(
+                title ?? '', 
+                style: TextStyles(context).white_25_w800.copyWith(color: title == null ? Colors.white : Colors.white.withOpacity(0.5)),
+              )
+            ),
+            Positioned(
               bottom: 30.h,
               right: 24.w,
               child: Row(

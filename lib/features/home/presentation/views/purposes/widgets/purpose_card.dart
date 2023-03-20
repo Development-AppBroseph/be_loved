@@ -16,7 +16,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class PurposeCard extends StatelessWidget {
   final PurposeEntity purposeEntity;
   final Function()? onCompleteTap;
@@ -24,31 +23,33 @@ class PurposeCard extends StatelessWidget {
   final Function(File file)? onPickFile;
   final bool isMainWidget;
   final Function()? deleteTap;
-  PurposeCard({required this.purposeEntity, this.onCompleteTap, this.onPickFile, this.onCancelTap, this.isMainWidget = false, this.deleteTap});
+  PurposeCard(
+      {required this.purposeEntity,
+      this.onCompleteTap,
+      this.onPickFile,
+      this.onCancelTap,
+      this.isMainWidget = false,
+      this.deleteTap});
 
-
-  pickImage(ImageSource source) async{
+  pickImage(ImageSource source) async {
     XFile? pick = await ImagePicker().pickImage(source: source);
-    if(pick != null){
-      if(onPickFile != null)
-        onPickFile!(File(pick.path));
+    if (pick != null) {
+      if (onPickFile != null) onPickFile!(File(pick.path));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Duration daysDifference = purposeEntity.dateTime == null ? Duration.zero : purposeEntity.dateTime!.difference(DateTime.now());
+    Duration daysDifference = purposeEntity.dateTime == null
+        ? Duration.zero
+        : purposeEntity.dateTime!.difference(DateTime.now());
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
             offset: Offset(0, -5.h),
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 20.w
-          )
-        ],
-        borderRadius: BorderRadius.circular(20.r)
-      ),
+            blurRadius: 20.w)
+      ], borderRadius: BorderRadius.circular(20.r)),
       width: 378.w,
       child: CupertinoCard(
         margin: EdgeInsets.zero,
@@ -66,44 +67,55 @@ class PurposeCard extends StatelessWidget {
                 //   fit: BoxFit.cover,
                 // ),
                 CachedNetworkImage(
-                  imageUrl: purposeEntity.photo.contains('http') ? purposeEntity.photo : Config.url.url + purposeEntity.photo,
+                  imageUrl: purposeEntity.photo.contains('http')
+                      ? purposeEntity.photo
+                      : Config.url.url + purposeEntity.photo,
                   height: purposeEntity.inHistory ? 181.h : 151.h,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
-                if((purposeEntity.dateTime != null && daysDifference.inDays <= 31) || purposeEntity.inHistory || purposeEntity.inProcess)
-                Positioned(
-                  top: 18.h,
-                  left: 20.w,
-                  child: Row(
-                    children: [
-                      if(purposeEntity.inProcess)
-                      ...[_buildCloseBtn((){onCancelTap != null ? onCancelTap!() : (){};}),
-                      SizedBox(width: 10.w,)],
-                      _buildStatusBlock(
-                        purposeEntity.inProcess
-                          ? 'В процессе'
-                          : purposeEntity.inHistory
-                          ? 'Достигнута'
-                          : daysDifference == 0
-                          ? purposeTimes(daysDifference)
-                          : purposeDays('${daysDifference.inDays}'),
-                        context,
-                        horizontalPadding: purposeEntity.inProcess ? 26.w : 17.w
-                      ),
-                    ],
-                  )
-                ),
-                if(isMainWidget)
-                Positioned(
-                  top: 18.h,
-                  right: 20.w,
-                  child: Row(
-                    children: [
-                      _buildCloseBtn((){deleteTap != null ? deleteTap!() : (){};}),
-                    ],
-                  )
-                ),
+                if ((purposeEntity.dateTime != null &&
+                        daysDifference.inDays <= 31) ||
+                    purposeEntity.inHistory ||
+                    purposeEntity.inProcess)
+                  Positioned(
+                      top: 18.h,
+                      left: 20.w,
+                      child: Row(
+                        children: [
+                          if (purposeEntity.inProcess) ...[
+                            _buildCloseBtn(() {
+                              onCancelTap != null ? onCancelTap!() : () {};
+                            }),
+                            SizedBox(
+                              width: 10.w,
+                            )
+                          ],
+                          _buildStatusBlock(
+                              purposeEntity.inProcess
+                                  ? 'В процессе'
+                                  : purposeEntity.inHistory
+                                      ? 'Достигнута'
+                                      : daysDifference == 0
+                                          ? purposeTimes(daysDifference)
+                                          : purposeDays(
+                                              '${daysDifference.inDays}'),
+                              context,
+                              horizontalPadding:
+                                  purposeEntity.inProcess ? 26.w : 17.w),
+                        ],
+                      )),
+                if (isMainWidget)
+                  Positioned(
+                      top: 18.h,
+                      right: 20.w,
+                      child: Row(
+                        children: [
+                          _buildCloseBtn(() {
+                            deleteTap != null ? deleteTap!() : () {};
+                          }),
+                        ],
+                      )),
                 // Positioned(
                 //   top: 18.h,
                 //   right: 23.w,
@@ -124,50 +136,69 @@ class PurposeCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: Text((purposeEntity.name), style: TextStyles(context).black_25_w800,),
-                  ),
-                  SizedBox(width: 4.w,),
-                  if(!purposeEntity.inHistory)
-                  !purposeEntity.inProcess
-                  ? GestureDetector(
-                    onTap: (){
-                      if(onCompleteTap != null){
-                        onCompleteTap!();
-                      }
-                    },
-                    child: SizedBox(
-                      width: 139.w,
-                      height: 42.h,
-                      child: CupertinoCard(
-                        margin: EdgeInsets.zero,
-                        elevation: 0,
-                        color: ColorStyles.primarySwath,
-                        radius: BorderRadius.circular(20.r),
-                        child: Center(child: Text('Достигнуть', style: TextStyles(context).white_18_w800.copyWith(color: sl<AuthConfig>().idx == 1 ? ColorStyles.black2Color : null))),
-                      ),
+                    child: Text(
+                      (purposeEntity.name),
+                      style: TextStyles(context).black_25_w800,
                     ),
-                  )
-                  : Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(width: 5.w,),
-                      _buildSvgBtn(
-                        svg: SvgImg.gallery,
-                        onTap: (){
-                          pickImage(ImageSource.gallery);
-                        }
-                      ),
-                      SizedBox(width: 24.w,),
-                      _buildSvgBtn(
-                        svg: SvgImg.camera,
-                        onTap: (){
-                          pickImage(ImageSource.camera);
-                        }
-                      ),
-                      SizedBox(width: 12.w,)
-                    ],
-                  )
+                  ),
+                  SizedBox(
+                    width: 4.w,
+                  ),
+                  if (!purposeEntity.inHistory)
+                    !purposeEntity.inProcess
+                        ? GestureDetector(
+                            onTap: () {
+                              if (onCompleteTap != null) {
+                                onCompleteTap!();
+                              }
+                            },
+                            child: SizedBox(
+                              width: 139.w,
+                              height: 42.h,
+                              child: CupertinoCard(
+                                margin: EdgeInsets.zero,
+                                elevation: 0,
+                                color: ColorStyles.primarySwath,
+                                radius: BorderRadius.circular(20.r),
+                                child: Center(
+                                  child: Text(
+                                    'Достигнуть',
+                                    style: TextStyles(context)
+                                        .white_18_w800
+                                        .copyWith(
+                                            color: sl<AuthConfig>().idx == 1
+                                                ? ColorStyles.black2Color
+                                                : null),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              _buildSvgBtn(
+                                  svg: SvgImg.gallery,
+                                  onTap: () {
+                                    pickImage(ImageSource.gallery);
+                                  }),
+                              SizedBox(
+                                width: 24.w,
+                              ),
+                              _buildSvgBtn(
+                                  svg: SvgImg.camera,
+                                  onTap: () {
+                                    pickImage(ImageSource.camera);
+                                  }),
+                              SizedBox(
+                                width: 12.w,
+                              )
+                            ],
+                          )
                 ],
               ),
             ),
@@ -177,8 +208,7 @@ class PurposeCard extends StatelessWidget {
     );
   }
 
-
-  Widget _buildSvgBtn({required Function() onTap, required String svg}){
+  Widget _buildSvgBtn({required Function() onTap, required String svg}) {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -189,60 +219,67 @@ class PurposeCard extends StatelessWidget {
           elevation: 0,
           color: ColorStyles.primarySwath,
           radius: BorderRadius.circular(20.r),
-          child: Center(child: SvgPicture.asset(svg, width: 19.w, color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],)),
+          child: Center(
+              child: SvgPicture.asset(
+            svg,
+            width: 19.w,
+            color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+          )),
         ),
       ),
     );
   }
 
-
-
-
-
-
-  Widget _buildStatusBlock(String text, BuildContext context, {double? horizontalPadding}){
+  Widget _buildStatusBlock(String text, BuildContext context,
+      {double? horizontalPadding}) {
     return ClipPath.shape(
-      shape: SquircleBorder(
-        radius: BorderRadius.circular(20.r)
-      ),
-      child: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: horizontalPadding ?? 17.w),
-            height: 33.h,
-            alignment: Alignment.center,
-            color: sl<AuthConfig>().idx == 0 ? Colors.white.withOpacity(0.9) : ColorStyles.black2Color.withOpacity(0.9),
-            child: Text(
-              text, 
-            style: TextStyles(context).black_15_w800.copyWith(color: sl<AuthConfig>().idx == 0 ? ColorStyles.blackColor.withOpacity(0.7) : ColorStyles.white.withOpacity(0.7)),),
-          )
-        ],
-      )
-    );
+        shape: SquircleBorder(radius: BorderRadius.circular(20.r)),
+        child: Stack(
+          children: [
+            Container(
+              padding:
+                  EdgeInsets.symmetric(horizontal: horizontalPadding ?? 17.w),
+              height: 33.h,
+              alignment: Alignment.center,
+              color: sl<AuthConfig>().idx == 0
+                  ? Colors.white.withOpacity(0.9)
+                  : ColorStyles.black2Color.withOpacity(0.9),
+              child: Text(
+                text,
+                style: TextStyles(context).black_15_w800.copyWith(
+                    color: sl<AuthConfig>().idx == 0
+                        ? ColorStyles.blackColor.withOpacity(0.7)
+                        : ColorStyles.white.withOpacity(0.7)),
+              ),
+            )
+          ],
+        ));
   }
 
-
-
-  Widget _buildCloseBtn(Function() onTap){
+  Widget _buildCloseBtn(Function() onTap) {
     return GestureDetector(
       onTap: onTap,
       child: ClipPath.shape(
-        shape: SquircleBorder(
-          radius: BorderRadius.circular(20.r)
-        ),
-        child: Container(
-          height: 33.h,
-          color: sl<AuthConfig>().idx == 0 ? Colors.white.withOpacity(0.9) : ColorStyles.black2Color.withOpacity(0.9),
-          width: 33.h,
-          child: Stack(
-            children: [
-              Center(
-                child: SvgPicture.asset(SvgImg.add, height: 14.h, color: sl<AuthConfig>().idx == 0 ? ColorStyles.blackColor.withOpacity(0.7) : ColorStyles.white.withOpacity(0.7),)
-              )
-            ],
-          ),
-        )
-      ),
+          shape: SquircleBorder(radius: BorderRadius.circular(20.r)),
+          child: Container(
+            height: 33.h,
+            color: sl<AuthConfig>().idx == 0
+                ? Colors.white.withOpacity(0.9)
+                : ColorStyles.black2Color.withOpacity(0.9),
+            width: 33.h,
+            child: Stack(
+              children: [
+                Center(
+                    child: SvgPicture.asset(
+                  SvgImg.add,
+                  height: 14.h,
+                  color: sl<AuthConfig>().idx == 0
+                      ? ColorStyles.blackColor.withOpacity(0.7)
+                      : ColorStyles.white.withOpacity(0.7),
+                ))
+              ],
+            ),
+          )),
     );
   }
 }

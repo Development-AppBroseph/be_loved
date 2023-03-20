@@ -33,9 +33,7 @@ class _MomentsPageState extends State<MomentsPage> {
     super.initState();
     MomentsBloc bloc = context.read<MomentsBloc>();
 
-    if (bloc.state is MomentInitialState) {
-      bloc.add(GetMomentsEvent());
-    }
+    bloc.add(GetMomentsEvent());
   }
 
   showAlbumSettingsModal(
@@ -354,7 +352,7 @@ class _MomentsPageState extends State<MomentsPage> {
                   //     ? (albumEntity.files[index].urlToPreviewVideoImage ?? '')
                   //     : albumEntity.files[index].urlToFile,
                   url: bloc.moments.targets[index].urlToFile,
-                  title: '',
+                  title: bloc.moments.targets[index].targetName,
                 ),
               );
             },
