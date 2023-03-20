@@ -252,3 +252,58 @@ abstract class JsonKeys {
   static const String billingState = 'billingState';
   static const String protocolVersion = 'protocolVersion';
 }
+
+class Months {
+  static List<int> month1 = [
+    0,
+    31,
+    28,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31,
+  ];
+  static List<int> month2 = [
+    0,
+    31,
+    29,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31,
+  ];
+  static int returnMonth() {
+    int days = 0;
+    if (DateTime.now().year % 4 == 0) {
+      days = month2[DateTime.now().month];
+      return days;
+    } else {
+      days = month1[DateTime.now().month];
+      return days;
+    }
+  }
+
+  static int returnDays(int month) {
+    int days = 0;
+    for (var i = 1; i <= month; i++) {
+      if (DateTime.now().year % 4 == 0) {
+        days = days + month2[i];
+      }else{
+        days = days + month1[i];
+      }
+    }
+    return days;
+  }
+}

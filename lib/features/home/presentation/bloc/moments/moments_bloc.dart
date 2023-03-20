@@ -15,28 +15,37 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
   GetMoments getMoments;
   AddFavorites addFavorites;
 
-  MomentsBloc(this.getMoments, this.addFavorites) : super(MomentInitialState()) {
+  MomentsBloc(this.getMoments, this.addFavorites)
+      : super(MomentInitialState()) {
     on<GetMomentsEvent>(_getMoments);
     on<AddFavoritesFileEvent>(_addFavorites);
     // on<DeleteMomentEvent>(_deleteMoment);
   }
 
-  MomentEntity moments = MomentEntity(forYou: [], otherFiles: [], groupedOtherFiles: []);
-  
+  MomentEntity moments = MomentEntity(
+    forYou: const [],
+    otherFiles: const [],
+    groupedOtherFiles: const [],
+    targets: const [],
+  );
+
   int page = 0;
   bool isLoading = false;
   bool isEnd = false;
 
   void _getMoments(GetMomentsEvent event, Emitter<MomentsState> emit) async {
-
     //pagination
     isLoading = true;
     if (event.isReset) {
       emit(MomentLoadingState());
       page = 0;
       isEnd = false;
-      moments = MomentEntity(forYou: [], otherFiles: [], groupedOtherFiles: []);
-    }else{
+      moments = MomentEntity(
+          forYou: const [],
+          otherFiles: const [],
+          groupedOtherFiles: const [],
+          targets: const []);
+    } else {
       emit(MomentBlankState());
     }
     page++;
@@ -47,27 +56,30 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
       (error) => errorCheck(error),
       (data) {
         //pagination
-        if(data.otherFiles.any((element) => moments.otherFiles.any((file) => file.id == element.id))){
+        if (data.otherFiles.any((element) =>
+            moments.otherFiles.any((file) => file.id == element.id))) {
           isEnd = true;
-        }else{
+        } else {
           if (event.isReset) {
             moments = MomentEntity(
-              forYou: data.forYou, 
+              forYou: data.forYou,
               otherFiles: data.otherFiles,
-              groupedOtherFiles: getGroupedFiles(data.otherFiles)
+              groupedOtherFiles: getGroupedFiles(data.otherFiles),
+              targets: data.targets,
             );
           } else {
             moments = MomentEntity(
-              forYou: data.forYou, 
+              forYou: data.forYou,
               otherFiles: [...moments.otherFiles, ...data.otherFiles],
-              groupedOtherFiles: []
+              groupedOtherFiles: const [],
+              targets: data.targets,
             );
             moments.groupedOtherFiles = getGroupedFiles(moments.otherFiles);
           }
         }
 
         // moments = MomentEntity(
-        //   forYou: data.forYou, 
+        //   forYou: data.forYou,
         //   otherFiles: data.otherFiles,
         //   groupedOtherFiles: getGroupedFiles(data.otherFiles)
         // );
@@ -78,40 +90,33 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
     emit(state);
   }
 
-
-
-  void _addFavorites(AddFavoritesFileEvent event, Emitter<MomentsState> emit) async {
+  void _addFavorites(
+      AddFavoritesFileEvent event, Emitter<MomentsState> emit) async {
     emit(MomentBlankState());
-    final data = await addFavorites.call(
-      AddFavoritesParams(
-        fileId: event.id,
-        isFavor: setNewFavorite(event.id)
-    ));
-    // MomentsState state = data.fold(
-    //   (error) => errorCheck(error),
-    //   (data) {
-    //     return MomentFavoriteChangeState();
-    //   },
-    // );
+    final data = await addFavorites.call(AddFavoritesParams(
+        fileId: event.id, isFavor: setNewFavorite(event.id)));
+    MomentsState state = data.fold(
+      (error) => errorCheck(error),
+      (data) {
+        return MomentFavoriteChangeState();
+      },
+    );
     emit(MomentFavoriteChangeState());
   }
 
-
-  MomentsState errorCheck(Failure failure){
+  MomentsState errorCheck(Failure failure) {
     print('FAIL: $failure');
-    if(failure == ConnectionFailure() || failure == NetworkFailure()){
+    if (failure == ConnectionFailure() || failure == NetworkFailure()) {
       return MomentInternetErrorState();
-    }else if(failure is ServerFailure){
-      return MomentErrorState(message: failure.message.length < 100 ? failure.message : 'Ошибка сервера');
-    }else{
+    } else if (failure is ServerFailure) {
+      return MomentErrorState(
+          message: failure.message.length < 100
+              ? failure.message
+              : 'Ошибка сервера');
+    } else {
       return MomentErrorState(message: 'Повторите попытку');
     }
   }
-
-
-
-
-
 
   List<AlbumEntity> getGroupedFiles(List<GalleryFileEntity> list) {
     List<AlbumEntity> listItems = [];
@@ -119,25 +124,29 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
     DateTime dateTime = DateTime.now();
     for (int i = 0; i < list.length; i++) {
       if (i == 0) {
-        listItems.add(AlbumEntity(
-          id: 0,
-          relationId: 0,
-          name: DateFormat('dd.MM.yyyy').format(list[i].dateTime),
-          files: [list[i]]
-        ));
+        listItems.add(
+          AlbumEntity(
+            id: 0,
+            relationId: 0,
+            name: DateFormat('dd.MM.yyyy').format(list[i].dateTime),
+            files: [list[i]],
+          ),
+        );
         dateTime = list[i].dateTime;
       }
 
       if (i != 0) {
-        if(isOneDay(list[i].dateTime, dateTime)){
-          listItems[listItems.length-1].files.add(list[i]);
-        }else{
-          listItems.add(AlbumEntity(
-            id: 0,
-            relationId: 0,
-            name: DateFormat('dd.MM.yyyy').format(list[i].dateTime),
-            files: [list[i]]
-          ));
+        if (isOneDay(list[i].dateTime, dateTime)) {
+          listItems[listItems.length - 1].files.add(list[i]);
+        } else {
+          listItems.add(
+            AlbumEntity(
+              id: 0,
+              relationId: 0,
+              name: DateFormat('dd.MM.yyyy').format(list[i].dateTime),
+              files: [list[i]],
+            ),
+          );
           dateTime = list[i].dateTime;
         }
       }
@@ -145,21 +154,21 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
     return listItems;
   }
 
-
-
-
-  bool setNewFavorite(int id){
+  bool setNewFavorite(int id) {
     bool isSet = false;
     bool newValue = false;
-    for(int i = 0; i < moments.forYou.length; i++){
-      if(moments.forYou[i].id == id){
+    for (int i = 0; i < moments.forYou.length; i++) {
+      if (moments.forYou[i].id == id) {
         newValue = !moments.forYou[i].isFavorite;
         moments.forYou[i].isFavorite = !moments.forYou[i].isFavorite;
+      } else {
+        newValue = !moments.targets[i].isFavorite;
+        moments.targets[i].isFavorite = !moments.targets[i].isFavorite;
       }
     }
-    if(!isSet){
-      for(int i = 0; i < moments.otherFiles.length; i++){
-        if(moments.otherFiles[i].id == id){
+    if (!isSet) {
+      for (int i = 0; i < moments.otherFiles.length; i++) {
+        if (moments.otherFiles[i].id == id) {
           newValue = !moments.otherFiles[i].isFavorite;
           moments.otherFiles[i].isFavorite = !moments.otherFiles[i].isFavorite;
         }
@@ -169,4 +178,4 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
 
     return newValue;
   }
-} 
+}

@@ -19,6 +19,7 @@ import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.da
 import 'package:be_loved/features/home/presentation/bloc/stats/stats_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/controller/home_info_first_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
@@ -123,9 +124,9 @@ void main() async {
           BlocProvider<ThemeBloc>(
             create: (context) => sl<ThemeBloc>()..add(GetThemeLocalEvent()),
           ),
-          // BlocProvider<OldEventsBloc>(
-          //   create: (context) => sl<OldEventsBloc>(),
-          // ),
+          BlocProvider<HomeInfoFirstCubit>(
+            create: (context) => sl<HomeInfoFirstCubit>(),
+          ),
           BlocProvider<StaticsBloc>(
             create: (context) => sl<StaticsBloc>(),
           ),

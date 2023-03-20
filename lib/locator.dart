@@ -61,6 +61,7 @@ import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.da
 import 'package:be_loved/features/home/presentation/bloc/stats/stats_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/controller/home_info_first_cubit.dart';
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:be_loved/features/profile/domain/usecases/connect_vk.dart';
@@ -123,7 +124,6 @@ void setupInjections() {
   //   () => AuthBloc(sl(), sl(), sl(), sl(), sl()),
   // );
 
-
   sl.registerFactory<MainScreenBloc>(
     () => MainScreenBloc(),
   );
@@ -139,10 +139,6 @@ void setupInjections() {
   //Datasource
   sl.registerLazySingleton<BeLovedRemoteDatasource>(
       () => BeLovedRemoteDatasourceImpl(dio: sl()));
-
-  
-
-
 
   //Datasources
   sl.registerLazySingleton<EventsRemoteDataSource>(
@@ -169,10 +165,6 @@ void setupInjections() {
   );
 
   sl.registerFactory(() => SubCubit(getStatusSub: sl()));
-
-
-
-
 
   //Datasources
   sl.registerLazySingleton<ProfileRemoteDataSource>(
@@ -205,13 +197,6 @@ void setupInjections() {
     () => StaticsBloc(sl()),
   );
 
-
-
-
-
-
-
-
   //Datasources
   sl.registerLazySingleton<TagsRemoteDataSource>(
     () => TagsRemoteDataSourceImpl(dio: sl()),
@@ -232,19 +217,6 @@ void setupInjections() {
   sl.registerFactory<TagsBloc>(
     () => TagsBloc(sl(), sl(), sl(), sl()),
   );
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   //Datasources
   sl.registerLazySingleton<ArchiveRemoteDataSource>(
@@ -284,17 +256,6 @@ void setupInjections() {
   //   () => OldEventsBloc(sl(), sl()),
   // );
 
-
-
-
-
-
-
-
-
-
-
-
   //Datasources
   sl.registerLazySingleton<PurposeRemoteDataSource>(
     () => PurposeRemoteDataSourceImpl(dio: sl()),
@@ -319,24 +280,10 @@ void setupInjections() {
     () => PurposeBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()),
   );
 
-
-
-
-
-
   //Theme
   sl.registerFactory<ThemeBloc>(
     () => ThemeBloc(),
   );
-
-
-
-
-
-
-
-
-
 
   //Datasources
   sl.registerLazySingleton<MainWidgetsRemoteDataSource>(
@@ -360,8 +307,7 @@ void setupInjections() {
     () => MainWidgetsBloc(sl(), sl(), sl(), sl(), sl()),
   );
 
-
-
-
-
+  sl.registerFactory<HomeInfoFirstCubit>(
+    () => HomeInfoFirstCubit(),
+  );
 }

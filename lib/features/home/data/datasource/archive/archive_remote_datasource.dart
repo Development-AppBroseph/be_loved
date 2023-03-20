@@ -21,7 +21,9 @@ import '../../../../../locator.dart';
 abstract class ArchiveRemoteDataSource {
   Future<List<GalleryFileEntity>> getGalleryFiles(int page);
   Future<void> deleteGalleryFiles(List<int> ids);
-  Future<void> addGalleryFile(List<GalleryFileEntity> galleryFileEntity,);
+  Future<void> addGalleryFile(
+    List<GalleryFileEntity> galleryFileEntity,
+  );
   Future<MemoryEntity> getMemoryInfo();
 
   //Albums
@@ -35,8 +37,7 @@ abstract class ArchiveRemoteDataSource {
   Future<List<EventEntity>> getOldEvents(int page);
 }
 
-class ArchiveRemoteDataSourceImpl
-    implements ArchiveRemoteDataSource {
+class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   final Dio dio;
 
   ArchiveRemoteDataSourceImpl({required this.dio});
@@ -45,15 +46,12 @@ class ArchiveRemoteDataSourceImpl
     "Content-Type": "application/json"
   };
 
-
   @override
   Future<List<GalleryFileEntity>> getGalleryFiles(int page) async {
     headers["Content-Type"] = "application/json";
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.get(Endpoints.getGalleryFiles.getPath(),
-        queryParameters: {
-          'page': page
-        },
+        queryParameters: {'page': page},
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 599,
@@ -61,19 +59,14 @@ class ArchiveRemoteDataSourceImpl
     printRes(response);
     if (response.statusCode == 200) {
       return (response.data as List)
-            .map((json) => GalleryFileModel.fromJson(json))
-            .toList();
-    } else if(response.statusCode == 401 || response.statusCode == 403){
+          .map((json) => GalleryFileModel.fromJson(json))
+          .toList();
+    } else if (response.statusCode == 401 || response.statusCode == 403) {
       throw ServerException(message: 'token_error');
-    }else {
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
-
-
 
   @override
   Future<AlbumFullEntity> getAlbums() async {
@@ -87,25 +80,18 @@ class ArchiveRemoteDataSourceImpl
     printRes(response);
     if (response.statusCode == 200) {
       final albums = (response.data['other'] as List)
-            .map((json) => AlbumModel.fromJson(json))
-            .toList();
+          .map((json) => AlbumModel.fromJson(json))
+          .toList();
       final favorites = (response.data['favor'] as List)
-            .map((json) => GalleryFileModel.fromJson(json))
-            .toList();
-      return AlbumFullEntity(
-        otherAlbums: albums,
-        favorites: favorites
-      );
-    } else if(response.statusCode == 401 || response.statusCode == 403){
+          .map((json) => GalleryFileModel.fromJson(json))
+          .toList();
+      return AlbumFullEntity(otherAlbums: albums, favorites: favorites);
+    } else if (response.statusCode == 401 || response.statusCode == 403) {
       throw ServerException(message: 'token_error');
-    }else {
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
-
 
   @override
   Future<void> deleteGalleryFiles(List<int> ids) async {
@@ -121,14 +107,12 @@ class ArchiveRemoteDataSourceImpl
     printRes(response);
     if (!(response.statusCode! < 200 || response.statusCode! > 204)) {
       return;
-    } else if(response.statusCode == 401 || response.statusCode == 403){
+    } else if (response.statusCode == 401 || response.statusCode == 403) {
       throw ServerException(message: 'token_error');
-    }else {
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
 
   @override
   Future<void> createAlbum(AlbumEntity albumEntity) async {
@@ -148,15 +132,12 @@ class ArchiveRemoteDataSourceImpl
     }
   }
 
-
-
-
-
   @override
   Future<void> deleteAlbum(AlbumEntity albumEntity) async {
     headers["Content-Type"] = "application/json";
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.delete(Endpoints.deleteAlbum.getPath(params: [albumEntity.id]),
+    Response response = await dio.delete(
+        Endpoints.deleteAlbum.getPath(params: [albumEntity.id]),
         data: FormData.fromMap(albumEntity.toMap()),
         options: Options(
             followRedirects: false,
@@ -169,8 +150,6 @@ class ArchiveRemoteDataSourceImpl
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-  
-
 
   @override
   Future<void> addGalleryFile(List<GalleryFileEntity> list) async {
@@ -187,18 +166,20 @@ class ArchiveRemoteDataSourceImpl
     List<String?> places = [];
     List<int> durations = [];
     final String path = (await getApplicationDocumentsDirectory()).path;
-    for(int i = 0; i < list.length; i++){
+    for (int i = 0; i < list.length; i++) {
       files.add(await MultipartFile.fromFile(list[i].urlToFile));
       places.add(list[i].place);
       times.add(list[i].dateTime);
       durations.add(list[i].duration ?? 0);
       File? newFile;
-      if(list[i].memoryFilePhotoForVideo != null){
+      if (list[i].memoryFilePhotoForVideo != null) {
         final int epoch = DateTime.now().millisecondsSinceEpoch;
         newFile = await File('$path/image_$epoch.jpeg').create();
         newFile.writeAsBytesSync(list[i].memoryFilePhotoForVideo!);
       }
-      images.add(list[i].memoryFilePhotoForVideo == null ? null : (await MultipartFile.fromFile(newFile!.path)));
+      images.add(list[i].memoryFilePhotoForVideo == null
+          ? null
+          : (await MultipartFile.fromFile(newFile!.path)));
     }
     Map<String, dynamic> mapDataList = {
       'files': files,
@@ -207,8 +188,10 @@ class ArchiveRemoteDataSourceImpl
       // 'images': images,
       'durations': durations
     };
-    for(int i = 0; i < images.length; i++){
-      mapDataList.addAll({'image_$i': [images[i] ?? '0']});
+    for (int i = 0; i < images.length; i++) {
+      mapDataList.addAll({
+        'image_$i': [images[i] ?? '0']
+      });
     }
     print('mapDATA: ${mapDataList}');
     Response response = await dio.post(Endpoints.addGalleryFile.getPath(),
@@ -226,9 +209,6 @@ class ArchiveRemoteDataSourceImpl
     }
   }
 
-
-
-
   @override
   Future<MemoryEntity> getMemoryInfo() async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
@@ -242,66 +222,65 @@ class ArchiveRemoteDataSourceImpl
       MemoryEntity memoryEntity = MemoryModel.fromJson(response.data);
       sl<AuthConfig>().memoryEntity = memoryEntity;
       return memoryEntity;
-    } else if(response.statusCode == 401 || response.statusCode == 403){
+    } else if (response.statusCode == 401 || response.statusCode == 403) {
       throw ServerException(message: 'token_error');
-    }else {
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
-
-
-
 
   @override
   Future<MomentEntity> getMoments(int page) async {
     headers["Content-Type"] = "application/json";
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.get(Endpoints.getMoments.getPath(),
-        queryParameters: {
-          'page': page
-        },
-        options: Options(
-            followRedirects: false,
-            validateStatus: (status) => status! < 599,
-            headers: headers));
+    Response response = await dio.get(
+      Endpoints.getMoments.getPath(),
+      queryParameters: {'page': page},
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 599,
+        headers: headers,
+      ),
+    );
     printRes(response);
     if (response.statusCode == 200) {
       final others = (response.data['other'] as List)
-            .map((json) => GalleryFileModel.fromJson(json))
-            .toList();
+          .map((json) => GalleryFileModel.fromJson(json))
+          .toList();
       final forYou = (response.data['for_you'] as List)
-            .map((json) => GalleryFileModel.fromJson(json))
-            .toList();
+          .map((json) => GalleryFileModel.fromJson(json))
+          .toList();
+      final targets = (response.data['targets'] as List<dynamic>)
+          .map(
+            (json) => GalleryFileModel.fromJson(json),
+          )
+          .toList();
       return MomentEntity(
         otherFiles: others,
         forYou: forYou,
-        groupedOtherFiles: []
+        groupedOtherFiles: const [],
+        targets: targets,
       );
-    } else if(response.statusCode == 401 || response.statusCode == 403){
+    } else if (response.statusCode == 401 || response.statusCode == 403) {
       throw ServerException(message: 'token_error');
-    }else {
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
-
-
 
   @override
   Future<void> addFavorites(int id, bool isFavorite) async {
     headers["Content-Type"] = "application/json";
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.patch(Endpoints.addFavorites.getPath(params: [id]),
-        data: FormData.fromMap({'if_favor': isFavorite}),
-        options: Options(
-            followRedirects: false,
-            validateStatus: (status) => status! < 699,
-            headers: headers));
+    Response response = await dio.patch(
+      Endpoints.addFavorites.getPath(params: [id]),
+      data: FormData.fromMap({'if_favor': isFavorite}),
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 699,
+        headers: headers,
+      ),
+    );
     printRes(response);
     if (!(response.statusCode! < 200 || response.statusCode! > 204)) {
       return;
@@ -309,11 +288,6 @@ class ArchiveRemoteDataSourceImpl
       throw ServerException(message: 'Ошибка с сервером');
     }
   }
-
-
-
-
-
 
   @override
   Future<List<EventEntity>> getOldEvents(int page) async {
@@ -327,11 +301,11 @@ class ArchiveRemoteDataSourceImpl
     printRes(response);
     if (response.statusCode == 200) {
       return (response.data as List)
-            .map((json) => EventModel.fromJson(json))
-            .toList();
-    } else if(response.statusCode == 401 || response.statusCode == 403){
+          .map((json) => EventModel.fromJson(json))
+          .toList();
+    } else if (response.statusCode == 401 || response.statusCode == 403) {
       throw ServerException(message: 'token_error');
-    }else {
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }

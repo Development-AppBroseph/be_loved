@@ -14,6 +14,7 @@ import 'package:be_loved/features/home/presentation/views/archive/presentation/v
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/albums/album_settings_modal.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/event_photo_card.dart';
+import 'package:be_loved/features/home/presentation/views/events/widgets/moments_photo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -25,7 +26,6 @@ class MomentsPage extends StatefulWidget {
 }
 
 class _MomentsPageState extends State<MomentsPage> {
-
   final momentsController = StreamController<int>();
   @override
   void initState() {
@@ -53,15 +53,19 @@ class _MomentsPageState extends State<MomentsPage> {
   }
 
   void scrollToCenter(
-      ScrollController controller, int index, AlbumEntity album) {
+    ScrollController controller,
+    int index,
+    AlbumEntity album,
+  ) {
     controller.animateTo(
-        index == 0
-            ? 0
-            : (album.files.length - 1) == index
-                ? controller.position.maxScrollExtent
-                : 388.w * index,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOutQuint);
+      index == 0
+          ? 0
+          : (album.files.length - 1) == index
+              ? controller.position.maxScrollExtent
+              : 388.w * index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOutQuint,
+    );
   }
 
   @override
@@ -99,30 +103,30 @@ class _MomentsPageState extends State<MomentsPage> {
             return Container();
           }
           return SingleChildScrollView(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              if (bloc.moments.forYou.isNotEmpty) ...[
-                _buildForYouBlock(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (bloc.moments.forYou.isNotEmpty) ...[
+                  _buildForYouBlock(context),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                ] else
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                  ),
+                ...bloc.moments.groupedOtherFiles
+                    .map((e) => _buildAlbum(context, e))
+                    .toList(),
                 SizedBox(
-                  height: 30.h,
-                )
-              ] else
-                Container(
-                  height: MediaQuery.of(context).size.height,
+                  height: bloc.moments.groupedOtherFiles.isEmpty &&
+                          bloc.moments.forYou.isEmpty
+                      ? 0
+                      : 50.h,
                 ),
-
-              // _buildOthersBlock(context),
-              ...bloc.moments.groupedOtherFiles
-                  .map((e) => _buildAlbum(context, e))
-                  .toList(),
-
-              SizedBox(
-                height: bloc.moments.groupedOtherFiles.isEmpty &&
-                        bloc.moments.forYou.isEmpty
-                    ? 0
-                    : 140.h,
-              ),
-            ]),
+                if (bloc.moments.targets.isNotEmpty) _buildTargets(context),
+              ],
+            ),
           );
         },
       ),
@@ -208,87 +212,158 @@ class _MomentsPageState extends State<MomentsPage> {
   Widget _buildAlbum(BuildContext context, AlbumEntity albumEntity) {
     MomentsBloc bloc = context.read<MomentsBloc>();
     ScrollController scrollController = ScrollController();
-    return StreamBuilder<int>(
-      stream: momentsController.stream,
-      builder: (context, snapshot) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 25.w),
-              child: RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: albumEntity.name.substring(0, 6),
-                        style: TextStyles(context).black_25_w800),
-                    TextSpan(
-                        text: albumEntity.name.substring(6),
-                        style: TextStyles(context).grey_25_w800),
-                  ],
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 25.w),
+          child: RichText(
+            text: TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                    text: albumEntity.name.substring(0, 6),
+                    style: TextStyles(context).black_25_w800),
+                TextSpan(
+                    text: albumEntity.name.substring(6),
+                    style: TextStyles(context).grey_25_w800),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 25.h,
+        ),
+        SizedBox(
+          height: 378.w,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: albumEntity.files.length,
+            controller: scrollController,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding:
+                    EdgeInsets.only(left: index == 0 ? 25.w : 0, right: 10.w),
+                child: EventPhotoCard(
+                  isVideo: albumEntity.files[index].isVideo,
+                  additionKey: GlobalKey(),
+                  isFavorite: true,
+                  isFavoriteVal: albumEntity.files[index].isFavorite,
+                  onFavoriteTap: () {
+                    bloc.add(
+                        AddFavoritesFileEvent(id: albumEntity.files[index].id));
+                  },
+                  onAdditionTap: () {},
+                  onAdditionWithKeyTap: (g) {
+                    scrollToCenter(scrollController, index, albumEntity);
+                    showAlbumSettingsModal(g!, albumEntity.files[index], true);
+                  },
+                  onTap: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => albumEntity
+                              .files[index].isVideo
+                          ? VideoView(
+                              url: albumEntity.files[index].urlToFile,
+                              duration: const Duration(seconds: 0))
+                          : PhotoFullScreenView(
+                              file: albumEntity.files,
+                              urlToImage: albumEntity.files[index].urlToFile,
+                              index: index,
+                            ),
+                      transitionDuration: const Duration(milliseconds: 400),
+                      transitionsBuilder: (_, a, __, c) =>
+                          FadeTransition(opacity: a, child: c),
+                    ));
+                  },
+                  url: albumEntity.files[index].isVideo
+                      ? (albumEntity.files[index].urlToPreviewVideoImage ?? '')
+                      : albumEntity.files[index].urlToFile,
+                  title: albumEntity.files[index].place ?? '',
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 25.h,
-            ),
-            SizedBox(
-              height: 378.w,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: albumEntity.files.length,
-                controller: scrollController,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding:
-                        EdgeInsets.only(left: index == 0 ? 25.w : 0, right: 10.w),
-                    child: EventPhotoCard(
-                      isVideo: albumEntity.files[index].isVideo,
-                      additionKey: GlobalKey(),
-                      isFavorite: true,
-                      isFavoriteVal: albumEntity.files[index].isFavorite,
-                      onFavoriteTap: () {
-                        bloc.add(
-                            AddFavoritesFileEvent(id: albumEntity.files[index].id));
-                      },
-                      onAdditionTap: () {},
-                      onAdditionWithKeyTap: (g) {
-                        scrollToCenter(scrollController, index, albumEntity);
-                        showAlbumSettingsModal(g!, albumEntity.files[index], true);
-                      },
-                      onTap: () {
-                        Navigator.of(context).push(PageRouteBuilder(
-                          pageBuilder: (_, __, ___) => albumEntity
-                                  .files[index].isVideo
-                              ? VideoView(
-                                  url: albumEntity.files[index].urlToFile,
-                                  duration: const Duration(seconds: 0))
-                              : PhotoFullScreenView(
-                                  file: albumEntity.files,
-                                  urlToImage: albumEntity.files[index].urlToFile,
-                                  index: index,
-                                ),
-                          transitionDuration: const Duration(milliseconds: 400),
-                          transitionsBuilder: (_, a, __, c) =>
-                              FadeTransition(opacity: a, child: c),
-                        ));
-                      },
-                      url: albumEntity.files[index].isVideo
-                          ? (albumEntity.files[index].urlToPreviewVideoImage ?? '')
-                          : albumEntity.files[index].urlToFile,
-                      title: albumEntity.files[index].place ?? '',
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-          ],
-        );
-      }
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          height: 20.h,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTargets(BuildContext context) {
+    MomentsBloc bloc = context.read<MomentsBloc>();
+    ScrollController scrollController = ScrollController();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 25.w),
+          child: Text(
+            'Достигнутые цели',
+            style: TextStyles(context).black_25_w800,
+          ),
+        ),
+        SizedBox(
+          height: 25.h,
+        ),
+        SizedBox(
+          height: 378.w,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: bloc.moments.targets.length,
+            controller: scrollController,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding:
+                    EdgeInsets.only(left: index == 0 ? 25.w : 0, right: 10.w),
+                child: MomentsPhotoCard(
+                  additionKey: GlobalKey(),
+                  isFavorite: true,
+                  isFavoriteVal: bloc.moments.targets[index].isFavorite,
+                  onFavoriteTap: () {
+                    bloc.add(
+                      AddFavoritesFileEvent(
+                        id: bloc.moments.targets[index].id,
+                      ),
+                    );
+                  },
+                  onAdditionTap: () {},
+                  // onAdditionWithKeyTap: (g) {
+                  //   // scrollToCenter(scrollController, index, albumEntity);
+                  //   // showAlbumSettingsModal(
+                  //   //     g!, bloc.moments.targets[index], true);
+                  // },
+                  onTap: () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => PhotoFullScreenView(
+                        file: bloc.moments.targets,
+                        urlToImage: bloc.moments.targets[index].urlToFile,
+                        index: index,
+                      ),
+                      transitionDuration: const Duration(milliseconds: 400),
+                      transitionsBuilder: (_, a, __, c) =>
+                          FadeTransition(opacity: a, child: c),
+                    ));
+                  },
+
+                  // url: albumEntity.files[index].isVideo
+                  //     ? (albumEntity.files[index].urlToPreviewVideoImage ?? '')
+                  //     : albumEntity.files[index].urlToFile,
+                  url: bloc.moments.targets[index].urlToFile,
+                  title: '',
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          height: 20.h,
+        ),
+      ],
     );
   }
 }

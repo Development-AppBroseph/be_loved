@@ -27,7 +27,7 @@ import 'package:be_loved/features/home/presentation/views/events/widgets/photo_s
 import 'package:be_loved/features/home/presentation/views/events/widgets/show_create_tag_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_widget.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/view/home_info_first.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';

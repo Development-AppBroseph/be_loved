@@ -15,7 +15,7 @@ import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widge
 import 'package:be_loved/features/home/presentation/views/archive/presentation/selecting_gallery_page.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/modals/widget_purposes_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/file_widget_delete_modal.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/view/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/main_widgets.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';

@@ -4,20 +4,22 @@ import 'package:equatable/equatable.dart';
 
 class MomentEntity extends Equatable {
   final List<GalleryFileEntity> forYou;
-  List<GalleryFileEntity> otherFiles;
+  final List<GalleryFileEntity> otherFiles;
   List<AlbumEntity> groupedOtherFiles;
+  final List<GalleryFileEntity> targets;
 
   MomentEntity({
     required this.forYou,
     required this.otherFiles,
     required this.groupedOtherFiles,
+    required this.targets,
   });
-
 
   @override
   List<Object> get props => [
-    forYou,
-    otherFiles,
-    groupedOtherFiles
-  ];
+        forYou,
+        otherFiles,
+        groupedOtherFiles,
+        targets,
+      ];
 }

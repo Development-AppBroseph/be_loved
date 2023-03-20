@@ -12,12 +12,16 @@ import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
+import 'package:check_vpn_connection/check_vpn_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
+
+import '../../../../../core/widgets/alerts/vpn.dart';
 
 class CodePage extends StatefulWidget {
   const CodePage({Key? key}) : super(key: key);
@@ -27,6 +31,24 @@ class CodePage extends StatefulWidget {
 }
 
 class _CodePageState extends State<CodePage> {
+  void checkVpnConnection() async {
+    if (await CheckVpnConnection.isVpnActive()) {
+      SmartDialog.show(
+        animationType: SmartAnimationType.fade,
+        maskColor: Colors.transparent,
+        displayTime: const Duration(seconds: 5),
+        clickMaskDismiss: false,
+        usePenetrate: true,
+        builder: (context) => const SafeArea(
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Vpn(),
+          ),
+        ),
+      );
+    }
+  }
+
   final FocusNode focusNode = FocusNode();
 
   // int? code;
@@ -45,6 +67,7 @@ class _CodePageState extends State<CodePage> {
   @override
   void initState() {
     startTimer();
+    checkVpnConnection();
     super.initState();
   }
 
@@ -217,8 +240,7 @@ class _CodePageState extends State<CodePage> {
                               fontWeight: FontWeight.w600),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
-                              top: 44.h),
+                          padding: EdgeInsets.only(top: 44.h),
                           child: SizedBox(
                             height: 80.sp,
                             child: Pinput(
