@@ -15,7 +15,8 @@ class GetMomentsEvent extends MomentsEvent{
 
 class AddFavoritesFileEvent extends MomentsEvent{
   final int id;
-  AddFavoritesFileEvent({required this.id});
+  final bool target;
+  AddFavoritesFileEvent({required this.id, required this.target});
 }
 
 // class DeleteMomentEvent extends MomentsEvent{

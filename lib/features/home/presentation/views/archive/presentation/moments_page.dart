@@ -174,7 +174,7 @@ class _MomentsPageState extends State<MomentsPage> {
                   isFavoriteVal: bloc.moments.forYou[index].isFavorite,
                   onFavoriteTap: () {
                     bloc.add(AddFavoritesFileEvent(
-                        id: bloc.moments.forYou[index].id));
+                        id: bloc.moments.forYou[index].id, target: false));
                   },
                   height: 471.w,
                   onTap: () {
@@ -249,8 +249,8 @@ class _MomentsPageState extends State<MomentsPage> {
                   isFavorite: true,
                   isFavoriteVal: albumEntity.files[index].isFavorite,
                   onFavoriteTap: () {
-                    bloc.add(
-                        AddFavoritesFileEvent(id: albumEntity.files[index].id));
+                    bloc.add(AddFavoritesFileEvent(
+                        id: albumEntity.files[index].id, target: false));
                   },
                   onAdditionTap: () {},
                   onAdditionWithKeyTap: (g) {
@@ -326,6 +326,7 @@ class _MomentsPageState extends State<MomentsPage> {
                     bloc.add(
                       AddFavoritesFileEvent(
                         id: bloc.moments.targets[index].id,
+                        target: true,
                       ),
                     );
                   },
