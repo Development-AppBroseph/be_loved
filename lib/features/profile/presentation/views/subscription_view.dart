@@ -21,7 +21,6 @@ import 'package:flutter/material.dart' as material;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class SubscriptionView extends material.StatefulWidget {
   @override
   State<SubscriptionView> createState() => _SubscriptionViewState();
@@ -46,7 +45,8 @@ class _SubscriptionViewState extends State<SubscriptionView> {
         amount: subscriptionVariant[index].price! * 100,
         returnUrl: 'https://3dsec.sberbank.ru/payment/rest/register.do',
         failUrl: 'https://www.yandex.ru/',
-        orderNumber: subscriptionVariant[index].id.toString() + Random().nextInt(10000).toString(),
+        orderNumber: subscriptionVariant[index].id.toString() +
+            Random().nextInt(10000).toString(),
         pageView: 'MOBILE',
       ),
     );
@@ -386,21 +386,22 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                 )
               ],
             ),
-            Center(
-              child: Container(
-                height: 30.h,
-                width: 139.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.r),
-                  color: selectIndex == index ? Colors.white : Colors.grey,
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  '+${item.overCountGb} ГБ архива',
-                  style: TextStyles(context).black_15_w800,
+            if (index == 2)
+              Center(
+                child: Container(
+                  height: 30.h,
+                  width: 139.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.r),
+                    color: selectIndex == index ? Colors.white : Colors.grey,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '+${item.overCountGb} ГБ архива',
+                    style: TextStyles(context).black_15_w800,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

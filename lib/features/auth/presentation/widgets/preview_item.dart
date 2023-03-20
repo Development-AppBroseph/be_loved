@@ -46,7 +46,7 @@ class PreviewItem extends StatelessWidget {
             child: SizedBox(
               child: Container(
                 height: 111.h,
-                margin: EdgeInsets.only(bottom: 267.h),
+                margin: EdgeInsets.only(bottom: 227.h),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

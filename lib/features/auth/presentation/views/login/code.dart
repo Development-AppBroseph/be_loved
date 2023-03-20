@@ -241,7 +241,8 @@ class _CodePageState extends State<CodePage> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 44.h),
-                          child: SizedBox(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 29.75.w),
                             height: 80.sp,
                             child: Pinput(
                               pinAnimationType: PinAnimationType.none,

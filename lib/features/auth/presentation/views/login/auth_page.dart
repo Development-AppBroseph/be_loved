@@ -111,7 +111,7 @@ class _AuthPageState extends State<AuthPage> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: SizedBox(
-                      height: 250.h,
+                      height: 220.h,
                       child: Column(
                         children: [
                           SizedBox(
@@ -136,22 +136,22 @@ class _AuthPageState extends State<AuthPage> {
                           SizedBox(
                             height: 15.h,
                           ),
-                          OptionBtn(
-                              onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     CupertinoPageRoute(
-                                //         builder: (BuildContext context) =>
-                                //             VKView(onCodeReturn: (code) {
-                                //               Navigator.pop(context);
-                                //               authBloc.add(TryAuthVK(code));
-                                //             })));
-                              },
-                              text: 'Через Вконтакте',
-                              isPhone: false),
-                          SizedBox(
-                            height: 50.h,
-                          ),
+                          // OptionBtn(
+                          //     onTap: () {
+                          //       // Navigator.push(
+                          //       //     context,
+                          //       //     CupertinoPageRoute(
+                          //       //         builder: (BuildContext context) =>
+                          //       //             VKView(onCodeReturn: (code) {
+                          //       //               Navigator.pop(context);
+                          //       //               authBloc.add(TryAuthVK(code));
+                          //       //             })));
+                          //     },
+                          //     text: 'Через Вконтакте',
+                          //     isPhone: false),
+                          // SizedBox(
+                          //   height: 50.h,
+                          // ),
                         ],
                       ),
                     ),
