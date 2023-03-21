@@ -59,6 +59,14 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
         if (data.otherFiles.any((element) =>
             moments.otherFiles.any((file) => file.id == element.id))) {
           isEnd = true;
+          if (isEnd) {
+            moments = MomentEntity(
+              forYou: data.forYou,
+              otherFiles: data.otherFiles,
+              groupedOtherFiles: getGroupedFiles(data.otherFiles),
+              targets: data.targets,
+            );
+          }
         } else {
           if (event.isReset) {
             moments = MomentEntity(
@@ -77,7 +85,6 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
             moments.groupedOtherFiles = getGroupedFiles(moments.otherFiles);
           }
         }
-
         // moments = MomentEntity(
         //   forYou: data.forYou,
         //   otherFiles: data.otherFiles,
@@ -94,7 +101,7 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
       AddFavoritesFileEvent event, Emitter<MomentsState> emit) async {
     emit(MomentBlankState());
     final data = await addFavorites.call(AddFavoritesParams(
-        fileId: event.id, isFavor: setNewFavorite(event.id)));
+        fileId: event.id, isFavor: setNewFavorite(event.id, event.target)));
     MomentsState state = data.fold(
       (error) => errorCheck(error),
       (data) {
@@ -154,18 +161,26 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
     return listItems;
   }
 
-  bool setNewFavorite(int id) {
+  bool setNewFavorite(int id, bool target) {
     bool isSet = false;
     bool newValue = false;
-    for (int i = 0; i < moments.forYou.length; i++) {
-      if (moments.forYou[i].id == id) {
-        newValue = !moments.forYou[i].isFavorite;
-        moments.forYou[i].isFavorite = !moments.forYou[i].isFavorite;
-      } else {
-        newValue = !moments.targets[i].isFavorite;
-        moments.targets[i].isFavorite = !moments.targets[i].isFavorite;
+    if (target) {
+      for (var i = 0; i < moments.targets.length; i++) {
+        if (moments.targets[i].id == id) {
+          newValue = !moments.targets[i].isFavorite;
+          moments.targets[i].isFavorite = !moments.targets[i].isFavorite;
+        }
+      }
+    } else {
+      for (int i = 0; i < moments.forYou.length; i++) {
+        print(moments.forYou[i].id);
+        if (moments.forYou[i].id == id) {
+          newValue = !moments.forYou[i].isFavorite;
+          moments.forYou[i].isFavorite = !moments.forYou[i].isFavorite;
+        }
       }
     }
+
     if (!isSet) {
       for (int i = 0; i < moments.otherFiles.length; i++) {
         if (moments.otherFiles[i].id == id) {
