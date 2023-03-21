@@ -79,7 +79,7 @@ class MainWidgets extends StatelessWidget {
         }
         if (state is CompletedPurposeState) {
           Loader.hide();
-          purposeBloc.add(GetAllPurposeDataEvent());
+          // purposeBloc.add(GetAllPurposeDataEvent());
           bloc.add(GetMainWidgetsEvent());
         }
       }, builder: (context, state) {

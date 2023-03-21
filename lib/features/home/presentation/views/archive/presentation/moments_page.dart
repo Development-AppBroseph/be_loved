@@ -110,9 +110,9 @@ class _MomentsPageState extends State<MomentsPage> {
                     height: 30.h,
                   ),
                 ] else
-                  Container(
-                    height: MediaQuery.of(context).size.height,
-                  ),
+                  // Container(
+                  //   height: MediaQuery.of(context).size.height,
+                  // ),
                 ...bloc.moments.groupedOtherFiles
                     .map((e) => _buildAlbum(context, e))
                     .toList(),
