@@ -360,7 +360,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                 Padding(
                   padding: EdgeInsets.only(left: 33.w),
                   child: Text(
-                    '${period == 12 ? '' : period} $monthName',
+                    '${period == 1000 ? '' : period} $monthName',
                     style: TextStyles(context).white_20_w700.copyWith(
                           color:
                               selectIndex == index ? Colors.white : Colors.grey,
