@@ -188,6 +188,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
               Positioned.fill(
                 top: 500.h,
                 child: material.PageView(
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   children: [
                     Column(
@@ -204,7 +205,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           height: 15.h,
                         ),
                         Text(
-                          'И получи N ГБ совместного архива, доступ к\nвыполнению уникальных целей и получению\nинтересных призов :) ',
+                          'И получи 5 ГБ совместного архива и доступ к\nуникальным купонам от партнёров',
                           style: TextStyles(context).grey_15_w800,
                           textAlign: TextAlign.center,
                         ),
@@ -215,7 +216,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           padding: EdgeInsets.symmetric(horizontal: 25.w),
                           child: CustomButton(
                             color: ColorStyles.white,
-                            text: 'Приобрести за 200₽',
+                            text: 'Приобрести за 199₽',
                             textColor: ColorStyles.blackColor,
                             validate: true,
                             onPressed: () {
@@ -335,15 +336,13 @@ class _SubscriptionViewState extends State<SubscriptionView> {
     } else if (period >= 5 && period <= 11) {
       monthName = 'месяцев';
     } else if (period == 12) {
-      period = 1;
-      monthName = 'год';
+      monthName = 'Навсегда';
     }
 
     return GestureDetector(
       onTap: () => _streamController.sink.add(index),
       child: Container(
         height: 50.h,
-        // margin: EdgeInsets.only(bottom: 10.h),
         width: double.infinity,
         margin: EdgeInsets.only(left: 25.w, right: 25.w, bottom: 10.h),
         decoration: BoxDecoration(
@@ -361,7 +360,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                 Padding(
                   padding: EdgeInsets.only(left: 33.w),
                   child: Text(
-                    '${period} ${monthName}',
+                    '${period == 12 ? '' : period} $monthName',
                     style: TextStyles(context).white_20_w700.copyWith(
                           color:
                               selectIndex == index ? Colors.white : Colors.grey,
@@ -381,25 +380,24 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   alignment: Alignment.center,
                   child: Text(
                     '${item.price}₽',
-                    style: TextStyles(context).black_20_w700,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                    ),
                   ),
                 )
               ],
             ),
-            if (index == 2)
-              Center(
-                child: Container(
-                  height: 30.h,
-                  width: 139.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    color: selectIndex == index ? Colors.white : Colors.grey,
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '+${item.overCountGb} ГБ архива',
-                    style: TextStyles(context).black_15_w800,
-                  ),
+            Center(
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  item.overCountGb == 1000000
+                      ? ''
+                      : '+${item.overCountGb} ГБ архива',
+                  style: TextStyles(context).black_15_w800,
                 ),
               ),
           ],

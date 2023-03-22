@@ -7,7 +7,7 @@ String countEventsText(List<EventEntity> list){
   //                       => int.parse(element.datetimeString) < 7).toList().length;
   
   int length = list.length;
-
+  if(length == 0) return '$length событий';
   if(length > 5 && length < 10) return '$length событии';
   if(length % 5 == 0) return '$length событии';
   if(length == 11) return '$length событии';
