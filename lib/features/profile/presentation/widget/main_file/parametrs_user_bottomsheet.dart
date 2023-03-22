@@ -88,7 +88,9 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                   SizedBox(
                     height: 87.h - 24.h,
                   ),
-                  DevideSettings(
+                  state is SubHaveState
+                      ? Container()
+                      : DevideSettings(
                           title: "Подписка BeLoved+",
                           subtitle: "Подробнее",
                           haveToggleSwitch: false,
