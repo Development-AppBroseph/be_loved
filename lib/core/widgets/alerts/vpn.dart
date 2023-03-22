@@ -46,9 +46,9 @@ class _VpnState extends State<Vpn> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 85.h,
-      margin: const EdgeInsets.only(right: 25, left: 25, bottom: 111),
-      padding: const EdgeInsets.only(top: 15, bottom: 15, left: 27, right: 20),
+      height: 100.h,
+      margin: const EdgeInsets.only(right: 25, left: 25, bottom: 111,),
+      padding: const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
         color: ColorStyles.white.withOpacity(0.9),
@@ -58,32 +58,36 @@ class _VpnState extends State<Vpn> {
         children: [
           SvgPicture.asset(SvgImg.alertVpn),
           const SizedBox(
-            width: 18,
+            width: 10,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                'Возможно у вас включен VPN',
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Color(0xff20CB83),
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Inter',
+          Flexible(
+            flex: 40,
+            fit: FlexFit.tight,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  'Возможно у вас включен VPN',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color(0xff20CB83),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Inter',
+                  ),
+                  textAlign: TextAlign.start,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                'Для корректной работы предложения\n его необходимо отключить',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
+                Text(
+                  'Для корректной работы предложения\n его необходимо отключить',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.start,
                 ),
-                textAlign: TextAlign.left,
-              ),
-            ],
+              ],
+            ),
           ),
           const Spacer(),
           Column(
