@@ -360,7 +360,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                 Padding(
                   padding: EdgeInsets.only(left: 33.w),
                   child: Text(
-                    '${period == 12 ? '' : period} $monthName',
+                    '${period == 1000 ? '' : period} $monthName',
                     style: TextStyles(context).white_20_w700.copyWith(
                           color:
                               selectIndex == index ? Colors.white : Colors.grey,
@@ -397,7 +397,12 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   item.overCountGb == 1000000
                       ? ''
                       : '+${item.overCountGb} ГБ архива',
-                  style: TextStyles(context).black_15_w800,
+                  style: TextStyle(
+                      color: selectIndex == index ? Colors.white : Colors.grey,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w800,
+                      fontSize: 15,
+                    )
                 ),
               ),
           ],
