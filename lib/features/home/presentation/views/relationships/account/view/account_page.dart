@@ -484,7 +484,7 @@ class _AccountPageState extends State<AccountPage>
                                               ),
                                               Text(
                                                 sendCode
-                                                    ? 'Введи последние 4 цифры\nзвонка'
+                                                    ? 'Введи код из смс'
                                                     : 'Сменить номер телефона',
                                                 style: TextStyle(
                                                     fontSize: 20.sp,
@@ -1034,7 +1034,7 @@ class _AccountPageState extends State<AccountPage>
                                               SvgImg.policy,
                                               height: 22.5.h,
                                               width: 18.w,
-                                              color: ClrStyle.greyToBlack17[
+                                              color: ClrStyle.black17ToWhite[
                                                   sl<AuthConfig>().idx],
                                             ),
                                           ),
@@ -1043,7 +1043,7 @@ class _AccountPageState extends State<AccountPage>
                                             style: TextStyle(
                                               fontSize: 20.sp,
                                               fontWeight: FontWeight.w800,
-                                              color: ClrStyle.greyToBlack17[
+                                              color: ClrStyle.black17ToWhite[
                                                   sl<AuthConfig>().idx],
                                             ),
                                           ),

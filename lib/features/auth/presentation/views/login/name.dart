@@ -111,6 +111,7 @@ class InputNamePage extends StatelessWidget {
                                   width: 0.78.sw,
                                   color: Colors.white,
                                   child: TextField(
+                                    textCapitalization: TextCapitalization.sentences,
                                     textAlignVertical: TextAlignVertical.top,
                                     focusNode: focusNode,
                                     onTap: () {

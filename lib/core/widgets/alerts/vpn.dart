@@ -77,7 +77,7 @@ class _VpnState extends State<Vpn> {
                   textAlign: TextAlign.start,
                 ),
                 Text(
-                  'Для корректной работы предложения\n его необходимо отключить',
+                  'Для корректной работы приложения\n его необходимо отключить',
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 12,

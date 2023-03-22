@@ -323,7 +323,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                     ),
                                   ),
                                   Text(
-                                    'Позови партнёра на этот экран, введи его\nномер, и ожидай принятия приглашения',
+                                    'Введи номер телефона партнера и ожидай принятия приглашения',
                                     style: GoogleFonts.inter(
                                       fontSize: 15.sp,
                                       color: const Color.fromRGBO(
