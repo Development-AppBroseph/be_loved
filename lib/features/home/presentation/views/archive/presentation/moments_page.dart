@@ -188,7 +188,9 @@ class _MomentsPageState extends State<MomentsPage> {
                               duration: const Duration(seconds: 0),
                             )
                           : PhotoFullScreenView(
-                              urlToImage: bloc.moments.forYou[index].urlToFile),
+                              urlToImage: bloc.moments.forYou[index].urlToFile,
+                              index: index,
+                            ),
                       transitionDuration: const Duration(milliseconds: 400),
                       transitionsBuilder: (_, a, __, c) =>
                           FadeTransition(opacity: a, child: c),
@@ -265,7 +267,8 @@ class _MomentsPageState extends State<MomentsPage> {
                               .files[index].isVideo
                           ? VideoView(
                               url: albumEntity.files[index].urlToFile,
-                              duration: const Duration(seconds: 0))
+                              duration: const Duration(seconds: 0),
+                            )
                           : PhotoFullScreenView(
                               file: albumEntity.files,
                               urlToImage: albumEntity.files[index].urlToFile,

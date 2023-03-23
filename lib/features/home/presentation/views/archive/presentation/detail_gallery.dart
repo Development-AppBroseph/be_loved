@@ -94,8 +94,8 @@ class _DetailGalleryPageState extends State<DetailGalleryPage> {
                       child: Column(
                         children: [
                           Wrap(
-                              spacing: 4.w,
-                              runSpacing: 4.w,
+                              spacing: 2.w,
+                              runSpacing: 2.w,
                               children: List.generate(
                                   widget.group.additionalFiles.length +
                                       1 +

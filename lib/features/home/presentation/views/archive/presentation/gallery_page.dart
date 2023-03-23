@@ -93,8 +93,8 @@ class _GalleryPageState extends State<GalleryPage> {
                 .map((group) => Stack(
                       children: [
                         Wrap(
-                          spacing: 4.w,
-                          runSpacing: 4.w,
+                          spacing: 2.w,
+                          runSpacing: 2.w,
                           children: [
                             _buildMainItem(
                                 GlobalKey(),
@@ -159,6 +159,8 @@ class _GalleryPageState extends State<GalleryPage> {
                                                   urlToImage: group
                                                       .additionalFiles[index]
                                                       .urlToFile,
+                                                      file: bloc.files,
+                                                      index: index++,
                                                 ),
                                               ),
                                             );
@@ -252,7 +254,7 @@ class _GalleryPageState extends State<GalleryPage> {
             onSelectForDeleting: widget.onSelectForDeleting,
             deletingIds: widget.deletingIds,
           ),
-          transitionDuration: Duration(milliseconds: 400),
+          transitionDuration: const Duration(milliseconds: 400),
           transitionsBuilder: (_, a, __, c) =>
               FadeTransition(opacity: a, child: c),
         ));
@@ -272,7 +274,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         deletingIds: widget.deletingIds,
                         groupList: groupList,
                       ),
-            transitionDuration: Duration(milliseconds: 400),
+            transitionDuration: const Duration(milliseconds: 400),
             transitionsBuilder: (_, a, __, c) =>
                 FadeTransition(opacity: a, child: c),
           ));
