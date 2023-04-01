@@ -17,7 +17,7 @@ class CustomButton extends StatefulWidget {
   bool code;
   final Border? border;
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback onPressed; 
   final String? svg;
   final double? svgHeight;
 

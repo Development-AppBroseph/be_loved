@@ -1,31 +1,30 @@
 import 'package:be_loved/core/error/exceptions.dart';
 import 'package:be_loved/core/services/network/network_info.dart';
 import 'package:be_loved/features/home/data/datasource/purpose/purpose_remote_datasource.dart';
+import 'package:be_loved/features/home/domain/entities/purposes/actual_entiti.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/full_purpose_entity.dart';
+import 'package:be_loved/features/home/domain/entities/purposes/promos_entiti.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
 import 'package:be_loved/features/home/domain/repositories/purpose_repository.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 
-
 class PurposeRepositoryImpl implements PurposeRepository {
   final PurposeRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
-  PurposeRepositoryImpl(
-      this.remoteDataSource, this.networkInfo);
-
-
-
+  PurposeRepositoryImpl(this.remoteDataSource, this.networkInfo);
 
   @override
-  Future<Either<Failure, List<PurposeEntity>>> getAvailablePurposes(params) async {
+  Future<Either<Failure, List<PurposeEntity>>> getAvailablePurposes(
+      params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.getAvailablePurposes(params.lat, params.long);
+        final items = await remoteDataSource.getAvailablePurposes(
+            params.lat, params.long);
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -35,18 +34,16 @@ class PurposeRepositoryImpl implements PurposeRepository {
     }
   }
 
-
-
-
   @override
-  Future<Either<Failure, List<FullPurposeEntity>>> getInProcessPurposes() async {
+  Future<Either<Failure, List<FullPurposeEntity>>>
+      getInProcessPurposes() async {
     if (await networkInfo.isConnected) {
       try {
         final items = await remoteDataSource.getInProcessPurposes();
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -55,9 +52,6 @@ class PurposeRepositoryImpl implements PurposeRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
 
   @override
   Future<Either<Failure, void>> completePurpose(params) async {
@@ -67,7 +61,7 @@ class PurposeRepositoryImpl implements PurposeRepository {
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -76,8 +70,6 @@ class PurposeRepositoryImpl implements PurposeRepository {
       return Left(NetworkFailure());
     }
   }
-
-
 
   @override
   Future<Either<Failure, PurposeEntity>> getSeasonPurpose() async {
@@ -87,7 +79,7 @@ class PurposeRepositoryImpl implements PurposeRepository {
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -96,21 +88,17 @@ class PurposeRepositoryImpl implements PurposeRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
-
-
 
   @override
   Future<Either<Failure, void>> sendPhotoPurpose(params) async {
     if (await networkInfo.isConnected) {
       try {
-        final items = await remoteDataSource.sendPhotoPurpose(params.path, params.target);
+        final items =
+            await remoteDataSource.sendPhotoPurpose(params.path, params.target);
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -119,10 +107,6 @@ class PurposeRepositoryImpl implements PurposeRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
-
 
   @override
   Future<Either<Failure, void>> cancelPurpose(params) async {
@@ -132,7 +116,7 @@ class PurposeRepositoryImpl implements PurposeRepository {
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -141,10 +125,6 @@ class PurposeRepositoryImpl implements PurposeRepository {
       return Left(NetworkFailure());
     }
   }
-
-
-
-
 
   @override
   Future<Either<Failure, List<FullPurposeEntity>>> getHistoryPurposes() async {
@@ -154,7 +134,7 @@ class PurposeRepositoryImpl implements PurposeRepository {
         return Right(items);
       } catch (e) {
         print(e);
-        if(e is ServerException){
+        if (e is ServerException) {
           return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
         }
         return Left(ServerFailure(e.toString()));
@@ -164,5 +144,39 @@ class PurposeRepositoryImpl implements PurposeRepository {
     }
   }
 
-}
+  @override
+  Future<Either<Failure, List<PromosEntiti>>> getPromos() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.getPromos();
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if (e is ServerException) {
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
 
+  @override
+  Future<Either<Failure, List<ActualEntiti>>> getActuail() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final items = await remoteDataSource.getActual();
+        return Right(items);
+      } catch (e) {
+        print(e);
+        if (e is ServerException) {
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+}

@@ -38,6 +38,20 @@ class MainConfigApp {
     'Ноя',
     'Дек',
   ];
+  static List<String> monthsPromo = [
+    'Янв',
+    'Фев',
+    'Мар',
+    'Апр',
+    'Мая',
+    'Июня',
+    'Июля',
+    'Авг',
+    'Сен',
+    'Окт',
+    'Ноя',
+    'Дек',
+  ];
 
   static List<AvatarsGridModel> avatars = [
     AvatarsGridModel(dirName: 'men', avatars: [

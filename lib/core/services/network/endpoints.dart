@@ -39,6 +39,8 @@ enum Endpoints {
   getHistoryPurposes,
   sendPurpose,
   sendPhotoPurpose,
+  getPromos,
+  getActual,
 
   //Albums
   getAlbums,
@@ -162,6 +164,10 @@ extension EndpointsExtension on Endpoints {
         return "/notifications/send_push";
       case Endpoints.statusSub:
         return '/sub/appstatus';
+      case Endpoints.getPromos:
+        return '/promos/';
+      case Endpoints.getActual:
+        return '/promos/actual';
       default:
         return '';
     }

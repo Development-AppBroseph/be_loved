@@ -11,6 +11,8 @@ abstract class Img {
       "assets/images/android12splash.png";
   static const String splashScreen = "assets/images/splash.png";
   static const String smile = "assets/images/smile.png";
+  static const String sad = "assets/images/sad.png";
+  static const String back = 'assets/images/abroad.png';
 }
 
 abstract class SvgImg {

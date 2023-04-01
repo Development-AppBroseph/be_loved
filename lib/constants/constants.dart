@@ -255,7 +255,6 @@ abstract class JsonKeys {
 
 class Months {
   static List<int> month1 = [
-    0,
     31,
     28,
     31,
@@ -270,7 +269,6 @@ class Months {
     31,
   ];
   static List<int> month2 = [
-    0,
     31,
     29,
     31,

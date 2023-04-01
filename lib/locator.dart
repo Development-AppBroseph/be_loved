@@ -34,6 +34,7 @@ import 'package:be_loved/features/home/domain/usecases/delete_gallery_files.dart
 import 'package:be_loved/features/home/domain/usecases/delete_purpose_widget.dart';
 import 'package:be_loved/features/home/domain/usecases/delete_tag.dart';
 import 'package:be_loved/features/home/domain/usecases/edit_tag.dart';
+import 'package:be_loved/features/home/domain/usecases/get_actual.dart';
 import 'package:be_loved/features/home/domain/usecases/get_albums.dart';
 import 'package:be_loved/features/home/domain/usecases/get_available_purposes.dart';
 import 'package:be_loved/features/home/domain/usecases/get_events.dart';
@@ -44,6 +45,7 @@ import 'package:be_loved/features/home/domain/usecases/get_main_widgets.dart';
 import 'package:be_loved/features/home/domain/usecases/get_memory_info.dart';
 import 'package:be_loved/features/home/domain/usecases/get_moments.dart';
 import 'package:be_loved/features/home/domain/usecases/get_old_events.dart';
+import 'package:be_loved/features/home/domain/usecases/get_promos.dart';
 import 'package:be_loved/features/home/domain/usecases/get_season_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_tags.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
@@ -274,10 +276,13 @@ void setupInjections() {
   sl.registerLazySingleton(() => SendPhotoPurpose(sl()));
   sl.registerLazySingleton(() => CancelPurpose(sl()));
   sl.registerLazySingleton(() => GetHistoryPurpose(sl()));
+  sl.registerLazySingleton(() => GetPromo(purposeRepository: sl()));
+  sl.registerLazySingleton(() => GetActual(purposeRepository: sl()));
+
 
   //Blocs
   sl.registerFactory<PurposeBloc>(
-    () => PurposeBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()),
+    () => PurposeBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()),
   );
 
   //Theme

@@ -11,5 +11,6 @@ allSync(BuildContext context){
   context.read<TagsBloc>().add(GetTagsEvent());
   context.read<EventsBloc>().add(GetEventsEvent());
   context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
+  context.read<PurposeBloc>().add(GetPromosEvent());
   context.read<DecorBloc>().add(GetBackgroundEvent());
 }

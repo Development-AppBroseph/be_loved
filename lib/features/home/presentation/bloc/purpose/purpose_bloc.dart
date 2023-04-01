@@ -1,12 +1,19 @@
+import 'dart:async';
+
 import 'package:be_loved/core/error/failures.dart';
+import 'package:be_loved/core/models/common/common.dart';
 import 'package:be_loved/core/usecases/usecase.dart';
+import 'package:be_loved/features/home/domain/entities/purposes/actual_entiti.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/full_purpose_entity.dart';
+import 'package:be_loved/features/home/domain/entities/purposes/promos_entiti.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
 import 'package:be_loved/features/home/domain/usecases/cancel_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/complete_purpose.dart';
+import 'package:be_loved/features/home/domain/usecases/get_actual.dart';
 import 'package:be_loved/features/home/domain/usecases/get_available_purposes.dart';
 import 'package:be_loved/features/home/domain/usecases/get_history_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_in_process_purpose.dart';
+import 'package:be_loved/features/home/domain/usecases/get_promos.dart';
 import 'package:be_loved/features/home/domain/usecases/get_season_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/send_photo_purpose.dart';
 import 'package:bloc/bloc.dart';
@@ -22,12 +29,28 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
   final SendPhotoPurpose sendPhotoPurpose;
   final CancelPurpose cancelPurpose;
   final GetHistoryPurpose getHistoryPurpose;
+  final GetPromo getPromos;
+  final GetActual getActual;
 
-  PurposeBloc(this.getSeasonPurpose, this.getAvailablePurposes, this.getInProcessPurpose, this.completePurpose, this.sendPhotoPurpose, this.cancelPurpose, this.getHistoryPurpose) : super(PurposeInitialState()) {
+  PurposeBloc(
+    this.getSeasonPurpose,
+    this.getAvailablePurposes,
+    this.getInProcessPurpose,
+    this.completePurpose,
+    this.sendPhotoPurpose,
+    this.cancelPurpose,
+    this.getHistoryPurpose,
+    this.getPromos,
+    this.getActual,
+  ) : super(
+          PurposeInitialState(),
+        ) {
     on<GetAllPurposeDataEvent>(_getAllPurposeData);
     on<CompletePurposeEvent>(_completePurpose);
     on<CancelPurposeEvent>(_cancelPurpose);
     on<SendPhotoPurposeEvent>(_sendPhotoPurpose);
+    on<GetPromosEvent>(_getPromos);
+    on<GetActualEvent>(_getActual);
   }
 
   List<PurposeEntity> allPurposes = [];
@@ -35,32 +58,63 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
   List<PurposeEntity> availablePurposes = [];
   List<FullPurposeEntity> inProcessPurposes = [];
   List<FullPurposeEntity> historyPurposes = [];
+  List<PromosEntiti> promos = [];
+  List<ActualEntiti> actual = [];
 
-  void _getAllPurposeData(GetAllPurposeDataEvent event, Emitter<PurposeState> emit) async {
+  void _getPromos(GetPromosEvent event, Emitter<PurposeState> emit) async {
+    emit(PurposeLoadingState());
+    final promo = await getPromos.call(PromosParams());
+    promo.fold(
+      (error) => errorCheck(error),
+      (data) {
+        promos = data;
+        return GotPurposeDataState();
+      },
+    );
+    emit(state);
+    emit(PurposeBlankState());
+  }
+
+  FutureOr<void> _getActual(
+      GetActualEvent event, Emitter<PurposeState> emit) async {
+    emit(PurposeLoadingState());
+    final promo = await getActual.call(ActualParams());
+    promo.fold(
+      (error) => errorCheck(error),
+      (data) {
+        actual = data;
+        return GotPurposeDataState();
+      },
+    );
+    emit(state);
+    emit(PurposeBlankState());
+  }
+
+  void _getAllPurposeData(
+      GetAllPurposeDataEvent event, Emitter<PurposeState> emit) async {
     print('GET PURPOSE DATA');
     emit(PurposeLoadingState());
 
     //Getting season purpsose(target)
+    emit(PurposeLoadingState());
     final gotPurpose = await getSeasonPurpose.call(NoParams());
     PurposeState state = gotPurpose.fold(
       (error) => errorCheck(error),
       (data) {
         seasonPurpose = data;
-        seasonPurpose!.inHistory = seasonPurpose!.verdict == 'Принято' 
-          ? true
-          : false;
-        seasonPurpose!.inProcess = seasonPurpose!.verdict == 'Ожидание' 
-          ? true
-          : false;
+        seasonPurpose!.inHistory =
+            seasonPurpose!.verdict == 'Принято' ? true : false;
+        seasonPurpose!.inProcess =
+            seasonPurpose!.verdict == 'Ожидание' ? true : false;
         return GotPurposeDataState();
       },
     );
     emit(state);
     emit(PurposeBlankState());
 
-
     //Getting available purposes by lat and long
-    final gotPurposes = await getAvailablePurposes.call(GetAvailablePurposesParams(lat: 59.886086, long: 30.285244));
+    final gotPurposes = await getAvailablePurposes
+        .call(GetAvailablePurposesParams(lat: 59.886086, long: 30.285244));
     state = gotPurposes.fold(
       (error) => errorCheck(error),
       (data) {
@@ -72,7 +126,6 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     );
     emit(state);
     emit(PurposeBlankState());
-
 
     //Getting in process purposes
     final gotInProcessPurposes = await getInProcessPurpose.call(NoParams());
@@ -87,7 +140,6 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     emit(state);
     emit(PurposeBlankState());
 
-
     //Getting history purposes
     final gotHistoryPurposes = await getHistoryPurpose.call(NoParams());
     state = gotHistoryPurposes.fold(
@@ -98,103 +150,88 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
       },
     );
     emit(state);
-
   }
 
-
-
-
-
-
-  void _completePurpose(CompletePurposeEvent event, Emitter<PurposeState> emit) async {
+  void _completePurpose(
+      CompletePurposeEvent event, Emitter<PurposeState> emit) async {
     print('COMPLETE PURPOSE DATA ID: ${event.target}');
     emit(PurposeLoadingState());
 
     //Complete and to in process
-    final gotPurpose = await completePurpose.call(CompletePurposeParams(target: event.target));
-    PurposeState state = gotPurpose.fold(
-      (error) => errorCheck(error),
-      (data) {
-        clearAll();
-        return CompletedPurposeState();
-      }
-    );
+    final gotPurpose =
+        await completePurpose.call(CompletePurposeParams(target: event.target));
+    PurposeState state = gotPurpose.fold((error) => errorCheck(error), (data) {
+      clearAll();
+      return CompletedPurposeState();
+    });
     emit(state);
   }
 
-
-
-
-
-
-  void _cancelPurpose(CancelPurposeEvent event, Emitter<PurposeState> emit) async {
+  void _cancelPurpose(
+      CancelPurposeEvent event, Emitter<PurposeState> emit) async {
     print('CANCEL PURPOSE DATA');
     emit(PurposeLoadingState());
 
     //Cancel and to available
     final gotPurpose = await cancelPurpose.call(CancelPurposeParams(
         target: seasonPurpose!.id == event.target
-          ? seasonPurpose!.forPhotoId ?? 1
-          : inProcessPurposes.where((element) => element.purpose.id == event.target).first.id
-      )
-    );
-    PurposeState state = gotPurpose.fold(
-      (error) => errorCheck(error),
-      (data) {
-        clearAll();
-        return CompletedPurposeState();
-      }
-    );
+            ? seasonPurpose!.forPhotoId ?? 1
+            : inProcessPurposes
+                .where((element) => element.purpose.id == event.target)
+                .first
+                .id));
+    PurposeState state = gotPurpose.fold((error) => errorCheck(error), (data) {
+      clearAll();
+      return CompletedPurposeState();
+    });
     emit(state);
   }
 
-
-
-
-
-
-  void _sendPhotoPurpose(SendPhotoPurposeEvent event, Emitter<PurposeState> emit) async {
+  void _sendPhotoPurpose(
+      SendPhotoPurposeEvent event, Emitter<PurposeState> emit) async {
     print('COMPLETE PURPOSE DATA');
     emit(PurposeLoadingState());
 
     //Send photo of purpose and complete)(history)
     final gotPurpose = await sendPhotoPurpose.call(SendPhotoPurposeParams(
-      path: event.path, 
-      target: seasonPurpose!.id == event.target
-        ? seasonPurpose!.forPhotoId ?? 1
-        : inProcessPurposes.where((element) => element.purpose.id == event.target).first.id
-      )
-    );
-    PurposeState state = gotPurpose.fold(
-      (error) => errorCheck(error),
-      (data) {
-        clearAll();
-        return CompletedPurposeState();
-      }
-    );
+        path: event.path,
+        target: seasonPurpose!.id == event.target
+            ? seasonPurpose!.forPhotoId ?? 1
+            : inProcessPurposes
+                .where((element) => element.purpose.id == event.target)
+                .first
+                .id));
+    PurposeState state = gotPurpose.fold((error) => errorCheck(error), (data) {
+      clearAll();
+      return CompletedPurposeState();
+    });
     emit(state);
   }
 
-
-
-  PurposeState errorCheck(Failure failure){
+  PurposeState errorCheck(Failure failure) {
     print('FAIL: $failure');
-    if(failure == ConnectionFailure() || failure == NetworkFailure()){
+    if (failure == ConnectionFailure() || failure == NetworkFailure()) {
       return PurposeInternetErrorState();
-    }else if(failure is ServerFailure){
-      if(failure.message == 'token_error'){
+    } else if (failure is ServerFailure) {
+      if (failure.message == 'token_error') {
         print('token_error');
-        return PurposeErrorState(message: failure.message.length < 100 ? failure.message : 'Вы не авторизованы', isTokenError: true);
+        return PurposeErrorState(
+            message: failure.message.length < 100
+                ? failure.message
+                : 'Вы не авторизованы',
+            isTokenError: true);
       }
-      return PurposeErrorState(message: failure.message.length < 100 ? failure.message : 'Ошибка сервера', isTokenError: false);
-    }else{
-      return PurposeErrorState(message: 'Повторите попытку', isTokenError: false);
+      return PurposeErrorState(
+          message:
+              failure.message.length < 100 ? failure.message : 'Ошибка сервера',
+          isTokenError: false);
+    } else {
+      return PurposeErrorState(
+          message: 'Повторите попытку', isTokenError: false);
     }
   }
 
-
-
-  void clearAll(){
+  void clearAll() {
     seasonPurpose = null;
     allPurposes = [];
     availablePurposes = [];
@@ -202,27 +239,21 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     historyPurposes = [];
   }
 
-
-
-  List<PurposeEntity> getPurposeListFromFullData(List<FullPurposeEntity> list, {bool isHistory = false}){
+  List<PurposeEntity> getPurposeListFromFullData(List<FullPurposeEntity> list,
+      {bool isHistory = false}) {
     List<PurposeEntity> result = [];
-    for(var item in list){
-      if(isHistory){
+    for (var item in list) {
+      if (isHistory) {
         item.purpose.inHistory = true;
-      }else{
+      } else {
         item.purpose.inProcess = true;
       }
       result.add(item.purpose);
     }
-    return result; 
+    return result;
   }
 
-
-
-
-
-
-  getCurrentLocation(){
+  getCurrentLocation() {
     // LocationPermission permission = await Geolocator.checkPermission();
     //   bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     //   if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever || !isLocationEnabled){
@@ -249,4 +280,4 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     //     }
     //   }
   }
-} 
+}

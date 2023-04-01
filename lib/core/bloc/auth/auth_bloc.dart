@@ -26,6 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   String? phone;
   File? image;
   UserAnswer? user;
+  
 
   //VK
   String? vkCode;

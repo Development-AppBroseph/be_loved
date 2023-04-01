@@ -24,10 +24,10 @@ class PurposeMenuCard extends StatelessWidget {
       elevation: 0,
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       decoration: BoxDecoration(
-        color: index == selectedType && index == 0
-          ? ClrStyle.black2CToWhite[sl<AuthConfig>().idx]
+        color: index == selectedType && index == 1
+          ? ColorStyles.redColor
           : index == selectedType  
-          ? ColorStyles.primarySwath 
+          ? ClrStyle.black2CToWhite[sl<AuthConfig>().idx]
           : (isGrey ? ColorStyles.greyColorE4E4E4 : ClrStyle.whiteTo17[sl<AuthConfig>().idx])
       ),
       color: index == selectedType && index == 0

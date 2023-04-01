@@ -17,7 +17,6 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-
 class PurposesModal extends StatefulWidget {
   final Function(PurposeEntity purposeEntity) onSelect;
   PurposesModal({required this.onSelect});
@@ -36,84 +35,88 @@ class _PurposesModalState extends State<PurposesModal> {
 
   ScrollController controller = ScrollController();
 
-  void completePurpose(int id){
+  void completePurpose(int id) {
     showLoaderWrapper(context);
     context.read<PurposeBloc>().add(CompletePurposeEvent(target: id));
   }
 
-  void cancelPurpose(int id){
+  void cancelPurpose(int id) {
     showLoaderWrapper(context);
     context.read<PurposeBloc>().add(CancelPurposeEvent(target: id));
   }
 
-  void sendPhotoPurpose(int id, File file){
+  void sendPhotoPurpose(int id, File file) {
     showLoaderWrapper(context);
-    context.read<PurposeBloc>().add(SendPhotoPurposeEvent(path: file.path, target: id));
+    context
+        .read<PurposeBloc>()
+        .add(SendPhotoPurposeEvent(path: file.path, target: id));
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(context.read<PurposeBloc>().state is PurposeInitialState){
+    if (context.read<PurposeBloc>().state is PurposeInitialState) {
       context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
+      
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     PurposeBloc bloc = context.read<PurposeBloc>();
-    
+
     return BlocListener<PurposeBloc, PurposeState>(
-      listener: (context, state) {
-        if (state is PurposeErrorState) {
-          Loader.hide();
-          showAlertToast(state.message);
-        }
-        if (state is PurposeInternetErrorState) {
-          Loader.hide();
-          showAlertToast('Проверьте соединение с интернетом!');
-        }
-      },
-      child: CupertinoCard(
-        radius: BorderRadius.vertical(
-          top: Radius.circular(80.r),
-        ),
-        color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
-        elevation: 0,
-        margin: EdgeInsets.zero,
-        child: SizedBox(
-          height: 750.h,
-          child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
-            child: BlocConsumer<PurposeBloc, PurposeState>(
-              listener: (context, state) {
-                if(state is PurposeErrorState){
+        listener: (context, state) {
+          if (state is PurposeErrorState) {
+            Loader.hide();
+            showAlertToast(state.message);
+          }
+          if (state is PurposeInternetErrorState) {
+            Loader.hide();
+            showAlertToast('Проверьте соединение с интернетом!');
+          }
+        },
+        child: CupertinoCard(
+          radius: BorderRadius.vertical(
+            top: Radius.circular(80.r),
+          ),
+          color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
+          elevation: 0,
+          margin: EdgeInsets.zero,
+          child: SizedBox(
+            height: 750.h,
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: BlocConsumer<PurposeBloc, PurposeState>(
+                  listener: (context, state) {
+                if (state is PurposeErrorState) {
                   Loader.hide();
                   showAlertToast(state.message);
                 }
-                if(state is PurposeInternetErrorState){
+                if (state is PurposeInternetErrorState) {
                   Loader.hide();
                   showAlertToast('Проверьте соединение с интернетом!');
                 }
-                if(state is CompletedPurposeState){
+                if (state is CompletedPurposeState) {
                   Loader.hide();
                   bloc.add(GetAllPurposeDataEvent());
                 }
-              },
-              builder: (context, state) {
+              }, builder: (context, state) {
                 List<PurposeEntity> listPurposes = [];
                 //All purposes
-                if(selectedType == 0){
+                if (selectedType == 0) {
                   listPurposes = bloc.allPurposes;
-                //Available purposes
-                }else if(selectedType == 1){
+                  //Available purposes
+                } else if (selectedType == 1) {
                   listPurposes = bloc.availablePurposes;
-                }else if(selectedType == 2){
-                  listPurposes = bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
-                }else if(selectedType == 3){
-                  listPurposes = bloc.getPurposeListFromFullData(bloc.historyPurposes, isHistory: true);
+                } else if (selectedType == 2) {
+                  listPurposes =
+                      bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
+                } else if (selectedType == 3) {
+                  listPurposes = bloc.getPurposeListFromFullData(
+                      bloc.historyPurposes,
+                      isHistory: true);
                 }
                 return Column(
                   children: [
@@ -138,7 +141,6 @@ class _PurposesModalState extends State<PurposesModal> {
                       ),
                     ),
 
-
                     SizedBox(
                       height: 37.w,
                       child: ListView.builder(
@@ -148,27 +150,34 @@ class _PurposesModalState extends State<PurposesModal> {
                         itemCount: data.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: (){
-                              setState(() {
-                                selectedType = index;
-                              });
-                              if(index >= 2){
-                                controller.animateTo(controller.position.maxScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeInOutQuint);
-                              }else{
-                                controller.animateTo(controller.position.minScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeInOutQuint);
-                              }
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 15.w, left: index == 0 ? 25.w : 0),
-                              height: 37.h,
-                              child: PurposeMenuCard(
-                                text: data[index], 
-                                index: index, 
-                                selectedType: selectedType,
-                                isGrey: true,
-                              )
-                            )
-                          );
+                              onTap: () {
+                                setState(() {
+                                  selectedType = index;
+                                });
+                                if (index >= 2) {
+                                  controller.animateTo(
+                                      controller.position.maxScrollExtent,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeInOutQuint);
+                                } else {
+                                  controller.animateTo(
+                                      controller.position.minScrollExtent,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeInOutQuint);
+                                }
+                              },
+                              child: Container(
+                                  margin: EdgeInsets.only(
+                                      right: 15.w, left: index == 0 ? 25.w : 0),
+                                  height: 37.h,
+                                  child: PurposeMenuCard(
+                                    text: data[index],
+                                    index: index,
+                                    selectedType: selectedType,
+                                    isGrey: true,
+                                  )));
                         },
                       ),
                     ),
@@ -178,40 +187,39 @@ class _PurposesModalState extends State<PurposesModal> {
 
                     //..
 
-
                     //All purposes
-                    if(listPurposes.isNotEmpty)
-                    ...listPurposes.map((e) 
-                      => Container(
-                        margin: EdgeInsets.only(bottom: 15.h),
-                        child: GestureDetector(
-                          onTap: (){
-                            widget.onSelect(e);
-                          },
-                          child: PurposeCard(
-                            purposeEntity: e,
-                            onPickFile: (f){
-                              sendPhotoPurpose(e.id, f);
-                            },
-                            onCompleteTap: (){
-                              completePurpose(e.id);
-                            },
-                            onCancelTap: (){
-                              cancelPurpose(e.id);
-                            },
-                          ),
-                        ),
-                      ),
-                    ).toList()
+                    if (listPurposes.isNotEmpty)
+                      ...listPurposes
+                          .map(
+                            (e) => Container(
+                              margin: EdgeInsets.only(bottom: 15.h),
+                              child: GestureDetector(
+                                onTap: () {
+                                  widget.onSelect(e);
+                                },
+                                child: PurposeCard(
+                                  purposeEntity: e,
+                                  onPickFile: (f) {
+                                    sendPhotoPurpose(e.id, f);
+                                  },
+                                  onCompleteTap: () {
+                                    completePurpose(e.id);
+                                  },
+                                  onCancelTap: () {
+                                    cancelPurpose(e.id);
+                                  },
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList()
                     else
-                    EmptyCard(isAvailable: selectedType == 1, isModal: true),
+                      EmptyCard(isAvailable: selectedType == 1, isModal: true),
                   ],
                 );
-              }
+              }),
             ),
           ),
-        ),
-      )
-    );
+        ));
   }
 }

@@ -16,6 +16,7 @@ import 'package:be_loved/features/home/presentation/views/purposes/purposes_page
 import 'package:be_loved/features/home/presentation/views/relationships/main_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_relation_ships_page.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
@@ -59,6 +60,9 @@ class _HomePageState extends State<HomePage> {
     context.read<AuthBloc>().add(GetUser());
     context.read<TagsBloc>().add(GetTagsEvent());
     context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
+    context.read<PurposeBloc>().add(GetPromosEvent());
+    context.read<SubCubit>().getStatus();
+    context.read<PurposeBloc>().add(GetActualEvent());
 
     if (context.read<ArchiveBloc>().memoryEntity == null ||
         sl<AuthConfig>().memoryEntity == null) {
