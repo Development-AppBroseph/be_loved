@@ -37,6 +37,5 @@ class PurposeEntity extends Equatable {
         ifSeason,
         inProcess,
         inHistory,
-        promo!,
       ];
 }

@@ -157,85 +157,95 @@ class _PurposesPageState extends State<PurposesPage> {
           },
           builder: (context, state) {
             if (state is PurposeLoadingState) {
-            return SafeArea(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 25.w),
-                child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 56.h, bottom: 10.h),
-                          height: 28.h,
-                          width: 154.w,
-                          decoration: BoxDecoration(
+              return SafeArea(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 25.w),
+                  child: ListView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 28.h,
+                            width: 154.w,
+                            margin: EdgeInsets.only(top: 56.h, bottom: 10.h),
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: const Color(0xffD9D9D9)),
-                        ),
-                        Container(
-                          height: 189.h,
-                          width: 358.w,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: const Color(0xffD9D9D9)),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 38.h, bottom: 19.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10.h),
-                                height: 38.h,
-                                width: 98.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xffD9D9D9)),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10.h),
-                                height: 38.h,
-                                width: 121.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xffD9D9D9)),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 10.h),
-                                height: 38.h,
-                                width: 121.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: const Color(0xffD9D9D9)),
-                              ),
-                            ],
+                              color: const Color(0xffD9D9D9),
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 220.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: const Color(0xffD9D9D9)),
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        Container(
-                          height: 220.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: const Color(0xffD9D9D9)),
-                        ),
-                      ],
-                    )
-                  ],
+                          SizedBox(
+                            height: 189,
+                            width: double.infinity,
+                            child: CupertinoCard(
+                              margin: EdgeInsets.zero,
+                              padding: EdgeInsets.zero,
+                              elevation: 0,
+                              color: const Color(0xffD9D9D9),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 38.h, bottom: 19.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10.h),
+                                  height: 38.h,
+                                  width: 98.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xffD9D9D9)),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10.h),
+                                  height: 38.h,
+                                  width: 121.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xffD9D9D9)),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10.h),
+                                  height: 38.h,
+                                  width: 121.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xffD9D9D9)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 220,
+                            width: double.infinity,
+                            child: CupertinoCard(
+                              margin: EdgeInsets.zero,
+                              padding: EdgeInsets.zero,
+                              elevation: 0,
+                              color: const Color(0xffD9D9D9),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          SizedBox(
+                            height: 220,
+                            width: double.infinity,
+                            child: CupertinoCard(
+                              margin: EdgeInsets.zero,
+                              padding: EdgeInsets.zero,
+                              elevation: 0,
+                              color: const Color(0xffD9D9D9),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
+              );
             }
             List<PurposeEntity> listPurposes = [];
             List<PromosEntiti> listPromos = [];
@@ -261,20 +271,18 @@ class _PurposesPageState extends State<PurposesPage> {
               child: CustomScrollView(
                 physics: const ClampingScrollPhysics(),
                 slivers: [
-                  SliverAppBar(
-                    elevation: 0,
-                    backgroundColor: Colors.transparent,
-                    toolbarHeight: 305,
-                    flexibleSpace: BlocBuilder<SubCubit, SubState>(
+                  SliverToBoxAdapter(
+                    child: BlocBuilder<SubCubit, SubState>(
                       builder: (context, state) {
                         return Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             if (selectedType == 1 && state is SubNotHaveState)
                               Column(
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(
-                                        top: 56.h, left: 25.w, bottom: 10.h),
+                                        top: 26.h, left: 25.w, bottom: 10.h),
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: RichText(
@@ -362,10 +370,11 @@ class _PurposesPageState extends State<PurposesPage> {
                               )
                             else
                               Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(
-                                        top: 56.h, left: 25.w, bottom: 10.h),
+                                        top: 36.h, left: 25.w, bottom: 10.h),
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(

@@ -71,21 +71,15 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
         'SET TIME: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
     if (user!.date != null) {
       final startTime = user.date as String;
-      final array = startTime.split('-');
 
       DateTime berlinWallFell = DateTime.now();
-      DateTime moonLanding = DateTime(
-        int.parse(array[0]),
-        int.parse(array[1]),
-        int.parse(
-          array[2].substring(0, 2),
-        ),
-      );
+      DateTime moonLanding = DateTime.parse(startTime);
 
       final difference = berlinWallFell.difference(moonLanding);
       years = difference.inDays ~/ 365;
-      month = (difference.inDays % 365) ~/ 30;
-      daysInYears = (difference.inDays % 365) - Months.returnDays(month);
+      month = (difference.inDays % 365) ~/ 30.4;
+      double a = (difference.inDays % 365) % 30.4;
+      daysInYears = ((difference.inDays % 365) % 30.44).toInt();
       days = difference.inDays;
       hour = difference.inHours - difference.inDays * 24;
       minute = difference.inMinutes - difference.inHours * 60;
@@ -228,225 +222,225 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                         );
                       } else if (state
                           is HomeInfoFirstOnlyDayHoursAndMinutesState) {
-                            return Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${state.days}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'д',
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${state.days}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Text(
-                            '${state.hours}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'ч',
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'д',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              '${state.hours}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Text(
-                            '${state.minutes}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'мин',
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'ч',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              '${state.minutes}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                        ],
-                      );
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'мин',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ],
+                        );
                       } else if (state is HomeInfoFirstMonthDaysAndHours) {
                         return Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${state.month}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'мес',
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${state.month}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Text(
-                            '${state.days}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'д',
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'мес',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              '${state.days}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Text(
-                            '${state.hours}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'ч',
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'д',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              '${state.hours}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                        ],
-                      );
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'ч',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ],
+                        );
                       } else if (state
                           is HomeInfoFirstMonthDaysHoursAndMinutes) {
-                            return Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${state.month}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'мес',
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${state.month}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Text(
-                            '${state.days}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'д',
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'мес',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              '${state.days}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Text(
-                            '${state.hours}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'ч',
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'д',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              '${state.hours}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Text(
-                            '${state.minutes}',
-                            style: TextStyle(
-                                color: ClrStyle
-                                    .black17ToWhite[sl<AuthConfig>().idx],
-                                fontSize: 50.sp,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 7.h),
-                            child: Text(
-                              'мин',
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'ч',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              '${state.minutes}',
                               style: TextStyle(
-                                  color: const Color(0xFF969696),
-                                  fontSize: 15.sp,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                  fontSize: 50.sp,
                                   fontWeight: FontWeight.w700),
                             ),
-                          ),
-                        ],
-                      );
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 7.h),
+                              child: Text(
+                                'мин',
+                                style: TextStyle(
+                                    color: const Color(0xFF969696),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ],
+                        );
                       } else if (state is HomeInfoFirstYearsMonthsAndDays) {
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.end,

@@ -7,10 +7,10 @@ class PurposeModel extends PurposeEntity {
   PurposeModel({
     required int id,
     required int? widgetId,
+    required int? forPhotoId,
     required String name,
     required String photo,
     required String? verdict,
-    required int? forPhotoId,
     required DateTime? dateTime,
     required bool ifSeason,
     required bool inHistory,

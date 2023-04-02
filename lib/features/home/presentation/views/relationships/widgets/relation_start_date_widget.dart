@@ -15,20 +15,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-
-
 class RelationStartDateWidget extends StatelessWidget {
   final Function() onTapStats;
   final Function() onTapEditDate;
   final Function(DateTime date) onChangeDate;
   DateTime datetime;
-  RelationStartDateWidget({required this.datetime, required this.onTapEditDate, required this.onChangeDate, required this.onTapStats});
+  RelationStartDateWidget(
+      {required this.datetime,
+      required this.onTapEditDate,
+      required this.onChangeDate,
+      required this.onTapStats});
 
-  final CustomPopupMenuController _customPopupMenuController = CustomPopupMenuController();
+  final CustomPopupMenuController _customPopupMenuController =
+      CustomPopupMenuController();
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       width: double.infinity,
       height: 243.h,
@@ -43,25 +45,35 @@ class RelationStartDateWidget extends StatelessWidget {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           children: [
-            Text('Вы начали встречаться:', style: TextStyle(
-              color: Color(0xFF969696),
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w700
-            ),),
-            SizedBox(height: 9.h,),
+            Text(
+              'Вы начали встречаться:',
+              style: TextStyle(
+                  color: Color(0xFF969696),
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w700),
+            ),
+            SizedBox(
+              height: 9.h,
+            ),
             Row(
               children: [
-                Text(DateFormat('dd MMMM', 'RU').format(datetime), style: TextStyle(
-                  color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                  fontSize: 35.sp,
-                  fontWeight: FontWeight.w700
-                ),),
-                SizedBox(width: 10.w,),
-                Text(DateFormat('yyyy', 'RU').format(datetime), style: TextStyle(
-                  color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                  fontSize: 35.sp,
-                  fontWeight: FontWeight.w700
-                ),),
+                Text(
+                  DateFormat('dd MMMM', 'RU').format(datetime),
+                  style: TextStyle(
+                      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                      fontSize: 35.sp,
+                      fontWeight: FontWeight.w700),
+                ),
+                SizedBox(
+                  width: 10.w,
+                ),
+                Text(
+                  DateFormat('yyyy', 'RU').format(datetime),
+                  style: TextStyle(
+                      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                      fontSize: 35.sp,
+                      fontWeight: FontWeight.w700),
+                ),
               ],
             ),
             SizedBox(
@@ -72,7 +84,9 @@ class RelationStartDateWidget extends StatelessWidget {
               height: 1.h,
               color: Color(0xFF969696),
             ),
-            SizedBox(height: 24.h,),
+            SizedBox(
+              height: 24.h,
+            ),
             GestureDetector(
               onTap: onTapStats,
               behavior: HitTestBehavior.translucent,
@@ -83,61 +97,79 @@ class RelationStartDateWidget extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(SvgImg.homeStats, width: 38.w,),
-                      SizedBox(width: 22.w,),
+                      SvgPicture.asset(
+                        SvgImg.homeStats,
+                        width: 38.w,
+                      ),
+                      SizedBox(
+                        width: 22.w,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Статистика', style: TextStyle(
-                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w700
-                          ),),
-                          SizedBox(height: 2.h,),
-                          Text('Посмотреть', style: TextStyle(
-                            color: Color(0xFF969696),
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w500
-                          ),),
+                          Text(
+                            'Статистика',
+                            style: TextStyle(
+                                color: ClrStyle
+                                    .black17ToWhite[sl<AuthConfig>().idx],
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Text(
+                            'Посмотреть',
+                            style: TextStyle(
+                                color: Color(0xFF969696),
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w500),
+                          ),
                         ],
                       )
                     ],
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 17.w),
-                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h, color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],),
+                    child: SvgPicture.asset(
+                      SvgImg.homeArrow,
+                      height: 20.h,
+                      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                    ),
                   )
                 ],
               ),
             ),
-            SizedBox(height: 20.h,),
-          
+            SizedBox(
+              height: 20.h,
+            ),
             CustomPopupMenu(
               position: PreferredPosition.bottom,
               barrierColor: Colors.transparent,
               showArrow: false,
               controller: _customPopupMenuController,
-              menuOnChange: (p){
-                if(!p){
+              menuOnChange: (p) {
+                if (!p) {
                   onChangeDate(datetime);
                 }
               },
               pressType: PressType.singleClick,
               menuBuilder: () {
                 onTapEditDate();
-                return _buildDatePicker(context,
-                    (date, hide) {
-                    if (hide){
+                return _buildDatePicker(
+                  context,
+                  (date, hide) {
+                    if (hide) {
                       _customPopupMenuController.hideMenu();
-                    } 
+                    }
                     // setState(() {
                     //   toDate = date;
                     // });
                     // onChangeDate(date);
                     datetime = date;
-                  }, 
-                  datetime, 
+                  },
+                  datetime,
                   fromDate: null,
                 );
               },
@@ -148,37 +180,55 @@ class RelationStartDateWidget extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(width: 5.w,),
-                      SvgPicture.asset(SvgImg.calendar, width: 29.w, color: ColorStyles.redColor,),
-                      SizedBox(width: 26.w,),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      SvgPicture.asset(
+                        SvgImg.calendar,
+                        width: 29.w,
+                        color: ColorStyles.redColor,
+                      ),
+                      SizedBox(
+                        width: 26.w,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Редактировать дату', style: TextStyle(
-                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w700
-                          ),),
-                          SizedBox(height: 2.h,),
-                          Text('Редактировать', style: TextStyle(
-                            color: Color(0xFF969696),
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w500
-                          ),),
+                          Text(
+                            'Редактировать дату',
+                            style: TextStyle(
+                                color: ClrStyle
+                                    .black17ToWhite[sl<AuthConfig>().idx],
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Text(
+                            'Редактировать',
+                            style: TextStyle(
+                                color: Color(0xFF969696),
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w500),
+                          ),
                         ],
                       )
                     ],
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 17.w),
-                    child: SvgPicture.asset(SvgImg.homeArrow, height: 20.h, color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],),
+                    child: SvgPicture.asset(
+                      SvgImg.homeArrow,
+                      height: 20.h,
+                      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                    ),
                   )
                 ],
               ),
             ),
-            
           ],
         ),
       ),
@@ -186,16 +236,14 @@ class RelationStartDateWidget extends StatelessWidget {
   }
 }
 
-
-
 Widget _buildDatePicker(BuildContext context,
     Function(DateTime dateTime, bool hideMenu) onTap, DateTime selectedDay,
     {DateTime? fromDate}) {
   DateTime now = DateTime.now();
-  DateTime startDate = DateTime(now.year-22, now.month, now.day);
+  DateTime startDate = DateTime(now.year - 22, now.month, now.day);
   TextStyle style1 = TextStyle(
       color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.w800);
-      
+
   DateTime _focusedDay = DateTime(selectedDay.year, selectedDay.month, 1);
   DateTime _calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
   Widget _buildJustDay(context, DateTime date, events) {
@@ -209,7 +257,7 @@ Widget _buildDatePicker(BuildContext context,
   }
 
   final kToday = DateTime(startDate.year, startDate.month, 1);
-  final kFirstDay = DateTime(kToday.year-22, kToday.month, kToday.day);
+  final kFirstDay = DateTime(kToday.year - 22, kToday.month, kToday.day);
   final kLastDay = now;
   Widget _buildSelectedDay(context, date, events) {
     return CalendarSelectedItem(text: date.day.toString());
@@ -250,7 +298,7 @@ Widget _buildDatePicker(BuildContext context,
                             _pageController.previousPage(
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOutQuint);
-                          }
+                          } 
                         },
                         behavior: HitTestBehavior.opaque,
                         child: SvgPicture.asset(
@@ -284,7 +332,7 @@ Widget _buildDatePicker(BuildContext context,
                           _pageController.nextPage(
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOutQuint);
-                        }
+                        } 
                       },
                       behavior: HitTestBehavior.opaque,
                       child: SvgPicture.asset(
@@ -308,10 +356,10 @@ Widget _buildDatePicker(BuildContext context,
                           _focusedDay =
                               DateTime(i, selectedDay.month, selectedDay.day);
                           _calendarType = CalendarType.month;
-                          if(_focusedDay.millisecondsSinceEpoch > now.millisecondsSinceEpoch){
+                          if (_focusedDay.millisecondsSinceEpoch >
+                              now.millisecondsSinceEpoch) {
                             _focusedDay = now;
                           }
-
                         } else {
                           if (!((i + 1) < startDate.month &&
                               selectedDay.year == startDate.year)) {
@@ -319,7 +367,8 @@ Widget _buildDatePicker(BuildContext context,
                                 selectedDay.year, i + 1, selectedDay.day);
                             _calendarType = CalendarType.days;
 
-                            if(_focusedDay.millisecondsSinceEpoch > now.millisecondsSinceEpoch){
+                            if (_focusedDay.millisecondsSinceEpoch >
+                                now.millisecondsSinceEpoch) {
                               _focusedDay = now;
                             }
                           }
@@ -329,8 +378,7 @@ Widget _buildDatePicker(BuildContext context,
                           selectedDay = _focusedDay;
                           onTap(_focusedDay, false);
                         } else {
-                          selectedDay =
-                              startDate.add(const Duration(days: 1));
+                          selectedDay = startDate.add(const Duration(days: 1));
                           onTap(selectedDay, false);
                         }
                         _calendarStartDay = _focusedDay;
@@ -357,7 +405,6 @@ Widget _buildDatePicker(BuildContext context,
                   },
                   focusedDay: _focusedDay,
                   calendarFormat: CalendarFormat.month,
-
                   firstDay: kFirstDay,
                   lastDay: kLastDay,
                   headerVisible: false,
