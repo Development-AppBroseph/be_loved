@@ -189,6 +189,7 @@ class _MomentsPageState extends State<MomentsPage> {
                             )
                           : PhotoFullScreenView(
                               urlToImage: bloc.moments.forYou[index].urlToFile,
+                              file: bloc.moments.forYou,
                               index: index,
                             ),
                       transitionDuration: const Duration(milliseconds: 400),
