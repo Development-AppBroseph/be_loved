@@ -137,6 +137,7 @@ class _MomentsPageState extends State<MomentsPage> {
     ScrollController scrollController = ScrollController();
     MomentsBloc bloc = context.read<MomentsBloc>();
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(left: 25.w),

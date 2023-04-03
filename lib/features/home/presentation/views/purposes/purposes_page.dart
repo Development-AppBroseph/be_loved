@@ -43,7 +43,7 @@ class PurposesPage extends StatefulWidget {
 }
 
 class _PurposesPageState extends State<PurposesPage> {
-  List<String> data = ['Цели', 'Купоны', 'Доступные', 'В процессе', 'История'];
+  List<String> data = ['Цели', 'Доступные', 'В процессе', 'История'];
 
   int selectedType = 0;
   static const _indicatorSize = 30.0;
@@ -255,14 +255,14 @@ class _PurposesPageState extends State<PurposesPage> {
             if (selectedType == 0) {
               listPurposes = bloc.allPurposes;
               //Available purposes
+            // } else if (selectedType == 1) {
+              // listPromos = bloc.promos;
             } else if (selectedType == 1) {
-              listPromos = bloc.promos;
-            } else if (selectedType == 2) {
               listPurposes = bloc.availablePurposes;
-            } else if (selectedType == 3) {
+            } else if (selectedType == 2) {
               listPurposes =
                   bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
-            } else if (selectedType == 4) {
+            } else if (selectedType == 3) {
               listPurposes = bloc.getPurposeListFromFullData(
                   bloc.historyPurposes,
                   isHistory: true);
@@ -271,220 +271,220 @@ class _PurposesPageState extends State<PurposesPage> {
               child: CustomScrollView(
                 physics: const ClampingScrollPhysics(),
                 slivers: [
-                  SliverToBoxAdapter(
-                    child: BlocBuilder<SubCubit, SubState>(
-                      builder: (context, state) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (selectedType == 1 && state is SubNotHaveState)
-                              Column(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        top: 26.h, left: 25.w, bottom: 10.h),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: RichText(
-                                        text: TextSpan(
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: 'Подписка',
-                                              style: TextStyles(context)
-                                                  .black_25_w800,
-                                            ),
-                                            TextSpan(
-                                              text: 'Beloved++',
-                                              style: TextStyles(context)
-                                                  .black_25_w800
-                                                  .copyWith(
-                                                    color:
-                                                        const Color(0xffFF1D1D),
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 189.h,
-                                    width: 377.w,
-                                    child: CupertinoCard(
-                                      margin: EdgeInsets.zero,
-                                      color: const Color(0xff8C8C8C),
-                                      child: Stack(
-                                        fit: StackFit.expand,
-                                        children: [
-                                          Image.asset(
-                                            Img.back,
-                                            fit: BoxFit.cover,
-                                            alignment: Alignment.topCenter,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      SubscriptionView(),
-                                                ),
-                                              );
-                                            },
-                                            child: Align(
-                                              alignment: Alignment.bottomLeft,
-                                              child: Container(
-                                                margin: EdgeInsets.only(
-                                                    left: 20.w, bottom: 15.h),
-                                                child: CupertinoCard(
-                                                  margin: EdgeInsets.zero,
-                                                  elevation: 0,
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 15.w,
-                                                      vertical: 8.h),
-                                                  color: ColorStyles.white,
-                                                  radius: BorderRadius.circular(
-                                                      20.r),
-                                                  child: Text('Приобрести',
-                                                      style: TextStyles(context)
-                                                          .black_18_w800),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Align(
-                                            alignment: Alignment.bottomRight,
-                                            child: Container(
-                                              margin: EdgeInsets.only(
-                                                  bottom: 23.h, right: 70.w),
-                                              child: Text('199₽ в месяц',
-                                                  style: TextStyles(context)
-                                                      .white_18_w800),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            else
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        top: 36.h, left: 25.w, bottom: 10.h),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Актуальное',
-                                        style:
-                                            TextStyles(context).black_25_w800,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 189.h,
-                                    child: ListView.separated(
-                                      separatorBuilder: (context, index) =>
-                                          Container(
-                                        width: 10.w,
-                                      ),
-                                      itemCount: listActuals.length,
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 25.w),
-                                      physics: const BouncingScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () =>
-                                              Functions.showActualDialog(
-                                                  listActuals[index], context),
-                                          child: SizedBox(
-                                            height: 189.h,
-                                            width: 358.w,
-                                            child: CupertinoCard(
-                                              margin: EdgeInsets.zero,
-                                              color: const Color(0xff8C8C8C),
-                                              child: Stack(
-                                                fit: StackFit.expand,
-                                                children: [
-                                                  Image.network(
-                                                    listActuals[index]
-                                                        .promoDetailsEntiti
-                                                        .photo,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.bottomRight,
-                                                    child: Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 17.w,
-                                                              vertical: 6.h),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        color: sl<AuthConfig>()
-                                                                    .idx ==
-                                                                0
-                                                            ? Colors.white
-                                                                .withOpacity(
-                                                                    0.9)
-                                                            : ColorStyles
-                                                                .black2Color
-                                                                .withOpacity(
-                                                                    0.9),
-                                                      ),
-                                                      margin: EdgeInsets.only(
-                                                        top: 15.h,
-                                                        right: 20.w,
-                                                        bottom: 11.h,
-                                                      ),
-                                                      child: Text(
-                                                        'до ${listActuals[index].promoDetailsEntiti.dateEnd!.day.toString()} ${MainConfigApp.monthsPromo[listActuals[index].promoDetailsEntiti.dateEnd!.month]}.',
-                                                        style:
-                                                            TextStyles(context)
-                                                                .black_15_w800
-                                                                .copyWith(
-                                                                  color: sl<AuthConfig>()
-                                                                              .idx ==
-                                                                          0
-                                                                      ? ColorStyles
-                                                                          .blackColor
-                                                                          .withOpacity(
-                                                                              0.7)
-                                                                      : ColorStyles
-                                                                          .white
-                                                                          .withOpacity(
-                                                                          0.7,
-                                                                        ),
-                                                                ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            SizedBox(
-                              height: 38.5.h,
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
+                  // SliverToBoxAdapter(
+                  //   child: BlocBuilder<SubCubit, SubState>(
+                  //     builder: (context, state) {
+                  //       return Column(
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         children: [
+                  //           if (selectedType == 1 && state is SubNotHaveState)
+                  //             Column(
+                  //               children: [
+                  //                 Container(
+                  //                   margin: EdgeInsets.only(
+                  //                       top: 26.h, left: 25.w, bottom: 10.h),
+                  //                   child: Align(
+                  //                     alignment: Alignment.centerLeft,
+                  //                     child: RichText(
+                  //                       text: TextSpan(
+                  //                         children: <TextSpan>[
+                  //                           TextSpan(
+                  //                             text: 'Подписка',
+                  //                             style: TextStyles(context)
+                  //                                 .black_25_w800,
+                  //                           ),
+                  //                           TextSpan(
+                  //                             text: 'Beloved++',
+                  //                             style: TextStyles(context)
+                  //                                 .black_25_w800
+                  //                                 .copyWith(
+                  //                                   color:
+                  //                                       const Color(0xffFF1D1D),
+                  //                                 ),
+                  //                           ),
+                  //                         ],
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 SizedBox(
+                  //                   height: 189.h,
+                  //                   width: 377.w,
+                  //                   child: CupertinoCard(
+                  //                     margin: EdgeInsets.zero,
+                  //                     color: const Color(0xff8C8C8C),
+                  //                     child: Stack(
+                  //                       fit: StackFit.expand,
+                  //                       children: [
+                  //                         Image.asset(
+                  //                           Img.back,
+                  //                           fit: BoxFit.cover,
+                  //                           alignment: Alignment.topCenter,
+                  //                         ),
+                  //                         GestureDetector(
+                  //                           onTap: () {
+                  //                             Navigator.push(
+                  //                               context,
+                  //                               MaterialPageRoute(
+                  //                                 builder: (context) =>
+                  //                                     SubscriptionView(),
+                  //                               ),
+                  //                             );
+                  //                           },
+                  //                           child: Align(
+                  //                             alignment: Alignment.bottomLeft,
+                  //                             child: Container(
+                  //                               margin: EdgeInsets.only(
+                  //                                   left: 20.w, bottom: 15.h),
+                  //                               child: CupertinoCard(
+                  //                                 margin: EdgeInsets.zero,
+                  //                                 elevation: 0,
+                  //                                 padding: EdgeInsets.symmetric(
+                  //                                     horizontal: 15.w,
+                  //                                     vertical: 8.h),
+                  //                                 color: ColorStyles.white,
+                  //                                 radius: BorderRadius.circular(
+                  //                                     20.r),
+                  //                                 child: Text('Приобрести',
+                  //                                     style: TextStyles(context)
+                  //                                         .black_18_w800),
+                  //                               ),
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                         Align(
+                  //                           alignment: Alignment.bottomRight,
+                  //                           child: Container(
+                  //                             margin: EdgeInsets.only(
+                  //                                 bottom: 23.h, right: 70.w),
+                  //                             child: Text('199₽ в месяц',
+                  //                                 style: TextStyles(context)
+                  //                                     .white_18_w800),
+                  //                           ),
+                  //                         ),
+                  //                       ],
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             )
+                  //           else
+                  //             Column(
+                  //               mainAxisSize: MainAxisSize.min,
+                  //               children: [
+                  //                 Container(
+                  //                   margin: EdgeInsets.only(
+                  //                       top: 36.h, left: 25.w, bottom: 10.h),
+                  //                   child: Align(
+                  //                     alignment: Alignment.centerLeft,
+                  //                     child: Text(
+                  //                       'Актуальное',
+                  //                       style:
+                  //                           TextStyles(context).black_25_w800,
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 SizedBox(
+                  //                   height: 189.h,
+                  //                   child: ListView.separated(
+                  //                     separatorBuilder: (context, index) =>
+                  //                         Container(
+                  //                       width: 10.w,
+                  //                     ),
+                  //                     itemCount: listActuals.length,
+                  //                     shrinkWrap: true,
+                  //                     scrollDirection: Axis.horizontal,
+                  //                     padding: EdgeInsets.symmetric(
+                  //                         horizontal: 25.w),
+                  //                     physics: const BouncingScrollPhysics(),
+                  //                     itemBuilder: (context, index) {
+                  //                       return GestureDetector(
+                  //                         onTap: () =>
+                  //                             Functions.showActualDialog(
+                  //                                 listActuals[index], context),
+                  //                         child: SizedBox(
+                  //                           height: 189.h,
+                  //                           width: 358.w,
+                  //                           child: CupertinoCard(
+                  //                             margin: EdgeInsets.zero,
+                  //                             color: const Color(0xff8C8C8C),
+                  //                             child: Stack(
+                  //                               fit: StackFit.expand,
+                  //                               children: [
+                  //                                 Image.network(
+                  //                                   listActuals[index]
+                  //                                       .promoDetailsEntiti
+                  //                                       .photo,
+                  //                                   fit: BoxFit.cover,
+                  //                                 ),
+                  //                                 Align(
+                  //                                   alignment:
+                  //                                       Alignment.bottomRight,
+                  //                                   child: Container(
+                  //                                     padding:
+                  //                                         EdgeInsets.symmetric(
+                  //                                             horizontal: 17.w,
+                  //                                             vertical: 6.h),
+                  //                                     decoration: BoxDecoration(
+                  //                                       borderRadius:
+                  //                                           BorderRadius
+                  //                                               .circular(10),
+                  //                                       color: sl<AuthConfig>()
+                  //                                                   .idx ==
+                  //                                               0
+                  //                                           ? Colors.white
+                  //                                               .withOpacity(
+                  //                                                   0.9)
+                  //                                           : ColorStyles
+                  //                                               .black2Color
+                  //                                               .withOpacity(
+                  //                                                   0.9),
+                  //                                     ),
+                  //                                     margin: EdgeInsets.only(
+                  //                                       top: 15.h,
+                  //                                       right: 20.w,
+                  //                                       bottom: 11.h,
+                  //                                     ),
+                  //                                     child: Text(
+                  //                                       'до ${listActuals[index].promoDetailsEntiti.dateEnd!.day.toString()} ${MainConfigApp.monthsPromo[listActuals[index].promoDetailsEntiti.dateEnd!.month]}.',
+                  //                                       style:
+                  //                                           TextStyles(context)
+                  //                                               .black_15_w800
+                  //                                               .copyWith(
+                  //                                                 color: sl<AuthConfig>()
+                  //                                                             .idx ==
+                  //                                                         0
+                  //                                                     ? ColorStyles
+                  //                                                         .blackColor
+                  //                                                         .withOpacity(
+                  //                                                             0.7)
+                  //                                                     : ColorStyles
+                  //                                                         .white
+                  //                                                         .withOpacity(
+                  //                                                         0.7,
+                  //                                                       ),
+                  //                                               ),
+                  //                                     ),
+                  //                                   ),
+                  //                                 ),
+                  //                               ],
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                       );
+                  //                     },
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           SizedBox(
+                  //             height: 38.5.h,
+                  //           ),
+                  //         ],
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                   SliverAppBar(
                     backgroundColor: sl<AuthConfig>().idx == 1
                         ? ColorStyles.blackColor
