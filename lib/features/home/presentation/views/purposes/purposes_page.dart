@@ -255,7 +255,7 @@ class _PurposesPageState extends State<PurposesPage> {
             if (selectedType == 0) {
               listPurposes = bloc.allPurposes;
               //Available purposes
-            // } else if (selectedType == 1) {
+              // } else if (selectedType == 1) {
               // listPromos = bloc.promos;
             } else if (selectedType == 1) {
               listPurposes = bloc.availablePurposes;

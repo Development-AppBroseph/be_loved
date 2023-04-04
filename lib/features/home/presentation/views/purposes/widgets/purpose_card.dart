@@ -302,27 +302,20 @@ class PurposeCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (onCompleteTap != null) {
-                            onCompleteTap!();
-                          }
-                        },
-                        child: SizedBox(
-                          height: 36.h,
-                          child: CupertinoCard(
-                            margin: EdgeInsets.zero,
-                            padding: EdgeInsets.symmetric(horizontal: 15.w),
-                            elevation: 0,
-                            color: const Color(0xff20CB83).withOpacity(.5),
-                            radius: BorderRadius.circular(20.r),
-                            child: Center(
-                              child: Text(
-                                'Цель достигнута',
-                                style: TextStyles(context)
-                                    .white_18_w800
-                                    .copyWith(color: Colors.white),
-                              ),
+                      SizedBox(
+                        height: 36.h,
+                        child: CupertinoCard(
+                          margin: EdgeInsets.zero,
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
+                          elevation: 0,
+                          color: const Color(0xff20CB83).withOpacity(.5),
+                          radius: BorderRadius.circular(20.r),
+                          child: Center(
+                            child: Text(
+                              'Цель достигнута',
+                              style: TextStyles(context)
+                                  .white_18_w800
+                                  .copyWith(color: Colors.white),
                             ),
                           ),
                         ),
