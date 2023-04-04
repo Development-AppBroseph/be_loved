@@ -15,3 +15,13 @@ class MainWidgetsEntity extends Equatable {
   List<Object> get props => [
   ];
 }
+      
+       
+        
+         
+          
+           
+            
+             
+              
+               

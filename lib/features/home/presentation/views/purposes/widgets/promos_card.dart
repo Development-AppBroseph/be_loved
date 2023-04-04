@@ -55,7 +55,6 @@ class _PromosCardState extends State<PromosCard> {
                     child: Image.network(
                       widget.promosEntiti.photo,
                       fit: BoxFit.cover,
-                      color: Colors.black,
                     ),
                   ),
                 ),

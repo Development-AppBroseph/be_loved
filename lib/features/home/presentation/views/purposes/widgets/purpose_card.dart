@@ -75,7 +75,7 @@ class PurposeCard extends StatelessWidget {
                   : Config.url.url + purposeEntity.photo,
             ),
             fit: BoxFit.cover,
-            opacity: .6
+            opacity: .6,
           ),
         ),
         child: Stack(

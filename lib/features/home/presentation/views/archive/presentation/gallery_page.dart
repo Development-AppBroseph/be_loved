@@ -102,17 +102,16 @@ class _GalleryPageState extends State<GalleryPage> {
                                 bloc.groupedFiles.indexOf(group),
                                 group.mainPhoto,
                                 group,
-                                bloc.groupedFiles
-                                ),
+                                bloc.groupedFiles),
                             if (group.mainVideo != null)
                               _buildMainItem(
-                                  GlobalKey(),
-                                  GlobalKey(),
-                                  bloc.groupedFiles.indexOf(group),
-                                  group.mainVideo!,
-                                  group,
-                                  bloc.groupedFiles
-                                  ),
+                                GlobalKey(),
+                                GlobalKey(),
+                                bloc.groupedFiles.indexOf(group),
+                                group.mainVideo!,
+                                group,
+                                bloc.groupedFiles,
+                              ),
                             ...List.generate(
                                 galleryGroupingCount(group),
                                 (index) => MiniMediaCard(
@@ -141,11 +140,6 @@ class _GalleryPageState extends State<GalleryPage> {
                                                     url: group
                                                         .additionalFiles[index]
                                                         .urlToFile,
-                                                    // url: index == 0
-                                                    // ? widget.group.mainPhoto.urlToFile
-                                                    // : index == 1
-                                                    // ? widget.group.mainVideo!.urlToFile
-                                                    // : widget.group.additionalFiles[index - 1 + (widget.group.mainVideo == null ? 0 : 1)].urlToFile,
                                                     duration: null,
                                                   ),
                                                 ));
@@ -159,8 +153,8 @@ class _GalleryPageState extends State<GalleryPage> {
                                                   urlToImage: group
                                                       .additionalFiles[index]
                                                       .urlToFile,
-                                                      file: bloc.files,
-                                                      index: index++,
+                                                  file: group.additionalFiles,
+                                                  index: index,
                                                 ),
                                               ),
                                             );
@@ -214,8 +208,13 @@ class _GalleryPageState extends State<GalleryPage> {
     );
   }
 
-  Widget _buildMainItem(GlobalKey mainKey, GlobalKey dotsKey, int index,
-      GalleryFileEntity file, GalleryGroupFilesEntity group, List<GalleryGroupFilesEntity>? groupList) {
+  Widget _buildMainItem(
+      GlobalKey mainKey,
+      GlobalKey dotsKey,
+      int index,
+      GalleryFileEntity file,
+      GalleryGroupFilesEntity group,
+      List<GalleryGroupFilesEntity>? groupList) {
     //Setting position of group
     if (group.topPosition == 0) {
       print('SET POSITIONS: ${widget.position}');

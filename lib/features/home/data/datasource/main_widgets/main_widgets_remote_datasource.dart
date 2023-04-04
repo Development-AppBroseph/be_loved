@@ -45,7 +45,7 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
               .map((json) => PurposeModel.fromJson(json))
               .toList();
 
-      return MainWidgetsEntity(file: file, purposes: purposes!);
+      return MainWidgetsEntity(file: file, purposes: purposes ?? []);
     } else if (response.statusCode == 401) {
       throw ServerException(message: 'token_error');
     } else {

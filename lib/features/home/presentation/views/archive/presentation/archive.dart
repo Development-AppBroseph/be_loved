@@ -262,6 +262,7 @@ class _ArchivePageState extends State<ArchivePage> {
               ArchiveWrapper(
                 currentIndex: currentPageIndex,
                 onChangePage: changePage,
+                scrollController: scrollController,
                 child: currentPageIndex == 0
                     ? MomentsPage()
                     : currentPageIndex == 1
@@ -286,8 +287,7 @@ class _ArchivePageState extends State<ArchivePage> {
                                     pageController: pageController,
                                     nextPage: nextPage,
                                   )
-                                : SizedBox.shrink(),
-                scrollController: scrollController,
+                                : const SizedBox.shrink(),
               ),
               if (!hideTopBar && currentPageIndex == 1)
                 Positioned(
