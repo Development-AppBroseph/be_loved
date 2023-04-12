@@ -6,12 +6,16 @@ import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class UserTag extends StatelessWidget {
   final EventEntity eventEntity;
   final bool isSelected;
   final Function(bool s) onSelect;
-  UserTag({Key? key, required this.eventEntity, required this.onSelect, required this.isSelected}) : super(key: key);
+  UserTag(
+      {Key? key,
+      required this.eventEntity,
+      required this.onSelect,
+      required this.isSelected})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +39,16 @@ class UserTag extends StatelessWidget {
                 ),
               ),
               eventEntity.important
-              ? ImportantTextWidget()
-              : Text(
-                'Добавил(а): ${eventEntity.eventCreator.username}',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xff969696),
-                ),
-              ),
+                  ? ImportantTextWidget()
+                  : Text(
+                      'Добавил(а): ${eventEntity.eventCreator.username}',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xff969696),
+                      ),
+                    ),
             ],
           ),
           const Spacer(),
@@ -55,10 +59,11 @@ class UserTag extends StatelessWidget {
                 shape: const CircleBorder(),
                 value: isSelected,
                 splashRadius: 0,
+                checkColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                 activeColor: const Color(0xffFF1D1D),
                 side: MaterialStateBorderSide.resolveWith(
                   (states) => const BorderSide(
-                    width: 3,
+                    width: 1,
                     color: Color(0xffFF1D1D),
                   ),
                 ),

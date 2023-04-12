@@ -89,21 +89,24 @@ class _AuthPageState extends State<AuthPage> {
                           currentIndex = value;
                         });
                       },
-                      children: [
+                      children: const [
                         PreviewItem(
                           title: 'Сохраняй моменты',
                           text:
                               'Пользуйтесь совместным архивом для\nсохранения общих фотографий, видео и\nсобытий',
+                          image: Img.onboardingFirst,
                         ),
                         PreviewItem(
                           title: 'Планируй события',
                           text:
                               'Отметьте самые важные события для ваших\nотношений, а BeLoved напомнит о них',
+                          image: Img.onboardingSecond,
                         ),
                         PreviewItem(
                           title: 'Достигай целей',
                           text:
                               'Выполняйте милые достижения для ваших\nотношений, и получайте приятные призы',
+                          image: Img.onboardingThird,
                         ),
                       ],
                     ),

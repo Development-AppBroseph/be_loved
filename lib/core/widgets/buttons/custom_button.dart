@@ -17,7 +17,7 @@ class CustomButton extends StatefulWidget {
   bool code;
   final Border? border;
   final String text;
-  final VoidCallback onPressed; 
+  final VoidCallback onPressed;
   final String? svg;
   final double? svgHeight;
 
@@ -65,32 +65,48 @@ class CustomButtonState extends State<CustomButton> {
           color: widget.validate == null
               ? state is TextFieldSuccess
                   ? widget.color
-                  : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
+                  : (sl<AuthConfig>().idx == 0
+                      ? Colors.transparent
+                      : ColorStyles.white)
               : widget.code
                   ? widget.validate!
                       ? widget.color
-                      : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
+                      : (sl<AuthConfig>().idx == 0
+                          ? Colors.transparent
+                          : ColorStyles.white)
                   : state is TextFieldSuccess || (widget.validate!)
                       ? widget.color
-                      : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white),
+                      : (sl<AuthConfig>().idx == 1
+                          ? Colors.transparent
+                          : ColorStyles.white),
           borderRadius: BorderRadius.circular(10),
           child: InkWell(
             borderRadius: BorderRadius.circular(10),
             highlightColor: widget.validate == null
                 ? state is TextFieldSuccess
                     ? const Color.fromRGBO(112, 200, 163, 1)
-                    : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
+                    : (sl<AuthConfig>().idx == 0
+                        ? Colors.transparent
+                        : ColorStyles.white)
                 : widget.code
                     ? widget.validate! || state is TextFieldSuccess
                         ? widget.color != Colors.black
                             ? const Color.fromRGBO(112, 200, 163, 1)
-                            : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
-                        : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
+                            : (sl<AuthConfig>().idx == 0
+                                ? Colors.transparent
+                                : ColorStyles.white)
+                        : (sl<AuthConfig>().idx == 0
+                            ? Colors.transparent
+                            : ColorStyles.white)
                     : state is TextFieldSuccess || (widget.validate!)
                         ? widget.color != Colors.black
                             ? const Color.fromRGBO(112, 200, 163, 1)
-                            : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white)
-                        : (sl<AuthConfig>().idx == 0 ? Colors.transparent : ColorStyles.white),
+                            : (sl<AuthConfig>().idx == 0
+                                ? Colors.transparent
+                                : ColorStyles.white)
+                        : (sl<AuthConfig>().idx == 0
+                            ? Colors.transparent
+                            : ColorStyles.white),
             child: AnimatedContainer(
               curve: Curves.easeInOutQuint,
               duration: const Duration(milliseconds: 200),
@@ -115,8 +131,8 @@ class CustomButtonState extends State<CustomButton> {
                         : state is TextFieldSuccess || (widget.validate!)
                             ? widget.border
                             : Border.all(
-                                width: 1,
-                                color: const Color.fromRGBO(23, 23, 23, 1),
+                                width: 2,
+                                color: Colors.white,
                               ),
               ),
               child: widget.svg != null
@@ -150,7 +166,7 @@ class CustomButtonState extends State<CustomButton> {
                                 : state is TextFieldSuccess ||
                                         (widget.validate!)
                                     ? widget.textColor
-                                    : const Color.fromRGBO(23, 23, 23, 1),
+                                    : Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

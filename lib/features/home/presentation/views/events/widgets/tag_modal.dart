@@ -230,12 +230,21 @@ class _TagModalState extends State<TagModal> {
                             behavior: HitTestBehavior.opaque,
                             child: Row(
                               children: [
-                                SvgPicture.asset(
-                                  MainConfigApp.tagColors[iconIndex].assetPath,
+                                Container(
                                   key: iconBtn,
-                                  height: 58.h,
-                                  // color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                      color: MainConfigApp
+                                          .tagColors[iconIndex].color,
+                                      borderRadius: BorderRadius.circular(7.5)),
                                 ),
+                                // SvgPicture.asset(
+                                //   MainConfigApp.tagColors[iconIndex].assetPath,
+                                //   key: iconBtn,
+                                //   height: 58.h,
+                                //   // color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                // ),
                                 SizedBox(
                                   width: 7.w,
                                 ),

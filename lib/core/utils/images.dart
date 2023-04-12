@@ -13,6 +13,9 @@ abstract class Img {
   static const String smile = "assets/images/smile.png";
   static const String sad = "assets/images/sad.png";
   static const String back = 'assets/images/abroad.png';
+  static const String onboardingFirst = 'assets/images/onboarding_first.png';
+  static const String onboardingSecond = "assets/images/onboarding_second.png";
+  static const String onboardingThird = 'assets/images/onboarding_third.png';
 }
 
 abstract class SvgImg {

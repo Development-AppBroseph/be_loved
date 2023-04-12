@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PreviewItem extends StatelessWidget {
   final String title;
   final String text;
-  PreviewItem({required this.text, required this.title});
+  final String image;
+  const PreviewItem({required this.text, required this.title, required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -19,23 +18,22 @@ class PreviewItem extends StatelessWidget {
         children: [
           Column(
             children: [
-              Expanded(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    color: ColorStyles.greyColor,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: title == 'Планируй события'
-                          ? const AssetImage(
-                              'assets/images/onboarding_second.png')
-                          : title == "Сохраняй моменты"
-                              ? const AssetImage(
-                                  'assets/images/onboarding_first.png')
-                              : const AssetImage(
-                                  'assets/images/onboarding_third.png'),
-                    ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  color: ColorStyles.greyColor,
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(image)
+                    // image: title == 'Планируй события'
+                    //     ? const AssetImage(
+                    //         'assets/images/onboarding_second.png')
+                    //     : title == "Сохраняй моменты"
+                    //         ? const AssetImage(
+                    //             'assets/images/onboarding_first.png')
+                    //         : const AssetImage(
+                    //             'assets/images/onboarding_third.png'),
                   ),
                 ),
               ),

@@ -250,7 +250,7 @@ class TagItemWidget extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 '#${tagEntity.title}',
-                style: TextStyles(context).white_15_w800.copyWith(color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]),
+                style: TextStyles(context).white_15_w800.copyWith(color: Colors.white),
                 overflow: TextOverflow.ellipsis,
               ))),
     );

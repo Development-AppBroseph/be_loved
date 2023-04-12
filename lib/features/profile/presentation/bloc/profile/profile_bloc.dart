@@ -51,8 +51,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
     emit(state);
   }
-  void _postPhone(
-      PostPhoneNumberEvent event, Emitter<ProfileState> emit) async {
+  void _postPhone(PostPhoneNumberEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoadingState());
     newPhone = event.phone;
     final data =
@@ -60,6 +59,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ProfileState state = data.fold(
       (error) => errorCheck(error),
       (data) {
+        sl<AuthConfig>().user!.me.phoneNumber = newPhone!;
         return ProfileSentCodeState();
       },
     );

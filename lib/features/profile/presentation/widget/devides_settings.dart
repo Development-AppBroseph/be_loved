@@ -79,9 +79,8 @@ class _DevideSettingsState extends State<DevideSettings> {
                     },
                     value: switchValue,
                   )
-                : IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_forward_ios_rounded),
+                : Icon(
+                    Icons.arrow_forward_ios_rounded,
                     color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                   ),
           ],

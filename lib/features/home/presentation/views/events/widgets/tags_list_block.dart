@@ -22,7 +22,7 @@ class TagsListBlock extends StatelessWidget {
   bool isBlack2C;
   TagsListBlock({this.isLeftPadding = true, this.isBlack2C = false});
   TextStyle style1 = TextStyle(
-      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx], fontWeight: FontWeight.w800, fontSize: 15.sp);
+      color: ColorStyles.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
 
   @override
   Widget build(BuildContext context) {

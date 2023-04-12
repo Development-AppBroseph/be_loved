@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
-
 class DefaultTextFormField extends StatelessWidget {
   final String hint;
   final String? title;
@@ -22,11 +20,13 @@ class DefaultTextFormField extends StatelessWidget {
   final int? maxLines;
   final int? maxLength;
   final bool hideCounter;
+  bool isEmail;
   DefaultTextFormField({
     Key? key,
     this.focusNode,
     this.maxLength,
     this.hideCounter = false,
+    this.isEmail = false,
     this.onTap,
     this.onChange,
     this.maxLines,
@@ -39,7 +39,6 @@ class DefaultTextFormField extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    
     return Stack(
       children: [
         TextFormField(
@@ -51,7 +50,10 @@ class DefaultTextFormField extends StatelessWidget {
           validator: validator,
           controller: controller,
           maxLines: maxLines,
-          style: TextStyles(context).black_18_w800.copyWith(color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx]),
+          style: TextStyles(context).black_18_w800.copyWith(
+              color: sl<AuthConfig>().idx == 1 && isEmail == true
+                  ? ColorStyles.greyColor
+                  : ClrStyle.black17ToWhite[sl<AuthConfig>().idx]),
           maxLength: maxLength,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(20.h),
@@ -62,16 +64,23 @@ class DefaultTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.r),
               borderSide: BorderSide.none,
             ),
-            fillColor: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
-            hintStyle: TextStyles(context).grey_18_w800.copyWith(color: sl<AuthConfig>().idx == 1 ? ColorStyles.white : null)
+            fillColor: ClrStyle
+                .backToBlack2C[isEmail == true ? 0 : sl<AuthConfig>().idx],
+            hintStyle: TextStyles(context).grey_18_w800.copyWith(
+                  color: sl<AuthConfig>().idx == 1 && isEmail == true
+                      ? ColorStyles.greyColor
+                      : null,
+                ),
           ),
         ),
-        if(!hideCounter && maxLength != null && controller?.text.length == 0)
-        Positioned(
-          right: 20.w,
-          top: 16.h,
-          child: Text('${controller?.text.length}/$maxLength', style: TextStyles(context).grey_15_w800,)
-        )
+        if (!hideCounter && maxLength != null && controller?.text.length == 0)
+          Positioned(
+              right: 20.w,
+              top: 16.h,
+              child: Text(
+                '${controller?.text.length}/$maxLength',
+                style: TextStyles(context).grey_15_w800,
+              ))
       ],
     );
   }

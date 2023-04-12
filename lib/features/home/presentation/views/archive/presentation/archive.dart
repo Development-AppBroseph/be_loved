@@ -243,7 +243,7 @@ class _ArchivePageState extends State<ArchivePage> {
       listener: (context, state) {
         if (state is GalleryFilesDeletedState ||
             state is GalleryFilesAddedState) {
-          currentScrollPosition = 0;
+          // currentScrollPosition = 0;
         }
       },
       child: PageView(

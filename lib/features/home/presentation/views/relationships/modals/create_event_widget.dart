@@ -36,13 +36,16 @@ import 'icon_select_modal.dart';
 class CreateEventWidget extends StatefulWidget {
   final Function() onTap;
   final EventEntity? editingEvent;
-  const CreateEventWidget({Key? key, required this.onTap, required this.editingEvent}) : super(key: key);
+  const CreateEventWidget(
+      {Key? key, required this.onTap, required this.editingEvent})
+      : super(key: key);
   @override
   State<CreateEventWidget> createState() => _CreateEventWidgetState();
 }
 
 class _CreateEventWidgetState extends State<CreateEventWidget> {
   GlobalKey iconBtn = GlobalKey();
+  GlobalKey datePicker = GlobalKey();
   TextStyle style1 = TextStyle(
       color: ColorStyles.greyColor,
       fontSize: 15.sp,
@@ -61,8 +64,10 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   int iconIndex = 15;
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
-  final TextEditingController _controllerFromTime = TextEditingController(text: '23:59');
-  final TextEditingController _controllerToTime = TextEditingController(text: '23:59');
+  final TextEditingController _controllerFromTime =
+      TextEditingController(text: '23:59');
+  final TextEditingController _controllerToTime =
+      TextEditingController(text: '23:59');
 
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now().add(const Duration(days: 5));
@@ -95,99 +100,109 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
 
   showIconModal() async {
     await scrollController.animateTo(scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 200), curve: Curves.easeInOutQuint);
-    iconSelectModal(context, getWidgetPosition(iconBtn), (index) {
-      setState(() {
-        iconIndex = index;
-      });
-      Navigator.pop(context);
-    }, iconIndex, );
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOutQuint);
+    iconSelectModal(
+      context,
+      getWidgetPosition(iconBtn),
+      (index) {
+        setState(() {
+          iconIndex = index;
+        });
+        Navigator.pop(context);
+      },
+      iconIndex,
+    );
   }
 
-
-  createEvent(){
-    if(isValidate()){
-      if(context.read<EventsBloc>().events.length >= 30){
+  createEvent() {
+    if (isValidate()) {
+      if (context.read<EventsBloc>().events.length >= 30) {
         showAlertToast('Максимум кол-во событии 30');
       }
       showLoaderWrapper(context);
-      if(widget.editingEvent != null){
-        context.read<EventsBloc>().add(EventEditEvent(eventEntity: EventEntity(
-          id: widget.editingEvent!.id,
-          title: _controllerName.text,
-          photo: null,
-          description: _controllerDescription.text,
-          important: false,
-          start: DateTime(fromDate.year, fromDate.month, fromDate.day, 
-            _controllerFromTime.text.length > 4
-            ? int.parse(_controllerFromTime.text.split(":")[0])
-            : 0, 
-            _controllerFromTime.text.length > 4
-            ? int.parse(_controllerFromTime.text.split(":")[1])
-            : 0
-          ),
-          finish: DateTime(toDate.year, toDate.month, toDate.day, 
-            _controllerToTime.text.length > 4
-            ? int.parse(_controllerToTime.text.split(":")[0])
-            : 0, 
-            _controllerToTime.text.length > 4
-            ? int.parse(_controllerToTime.text.split(":")[1])
-            : 0
-          ),
-          datetimeString: '',
-          tagIds: [],
-          married: widget.editingEvent!.married,
-          relationId: sl<AuthConfig>().user!.relationId!,
-          notification: notification,
-          repeat: repeat,
-          allDays: allDays,
-          eventCreator: sl<AuthConfig>().user!.me,
-          mainPosition: widget.editingEvent!.mainPosition
-          ))
-        );
-      }else{
-        context.read<EventsBloc>().add(EventAddEvent(eventEntity: EventEntity(
-          id: 0,
-          title: _controllerName.text,
-          description: _controllerDescription.text,
-          important: false,
-          tagIds: [],
-          photo: null,
-          start: DateTime(fromDate.year, fromDate.month, fromDate.day, 
-            _controllerFromTime.text.length > 4
-            ? int.parse(_controllerFromTime.text.split(":")[0])
-            : 0, 
-            _controllerFromTime.text.length > 4
-            ? int.parse(_controllerFromTime.text.split(":")[1])
-            : 0
-          ),
-          finish: DateTime(toDate.year, toDate.month, toDate.day, 
-            _controllerToTime.text.length > 4
-            ? int.parse(_controllerToTime.text.split(":")[0])
-            : 0, 
-            _controllerToTime.text.length > 4
-            ? int.parse(_controllerToTime.text.split(":")[1])
-            : 0
-          ),
-          datetimeString: '',
-          married: false,
-          relationId: sl<AuthConfig>().user!.relationId!,
-          notification: notification,
-          repeat: repeat,
-          allDays: allDays,
-          eventCreator: sl<AuthConfig>().user!.me,
-          mainPosition: 0
-          ))
-        );
+      if (widget.editingEvent != null) {
+        context.read<EventsBloc>().add(EventEditEvent(
+            eventEntity: EventEntity(
+                id: widget.editingEvent!.id,
+                title: _controllerName.text,
+                photo: null,
+                description: _controllerDescription.text,
+                important: false,
+                start: DateTime(
+                    fromDate.year,
+                    fromDate.month,
+                    fromDate.day,
+                    _controllerFromTime.text.length > 4
+                        ? int.parse(_controllerFromTime.text.split(":")[0])
+                        : 0,
+                    _controllerFromTime.text.length > 4
+                        ? int.parse(_controllerFromTime.text.split(":")[1])
+                        : 0),
+                finish: DateTime(
+                    toDate.year,
+                    toDate.month,
+                    toDate.day,
+                    _controllerToTime.text.length > 4
+                        ? int.parse(_controllerToTime.text.split(":")[0])
+                        : 0,
+                    _controllerToTime.text.length > 4
+                        ? int.parse(_controllerToTime.text.split(":")[1])
+                        : 0),
+                datetimeString: '',
+                tagIds: [],
+                married: widget.editingEvent!.married,
+                relationId: sl<AuthConfig>().user!.relationId!,
+                notification: notification,
+                repeat: repeat,
+                allDays: allDays,
+                eventCreator: sl<AuthConfig>().user!.me,
+                mainPosition: widget.editingEvent!.mainPosition)));
+      } else {
+        context.read<EventsBloc>().add(EventAddEvent(
+            eventEntity: EventEntity(
+                id: 0,
+                title: _controllerName.text,
+                description: _controllerDescription.text,
+                important: false,
+                tagIds: [],
+                photo: null,
+                start: DateTime(
+                    fromDate.year,
+                    fromDate.month,
+                    fromDate.day,
+                    _controllerFromTime.text.length > 4
+                        ? int.parse(_controllerFromTime.text.split(":")[0])
+                        : 0,
+                    _controllerFromTime.text.length > 4
+                        ? int.parse(_controllerFromTime.text.split(":")[1])
+                        : 0),
+                finish: DateTime(
+                    toDate.year,
+                    toDate.month,
+                    toDate.day,
+                    _controllerToTime.text.length > 4
+                        ? int.parse(_controllerToTime.text.split(":")[0])
+                        : 0,
+                    _controllerToTime.text.length > 4
+                        ? int.parse(_controllerToTime.text.split(":")[1])
+                        : 0),
+                datetimeString: '',
+                married: false,
+                relationId: sl<AuthConfig>().user!.relationId!,
+                notification: notification,
+                repeat: repeat,
+                allDays: allDays,
+                eventCreator: sl<AuthConfig>().user!.me,
+                mainPosition: 0)));
       }
-      
     }
   }
 
   @override
   void initState() {
     super.initState();
-    if(widget.editingEvent != null){
+    if (widget.editingEvent != null) {
       EventEntity model = widget.editingEvent!;
       _controllerName.text = model.title;
       _controllerDescription.text = model.description;
@@ -220,15 +235,15 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   Widget build(BuildContext context) {
     return BlocListener<EventsBloc, EventsState>(
       listener: (context, state) {
-        if(state is EventErrorState){
+        if (state is EventErrorState) {
           Loader.hide();
           showAlertToast(state.message);
         }
-        if(state is EventInternetErrorState){
+        if (state is EventInternetErrorState) {
           Loader.hide();
           showAlertToast('Проверьте соединение с интернетом!');
         }
-        if(state is EventAddedState){
+        if (state is EventAddedState) {
           Loader.hide();
           Navigator.pop(context);
         }
@@ -252,7 +267,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                       (keyboardOpened ? 0.99 : 0.8) -
                   (keyboardOpened ? MediaQuery.of(context).padding.top : 0),
               width: MediaQuery.of(context).size.width,
-              color: const Color.fromRGBO(0, 0, 0, 0),
+              color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
               child: Stack(
                 children: [
                   SizedBox(
@@ -287,65 +302,71 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 onChange: (s) {
                                   setState(() {});
                                 }),
-                            if(!(widget.editingEvent != null && widget.editingEvent!.important))
-                            ...[SizedBox(
-                              height: 20.h,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.r),
-                                  color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
-                              padding: EdgeInsets.symmetric(horizontal: 20.w),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 12.h,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Весь день',
-                                        style: style2,
-                                      ),
-                                      SwitchBtn(
-                                          onChange: (val) {
-                                            setState(() {
-                                              allDays = val;
-                                            });
-                                          },
-                                          value: allDays)
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 12.h,
-                                  ),
-                                  Container(
-                                    color: ColorStyles.greyColor,
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 1.h,
-                                  ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Начало',
-                                        style: style2,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          CustomPopupMenu(
-                                              position: PreferredPosition.bottom,
+                            if (!(widget.editingEvent != null &&
+                                widget.editingEvent!.important)) ...[
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                    color: ClrStyle
+                                        .backToBlack2C[sl<AuthConfig>().idx]),
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 12.h,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Весь день',
+                                          style: style2,
+                                        ),
+                                        SwitchBtn(
+                                            onChange: (val) {
+                                              setState(() {
+                                                allDays = val;
+                                              });
+                                            },
+                                            value: allDays)
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 12.h,
+                                    ),
+                                    Container(
+                                      color: ColorStyles.greyColor,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 1.h,
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Начало',
+                                          style: style2,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            CustomPopupMenu(
+                                              position:
+                                                  PreferredPosition.bottom,
                                               barrierColor: Colors.transparent,
                                               showArrow: false,
                                               controller:
@@ -372,143 +393,175 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                 }, fromDate);
                                               },
                                               child: TimeItemWidget(
-                                                  text: DateFormat(
-                                                          'd MMM yyyy г.', 'RU')
-                                                      .format(fromDate))),
-                                          if(!allDays)
-                                          ...[
-                                            SizedBox(
-                                              width: 15.w,
+                                                text: DateFormat(
+                                                        'd MMM yyyy г.', 'RU')
+                                                    .format(fromDate),
+                                              ),
                                             ),
-                                            TimeItemTextFieldWidget(
-                                              controller: _controllerFromTime,
-                                              validateText: validateTextFields,
-                                              onChanged: (text) {
-                                                if (text != null &&
-                                                    text.isNotEmpty) {
-                                                  if (text.length == 2 &&
-                                                      int.parse(text[0]) == 2 &&
-                                                      int.parse(text[1]) > 3) {
-                                                    _controllerFromTime.text = '';
-                                                    setState(() {});
+                                            if (!allDays) ...[
+                                              SizedBox(
+                                                width: 15.w,
+                                              ),
+                                              TimeItemTextFieldWidget(
+                                                controller: _controllerFromTime,
+                                                validateText:
+                                                    validateTextFields,
+                                                onChanged: (text) {
+                                                  if (text != null &&
+                                                      text.isNotEmpty) {
+                                                    if (text.length == 2 &&
+                                                        int.parse(text[0]) ==
+                                                            2 &&
+                                                        int.parse(text[1]) >
+                                                            3) {
+                                                      _controllerFromTime.text =
+                                                          '';
+                                                      setState(() {});
+                                                    }
                                                   }
-                                                }
-                                              },
-                                            )
+                                                },
+                                              )
+                                            ],
                                           ],
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Конец',
-                                        style: style2,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          CustomPopupMenu(
-                                              position: PreferredPosition.bottom,
-                                              barrierColor: Colors.transparent,
-                                              showArrow: false,
-                                              controller:
-                                                  _customPopupMenuController2,
-                                              pressType: PressType.singleClick,
-                                              menuBuilder: () {
-                                                return _buildDatePicker(context,
-                                                    (date, hide) {
-                                                  if (hide) {
-                                                    _customPopupMenuController2
-                                                        .hideMenu();
-                                                  }
-                                                  setState(() {
-                                                    toDate = date;
-                                                  });
-                                                }, toDate, fromDate: fromDate);
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Конец',
+                                          style: style2,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                scrollController.animateTo(
+                                                    scrollController.position
+                                                        .maxScrollExtent,
+                                                    duration: const Duration(
+                                                        milliseconds: 200),
+                                                    curve:
+                                                        Curves.easeInOutQuint);
                                               },
-                                              child: TimeItemWidget(
-                                                  text: DateFormat(
-                                                          'd MMM yyyy г.', 'RU')
-                                                      .format(toDate))),
-                                          if(!allDays)
-                                          ...[
-                                            SizedBox(
-                                              width: 15.w,
+                                              child: CustomPopupMenu(
+                                                  position:
+                                                      PreferredPosition.bottom,
+                                                  barrierColor:
+                                                      Colors.transparent,
+                                                  showArrow: false,
+                                                  controller:
+                                                      _customPopupMenuController2,
+                                                  pressType:
+                                                      PressType.singleClick,
+                                                  menuBuilder: () {
+                                                    return _buildDatePicker(
+                                                        context, (date, hide) {
+                                                      if (hide) {
+                                                        _customPopupMenuController2
+                                                            .hideMenu();
+                                                      }
+                                                      setState(() {
+                                                        toDate = date;
+                                                        
+                                                      });
+                                                    }, toDate,
+                                                        fromDate: fromDate);
+                                                  },
+                                                  child: TimeItemWidget(
+                                                      text: DateFormat(
+                                                              'd MMM yyyy г.',
+                                                              'RU')
+                                                          .format(toDate))),
                                             ),
-                                            TimeItemTextFieldWidget(
-                                              controller: _controllerToTime,
-                                              validateText: validateTextFields,
-                                              onChanged: (text) {
-                                                if (text != null &&
-                                                    text.isNotEmpty) {
-                                                  if (text.length == 2 &&
-                                                      int.parse(text[0]) == 2 &&
-                                                      int.parse(text[1]) > 3) {
-                                                    _controllerToTime.text = '';
-                                                    setState(() {});
+                                            if (!allDays) ...[
+                                              SizedBox(
+                                                width: 15.w,
+                                              ),
+                                              TimeItemTextFieldWidget(
+                                                controller: _controllerToTime,
+                                                validateText:
+                                                    validateTextFields,
+                                                onChanged: (text) {
+                                                  if (text != null &&
+                                                      text.isNotEmpty) {
+                                                    if (text.length == 2 &&
+                                                        int.parse(text[0]) ==
+                                                            2 &&
+                                                        int.parse(text[1]) >
+                                                            3) {
+                                                      _controllerToTime.text =
+                                                          '';
+                                                      setState(() {});
+                                                    }
                                                   }
-                                                }
-                                              },
-                                            )
-                                          ]
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 32.h,
-                                  ),
-                                ],
+                                                },
+                                              )
+                                            ]
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 32.h,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                    color: ClrStyle
+                                        .backToBlack2C[sl<AuthConfig>().idx]),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w, vertical: 13.h),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Повтор',
+                                      style: style2,
+                                    ),
+                                    SwitchBtn(
+                                        onChange: (val) {
+                                          setState(() {
+                                            repeat = val;
+                                          });
+                                        },
+                                        value: repeat)
+                                  ],
+                                ),
+                              ),
+                            ],
                             SizedBox(
                               height: 20.h,
                             ),
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
-                                  color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
+                                  color: ClrStyle
+                                      .backToBlack2C[sl<AuthConfig>().idx]),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 20.w, vertical: 13.h),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Повтор',
-                                    style: style2,
-                                  ),
-                                  SwitchBtn(
-                                      onChange: (val) {
-                                        setState(() {
-                                          repeat = val;
-                                        });
-                                      },
-                                      value: repeat)
-                                ],
-                              ),
-                            ),],
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15.r),
-                                  color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20.w, vertical: 13.h),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
@@ -532,10 +585,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               height: 57.h,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
-                                  color: ClrStyle.backToBlack2C[sl<AuthConfig>().idx]),
+                                  color: ClrStyle
+                                      .backToBlack2C[sl<AuthConfig>().idx]),
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
@@ -559,17 +614,18 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                   key: iconBtn,
                                                 )
                                               : Image.asset(
-                                                Img.smile, 
-                                                height: 33.h, 
-                                                width: 33.h,
-                                                key: iconBtn,
-                                              ),
+                                                  Img.smile,
+                                                  height: 33.h,
+                                                  width: 33.h,
+                                                  key: iconBtn,
+                                                ),
                                           SizedBox(
                                             width: 20.w,
                                           ),
                                           SvgPicture.asset(
                                             SvgImg.upDownIcon,
-                                            color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                            color: ClrStyle.black2CToWhite[
+                                                sl<AuthConfig>().idx],
                                           ),
                                         ],
                                       ),
@@ -586,14 +642,21 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 SizedBox(
                                   width: 60.h,
                                   child: CustomButton(
-                                    color: widget.editingEvent == null || widget.editingEvent!.important ? Color(0xFF70C8A3) : ColorStyles.redColor,
+                                    color: widget.editingEvent == null ||
+                                            widget.editingEvent!.important
+                                        ? Color(0xFF70C8A3)
+                                        : ColorStyles.redColor,
                                     text: title,
                                     validate: widget.editingEvent != null,
                                     code: false,
                                     textColor: Colors.white,
                                     onPressed: () {
-                                      if(widget.editingEvent != null && !widget.editingEvent!.important){
-                                        context.read<EventsBloc>().add(EventDeleteEvent(ids: [widget.editingEvent!.id]));
+                                      if (widget.editingEvent != null &&
+                                          !widget.editingEvent!.important) {
+                                        context.read<EventsBloc>().add(
+                                                EventDeleteEvent(ids: [
+                                              widget.editingEvent!.id
+                                            ]));
                                         Navigator.pop(context);
                                       }
                                     },
@@ -606,15 +669,14 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 ),
                                 Expanded(
                                   child: CustomButton(
-                                    color: ColorStyles.accentColor,
-                                    text: widget.editingEvent != null
-                                    ? 'Готово'
-                                    : title,
-                                    validate: isValidate(),
-                                    code: false,
-                                    textColor: Colors.white,
-                                    onPressed: createEvent
-                                  ),
+                                      color: ColorStyles.accentColor,
+                                      text: widget.editingEvent != null
+                                          ? 'Готово'
+                                          : title,
+                                      validate: isValidate(),
+                                      code: false,
+                                      textColor: Colors.white,
+                                      onPressed: createEvent),
                                 )
                               ],
                             ),
@@ -673,7 +735,9 @@ Widget _buildDatePicker(BuildContext context,
     {DateTime? fromDate}) {
   DateTime currentDate = fromDate != null ? fromDate : DateTime.now();
   TextStyle style1 = TextStyle(
-      color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.w800);
+      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+      fontSize: 20.sp,
+      fontWeight: FontWeight.w800);
   TextStyle style2 = TextStyle(
       color: ColorStyles.blackColor,
       fontSize: 18.sp,
@@ -714,7 +778,7 @@ Widget _buildDatePicker(BuildContext context,
         // padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
         child: CupertinoCard(
           padding: EdgeInsets.fromLTRB(25.w, 37.h, 25.w, 30.h),
-          color: Colors.white,
+          color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
           elevation: 0,
           radius: BorderRadius.circular(40.r),
           margin: EdgeInsets.zero,
@@ -831,7 +895,6 @@ Widget _buildDatePicker(BuildContext context,
                   },
                   focusedDay: _focusedDay,
                   calendarFormat: CalendarFormat.month,
-
                   firstDay: kFirstDay,
                   lastDay: kLastDay,
                   headerVisible: false,
@@ -839,13 +902,12 @@ Widget _buildDatePicker(BuildContext context,
                   daysOfWeekVisible: false,
                   rangeSelectionMode: RangeSelectionMode.toggledOff,
                   onDaySelected: (date, events) {
-                    if (date.millisecondsSinceEpoch >=
-                        currentDate.millisecondsSinceEpoch) {
+                    
                       onTap(date, false);
                       setState(() {
                         selectedDay = date;
                       });
-                    }
+                    
                   },
                   rowHeight: 40.h,
                   selectedDayPredicate: (day) => isSameDay(selectedDay, day),
