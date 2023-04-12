@@ -130,10 +130,15 @@ class CustomButtonState extends State<CustomButton> {
                               )
                         : state is TextFieldSuccess || (widget.validate!)
                             ? widget.border
-                            : Border.all(
-                                width: 2,
-                                color: Colors.white,
-                              ),
+                            : sl<AuthConfig>().idx == 0
+                                ? Border.all(
+                                    width: 2,
+                                    color: Colors.black,
+                                  )
+                                : Border.all(
+                                    width: 2,
+                                    color: Colors.white,
+                                  ),
               ),
               child: widget.svg != null
                   ? SvgPicture.asset(
@@ -166,7 +171,9 @@ class CustomButtonState extends State<CustomButton> {
                                 : state is TextFieldSuccess ||
                                         (widget.validate!)
                                     ? widget.textColor
-                                    : Colors.white,
+                                    : sl<AuthConfig>().idx == 0
+                                        ? Colors.black
+                                        : Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -68,7 +68,7 @@ class _NewAlbumWidgetState extends State<NewAlbumWidget> {
 
 
   bool isValidate() {
-    return _controller.text.length > 3 && selectedFiles.isNotEmpty;
+    return _controller.text.length >= 3 && selectedFiles.isNotEmpty;
   }
 
   createAlbum(){
