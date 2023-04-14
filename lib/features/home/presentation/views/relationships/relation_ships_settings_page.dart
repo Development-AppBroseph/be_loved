@@ -241,7 +241,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                       ),
                                       child: GestureDetector(
                                         onTap: () => widget.prevPage(),
-                                        child: SizedBox(
+                                        child: Container(
+                                          color: Colors.transparent,
                                           child: Row(
                                             children: [
                                               // const Icon(
@@ -253,17 +254,16 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                 height: 26.32.h,
                                                 color: Colors.white,
                                               ),
-                                              Container(
-                                                margin:
-                                                    EdgeInsets.only(left: 20.w),
-                                                child: Text(
-                                                  'Назад',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontSize: 20.sp,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w800,
-                                                  ),
+                                              SizedBox(
+                                                width: 20.w,
+                                              ),
+                                              Text(
+                                                'Назад',
+                                                style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  fontSize: 20.sp,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w800,
                                                 ),
                                               ),
                                             ],

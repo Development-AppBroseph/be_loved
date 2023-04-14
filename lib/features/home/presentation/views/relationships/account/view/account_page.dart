@@ -262,31 +262,28 @@ class _AccountPageState extends State<AccountPage>
                         padding: EdgeInsets.only(left: 15.w, top: 76.h),
                         child: GestureDetector(
                           onTap: widget.prevPage,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                height: 55.h,
-                                width: 55.w,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      SvgImg.back,
-                                      color: Colors.white,
-                                      width: 15.w,
-                                      height: 26.32,
-                                    ),
-                                  ],
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  SvgImg.back,
+                                  color: Colors.white,
+                                  width: 15.w,
+                                  height: 26.32,
                                 ),
-                              ),
-                              Text(
-                                'Назад',
-                                style: TextStyle(
-                                    fontSize: 20.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700),
-                              )
-                            ],
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                Text(
+                                  'Назад',
+                                  style: TextStyle(
+                                      fontSize: 20.sp,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
