@@ -49,3 +49,7 @@ class PartingOrSendFilesEvent extends ProfileEvent{
   final bool isParting;
   PartingOrSendFilesEvent({required this.email, this.isParting = false});
 }
+
+class NotificationEvent extends ProfileEvent{
+  
+}

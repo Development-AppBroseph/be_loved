@@ -21,4 +21,5 @@ abstract class ProfileRepository {
   Future<Either<Failure, void>> editBackgroundsInfo(
       EditBackgroundsInfoParams params);
   Future<Either<Failure, SubEntiti>> getStatus();
+  Future<Either<Failure, UserAnswer>> notification();
 }

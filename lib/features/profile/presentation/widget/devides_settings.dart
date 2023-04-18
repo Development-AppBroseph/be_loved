@@ -1,8 +1,10 @@
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/widgets/buttons/switch_btn.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -71,13 +73,20 @@ class _DevideSettingsState extends State<DevideSettings> {
             ),
             const Spacer(),
             widget.haveToggleSwitch
-                ? SwitchBtn(
-                    onChange: (value) {
-                      setState(() {
-                        switchValue = value;
-                      });
+                ? BlocBuilder<ProfileBloc, ProfileState>(
+                    builder: (context, state) {
+                      return SwitchBtn(
+                        onChange: (value) {
+                          setState(() {
+                            sl<AuthConfig>().user!.noti = value;
+                            context
+                                .read<ProfileBloc>()
+                                .add(NotificationEvent());
+                          });
+                        },
+                        value: sl<AuthConfig>().user!.noti,
+                      );
                     },
-                    value: switchValue,
                   )
                 : Icon(
                     Icons.arrow_forward_ios_rounded,

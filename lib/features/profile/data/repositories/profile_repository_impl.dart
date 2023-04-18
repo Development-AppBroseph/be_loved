@@ -138,4 +138,18 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(NetworkFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, UserAnswer>> notification() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final data = await remoteDataSource.notification();
+        return Right(data);
+      } catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
 }

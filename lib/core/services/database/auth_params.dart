@@ -22,6 +22,7 @@ class AuthConfig {
   int selectedBackgroundIndex;
   int idx;
   bool status;
+  bool noti;
 
   AuthConfig({
     this.token,
@@ -31,5 +32,6 @@ class AuthConfig {
     this.selectedBackgroundIndex = 0,
     this.authenticatedOption = AuthenticatedOption.unauthenticated,
     this.status = false,
+    this.noti = false,
   });
 }

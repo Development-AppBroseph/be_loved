@@ -28,6 +28,7 @@ abstract class ProfileRemoteDataSource {
   Future<BackEntity> getBackgroundInfo();
   Future<void> editBackgroundInfo(BackEntity back, File? file);
   Future<SubEntiti> getStatusSub();
+  Future<UserAnswer> notification();
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -234,6 +235,28 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     print('ResStatusCode: ${response.statusCode}\tResData: ${response.data}');
     if (response.statusCode == 200) {
       return SubModel.fromJson(response.data);
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+  @override
+  Future<UserAnswer> notification() async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.put(
+      Endpoints.editProfile.getPath(),
+      data: jsonEncode({
+        'notification_on': sl<AuthConfig>().user!.noti,
+      }),
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 599,
+        headers: headers,
+      ),
+    );
+    print('ResStatusCode: ${response.statusCode}\tResData: ${response.data}');
+    if (response.statusCode == 200) {
+      return UserAnswer.fromJson(response.data);
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
