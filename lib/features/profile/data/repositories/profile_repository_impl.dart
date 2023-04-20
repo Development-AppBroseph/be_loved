@@ -8,6 +8,7 @@ import 'package:be_loved/features/profile/domain/entities/back_entity.dart';
 import 'package:be_loved/features/profile/domain/entities/subscription_entiti.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:get/get_navigation/src/routes/default_transitions.dart';
 import '../../../../core/error/failures.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -144,6 +145,20 @@ class ProfileRepositoryImpl implements ProfileRepository {
     if (await networkInfo.isConnected) {
       try {
         final data = await remoteDataSource.notification();
+        return Right(data);
+      } catch (e) {
+        return Left(ServerFailure(e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAccount() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final data = await remoteDataSource.deleteAccount();
         return Right(data);
       } catch (e) {
         return Left(ServerFailure(e.toString()));

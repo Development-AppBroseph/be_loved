@@ -67,6 +67,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/widgets/
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:be_loved/features/profile/domain/usecases/connect_vk.dart';
+import 'package:be_loved/features/profile/domain/usecases/delete_account.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_backgrounds_info.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_relation.dart';
@@ -189,10 +190,11 @@ void setupInjections() {
   sl.registerLazySingleton(() => EditBackgroundsInfo(sl()));
   sl.registerLazySingleton(() => GetStatusSub(profileRepository: sl()));
   sl.registerLazySingleton(() => Notification(profileRepository: sl()));
+  sl.registerLazySingleton(() => DeleteAccount(profileRepository: sl()));
 
   //Blocs
   sl.registerFactory<ProfileBloc>(
-    () => ProfileBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()),
+    () => ProfileBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()),
   );
   sl.registerFactory<DecorBloc>(
     () => DecorBloc(sl(), sl()),

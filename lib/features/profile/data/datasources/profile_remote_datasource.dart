@@ -29,6 +29,7 @@ abstract class ProfileRemoteDataSource {
   Future<void> editBackgroundInfo(BackEntity back, File? file);
   Future<SubEntiti> getStatusSub();
   Future<UserAnswer> notification();
+  Future<void> deleteAccount();
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -257,6 +258,25 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     print('ResStatusCode: ${response.statusCode}\tResData: ${response.data}');
     if (response.statusCode == 200) {
       return UserAnswer.fromJson(response.data);
+    } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.delete(
+      Endpoints.editProfile.getPath(),
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 599,
+        headers: headers,
+      ),
+    );
+    print('ResStatusCode: ${response.statusCode}\tResData: ${response.data}');
+    if (response.statusCode == 205) {
+      return;
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }

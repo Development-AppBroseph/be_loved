@@ -22,4 +22,5 @@ abstract class ProfileRepository {
       EditBackgroundsInfoParams params);
   Future<Either<Failure, SubEntiti>> getStatus();
   Future<Either<Failure, UserAnswer>> notification();
+  Future<Either<Failure, void>> deleteAccount();
 }

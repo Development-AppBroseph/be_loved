@@ -500,7 +500,9 @@ class _AccountPageState extends State<AccountPage>
                                                   SvgImg.goto,
                                                   height: 24.h,
                                                   width: 13.37.h,
-                                                  color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                                                  color:
+                                                      ClrStyle.black17ToWhite[
+                                                          sl<AuthConfig>().idx],
                                                 ),
                                                 builder: (context, child) =>
                                                     Transform.rotate(
@@ -658,7 +660,7 @@ class _AccountPageState extends State<AccountPage>
                                                                   if (sl<AuthConfig>()
                                                                           .user!
                                                                           .me
-                                                                           .phoneNumber ==
+                                                                          .phoneNumber ==
                                                                       phoneNumber) {
                                                                     showAlertToast(
                                                                         'Вы ввели тот же номер');
@@ -997,7 +999,8 @@ class _AccountPageState extends State<AccountPage>
                                             SvgImg.goto,
                                             width: 13.w,
                                             height: 24.h,
-                                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                                            color: ClrStyle.black17ToWhite[
+                                                sl<AuthConfig>().idx],
                                           ),
                                         ],
                                       ),
@@ -1062,6 +1065,23 @@ class _AccountPageState extends State<AccountPage>
                                     ),
                                   ),
                                 ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              child: CustomAnimationButton(
+                                red: true,
+                                text: 'Удалить аккаунт',
+                                onPressed: () async {
+                                  context.read<ProfileBloc>().add(
+                                        DeleteAccoubtEvent(),
+                                      );
+                                  MySharedPrefs().logOut(context);
+                                },
                               ),
                             ),
                             // SizedBox(
