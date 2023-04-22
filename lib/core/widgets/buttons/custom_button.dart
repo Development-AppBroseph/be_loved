@@ -78,7 +78,7 @@ class CustomButtonState extends State<CustomButton> {
                       ? widget.color
                       : (sl<AuthConfig>().idx == 1
                           ? Colors.transparent
-                          : ColorStyles.white),
+                          : Colors.transparent),
           borderRadius: BorderRadius.circular(10),
           child: InkWell(
             borderRadius: BorderRadius.circular(10),
