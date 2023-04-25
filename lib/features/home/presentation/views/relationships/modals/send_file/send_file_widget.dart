@@ -115,6 +115,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                         controller: _controller,
                         maxLength: 40,
                         hideCounter: true,
+                        isEmail:  true,
                       ),
                       SizedBox(
                         height: widget.isParting ? 20.h : 77.h,

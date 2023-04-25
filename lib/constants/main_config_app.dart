@@ -38,6 +38,20 @@ class MainConfigApp {
     'Ноя',
     'Дек',
   ];
+  static List<String> monthsPromo = [
+    'Янв',
+    'Фев',
+    'Мар',
+    'Апр',
+    'Мая',
+    'Июня',
+    'Июля',
+    'Авг',
+    'Сен',
+    'Окт',
+    'Ноя',
+    'Дек',
+  ];
 
   static List<AvatarsGridModel> avatars = [
     AvatarsGridModel(dirName: 'men', avatars: [
@@ -112,7 +126,7 @@ class MainConfigApp {
         colorHex: '#20CB83',
         assetPath: 'assets/icons/green.svg'),
     TagColor(
-        color: const Color(0xFF2C2C2E),
+        color: Colors.black,
         colorHex: '#2C2C2E',
         assetPath: 'assets/icons/black.svg'),
     TagColor(

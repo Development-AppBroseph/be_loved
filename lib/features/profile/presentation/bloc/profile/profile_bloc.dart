@@ -1,17 +1,22 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
+import 'package:be_loved/core/usecases/usecase.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/domain/usecases/post_number.dart';
 import 'package:be_loved/features/home/domain/usecases/put_code.dart';
 import 'package:be_loved/features/profile/domain/usecases/connect_vk.dart';
+import 'package:be_loved/features/profile/domain/usecases/delete_account.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_relation.dart';
+import 'package:be_loved/features/profile/domain/usecases/notifications.dart';
 import 'package:be_loved/features/profile/domain/usecases/send_files_to_mail.dart';
 import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 
 import '../../../domain/usecases/get_status_sub.dart';
 part 'profile_event.dart';
@@ -25,8 +30,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ConnectVK connectVK;
   final SendFilesToMail sendFilesToMail;
   final GetStatusSub getStatusSub;
-  ProfileBloc(this.editProfile, this.postNumber, this.putCode,
-      this.editRelation, this.connectVK, this.sendFilesToMail, this.getStatusSub)
+  final Notification notification;
+  final DeleteAccount deleteAccount;
+  ProfileBloc(
+      this.editProfile,
+      this.postNumber,
+      this.putCode,
+      this.editRelation,
+      this.connectVK,
+      this.sendFilesToMail,
+      this.getStatusSub,
+      this.notification,
+      this.deleteAccount)
       : super(ProfileInitialState()) {
     on<EditProfileEvent>(_editProfile);
     on<PostPhoneNumberEvent>(_postPhone);
@@ -34,7 +49,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<EditRelationNameEvent>(_editRelationName);
     on<ConnectVKEvent>(_connectVK);
     on<PartingOrSendFilesEvent>(_partingOrSendFiles);
+    on<NotificationEvent>(_notificationSend);
+    on<DeleteAccoubtEvent>(_deleteUserAccount);
   }
+  // void _notificationSend(EditProfileEvent event, Emitter<ProfileState> emit) async {}
+  void _notificationSend(
+      NotificationEvent event, Emitter<ProfileState> emit) async {
+    final data = await notification.call(NoParams());
+    ProfileState state = data.fold(
+      (error) => errorCheck(error),
+      (data) {
+        sl<AuthConfig>().user = data;
+        return ProfileEditedSuccessState();
+      },
+    );
+    await MySharedPrefs().updateUser(sl<AuthConfig>().user!);
+    emit(state);
+  }
+
   String? newPhone;
   void _editProfile(EditProfileEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoadingState());
@@ -51,6 +83,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .setUser(sl<AuthConfig>().token!, sl<AuthConfig>().user!);
     emit(state);
   }
+
   void _postPhone(
       PostPhoneNumberEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileLoadingState());
@@ -60,6 +93,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ProfileState state = data.fold(
       (error) => errorCheck(error),
       (data) {
+        sl<AuthConfig>().user!.me.phoneNumber = newPhone!;
         return ProfileSentCodeState();
       },
     );
@@ -150,5 +184,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } else {
       return ProfileErrorState(message: 'Повторите попытку');
     }
+  }
+
+  FutureOr<void> _deleteUserAccount(
+      DeleteAccoubtEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileLoadingState());
+    final data = await deleteAccount.call(NoParams());
+    ProfileState state = data.fold(
+      (error) => errorCheck(error),
+      (data) => ProfileConfirmedSuccessState(),
+    );
+    emit(state);
   }
 }

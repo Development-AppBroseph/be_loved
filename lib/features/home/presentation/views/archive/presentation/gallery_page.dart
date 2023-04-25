@@ -93,8 +93,8 @@ class _GalleryPageState extends State<GalleryPage> {
                 .map((group) => Stack(
                       children: [
                         Wrap(
-                          spacing: 4.w,
-                          runSpacing: 4.w,
+                          spacing: 2.w,
+                          runSpacing: 2.w,
                           children: [
                             _buildMainItem(
                                 GlobalKey(),
@@ -102,17 +102,16 @@ class _GalleryPageState extends State<GalleryPage> {
                                 bloc.groupedFiles.indexOf(group),
                                 group.mainPhoto,
                                 group,
-                                bloc.groupedFiles
-                                ),
+                                bloc.groupedFiles),
                             if (group.mainVideo != null)
                               _buildMainItem(
-                                  GlobalKey(),
-                                  GlobalKey(),
-                                  bloc.groupedFiles.indexOf(group),
-                                  group.mainVideo!,
-                                  group,
-                                  bloc.groupedFiles
-                                  ),
+                                GlobalKey(),
+                                GlobalKey(),
+                                bloc.groupedFiles.indexOf(group),
+                                group.mainVideo!,
+                                group,
+                                bloc.groupedFiles,
+                              ),
                             ...List.generate(
                                 galleryGroupingCount(group),
                                 (index) => MiniMediaCard(
@@ -141,11 +140,6 @@ class _GalleryPageState extends State<GalleryPage> {
                                                     url: group
                                                         .additionalFiles[index]
                                                         .urlToFile,
-                                                    // url: index == 0
-                                                    // ? widget.group.mainPhoto.urlToFile
-                                                    // : index == 1
-                                                    // ? widget.group.mainVideo!.urlToFile
-                                                    // : widget.group.additionalFiles[index - 1 + (widget.group.mainVideo == null ? 0 : 1)].urlToFile,
                                                     duration: null,
                                                   ),
                                                 ));
@@ -159,6 +153,8 @@ class _GalleryPageState extends State<GalleryPage> {
                                                   urlToImage: group
                                                       .additionalFiles[index]
                                                       .urlToFile,
+                                                  file: group.additionalFiles,
+                                                  index: index,
                                                 ),
                                               ),
                                             );
@@ -212,8 +208,13 @@ class _GalleryPageState extends State<GalleryPage> {
     );
   }
 
-  Widget _buildMainItem(GlobalKey mainKey, GlobalKey dotsKey, int index,
-      GalleryFileEntity file, GalleryGroupFilesEntity group, List<GalleryGroupFilesEntity>? groupList) {
+  Widget _buildMainItem(
+      GlobalKey mainKey,
+      GlobalKey dotsKey,
+      int index,
+      GalleryFileEntity file,
+      GalleryGroupFilesEntity group,
+      List<GalleryGroupFilesEntity>? groupList) {
     //Setting position of group
     if (group.topPosition == 0) {
       print('SET POSITIONS: ${widget.position}');
@@ -252,7 +253,7 @@ class _GalleryPageState extends State<GalleryPage> {
             onSelectForDeleting: widget.onSelectForDeleting,
             deletingIds: widget.deletingIds,
           ),
-          transitionDuration: Duration(milliseconds: 400),
+          transitionDuration: const Duration(milliseconds: 400),
           transitionsBuilder: (_, a, __, c) =>
               FadeTransition(opacity: a, child: c),
         ));
@@ -272,7 +273,7 @@ class _GalleryPageState extends State<GalleryPage> {
                         deletingIds: widget.deletingIds,
                         groupList: groupList,
                       ),
-            transitionDuration: Duration(milliseconds: 400),
+            transitionDuration: const Duration(milliseconds: 400),
             transitionsBuilder: (_, a, __, c) =>
                 FadeTransition(opacity: a, child: c),
           ));

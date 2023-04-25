@@ -292,17 +292,20 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                     Navigator.pop(context);
                   },
                   behavior: HitTestBehavior.opaque,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        SvgImg.back,
-                        height: 26.32.h,
-                        color: Colors.white,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 20.w),
-                        child: Text(
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          SvgImg.back,
+                          height: 26.32.h,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: 20.w,
+                        ),
+                        Text(
                           'Назад',
                           style: TextStyle(
                             fontFamily: 'Inter',
@@ -311,8 +314,8 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -335,7 +338,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
       monthName = 'месяцев';
     } else if (period >= 5 && period <= 11) {
       monthName = 'месяцев';
-    } else if (period == 12) {
+    } else if (period == 12000) {
       monthName = 'Навсегда';
     }
 
@@ -360,7 +363,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                 Padding(
                   padding: EdgeInsets.only(left: 33.w),
                   child: Text(
-                    '${period == 1000 ? '' : period} $monthName',
+                    '${period == 12000 ? '' : period} $monthName',
                     style: TextStyles(context).white_20_w700.copyWith(
                           color:
                               selectIndex == index ? Colors.white : Colors.grey,
@@ -392,18 +395,18 @@ class _SubscriptionViewState extends State<SubscriptionView> {
             ),
             Center(
               child: Container(
+                margin: const EdgeInsets.only(left: 35),
                 alignment: Alignment.center,
                 child: Text(
-                  item.overCountGb == 1000000
-                      ? ''
-                      : '+${item.overCountGb} ГБ архива',
-                  style: TextStyle(
+                    item.overCountGb == 10000000
+                        ? ''
+                        : '+${item.overCountGb} ГБ архива',
+                    style: TextStyle(
                       color: selectIndex == index ? Colors.white : Colors.grey,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w800,
                       fontSize: 15,
-                    )
-                ),
+                    )),
               ),
           ],
         ),

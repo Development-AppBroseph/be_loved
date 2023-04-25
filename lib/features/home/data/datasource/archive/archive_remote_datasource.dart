@@ -73,10 +73,11 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
     headers["Content-Type"] = "application/json";
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.get(Endpoints.getAlbums.getPath(),
+        queryParameters: {'page': 1},
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 599,
-            headers: headers));
+            headers: headers,),);
     printRes(response);
     if (response.statusCode == 200) {
       final albums = (response.data['other'] as List)

@@ -124,7 +124,6 @@ class _InvitePartnerState extends State<InvitePartner> {
         buildWhen: (previous, current) {
       if (current is WebSocketInviteGetState) {
         widget.nextPage();
-        print('huuuuuuuuuy');
         return false;
       }
       if (current is WebSocketInviteCloseState) {
@@ -323,7 +322,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                     ),
                                   ),
                                   Text(
-                                    'Введи номер телефона партнера и ожидай принятия приглашения',
+                                    'Чтобы пригласить партнера у него должно быть загружено приложение и открыт этот экран',
                                     style: GoogleFonts.inter(
                                       fontSize: 15.sp,
                                       color: const Color.fromRGBO(

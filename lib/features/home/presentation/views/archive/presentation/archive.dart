@@ -243,7 +243,7 @@ class _ArchivePageState extends State<ArchivePage> {
       listener: (context, state) {
         if (state is GalleryFilesDeletedState ||
             state is GalleryFilesAddedState) {
-          currentScrollPosition = 0;
+          // currentScrollPosition = 0;
         }
       },
       child: PageView(
@@ -262,6 +262,7 @@ class _ArchivePageState extends State<ArchivePage> {
               ArchiveWrapper(
                 currentIndex: currentPageIndex,
                 onChangePage: changePage,
+                scrollController: scrollController,
                 child: currentPageIndex == 0
                     ? MomentsPage()
                     : currentPageIndex == 1
@@ -286,8 +287,7 @@ class _ArchivePageState extends State<ArchivePage> {
                                     pageController: pageController,
                                     nextPage: nextPage,
                                   )
-                                : SizedBox.shrink(),
-                scrollController: scrollController,
+                                : const SizedBox.shrink(),
               ),
               if (!hideTopBar && currentPageIndex == 1)
                 Positioned(

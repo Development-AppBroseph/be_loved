@@ -141,6 +141,8 @@ class _AccountPageState extends State<AccountPage>
         sl<AuthConfig>().user!.me.phoneNumber != phoneNumber) {
       showLoaderWrapper(context);
       context.read<ProfileBloc>().add(PostPhoneNumberEvent(phone: phoneNumber));
+    } else {
+      showAlertToast('Вы ввели тот же номер');
     }
   }
 
@@ -260,31 +262,28 @@ class _AccountPageState extends State<AccountPage>
                         padding: EdgeInsets.only(left: 15.w, top: 76.h),
                         child: GestureDetector(
                           onTap: widget.prevPage,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                height: 55.h,
-                                width: 55.w,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      SvgImg.back,
-                                      color: Colors.white,
-                                      width: 15.w,
-                                      height: 26.32,
-                                    ),
-                                  ],
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  SvgImg.back,
+                                  color: Colors.white,
+                                  width: 15.w,
+                                  height: 26.32,
                                 ),
-                              ),
-                              Text(
-                                'Назад',
-                                style: TextStyle(
-                                    fontSize: 20.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700),
-                              )
-                            ],
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                Text(
+                                  'Назад',
+                                  style: TextStyle(
+                                      fontSize: 20.sp,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -316,6 +315,7 @@ class _AccountPageState extends State<AccountPage>
                                             MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
                                           _textField(),
                                           SizedBox(height: 5.h),
@@ -500,6 +500,9 @@ class _AccountPageState extends State<AccountPage>
                                                   SvgImg.goto,
                                                   height: 24.h,
                                                   width: 13.37.h,
+                                                  color:
+                                                      ClrStyle.black17ToWhite[
+                                                          sl<AuthConfig>().idx],
                                                 ),
                                                 builder: (context, child) =>
                                                     Transform.rotate(
@@ -649,10 +652,18 @@ class _AccountPageState extends State<AccountPage>
                                                                           '9') {
                                                                     // BlocProvider.of<AuthBloc>(context)
                                                                     //     .add(TextFieldFilled(true));
-                                                                    // focusNode.unfocus();
+                                                                    // focusNodePhone.unfocus();
                                                                   } else {
                                                                     // BlocProvider.of<AuthBloc>(context)
                                                                     //     .add(TextFieldFilled(false));
+                                                                  }
+                                                                  if (sl<AuthConfig>()
+                                                                          .user!
+                                                                          .me
+                                                                          .phoneNumber ==
+                                                                      phoneNumber) {
+                                                                    showAlertToast(
+                                                                        'Вы ввели тот же номер');
                                                                   }
                                                                   _streamController
                                                                       .sink
@@ -988,6 +999,8 @@ class _AccountPageState extends State<AccountPage>
                                             SvgImg.goto,
                                             width: 13.w,
                                             height: 24.h,
+                                            color: ClrStyle.black17ToWhite[
+                                                sl<AuthConfig>().idx],
                                           ),
                                         ],
                                       ),
@@ -1054,6 +1067,23 @@ class _AccountPageState extends State<AccountPage>
                                 ),
                               ),
                             ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
+                              child: CustomAnimationButton(
+                                red: true,
+                                text: 'Удалить аккаунт',
+                                onPressed: () async {
+                                  context.read<ProfileBloc>().add(
+                                        DeleteAccoubtEvent(),
+                                      );
+                                  MySharedPrefs().logOut(context);
+                                },
+                              ),
+                            ),
                             // SizedBox(
                             //   height: 73.h,
                             // ),
@@ -1102,15 +1132,13 @@ class _AccountPageState extends State<AccountPage>
             // padding: EdgeInsets.only(
             //     left: 89.w, right: 98.w),
             child: SizedBox(
-              height: 45.h,
+              // height: 45.h,
               child: Stack(
-                // mainAxisAlignment:
-                //     MainAxisAlignment.center,
                 children: [
                   Align(
-                    alignment: Alignment.centerLeft,
-                    child: SizedBox(
-                      height: 33.h,
+                    alignment: Alignment.center,
+                    child: Container(
+                      padding: EdgeInsets.only(bottom: 5.h),
                       child: TextField(
                         textAlign: TextAlign.center,
                         textCapitalization: TextCapitalization.words,
@@ -1150,7 +1178,7 @@ class _AccountPageState extends State<AccountPage>
                         focusNode: focusNodeName,
                         scrollPadding: EdgeInsets.zero,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(top: 20),
+                          contentPadding: EdgeInsets.zero,
                           border: InputBorder.none,
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
@@ -1166,8 +1194,9 @@ class _AccountPageState extends State<AccountPage>
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
+                  Positioned(
+                    top: 21,
+                    right: 8,
                     child: GestureDetector(
                       onTap: () async {
                         if (focusNodeName.hasFocus &&

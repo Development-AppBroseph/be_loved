@@ -208,7 +208,7 @@ class _AddFileWidgetState extends State<AddFileWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: 57.h,
+                              height: 60.h,
                             ),
                             MemoryInfoCard(),
                             SizedBox(

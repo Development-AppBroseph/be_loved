@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-
 class ArchiveFixedTopInfo extends StatelessWidget {
   final bool showTop;
   final GalleryGroupFilesEntity? enitityPos;
@@ -47,22 +46,24 @@ class ArchiveFixedTopInfo extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if(isForSelecting)
-                GestureDetector(
-                  onTap: onBackTap,
-                  behavior: HitTestBehavior.opaque,
-                  child: SizedBox(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          SvgImg.back,
-                          height: 26.32.h,
-                          color: Colors.white,
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20.w),
-                          child: Text(
+                if (isForSelecting)
+                  GestureDetector(
+                    onTap: onBackTap,
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            SvgImg.back,
+                            height: 26.32.h,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Text(
                             'Назад',
                             style: TextStyle(
                               fontFamily: 'Inter',
@@ -71,60 +72,57 @@ class ArchiveFixedTopInfo extends StatelessWidget {
                               fontWeight: FontWeight.w800,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-                else
-                Text(
-                  dateTime,
-                  style: TextStyles(context).white_35_w800.copyWith(
-                        color: Colors.white.withOpacity(0.7),
+                        ],
                       ),
-                ),
-                if(showTop)
-                isDeleting
-                ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _buildSelectBtn('Отменить', context),
-                    if(!isForSelecting)
-                    ...[SizedBox(width: 10.w,),
-                    _buildDeleteBtn()]
-                  ],
-                ) 
-                : _buildSelectBtn('Выбрать', context),
-                
+                    ),
+                  )
+                else
+                  Text(
+                    dateTime,
+                    style: TextStyles(context).white_35_w800.copyWith(
+                          color: Colors.white.withOpacity(0.7),
+                        ),
+                  ),
+                if (showTop)
+                  isDeleting
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            _buildSelectBtn('Отменить', context),
+                            if (!isForSelecting) ...[
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              _buildDeleteBtn()
+                            ]
+                          ],
+                        )
+                      : _buildSelectBtn('Выбрать', context),
               ],
             ),
-            if(!isForSelecting)
-            Text(
-              enitityPos == null ? '' : (enitityPos!.mainPhoto.place ?? ''),
-              style: TextStyles(context).white_15_w800.copyWith(
-                    color: Colors.white.withOpacity(0.5),
-                  ),
-            ),
+            if (!isForSelecting)
+              Text(
+                enitityPos == null ? '' : (enitityPos!.mainPhoto.place ?? ''),
+                style: TextStyles(context).white_15_w800.copyWith(
+                      color: Colors.white.withOpacity(0.5),
+                    ),
+              ),
           ],
         ),
       ),
     );
   }
 
-
-
-  Widget _buildSelectBtn(String text, BuildContext context){
+  Widget _buildSelectBtn(String text, BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
         width: 120.w,
         height: 38.h,
         child: ClipPath.shape(
-          shape: SquircleBorder(
-              radius: BorderRadius.circular(26.r)),
+          shape: SquircleBorder(radius: BorderRadius.circular(26.r)),
           child: BackdropFilter(
-            filter:
-                ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
             child: Container(
               color: Colors.white.withOpacity(0.7),
               alignment: Alignment.center,
@@ -132,9 +130,7 @@ class ArchiveFixedTopInfo extends StatelessWidget {
                 text,
                 style: TextStyles(context)
                     .black_18_w800
-                    .copyWith(
-                        color: ColorStyles.blackColor
-                            .withOpacity(0.7)),
+                    .copyWith(color: ColorStyles.blackColor.withOpacity(0.7)),
               ),
             ),
           ),
@@ -143,28 +139,24 @@ class ArchiveFixedTopInfo extends StatelessWidget {
     );
   }
 
-
-  Widget _buildDeleteBtn(){
+  Widget _buildDeleteBtn() {
     return GestureDetector(
       onTap: onDeleteTap,
       child: SizedBox(
         width: 38.h,
         height: 38.h,
         child: ClipPath.shape(
-          shape: SquircleBorder(
-              radius: BorderRadius.circular(26.r)),
+          shape: SquircleBorder(radius: BorderRadius.circular(26.r)),
           child: BackdropFilter(
-            filter:
-                ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
             child: Container(
-              color: Colors.white.withOpacity(0.7),
-              alignment: Alignment.center,
-              child: SvgPicture.asset(
-                SvgImg.trash,
-                color: ColorStyles.blackColor.withOpacity(0.6),
-                width: 16.h,
-              )
-            ),
+                color: Colors.white.withOpacity(0.7),
+                alignment: Alignment.center,
+                child: SvgPicture.asset(
+                  SvgImg.trash,
+                  color: ColorStyles.blackColor.withOpacity(0.6),
+                  width: 16.h,
+                )),
           ),
         ),
       ),

@@ -7,6 +7,8 @@ abstract class PurposeEvent extends Equatable {
 
 
 class GetAllPurposeDataEvent extends PurposeEvent{}
+class GetPromosEvent extends PurposeEvent{}
+class GetActualEvent extends PurposeEvent{}
 class CompletePurposeEvent extends PurposeEvent{
   final int target;
   CompletePurposeEvent({required this.target});

@@ -47,7 +47,7 @@ class _PhotoFullScreenViewState extends State<PhotoFullScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorStyles.blackColor,
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           PhotoViewGallery.builder(

@@ -191,7 +191,8 @@ class _EventDetailViewState extends State<EventDetailView> {
                         children: [
                           GestureDetector(
                             onTap: () => widget.prevPage(),
-                            child: SizedBox(
+                            child: Container(
+                              color: Colors.transparent,
                               child: Row(
                                 children: [
                                   // const Icon(
@@ -204,17 +205,17 @@ class _EventDetailViewState extends State<EventDetailView> {
                                     color: ClrStyle
                                         .black2CToWhite[sl<AuthConfig>().idx],
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 20.w),
-                                    child: Text(
-                                      'Назад',
-                                      style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontSize: 20.sp,
-                                        color: ClrStyle.black2CToWhite[
-                                            sl<AuthConfig>().idx],
-                                        fontWeight: FontWeight.w800,
-                                      ),
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
+                                  Text(
+                                    'Назад',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 20.sp,
+                                      color: ClrStyle
+                                          .black2CToWhite[sl<AuthConfig>().idx],
+                                      fontWeight: FontWeight.w800,
                                     ),
                                   ),
                                 ],

@@ -27,7 +27,9 @@ import 'tag_modal.dart';
 class AllEeventsPage extends StatefulWidget {
   final VoidCallback prevPage;
   final Function(int id) toDetailPage;
-  const AllEeventsPage({Key? key, required this.prevPage, required this.toDetailPage}) : super(key: key);
+  const AllEeventsPage(
+      {Key? key, required this.prevPage, required this.toDetailPage})
+      : super(key: key);
 
   @override
   State<AllEeventsPage> createState() => _AllEeventsPageState();
@@ -70,7 +72,8 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
             padding: EdgeInsets.only(top: 75.h, bottom: 54.h, left: 35.w),
             child: GestureDetector(
               onTap: () => widget.prevPage(),
-              child: SizedBox(
+              child: Container(
+                color: Colors.transparent,
                 child: Row(
                   children: [
                     // const Icon(
@@ -82,16 +85,16 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                       height: 26.32.h,
                       color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 20.w),
-                      child: Text(
-                        'Назад',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 20.sp,
-                          color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                          fontWeight: FontWeight.w800,
-                        ),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    Text(
+                      'Назад',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 20.sp,
+                        color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ],
@@ -160,7 +163,8 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                   SvgImg.edit,
                                   height: 19.h,
                                   width: 19.w,
-                                  color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+                                  color:
+                                      ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                 ),
                               ),
                             ),
@@ -183,7 +187,8 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                 child: Icon(
                                   Icons.add,
                                   size: 35,
-                                  color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+                                  color:
+                                      ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                 ),
                               ),
                             ),
@@ -235,7 +240,8 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                                   SvgImg.bin,
                                   height: 22.h,
                                   width: 24.w,
-                                  color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+                                  color:
+                                      ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                                 ),
                               ),
                             ),
@@ -281,7 +287,9 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
           SizedBox(
             height: 39.h,
           ),
-          TagsListBlock(isBlack2C: true,),
+          TagsListBlock(
+            isBlack2C: true,
+          ),
           BlocConsumer<EventsBloc, EventsState>(listener: (context, state) {
             if (state is EventErrorState) {
               Loader.hide();
@@ -311,12 +319,14 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                   physics: const ClampingScrollPhysics(),
                   itemBuilder: (context, index) {
                     return UserEventItem(
-                      onTap: (){
+                      onTap: () {
                         // if(!eventsBloc.eventsSorted[index].important && countPage != 0){
-                        if(countPage != 0){
-                          showModalCreateEvent(context, (){}, eventsBloc.eventsSorted[index]);
-                        }else{
-                          widget.toDetailPage(eventsBloc.eventsSorted[index].id);
+                        if (countPage != 0) {
+                          showModalCreateEvent(
+                              context, () {}, eventsBloc.eventsSorted[index]);
+                        } else {
+                          widget
+                              .toDetailPage(eventsBloc.eventsSorted[index].id);
                         }
                       },
                       editorState: isSelectedAll
