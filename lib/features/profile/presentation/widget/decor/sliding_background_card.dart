@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/toasts.dart';
@@ -77,7 +76,7 @@ class _SlidingBackgroundCardState extends State<SlidingBackgroundCard> {
       }
       return SizedBox(
         width: double.infinity,
-        height: widget.height ?? 500.h,
+        height: 500.h,
         child: PageView(
           physics: NeverScrollableScrollPhysics(),
           controller: pageController,

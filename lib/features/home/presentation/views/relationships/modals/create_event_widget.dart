@@ -373,6 +373,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                   _customPopupMenuController1,
                                               pressType: PressType.singleClick,
                                               menuBuilder: () {
+                                                FocusManager.instance.primaryFocus?.unfocus();
                                                 return _buildDatePicker(context,
                                                     (date, hide) {
                                                   if (hide) {
@@ -466,6 +467,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                   pressType:
                                                       PressType.singleClick,
                                                   menuBuilder: () {
+                                                    FocusManager.instance.primaryFocus?.unfocus();
                                                     return _buildDatePicker(
                                                         context, (date, hide) {
                                                       if (hide) {

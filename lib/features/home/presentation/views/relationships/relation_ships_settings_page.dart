@@ -465,137 +465,177 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                       ),
                                     ),
                                     SizedBox(height: 26.h),
-                                    //CAROUSEL
-                                    RelationStartDateWidget(
-                                      onTapEditDate: () {
-                                        // controller.animateTo(controller.position.pixels+100.h, duration: Duration(milliseconds: 300), curve: Curves.easeInOutQuint);
-                                      },
-                                      onTapStats: widget.toStaticsPage,
-                                      onChangeDate: (newDate) {
-                                        setState(() {
-                                          datetime = newDate;
-                                        });
-                                        setNewRelationDate();
-                                      },
-                                      datetime: datetime,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: ClrStyle.backgroundColor[
+                                            sl<AuthConfig>().idx],
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          RelationStartDateWidget(
+                                            onTapEditDate: () {
+                                              // controller.animateTo(controller.position.pixels+100.h, duration: Duration(milliseconds: 300), curve: Curves.easeInOutQuint);
+                                            },
+                                            onTapStats: widget.toStaticsPage,
+                                            onChangeDate: (newDate) {
+                                              setState(() {
+                                                datetime = newDate;
+                                              });
+                                              setNewRelationDate();
+                                            },
+                                            datetime: datetime,
+                                          ),
+                                          SizedBox(height: 15.h),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: CupertinoCard(
+                                              radius:
+                                                  BorderRadius.circular(40.r),
+                                              color: ClrStyle.whiteTo17[
+                                                  sl<AuthConfig>().idx],
+                                              elevation: 0,
+                                              margin: EdgeInsets.zero,
+                                              padding: EdgeInsets.only(
+                                                  top: 25.h, bottom: 50.h),
+                                              child: Column(
+                                                children: [
+                                                  TagsListBlock(),
+                                                  SizedBox(height: 25.h),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 25.w),
+                                                    child: GestureDetector(
+                                                      onTap: widget.toAllEvents,
+                                                      behavior: HitTestBehavior
+                                                          .translucent,
+                                                      child: Row(
+                                                        children: [
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  'Предстоящие события',
+                                                                  style: TextStyles(
+                                                                          context)
+                                                                      .black_20_w700),
+                                                              SizedBox(
+                                                                  height: 8.h),
+                                                              Text(
+                                                                  countEventsText(
+                                                                      eventsBloc
+                                                                          .eventsSorted),
+                                                                  style: TextStyles(
+                                                                          context)
+                                                                      .grey_15_w700),
+                                                            ],
+                                                          ),
+                                                          const Spacer(),
+                                                          SizedBox(
+                                                            height: 45.w,
+                                                            width: 45.w,
+                                                            child: Stack(
+                                                              children: [
+                                                                Align(
+                                                                  child: Transform
+                                                                      .rotate(
+                                                                          angle:
+                                                                              pi,
+                                                                          child:
+                                                                              SvgPicture.asset(
+                                                                            SvgImg.back,
+                                                                            height:
+                                                                                20.41.h,
+                                                                            width:
+                                                                                11.37.h,
+                                                                            color:
+                                                                                ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                                                                          )),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 17.h),
+                                                  BlocConsumer<EventsBloc,
+                                                          EventsState>(
+                                                      listener:
+                                                          (context, state) {
+                                                    if (state
+                                                        is EventErrorState) {
+                                                      showAlertToast(
+                                                          state.message);
+                                                    }
+                                                    if (state
+                                                        is EventInternetErrorState) {
+                                                      showAlertToast(
+                                                          'Проверьте соединение с интернетом!');
+                                                    }
+                                                    if (state
+                                                            is EventAddedState ||
+                                                        state
+                                                            is GotSuccessEventsState) {
+                                                      setState(() {});
+                                                    }
+                                                  }, builder: (context, state) {
+                                                    if (state
+                                                        is EventLoadingState) {
+                                                      return Container();
+                                                    }
+                                                    return Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      25.w),
+                                                          child: Container(
+                                                            height: 1,
+                                                            color: ColorStyles
+                                                                .greyColor,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 25.h),
+                                                        EventsListWidget(
+                                                            events: eventsBloc
+                                                                .eventsSorted,
+                                                            onTap: (id) {}),
+                                                      ],
+                                                    );
+                                                  }),
+                                                  SizedBox(height: 35.h),
+                                                  NewEventBtn(
+                                                    onTap: () =>
+                                                        showModalCreateEvent(
+                                                            context, () {
+                                                      Navigator.pop(context);
+                                                    }),
+                                                    isActive: !(eventsBloc
+                                                            .events.length >=
+                                                        30),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    SizedBox(height: 15.h),
+                                    //CAROUSEL
+
                                     //EVENTS
                                   ],
                                 )
                               ],
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: CupertinoCard(
-                                radius: BorderRadius.circular(40.r),
-                                color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
-                                elevation: 0,
-                                margin: EdgeInsets.zero,
-                                padding:
-                                    EdgeInsets.only(top: 25.h, bottom: 50.h),
-                                child: Column(
-                                  children: [
-                                    TagsListBlock(),
-                                    SizedBox(height: 25.h),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 25.w),
-                                      child: GestureDetector(
-                                        onTap: widget.toAllEvents,
-                                        behavior: HitTestBehavior.translucent,
-                                        child: Row(
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text('Предстоящие события',
-                                                    style: TextStyles(context)
-                                                        .black_20_w700),
-                                                SizedBox(height: 8.h),
-                                                Text(
-                                                    countEventsText(eventsBloc
-                                                        .eventsSorted),
-                                                    style: TextStyles(context)
-                                                        .grey_15_w700),
-                                              ],
-                                            ),
-                                            const Spacer(),
-                                            SizedBox(
-                                              height: 45.w,
-                                              width: 45.w,
-                                              child: Stack(
-                                                children: [
-                                                  Align(
-                                                    child: Transform.rotate(
-                                                        angle: pi,
-                                                        child: SvgPicture.asset(
-                                                          SvgImg.back,
-                                                          height: 20.41.h,
-                                                          width: 11.37.h,
-                                                          color: ClrStyle
-                                                              .black17ToWhite[sl<
-                                                                  AuthConfig>()
-                                                              .idx],
-                                                        )),
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 17.h),
-                                    BlocConsumer<EventsBloc, EventsState>(
-                                        listener: (context, state) {
-                                      if (state is EventErrorState) {
-                                        showAlertToast(state.message);
-                                      }
-                                      if (state is EventInternetErrorState) {
-                                        showAlertToast(
-                                            'Проверьте соединение с интернетом!');
-                                      }
-                                      if (state is EventAddedState ||
-                                          state is GotSuccessEventsState) {
-                                        setState(() {});
-                                      }
-                                    }, builder: (context, state) {
-                                      if (state is EventLoadingState) {
-                                        return Container();
-                                      }
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 25.w),
-                                            child: Container(
-                                              height: 1,
-                                              color: ColorStyles.greyColor,
-                                            ),
-                                          ),
-                                          SizedBox(height: 25.h),
-                                          EventsListWidget(
-                                              events: eventsBloc.eventsSorted,
-                                              onTap: (id) {}),
-                                        ],
-                                      );
-                                    }),
-                                    SizedBox(height: 35.h),
-                                    NewEventBtn(
-                                      onTap: () =>
-                                          showModalCreateEvent(context, () {
-                                        Navigator.pop(context);
-                                      }),
-                                      isActive:
-                                          !(eventsBloc.events.length >= 30),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
                             SizedBox(
                               height: 15.h,
