@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-
 class OptionBtn extends StatelessWidget {
   final Function() onTap;
   final String text;
@@ -27,15 +26,24 @@ class OptionBtn extends StatelessWidget {
         child: CupertinoCard(
           elevation: 0,
           margin: EdgeInsets.zero,
-          color: isPhone ? ColorStyles.accentColor : Color(0xFF0077FF),
+          color: isPhone ? ColorStyles.white : Color(0xFF0077FF),
           padding: EdgeInsets.symmetric(horizontal: 18.w),
           radius: BorderRadius.circular(20.r),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SvgPicture.asset(isPhone ? SvgImg.phone : SvgImg.vk, color: ColorStyles.white, height: isPhone ? 22.h : 18.h,),
-              Text(text, style: TextStyles(context).white_20_w700,),
-              SizedBox(width: isPhone ? 22.w : 28.85.w,)
+              SvgPicture.asset(
+                isPhone ? SvgImg.phone : SvgImg.vk,
+                color: ColorStyles.blackColor,
+                height: isPhone ? 22.h : 18.h,
+              ),
+              Text(
+                text,
+                style: TextStyles(context).black_20_w700,
+              ),
+              SizedBox(
+                width: isPhone ? 22.w : 28.85.w,
+              )
             ],
           ),
         ),

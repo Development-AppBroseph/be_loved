@@ -114,7 +114,7 @@ class _AuthPageState extends State<AuthPage> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: SizedBox(
-                      height: 250.h,
+                      height: 220.h,
                       child: Column(
                         children: [
                           SizedBox(
