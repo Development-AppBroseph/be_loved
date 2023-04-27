@@ -408,6 +408,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                       fontSize: 15,
                     )),
               ),
+            ),
           ],
         ),
       ),

@@ -43,7 +43,7 @@ class UserAnswer {
         fromYou: json["from_you"],
         date: json["date"],
         vkPID: json["vk_pid"],
-        noti: json["notification_on"],
+        noti: json["notification_on"] ?? true,
       );
 
   Map<String, dynamic> toJson() => {

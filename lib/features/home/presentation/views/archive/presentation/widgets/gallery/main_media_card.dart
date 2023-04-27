@@ -133,10 +133,10 @@ class MainMediaCard extends StatelessWidget {
                             ),
                         ],
                       ),
-                      Text(file.place ?? '',
-                          style: TextStyles(context).white_15_w800.copyWith(
-                                color: Colors.white.withOpacity(0.7),
-                              )),
+                      // Text(file.place ?? '',
+                      //     style: TextStyles(context).white_15_w800.copyWith(
+                      //           color: Colors.white.withOpacity(0.7),
+                      //         )),
                     ],
                     // ),
                   )),

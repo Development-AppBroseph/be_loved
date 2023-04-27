@@ -72,12 +72,15 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   Future<AlbumFullEntity> getAlbums() async {
     headers["Content-Type"] = "application/json";
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.get(Endpoints.getAlbums.getPath(),
-        queryParameters: {'page': 1},
-        options: Options(
-            followRedirects: false,
-            validateStatus: (status) => status! < 599,
-            headers: headers,),);
+    Response response = await dio.get(
+      Endpoints.getAlbums.getPath(),
+      queryParameters: {'page': 1},
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 599,
+        headers: headers,
+      ),
+    );
     printRes(response);
     if (response.statusCode == 200) {
       final albums = (response.data['other'] as List)
@@ -182,9 +185,13 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
           ? null
           : (await MultipartFile.fromFile(newFile!.path)));
     }
+    var newPlaces = [];
+    files.forEach((element) {
+      newPlaces.add('undefiend');
+    });
     Map<String, dynamic> mapDataList = {
       'files': files,
-      'places': places.isEmpty ? 'undefiend' : places,
+      'places': places.isEmpty ? 'undefiend' : newPlaces,
       'dates': times,
       // 'images': images,
       'durations': durations
