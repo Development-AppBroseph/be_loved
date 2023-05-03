@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
+import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
@@ -144,6 +145,13 @@ class _AccountPageState extends State<AccountPage>
     } else {
       showAlertToast('Вы ввели тот же номер');
     }
+  }
+
+  bool isValidate(TextEditingController controller) {
+    if (controller.text.length > 12 && controller.text.substring(0, 1) == '9') {
+      return true;
+    }
+    return false;
   }
 
   _confirmCode() {
@@ -536,10 +544,14 @@ class _AccountPageState extends State<AccountPage>
                                                         height: 70.h,
                                                         decoration:
                                                             BoxDecoration(
-                                                          color: ClrStyle
-                                                                  .whiteTo17[
-                                                              sl<AuthConfig>()
-                                                                  .idx],
+                                                          color: isValidate(
+                                                                  phoneController)
+                                                              ? ClrStyle
+                                                                      .whiteTo17[
+                                                                  sl<AuthConfig>()
+                                                                      .idx]
+                                                              : ColorStyles
+                                                                  .validateColor,
                                                           borderRadius:
                                                               const BorderRadius
                                                                   .horizontal(
@@ -642,32 +654,33 @@ class _AccountPageState extends State<AccountPage>
                                                                 ),
                                                                 onChanged:
                                                                     (value) {
-                                                                  phoneNumber =
-                                                                      '+7${value.replaceAll(RegExp(' '), '')}';
-                                                                  if (value.length >
-                                                                          12 &&
-                                                                      value.substring(
-                                                                              0,
-                                                                              1) ==
-                                                                          '9') {
-                                                                    // BlocProvider.of<AuthBloc>(context)
-                                                                    //     .add(TextFieldFilled(true));
-                                                                    // focusNodePhone.unfocus();
-                                                                  } else {
-                                                                    // BlocProvider.of<AuthBloc>(context)
-                                                                    //     .add(TextFieldFilled(false));
-                                                                  }
-                                                                  if (sl<AuthConfig>()
-                                                                          .user!
-                                                                          .me
-                                                                          .phoneNumber ==
-                                                                      phoneNumber) {
-                                                                    showAlertToast(
-                                                                        'Вы ввели тот же номер');
-                                                                  }
-                                                                  _streamController
-                                                                      .sink
-                                                                      .add(1);
+                                                                  setState(() {
+                                                                    phoneNumber =
+                                                                        '+7${value.replaceAll(RegExp(' '), '')}';
+                                                                    if (value.length >
+                                                                            12 &&
+                                                                        value.substring(0,
+                                                                                1) ==
+                                                                            '9') {
+                                                                      // BlocProvider.of<AuthBloc>(context)
+                                                                      //     .add(TextFieldFilled(true));
+                                                                      // focusNodePhone.unfocus();
+                                                                    } else {
+                                                                      // BlocProvider.of<AuthBloc>(context)
+                                                                      //     .add(TextFieldFilled(false));
+                                                                    }
+                                                                    if (sl<AuthConfig>()
+                                                                            .user!
+                                                                            .me
+                                                                            .phoneNumber ==
+                                                                        phoneNumber) {
+                                                                      showAlertToast(
+                                                                          'Вы ввели тот же номер');
+                                                                    }
+                                                                    _streamController
+                                                                        .sink
+                                                                        .add(1);
+                                                                  });
                                                                 },
                                                                 focusNode:
                                                                     focusNodePhone,
@@ -780,23 +793,24 @@ class _AccountPageState extends State<AccountPage>
                                                         height: 80.sp,
                                                         child: Pinput(
                                                           onTap: () {
-                                                            Future.delayed(
-                                                                const Duration(
-                                                                    milliseconds:
-                                                                        600),
-                                                                () {
-                                                              _scrollController
-                                                                  .animateTo(
+                                                            setState(() {
+                                                              Future.delayed(
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          600),
+                                                                  () {
                                                                 _scrollController
-                                                                    .position
-                                                                    .maxScrollExtent,
-                                                                duration:
-                                                                    const Duration(
-                                                                        milliseconds:
-                                                                            500),
-                                                                curve:
-                                                                    Curves.ease,
-                                                              );
+                                                                    .animateTo(
+                                                                  _scrollController
+                                                                      .position
+                                                                      .maxScrollExtent,
+                                                                  duration: const Duration(
+                                                                      milliseconds:
+                                                                          500),
+                                                                  curve: Curves
+                                                                      .ease,
+                                                                );
+                                                              });
                                                             });
                                                           },
                                                           pinAnimationType:
@@ -834,10 +848,7 @@ class _AccountPageState extends State<AccountPage>
                                                             height: 80.sp,
                                                             decoration:
                                                                 BoxDecoration(
-                                                                    color: ClrStyle
-                                                                        .whiteTo17[sl<
-                                                                            AuthConfig>()
-                                                                        .idx],
+                                                                    color: textEditingControllerUp.text.length == 4 ? Colors.white : ColorStyles.validateColor,
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             10),

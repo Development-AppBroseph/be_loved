@@ -114,6 +114,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                         maxLines: 1,
                         controller: _controller,
                         maxLength: 40,
+                        isValidate: _controller.text.isNotEmpty,
                         hideCounter: true,
                         isEmail:  true,
                       ),
