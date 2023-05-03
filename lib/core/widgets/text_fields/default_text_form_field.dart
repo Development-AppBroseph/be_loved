@@ -12,6 +12,7 @@ class DefaultTextFormField extends StatelessWidget {
   final String? title;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final bool? isValidate;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
   final Function()? onTap;
@@ -33,6 +34,7 @@ class DefaultTextFormField extends StatelessWidget {
     required this.hint,
     this.title,
     this.validator,
+    this.isValidate = true,
     this.controller,
     this.inputFormatters,
     this.keyboardType,
@@ -64,8 +66,8 @@ class DefaultTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.r),
               borderSide: BorderSide.none,
             ),
-            fillColor: ClrStyle
-                .backToBlack2C[isEmail == true ? 0 : sl<AuthConfig>().idx],
+            fillColor: isValidate! ? ClrStyle
+                .backToBlack2C[isEmail == true ? 0 : sl<AuthConfig>().idx] : ColorStyles.validateColor,
             hintStyle: TextStyles(context).grey_18_w800.copyWith(
                   color: sl<AuthConfig>().idx == 1 && isEmail == true
                       ? ColorStyles.greyColor

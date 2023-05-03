@@ -17,7 +17,8 @@ class ColorStyles {
 
   static const Color accentColor = Color(0xFF20CB83);
 
-  static const Color redColor = Color(0xFFFF1D1D);
+  static const Color redColor = Color(0xFFFF3347);
+  static const Color validateColor = Color(0xffF0E0E0);
 
   static const Color blueColor = Color(0xFF0177FF);
 

@@ -41,6 +41,13 @@ class _PhonePageState extends State<PhonePage> {
     super.dispose();
   }
 
+  bool isValidate(TextEditingController controller) {
+    if (controller.text.length > 12 && controller.text.substring(0, 1) == '9') {
+      return true;
+    }
+    return false;
+  }
+
   void _sendCode() =>
       BlocProvider.of<AuthBloc>(context).add(SendPhone(phoneNumber));
 
@@ -148,9 +155,11 @@ class _PhonePageState extends State<PhonePage> {
                           padding: EdgeInsets.only(top: 37.h, bottom: 5.h),
                           child: Container(
                             height: 70.h,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.horizontal(
+                            decoration: BoxDecoration(
+                              color: isValidate(phoneController)
+                                  ? Colors.white
+                                  : ColorStyles.validateColor,
+                              borderRadius: const BorderRadius.horizontal(
                                 left: Radius.circular(10),
                                 right: Radius.circular(10),
                               ),
@@ -202,17 +211,19 @@ class _PhonePageState extends State<PhonePage> {
                                       fontWeight: FontWeight.w700,
                                     ),
                                     onChanged: (value) {
-                                      phoneNumber =
-                                          '+7${value.replaceAll(RegExp(' '), '')}';
-                                      if (value.length > 12 &&
-                                          value.substring(0, 1) == '9') {
-                                        BlocProvider.of<AuthBloc>(context)
-                                            .add(TextFieldFilled(true));
-                                        focusNode.unfocus();
-                                      } else {
-                                        BlocProvider.of<AuthBloc>(context)
-                                            .add(TextFieldFilled(false));
-                                      }
+                                      setState(() {
+                                        phoneNumber =
+                                            '+7${value.replaceAll(RegExp(' '), '')}';
+                                        if (value.length > 12 &&
+                                            value.substring(0, 1) == '9') {
+                                          BlocProvider.of<AuthBloc>(context)
+                                              .add(TextFieldFilled(true));
+                                          focusNode.unfocus();
+                                        } else {
+                                          BlocProvider.of<AuthBloc>(context)
+                                              .add(TextFieldFilled(false));
+                                        }
+                                      });
                                     },
                                     focusNode: focusNode,
                                     decoration: InputDecoration(

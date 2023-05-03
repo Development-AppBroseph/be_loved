@@ -79,6 +79,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
       CustomPopupMenuController();
 
   String title = 'Создать событие';
+  bool validate = false;
 
   validateTextFields() {
     setState(() {
@@ -87,6 +88,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
           : _controllerFromTime.clear();
       timeTextHelper(_controllerToTime.text) ? {} : _controllerToTime.clear();
     });
+  }
+  bool fieldValidation(TextEditingController controller){
+    return controller.text.length > 3;
   }
 
   bool isValidate() {
@@ -290,6 +294,11 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               controller: _controllerName,
                               maxLength: 40,
                               hideCounter: true,
+                              onChange: (val) => {
+                                setState(() {
+                                })
+                              },
+                              isValidate: fieldValidation(_controllerName),
                             ),
                             SizedBox(
                               height: 20.h,
@@ -299,6 +308,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 maxLines: 3,
                                 controller: _controllerDescription,
                                 maxLength: 50,
+                                isValidate: fieldValidation(_controllerDescription),
                                 onChange: (s) {
                                   setState(() {});
                                 }),
@@ -373,7 +383,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                   _customPopupMenuController1,
                                               pressType: PressType.singleClick,
                                               menuBuilder: () {
-                                                FocusManager.instance.primaryFocus?.unfocus();
+                                                FocusManager
+                                                    .instance.primaryFocus
+                                                    ?.unfocus();
                                                 return _buildDatePicker(context,
                                                     (date, hide) {
                                                   if (hide) {
@@ -467,7 +479,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                   pressType:
                                                       PressType.singleClick,
                                                   menuBuilder: () {
-                                                    FocusManager.instance.primaryFocus?.unfocus();
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
                                                     return _buildDatePicker(
                                                         context, (date, hide) {
                                                       if (hide) {
@@ -476,7 +490,6 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                                       }
                                                       setState(() {
                                                         toDate = date;
-                                                        
                                                       });
                                                     }, toDate,
                                                         fromDate: fromDate);
@@ -904,12 +917,10 @@ Widget _buildDatePicker(BuildContext context,
                   daysOfWeekVisible: false,
                   rangeSelectionMode: RangeSelectionMode.toggledOff,
                   onDaySelected: (date, events) {
-                    
-                      onTap(date, false);
-                      setState(() {
-                        selectedDay = date;
-                      });
-                    
+                    onTap(date, false);
+                    setState(() {
+                      selectedDay = date;
+                    });
                   },
                   rowHeight: 40.h,
                   selectedDayPredicate: (day) => isSameDay(selectedDay, day),

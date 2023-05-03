@@ -1,12 +1,10 @@
-import 'package:be_loved/constants/colors/color_styles.dart';
-import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_state.dart';
 import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
-import 'package:be_loved/features/profile/presentation/widget/avatar_and_name_user.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/decor_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/devides_settings.dart';
 import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
@@ -16,7 +14,6 @@ import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class ParametrsUserBottomsheet extends StatefulWidget {
   final Function() onRelationSettingsTap;
@@ -51,7 +48,16 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
               child: Column(
                 children: [
                   const BottomSheetGreyLine(),
-                  const AvatarAndNameUser(),
+                  Text(
+                    'Меню',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      color: const Color(0xff969696),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.sp,
+                    ),
+                  ),
+                  // const AvatarAndNameUser(),
                   SizedBox(
                     height: 16.h,
                   ),
@@ -85,11 +91,16 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                       showModalDecor(context, () {});
                     },
                   ),
-                  SizedBox(
-                    height: 87.h - 24.h,
+                  DevideSettings(
+                    title: "Уведомления",
+                    subtitle: "от приложения",
+                    haveToggleSwitch: true,
+                    icon: SvgImg.notification,
                   ),
                   state is SubHaveState
-                      ? Container()
+                      ? Container(
+                        // height: 275,
+                      )
                       : DevideSettings(
                           title: "Подписка BeLoved+",
                           subtitle: "Подробнее",
@@ -105,42 +116,18 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                             );
                           },
                         ),
-                  DevideSettings(
-                    title: "Уведомления",
-                    subtitle: "от приложения",
-                    haveToggleSwitch: true,
-                    icon: SvgImg.notification,
-                  ),
                   SizedBox(
-                    height: 45.h,
+                    height: 40.h,
                   ),
-
                   Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 25.w,
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
+                    margin: EdgeInsets.symmetric(horizontal: 25.w),
+                    child: CustomAnimationButton(
+                      red: true,
+                      text: 'Выйти из аккаунта',
+                      onPressed: () async {
                         Navigator.pop(context);
                         context.read<AuthBloc>().add(LogOut(context));
                       },
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            SvgImg.logout,
-                            height: 45.h,
-                          ),
-                          SizedBox(
-                            width: 21.w,
-                          ),
-                          Text(
-                            'Выйти из аккаунта',
-                            style: TextStyles(context)
-                                .black_20_w800
-                                .copyWith(color: ColorStyles.redColor),
-                          )
-                        ],
-                      ),
                     ),
                   ),
                   SizedBox(
