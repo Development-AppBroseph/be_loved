@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/utils/helpers/sync_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
-import 'package:be_loved/core/utils/toasts.dart';
-import 'package:be_loved/core/widgets/buttons/option_black_btn.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/memory_mini_info_card.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';
@@ -16,7 +16,6 @@ import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -27,11 +26,11 @@ class ArchiveWrapper extends StatefulWidget {
   final ScrollController scrollController;
   final Function(int index)? onChangePage;
   final int currentIndex;
-  ArchiveWrapper(
-      {required this.currentIndex,
+  const ArchiveWrapper(
+      {Key? key, required this.currentIndex,
       required this.child,
       required this.scrollController,
-      this.onChangePage});
+      this.onChangePage}) : super(key: key);
 
   @override
   State<ArchiveWrapper> createState() => _ArchiveWrapperState();
@@ -53,11 +52,46 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
 
   late AnimationController _spoonController;
   static final _spoonTween = CurveTween(curve: Curves.easeInOutQuint);
+  bool isLoading = false;
+  bool isOpacity = false;
+  final StreamController<bool> streamController = StreamController();
+  void _showLoader() {
+    setState(() {
+      isLoading = true;
+    });
 
+    allSync(context);
+    streamController.sink.add(true);
+    widget.scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOutQuint,
+    );
+    Future.delayed(const Duration(milliseconds: 100), () {
+      setState(() {
+        isOpacity = true;
+      });
+    });
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      setState(() {
+        isOpacity = false;
+      });
+    });
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      isLoading = false;
+      streamController.sink.add(false);
+    });
+  }
   @override
   void initState() {
     _spoonController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
+        widget.scrollController.addListener(() {
+      if (widget.scrollController.offset.toInt() < -40 && !isLoading) {
+        _showLoader();
+      }
+      // print('offset: ' + scrollController.offset.toString());
+    });
 
     super.initState();
   }
@@ -80,7 +114,7 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey[300]!,
-                  offset: Offset(0, 0),
+                  offset: const Offset(0, 0),
                   blurRadius: 4,
                 )
               ]),
@@ -103,120 +137,130 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
         width: double.infinity,
         child: Stack(
           children: [
-            CustomRefreshIndicator(
-              onRefresh: () async {
-                return;
-              },
-              builder: (context, child, controller) {
-                return Stack(
-                  children: <Widget>[
-                    AnimatedBuilder(
-                      animation: controller,
-                      builder: (BuildContext context, Widget? _) {
-                        return SizedBox(
-                          height: controller.value * _indicatorSize,
-                          child: Stack(
-                            children: <Widget>[
-                              /// check if it is a spoon build animated builed and attach spoon controller
-
-                              _buildImage(
-                                  controller,
-                                  ParalaxConfig(
-                                      level: 5, image: 'assets/icons/add.svg')),
-                            ],
+            SingleChildScrollView(
+              controller: widget.scrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(
+                          left: 25.w,
+                          right: 25.w,
+                          top: 45.h + MediaQuery.of(context).padding.top,
+                          bottom: 22.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MemoryMiniInfoCard(),
+                          _buildAddBtn(context, () {
+                            print('add');
+                            if (context.read<ArchiveBloc>().memoryEntity !=
+                                    null &&
+                                !context
+                                    .read<ArchiveBloc>()
+                                    .memoryEntity!
+                                    .fullFilled()) {
+                              showModalAddFile(context, () {});
+                            }
+                          })
+                        ],
+                      )),
+                  SizedBox(
+                    height: 38.w,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.zero,
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.only(
+                              right: 15.w, left: index == 0 ? 25.w : 0),
+                          height: 38.h,
+                          child: GestureDetector(
+                            onTap: () {
+                              if (widget.onChangePage != null) {
+                                widget.onChangePage!(index);
+                              }
+                            },
+                            child: CupertinoCard(
+                              margin: EdgeInsets.zero,
+                              elevation: 0,
+                              padding: EdgeInsets.symmetric(horizontal: 15.w),
+                              color: index == widget.currentIndex
+                                  ? ColorStyles.blackColor
+                                  : Colors.white,
+                              radius: BorderRadius.circular(20.r),
+                              child: Center(
+                                  child: Text(data[index],
+                                      style: TextStyles(context)
+                                          .white_18_w800
+                                          .copyWith(
+                                              color: index ==
+                                                      widget.currentIndex
+                                                  ? Colors.white
+                                                  : ColorStyles.greyColor))),
+                            ),
                           ),
                         );
                       },
                     ),
-                    AnimatedBuilder(
-                      builder: (context, _) {
-                        return Transform.translate(
-                          offset: Offset(0.0, controller.value * 0),
-                          child: child,
-                        );
-                      },
-                      animation: controller,
-                    ),
-                  ],
-                );
-              },
-              child: SingleChildScrollView(
-                controller: widget.scrollController,
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(
-                            left: 25.w,
-                            right: 25.w,
-                            top: 45.h + MediaQuery.of(context).padding.top,
-                            bottom: 22.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            MemoryMiniInfoCard(),
-                            _buildAddBtn(context, () {
-                              print('add');
-                              if (context.read<ArchiveBloc>().memoryEntity !=
-                                      null &&
-                                  !context
-                                      .read<ArchiveBloc>()
-                                      .memoryEntity!
-                                      .fullFilled()) {
-                                showModalAddFile(context, () {});
-                              }
-                            })
-                          ],
-                        )),
-                    SizedBox(
-                      height: 38.w,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.zero,
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.only(
-                                right: 15.w, left: index == 0 ? 25.w : 0),
-                            height: 38.h,
-                            child: GestureDetector(
-                              onTap: () {
-                                if (widget.onChangePage != null) {
-                                  widget.onChangePage!(index);
-                                }
-                              },
-                              child: CupertinoCard(
-                                margin: EdgeInsets.zero,
-                                elevation: 0,
-                                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                                color: index == widget.currentIndex
-                                    ? ColorStyles.blackColor
-                                    : Colors.white,
-                                radius: BorderRadius.circular(20.r),
-                                child: Center(
-                                    child: Text(data[index],
-                                        style: TextStyles(context)
-                                            .white_18_w800
-                                            .copyWith(
-                                                color: index ==
-                                                        widget.currentIndex
-                                                    ? Colors.white
-                                                    : ColorStyles.greyColor))),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    widget.child
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  widget.child
+                ],
               ),
             ),
+            StreamBuilder<bool>(
+          stream: streamController.stream,
+          initialData: false,
+          builder: (context, snapshot) {
+            print('Изменения');
+            if (snapshot.data!) {
+              return Stack(
+                children: [
+                  backdropFilterExample(
+                    context,
+                    SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height,
+                      // color: Colors.black,
+                    ),
+                  ),
+                  AnimatedPositioned(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOutQuint,
+                    top: isOpacity ? 80.h : -100,
+                    left: MediaQuery.of(context).size.width / 2 - 20.w,
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        height: 40.h,
+                        width: 40.w,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        padding: EdgeInsets.all(10.h),
+                        child: Image.asset(
+                          'assets/images/smile.png',
+                          fit: BoxFit.contain,
+                          height: _imageSize,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              );
+            } else {
+              return const SizedBox(
+                width: 0,
+                height: 0,
+              );
+            }
+          },
+        ),
           ],
         ));
   }
@@ -243,6 +287,27 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
                   ))),
         ),
       ),
+    );
+  }
+  Widget backdropFilterExample(BuildContext context, Widget child) {
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        child,
+        AnimatedOpacity(
+          opacity: isOpacity ? 1 : 0,
+          duration: const Duration(milliseconds: 200),
+          child: BackdropFilter(
+            filter: ui.ImageFilter.blur(
+              sigmaX: 5.0,
+              sigmaY: 5.0,
+            ),
+            child: Container(
+              color: const Color.fromRGBO(44, 44, 46, 0.1),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
