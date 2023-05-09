@@ -78,7 +78,7 @@ class _SlidingBackgroundCardState extends State<SlidingBackgroundCard> {
         width: double.infinity,
         height: 500.h,
         child: PageView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           children: [
             ...decorBloc.back!.photos

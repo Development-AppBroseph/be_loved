@@ -357,64 +357,64 @@ class _AccountPageState extends State<AccountPage>
                                 photo(context),
                               ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 15.h),
-                              child: GestureDetector(
-                                onTap: vkConnect,
-                                child: SizedBox(
-                                  height: 65.h,
-                                  width: 428.w,
-                                  child: CupertinoCard(
-                                    margin: EdgeInsets.all(0.h),
-                                    elevation: 0,
-                                    color: ClrStyle
-                                        .whiteTo17[sl<AuthConfig>().idx],
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20.r),
-                                        color: ClrStyle
-                                            .whiteTo17[sl<AuthConfig>().idx]),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          right: 26.w, left: 19.w),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 20.w),
-                                            child: SvgPicture.asset(
-                                              SvgImg.vkLogo,
-                                            ),
-                                          ),
-                                          Text(
-                                            sl<AuthConfig>().user!.vkPID == null
-                                                ? 'Привязать страницу VK'
-                                                : 'Привязано к странице VK',
-                                            style: TextStyle(
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.w800,
-                                                color: ClrStyle.black17ToWhite[
-                                                    sl<AuthConfig>().idx]),
-                                          ),
-                                          const Spacer(),
-                                          if (sl<AuthConfig>().user!.vkPID ==
-                                              null)
-                                            SvgPicture.asset(
-                                              SvgImg.addNewEvent,
-                                              width: 22.w,
-                                              height: 22.h,
-                                              color: ClrStyle.blueToWhite[
-                                                  sl<AuthConfig>().idx],
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: EdgeInsets.only(top: 15.h),
+                            //   child: GestureDetector(
+                            //     onTap: vkConnect,
+                            //     child: SizedBox(
+                            //       height: 65.h,
+                            //       width: 428.w,
+                            //       child: CupertinoCard(
+                            //         margin: EdgeInsets.all(0.h),
+                            //         elevation: 0,
+                            //         color: ClrStyle
+                            //             .whiteTo17[sl<AuthConfig>().idx],
+                            //         decoration: BoxDecoration(
+                            //             borderRadius:
+                            //                 BorderRadius.circular(20.r),
+                            //             color: ClrStyle
+                            //                 .whiteTo17[sl<AuthConfig>().idx]),
+                            //         child: Padding(
+                            //           padding: EdgeInsets.only(
+                            //               right: 26.w, left: 19.w),
+                            //           child: Row(
+                            //             crossAxisAlignment:
+                            //                 CrossAxisAlignment.center,
+                            //             children: [
+                            //               Padding(
+                            //                 padding:
+                            //                     EdgeInsets.only(right: 20.w),
+                            //                 child: SvgPicture.asset(
+                            //                   SvgImg.vkLogo,
+                            //                 ),
+                            //               ),
+                            //               Text(
+                            //                 sl<AuthConfig>().user!.vkPID == null
+                            //                     ? 'Привязать страницу VK'
+                            //                     : 'Привязано к странице VK',
+                            //                 style: TextStyle(
+                            //                     fontSize: 20.sp,
+                            //                     fontWeight: FontWeight.w800,
+                            //                     color: ClrStyle.black17ToWhite[
+                            //                         sl<AuthConfig>().idx]),
+                            //               ),
+                            //               const Spacer(),
+                            //               if (sl<AuthConfig>().user!.vkPID ==
+                            //                   null)
+                            //                 SvgPicture.asset(
+                            //                   SvgImg.addNewEvent,
+                            //                   width: 22.w,
+                            //                   height: 22.h,
+                            //                   color: ClrStyle.blueToWhite[
+                            //                       sl<AuthConfig>().idx],
+                            //                 ),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             Padding(
                               padding: EdgeInsets.only(top: 15.h),
                               child: GestureDetector(
