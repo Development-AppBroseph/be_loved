@@ -7,7 +7,11 @@ import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/sync_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
+import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/memory_mini_info_card.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
@@ -27,10 +31,12 @@ class ArchiveWrapper extends StatefulWidget {
   final Function(int index)? onChangePage;
   final int currentIndex;
   const ArchiveWrapper(
-      {Key? key, required this.currentIndex,
+      {Key? key,
+      required this.currentIndex,
       required this.child,
       required this.scrollController,
-      this.onChangePage}) : super(key: key);
+      this.onChangePage})
+      : super(key: key);
 
   @override
   State<ArchiveWrapper> createState() => _ArchiveWrapperState();
@@ -59,7 +65,24 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
     setState(() {
       isLoading = true;
     });
+    GalleryBloc bloc = context.read<GalleryBloc>();
+    ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
+    AlbumsBloc albumsBloc = context.read<AlbumsBloc>();
+    MomentsBloc momentsBloc = context.read<MomentsBloc>();
+    EventsBloc eventsBloc = context.read<EventsBloc>();
 
+    if (bloc.state is GalleryFilesInitialState) {
+      bloc.add(GetGalleryFilesEvent(isReset: false));
+    }
+    if (albumsBloc.state is AlbumInitialState) {
+      albumsBloc.add(GetAlbumsEvent());
+    }
+    if (archiveBloc.memoryEntity == null ||
+        sl<AuthConfig>().memoryEntity == null) {
+      archiveBloc.add(GetMemoryInfoEvent());
+    }
+    GalleryBloc galleryBloc = context.read<GalleryBloc>();
+    galleryBloc.add(GetGalleryFilesEvent(isReset: false));
     allSync(context);
     streamController.sink.add(true);
     widget.scrollController.animateTo(
@@ -82,11 +105,12 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
       streamController.sink.add(false);
     });
   }
+
   @override
   void initState() {
     _spoonController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
-        widget.scrollController.addListener(() {
+    widget.scrollController.addListener(() {
       if (widget.scrollController.offset.toInt() < -40 && !isLoading) {
         _showLoader();
       }
@@ -208,59 +232,62 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
                   SizedBox(
                     height: 30.h,
                   ),
-                  widget.child
+                  widget.child,
+                  SizedBox(
+                    height: 700.h,
+                  ),
                 ],
               ),
             ),
             StreamBuilder<bool>(
-          stream: streamController.stream,
-          initialData: false,
-          builder: (context, snapshot) {
-            print('Изменения');
-            if (snapshot.data!) {
-              return Stack(
-                children: [
-                  backdropFilterExample(
-                    context,
-                    SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height,
-                      // color: Colors.black,
-                    ),
-                  ),
-                  AnimatedPositioned(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeInOutQuint,
-                    top: isOpacity ? 80.h : -100,
-                    left: MediaQuery.of(context).size.width / 2 - 20.w,
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        height: 40.h,
-                        width: 40.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15.r),
-                        ),
-                        padding: EdgeInsets.all(10.h),
-                        child: Image.asset(
-                          'assets/images/smile.png',
-                          fit: BoxFit.contain,
-                          height: _imageSize,
+              stream: streamController.stream,
+              initialData: false,
+              builder: (context, snapshot) {
+                print('Изменения');
+                if (snapshot.data!) {
+                  return Stack(
+                    children: [
+                      backdropFilterExample(
+                        context,
+                        SizedBox(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height,
+                          // color: Colors.black,
                         ),
                       ),
-                    ),
-                  )
-                ],
-              );
-            } else {
-              return const SizedBox(
-                width: 0,
-                height: 0,
-              );
-            }
-          },
-        ),
+                      AnimatedPositioned(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeInOutQuint,
+                        top: isOpacity ? 80.h : -100,
+                        left: MediaQuery.of(context).size.width / 2 - 20.w,
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(
+                            height: 40.h,
+                            width: 40.w,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15.r),
+                            ),
+                            padding: EdgeInsets.all(10.h),
+                            child: Image.asset(
+                              'assets/images/smile.png',
+                              fit: BoxFit.contain,
+                              height: _imageSize,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                } else {
+                  return const SizedBox(
+                    width: 0,
+                    height: 0,
+                  );
+                }
+              },
+            ),
           ],
         ));
   }
@@ -289,6 +316,7 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
       ),
     );
   }
+
   Widget backdropFilterExample(BuildContext context, Widget child) {
     return Stack(
       fit: StackFit.expand,
