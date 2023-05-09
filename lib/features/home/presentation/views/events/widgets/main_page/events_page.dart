@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui' as ui;
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
-import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/new_event_btn.dart';
 import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
-import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
-import 'package:be_loved/features/home/presentation/views/events/widgets/add_events_bottomsheet.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/widgets/events_list_widget.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
@@ -27,7 +26,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:ui' as ui;
 
 import '../../../../../data/models/home/hashTag.dart';
 
@@ -80,6 +78,7 @@ class _MainEventsPageState extends State<MainEventsPage>
     setState(() {
       isLoading = true;
     });
+    context.read<EventsBloc>().add(GetEventsEvent());
     streamController.sink.add(true);
     scrollController.animateTo(
       0,
@@ -136,7 +135,7 @@ class _MainEventsPageState extends State<MainEventsPage>
                 children: [
                   backdropFilterExample(
                     context,
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       height: MediaQuery.of(context).size.height,
                       // color: Colors.black,
@@ -168,7 +167,7 @@ class _MainEventsPageState extends State<MainEventsPage>
                 ],
               );
             } else {
-              return Container(
+              return SizedBox(
                 width: 0,
                 height: 0,
               );
@@ -197,7 +196,7 @@ class _MainEventsPageState extends State<MainEventsPage>
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey[300]!,
-                  offset: Offset(0, 0),
+                  offset: const Offset(0, 0),
                   blurRadius: 4,
                 )
               ]),

@@ -70,7 +70,8 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
     AlbumsBloc albumsBloc = context.read<AlbumsBloc>();
     MomentsBloc momentsBloc = context.read<MomentsBloc>();
     EventsBloc eventsBloc = context.read<EventsBloc>();
-
+    context.read<AlbumsBloc>().add(GetAlbumsEvent());
+    context.read<GalleryBloc>().add(GetGalleryFilesEvent(isReset: true));
     if (bloc.state is GalleryFilesInitialState) {
       bloc.add(GetGalleryFilesEvent(isReset: false));
     }
