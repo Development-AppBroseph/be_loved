@@ -9,6 +9,11 @@ environment:
   sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
+  modal_bottom_sheet:
+    git:
+      url: https://github.com/followthemoney1/modal_bottom_sheet.git
+      ref: main
+      path: modal_bottom_sheet
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -48,7 +53,6 @@ dependencies:
   overlay_support: ^2.0.1
   fluttercontactpicker: ^4.7.0
   carousel_slider: ^4.0.0
-  modal_bottom_sheet: ^2.1.0
   table_calendar: ^3.0.8
   custom_pop_up_menu: ^1.2.4
   intl: ^0.17.0
@@ -87,6 +91,10 @@ dependencies:
   check_vpn_connection: ^0.0.2
   flutter_smart_dialog: ^4.9.0+3
   dotted_border: ^2.0.0+3
+  web_socket_channel: ^2.4.0
+  flutter_native_timezone: ^2.0.0
+  awesome_notifications: ^0.7.4+1
+  permission_handler: ^10.2.0
           
   # webview_flutter: ^4.0.2
 

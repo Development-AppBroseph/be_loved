@@ -1,13 +1,16 @@
 import 'dart:io';
+
 import 'package:be_loved/core/models/subscriptions/subscription_variant.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
+import 'package:be_loved/core/widgets/alerts/auth_alert.dart';
 import 'package:be_loved/locator.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 
 import '../../features/auth/data/models/auth/check_is_user_exist.dart';
@@ -119,7 +122,7 @@ class Repository {
       var response = await dio.put('auth/code_phone', data: {
         'phone_number': number,
         'code': code,
-        'fcm_token': availability.value == 0
+        'fcm_token': availability.value == 0 || Platform.isIOS
             ? await FirebaseMessaging.instance.getToken()
             : '',
       });
@@ -220,7 +223,7 @@ class Repository {
               if (vkCode != null) 'code': vkCode,
               'photo':
                   MultipartFile.fromFileSync(xFile.path, filename: xFile.path),
-              'fcm_token': availability.value == 0
+              'fcm_token': availability.value == 0 || Platform.isIOS
                   ? await FirebaseMessaging.instance.getToken()
                   : null,
             }
@@ -228,7 +231,7 @@ class Repository {
               'secret_key': secretKey,
               'username': nickname,
               if (vkCode != null) 'code': vkCode,
-              'fcm_token': availability.value == 0
+              'fcm_token': availability.value == 0 || Platform.isIOS
                   ? await FirebaseMessaging.instance.getToken()
                   : null
             };
@@ -253,7 +256,7 @@ class Repository {
   }
 
   Future<UserAnswer?> inviteUser(String phone) async {
-    print('PHNE: ${phone} ::: ${await MySharedPrefs().token}');
+    print('PHNE: $phone ::: ${await MySharedPrefs().token}');
     var options = Options(headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -272,7 +275,21 @@ class Repository {
       if (response.statusCode == 200) {
         return UserAnswer.fromJson(response.data);
       }
-      if (response.statusCode == 400) {}
+      if (response.statusCode == 409) {
+        SmartDialog.show(
+          animationType: SmartAnimationType.fade,
+          maskColor: Colors.transparent,
+          displayTime: const Duration(seconds: 5),
+          clickMaskDismiss: false,
+          usePenetrate: true,
+          builder: (context) => const SafeArea(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: AuthAlert(),
+            ),
+          ),
+        );
+      }
 
       return null;
     } catch (e) {
@@ -308,7 +325,7 @@ class Repository {
   Future<UserAnswer?> getUser() async {
     String? token = await MySharedPrefs().token;
     var options = Options(headers: {
-      'Authorization': 'Token ${token}',
+      'Authorization': 'Token $token',
     });
     try {
       var response = await dio.get(

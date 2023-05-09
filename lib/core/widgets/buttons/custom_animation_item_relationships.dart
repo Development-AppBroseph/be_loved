@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
-import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/text_size.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/texts/next_text_widget.dart';
 import 'package:be_loved/core/widgets/texts/today_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -69,7 +68,7 @@ class _CustomAnimationItemRelationshipsState
       initialData: false,
       builder: (context, snapshot) {
         return GestureDetector(
-          onTap: (){  
+          onTap: () {
             widget.onDetail(widget.events.id);
           },
           onHorizontalDragStart: (details) {
@@ -134,8 +133,7 @@ class _CustomAnimationItemRelationshipsState
                     color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                     elevation: 0,
                     decoration: BoxDecoration(
-                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
-                    ),
+                        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]),
                     margin: EdgeInsets.zero,
                     padding: EdgeInsets.zero,
                     child: SingleChildScrollView(
@@ -148,7 +146,7 @@ class _CustomAnimationItemRelationshipsState
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SingleChildScrollView(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 child: Container(
                                   height: 140.h,
                                   padding: EdgeInsets.symmetric(
@@ -163,62 +161,101 @@ class _CustomAnimationItemRelationshipsState
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         widget.events.datetimeString == '0'
-                                        ? TodayTextWidget()
-                                        : Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Предстоящее событие',
-                                              style: TextStyle(
-                                                color: ColorStyles.greyColor,
-                                                fontSize: 15.sp,
-                                                fontWeight: FontWeight.w700,
-                                                height: 1,
+                                            ? TodayTextWidget()
+                                            : Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  widget.events.title ==
+                                                          'Годовщина'
+                                                      ? Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  right: 5.w),
+                                                          child: Image.asset(
+                                                            Img.redHeart,
+                                                            height: 15,
+                                                            width: 15,
+                                                          ),
+                                                        )
+                                                      : Container(),
+                                                  Text(
+                                                    'Предстоящее событие',
+                                                    style: TextStyle(
+                                                      color:
+                                                          ColorStyles.greyColor,
+                                                      fontSize: 15.sp,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      height: 1,
+                                                    ),
+                                                  ),
+                                                  const Spacer(),
+                                                  Text(
+                                                    widget.events
+                                                                .datetimeString ==
+                                                            '0'
+                                                        ? 'Сегодня'
+                                                        : checkDays(widget
+                                                            .events
+                                                            .datetimeString),
+                                                    style: TextStyle(
+                                                      color: getColorFromDays(
+                                                          widget.events
+                                                              .datetimeString,
+                                                          widget.events
+                                                              .important),
+                                                      fontSize: 15.sp,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      height: 1,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                              widget.events.datetimeString == '0'
-                                              ? 'Сегодня'
-                                              : '${checkDays(widget.events.datetimeString)}',
-                                              style: TextStyle(
-                                                color: getColorFromDays(widget.events.datetimeString, widget.events.important),
-                                                fontSize: 15.sp,
-                                                fontWeight: FontWeight.w800,
-                                                height: 1,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
-                                          duration: const Duration(
-                                              milliseconds: 600),
-                                          height: snapshot.data! 
-                                          ? (widget.events.datetimeString == '0' && eventsBloc.events.first.id == widget.events.id 
-                                            ? 10.h 
-                                            : eventsBloc.events.first.id == widget.events.id  
-                                            ? 19.h 
-                                            : (widget.events.datetimeString == '0' ? 23.h : 36.h)+4.h) 
-                                          : 0.h,
+                                          duration:
+                                              const Duration(milliseconds: 600),
+                                          height: snapshot.data!
+                                              ? (widget.events.datetimeString ==
+                                                          '0' &&
+                                                      eventsBloc.events.first
+                                                              .id ==
+                                                          widget.events.id
+                                                  ? 10.h
+                                                  : eventsBloc.events.first
+                                                              .id ==
+                                                          widget.events.id
+                                                      ? 19.h
+                                                      : (widget.events.datetimeString ==
+                                                                  '0'
+                                                              ? 23.h
+                                                              : 36.h) +
+                                                          4.h)
+                                              : 0.h,
                                         ),
                                         Text(
                                           widget.events.title,
                                           style: TextStyle(
-                                              color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                                              fontSize: homeWidgetTextSize(widget.events.title).sp,
+                                              color: ClrStyle.black17ToWhite[
+                                                  sl<AuthConfig>().idx],
+                                              fontSize: homeWidgetTextSize(
+                                                      widget.events.title)
+                                                  .sp,
                                               fontWeight: FontWeight.w800,
                                               height: 1),
                                         ),
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
-                                          duration: const Duration(
-                                              milliseconds: 600),
+                                          duration:
+                                              const Duration(milliseconds: 600),
                                           height: snapshot.data! ? 9.h : 0.h,
                                         ),
                                         // widget.index == 0
-                                        // ? 
-                                        NextEventTextWidget(eventEntity: widget.events)
+                                        // ?
+                                        NextEventTextWidget(
+                                            eventEntity: widget.events)
                                         //  SizedBox(height: 10.h,)
                                       ],
                                     ),
@@ -226,11 +263,11 @@ class _CustomAnimationItemRelationshipsState
                                 ),
                               ),
                               SingleChildScrollView(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 child: Column(
                                   children: [
                                     GestureDetector(
-                                      onTap: (){
+                                      onTap: () {
                                         widget.onDetail(widget.events.id);
                                       },
                                       child: Container(
@@ -252,8 +289,8 @@ class _CustomAnimationItemRelationshipsState
                                             duration: const Duration(
                                                 milliseconds: 600),
                                             curve: Curves.easeInOutQuint);
-                                        Future.delayed(
-                                                Duration(milliseconds: 600))
+                                        Future.delayed(const Duration(
+                                                milliseconds: 600))
                                             .then((value) {
                                           widget.delete(widget.index);
                                         });

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:be_loved/core/error/failures.dart';
@@ -14,6 +15,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../domain/usecases/send_noti.dart';
+
 part 'events_event.dart';
 part 'events_state.dart';
 
@@ -23,12 +25,12 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   final EditEvent editEvent;
   final DeleteEvent deleteEvent;
   final ChangePositionEvent changePositionEvent;
-  final SendNoti sendNoti;
+  final SendNotificaton sendNotification;
 
   final GetOldEvents getOldEvents;
 
   EventsBloc(this.addEvent, this.getEvents, this.deleteEvent,
-      this.changePositionEvent, this.editEvent, this.getOldEvents, this.sendNoti)
+      this.changePositionEvent, this.editEvent, this.getOldEvents, this.sendNotification)
       : super(EventInitialState()) {
     on<GetEventsEvent>(_getEvents);
     on<EventAddEvent>(_addEvents);
@@ -38,6 +40,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     on<EventDeleteEvent>(_deleteEvent);
     on<ResetSortEvent>(_resetEvents);
     on<GetOldEventsEvent>(_getOldEvents);
+    on<SendNoti>(_sendNoti);
   }
 
   List<EventEntity> events = [];
@@ -220,7 +223,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
                   : event.position - 1,
           event.eventEntity!);
     }
-    print('DELETE LIST: ${eventsDeleted}');
+    print('DELETE LIST: $eventsDeleted');
     emit(GotSuccessEventsState());
 
     Map<String, int> items = {};
@@ -230,7 +233,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     for (var inHomeItem in eventsInHome) {
       items['${inHomeItem.id}'] = eventsInHome.indexOf(inHomeItem) + 1;
     }
-    print('DATA TO BACK: ${items}');
+    print('DATA TO BACK: $items');
     final data =
         await changePositionEvent.call(ChangePositionEventParams(items: items));
     EventsState state = data.fold(
@@ -286,14 +289,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     emit(state);
   }
 
-  Future<void> sendNotification() async {
-    try {
-      emit(EventLoadingState());
-      await sendNoti.call(SendNotiParams());
-    } catch (e) {
-      emit(EventErrorState(message: '', isTokenError: false));
-    }
-  }
+  
 
   EventsState errorCheck(Failure failure) {
     print('FAIL: $failure');
@@ -313,7 +309,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
               failure.message.length < 100 ? failure.message : 'Ошибка сервера',
           isTokenError: false);
     } else {
-      return EventErrorState(message: 'Повторите попытку', isTokenError: false);
+      return const EventErrorState(message: 'Повторите попытку', isTokenError: false);
     }
   }
 
@@ -348,5 +344,14 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
   DateTime getEventStart(EventEntity event) {
     return DateTime.now().add(Duration(days: int.parse(event.datetimeString)));
+  }
+
+  Future _sendNoti(SendNoti event, Emitter<EventsState> emit) async {
+    try {
+      emit(EventLoadingState());
+      await sendNotification.call(SendNotiParams());
+    } catch (e) {
+      emit(const EventErrorState(message: '', isTokenError: false));
+    }
   }
 }

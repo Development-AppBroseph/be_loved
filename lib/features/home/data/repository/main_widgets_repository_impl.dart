@@ -1,9 +1,11 @@
 import 'package:be_loved/core/error/exceptions.dart';
 import 'package:be_loved/core/services/network/network_info.dart';
 import 'package:be_loved/features/home/data/datasource/main_widgets/main_widgets_remote_datasource.dart';
+import 'package:be_loved/features/home/domain/entities/home/levels_entiti.dart';
 import 'package:be_loved/features/home/domain/entities/main_widgets/main_widgets_entity.dart';
 import 'package:be_loved/features/home/domain/repositories/main_widgets_repository.dart';
 import 'package:dartz/dartz.dart';
+
 import '../../../../core/error/failures.dart';
 
 class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
@@ -114,6 +116,23 @@ class MainWidgetsRepositoryImpl implements MainWidgetsRepository {
         return Left(ServerFailure(e.toString()));
       }
     } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LevelEntiti>>> getLevels() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getLevels();
+        return Right(result);
+      } catch (e) {
+        if (e is ServerException) {
+          return Left(ServerFailure(e.message ?? 'Ошибка сервера'));
+        }
+        return Left(ServerFailure(e.toString()));
+      }
+    }else{
       return Left(NetworkFailure());
     }
   }

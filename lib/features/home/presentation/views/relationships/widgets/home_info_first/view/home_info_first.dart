@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:be_loved/constants/constants.dart';
+
 import 'package:be_loved/core/services/database/auth_params.dart';
-import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/relation_ship_settings_page.dart/controller/leveles_cubit.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/controller/home_info_first_cubit.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/controller/home_info_first_state.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
@@ -16,7 +16,7 @@ import 'package:flutter_svg/svg.dart';
 
 class HomeInfoFirst extends StatefulWidget {
   final Function() onRelationTap;
-  HomeInfoFirst({required this.onRelationTap});
+  const HomeInfoFirst({Key? key, required this.onRelationTap}) : super(key: key);
   @override
   State<HomeInfoFirst> createState() => _HomeInfoFirstState();
 }
@@ -38,12 +38,13 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
     super.initState();
     if (sl<AuthConfig>().user != null) {
       startTimer();
+      context.read<LevelsCubit>().anniversary(days, context);
     }
   }
 
   @override
   void dispose() {
-    streamController.close();
+    streamController.close();  
     _timer?.cancel();
     super.dispose();
   }
@@ -91,6 +92,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
             month,
             daysInYears,
           );
+      
       streamController.add(true);
     }
   }

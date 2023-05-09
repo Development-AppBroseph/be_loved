@@ -5,10 +5,10 @@ import 'package:equatable/equatable.dart';
 
 import '../repositories/main_widgets_repository.dart';
 
-class SendNoti implements UseCase<void, SendNotiParams> {
+class SendNotificaton implements UseCase<void, SendNotiParams> {
   final MainWidgetsRepository mainWidgetsRepository;
 
-  SendNoti({required this.mainWidgetsRepository});
+  SendNotificaton({required this.mainWidgetsRepository});
 
   @override
   Future<Either<Failure, void>> call(SendNotiParams params) async {

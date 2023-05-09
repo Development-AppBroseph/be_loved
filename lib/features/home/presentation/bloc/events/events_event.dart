@@ -43,3 +43,7 @@ class GetOldEventsEvent extends EventsEvent{
   final bool isReset;
   GetOldEventsEvent({required this.isReset});
 }
+
+class SendNoti extends EventsEvent{
+  
+}
