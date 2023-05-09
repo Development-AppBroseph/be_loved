@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart
 import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/widgets/events_list_widget.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/relation_ship_settings_page.dart/widgets/levels_widgets.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/relation_start_date_widget.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
@@ -35,6 +37,7 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class RelationShipsSettingsPage extends StatefulWidget {
   final VoidCallback prevPage;
@@ -86,7 +89,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {});
     });
     _controller.addListener(() {
@@ -487,6 +490,66 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                             datetime: datetime,
                                           ),
                                           SizedBox(height: 15.h),
+                                          GestureDetector(
+                                            onTap: () =>
+                                                showMaterialModalBottomSheet(
+                                              context: context,
+                                              animationCurve:
+                                                  Curves.easeInOutQuint,
+                                              duration: const Duration(
+                                                milliseconds: 600,
+                                              ),
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              builder: (context) {
+                                                return const LevelsWidget();
+                                              },
+                                            ),
+                                            child: SizedBox(
+                                              width: double.infinity,
+                                              height: 65.h,
+                                              child: CupertinoCard(
+                                                radius:
+                                                    BorderRadius.circular(40.r),
+                                                color: ClrStyle.whiteTo17[
+                                                    sl<AuthConfig>().idx],
+                                                elevation: 0,
+                                                margin: EdgeInsets.zero,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 25.w,
+                                                    vertical: 20.h),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      SvgImg.heart,
+                                                      color:
+                                                          ColorStyles.redColor,
+                                                      width: 27.w,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 18.w,
+                                                    ),
+                                                    Text(
+                                                      'Уровни отношений',
+                                                      style: TextStyles(context)
+                                                          .black_18_w800,
+                                                    ),
+                                                    const Spacer(),
+                                                    Icon(
+                                                      Icons
+                                                          .arrow_forward_ios_rounded,
+                                                      color: ClrStyle
+                                                              .black17ToWhite[
+                                                          sl<AuthConfig>().idx],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 15.h),
                                           SizedBox(
                                             width: double.infinity,
                                             child: CupertinoCard(
@@ -716,7 +779,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
     if (path != null && path.trim() != '') {
       return NetworkImage(Config.url.url + path);
     }
-    return AssetImage('assets/images/avatar_none.png');
+    return const AssetImage('assets/images/avatar_none.png');
   }
 
   @override

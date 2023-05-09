@@ -91,6 +91,10 @@ dependencies:
   check_vpn_connection: ^0.0.2
   flutter_smart_dialog: ^4.9.0+3
   dotted_border: ^2.0.0+3
+  web_socket_channel: ^2.4.0
+  flutter_native_timezone: ^2.0.0
+  awesome_notifications: ^0.7.4+1
+  permission_handler: ^10.2.0
           
   # webview_flutter: ^4.0.2
 

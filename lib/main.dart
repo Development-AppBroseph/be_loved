@@ -1,12 +1,14 @@
 import 'dart:io';
 
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
+import 'package:be_loved/core/services/notification/notification_service.dart';
 import 'package:be_loved/features/auth/presentation/views/login/auth_page.dart';
-import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
@@ -14,11 +16,11 @@ import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.da
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
-import 'package:be_loved/features/home/presentation/bloc/old_events/old_events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/stats/stats_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/relation_ship_settings_page.dart/controller/leveles_cubit.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/controller/home_info_first_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
@@ -31,23 +33,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'features/auth/data/models/auth/user.dart';
-import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+
+Future<void> check() async {
+  var status = await Permission.notification.status;
+  if (!status.isGranted) {
+    Permission.notification.request();
+  }
+}
 
 void main() async {
   AppMetrica.runZoneGuarded(() async {
     AppMetrica.activate(
         const AppMetricaConfig("416e2567-76ea-42d1-adce-c786faf3ada5"));
     WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    check();
+    NotificationService().initTimeZone();
+    AwesomeNotifications().initialize(null, [
+      NotificationChannel(
+        channelKey: 'key1',
+        channelName: 'Be loved',
+        channelDescription: 'Test notification',
+        playSound: true,
+        enableVibration: true,
+      )
+    ]);
     setupInjections();
     HttpOverrides.global = MyHttpOverrides();
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+    // NotificationService().initNotification();
     var user = await MySharedPrefs().user;
     GooglePlayServicesAvailability availability = await GoogleApiAvailability
         .instance
@@ -55,7 +77,6 @@ void main() async {
 
     if (availability.value == 0 || Platform.isIOS) {
       await Firebase.initializeApp();
-
       await FirebaseMessaging.instance.requestPermission(
         alert: true,
         announcement: false,
@@ -135,7 +156,10 @@ void main() async {
           ),
           BlocProvider<SubCubit>(
             create: (context) => sl<SubCubit>(),
-          )
+          ),
+          BlocProvider<LevelsCubit>(
+            create: (context) => sl<LevelsCubit>(),
+          ),
         ],
         child: OverlaySupport.global(
           child: MyApp(user: user),
@@ -145,9 +169,19 @@ void main() async {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final UserAnswer? user;
   const MyApp({Key? key, required this.user}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,8 +219,8 @@ class MyApp extends StatelessWidget {
                       ? ColorStyles.blackColor
                       : const Color.fromRGBO(240, 240, 240, 1.0),
                   fontFamily: 'Inter'),
-              home: user != null
-                  ? user?.date != null
+              home: widget.user != null
+                  ? widget.user?.date != null
                       ? HomePage()
                       : const AuthPage()
                   : const AuthPage()

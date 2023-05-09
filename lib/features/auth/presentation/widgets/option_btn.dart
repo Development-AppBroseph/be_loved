@@ -26,7 +26,7 @@ class OptionBtn extends StatelessWidget {
         child: CupertinoCard(
           elevation: 0,
           margin: EdgeInsets.zero,
-          color: isPhone ? ColorStyles.white : Color(0xFF0077FF),
+          color: isPhone ? ColorStyles.white : const Color(0xFF0077FF),
           padding: EdgeInsets.symmetric(horizontal: 18.w),
           radius: BorderRadius.circular(20.r),
           child: Row(
@@ -39,7 +39,12 @@ class OptionBtn extends StatelessWidget {
               ),
               Text(
                 text,
-                style: TextStyles(context).black_20_w700,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: ColorStyles.blackColor,
+                ),
               ),
               SizedBox(
                 width: isPhone ? 22.w : 28.85.w,

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:be_loved/constants/colors/color_styles.dart';
+
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
@@ -7,44 +7,37 @@ import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/sync_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
-import 'package:be_loved/core/widgets/alerts/vpn.dart';
+import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
+import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/selecting_gallery_page.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/modals/widget_purposes_modal.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/modals/file_widget_delete_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/view/home_info_first.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/main_widgets.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
-import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/sliding_background_card.dart';
 import 'package:be_loved/features/profile/presentation/widget/main_file/parametrs_user_bottomsheet.dart';
-import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
-import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:check_vpn_connection/check_vpn_connection.dart';
-import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 import 'modals/add_event_modal.dart';
-import 'modals/create_event_modal.dart';
 
 class ParalaxConfig {
   final int? level;
@@ -100,7 +93,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   @override
   void initState() {
     super.initState();
-    
+
     animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 600));
     animationController.addStatusListener((status) {
@@ -226,11 +219,25 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                     CustomRefreshIndicator(
                       onRefresh: () async {
                         showLoaderWrapper(context);
+                      //  await showDialog(
+                      //       context: context,
+                      //       barrierColor: Colors.black.withOpacity(.1),
+                      //       builder: (context) {
+                      //         return BackdropFilter(
+                      //           filter:
+                      //               ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      //           child: SizedBox(
+                      //             height: 100,
+                      //             width: 100,
+                      //           ),
+                      //         );
+                      //       }).then((value) => Navigator.of(context).pop());
                         context
                             .read<AuthBloc>()
                             .add(GetUser(isJustRefresh: true));
                         context.read<SubCubit>().getStatus();
                         allSync(context);
+                        
                         return;
                       },
                       builder: (BuildContext context, Widget child,
@@ -248,7 +255,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
                                       _buildImage(
                                           controller,
-                                          ParalaxConfig(
+                                          const ParalaxConfig(
                                               level: 5,
                                               image: 'assets/icons/add.svg')),
                                     ],
@@ -560,8 +567,9 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                                     await animationController
                                                         .animateTo(2);
                                                     animationController.stop();
-                                                    await eventsBloc
-                                                        .sendNotification();
+                                                    context
+                                                        .read<EventsBloc>()
+                                                        .add(SendNoti());
                                                   },
                                                   onLongPressEnd: (details) {
                                                     animationController
@@ -710,7 +718,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                       decoration: BoxDecoration(boxShadow: [
                         BoxShadow(
                             blurRadius: 20.h,
-                            color: Color.fromRGBO(0, 0, 0, 0.1))
+                            color: const Color.fromRGBO(0, 0, 0, 0.1))
                       ], borderRadius: BorderRadius.circular(20.r)),
                       child: child,
                     );
@@ -741,9 +749,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
                 //On archive tap
                 funcArchive: () async {
-                  if (context.read<MainWidgetsBloc>().mainWidgets == null ||
-                      context.read<MainWidgetsBloc>().mainWidgets.file !=
-                          null) {
+                  if (context.read<MainWidgetsBloc>().mainWidgets.file !=
+                      null) {
                     return;
                   }
 
@@ -757,7 +764,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                       files: fileId != null ? [fileId] : [],
                       isOneItemSelecting: true,
                     ),
-                    transitionDuration: Duration(milliseconds: 400),
+                    transitionDuration: const Duration(milliseconds: 400),
                     transitionsBuilder: (_, a, __, c) =>
                         FadeTransition(opacity: a, child: c),
                   ));
@@ -773,13 +780,12 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
                 //On purpose tap
                 funcPurpose: () {
-                  if (context.read<MainWidgetsBloc>().mainWidgets == null ||
-                      context
-                              .read<MainWidgetsBloc>()
-                              .mainWidgets
-                              .purposes
-                              .length >=
-                          3) {
+                  if (context
+                          .read<MainWidgetsBloc>()
+                          .mainWidgets
+                          .purposes
+                          .length >=
+                      3) {
                     return;
                   }
 
@@ -904,7 +910,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
     if (path != null && path.trim() != '') {
       return NetworkImage(Config.url.url + path);
     }
-    return AssetImage('assets/images/avatar_none.png');
+    return const AssetImage('assets/images/avatar_none.png');
   }
 
   @override

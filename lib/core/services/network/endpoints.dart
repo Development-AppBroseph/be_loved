@@ -1,5 +1,6 @@
-import 'config.dart';
 import 'dart:core';
+
+import 'config.dart';
 
 enum Endpoints {
   // Authentication
@@ -74,7 +75,8 @@ enum Endpoints {
   //SendNoti
   sendNoti,
   //statusSub
-  statusSub
+  statusSub,
+  levels,
 }
 
 extension EndpointsExtension on Endpoints {
@@ -168,6 +170,8 @@ extension EndpointsExtension on Endpoints {
         return '/promos/';
       case Endpoints.getActual:
         return '/promos/actual';
+      case Endpoints.levels:
+        return '/relations/levels';
       default:
         return '';
     }
@@ -199,9 +203,9 @@ extension EndpointsExtension on Endpoints {
   Uri buildURL(
       {Map<String, dynamic>? queryParameters, List<dynamic>? urlParams}) {
     var url = Uri(
-        scheme: this.scheme,
-        host: this.hostName,
-        path: this.getPath(params: urlParams),
+        scheme: scheme,
+        host: hostName,
+        path: getPath(params: urlParams),
         queryParameters: queryParameters ?? {});
     return url;
   }

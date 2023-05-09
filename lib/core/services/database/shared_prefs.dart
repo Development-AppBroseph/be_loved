@@ -1,8 +1,8 @@
 import 'dart:convert';
+
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/secure_storage.dart';
 import 'package:be_loved/features/auth/presentation/views/login/auth_page.dart';
-import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -60,6 +60,10 @@ class MySharedPrefs {
       jsonEncode(user.toJson()),
     );
   }
+  Future<void> setYears(int year) async {
+    (await _sharedPreferences).setInt('year',  year);
+  }
+  Future<int?> get year async => (await _sharedPreferences).getInt('year');
 
   void changeName(String newName) async {
     var newUser = (await user) as UserAnswer;

@@ -1,8 +1,11 @@
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/home/data/models/archive/gallery_file_model.dart';
+import 'package:be_loved/features/home/data/models/home/levels_model.dart';
 import 'package:be_loved/features/home/data/models/purposes/purpose_model.dart';
 import 'package:be_loved/features/home/domain/entities/main_widgets/main_widgets_entity.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/services/database/auth_params.dart';
 import '../../../../../core/services/network/endpoints.dart';
@@ -15,6 +18,7 @@ abstract class MainWidgetsRemoteDataSource {
   Future<void> deleteFileWidget(int id);
   Future<void> deletePurposeWidget(int id);
   Future<void> sendNotification();
+  Future<List<LevelModel>> getLevels();
 }
 
 class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
@@ -125,19 +129,36 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
 
   @override
   Future<void> sendNotification() async {
+    final token = await FirebaseMessaging.instance.getToken();
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.post(
       Endpoints.sendNoti.getPath(),
+      data: {"fcm_token": token},
       options: Options(
-        followRedirects: false,
-        validateStatus: (status) => status! < 699,
         headers: headers,
       ),
     );
+    print(token);
     print(response.statusCode);
     if (response.statusCode! >= 200 || response.statusCode! > 204) {
       return;
     } else {
+      throw ServerException(message: 'Ошибка с сервером');
+    }
+  }
+
+  @override
+  Future<List<LevelModel>> getLevels() async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    Response response = await dio.get(
+      Endpoints.levels.getPath(),
+      options: Options(
+        headers: headers,
+      ),
+    );
+    if (response.statusCode! >= 200 ) {
+      return List.from((response.data as List<dynamic>).map((e) => LevelModel.fromJson(e)).toList());
+    }else{
       throw ServerException(message: 'Ошибка с сервером');
     }
   }

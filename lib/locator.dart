@@ -41,6 +41,7 @@ import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:be_loved/features/home/domain/usecases/get_gallery_files.dart';
 import 'package:be_loved/features/home/domain/usecases/get_history_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/get_in_process_purpose.dart';
+import 'package:be_loved/features/home/domain/usecases/get_levels.dart';
 import 'package:be_loved/features/home/domain/usecases/get_main_widgets.dart';
 import 'package:be_loved/features/home/domain/usecases/get_memory_info.dart';
 import 'package:be_loved/features/home/domain/usecases/get_moments.dart';
@@ -58,11 +59,10 @@ import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.da
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
-import 'package:be_loved/features/home/presentation/bloc/old_events/old_events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/stats/stats_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/relation_ship_settings_page.dart/controller/leveles_cubit.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/controller/home_info_first_cubit.dart';
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
@@ -83,6 +83,8 @@ import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
 import 'constants/main_config_app.dart';
 import 'core/services/database/auth_params.dart';
 import 'core/services/network/config.dart';
@@ -102,7 +104,20 @@ void setupInjections() {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   sl.registerFactory<Dio>(
-    () => Dio(BaseOptions(baseUrl: Config.url.url)),
+    () => Dio(BaseOptions(
+      baseUrl: Config.url.url,
+    ))
+      ..interceptors.add(
+        PrettyDioLogger(
+          requestHeader: true,
+          requestBody: true,
+          responseBody: true,
+          responseHeader: false,
+          error: true,
+          compact: true,
+          maxWidth: 90,
+        ),
+      ),
   );
 
   ///Authentication
@@ -161,7 +176,7 @@ void setupInjections() {
   sl.registerLazySingleton(() => ChangePositionEvent(sl()));
   sl.registerLazySingleton(() => GetEvents(sl()));
   sl.registerLazySingleton(() => GetOldEvents(sl()));
-  sl.registerLazySingleton(() => SendNoti(mainWidgetsRepository: sl()));
+  sl.registerLazySingleton(() => SendNotificaton(mainWidgetsRepository: sl()));
 
   //Blocs
   sl.registerFactory<EventsBloc>(
@@ -283,7 +298,6 @@ void setupInjections() {
   sl.registerLazySingleton(() => GetPromo(purposeRepository: sl()));
   sl.registerLazySingleton(() => GetActual(purposeRepository: sl()));
 
-
   //Blocs
   sl.registerFactory<PurposeBloc>(
     () => PurposeBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()),
@@ -306,6 +320,7 @@ void setupInjections() {
 
   // //UseCases
   sl.registerLazySingleton(() => GetMainWidgets(sl()));
+  sl.registerLazySingleton(() => GetLevels(mainWidgetsRepository: sl()));
   sl.registerLazySingleton(() => AddFileWidget(sl()));
   sl.registerLazySingleton(() => AddPurposeWidget(sl()));
   sl.registerLazySingleton(() => DeleteFileWidget(sl()));
@@ -315,6 +330,7 @@ void setupInjections() {
   sl.registerFactory<MainWidgetsBloc>(
     () => MainWidgetsBloc(sl(), sl(), sl(), sl(), sl()),
   );
+  sl.registerFactory<LevelsCubit>(() => LevelsCubit(getLevels: sl()));
 
   sl.registerFactory<HomeInfoFirstCubit>(
     () => HomeInfoFirstCubit(),

@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
-import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/text_size.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/texts/next_text_widget.dart';
 import 'package:be_loved/core/widgets/texts/today_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -147,7 +146,7 @@ class _CustomAnimationItemRelationshipsState
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SingleChildScrollView(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 child: Container(
                                   height: 140.h,
                                   padding: EdgeInsets.symmetric(
@@ -167,14 +166,19 @@ class _CustomAnimationItemRelationshipsState
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Container(
-                                                    margin: EdgeInsets.only(right: 5.w),
-                                                    child: Image.asset(
-                                                      Img.redHeart,
-                                                      height: 15,
-                                                      width: 15,
-                                                    ),
-                                                  ),
+                                                  widget.events.title ==
+                                                          'Годовщина'
+                                                      ? Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  right: 5.w),
+                                                          child: Image.asset(
+                                                            Img.redHeart,
+                                                            height: 15,
+                                                            width: 15,
+                                                          ),
+                                                        )
+                                                      : Container(),
                                                   Text(
                                                     'Предстоящее событие',
                                                     style: TextStyle(
@@ -192,7 +196,9 @@ class _CustomAnimationItemRelationshipsState
                                                                 .datetimeString ==
                                                             '0'
                                                         ? 'Сегодня'
-                                                        : '${checkDays(widget.events.datetimeString)}',
+                                                        : checkDays(widget
+                                                            .events
+                                                            .datetimeString),
                                                     style: TextStyle(
                                                       color: getColorFromDays(
                                                           widget.events
@@ -257,7 +263,7 @@ class _CustomAnimationItemRelationshipsState
                                 ),
                               ),
                               SingleChildScrollView(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 child: Column(
                                   children: [
                                     GestureDetector(
@@ -283,8 +289,8 @@ class _CustomAnimationItemRelationshipsState
                                             duration: const Duration(
                                                 milliseconds: 600),
                                             curve: Curves.easeInOutQuint);
-                                        Future.delayed(
-                                                Duration(milliseconds: 600))
+                                        Future.delayed(const Duration(
+                                                milliseconds: 600))
                                             .then((value) {
                                           widget.delete(widget.index);
                                         });

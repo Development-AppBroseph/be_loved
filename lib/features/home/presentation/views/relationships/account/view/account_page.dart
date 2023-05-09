@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
-import 'package:be_loved/constants/main_config_app.dart';
-import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
@@ -13,11 +10,7 @@ import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
-import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
-import 'package:be_loved/features/auth/presentation/views/login/vk_view.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_cubit.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/account/controller/account_page_state.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/avatar_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/mirror_image.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/policy_view.dart';
@@ -28,11 +21,9 @@ import 'package:be_loved/features/profile/presentation/widget/decor/sliding_back
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,7 +32,7 @@ import 'package:pinput/pinput.dart';
 
 class AccountPage extends StatefulWidget {
   final VoidCallback prevPage;
-  AccountPage({Key? key, required this.prevPage}) : super(key: key);
+  const AccountPage({Key? key, required this.prevPage}) : super(key: key);
 
   @override
   State<AccountPage> createState() => _AccountPageState();
@@ -98,7 +89,7 @@ class _AccountPageState extends State<AccountPage>
   late AnimationController animationController;
 
   void setRotation() {
-    final angle = 90 * pi / 180;
+    const angle = 90 * pi / 180;
     animation =
         Tween<double>(begin: 0, end: angle).animate(animationController);
   }
@@ -162,6 +153,7 @@ class _AccountPageState extends State<AccountPage>
         context
             .read<ProfileBloc>()
             .add(PutUserCodeEvent(code: int.parse(codeController.text)));
+        showAlertToast('Следующий вход в аккаунт будет производиться по новому номеру');
       } else {
         showAlertToast('Пишите корректный код');
       }

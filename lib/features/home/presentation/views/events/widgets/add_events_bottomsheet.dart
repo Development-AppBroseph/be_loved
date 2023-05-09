@@ -1,13 +1,7 @@
-import 'package:be_loved/constants/colors/color_styles.dart';
-import 'package:be_loved/core/bloc/relation_ships/events_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
-import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
-import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
 import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
-import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
-import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
 import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
@@ -15,15 +9,12 @@ import 'package:be_loved/features/home/domain/entities/events/event_entity.dart'
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
-import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:math';
 
 class AddEventBottomsheet extends StatefulWidget {
   final Function() onTap;
@@ -53,6 +44,8 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
         eventEntity: event,
         position: context.read<EventsBloc>().eventsInHome.length+1
       ));
+    }else{
+      showAlertToast("Такое событие уже добавлено");
     }
     Navigator.pop(context);
   }
@@ -282,7 +275,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  truncateWithEllipsis(22, '${eventsBloc.eventsSorted[index].title}'),
+                                                  truncateWithEllipsis(22, eventsBloc.eventsSorted[index].title),
                                                   style: TextStyle(
                                                     fontFamily: "Inter",
                                                     color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
