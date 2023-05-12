@@ -2,6 +2,7 @@ import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
 import 'package:be_loved/core/utils/helpers/truncate_text_helper.dart';
 import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/core/widgets/alerts/event_alert.dart';
 import 'package:be_loved/core/widgets/texts/day_text_widget.dart';
 import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
@@ -15,6 +16,7 @@ import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class AddEventBottomsheet extends StatefulWidget {
   final Function() onTap;
@@ -36,18 +38,29 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
   ScrollController scrollController = ScrollController();
   TextStyle style1 = TextStyle(
       color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
-  
 
-  selectEvent(EventEntity event){
-    if(!context.read<EventsBloc>().eventsInHome.any((element) => element.id == event.id)){
+  selectEvent(EventEntity event) async {
+    if (!context
+        .read<EventsBloc>()
+        .eventsInHome
+        .any((element) => element.id == event.id)) {
       context.read<EventsBloc>().add(EventChangeToHomeEvent(
-        eventEntity: event,
-        position: context.read<EventsBloc>().eventsInHome.length+1
-      ));
-    }else{
-      showAlertToast("Такое событие уже добавлено");
+          eventEntity: event,
+          position: context.read<EventsBloc>().eventsInHome.length + 1));
+    } else {
+      Navigator.pop(context);
+      await SmartDialog.show(
+        animationType: SmartAnimationType.fade,
+        maskColor: Colors.transparent,
+        displayTime: const Duration(seconds: 5),
+        clickMaskDismiss: false,
+        usePenetrate: true,
+        builder: (context) => const SafeArea(
+          child: Align(alignment: Alignment.topCenter, child: EventAlert()),
+        ),
+      );
+      // showAlertToast("Такое событие уже добавлено");
     }
-    Navigator.pop(context);
   }
 
   @override
@@ -148,7 +161,7 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                         'Завтра',
                                         style: TextStyle(
                                           fontFamily: "Inter",
-                                          color: const Color(0xffFF1D1D),
+                                          color: const Color(0xffFF3347),
                                           fontSize: 15.sp,
                                           fontWeight: FontWeight.w700,
                                         ),
@@ -160,7 +173,8 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                                     'Годовщина',
                                     style: TextStyle(
                                       fontFamily: "Inter",
-                                      color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                                      color: ClrStyle
+                                          .black17ToWhite[sl<AuthConfig>().idx],
                                       fontSize: 50.sp,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -185,127 +199,146 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 35.h,),
-                  TagsListBlock(isLeftPadding: false,),
-                  SizedBox(height: 25.h,),
+                  SizedBox(
+                    height: 35.h,
+                  ),
+                  TagsListBlock(
+                    isLeftPadding: false,
+                  ),
+                  SizedBox(
+                    height: 25.h,
+                  ),
                   BlocConsumer<EventsBloc, EventsState>(
-                    listener: (context, state) {
-                      if(state is EventErrorState){
-                        showAlertToast(state.message);
-                      }
-                      if(state is EventInternetErrorState){
-                        showAlertToast('Проверьте соединение с интернетом!');
-                      }
-                      if(state is GotSuccessEventsState){
-                        setState(() {});
-                      }
-                    },
-                    builder: (context, state) {
-                      if(state is EventLoadingState){
-                        return Container();
-                      }
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            child: Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Предстоящее событие:',
+                      listener: (context, state) {
+                    if (state is EventErrorState) {
+                      showAlertToast(state.message);
+                    }
+                    if (state is EventInternetErrorState) {
+                      showAlertToast('Проверьте соединение с интернетом!');
+                    }
+                    if (state is GotSuccessEventsState) {
+                      setState(() {});
+                    }
+                  }, builder: (context, state) {
+                    if (state is EventLoadingState) {
+                      return Container();
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          child: Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Предстоящее событие:',
+                                    style: TextStyle(
+                                      fontFamily: "Inter",
+                                      color: ClrStyle
+                                          .black17ToWhite[sl<AuthConfig>().idx],
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 6.h),
+                                    child: Text(
+                                      countEventsText(eventsBloc.eventsSorted),
                                       style: TextStyle(
                                         fontFamily: "Inter",
-                                        color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xff969696),
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 6.h),
-                                      child: Text(
-                                        countEventsText(eventsBloc.eventsSorted),
-                                        style: TextStyle(
-                                          fontFamily: "Inter",
-                                          color: const Color(0xff969696),
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                                   ),
+                                ],
+                              ),
+                              const Spacer(),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: 17.h, bottom: 26.h),
-                            height: 1.h,
-                            width: 378.w,
-                            color: const Color(0xff969696),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 35.w),
-                            child: SingleChildScrollView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              child: Column(
-                                children: List.generate(
-                                  eventsBloc.eventsSorted.length,
-                                  (index) => Padding(
-                                    padding: EdgeInsets.only(bottom: 16.h),
-                                    child: GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: (){
-                                        selectEvent(eventsBloc.eventsSorted[index]);
-                                      },
-                                      child: SizedBox(
-                                        child: Row(
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  truncateWithEllipsis(22, eventsBloc.eventsSorted[index].title),
-                                                  style: TextStyle(
-                                                    fontFamily: "Inter",
-                                                    color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                                                    fontSize: 20.sp,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 17.h, bottom: 26.h),
+                          height: 1.h,
+                          width: 378.w,
+                          color: const Color(0xff969696),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 35.w),
+                          child: SingleChildScrollView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            child: Column(
+                              children: List.generate(
+                                eventsBloc.eventsSorted.length,
+                                (index) => Padding(
+                                  padding: EdgeInsets.only(bottom: 16.h),
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      selectEvent(
+                                          eventsBloc.eventsSorted[index]);
+                                    },
+                                    child: SizedBox(
+                                      child: Row(
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                truncateWithEllipsis(
+                                                    22,
+                                                    eventsBloc
+                                                        .eventsSorted[index]
+                                                        .title),
+                                                style: TextStyle(
+                                                  fontFamily: "Inter",
+                                                  color:
+                                                      ClrStyle.black17ToWhite[
+                                                          sl<AuthConfig>().idx],
+                                                  fontSize: 20.sp,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(top: 6.h),
-                                                  child: !eventsBloc.eventsSorted[index].important
-                                                  ? Text(
-                                                    'Добавил(а): ${eventsBloc.eventsSorted[index].eventCreator.username}',
-                                                    style: TextStyle(
-                                                      fontFamily: "Inter",
-                                                      color: const Color(0xff969696),
-                                                      fontSize: 15.sp,
-                                                      fontWeight: FontWeight.w700,
-                                                    ),
-                                                  ) 
-                                                  : ImportantTextWidget()
-                                                ),
-                                              ],
-                                            ),
-                                            const Spacer(),
-                                            Align(
+                                              ),
+                                              Padding(
+                                                  padding:
+                                                      EdgeInsets.only(top: 6.h),
+                                                  child: !eventsBloc
+                                                          .eventsSorted[index]
+                                                          .important
+                                                      ? Text(
+                                                          'Добавил(а): ${eventsBloc.eventsSorted[index].eventCreator.username}',
+                                                          style: TextStyle(
+                                                            fontFamily: "Inter",
+                                                            color: const Color(
+                                                                0xff969696),
+                                                            fontSize: 15.sp,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
+                                                        )
+                                                      : ImportantTextWidget()),
+                                            ],
+                                          ),
+                                          const Spacer(),
+                                          Align(
                                               alignment: Alignment.centerRight,
-                                              child: DayTextWidget(eventEntity: eventsBloc.eventsSorted[index],)
-                                            ),
-                                          ],
-                                        ),
+                                              child: DayTextWidget(
+                                                eventEntity: eventsBloc
+                                                    .eventsSorted[index],
+                                              )),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -313,11 +346,10 @@ class _AddEventBottomsheetState extends State<AddEventBottomsheet> {
                               ),
                             ),
                           ),
-                        ],
-                      );
-                    }
-                  ),
-                  
+                        ),
+                      ],
+                    );
+                  }),
                   GestureDetector(
                     onTap: () {
                       showModalCreateEvent(context, () {});

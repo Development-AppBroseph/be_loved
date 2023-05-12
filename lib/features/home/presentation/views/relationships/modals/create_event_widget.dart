@@ -76,6 +76,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
       'repeat': 'Каждую неделю',
       'interval': 86400 * 7,
     },
+    {
+      'repeat': 'Каждый месяц',
+    },
+    {
+      'repeat': 'Каждый год',
+    }
   ];
 
   int iconIndex = 15;
@@ -228,11 +234,26 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                 eventCreator: sl<AuthConfig>().user!.me,
                 mainPosition: 0)));
       }
-      NotificationService().pushNotification(
-        title: _controllerName.text,
-        body: _controllerDescription.text,
-        interval: repeats[snapshot.data!]['interval'],
-      );
+      if (snapshot.data! != 3 || snapshot.data! != 4) {
+        if (snapshot.data! == 3) {
+          NotificationService().yearsPushNotification(
+            title: _controllerName.text,
+            body: _controllerDescription.text,
+          );
+        } else {
+          NotificationService().monthlyPushNotification(
+            title: _controllerName.text,
+            body: _controllerDescription.text,
+          );
+        }
+      } else {
+        NotificationService().pushNotification(
+          title: _controllerName.text,
+          body: _controllerDescription.text,
+          interval: repeats[snapshot.data!]['interval'],
+        );
+      }
+
       // NotificationService().cancelPushNotification();
     }
   }

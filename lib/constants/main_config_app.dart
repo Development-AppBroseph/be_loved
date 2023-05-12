@@ -118,8 +118,8 @@ class MainConfigApp {
         colorHex: '#0177FF',
         assetPath: 'assets/icons/blue.svg'),
     TagColor(
-        color: const Color(0xFFFF1D1D),
-        colorHex: '#FF1D1D',
+        color: const Color(0xFFFF3347),
+        colorHex: '#FF3347',
         assetPath: 'assets/icons/red.svg'),
     TagColor(
         color: const Color(0xFF20CB83),

@@ -5,7 +5,6 @@ import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
-import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/video_view_v2.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
@@ -18,9 +17,12 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainWidgets extends StatelessWidget {
+  MainWidgets({Key? key}) : super(key: key);
+
   void completePurpose(BuildContext context, int id) {
     showLoaderWrapper(context);
     context.read<PurposeBloc>().add(CompletePurposeEvent(target: id));
+    // context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
   }
 
   void cancelPurpose(BuildContext context, int id) {
@@ -79,7 +81,7 @@ class MainWidgets extends StatelessWidget {
         }
         if (state is CompletedPurposeState) {
           Loader.hide();
-          // purposeBloc.add(GetAllPurposeDataEvent());
+          purposeBloc.add(GetAllPurposeDataEvent());
           bloc.add(GetMainWidgetsEvent());
         }
       }, builder: (context, state) {
@@ -112,7 +114,7 @@ class MainWidgets extends StatelessWidget {
                                 : (Config.url.url +
                                     bloc.mainWidgets.file!.urlToFile)),
                           ),
-                    transitionDuration: Duration(milliseconds: 400),
+                    transitionDuration: const Duration(milliseconds: 400),
                     transitionsBuilder: (_, a, __, c) =>
                         FadeTransition(opacity: a, child: c),
                   ));

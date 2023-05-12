@@ -104,10 +104,11 @@ void setupInjections() {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   sl.registerFactory<Dio>(
-    () => Dio(BaseOptions(
-      baseUrl: Config.url.url,
-    ))
-      ..interceptors.add(
+    () => Dio(
+      BaseOptions(
+        baseUrl: Config.url.url,
+      ),
+    )..interceptors.add(
         PrettyDioLogger(
           requestHeader: true,
           requestBody: true,

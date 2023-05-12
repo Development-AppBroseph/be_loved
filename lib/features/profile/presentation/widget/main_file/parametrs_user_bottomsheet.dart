@@ -97,25 +97,130 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                     haveToggleSwitch: true,
                     icon: SvgImg.notification,
                   ),
-                  state is SubHaveState
-                      ? Container(
+                  if (state is SubHaveState)
+                    Container(
                         // height: 275,
-                      )
-                      : DevideSettings(
-                          title: "Подписка BeLoved+",
-                          subtitle: "Подробнее",
-                          haveToggleSwitch: false,
-                          icon: SvgImg.person,
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SubscriptionView(),
+                        )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Подписка',
+                                style: TextStyle(
+                                  fontFamily: "Inter",
+                                  fontSize: 25.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                ),
                               ),
-                            );
-                          },
-                        ),
+                              Text(
+                                ' BeLoved+',
+                                style: TextStyle(
+                                  fontFamily: "Inter",
+                                  fontSize: 25.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xffFF3347),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SubscriptionView(),
+                                ),
+                              );
+                            },
+                            child: SizedBox(
+                              height: 160,
+                              width: double.infinity,
+                              child: CupertinoCard(
+                                elevation: 0,
+                                margin: EdgeInsets.zero,
+                                padding: EdgeInsets.zero,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      Img.back,
+                                    ),
+                                    fit: BoxFit.cover,
+                                    alignment: Alignment.topCenter,
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      bottom: 15,
+                                      left: 20,
+                                      child: SizedBox(
+                                        height: 36.h,
+                                        width: 144.w,
+                                        child: CupertinoCard(
+                                          elevation: 0,
+                                          radius: BorderRadius.circular(20),
+                                          margin: EdgeInsets.zero,
+                                          padding: EdgeInsets.zero,
+                                          child:  Align(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              'Приобрести',
+                                              style: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      left: 184,
+                                      bottom: 23,
+                                      child: Text(
+                                        '199₽ в месяц',
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 18.sp,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  // : DevideSettings(
+                  //     title: "Подписка BeLoved+",
+                  //     subtitle: "Подробнее",
+                  //     haveToggleSwitch: false,
+                  //     icon: SvgImg.person,
+                  //     onPressed: () {
+                  //       Navigator.pop(context);
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => SubscriptionView(),
+                  //   ),
+                  // );
+                  //     },
+                  //   ),
                   SizedBox(
                     height: 40.h,
                   ),

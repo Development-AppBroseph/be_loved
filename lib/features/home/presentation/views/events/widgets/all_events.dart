@@ -1,28 +1,19 @@
-import 'dart:math';
-
-import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/data/models/home/hashTag.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
-import 'package:be_loved/features/home/presentation/views/events/widgets/show_create_tag_modal.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/tags_list_block.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_event_item.dart';
-import 'package:be_loved/features/home/presentation/views/events/widgets/user_events.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
-import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
-import 'tag_modal.dart';
 
 class AllEeventsPage extends StatefulWidget {
   final VoidCallback prevPage;
@@ -233,7 +224,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                               margin: EdgeInsets.only(right: 10.w),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.r),
-                                color: const Color(0xffFF1D1D),
+                                color: const Color(0xffFF3347),
                               ),
                               child: Center(
                                 child: SvgPicture.asset(
@@ -266,7 +257,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.r),
                             border: Border.all(
-                              color: const Color(0xffFF1D1D),
+                              color: const Color(0xffFF3347),
                               width: 1,
                             )),
                         child: Center(
@@ -274,7 +265,7 @@ class _AllEeventsPageState extends State<AllEeventsPage> {
                             SvgImg.add,
                             height: 19.h,
                             width: 19.w,
-                            color: const Color(0xffFF1D1D),
+                            color: const Color(0xffFF3347),
                           ),
                         ),
                       ),

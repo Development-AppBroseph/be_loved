@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
@@ -6,10 +7,10 @@ import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/enums.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/create_account_info.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_relation.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
-import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
@@ -75,7 +76,7 @@ class _CodePageState extends State<CodePage> {
       BlocProvider.of<AuthBloc>(context).add(CheckUser(
           phone ?? '',
           textEditingControllerUp.text,
-          int.parse('${textEditingControllerUp.text}')));
+          int.parse(textEditingControllerUp.text)));
 
   void startTimer() {
     start = 60;
@@ -134,8 +135,6 @@ class _CodePageState extends State<CodePage> {
                   builder: (context) => InviteRelation(previousPage: () {}),
                 ),
               ).then((value) {
-                BlocProvider.of<WebSocketBloc>(context)
-                    .add(WebSocketCloseEvent());
                 if (textEditingControllerUp.text.length == 4) {
                   BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
                 }

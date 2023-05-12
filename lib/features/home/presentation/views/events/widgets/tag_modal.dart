@@ -8,12 +8,10 @@ import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/core/widgets/text_fields/default_text_form_field.dart';
-import 'package:be_loved/features/home/data/models/home/hashTag.dart';
 import 'package:be_loved/features/home/domain/entities/events/tag_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/user_tag.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_widget.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -23,7 +21,6 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../relationships/modals/icon_select_modal.dart';
 import 'color_select.dart';
 
 class TagModal extends StatefulWidget {
@@ -303,7 +300,7 @@ class _TagModalState extends State<TagModal> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.r),
                               border: Border.all(
-                                color: const Color(0xffFF1D1D),
+                                color: const Color(0xffFF3347),
                                 width: 1,
                               ),
                             ),
@@ -312,7 +309,7 @@ class _TagModalState extends State<TagModal> {
                                 SvgImg.add,
                                 height: 17.h,
                                 width: 17.w,
-                                color: const Color(0xffFF1D1D),
+                                color: const Color(0xffFF3347),
                               ),
                             ),
                           ),
@@ -339,7 +336,7 @@ class _TagModalState extends State<TagModal> {
                         return ListView.builder(
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
+                            physics: const ClampingScrollPhysics(),
                             itemCount: eventsBloc.events.length,
                             itemBuilder: (context, i) {
                               return Container(

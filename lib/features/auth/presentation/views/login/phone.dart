@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
-import 'package:be_loved/features/auth/presentation/views/login/code.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
+import 'package:be_loved/features/auth/presentation/views/login/code.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/policy_view.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
@@ -15,7 +17,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:async';
 
 class PhonePage extends StatefulWidget {
   final String? vkCode;
@@ -166,9 +167,27 @@ class _PhonePageState extends State<PhonePage> {
                             ),
                             child: Row(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.asset('assets/images/code.png'),
+                                Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child:
+                                          Image.asset('assets/images/code.png'),
+                                    ),
+                                    Container(
+                                      height: 70,
+                                      width: 34,
+                                      decoration: BoxDecoration(
+                                        color: isValidate(phoneController)
+                                            ? Colors.transparent
+                                            : ColorStyles.validateColor
+                                                .withOpacity(.3),
+                                        borderRadius: BorderRadius.circular(
+                                          10,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(width: 12.w),
                                 Text(
