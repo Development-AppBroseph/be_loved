@@ -1,9 +1,6 @@
-import 'dart:math';
-
-import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
-import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/core/services/notification/notification_service.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/text_size.dart';
 import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
@@ -11,10 +8,8 @@ import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
-import 'package:be_loved/features/home/data/models/home/hashTag.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
-import 'package:be_loved/features/home/presentation/bloc/old_events/old_events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/add_photo_card.dart';
@@ -26,8 +21,6 @@ import 'package:be_loved/features/home/presentation/views/events/widgets/event_s
 import 'package:be_loved/features/home/presentation/views/events/widgets/photo_settings_modal.dart';
 import 'package:be_loved/features/home/presentation/views/events/widgets/show_create_tag_modal.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_modal.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/modals/create_event_widget.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/view/home_info_first.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -67,7 +60,7 @@ class _EventDetailViewState extends State<EventDetailView> {
 
   showPhotoSettingsModal(bool editPhoto) async {
     scrollToBottom();
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       photoSettingsModal(
           context,
           getWidgetPosition(editPhoto ? photoSettingsKey : addPhotoSettingsKey),
@@ -96,6 +89,7 @@ class _EventDetailViewState extends State<EventDetailView> {
     }, () {
       Navigator.pop(context);
       context.read<EventsBloc>().add(EventDeleteEvent(ids: [event!.id]));
+      NotificationService().cancelPushNotification(event!.id);
       widget.prevPage();
     }, () {
       Navigator.pop(context);

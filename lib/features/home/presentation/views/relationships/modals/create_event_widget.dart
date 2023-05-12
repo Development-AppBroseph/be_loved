@@ -239,11 +239,13 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
           NotificationService().yearsPushNotification(
             title: _controllerName.text,
             body: _controllerDescription.text,
+            id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
           );
         } else {
           NotificationService().monthlyPushNotification(
             title: _controllerName.text,
             body: _controllerDescription.text,
+            id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
           );
         }
       } else {
@@ -251,6 +253,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
           title: _controllerName.text,
           body: _controllerDescription.text,
           interval: repeats[snapshot.data!]['interval'],
+          id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
         );
       }
 

@@ -6,13 +6,15 @@ class NotificationService {
     timeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   }
 
-  Future pushNotification(
-      {required String title,
-      required String body,
-      required int interval}) async {
+  Future pushNotification({
+    required String title,
+    required String body,
+    required int interval,
+    required int id,
+  }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: 0,
+        id: id,
         channelKey: 'key1',
         title: title,
         body: body,
@@ -28,10 +30,11 @@ class NotificationService {
   Future monthlyPushNotification({
     required String title,
     required String body,
+    required int id,
   }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: 0,
+        id: id,
         channelKey: 'key1',
         title: title,
         body: body,
@@ -47,10 +50,11 @@ class NotificationService {
   Future yearsPushNotification({
     required String title,
     required String body,
+    required int id,
   }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: 0,
+        id: id,
         channelKey: 'key1',
         title: title,
         body: body,
@@ -62,7 +66,7 @@ class NotificationService {
     );
   }
 
-  Future cancelPushNotification() async {
-    await AwesomeNotifications().cancelAll();
+  Future cancelPushNotification(int id) async {
+    await AwesomeNotifications().cancel(id);
   }
 }
