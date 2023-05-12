@@ -7,6 +7,7 @@ import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/core/widgets/alerts/number_alert.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
@@ -26,6 +27,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
@@ -153,7 +155,20 @@ class _AccountPageState extends State<AccountPage>
         context
             .read<ProfileBloc>()
             .add(PutUserCodeEvent(code: int.parse(codeController.text)));
-        showAlertToast('Следующий вход в аккаунт будет производиться по новому номеру');
+        SmartDialog.show(
+          animationType: SmartAnimationType.fade,
+          maskColor: Colors.transparent,
+          displayTime: const Duration(seconds: 5),
+          clickMaskDismiss: false,
+          usePenetrate: true,
+          builder: (context) => const SafeArea(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: NumberAlert(),
+            ),
+          ),
+        );
+        // showAlertToast('Следующий вход в аккаунт будет производиться по новому номеру');
       } else {
         showAlertToast('Пишите корректный код');
       }
@@ -561,13 +576,38 @@ class _AccountPageState extends State<AccountPage>
                                                         ),
                                                         child: Row(
                                                           children: [
-                                                            ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              child: Image.asset(
-                                                                  'assets/images/code.png'),
+                                                            Stack(
+                                                              children: [
+                                                                ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                  child: Image
+                                                                      .asset(
+                                                                    'assets/images/code.png',
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  height: 70,
+                                                                  width: 34,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: isValidate(
+                                                                            phoneController)
+                                                                        ? Colors
+                                                                            .transparent
+                                                                        : ColorStyles
+                                                                            .validateColor
+                                                                            .withOpacity(.3),
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                      10,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                             SizedBox(
                                                                 width: 12.w),
@@ -591,11 +631,12 @@ class _AccountPageState extends State<AccountPage>
                                                               height: 37.h,
                                                               width: 1.w,
                                                               color: const Color
-                                                                      .fromRGBO(
-                                                                  224,
-                                                                  224,
-                                                                  224,
-                                                                  1.0),
+                                                                  .fromRGBO(
+                                                                224,
+                                                                224,
+                                                                224,
+                                                                1.0,
+                                                              ),
                                                             ),
                                                             SizedBox(
                                                               width: 12.w,
@@ -666,8 +707,7 @@ class _AccountPageState extends State<AccountPage>
                                                                             .me
                                                                             .phoneNumber ==
                                                                         phoneNumber) {
-                                                                      showAlertToast(
-                                                                          'Вы ввели тот же номер');
+                                                                      showAlertToast('Вы ввели тот же номер');
                                                                     }
                                                                     _streamController
                                                                         .sink
@@ -840,7 +880,12 @@ class _AccountPageState extends State<AccountPage>
                                                             height: 80.sp,
                                                             decoration:
                                                                 BoxDecoration(
-                                                                    color: textEditingControllerUp.text.length == 4 ? Colors.white : ColorStyles.validateColor,
+                                                                    color: textEditingControllerUp.text.length ==
+                                                                            4
+                                                                        ? Colors
+                                                                            .white
+                                                                        : ColorStyles
+                                                                            .validateColor,
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             10),

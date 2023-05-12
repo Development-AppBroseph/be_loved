@@ -37,7 +37,6 @@ class LevelsCubit extends Cubit<LevelState> {
     }, (data) async {
       if (year != previoseDay) {
         previoseDay = year;
-        await MySharedPrefs().setYears(previoseDay);
         showMaterialModalBottomSheet(
           context: context,
           animationCurve: Curves.easeInOutQuint,
@@ -51,6 +50,7 @@ class LevelsCubit extends Cubit<LevelState> {
             );
           },
         );
+        await MySharedPrefs().setYears(previoseDay);
       }
     });
   }

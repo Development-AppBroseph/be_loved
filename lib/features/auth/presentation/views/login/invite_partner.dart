@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
@@ -7,9 +8,9 @@ import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/phone.dart';
 import 'package:be_loved/features/auth/presentation/views/login/relationships.dart';
-import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
@@ -121,164 +122,167 @@ class _InvitePartnerState extends State<InvitePartner> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WebSocketBloc, WebSocketState>(
-        buildWhen: (previous, current) {
-      if (current is WebSocketInviteGetState) {
-        widget.nextPage();
-        return false;
-      }
-      if (current is WebSocketInviteCloseState) {
-        BlocProvider.of<AuthBloc>(context).user?.love = null;
-        setState(() {
-          timerIsStarted = false;
-          isValidate = true;
-        });
-        _timer?.cancel();
-        return true;
-      }
-      if (current is WebSocketInviteAcceptState) {
-        _timer?.cancel();
-        focusNode.unfocus();
-        Get.Get.to(
-          RelationShips(previewPage: () {}, prevPage: () {}),
-          duration: const Duration(seconds: 1),
-          transition: Get.Transition.rightToLeft,
-        )?.then((value) {
+      buildWhen: (previous, current) {
+        if (current is WebSocketInviteGetState) {
+          widget.nextPage();
+          return false;
+        }
+        if (current is WebSocketInviteCloseState) {
+          BlocProvider.of<AuthBloc>(context).user?.love = null;
           setState(() {
             timerIsStarted = false;
             isValidate = true;
           });
           _timer?.cancel();
-          // start = 30;
-          BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-          BlocProvider.of<AuthBloc>(context).user?.love = null;
-        });
-      }
-      return false;
-    }, builder: (context, snapshot) {
-      return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
-        // // printError(info: current.toString());
-        // // print(
-        // //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
-        // // if (current is GetUserError) {
-        // //   inviteUser = true;
-        // // }
-
-        // if (current is InviteSuccess) {
-        //   inviteUser = false;
-        //   if (_timer != null) {
-        //     if (!_timer!.isActive) {
-        //       startTimer();
-        //     }
-        //   }
-        //   // StandartSnackBar.show(
-        //   //   'Приглашение успешно отправлено',
-        //   //   SnackBarStatus(Icons.done, Colors.green),
-        //   // );
-        // }
-        // if (current is ReletionshipsError) {
-        //   _timer?.cancel();
-        // }
-        // // if (current is InviteAccepted &&
-        // //     current.fromYou &&
-        // //     previous is InviteAccepted == false &&
-        // //     previous is AuthLoading == false) {
-        // //   printInfo(info: 'CURRENT IS: $current');
-        // //   printInfo(info: 'PREVIOUS IS: $previous');
-        // //   _timer?.cancel();
-        // //   focusNode.unfocus();
-        // //   Get.Get.to(
-        // //     RelationShips(previewPage: () {}, prevPage: () {}),
-        // //     duration: const Duration(seconds: 1),
-        // //     transition: Get.Transition.rightToLeft,
-        // //   )?.then((value) {
-        // //     setState(() {
-        // //       timerIsStarted = false;
-        // //       isValidate = true;
-        // //     });
-        // //     _timer?.cancel();
-        // //     // start = 30;
-        // //     BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-        // //   });
-        // //   // widget.previousPage();
-        // //   // Navigator.push(
-        // //   //   context,
-        // //   //   MaterialPageRoute(
-        // //   //     builder: (context) => RelationShips(
-        // //   //       previewPage: () {},
-        // //   //       prevPage: () {},
-        // //   //     ),
-        // //   //   ),
-        // //   // ).then((value) => _startSearch(context));
-        // // }
-        // if (current is InviteError) {
-        //   inviteUser = false;
-        //   _timer?.cancel();
-        //   // StandartSnackBar.show(
-        //   //   'Приглашение не удалось отправить',
-        //   //   SnackBarStatus(Icons.error, redColor),
-        //   // );
-        // }
-        // if (current is CheckIsUserExistError) {
-        //   inviteUser = false;
-        //   // StandartSnackBar.show(
-        //   //   'Приглашение не удалось отправить',
-        //   //   SnackBarStatus(Icons.error, redColor),
-        //   // );
-        // }
-        // if (current is CheckIsUserExistSuccess) {
-        //   inviteUser = true;
-        //   // StandartSnackBar.show(
-        //   //   'Приглашение не удалось отправить',
-        //   //   SnackBarStatus(Icons.error, redColor),
-        //   // );
-        // }
-        // if (current is ReceiveInvite && previous is ReceiveInvite == false) {
-        //   _timer?.cancel();
-        //   widget.nextPage();
-        //   focusNode.unfocus();
-        //   // Get.Get.to(
-        //   //   InviteFor(
-        //   //       previewPage: () {
-        //   //         BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
-        //   //       },
-        //   //       nextPage: () {}),
-        //   //   duration: const Duration(seconds: 1),
-        //   //   transition: Get.Transition.upToDown,
-        //   // )?.then((value) => _startSearch(context));
-        //   // Navigator.push(
-        //   //   context,
-        //   //   MaterialPageRoute(
-        //   //     builder: (context) => InviteForStartRelationship(nextPage: () {}),
-        //   //     fullscreenDialog: true,
-        //   //   ),
-        //   // ).then((value) => _startSearch(context));
-        // }
-        // if (current is DeleteInviteSuccess) {
-        //   BlocProvider.of<AuthBloc>(context).add(
-        //       CheckIsUserPhone('7${_phoneController.text.replaceAll(' ', '')}'));
-        // }
-
+          return false;
+        }
+        if (current is WebSocketInviteAcceptState) {
+          _timer?.cancel();
+          focusNode.unfocus();
+          Get.Get.to(
+            RelationShips(previewPage: () {}, prevPage: () {}),
+            duration: const Duration(seconds: 1),
+            transition: Get.Transition.rightToLeft,
+          )?.then((value) {
+            setState(() {
+              timerIsStarted = false;
+              isValidate = true;
+            });
+            _timer?.cancel();
+            // start = 30;
+            BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+            BlocProvider.of<AuthBloc>(context).user?.love = null;
+          });
+        }
         return false;
-      }, builder: (context, state) {
-        // print(MediaQuery.of(context).viewInsets.bottom);
-        focusNode.addListener(() {
-          _streamController.sink.add(focusNode.hasFocus);
-        });
-        var bloc = BlocProvider.of<AuthBloc>(context);
-        return Scaffold(
-          appBar: appBar(context),
-          backgroundColor: sl<AuthConfig>().idx == 1
-              ? ColorStyles.blackColor
-              : const Color.fromRGBO(240, 240, 240, 1.0),
-          body: StreamBuilder<bool>(
-              initialData: false,
-              stream: _streamController.stream,
-              builder: (context, snapshot) {
-                return GestureDetector(
-                  onTap: () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                  },
-                  child: SafeArea(
+      },
+      builder: (context, snapshot) {
+        return BlocBuilder<AuthBloc, AuthState>(
+          buildWhen: (previous, current) {
+            // // printError(info: current.toString());
+            // // print(
+            // //     'objectobj ${current} ${_phoneController.text.length} ${isValidate}');
+            // // if (current is GetUserError) {
+            // //   inviteUser = true;
+            // // }
+
+            // if (current is InviteSuccess) {
+            //   inviteUser = false;
+            //   if (_timer != null) {
+            //     if (!_timer!.isActive) {
+            //       startTimer();
+            //     }
+            //   }
+            //   // StandartSnackBar.show(
+            //   //   'Приглашение успешно отправлено',
+            //   //   SnackBarStatus(Icons.done, Colors.green),
+            //   // );
+            // }
+            // if (current is ReletionshipsError) {
+            //   _timer?.cancel();
+            // }
+            // // if (current is InviteAccepted &&
+            // //     current.fromYou &&
+            // //     previous is InviteAccepted == false &&
+            // //     previous is AuthLoading == false) {
+            // //   printInfo(info: 'CURRENT IS: $current');
+            // //   printInfo(info: 'PREVIOUS IS: $previous');
+            // //   _timer?.cancel();
+            // //   focusNode.unfocus();
+            // //   Get.Get.to(
+            // //     RelationShips(previewPage: () {}, prevPage: () {}),
+            // //     duration: const Duration(seconds: 1),
+            // //     transition: Get.Transition.rightToLeft,
+            // //   )?.then((value) {
+            // //     setState(() {
+            // //       timerIsStarted = false;
+            // //       isValidate = true;
+            // //     });
+            // //     _timer?.cancel();
+            // //     // start = 30;
+            // //     BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+            // //   });
+            // //   // widget.previousPage();
+            // //   // Navigator.push(
+            // //   //   context,
+            // //   //   MaterialPageRoute(
+            // //   //     builder: (context) => RelationShips(
+            // //   //       previewPage: () {},
+            // //   //       prevPage: () {},
+            // //   //     ),
+            // //   //   ),
+            // //   // ).then((value) => _startSearch(context));
+            // // }
+            // if (current is InviteError) {
+            //   inviteUser = false;
+            //   _timer?.cancel();
+            //   // StandartSnackBar.show(
+            //   //   'Приглашение не удалось отправить',
+            //   //   SnackBarStatus(Icons.error, redColor),
+            //   // );
+            // }
+            // if (current is CheckIsUserExistError) {
+            //   inviteUser = false;
+            //   // StandartSnackBar.show(
+            //   //   'Приглашение не удалось отправить',
+            //   //   SnackBarStatus(Icons.error, redColor),
+            //   // );
+            // }
+            // if (current is CheckIsUserExistSuccess) {
+            //   inviteUser = true;
+            //   // StandartSnackBar.show(
+            //   //   'Приглашение не удалось отправить',
+            //   //   SnackBarStatus(Icons.error, redColor),
+            //   // );
+            // }
+            // if (current is ReceiveInvite && previous is ReceiveInvite == false) {
+            //   _timer?.cancel();
+            //   widget.nextPage();
+            //   focusNode.unfocus();
+            //   // Get.Get.to(
+            //   //   InviteFor(
+            //   //       previewPage: () {
+            //   //         BlocProvider.of<AuthBloc>(context).add(DeleteInviteUser());
+            //   //       },
+            //   //       nextPage: () {}),
+            //   //   duration: const Duration(seconds: 1),
+            //   //   transition: Get.Transition.upToDown,
+            //   // )?.then((value) => _startSearch(context));
+            //   // Navigator.push(
+            //   //   context,
+            //   //   MaterialPageRoute(
+            //   //     builder: (context) => InviteForStartRelationship(nextPage: () {}),
+            //   //     fullscreenDialog: true,
+            //   //   ),
+            //   // ).then((value) => _startSearch(context));
+            // }
+            // if (current is DeleteInviteSuccess) {
+            //   BlocProvider.of<AuthBloc>(context).add(
+            //       CheckIsUserPhone('7${_phoneController.text.replaceAll(' ', '')}'));
+            // }
+
+            return false;
+          },
+          builder: (context, state) {
+            // print(MediaQuery.of(context).viewInsets.bottom);
+            focusNode.addListener(() {
+              _streamController.sink.add(focusNode.hasFocus);
+            });
+            var bloc = BlocProvider.of<AuthBloc>(context);
+            return Scaffold(
+              appBar: appBar(context),
+              backgroundColor: sl<AuthConfig>().idx == 1
+                  ? ColorStyles.blackColor
+                  : const Color.fromRGBO(240, 240, 240, 1.0),
+              body: StreamBuilder<bool>(
+                initialData: false,
+                stream: _streamController.stream,
+                builder: (context, snapshot) {
+                  return GestureDetector(
+                    onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    child: SafeArea(
                       bottom: false,
                       child: Stack(
                         children: [
@@ -712,7 +716,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                   //   },
                                   // ),
                                   SizedBox(height: 17.h),
-                                  Container(
+                                  SizedBox(
                                     height: 400.h,
                                     child: AnimatedAlign(
                                       curve: Curves.easeInOutQuint,
@@ -747,12 +751,16 @@ class _InvitePartnerState extends State<InvitePartner> {
                             ),
                           ),
                         ],
-                      )),
-                );
-              }),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
         );
-      });
-    });
+      },
+    );
   }
 
   String _getTime() {
@@ -815,6 +823,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                   focusColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onPressed: () {
+                    context.read<WebSocketBloc>().add(WebSocketCloseEvent());
                     Navigator.pop(context);
                   },
                 ),

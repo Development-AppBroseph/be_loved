@@ -10,7 +10,7 @@ class UserTag extends StatelessWidget {
   final EventEntity eventEntity;
   final bool isSelected;
   final Function(bool s) onSelect;
-  UserTag(
+  const UserTag(
       {Key? key,
       required this.eventEntity,
       required this.onSelect,
@@ -60,11 +60,11 @@ class UserTag extends StatelessWidget {
                 value: isSelected,
                 splashRadius: 0,
                 checkColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
-                activeColor: const Color(0xffFF1D1D),
+                activeColor: const Color(0xffFF3347),
                 side: MaterialStateBorderSide.resolveWith(
                   (states) => const BorderSide(
                     width: 1,
-                    color: Color(0xffFF1D1D),
+                    color: Color(0xffFF3347),
                   ),
                 ),
                 onChanged: (value) {

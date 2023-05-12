@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:be_loved/core/error/failures.dart';
-import 'package:be_loved/core/models/common/common.dart';
 import 'package:be_loved/core/usecases/usecase.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/actual_entiti.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/full_purpose_entity.dart';
@@ -18,6 +17,7 @@ import 'package:be_loved/features/home/domain/usecases/get_season_purpose.dart';
 import 'package:be_loved/features/home/domain/usecases/send_photo_purpose.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
 part 'purpose_event.dart';
 part 'purpose_state.dart';
 
@@ -114,7 +114,7 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
 
     //Getting available purposes by lat and long
     final gotPurposes = await getAvailablePurposes
-        .call(GetAvailablePurposesParams(lat: 59.886086, long: 30.285244));
+        .call(const GetAvailablePurposesParams(lat: 59.886086, long: 30.285244));
     state = gotPurposes.fold(
       (error) => errorCheck(error),
       (data) {

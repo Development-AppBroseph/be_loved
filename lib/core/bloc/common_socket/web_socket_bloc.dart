@@ -51,7 +51,6 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
     channel = await WebSocket.connect(
       '${Config.ws.ws}/ws/${event.token}',
     );
-
     if (channel != null) {
       print('websocket CONNECT');
       channel!.listen((event) async {
@@ -79,9 +78,8 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
         } catch (e) {
           print(e);
         }
-      }, onDone: () {
-        _initWebSocket(event, emit);
-      }, onError: (error) {
+      }, 
+      onError: (error) {
         print('SOCKET ERROR: $error');
         if (trialsCount < 4) {
           channel!.close();
@@ -93,6 +91,8 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
   }
 
   void _closeConnection(
-          WebSocketCloseEvent event, Emitter<WebSocketState> emit) =>
-      channel!.close();
+      WebSocketCloseEvent event, Emitter<WebSocketState> emit) {
+    channel!.close();
+    print('Closed');
+  }
 }

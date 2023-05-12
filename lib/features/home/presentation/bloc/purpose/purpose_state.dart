@@ -11,7 +11,7 @@ class PurposeLoadingState extends PurposeState {}
 class PurposeErrorState extends PurposeState {
   final bool isTokenError;
   final String message;
-  PurposeErrorState({required this.message, required this.isTokenError});
+  const PurposeErrorState({required this.message, required this.isTokenError});
 }
 class PurposeInternetErrorState extends PurposeState{}
 

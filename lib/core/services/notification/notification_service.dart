@@ -25,6 +25,43 @@ class NotificationService {
     );
   }
 
+  Future monthlyPushNotification({
+    required String title,
+    required String body,
+  }) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 0,
+        channelKey: 'key1',
+        title: title,
+        body: body,
+      ),
+      schedule: NotificationCalendar(
+        timeZone: timeZone,
+        day: DateTime.now().day,
+        repeats: true,
+      ),
+    );
+  }
+
+  Future yearsPushNotification({
+    required String title,
+    required String body,
+  }) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 0,
+        channelKey: 'key1',
+        title: title,
+        body: body,
+      ),
+      schedule: NotificationCalendar(
+        month: DateTime.now().month,
+        repeats: true,
+      ),
+    );
+  }
+
   Future cancelPushNotification() async {
     await AwesomeNotifications().cancelAll();
   }

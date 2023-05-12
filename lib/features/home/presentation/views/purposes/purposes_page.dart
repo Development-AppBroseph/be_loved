@@ -155,6 +155,88 @@ class _PurposesPageState extends State<PurposesPage> {
               }
             },
             builder: (context, state) {
+              if (state is PurposeLoadingState) {
+                return SafeArea(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 25.w),
+                    child: ListView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 56.h, bottom: 10.h),
+                              height: 28.h,
+                              width: 154.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xffD9D9D9)),
+                            ),
+                            Container(
+                              height: 189.h,
+                              width: 358.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xffD9D9D9)),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 38.h, bottom: 19.h),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 10.h),
+                                    height: 38.h,
+                                    width: 98.w,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: const Color(0xffD9D9D9)),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 10.h),
+                                    height: 38.h,
+                                    width: 121.w,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: const Color(0xffD9D9D9)),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 10.h),
+                                    height: 38.h,
+                                    width: 121.w,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: const Color(0xffD9D9D9)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 220.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xffD9D9D9)),
+                            ),
+                            SizedBox(
+                              height: 15.h,
+                            ),
+                            Container(
+                              height: 220.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xffD9D9D9)),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
               List<PurposeEntity> listPurposes = [];
               List<PromosEntiti> listPromos = [];
               List<ActualEntiti> listActuals = [];
@@ -267,7 +349,7 @@ class _PurposesPageState extends State<PurposesPage> {
                                   ),
                                 )
                                 .toList()
-                          else
+                          else 
                             EmptyCard(
                               isAvailable: selectedType == 2,
                               inHistory: selectedType == 3,
