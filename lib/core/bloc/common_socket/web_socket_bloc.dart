@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -5,8 +6,11 @@ import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/secure_storage.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/core/widgets/alerts/love_push_get_alert.dart';
 import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 part 'web_socket_event.dart';
 part 'web_socket_state.dart';
@@ -20,6 +24,7 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
     on<WebSocketCloseInviteMessage>(_closeInvite);
     on<WebSocketAcceptInviteMessage>(_acceptInvite);
     on<WebSocketStartRelationshipsMessage>(_startRelationships);
+    on<WebSocketLovePushNotification>(_lovePushNotification);
   }
 
   void _getInvite(
@@ -53,40 +58,47 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
     );
     if (channel != null) {
       print('websocket CONNECT');
-      channel!.listen((event) async {
-        try {
-          print('websocket message ${jsonDecode(event)}');
-          print('object sokect statetyeteyte ${jsonDecode(event)['message']}');
-          // Приглашение в авторизации
-          if (jsonDecode(event)['type'] == 'notification') {
-            if (jsonDecode(event)['message'] == 'Вам пришло приглашение') {
-              add(WebSocketGetInviteMessage());
-            } else if (jsonDecode(event)['message'] ==
-                'Приглашение отправлено') {
-              add(WebSocketSendInviteMessage());
-            } else if (jsonDecode(event)['message'] ==
-                'Отношения разрушены (может даже не начавшись') {
-              add(WebSocketCloseInviteMessage());
-            } else if (jsonDecode(event)['message'] ==
-                'Поздравляю с началом отношений!') {
-              add(WebSocketAcceptInviteMessage());
-            } else if (jsonDecode(event)['message'] ==
-                'Дата отношений изменена!') {
-              add(WebSocketStartRelationshipsMessage());
+      channel!.listen(
+        (event) async {
+          print(event);
+          try {
+            print('websocket message ${jsonDecode(event)}');
+            print(
+                'object sokect statetyeteyte ${jsonDecode(event)['message']}');
+            // Приглашение в авторизации
+            if (jsonDecode(event)['type'] == 'notification') {
+              if (jsonDecode(event)['message'] == 'Вам пришло приглашение') {
+                add(WebSocketGetInviteMessage());
+              } else if (jsonDecode(event)['message'] ==
+                  'Приглашение отправлено') {
+                add(WebSocketSendInviteMessage());
+              } else if (jsonDecode(event)['message'] ==
+                  'Отношения разрушены (может даже не начавшись') {
+                add(WebSocketCloseInviteMessage());
+              } else if (jsonDecode(event)['message'] ==
+                  'Поздравляю с началом отношений!') {
+                add(WebSocketAcceptInviteMessage());
+              } else if (jsonDecode(event)['message'] ==
+                  'Дата отношений изменена!') {
+                add(WebSocketStartRelationshipsMessage());
+              } else if (jsonDecode(event)['message'] ==
+                  'Проверка связи от второй половинки') {
+                add(WebSocketLovePushNotification());
+              }
             }
+          } catch (e) {
+            print(e.toString());
           }
-        } catch (e) {
-          print(e);
-        }
-      }, 
-      onError: (error) {
-        print('SOCKET ERROR: $error');
-        if (trialsCount < 4) {
-          channel!.close();
-          _initWebSocket(event, emit);
-          trialsCount++;
-        }
-      });
+        },
+        onError: (error) {
+          print('SOCKET ERROR: $error');
+          if (trialsCount < 4) {
+            channel!.close();
+            // _initWebSocket(event, emit);
+            trialsCount++;
+          }
+        },
+      );
     }
   }
 
@@ -94,5 +106,22 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
       WebSocketCloseEvent event, Emitter<WebSocketState> emit) {
     channel!.close();
     print('Closed');
+  }
+
+  Future _lovePushNotification(
+      WebSocketLovePushNotification event, Emitter<WebSocketState> emit) async {
+    await SmartDialog.show(
+      animationType: SmartAnimationType.fade,
+      maskColor: Colors.transparent,
+      displayTime: const Duration(seconds: 5),
+      clickMaskDismiss: false,
+      usePenetrate: true,
+      builder: (context) => const SafeArea(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: LovePushGetAlert(),
+        ),
+      ),
+    );
   }
 }

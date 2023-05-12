@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/core/usecases/usecase.dart';
+import 'package:be_loved/core/widgets/alerts/love_push_sent_alert.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/home/domain/entities/events/tag_entity.dart';
 import 'package:be_loved/features/home/domain/usecases/add_event.dart';
@@ -13,6 +14,8 @@ import 'package:be_loved/features/home/domain/usecases/get_events.dart';
 import 'package:be_loved/features/home/domain/usecases/get_old_events.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import '../../../domain/usecases/send_noti.dart';
 
@@ -29,8 +32,14 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
   final GetOldEvents getOldEvents;
 
-  EventsBloc(this.addEvent, this.getEvents, this.deleteEvent,
-      this.changePositionEvent, this.editEvent, this.getOldEvents, this.sendNotification)
+  EventsBloc(
+      this.addEvent,
+      this.getEvents,
+      this.deleteEvent,
+      this.changePositionEvent,
+      this.editEvent,
+      this.getOldEvents,
+      this.sendNotification)
       : super(EventInitialState()) {
     on<GetEventsEvent>(_getEvents);
     on<EventAddEvent>(_addEvents);
@@ -289,8 +298,6 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     emit(state);
   }
 
-  
-
   EventsState errorCheck(Failure failure) {
     print('FAIL: $failure');
     if (failure == ConnectionFailure() || failure == NetworkFailure()) {
@@ -309,7 +316,8 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
               failure.message.length < 100 ? failure.message : 'Ошибка сервера',
           isTokenError: false);
     } else {
-      return const EventErrorState(message: 'Повторите попытку', isTokenError: false);
+      return const EventErrorState(
+          message: 'Повторите попытку', isTokenError: false);
     }
   }
 
@@ -348,8 +356,21 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
   Future _sendNoti(SendNoti event, Emitter<EventsState> emit) async {
     try {
-      emit(EventLoadingState());
-      await sendNotification.call(SendNotiParams());
+      await sendNotification.call(SendNotiParams()).then(
+            (value) async => await SmartDialog.show(
+              animationType: SmartAnimationType.fade,
+              maskColor: Colors.transparent,
+              displayTime: const Duration(seconds: 5),
+              clickMaskDismiss: false,
+              usePenetrate: true,
+              builder: (context) => const SafeArea(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: LovePushSentAlert(),
+                ),
+              ),
+            ),
+          );
     } catch (e) {
       emit(const EventErrorState(message: '', isTokenError: false));
     }

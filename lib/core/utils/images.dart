@@ -17,6 +17,7 @@ abstract class Img {
   static const String onboardingSecond = "assets/images/onboarding_second.png";
   static const String onboardingThird = 'assets/images/onboarding_third.png';
   static const String redHeart = 'assets/images/red_heart.png';
+  static const String gredientHeart = 'assets/images/gradient_heart.png';
 }
 
 abstract class SvgImg {
@@ -90,4 +91,5 @@ abstract class SvgImg {
   static const String galleryWithLine = 'assets/icons/GallaryWithLine.svg';
   static const String alertVpn = 'assets/icons/alertVpn.svg';
   static const String redHeart = 'assets/icons/red_heart.svg';
+  
 }
