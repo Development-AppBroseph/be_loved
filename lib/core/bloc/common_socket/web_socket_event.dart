@@ -19,3 +19,4 @@ class WebSocketAcceptInviteMessage extends WebSocketInitEvents {}
 class WebSocketStartRelationshipsMessage extends WebSocketInitEvents {}
 
 class WebSocketCloseEvent extends WebSocketInitEvents {}
+class WebSocketLovePushNotification extends WebSocketInitEvents{}
