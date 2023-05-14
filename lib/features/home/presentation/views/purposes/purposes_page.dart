@@ -15,7 +15,6 @@ import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.da
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/empty_card.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/promos_card.dart';
-import 'package:be_loved/features/home/presentation/views/purposes/widgets/purpose_card.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/widgets/purpose_menu_card.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
@@ -27,6 +26,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../relationships/relation_ships_page.dart';
+import 'widgets/purpose_card.dart';
 
 class PurposesPage extends StatefulWidget {
   const PurposesPage({Key? key}) : super(key: key);
@@ -155,213 +155,212 @@ class _PurposesPageState extends State<PurposesPage> {
               }
             },
             builder: (context, state) {
-              if (state is PurposeLoadingState) {
+              if (state is GotPurposeDataState) {
+                List<PurposeEntity> listPurposes = [];
+                List<PromosEntiti> listPromos = [];
+                List<ActualEntiti> listActuals = [];
+                listActuals = bloc.actual;
+                //All purposes
+                if (selectedType == 0) {
+                  listPurposes = bloc.allPurposes;
+                  //Available purposes
+                  // } else if (selectedType == 1) {
+                  // listPromos = bloc.promos;
+                } else if (selectedType == 1) {
+                  listPurposes = bloc.availablePurposes;
+                } else if (selectedType == 2) {
+                  listPurposes =
+                      bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
+                } else if (selectedType == 3) {
+                  listPurposes = bloc.getPurposeListFromFullData(
+                      bloc.historyPurposes,
+                      isHistory: true);
+                }
                 return SafeArea(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(top: 56.h, bottom: 10.h),
-                              height: 28.h,
-                              width: 154.w,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: const Color(0xffD9D9D9)),
+                  child: CustomScrollView(
+                    controller: scrollController,
+                    // physics: const ClampingScrollPhysics(),
+                    slivers: [
+                      SliverAppBar(
+                        backgroundColor: sl<AuthConfig>().idx == 1
+                            ? ColorStyles.blackColor
+                            : const Color.fromRGBO(240, 240, 240, 1.0),
+                        pinned: true,
+                        elevation: 0,
+                        flexibleSpace: Center(
+                          child: SizedBox(
+                            height: 37.w,
+                            child: ListView.builder(
+                              controller: controller,
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.zero,
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedType = index;
+                                      });
+                                      if (index >= 2) {
+                                        controller.animateTo(
+                                            controller.position.maxScrollExtent,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.easeInOutQuint);
+                                      } else {
+                                        controller.animateTo(
+                                            controller.position.minScrollExtent,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.easeInOutQuint);
+                                      }
+                                    },
+                                    child: Container(
+                                        margin: EdgeInsets.only(
+                                            right: 15.w,
+                                            left: index == 0 ? 25.w : 0),
+                                        height: 37.h,
+                                        child: PurposeMenuCard(
+                                            text: data[index],
+                                            index: index,
+                                            selectedType: selectedType)));
+                              },
                             ),
-                            Container(
-                              height: 189.h,
-                              width: 358.w,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: const Color(0xffD9D9D9)),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 38.h, bottom: 19.h),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 10.h),
-                                    height: 38.h,
-                                    width: 98.w,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: const Color(0xffD9D9D9)),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 10.h),
-                                    height: 38.h,
-                                    width: 121.w,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: const Color(0xffD9D9D9)),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 10.h),
-                                    height: 38.h,
-                                    width: 121.w,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: const Color(0xffD9D9D9)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: 220.h,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: const Color(0xffD9D9D9)),
-                            ),
-                            SizedBox(
-                              height: 15.h,
-                            ),
-                            Container(
-                              height: 220.h,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: const Color(0xffD9D9D9)),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }
-              List<PurposeEntity> listPurposes = [];
-              List<PromosEntiti> listPromos = [];
-              List<ActualEntiti> listActuals = [];
-              listActuals = bloc.actual;
-              //All purposes
-              if (selectedType == 0) {
-                listPurposes = bloc.allPurposes;
-                //Available purposes
-                // } else if (selectedType == 1) {
-                // listPromos = bloc.promos;
-              } else if (selectedType == 1) {
-                listPurposes = bloc.availablePurposes;
-              } else if (selectedType == 2) {
-                listPurposes =
-                    bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
-              } else if (selectedType == 3) {
-                listPurposes = bloc.getPurposeListFromFullData(
-                    bloc.historyPurposes,
-                    isHistory: true);
-              }
-              return SafeArea(
-                child: CustomScrollView(
-                  controller: scrollController,
-                  // physics: const ClampingScrollPhysics(),
-                  slivers: [
-                    SliverAppBar(
-                      backgroundColor: sl<AuthConfig>().idx == 1
-                          ? ColorStyles.blackColor
-                          : const Color.fromRGBO(240, 240, 240, 1.0),
-                      pinned: true,
-                      elevation: 0,
-                      flexibleSpace: Center(
-                        child: SizedBox(
-                          height: 37.w,
-                          child: ListView.builder(
-                            controller: controller,
-                            scrollDirection: Axis.horizontal,
-                            padding: EdgeInsets.zero,
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      selectedType = index;
-                                    });
-                                    if (index >= 2) {
-                                      controller.animateTo(
-                                          controller.position.maxScrollExtent,
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          curve: Curves.easeInOutQuint);
-                                    } else {
-                                      controller.animateTo(
-                                          controller.position.minScrollExtent,
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          curve: Curves.easeInOutQuint);
-                                    }
-                                  },
-                                  child: Container(
-                                      margin: EdgeInsets.only(
-                                          right: 15.w,
-                                          left: index == 0 ? 25.w : 0),
-                                      height: 37.h,
-                                      child: PurposeMenuCard(
-                                          text: data[index],
-                                          index: index,
-                                          selectedType: selectedType)));
-                            },
                           ),
                         ),
                       ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 19.5.h,
-                          ),
-
-                          //All purposes
-                          if (listPurposes.isNotEmpty)
-                            ...listPurposes
-                                .map(
-                                  (e) => Container(
-                                    margin: EdgeInsets.only(bottom: 15.h),
-                                    child: PurposeCard(
-                                      purposeEntity: e,
-                                      onPickFile: (f) {
-                                        sendPhotoPurpose(e.id, f);
-                                      },
-                                      onCompleteTap: () {
-                                        completePurpose(e.id);
-                                      },
-                                      onCancelTap: () {
-                                        cancelPurpose(e.id);
-                                      },
-                                    ),
-                                  ),
-                                )
-                                .toList()
-                          else if (listPromos.isNotEmpty)
-                            ...listPromos
-                                .map(
-                                  (e) => Container(
-                                    margin: EdgeInsets.only(bottom: 15.h),
-                                    child: PromosCard(
-                                      promosEntiti: e,
-                                    ),
-                                  ),
-                                )
-                                .toList()
-                          else 
-                            EmptyCard(
-                              isAvailable: selectedType == 2,
-                              inHistory: selectedType == 3,
+                      SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 19.5.h,
                             ),
 
+                            //All purposes
+                            if (listPurposes.isNotEmpty)
+                              ...listPurposes
+                                  .map(
+                                    (e) => Container(
+                                      margin: EdgeInsets.only(bottom: 15.h),
+                                      child: PurposeCard(
+                                        purposeEntity: e,
+                                        onPickFile: (f) {
+                                          sendPhotoPurpose(e.id, f);
+                                        },
+                                        onCompleteTap: () {
+                                          completePurpose(e.id);
+                                        },
+                                        onCancelTap: () {
+                                          cancelPurpose(e.id);
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                  .toList()
+                            else if (listPromos.isNotEmpty)
+                              ...listPromos
+                                  .map(
+                                    (e) => Container(
+                                      margin: EdgeInsets.only(bottom: 15.h),
+                                      child: PromosCard(
+                                        promosEntiti: e,
+                                      ),
+                                    ),
+                                  )
+                                  .toList()
+                            else
+                              EmptyCard(
+                                isAvailable: selectedType == 2,
+                                inHistory: selectedType == 3,
+                              ),
+
+                            SizedBox(
+                              height: 30.h,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return SafeArea(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 25.w),
+                  child: ListView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 56.h, bottom: 10.h),
+                            height: 28.h,
+                            width: 154.w,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffD9D9D9)),
+                          ),
+                          Container(
+                            height: 189.h,
+                            width: 358.w,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffD9D9D9)),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 38.h, bottom: 19.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10.h),
+                                  height: 38.h,
+                                  width: 98.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xffD9D9D9)),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10.h),
+                                  height: 38.h,
+                                  width: 121.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xffD9D9D9)),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10.h),
+                                  height: 38.h,
+                                  width: 121.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: const Color(0xffD9D9D9)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 220.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffD9D9D9)),
+                          ),
                           SizedBox(
-                            height: 30.h,
+                            height: 15.h,
+                          ),
+                          Container(
+                            height: 220.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0xffD9D9D9)),
                           ),
                         ],
-                      ),
-                    ),
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               );
             },

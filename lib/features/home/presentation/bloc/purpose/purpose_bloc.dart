@@ -68,11 +68,8 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
       (error) => errorCheck(error),
       (data) {
         promos = data;
-        return GotPurposeDataState();
       },
     );
-    emit(state);
-    emit(PurposeBlankState());
   }
 
   FutureOr<void> _getActual(
@@ -83,11 +80,8 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
       (error) => errorCheck(error),
       (data) {
         actual = data;
-        return GotPurposeDataState();
       },
     );
-    emit(state);
-    emit(PurposeBlankState());
   }
 
   void _getAllPurposeData(
@@ -96,9 +90,8 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     emit(PurposeLoadingState());
 
     //Getting season purpsose(target)
-    emit(PurposeLoadingState());
     final gotPurpose = await getSeasonPurpose.call(NoParams());
-    PurposeState state = gotPurpose.fold(
+    gotPurpose.fold(
       (error) => errorCheck(error),
       (data) {
         seasonPurpose = data;
@@ -106,50 +99,49 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
             seasonPurpose!.verdict == 'Принято' ? true : false;
         seasonPurpose!.inProcess =
             seasonPurpose!.verdict == 'Ожидание' ? true : false;
-        return GotPurposeDataState();
       },
     );
-    emit(state);
-    emit(PurposeBlankState());
 
     //Getting available purposes by lat and long
-    final gotPurposes = await getAvailablePurposes
-        .call(const GetAvailablePurposesParams(lat: 59.886086, long: 30.285244));
-    state = gotPurposes.fold(
+    final gotPurposes = await getAvailablePurposes.call(
+        const GetAvailablePurposesParams(lat: 59.886086, long: 30.285244));
+    gotPurposes.fold(
       (error) => errorCheck(error),
       (data) {
         availablePurposes = data;
         allPurposes = [];
         allPurposes.addAll(data);
-        return GotPurposeDataState();
       },
     );
-    emit(state);
-    emit(PurposeBlankState());
 
     //Getting in process purposes
     final gotInProcessPurposes = await getInProcessPurpose.call(NoParams());
-    state = gotInProcessPurposes.fold(
+    gotInProcessPurposes.fold(
       (error) => errorCheck(error),
       (data) {
         inProcessPurposes = data;
         allPurposes.addAll(getPurposeListFromFullData(data));
-        return GotPurposeDataState();
       },
     );
-    emit(state);
-    emit(PurposeBlankState());
 
     //Getting history purposes
     final gotHistoryPurposes = await getHistoryPurpose.call(NoParams());
-    state = gotHistoryPurposes.fold(
+    gotHistoryPurposes.fold(
       (error) => errorCheck(error),
       (data) {
         historyPurposes = data;
-        return GotPurposeDataState();
       },
     );
-    emit(state);
+    emit(
+      GotPurposeDataState(
+        historyPurposes: historyPurposes,
+        allPurposes: allPurposes,
+        availablePurposes: availablePurposes,
+        inProcessPurposes: inProcessPurposes,
+        promos: promos,
+        actual: actual,
+      ),
+    );
   }
 
   void _completePurpose(
@@ -226,7 +218,7 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
               failure.message.length < 100 ? failure.message : 'Ошибка сервера',
           isTokenError: false);
     } else {
-      return PurposeErrorState(
+      return const PurposeErrorState(
           message: 'Повторите попытку', isTokenError: false);
     }
   }
