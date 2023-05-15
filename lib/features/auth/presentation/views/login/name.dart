@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
@@ -100,7 +101,7 @@ class InputNamePage extends StatelessWidget {
                             height: 70.sp,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
+                              color: validate(_nicknameController) ? Colors.white : ColorStyles.validateColor,
                             ),
                             alignment: Alignment.center,
                             child: Row(
@@ -109,7 +110,7 @@ class InputNamePage extends StatelessWidget {
                                   alignment: Alignment.center,
                                   height: 60.sp,
                                   width: 0.78.sw,
-                                  color: Colors.white,
+                                  color: Colors.transparent,
                                   child: TextField(
                                     textCapitalization: TextCapitalization.sentences,
                                     textAlignVertical: TextAlignVertical.top,
@@ -273,5 +274,9 @@ class InputNamePage extends StatelessWidget {
       ),
       automaticallyImplyLeading: false,
     );
+  }
+  
+  bool validate(TextEditingController nicknameController) {
+    return nicknameController.text.isNotEmpty && nicknameController.text.trim() != ''; 
   }
 }

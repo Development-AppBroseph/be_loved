@@ -6,21 +6,25 @@ class NotificationService {
     timeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
   }
 
-  Future pushNotification(
-      {required String title,
-      required String body,
-      required int interval}) async {
+  Future pushNotification({
+    required String title,
+    required String body,
+    required int id,
+    required int minute,
+    required int hour,  
+  }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: 0,
+        id: id,
         channelKey: 'key1',
         title: title,
         body: body,
       ),
-      schedule: NotificationInterval(
-        interval: interval,
+      schedule: NotificationCalendar(
         timeZone: timeZone,
         repeats: true,
+        minute: minute,
+        hour: hour,
       ),
     );
   }
@@ -28,10 +32,13 @@ class NotificationService {
   Future monthlyPushNotification({
     required String title,
     required String body,
+    required int id,
+    required int minute,
+    required int hour,
   }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: 0,
+        id: id,
         channelKey: 'key1',
         title: title,
         body: body,
@@ -39,6 +46,8 @@ class NotificationService {
       schedule: NotificationCalendar(
         timeZone: timeZone,
         day: DateTime.now().day,
+        minute: minute,
+        hour: hour,
         repeats: true,
       ),
     );
@@ -47,22 +56,27 @@ class NotificationService {
   Future yearsPushNotification({
     required String title,
     required String body,
+    required int id,
+    required int minute,
+    required int hour,
   }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: 0,
+        id: id,
         channelKey: 'key1',
         title: title,
         body: body,
       ),
       schedule: NotificationCalendar(
         month: DateTime.now().month,
+        minute: minute,
+        hour: hour,
         repeats: true,
       ),
     );
   }
 
-  Future cancelPushNotification() async {
-    await AwesomeNotifications().cancelAll();
+  Future cancelPushNotification(int id) async {
+    await AwesomeNotifications().cancel(id);
   }
 }

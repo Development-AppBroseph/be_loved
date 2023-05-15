@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/home/data/models/purposes/actual_model.dart';
 import 'package:be_loved/features/home/data/models/purposes/full_purpose_model.dart';
@@ -10,6 +8,7 @@ import 'package:be_loved/features/home/domain/entities/purposes/full_purpose_ent
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/services/database/auth_params.dart';
 import '../../../../../core/services/network/endpoints.dart';
@@ -77,12 +76,15 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
   Future<List<PurposeEntity>> getAvailablePurposes(
       double lat, double long) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
-    Response response = await dio.get(Endpoints.getAvailablePurposes.getPath(),
-        queryParameters: {'lat': lat, 'lon': long},
-        options: Options(
-            followRedirects: false,
-            validateStatus: (status) => status! < 599,
-            headers: headers));
+    Response response = await dio.get(
+      Endpoints.getAvailablePurposes.getPath(),
+      queryParameters: {'lat': lat, 'lon': long},
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 599,
+        headers: headers,
+      ),
+    );
     printRes(response);
     if (response.statusCode == 200) {
       return (response.data as List)

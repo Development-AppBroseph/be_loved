@@ -20,29 +20,38 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SendFilesWidget extends StatefulWidget {
   final bool isParting;
-  SendFilesWidget({this.isParting = false});
+  const SendFilesWidget({Key? key, this.isParting = false}) : super(key: key);
 
   @override
   State<SendFilesWidget> createState() => _SendFilesWidgetState();
 }
 
 class _SendFilesWidgetState extends State<SendFilesWidget> {
-
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   bool keyboardOpened = false;
   late StreamSubscription<bool> keyboardSub;
 
-  sendFiles(){
+  sendFiles() {
     showLoaderWrapper(context);
-    context.read<ProfileBloc>().add(PartingOrSendFilesEvent(email: _controller.text.trim(), isParting: widget.isParting));
+    context.read<ProfileBloc>().add(PartingOrSendFilesEvent(
+        email: _controller.text.trim(), isParting: widget.isParting));
   }
 
-  justParting(){
+  justParting() {
     showLoaderWrapper(context);
-    context.read<ProfileBloc>().add(PartingOrSendFilesEvent(email: '', isParting: widget.isParting));
+    context
+        .read<ProfileBloc>()
+        .add(PartingOrSendFilesEvent(email: '', isParting: widget.isParting));
   }
-  
+
+  bool validateEmail(TextEditingController controller) {
+    if (controller.text.contains(RegExp(r'[А-Яа-яЁё]'))) {
+      return false;
+    }
+    return controller.text.isNotEmpty && controller.text.contains('@');
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -50,9 +59,10 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
     keyboardSub = KeyboardVisibilityController().onChange.listen((event) {
       setState(() {
         keyboardOpened = event;
-      }); 
+      });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProfileBloc, ProfileState>(
@@ -71,7 +81,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
         }
       },
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
           setState(() {});
         },
@@ -113,10 +123,13 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                         hint: 'E-mail',
                         maxLines: 1,
                         controller: _controller,
+                        onChange: (val) {
+                          setState(() {});
+                        },
                         maxLength: 40,
-                        isValidate: _controller.text.isNotEmpty,
+                        isValidate: validateEmail(_controller),
                         hideCounter: true,
-                        isEmail:  true,
+                        isEmail: true,
                       ),
                       SizedBox(
                         height: widget.isParting ? 20.h : 77.h,
@@ -124,19 +137,31 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                       CustomButton(
                         color: ColorStyles.primarySwath,
                         text: 'Готово',
-                        border: sl<AuthConfig>().idx == 0 ? null : Border.all(width: 2.w, color: ColorStyles.primarySwath),
-                        textColor: _controller.text.trim().length > 3 ? ColorStyles.white : Colors.black,
+                        border: sl<AuthConfig>().idx == 0
+                            ? null
+                            : Border.all(
+                                width: 2.w, color: ColorStyles.primarySwath),
+                        textColor: _controller.text.trim().length > 3
+                            ? ColorStyles.white
+                            : Colors.black,
                         onPressed: sendFiles,
-                        validate: _controller.text.trim().length > 3,
+                        validate:
+                            _controller.text.contains(RegExp(r'[А-Яа-яЁё]'))
+                                ? false
+                                : _controller.text.isNotEmpty &&
+                                    _controller.text.contains('@'),
                       ),
-
-                      if(widget.isParting)
-                      ...[
-                        SizedBox(height: 10.h,),
+                      if (widget.isParting) ...[
+                        SizedBox(
+                          height: 10.h,
+                        ),
                         CustomButton(
                           color: ColorStyles.blackColor,
                           text: 'Не выгружать данные',
-                          border: sl<AuthConfig>().idx == 0 ? null : Border.all(width: 2.w, color: ColorStyles.blackColor),
+                          border: sl<AuthConfig>().idx == 0
+                              ? null
+                              : Border.all(
+                                  width: 2.w, color: ColorStyles.blackColor),
                           textColor: Colors.white,
                           validate: true,
                           onPressed: justParting,
@@ -151,12 +176,11 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                   top: 0,
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(28.h),
-                        topRight: Radius.circular(28.h),
-                      ),
-                      color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]
-                    ),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(28.h),
+                          topRight: Radius.circular(28.h),
+                        ),
+                        color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]),
                     padding: EdgeInsets.fromLTRB(0, 7.h, 0, 18.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

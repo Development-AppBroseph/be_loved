@@ -1,19 +1,17 @@
 import 'dart:async';
+
 import 'package:be_loved/core/services/database/auth_params.dart';
-import 'package:be_loved/core/services/database/shared_prefs.dart';
-import 'package:be_loved/core/utils/images.dart';
-import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/core/services/notification/notification_service.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class EventDetailTimer extends StatefulWidget {
   final EventEntity eventEntity;
-  EventDetailTimer({required this.eventEntity});
+  const EventDetailTimer({Key? key, required this.eventEntity}) : super(key: key);
   @override
   State<EventDetailTimer> createState() => _EventDetailTimerState();
 }
@@ -70,7 +68,9 @@ class _EventDetailTimerState extends State<EventDetailTimer> {
     days = difference.inDays;
     hour = difference.inHours - difference.inDays * 24;
     minute = difference.inMinutes - difference.inHours * 60;
-
+    if (days == 0 && hour == 0 && minute == 0) {
+      await NotificationService().cancelPushNotification(widget.eventEntity.id);
+    }
     if(days.isNegative){
       days = 0;
     }
