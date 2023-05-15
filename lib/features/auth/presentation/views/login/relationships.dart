@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/images.dart';
-import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
+import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +28,13 @@ class RelationShips extends StatelessWidget {
   String date = '';
 
   void _relationShips(BuildContext context) {
+    if (date == '') {
+      date = DateTime.now().toString().substring(0, 10);
+      BlocProvider.of<AuthBloc>(context).add(StartRelationships(date));
+    }
     if (date != '') {
       BlocProvider.of<AuthBloc>(context).add(StartRelationships(date));
-    } else {}
+    }
   }
 
   @override
@@ -38,7 +43,7 @@ class RelationShips extends StatelessWidget {
       if (current is ReletionshipsStarted) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
           (route) => false,
         );
         return true;
@@ -48,7 +53,9 @@ class RelationShips extends StatelessWidget {
       var bloc = BlocProvider.of<AuthBloc>(context);
       return Scaffold(
         appBar: appBar(context),
-        backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+        backgroundColor: sl<AuthConfig>().idx == 1
+            ? ColorStyles.blackColor
+            : const Color.fromRGBO(240, 240, 240, 1.0),
         body: SafeArea(
             bottom: true,
             child: Padding(
@@ -70,7 +77,8 @@ class RelationShips extends StatelessWidget {
                               style: GoogleFonts.inter(
                                 fontSize: 35.sp,
                                 fontWeight: FontWeight.w800,
-                                color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                color: ClrStyle
+                                    .black2CToWhite[sl<AuthConfig>().idx],
                               ),
                             ),
                             TextSpan(
@@ -78,7 +86,8 @@ class RelationShips extends StatelessWidget {
                               style: GoogleFonts.inter(
                                 fontSize: 35.sp,
                                 fontWeight: FontWeight.w800,
-                                color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                color: ClrStyle
+                                    .black2CToWhite[sl<AuthConfig>().idx],
                               ),
                             ),
                             TextSpan(
@@ -126,11 +135,13 @@ class RelationShips extends StatelessWidget {
                                                 margin: EdgeInsets.all(43.h),
                                                 width: 135.h,
                                                 height: 135.h,
-                                                child: SvgPicture.asset(SvgImg.camera),
+                                                child: SvgPicture.asset(
+                                                    SvgImg.camera),
                                               )
                                         : bloc.user?.me.photo != null
                                             ? Image.network(
-                                                Config.url.url + bloc.user!.me.photo!,
+                                                Config.url.url +
+                                                    bloc.user!.me.photo!,
                                                 width: 135.h,
                                                 height: 135.h,
                                                 fit: BoxFit.cover,
@@ -139,7 +150,8 @@ class RelationShips extends StatelessWidget {
                                                 padding: EdgeInsets.all(43.h),
                                                 width: 135.h,
                                                 height: 135.h,
-                                                child: SvgPicture.asset(SvgImg.camera,
+                                                child: SvgPicture.asset(
+                                                  SvgImg.camera,
                                                 ),
                                               ),
                                   ),
@@ -179,14 +191,16 @@ class RelationShips extends StatelessWidget {
                                     clipBehavior: Clip.hardEdge,
                                     child: bloc.user?.love?.photo != null
                                         ? Image.network(
-                                            Config.url.url + bloc.user!.love!.photo!,
+                                            Config.url.url +
+                                                bloc.user!.love!.photo!,
                                             width: 135.h,
                                             height: 135.h,
                                             fit: BoxFit.cover,
                                           )
                                         : Padding(
                                             padding: EdgeInsets.all(43.h),
-                                            child: SvgPicture.asset(SvgImg.camera,
+                                            child: SvgPicture.asset(
+                                              SvgImg.camera,
                                             ),
                                           ),
                                   ),
@@ -207,23 +221,24 @@ class RelationShips extends StatelessWidget {
                     ),
                     SizedBox(height: 20.h),
                     StreamBuilder<DateTime>(
-                        stream: _streamController.stream,
-                        initialData: DateTime.now(),
-                        builder: (context, snapshot) {
-                          return SizedBox(
-                            height: 206.h,
-                            child: ScrollDatePicker(
-                              maximumDate: DateTime.now(),
-                              locale: const Locale('ru', 'RU'),
-                              onDateTimeChanged: (DateTime value) {
-                                bloc.add(TextFieldFilled(true));
-                                date = value.toString().substring(0, 10);
-                                _streamController.sink.add(value);
-                              },
-                              selectedDate: snapshot.data!,
-                            ),
-                          );
-                        }),
+                      stream: _streamController.stream,
+                      initialData: DateTime.now(),
+                      builder: (context, snapshot) {
+                        return SizedBox(
+                          height: 206.h,
+                          child: ScrollDatePicker(
+                            maximumDate: DateTime.now(),
+                            locale: const Locale('ru', 'RU'),
+                            onDateTimeChanged: (DateTime value) {
+                              bloc.add(TextFieldFilled(true));
+                              date = value.toString().substring(0, 10);
+                              _streamController.sink.add(value);
+                            },
+                            selectedDate: snapshot.data!,
+                          ),
+                        );
+                      },
+                    ),
                     SizedBox(height: 20.h),
                     CustomButton(
                       color: ColorStyles.accentColor,
@@ -245,7 +260,9 @@ class RelationShips extends StatelessWidget {
     return AppBar(
       elevation: 0,
       toolbarHeight: 80.sp,
-      backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+      backgroundColor: sl<AuthConfig>().idx == 1
+          ? ColorStyles.blackColor
+          : const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
         padding: EdgeInsets.only(left: 20.sp, top: 40.sp, right: 6.sp),
         child: Row(

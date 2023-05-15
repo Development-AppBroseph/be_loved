@@ -78,7 +78,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.get(
       Endpoints.getAvailablePurposes.getPath(),
-      queryParameters: {'lat': 63.2773775988409, 'lon': 90.82074510026895},
+      queryParameters: {'lat': lat, 'lon': long},
       options: Options(
         followRedirects: false,
         validateStatus: (status) => status! < 599,

@@ -116,7 +116,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   }
 
   bool fieldValidation(TextEditingController controller) {
-    return controller.text.length > 3;
+    return controller.text.length > 3 && controller.text.trim() != '';
   }
 
   bool isValidate() {
@@ -234,27 +234,46 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                 eventCreator: sl<AuthConfig>().user!.me,
                 mainPosition: 0)));
       }
-      if (snapshot.data! != 3 || snapshot.data! != 4) {
-        if (snapshot.data! == 3) {
-          NotificationService().yearsPushNotification(
-            title: _controllerName.text,
-            body: _controllerDescription.text,
-            id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
-          );
+      if (notification) {
+        if (snapshot.data! == 3 || snapshot.data! == 4) {
+          if (snapshot.data! == 3) {
+            NotificationService().yearsPushNotification(
+              title: _controllerName.text,
+              body: _controllerDescription.text,
+              id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
+              minute: _controllerFromTime.text.length > 4
+                  ? int.parse(_controllerFromTime.text.split(":")[1])
+                  : 0,
+              hour: _controllerFromTime.text.length > 4
+                  ? int.parse(_controllerFromTime.text.split(":")[0])
+                  : 0,
+            );
+          } else {
+            NotificationService().monthlyPushNotification(
+              title: _controllerName.text,
+              body: _controllerDescription.text,
+              id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
+              minute: _controllerFromTime.text.length > 4
+                  ? int.parse(_controllerFromTime.text.split(":")[1])
+                  : 0,
+              hour: _controllerFromTime.text.length > 4
+                  ? int.parse(_controllerFromTime.text.split(":")[0])
+                  : 0,
+            );
+          }
         } else {
-          NotificationService().monthlyPushNotification(
+          NotificationService().pushNotification(
             title: _controllerName.text,
             body: _controllerDescription.text,
             id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
+            minute: _controllerFromTime.text.length > 4
+                  ? int.parse(_controllerFromTime.text.split(":")[1])
+                  : 0,
+              hour: _controllerFromTime.text.length > 4
+                  ? int.parse(_controllerFromTime.text.split(":")[0])
+                  : 0,
           );
         }
-      } else {
-        NotificationService().pushNotification(
-          title: _controllerName.text,
-          body: _controllerDescription.text,
-          interval: repeats[snapshot.data!]['interval'],
-          id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
-        );
       }
 
       // NotificationService().cancelPushNotification();

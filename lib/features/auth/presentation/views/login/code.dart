@@ -7,6 +7,7 @@ import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/enums.dart';
 import 'package:be_loved/core/utils/images.dart';
+import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/create_account_info.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_relation.dart';
@@ -147,13 +148,16 @@ class _CodePageState extends State<CodePage> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomePage(),
+                  builder: (context) => const HomePage(),
                 ),
                 (route) => false,
               );
             }
           });
         }
+      }
+      if (current is CodeError) {
+        showAlertToast('Введен не верный код');
       }
       // if (current is CodeError) error = current.error;
 
@@ -253,23 +257,26 @@ class _CodePageState extends State<CodePage> {
                               focusNode: focusNode,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               onChanged: (value) {
-                               setState(() {
+                                setState(() {
                                   print('object ${value.length}---}');
-                                if (value.length == 4) {
-                                  BlocProvider.of<AuthBloc>(context)
-                                      .add(TextFieldFilled(true));
-                                  focusNode.unfocus();
-                                } else {
-                                  BlocProvider.of<AuthBloc>(context)
-                                      .add(TextFieldFilled(false));
-                                }
-                               });
+                                  if (value.length == 4) {
+                                    BlocProvider.of<AuthBloc>(context)
+                                        .add(TextFieldFilled(true));
+                                    focusNode.unfocus();
+                                  } else {
+                                    BlocProvider.of<AuthBloc>(context)
+                                        .add(TextFieldFilled(false));
+                                  }
+                                });
                               },
                               defaultPinTheme: PinTheme(
                                 width: 60.sp,
                                 height: 80.sp,
                                 decoration: BoxDecoration(
-                                    color: textEditingControllerUp.text.length == 4 ? Colors.white : ColorStyles.validateColor,
+                                    color:
+                                        textEditingControllerUp.text.length == 4
+                                            ? Colors.white
+                                            : ColorStyles.validateColor,
                                     borderRadius: BorderRadius.circular(10)),
                                 textStyle: GoogleFonts.inter(
                                   fontSize: 35.sp,

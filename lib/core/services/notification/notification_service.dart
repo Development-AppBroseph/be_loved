@@ -9,8 +9,9 @@ class NotificationService {
   Future pushNotification({
     required String title,
     required String body,
-    required int interval,
     required int id,
+    required int minute,
+    required int hour,  
   }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -19,10 +20,11 @@ class NotificationService {
         title: title,
         body: body,
       ),
-      schedule: NotificationInterval(
-        interval: interval,
+      schedule: NotificationCalendar(
         timeZone: timeZone,
         repeats: true,
+        minute: minute,
+        hour: hour,
       ),
     );
   }
@@ -31,6 +33,8 @@ class NotificationService {
     required String title,
     required String body,
     required int id,
+    required int minute,
+    required int hour,
   }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -42,6 +46,8 @@ class NotificationService {
       schedule: NotificationCalendar(
         timeZone: timeZone,
         day: DateTime.now().day,
+        minute: minute,
+        hour: hour,
         repeats: true,
       ),
     );
@@ -51,6 +57,8 @@ class NotificationService {
     required String title,
     required String body,
     required int id,
+    required int minute,
+    required int hour,
   }) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -61,6 +69,8 @@ class NotificationService {
       ),
       schedule: NotificationCalendar(
         month: DateTime.now().month,
+        minute: minute,
+        hour: hour,
         repeats: true,
       ),
     );

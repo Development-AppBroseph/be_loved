@@ -134,7 +134,9 @@ class Repository {
       if (response.statusCode == 204) {
         return CheckIsUserExist.fromJson(response.data);
       }
-      if (response.statusCode == 400) {}
+      if (response.statusCode == 400) {
+        throw 'Введен неверный код';
+      }
       return null;
     } catch (e) {
       return null;

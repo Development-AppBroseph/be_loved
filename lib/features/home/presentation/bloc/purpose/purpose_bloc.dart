@@ -89,18 +89,18 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     print('GET PURPOSE DATA');
     emit(PurposeLoadingState());
 
-    //Getting season purpsose(target)
-    final gotPurpose = await getSeasonPurpose.call(NoParams());
-    gotPurpose.fold(
-      (error) => errorCheck(error),
-      (data) {
-        seasonPurpose = data;
-        seasonPurpose!.inHistory =
-            seasonPurpose!.verdict == 'Принято' ? true : false;
-        seasonPurpose!.inProcess =
-            seasonPurpose!.verdict == 'Ожидание' ? true : false;
-      },
-    );
+    // Getting season purpsose(target)
+    // final gotPurpose = await getSeasonPurpose.call(NoParams());
+    // gotPurpose.fold(
+    //   (error) => errorCheck(error),
+    //   (data) {
+    //     seasonPurpose = data;
+    //     seasonPurpose!.inHistory =
+    //         seasonPurpose!.verdict == 'Принято' ? true : false;
+    //     seasonPurpose!.inProcess =
+    //         seasonPurpose!.verdict == 'Ожидание' ? true : false;
+    //   },
+    // );
 
     //Getting available purposes by lat and long
     final gotPurposes = await getAvailablePurposes.call(
@@ -185,14 +185,15 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
     emit(PurposeLoadingState());
 
     //Send photo of purpose and complete)(history)
-    final gotPurpose = await sendPhotoPurpose.call(SendPhotoPurposeParams(
+    final gotPurpose = await sendPhotoPurpose.call(
+      SendPhotoPurposeParams(
         path: event.path,
-        target: seasonPurpose!.id == event.target
-            ? seasonPurpose!.forPhotoId ?? 1
-            : inProcessPurposes
-                .where((element) => element.purpose.id == event.target)
-                .first
-                .id));
+        target: inProcessPurposes
+            .where((element) => element.purpose.id == event.target)
+            .first
+            .id,
+      ),
+    );
     PurposeState state = gotPurpose.fold((error) => errorCheck(error), (data) {
       clearAll();
       return CompletedPurposeState();
