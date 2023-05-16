@@ -43,7 +43,7 @@ class RelationStartDateWidget extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             Text(
               'Вы начали встречаться:',
@@ -298,7 +298,7 @@ Widget _buildDatePicker(BuildContext context,
                             _pageController.previousPage(
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOutQuint);
-                          } 
+                          }
                         },
                         behavior: HitTestBehavior.opaque,
                         child: SvgPicture.asset(
@@ -332,7 +332,7 @@ Widget _buildDatePicker(BuildContext context,
                           _pageController.nextPage(
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOutQuint);
-                        } 
+                        }
                       },
                       behavior: HitTestBehavior.opaque,
                       child: SvgPicture.asset(

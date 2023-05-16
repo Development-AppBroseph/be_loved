@@ -7,10 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LevelsWidget extends StatelessWidget {
-  const LevelsWidget({Key? key}) : super(key: key);
+  final DateTime dateTime;
+  const LevelsWidget({Key? key, required this.dateTime}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int currentYear =
+        (dateTime.difference(DateTime.now()).inDays / 365 * -1).toInt();
     return SizedBox(
       height: 732.h,
       child: CupertinoCard(
@@ -34,9 +37,10 @@ class LevelsWidget extends StatelessWidget {
                       fontSize: 15.sp,
                     ),
                   ),
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 13),
+                  SizedBox(height: 15.h),
+                  SizedBox(
+                    height: 677.h,
+                    child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: List.generate(
@@ -45,12 +49,58 @@ class LevelsWidget extends StatelessWidget {
                             height: 65.h,
                             width: double.infinity,
                             child: CupertinoCard(
-                              margin: EdgeInsets.symmetric(horizontal: 25.w, vertical: 5.h),
+                              color: Colors.grey,
+                              margin: EdgeInsets.symmetric(
+                                horizontal: 25.w,
+                                vertical: 5.h,
+                              ),
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: NetworkImage('https://beloved-app.ru${state.levels[index].image}'),
+                                  image: NetworkImage(
+                                    'https://beloved-app.ru${state.levels[index].image}',
+                                  ),
                                   fit: BoxFit.cover,
                                 ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          right: 20.w, bottom: 1.h),
+                                      child: CupertinoCard(
+                                        radius: BorderRadius.circular(28.r),
+                                        decoration: BoxDecoration(
+                                          color: currentYear >=
+                                                  state.levels[index].years
+                                              ? Colors.white
+                                              : const Color.fromRGBO(
+                                                  150, 150, 150, 1),
+                                        ),
+                                        child: Container(
+                                          width: 89.w,
+                                          height: 39.h,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            getNoun(state.levels[index].years),
+                                            style: TextStyle(
+                                              fontFamily: 'Inter',
+                                              color: currentYear >=
+                                                      state.levels[index].years
+                                                  ? const Color.fromRGBO(
+                                                      23, 23, 23, 1)
+                                                  : const Color.fromRGBO(
+                                                      208, 208, 208, 1),
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 20.sp,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ),
@@ -61,13 +111,31 @@ class LevelsWidget extends StatelessWidget {
                 ],
               );
             }
-            return const Center(
-              child: Text('Loading....'),
+            return Center(
+              child: Container(),
             );
           },
         ),
       ),
     );
   }
-}
 
+  String getNoun(int count) {
+    if (count == 228) {
+      return '40+';
+    }
+    if (count.toString().endsWith('1') && count != 11) {
+      return '$count год';
+    }
+    if (count.toString().endsWith('2') && count != 12) {
+      return '$count года';
+    }
+    if (count.toString().endsWith('3') && count != 13) {
+      return '$count года';
+    }
+    if (count.toString().endsWith('4') && count != 14) {
+      return '$count года';
+    }
+    return '$count лет';
+  }
+}

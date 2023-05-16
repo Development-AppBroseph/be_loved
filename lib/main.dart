@@ -8,6 +8,7 @@ import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/notification/notification_service.dart';
+import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/auth/presentation/views/login/auth_page.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
@@ -64,6 +65,7 @@ void main() async {
         channelDescription: 'Test notification',
         playSound: true,
         enableVibration: true,
+        criticalAlerts: false,
       )
     ]);
     setupInjections();
@@ -79,13 +81,17 @@ void main() async {
       await Firebase.initializeApp();
       await FirebaseMessaging.instance.requestPermission(
         alert: true,
-        announcement: false,
+        announcement: true,
         badge: true,
         carPlay: false,
         criticalAlert: false,
         provisional: false,
         sound: true,
       );
+
+      FirebaseMessaging.onBackgroundMessage((message) async {
+        print('messageIs: ' + message.data.toString());
+      });
     }
     // MySharedPrefs().setUser(
     //   '123123123123123213',

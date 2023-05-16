@@ -267,11 +267,11 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
             body: _controllerDescription.text,
             id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
             minute: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[1])
-                  : 0,
-              hour: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[0])
-                  : 0,
+                ? int.parse(_controllerFromTime.text.split(":")[1])
+                : 0,
+            hour: _controllerFromTime.text.length > 4
+                ? int.parse(_controllerFromTime.text.split(":")[0])
+                : 0,
           );
         }
       }
