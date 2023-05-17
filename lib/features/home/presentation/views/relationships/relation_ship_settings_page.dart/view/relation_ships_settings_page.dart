@@ -502,7 +502,9 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                               backgroundColor:
                                                   Colors.transparent,
                                               builder: (context) {
-                                                return const LevelsWidget();
+                                                return LevelsWidget(
+                                                  dateTime: datetime,
+                                                );
                                               },
                                             ),
                                             child: SizedBox(
