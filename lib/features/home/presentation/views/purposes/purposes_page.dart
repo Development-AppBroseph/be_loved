@@ -179,7 +179,7 @@ class _PurposesPageState extends State<PurposesPage> {
                 return SafeArea(
                   child: CustomScrollView(
                     controller: scrollController,
-                    // physics: const ClampingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     slivers: [
                       SliverAppBar(
                         backgroundColor: sl<AuthConfig>().idx == 1

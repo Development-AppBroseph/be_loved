@@ -1,6 +1,5 @@
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:equatable/equatable.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class EventEntity extends Equatable {
   final int id;
@@ -19,8 +18,9 @@ class EventEntity extends Equatable {
   final int mainPosition;
   final User eventCreator;
   final List<int> tagIds;
+  final String? cycle;
 
-  EventEntity({
+  const EventEntity({
     required this.id,
     required this.tagIds,
     required this.title,
@@ -37,8 +37,8 @@ class EventEntity extends Equatable {
     required this.repeat,
     required this.allDays,
     required this.eventCreator,
+    required this.cycle,
   });
-
 
   Map<String, dynamic> toMap() {
     return {
@@ -46,29 +46,21 @@ class EventEntity extends Equatable {
       'name': title,
       'description': description,
       // 'important': important,
-      'start': start.toString(),
-      'finish': finish.toString(),
+      'start': start.toUtc(),
+      'finish': finish.toUtc(),
       'married': married,
       // 'relation': relationId,
       'all_day': allDays,
       'repeat': repeat,
       'notification': notification,
-      'tags': tagIds
+      'tags': tagIds,
+      'cycle': cycle,
       // 'main_position': mainPosition
       // 'event_creator': eventCreator
     };
   }
 
-
   @override
-  List<Object> get props => [
-        id,
-        title,
-        description,
-        important,
-        start,
-        finish,
-        married,
-        relationId
-      ];
+  List<Object> get props =>
+      [id, title, description, important, start, finish, married, relationId];
 }

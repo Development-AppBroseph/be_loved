@@ -10,14 +10,14 @@ class GetEventsEvent extends EventsEvent{}
 
 class EventAddEvent extends EventsEvent{
   final EventEntity eventEntity;
-  EventAddEvent({required this.eventEntity});
+  EventAddEvent({required this.eventEntity,});
 }
 
 class EventEditEvent extends EventsEvent{
   final EventEntity eventEntity;
   File? photo;
   bool isDeletePhoto;
-  EventEditEvent({required this.eventEntity, this.photo, this.isDeletePhoto = false});
+  EventEditEvent({required this.eventEntity, this.photo, this.isDeletePhoto = false,});
 }
 
 class EventChangeToHomeEvent extends EventsEvent{

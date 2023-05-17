@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/home/data/models/events/event_model.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:dio/dio.dart';
+
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/services/database/auth_params.dart';
 import '../../../../../core/services/network/endpoints.dart';
@@ -52,10 +54,10 @@ class EventsRemoteDataSourceImpl
 
 
   @override
-  Future<EventEntity> addEvent(EventEntity eventEntity) async {
+  Future<EventEntity> addEvent(EventEntity eventEntity,) async {
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Response response = await dio.post(Endpoints.addEvent.getPath(),
-        data: jsonEncode(eventEntity.toMap()),
+        data: FormData.fromMap(eventEntity.toMap()),
         options: Options(
             followRedirects: false,
             validateStatus: (status) => status! < 699,
@@ -77,7 +79,7 @@ class EventsRemoteDataSourceImpl
     headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
     Map<String, dynamic> map = eventEntity.toMap();
     map['photo'] = photo == null ? null : await MultipartFile.fromFile(photo.path);
-    print('DATA: ${map}');
+    print('DATA: $map');
     Response response = await dio.patch(Endpoints.editEvent.getPath(params: [eventEntity.id]),
         data: isDeletePhoto 
         ? jsonEncode(map)

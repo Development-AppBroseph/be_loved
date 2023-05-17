@@ -163,6 +163,7 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
         child: Stack(
           children: [
             SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               controller: widget.scrollController,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

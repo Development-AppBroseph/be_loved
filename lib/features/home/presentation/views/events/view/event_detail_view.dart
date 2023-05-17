@@ -1,6 +1,5 @@
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
-import 'package:be_loved/core/services/notification/notification_service.dart';
 import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/helpers/text_size.dart';
 import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
@@ -52,10 +51,14 @@ class _EventDetailViewState extends State<EventDetailView> {
   EventEntity? event;
 
   showTagModal() async {
-    tagSelectModal(context, getWidgetPosition(tagAddIconKey), event!,
-        (eventFrom) {
-      context.read<EventsBloc>().add(EventEditEvent(eventEntity: eventFrom));
-    });
+    tagSelectModal(
+      context,
+      getWidgetPosition(tagAddIconKey),
+      event!,
+      (eventFrom) {
+        context.read<EventsBloc>().add(EventEditEvent(eventEntity: eventFrom));
+      },
+    );
   }
 
   showPhotoSettingsModal(bool editPhoto) async {
@@ -66,45 +69,54 @@ class _EventDetailViewState extends State<EventDetailView> {
           getWidgetPosition(editPhoto ? photoSettingsKey : addPhotoSettingsKey),
           editPhoto, () {
         Navigator.pop(context);
-        context
-            .read<EventsBloc>()
-            .add(EventEditEvent(eventEntity: event!, isDeletePhoto: true));
+        context.read<EventsBloc>().add(EventEditEvent(
+            eventEntity: event!, isDeletePhoto: true, ));
       }, (f) {
         Navigator.pop(context);
         showLoaderWrapper(context);
         context
             .read<EventsBloc>()
-            .add(EventEditEvent(eventEntity: event!, photo: f));
+            .add(EventEditEvent(eventEntity: event!, photo: f, ));
       });
     });
   }
 
   showEventSettingsModal() async {
     eventSettingsModal(
-        context, getWidgetPosition(eventSettingsKey), event!.important, () {
-      Navigator.pop(context);
-      showModalCreateEvent(context, () {
+      context,
+      getWidgetPosition(eventSettingsKey),
+      event!.important,
+      () {
+        Navigator.pop(context);
+        showModalCreateEvent(context, () {
+          widget.prevPage();
+        }, event);
+      },
+      () {
+        Navigator.pop(context);
+        context.read<EventsBloc>().add(EventDeleteEvent(ids: [event!.id]));
+        // NotificationService().cancelPushNotification(event!.id);
         widget.prevPage();
-      }, event);
-    }, () {
-      Navigator.pop(context);
-      context.read<EventsBloc>().add(EventDeleteEvent(ids: [event!.id]));
-      NotificationService().cancelPushNotification(event!.id);
-      widget.prevPage();
-    }, () {
-      Navigator.pop(context);
-      if (context.read<EventsBloc>().eventsInHome.length != 3 &&
-          !context
-              .read<EventsBloc>()
-              .eventsInHome
-              .any((element) => element.id == event!.id)) {
-        context.read<EventsBloc>().add(EventChangeToHomeEvent(
-            eventEntity: event!,
-            position: context.read<EventsBloc>().eventsInHome.isEmpty
-                ? 0
-                : (context.read<EventsBloc>().eventsInHome.length + 1)));
-      }
-    }, isOld: widget.isOld);
+      },
+      () {
+        Navigator.pop(context);
+        if (context.read<EventsBloc>().eventsInHome.length != 3 &&
+            !context
+                .read<EventsBloc>()
+                .eventsInHome
+                .any((element) => element.id == event!.id)) {
+          context.read<EventsBloc>().add(
+                EventChangeToHomeEvent(
+                  eventEntity: event!,
+                  position: context.read<EventsBloc>().eventsInHome.isEmpty
+                      ? 0
+                      : (context.read<EventsBloc>().eventsInHome.length + 1),
+                ),
+              );
+        }
+      },
+      isOld: widget.isOld,
+    );
   }
 
   void scrollToBottom() {

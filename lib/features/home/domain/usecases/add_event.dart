@@ -18,7 +18,7 @@ class AddEvent implements UseCase<EventEntity, AddEventParams> {
 
 class AddEventParams extends Equatable {
   final EventEntity eventEntity;
-  const AddEventParams({required this.eventEntity});
+  const AddEventParams({required this.eventEntity, });
 
   @override
   List<Object> get props => [eventEntity];

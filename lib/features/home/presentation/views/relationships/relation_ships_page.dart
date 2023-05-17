@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
@@ -36,7 +37,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'dart:ui' as ui;
 
 import 'modals/add_event_modal.dart';
 
@@ -111,7 +111,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
     scrollController.addListener(() {
       if (scrollController.offset.toInt() < -40 && !isLoading) {
         _showLoader();
-        print('offset: ' + scrollController.offset.toString());
+        print('offset: ${scrollController.offset}');
       }
       // print('offset: ' + scrollController.offset.toString());
     });
@@ -263,6 +263,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                       controller: scrollController,
                       keyboardDismissBehavior:
                           ScrollViewKeyboardDismissBehavior.onDrag,
+                          physics: const BouncingScrollPhysics(),
                       // physics: const AlwaysScrollableScrollPhysics(
                       //     parent: ClampingScrollPhysics()),
 
@@ -596,7 +597,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                             children: [
                               backdropFilterExample(
                                 context,
-                                Container(
+                                SizedBox(
                                   width: double.infinity,
                                   height: MediaQuery.of(context).size.height,
                                   // color: Colors.black,
@@ -629,7 +630,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                             ],
                           );
                         } else {
-                          return Container(
+                          return SizedBox(
                             width: 0,
                             height: 0,
                           );

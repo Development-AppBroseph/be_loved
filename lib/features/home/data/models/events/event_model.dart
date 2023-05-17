@@ -3,7 +3,7 @@ import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 
 class EventModel extends EventEntity{
-  EventModel({
+  const EventModel({
     required int id,
     required String title,
     required String description,
@@ -20,6 +20,7 @@ class EventModel extends EventEntity{
     required int mainPosition,
     required User eventCreator,
     required List<int> tagIds,
+    required final String? cycle,
 
   }) : super(
     id: id, 
@@ -37,7 +38,8 @@ class EventModel extends EventEntity{
     allDays: allDays,
     notification: notification,
     eventCreator: eventCreator,
-    mainPosition: mainPosition
+    mainPosition: mainPosition,
+    cycle: cycle,
   );
 
   factory EventModel.fromJson(Map<String, dynamic> json) {
@@ -71,6 +73,7 @@ class EventModel extends EventEntity{
       notification: json['notification'],
       mainPosition: json['main_position'],
       eventCreator: User.fromJson(json['event_creator']),
+      cycle: json['cycle']
     );
   }
 }

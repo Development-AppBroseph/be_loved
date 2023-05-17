@@ -156,10 +156,13 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
 
   void _editEvents(EventEditEvent event, Emitter<EventsState> emit) async {
     emit(EventLoadingState());
-    final data = await editEvent.call(EditEventParams(
+    final data = await editEvent.call(
+      EditEventParams(
         eventEntity: event.eventEntity,
         photo: event.photo,
-        isDeletePhoto: event.isDeletePhoto));
+        isDeletePhoto: event.isDeletePhoto,
+      ),
+    );
     EventsState state = data.fold(
       (error) => errorCheck(error),
       (data) {

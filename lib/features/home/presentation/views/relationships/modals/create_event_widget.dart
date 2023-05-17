@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
-import 'package:be_loved/core/services/notification/notification_service.dart';
 import 'package:be_loved/core/utils/helpers/time_text.dart';
 import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
@@ -66,22 +65,18 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   List<Map<String, dynamic>> repeats = [
     {
       'repeat': 'Каждый день',
-      'interval': 86400,
+      'interval': 'day',
     },
     {
       'repeat': 'Каждые 3 дня',
-      'interval': 86400 * 3,
+      'interval': 'three',
     },
     {
       'repeat': 'Каждую неделю',
-      'interval': 86400 * 7,
+      'interval': 'week',
     },
-    {
-      'repeat': 'Каждый месяц',
-    },
-    {
-      'repeat': 'Каждый год',
-    }
+    {'repeat': 'Каждый месяц', 'interval': 'month'},
+    {'repeat': 'Каждый год', 'interval': 'year'}
   ];
 
   int iconIndex = 15;
@@ -160,14 +155,15 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
       }
       showLoaderWrapper(context);
       if (widget.editingEvent != null) {
-        context.read<EventsBloc>().add(EventEditEvent(
-            eventEntity: EventEntity(
-                id: widget.editingEvent!.id,
-                title: _controllerName.text,
-                photo: null,
-                description: _controllerDescription.text,
-                important: false,
-                start: DateTime(
+        context.read<EventsBloc>().add(
+              EventEditEvent(
+                eventEntity: EventEntity(
+                  id: widget.editingEvent!.id,
+                  title: _controllerName.text,
+                  photo: null,
+                  description: _controllerDescription.text,
+                  important: false,
+                  start: DateTime(
                     fromDate.year,
                     fromDate.month,
                     fromDate.day,
@@ -176,8 +172,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         : 0,
                     _controllerFromTime.text.length > 4
                         ? int.parse(_controllerFromTime.text.split(":")[1])
-                        : 0),
-                finish: DateTime(
+                        : 0,
+                  ),
+                  finish: DateTime(
                     toDate.year,
                     toDate.month,
                     toDate.day,
@@ -186,95 +183,106 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         : 0,
                     _controllerToTime.text.length > 4
                         ? int.parse(_controllerToTime.text.split(":")[1])
-                        : 0),
-                datetimeString: '',
-                tagIds: const [],
-                married: widget.editingEvent!.married,
-                relationId: sl<AuthConfig>().user!.relationId!,
-                notification: notification,
-                repeat: repeat,
-                allDays: allDays,
-                eventCreator: sl<AuthConfig>().user!.me,
-                mainPosition: widget.editingEvent!.mainPosition)));
+                        : 0,
+                  ),
+                  datetimeString: '',
+                  tagIds: const [],
+                  married: widget.editingEvent!.married,
+                  relationId: sl<AuthConfig>().user!.relationId!,
+                  notification: notification,
+                  repeat: notification,  
+                  allDays: allDays,
+                  eventCreator: sl<AuthConfig>().user!.me,
+                  mainPosition: widget.editingEvent!.mainPosition,
+                  cycle: repeats[snapshot.data!]['interval'],
+                ),
+              ),
+            );
       } else {
-        context.read<EventsBloc>().add(EventAddEvent(
-            eventEntity: EventEntity(
-                id: 0,
-                title: _controllerName.text,
-                description: _controllerDescription.text,
-                important: false,
-                tagIds: const [],
-                photo: null,
-                start: DateTime(
-                    fromDate.year,
-                    fromDate.month,
-                    fromDate.day,
-                    _controllerFromTime.text.length > 4
-                        ? int.parse(_controllerFromTime.text.split(":")[0])
-                        : 0,
-                    _controllerFromTime.text.length > 4
-                        ? int.parse(_controllerFromTime.text.split(":")[1])
-                        : 0),
-                finish: DateTime(
-                    toDate.year,
-                    toDate.month,
-                    toDate.day,
-                    _controllerToTime.text.length > 4
-                        ? int.parse(_controllerToTime.text.split(":")[0])
-                        : 0,
-                    _controllerToTime.text.length > 4
-                        ? int.parse(_controllerToTime.text.split(":")[1])
-                        : 0),
-                datetimeString: '',
-                married: false,
-                relationId: sl<AuthConfig>().user!.relationId!,
-                notification: notification,
-                repeat: repeat,
-                allDays: allDays,
-                eventCreator: sl<AuthConfig>().user!.me,
-                mainPosition: 0)));
-      }
-      if (notification) {
-        if (snapshot.data! == 3 || snapshot.data! == 4) {
-          if (snapshot.data! == 3) {
-            NotificationService().yearsPushNotification(
-              title: _controllerName.text,
-              body: _controllerDescription.text,
-              id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
-              minute: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[1])
-                  : 0,
-              hour: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[0])
-                  : 0,
+        context.read<EventsBloc>().add(
+              EventAddEvent(
+                eventEntity: EventEntity(
+                  id: 0,
+                  title: _controllerName.text,
+                  description: _controllerDescription.text,
+                  important: false,
+                  tagIds: const [],
+                  photo: null,
+                  start: DateTime(
+                      fromDate.year,
+                      fromDate.month,
+                      fromDate.day,
+                      _controllerFromTime.text.length > 4
+                          ? int.parse(_controllerFromTime.text.split(":")[0])
+                          : 0,
+                      _controllerFromTime.text.length > 4
+                          ? int.parse(_controllerFromTime.text.split(":")[1])
+                          : 0),
+                  finish: DateTime(
+                      toDate.year,
+                      toDate.month,
+                      toDate.day,
+                      _controllerToTime.text.length > 4
+                          ? int.parse(_controllerToTime.text.split(":")[0])
+                          : 0,
+                      _controllerToTime.text.length > 4
+                          ? int.parse(_controllerToTime.text.split(":")[1])
+                          : 0),
+                  datetimeString: '',
+                  married: false,
+                  relationId: sl<AuthConfig>().user!.relationId!,
+                  notification: notification,
+                  repeat: notification,
+                  allDays: allDays,
+                  
+                  eventCreator: sl<AuthConfig>().user!.me,
+                  mainPosition: 0,
+                  cycle: repeats[snapshot.data!]['interval'],
+                ),
+              ),
             );
-          } else {
-            NotificationService().monthlyPushNotification(
-              title: _controllerName.text,
-              body: _controllerDescription.text,
-              id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
-              minute: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[1])
-                  : 0,
-              hour: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[0])
-                  : 0,
-            );
-          }
-        } else {
-          NotificationService().pushNotification(
-            title: _controllerName.text,
-            body: _controllerDescription.text,
-            id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
-            minute: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[1])
-                  : 0,
-              hour: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[0])
-                  : 0,
-          );
-        }
       }
+      // if (notification) {
+      //   if (snapshot.data! == 3 || snapshot.data! == 4) {
+      //     if (snapshot.data! == 3) {
+      //       NotificationService().yearsPushNotification(
+      //         title: _controllerName.text,
+      //         body: _controllerDescription.text,
+      //         id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
+      //         minute: _controllerFromTime.text.length > 4
+      //             ? int.parse(_controllerFromTime.text.split(":")[1])
+      //             : 0,
+      //         hour: _controllerFromTime.text.length > 4
+      //             ? int.parse(_controllerFromTime.text.split(":")[0])
+      //             : 0,
+      //       );
+      //     } else {
+      //       NotificationService().monthlyPushNotification(
+      //         title: _controllerName.text,
+      //         body: _controllerDescription.text,
+      //         id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
+      //         minute: _controllerFromTime.text.length > 4
+      //             ? int.parse(_controllerFromTime.text.split(":")[1])
+      //             : 0,
+      //         hour: _controllerFromTime.text.length > 4
+      //             ? int.parse(_controllerFromTime.text.split(":")[0])
+      //             : 0,
+      //       );
+      //     }
+      //   } else {
+      //     NotificationService().pushNotification(
+      //       title: _controllerName.text,
+      //       body: _controllerDescription.text,
+      //       id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
+      //       minute: _controllerFromTime.text.length > 4
+      //           ? int.parse(_controllerFromTime.text.split(":")[1])
+      //           : 0,
+      //       hour: _controllerFromTime.text.length > 4
+      //           ? int.parse(_controllerFromTime.text.split(":")[0])
+      //           : 0,
+      //     );
+      //   }
+      // }
 
       // NotificationService().cancelPushNotification();
     }
@@ -722,12 +730,13 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                           style: style2,
                                         ),
                                         SwitchBtn(
-                                            onChange: (val) {
-                                              setState(() {
-                                                notification = val;
-                                              });
-                                            },
-                                            value: notification)
+                                          onChange: (val) {
+                                            setState(() {
+                                              notification = val;
+                                            });
+                                          },
+                                          value: notification,
+                                        )
                                       ],
                                     ),
                                   ),
