@@ -15,11 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class PurposesModal extends StatefulWidget {
   final Function(PurposeEntity purposeEntity) onSelect;
-  PurposesModal({required this.onSelect});
+  const PurposesModal({Key? key, required this.onSelect}) : super(key: key);
   @override
   State<PurposesModal> createState() => _PurposesModalState();
 }
@@ -27,7 +26,6 @@ class PurposesModal extends StatefulWidget {
 class _PurposesModalState extends State<PurposesModal> {
   List<String> data = [
     'Все',
-    'Доступные',
     'В процессе',
   ];
 
@@ -36,7 +34,7 @@ class _PurposesModalState extends State<PurposesModal> {
   ScrollController controller = ScrollController();
 
   void completePurpose(int id) {
-    showLoaderWrapper(context);
+    // showLoaderWrapper(context);
     context.read<PurposeBloc>().add(CompletePurposeEvent(target: id));
   }
 
@@ -58,7 +56,6 @@ class _PurposesModalState extends State<PurposesModal> {
     super.initState();
     if (context.read<PurposeBloc>().state is PurposeInitialState) {
       context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
-      
     }
   }
 
@@ -108,17 +105,124 @@ class _PurposesModalState extends State<PurposesModal> {
                 if (selectedType == 0) {
                   listPurposes = bloc.allPurposes;
                   //Available purposes
-                } else if (selectedType == 1) {
-                  listPurposes = bloc.availablePurposes;
-                } else if (selectedType == 2) {
+                }
+                // else if (selectedType == 1) {
+                //   listPurposes = bloc.availablePurposes;
+                // }
+                else if (selectedType == 1) {
                   listPurposes =
                       bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
-                } else if (selectedType == 3) {
-                  listPurposes = bloc.getPurposeListFromFullData(
-                      bloc.historyPurposes,
-                      isHistory: true);
+                }
+                // else if (selectedType == 3) {
+                //   listPurposes = bloc.getPurposeListFromFullData(
+                //       bloc.historyPurposes,
+                //       isHistory: true);
+                // }
+                if (state is GotPurposeDataState) {
+                  return Column(
+                    children: [
+                      Container(
+                        height: 5.h,
+                        width: 100.w,
+                        margin: EdgeInsets.only(top: 7.h, bottom: 10.h),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            color: const Color(0xff969696)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 18.5.h),
+                        child: Text(
+                          "Выбрать цель",
+                          style: TextStyle(
+                            fontFamily: "Inter",
+                            color: const Color(0xff969696),
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 37.w,
+                        child: ListView.builder(
+                          controller: controller,
+                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.zero,
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedType = index;
+                                  });
+                                  if (index >= 2) {
+                                    controller.animateTo(
+                                        controller.position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOutQuint);
+                                  } else {
+                                    controller.animateTo(
+                                        controller.position.minScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOutQuint);
+                                  }
+                                },
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        right: 15.w,
+                                        left: index == 0 ? 25.w : 0),
+                                    height: 37.h,
+                                    child: PurposeMenuCard(
+                                      text: data[index],
+                                      index: index,
+                                      selectedType: selectedType,
+                                      isGrey: true,
+                                    )));
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 39.h,
+                      ),
+
+                      //..
+
+                      //All purposes
+                      if (listPurposes.isNotEmpty)
+                        ...listPurposes
+                            .map(
+                              (e) => Container(
+                                margin: EdgeInsets.only(bottom: 15.h),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    widget.onSelect(e);
+                                  },
+                                  child: PurposeCard(
+                                    purposeEntity: e,
+                                    onPickFile: (f) {
+                                      sendPhotoPurpose(e.id, f);
+                                    },
+                                    onCompleteTap: () {
+                                      completePurpose(e.id);
+                                    },
+                                    onCancelTap: () {
+                                      cancelPurpose(e.id);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList()
+                      else
+                        EmptyCard(
+                            isAvailable: selectedType == 1, isModal: true),
+                    ],
+                  );
                 }
                 return Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       height: 5.h,
@@ -140,7 +244,6 @@ class _PurposesModalState extends State<PurposesModal> {
                         ),
                       ),
                     ),
-
                     SizedBox(
                       height: 37.w,
                       child: ListView.builder(
@@ -150,71 +253,67 @@ class _PurposesModalState extends State<PurposesModal> {
                         itemCount: data.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedType = index;
-                                });
-                                if (index >= 2) {
-                                  controller.animateTo(
-                                      controller.position.maxScrollExtent,
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      curve: Curves.easeInOutQuint);
-                                } else {
-                                  controller.animateTo(
-                                      controller.position.minScrollExtent,
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      curve: Curves.easeInOutQuint);
-                                }
-                              },
-                              child: Container(
-                                  margin: EdgeInsets.only(
-                                      right: 15.w, left: index == 0 ? 25.w : 0),
-                                  height: 37.h,
-                                  child: PurposeMenuCard(
-                                    text: data[index],
-                                    index: index,
-                                    selectedType: selectedType,
-                                    isGrey: true,
-                                  )));
+                            onTap: () {
+                              setState(() {
+                                selectedType = index;
+                              });
+                              if (index >= 2) {
+                                controller.animateTo(
+                                    controller.position.maxScrollExtent,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOutQuint);
+                              } else {
+                                controller.animateTo(
+                                    controller.position.minScrollExtent,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOutQuint);
+                              }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  right: 15.w, left: index == 0 ? 25.w : 0),
+                              height: 37.h,
+                              child: PurposeMenuCard(
+                                text: data[index],
+                                index: index,
+                                selectedType: selectedType,
+                                isGrey: true,
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),
                     SizedBox(
-                      height: 39.h,
+                      height: 29.h,
                     ),
-
-                    //..
-
-                    //All purposes
-                    if (listPurposes.isNotEmpty)
-                      ...listPurposes
-                          .map(
-                            (e) => Container(
-                              margin: EdgeInsets.only(bottom: 15.h),
-                              child: GestureDetector(
-                                onTap: () {
-                                  widget.onSelect(e);
-                                },
-                                child: PurposeCard(
-                                  purposeEntity: e,
-                                  onPickFile: (f) {
-                                    sendPhotoPurpose(e.id, f);
-                                  },
-                                  onCompleteTap: () {
-                                    completePurpose(e.id);
-                                  },
-                                  onCancelTap: () {
-                                    cancelPurpose(e.id);
-                                  },
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList()
-                    else
-                      EmptyCard(isAvailable: selectedType == 1, isModal: true),
+                    Container(
+                      height: 220.h,
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 10),
+                      child: CupertinoCard(
+                        color: const Color(0xffD9D9D9),
+                      ),
+                    ),
+                    Container(
+                      height: 220.h,
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 10),
+                      child: CupertinoCard(
+                        color: const Color(0xffD9D9D9),
+                      ),
+                    ),
+                    Container(
+                      height: 220.h,
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 10),
+                      child: CupertinoCard(
+                        color: const Color(0xffD9D9D9),
+                      ),
+                    ),
                   ],
                 );
               }),

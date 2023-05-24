@@ -241,35 +241,6 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                 ),
               ),
             );
-<<<<<<< HEAD
-=======
-          } else {
-            NotificationService().monthlyPushNotification(
-              title: _controllerName.text,
-              body: _controllerDescription.text,
-              id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
-              minute: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[1])
-                  : 0,
-              hour: _controllerFromTime.text.length > 4
-                  ? int.parse(_controllerFromTime.text.split(":")[0])
-                  : 0,
-            );
-          }
-        } else {
-          NotificationService().pushNotification(
-            title: _controllerName.text,
-            body: _controllerDescription.text,
-            id: widget.editingEvent != null ? widget.editingEvent!.id : 0,
-            minute: _controllerFromTime.text.length > 4
-                ? int.parse(_controllerFromTime.text.split(":")[1])
-                : 0,
-            hour: _controllerFromTime.text.length > 4
-                ? int.parse(_controllerFromTime.text.split(":")[0])
-                : 0,
-          );
-        }
->>>>>>> c6c68f71636b30bf0de91bc798f4e5471ea7325c
       }
       // if (notification) {
       //   if (snapshot.data! == 3 || snapshot.data! == 4) {
