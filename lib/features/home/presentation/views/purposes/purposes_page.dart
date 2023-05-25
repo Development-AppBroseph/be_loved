@@ -36,7 +36,7 @@ class PurposesPage extends StatefulWidget {
 }
 
 class _PurposesPageState extends State<PurposesPage> {
-  List<String> data = ['Цели', 'Доступные', 'В процессе', 'История'];
+  List<String> data = ['Цели', 'В процессе', 'История'];
 
   int selectedType = 0;
   static const _indicatorSize = 30.0;
@@ -158,20 +158,22 @@ class _PurposesPageState extends State<PurposesPage> {
               if (state is GotPurposeDataState) {
                 List<PurposeEntity> listPurposes = [];
                 List<PromosEntiti> listPromos = [];
-                List<ActualEntiti> listActuals = [];
-                listActuals = bloc.actual;
+                // List<ActualEntiti> listActuals = [];
+                // listActuals = bloc.actual;
                 //All purposes
                 if (selectedType == 0) {
                   listPurposes = bloc.allPurposes;
                   //Available purposes
                   // } else if (selectedType == 1) {
                   // listPromos = bloc.promos;
-                } else if (selectedType == 1) {
-                  listPurposes = bloc.availablePurposes;
-                } else if (selectedType == 2) {
+                } 
+                // else if (selectedType == 1) {
+                //   // listPurposes = bloc.availablePurposes;
+                // } 
+                else if (selectedType == 1) {
                   listPurposes =
                       bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
-                } else if (selectedType == 3) {
+                } else if (selectedType == 2) {
                   listPurposes = bloc.getPurposeListFromFullData(
                       bloc.historyPurposes,
                       isHistory: true);
