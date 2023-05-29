@@ -43,7 +43,9 @@ class InputNamePage extends StatelessWidget {
       });
       return Scaffold(
         appBar: appBar(context),
-        backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+        backgroundColor: sl<AuthConfig>().idx == 1
+            ? ColorStyles.blackColor
+            : const Color.fromRGBO(240, 240, 240, 1.0),
         body: StreamBuilder<bool>(
             initialData: false,
             stream: _streamController.stream,
@@ -71,7 +73,8 @@ class InputNamePage extends StatelessWidget {
                                 style: GoogleFonts.inter(
                                   fontSize: 35.sp,
                                   fontWeight: FontWeight.w800,
-                                  color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
+                                  color: ClrStyle
+                                      .black2CToWhite[sl<AuthConfig>().idx],
                                 )),
                             TextSpan(
                                 text: 'зовут?',
@@ -101,7 +104,9 @@ class InputNamePage extends StatelessWidget {
                             height: 70.sp,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: validate(_nicknameController) ? Colors.white : ColorStyles.validateColor,
+                              color: validate(_nicknameController)
+                                  ? Colors.white
+                                  : ColorStyles.validateColor,
                             ),
                             alignment: Alignment.center,
                             child: Row(
@@ -112,7 +117,8 @@ class InputNamePage extends StatelessWidget {
                                   width: 0.78.sw,
                                   color: Colors.transparent,
                                   child: TextField(
-                                    textCapitalization: TextCapitalization.sentences,
+                                    textCapitalization:
+                                        TextCapitalization.sentences,
                                     textAlignVertical: TextAlignVertical.top,
                                     focusNode: focusNode,
                                     onTap: () {
@@ -129,10 +135,13 @@ class InputNamePage extends StatelessWidget {
                                       });
                                     },
                                     inputFormatters: [
-                                      LengthLimitingTextInputFormatter(12)
+                                      LengthLimitingTextInputFormatter(12),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp("[0-9a-zA-Z-А-Яа-я]")),
                                     ],
                                     onChanged: (text) {
-                                      if (text.length > 1) {
+                                      if (text.length > 1 &&
+                                          !text.contains('  ')) {
                                         BlocProvider.of<AuthBloc>(context)
                                             .add(TextFieldFilled(true));
                                       } else {
@@ -215,7 +224,9 @@ class InputNamePage extends StatelessWidget {
     return AppBar(
       elevation: 0,
       toolbarHeight: 80,
-      backgroundColor: sl<AuthConfig>().idx == 1 ? ColorStyles.blackColor : const Color.fromRGBO(240, 240, 240, 1.0),
+      backgroundColor: sl<AuthConfig>().idx == 1
+          ? ColorStyles.blackColor
+          : const Color.fromRGBO(240, 240, 240, 1.0),
       title: Padding(
         padding: EdgeInsets.only(top: 20.h, right: 6.w),
         child: Row(
@@ -275,8 +286,9 @@ class InputNamePage extends StatelessWidget {
       automaticallyImplyLeading: false,
     );
   }
-  
+
   bool validate(TextEditingController nicknameController) {
-    return nicknameController.text.isNotEmpty && nicknameController.text.trim() != ''; 
+    return nicknameController.text.isNotEmpty &&
+        nicknameController.text.trim() != '';
   }
 }

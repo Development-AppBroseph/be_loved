@@ -1,14 +1,11 @@
 import 'dart:io';
 
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
-import 'package:be_loved/core/services/notification/notification_service.dart';
-import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/auth/presentation/views/login/auth_page.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
@@ -57,17 +54,17 @@ void main() async {
         const AppMetricaConfig("416e2567-76ea-42d1-adce-c786faf3ada5"));
     WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
     check();
-    NotificationService().initTimeZone();
-    AwesomeNotifications().initialize(null, [
-      NotificationChannel(
-        channelKey: 'key1',
-        channelName: 'Be loved',
-        channelDescription: 'Test notification',
-        playSound: true,
-        enableVibration: true,
-        criticalAlerts: false,
-      )
-    ]);
+    // NotificationService().initTimeZone();
+    // AwesomeNotifications().initialize(null, [
+    //   NotificationChannel(
+    //     channelKey: 'key1',
+    //     channelName: 'Be loved',
+    //     channelDescription: 'Test notification',
+    //     playSound: true,
+    //     enableVibration: true,
+    //     criticalAlerts: false,
+    //   )
+    // ]);
     setupInjections();
     HttpOverrides.global = MyHttpOverrides();
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);

@@ -78,7 +78,9 @@ class _MainEventsPageState extends State<MainEventsPage>
     setState(() {
       isLoading = true;
     });
-    context.read<EventsBloc>().add(GetEventsEvent());
+    Future.delayed(const Duration(milliseconds: 500), () {
+      context.read<EventsBloc>().add(GetEventsEvent());
+    });
     streamController.sink.add(true);
     scrollController.animateTo(
       0,
@@ -90,12 +92,12 @@ class _MainEventsPageState extends State<MainEventsPage>
         isOpacity = true;
       });
     });
-    Future.delayed(const Duration(milliseconds: 1000), () {
+    Future.delayed(const Duration(milliseconds: 2000), () {
       setState(() {
         isOpacity = false;
       });
     });
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 3000), () {
       isLoading = false;
       streamController.sink.add(false);
     });
@@ -129,7 +131,7 @@ class _MainEventsPageState extends State<MainEventsPage>
           stream: streamController.stream,
           initialData: false,
           builder: (context, snapshot) {
-            print('Изменения');
+            // print('Изменения');
             if (snapshot.data!) {
               return Stack(
                 children: [
@@ -388,24 +390,39 @@ class _MainEventsPageState extends State<MainEventsPage>
                                                   ),
                                                   Row(
                                                     children: [
-                                                      SizedBox(
-                                                        width: (MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                70) /
-                                                            100,
-                                                        child: Text(
-                                                          eventsSlider[i].title,
-                                                          style:
-                                                              style6.copyWith(
-                                                                  height: 1.1),
-                                                          softWrap: false,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
+                                                      if (eventsSlider[i]
+                                                              .title !=
+                                                          'Годовщина')
+                                                        SizedBox(
+                                                          width: (MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  70) /
+                                                              100,
+                                                          child: Text(
+                                                            eventsSlider[i]
+                                                                .title,
+                                                            style:
+                                                                style6.copyWith(
+                                                                    height:
+                                                                        1.1),
+                                                            softWrap: false,
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        )
+                                                      else
+                                                        Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  top: 5.h),
+                                                          width: 290.w,
+                                                          child: Image.asset(
+                                                              'assets/images/Годовщина.png'),
                                                         ),
-                                                      ),
                                                     ],
                                                   ),
                                                 ],

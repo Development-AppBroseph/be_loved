@@ -52,7 +52,9 @@ class _PurposesPageState extends State<PurposesPage> {
       isLoading = true;
     });
 
-    context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
+    Future.delayed(const Duration(milliseconds: 500), () {
+      context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
+    });
     streamController.sink.add(true);
     scrollController.animateTo(
       0,
@@ -64,12 +66,12 @@ class _PurposesPageState extends State<PurposesPage> {
         isOpacity = true;
       });
     });
-    Future.delayed(const Duration(milliseconds: 1000), () {
+    Future.delayed(const Duration(milliseconds: 3000), () {
       setState(() {
         isOpacity = false;
       });
     });
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 4000), () {
       isLoading = false;
       streamController.sink.add(false);
     });
@@ -372,7 +374,7 @@ class _PurposesPageState extends State<PurposesPage> {
           stream: streamController.stream,
           initialData: false,
           builder: (context, snapshot) {
-            print('Изменения');
+            // print('Изменения');
             if (snapshot.data!) {
               return Stack(
                 children: [

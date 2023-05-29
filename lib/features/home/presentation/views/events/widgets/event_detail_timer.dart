@@ -11,7 +11,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventDetailTimer extends StatefulWidget {
   final EventEntity eventEntity;
-  const EventDetailTimer({Key? key, required this.eventEntity}) : super(key: key);
+  const EventDetailTimer({Key? key, required this.eventEntity})
+      : super(key: key);
   @override
   State<EventDetailTimer> createState() => _EventDetailTimerState();
 }
@@ -58,10 +59,12 @@ class _EventDetailTimerState extends State<EventDetailTimer> {
   }
 
   void setTime() async {
-    print('DATE s: ${widget.eventEntity.start}');
+    // print('DATE s: ${widget.eventEntity.start}');
     DateTime berlinWallFell = DateTime.now();
-    DateTime fromDays = DateTime.now().add(Duration(days: int.parse(widget.eventEntity.datetimeString)));
-    DateTime moonLanding = DateTime(fromDays.year, fromDays.month, fromDays.day, widget.eventEntity.start.hour, widget.eventEntity.start.minute);
+    DateTime fromDays = DateTime.now()
+        .add(Duration(days: int.parse(widget.eventEntity.datetimeString)));
+    DateTime moonLanding = DateTime(fromDays.year, fromDays.month, fromDays.day,
+        widget.eventEntity.start.hour, widget.eventEntity.start.minute);
 
     final difference = moonLanding.difference(berlinWallFell);
 
@@ -69,18 +72,18 @@ class _EventDetailTimerState extends State<EventDetailTimer> {
     hour = difference.inHours - difference.inDays * 24;
     minute = difference.inMinutes - difference.inHours * 60;
     if (days == 0 && hour == 0 && minute == 0) {
-      await NotificationService().cancelPushNotification(widget.eventEntity.id);
+      // await NotificationService().cancelPushNotification(widget.eventEntity.id);
     }
-    if(days.isNegative){
+    if (days.isNegative) {
       days = 0;
     }
-    if(hour.isNegative){
+    if (hour.isNegative) {
       hour = 0;
     }
-    if(minute.isNegative){
+    if (minute.isNegative) {
       minute = 0;
     }
-    streamController. add(true);
+    streamController.add(true);
   }
 
   @override
@@ -125,7 +128,8 @@ class _EventDetailTimerState extends State<EventDetailTimer> {
                       Text(
                         '$days',
                         style: TextStyle(
-                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                            color:
+                                ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 50.sp,
                             fontWeight: FontWeight.w700),
                       ),
@@ -145,7 +149,8 @@ class _EventDetailTimerState extends State<EventDetailTimer> {
                       Text(
                         '$hour',
                         style: TextStyle(
-                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                            color:
+                                ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 50.sp,
                             fontWeight: FontWeight.w700),
                       ),
@@ -165,7 +170,8 @@ class _EventDetailTimerState extends State<EventDetailTimer> {
                       Text(
                         '$minute',
                         style: TextStyle(
-                            color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+                            color:
+                                ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                             fontSize: 50.sp,
                             fontWeight: FontWeight.w700),
                       ),

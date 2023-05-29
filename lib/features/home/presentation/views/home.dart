@@ -13,8 +13,10 @@ import 'package:be_loved/features/home/presentation/views/purposes/purposes_page
 import 'package:be_loved/features/home/presentation/views/relationships/main_page.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
+import 'package:be_loved/features/profile/presentation/views/parting_second_view.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -83,6 +85,16 @@ class _HomePageState extends State<HomePage> {
               state is GetUserError ||
               state is RefreshUser) {
             if (state is GetUserSuccess) {
+              if (state.user.love == null) {
+                Future.delayed(const Duration(milliseconds: 400), () {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (BuildContext context) => PartingSecondView(),
+                    ),
+                  );
+                });
+              }
               // if(context.read<ThemeBloc>().state is ThemeInitialState){
               //   context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
               // }

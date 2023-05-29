@@ -19,7 +19,9 @@ class LevelsWidget extends StatelessWidget {
       child: CupertinoCard(
         margin: EdgeInsets.zero,
         padding: EdgeInsets.zero,
-        radius: BorderRadius.circular(40),
+        radius: BorderRadius.vertical(
+          top: Radius.circular(80.r),
+        ),
         child: BlocBuilder<LevelsCubit, LevelState>(
           builder: (context, state) {
             if (state is LevelEmptyState) {
@@ -39,70 +41,70 @@ class LevelsWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 15.h),
                   SizedBox(
-                    height: 677.h,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(
-                          state.levels.length,
-                          (index) => SizedBox(
-                            height: 65.h,
-                            width: double.infinity,
-                            child: CupertinoCard(
-                              color: Colors.grey,
-                              margin: EdgeInsets.symmetric(
-                                horizontal: 25.w,
-                                vertical: 5.h,
+                    height: 669.9.h,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: state.levels.length,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) => SizedBox(
+                        height: 65.h,
+                        width: double.infinity,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 25.w,
+                            vertical: 5.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(20.r),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                'https://beloved-app.ru${state.levels[index].image}',
                               ),
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    'https://beloved-app.ru${state.levels[index].image}',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          right: 20.w, bottom: 1.h),
-                                      child: CupertinoCard(
-                                        radius: BorderRadius.circular(28.r),
-                                        decoration: BoxDecoration(
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(right: 20.w, bottom: 1.h),
+                                  child: CupertinoCard(
+                                    elevation: 0,
+                                    radius: BorderRadius.circular(28.r),
+                                    decoration: BoxDecoration(
+                                      color: currentYear >=
+                                              state.levels[index].years
+                                          ? Colors.white
+                                          : const Color.fromRGBO(
+                                              150, 150, 150, 1),
+                                    ),
+                                    child: Container(
+                                      width: 90.w,
+                                      height: 39.h,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        getNoun(state.levels[index].years),
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
                                           color: currentYear >=
                                                   state.levels[index].years
-                                              ? Colors.white
+                                              ? const Color.fromRGBO(
+                                                  23, 23, 23, 1)
                                               : const Color.fromRGBO(
-                                                  150, 150, 150, 1),
-                                        ),
-                                        child: Container(
-                                          width: 89.w,
-                                          height: 39.h,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            getNoun(state.levels[index].years),
-                                            style: TextStyle(
-                                              fontFamily: 'Inter',
-                                              color: currentYear >=
-                                                      state.levels[index].years
-                                                  ? const Color.fromRGBO(
-                                                      23, 23, 23, 1)
-                                                  : const Color.fromRGBO(
-                                                      208, 208, 208, 1),
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20.sp,
-                                            ),
-                                          ),
+                                                  208, 208, 208, 1),
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 20.sp,
                                         ),
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),

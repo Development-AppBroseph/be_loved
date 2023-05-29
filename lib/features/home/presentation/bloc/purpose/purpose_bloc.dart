@@ -86,7 +86,7 @@ class PurposeBloc extends Bloc<PurposeEvent, PurposeState> {
 
   void _getAllPurposeData(
       GetAllPurposeDataEvent event, Emitter<PurposeState> emit) async {
-    print('GET PURPOSE DATA');
+    // print('GET PURPOSE DATA');
     emit(PurposeLoadingState());
 
     // Getting season purpsose(target)

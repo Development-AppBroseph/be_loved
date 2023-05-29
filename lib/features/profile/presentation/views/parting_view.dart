@@ -88,10 +88,12 @@ class PartingView extends StatelessWidget {
                             await showModalSendFile(context, isParting: true);
                         if (isPart != null && isPart) {
                           Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (BuildContext context) =>
-                                      PartingSecondView()));
+                            context,
+                            CupertinoPageRoute(
+                              builder: (BuildContext context) =>
+                                  PartingSecondView(),
+                            ),
+                          );
                         }
                       },
                     ),

@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_partner.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/modals/send_file/send_file_modal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,18 +70,34 @@ class PartingSecondView extends StatelessWidget {
                   SizedBox(
                     height: 15.h,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: CustomButton(
-                      color: Colors.black,
-                      text: 'Выйти из аккаунта',
-                      border:
-                          Border.all(width: 3.w, color: ColorStyles.redColor),
-                      textColor: ColorStyles.redColor,
-                      validate: true,
-                      onPressed: () {
-                        context.read<AuthBloc>().add(LogOut(context));
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      context.read<AuthBloc>().add(LogOut(context));
+                    },
+                    child: Stack(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 25.w),
+                          color: Colors.transparent,
+                          child: CustomButton(
+                            color: Colors.black,
+                            text: 'Выйти из аккаунта',
+                            border: Border.all(
+                                width: 3.w, color: ColorStyles.redColor),
+                            textColor: ColorStyles.redColor,
+                            validate: true,
+                            onPressed: () {
+                              context.read<AuthBloc>().add(LogOut(context));
+                            },
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 25.w),
+                          color: Colors.transparent,
+                          height: 50.h,
+                          width: double.infinity,
+                        ),
+                      ],
                     ),
                   ),
                 ],

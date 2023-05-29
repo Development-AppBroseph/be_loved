@@ -6,15 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void eventSettingsModal(
-  BuildContext context,
-  Offset offset,
-  bool isImportant,
-  Function() onEdit,
-  Function() onDelete,
-  Function() onAddToHome,
-  {bool isOld = false}
-) =>
+void eventSettingsModal(BuildContext context, Offset offset, bool isImportant,
+        Function() onEdit, Function() onDelete, Function() onAddToHome,
+        {bool isOld = false}) =>
     showDialog(
       useSafeArea: false,
       barrierColor: Colors.transparent,
@@ -38,32 +32,35 @@ void eventSettingsModal(
                     text: 'Редактировать',
                     icon: SvgImg.edit,
                     borderRadius: isOld && isImportant
-                      ? BorderRadius.circular(34.r)
-                      : null,
+                        ? BorderRadius.circular(34.r)
+                        : null,
                   ),
-                  if(!isOld)
-                  ...[SizedBox(
-                    height: 5.h,
-                  ),
-                  SettingsItem(
-                    onTap: () {
-                      if (context.read<EventsBloc>().eventsInHome.length != 3) {
+                  if (!isOld) ...[
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    SettingsItem(
+                      onTap: () {
+                        // if (context.read<EventsBloc>().eventsInHome.length !=
+                        //     3) {
                         onAddToHome();
-                      }
-                    },
-                    text: 'На главный экран',
-                    icon: SvgImg.smartphone,
-                    opacity: context.read<EventsBloc>().eventsInHome.length != 3
-                        ? null
-                        : 0.8,
-                    borderRadius: !isImportant
-                        ? BorderRadius.zero
-                        : BorderRadius.only(
-                            bottomLeft: Radius.circular(34.r),
-                            bottomRight: Radius.circular(34.r),
-                          ),
-                    iconSize: Size(16.w, 25.h),
-                  )],
+                        // }
+                      },
+                      text: 'На главный экран',
+                      icon: SvgImg.smartphone,
+                      opacity:
+                          context.read<EventsBloc>().eventsInHome.length != 3
+                              ? null
+                              : 0.8,
+                      borderRadius: !isImportant
+                          ? BorderRadius.zero
+                          : BorderRadius.only(
+                              bottomLeft: Radius.circular(34.r),
+                              bottomRight: Radius.circular(34.r),
+                            ),
+                      iconSize: Size(16.w, 25.h),
+                    )
+                  ],
                   if (!isImportant) ...[
                     SizedBox(
                       height: 5.h,

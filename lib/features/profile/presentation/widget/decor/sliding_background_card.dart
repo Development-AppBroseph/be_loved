@@ -52,18 +52,18 @@ class _SlidingBackgroundCardState extends State<SlidingBackgroundCard> {
         showAlertToast('Проверьте соединение с интернетом!');
       }
       if (state is DecorEditedSuccessState) {
-        print('ANIMATE');
+        // print('ANIMATE');
         animateToPage(decorBloc.back!);
       }
       if (state is DecorGotSuccessState) {
-        print('ANIMATE INIT');
+        // print('ANIMATE INIT');
         Future.delayed(const Duration(milliseconds: 400), () {
           animateToPage(decorBloc.back!, true);
         });
       }
     }, builder: (context, state) {
       if (state is DecorGotSuccessState) {
-        print('ANIMATE INIT');
+        // print('ANIMATE INIT');
         Future.delayed(const Duration(milliseconds: 400), () {
           animateToPage(decorBloc.back!, true);
         });

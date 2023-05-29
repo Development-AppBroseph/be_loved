@@ -39,9 +39,9 @@ class OptionBtn extends StatelessWidget {
               ),
               Text(
                 text,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Inter',
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w700,
                   color: ColorStyles.blackColor,
                 ),

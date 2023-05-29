@@ -16,7 +16,8 @@ import 'package:flutter_svg/svg.dart';
 
 class HomeInfoFirst extends StatefulWidget {
   final Function() onRelationTap;
-  const HomeInfoFirst({Key? key, required this.onRelationTap}) : super(key: key);
+  const HomeInfoFirst({Key? key, required this.onRelationTap})
+      : super(key: key);
   @override
   State<HomeInfoFirst> createState() => _HomeInfoFirstState();
 }
@@ -28,6 +29,25 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
   int years = 0;
   int month = 0;
   int daysInYears = 0;
+
+  List<int> leapYears = [
+    2020,
+    2016,
+    2012,
+    2008,
+    2004,
+    2000,
+    1996,
+    1992,
+    1988,
+    1994,
+    1990,
+    1986,
+    1982,
+    1978,
+    1974,
+    1973,
+  ];
 
   Timer? _timer;
 
@@ -44,7 +64,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
 
   @override
   void dispose() {
-    streamController.close();  
+    streamController.close();
     _timer?.cancel();
     super.dispose();
   }
@@ -68,20 +88,29 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
 
   void setTime() async {
     UserAnswer? user = sl<AuthConfig>().user;
-    print(
-        'SET TIME: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
+    // print(
+    //     'SET TIME: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
     if (user!.date != null) {
       final startTime = user.date as String;
 
       DateTime berlinWallFell = DateTime.now();
       DateTime moonLanding = DateTime.parse(startTime);
+      int countOfYears = 0;
 
       final difference = berlinWallFell.difference(moonLanding);
+
+      leapYears.forEach((element) {
+        if (moonLanding.year < element) {
+          countOfYears++;
+        }
+      });
+
+      print('countOfYears: $countOfYears');
       years = difference.inDays ~/ 365;
       month = (difference.inDays % 365) ~/ 30.4;
       double a = (difference.inDays % 365) % 30.4;
-      daysInYears = ((difference.inDays % 365) % 30.44).toInt();
-      days = difference.inDays;
+      daysInYears = ((difference.inDays % 365) % 30.44).toInt() - countOfYears;
+      days = difference.inDays - countOfYears;
       hour = difference.inHours - difference.inDays * 24;
       minute = difference.inMinutes - difference.inHours * 60;
       context.read<HomeInfoFirstCubit>().getTime(
@@ -92,7 +121,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
             month,
             daysInYears,
           );
-      
+
       streamController.add(true);
     }
   }

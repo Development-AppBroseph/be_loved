@@ -104,6 +104,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
         vsync: this, duration: const Duration(milliseconds: 600));
     animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
+        context.read<EventsBloc>().add(SendNoti());
         animationController.reverse();
       }
     });
@@ -263,7 +264,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                       controller: scrollController,
                       keyboardDismissBehavior:
                           ScrollViewKeyboardDismissBehavior.onDrag,
-                          physics: const BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       // physics: const AlwaysScrollableScrollPhysics(
                       //     parent: ClampingScrollPhysics()),
 
@@ -537,25 +538,28 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                         padding: EdgeInsets.only(top: 13.h),
                                         child: SizedBox(
                                           height: 108.h,
-                                          width: 108.w,
+                                          width: 84.w,
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
                                               GestureDetector(
                                                 onLongPress: () async {
-                                                  await animationController
-                                                      .animateTo(2);
-                                                  animationController.stop();
                                                   context
                                                       .read<EventsBloc>()
                                                       .add(SendNoti());
+                                                  await animationController
+                                                      .animateTo(
+                                                    2,
+                                                    duration: const Duration(
+                                                        milliseconds: 3500),
+                                                  );
+                                                  animationController.stop();
                                                 },
                                                 onLongPressEnd: (details) {
-                                                  animationController
-                                                      .animateBack(0);
+                                                  animationController.reset();
                                                 },
                                                 child: Lottie.asset(
-                                                    'assets/animations/heart.json',
+                                                    'assets/animations/opacity_lov5.json',
                                                     repeat: false,
                                                     controller:
                                                         animationController),
@@ -591,7 +595,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                       stream: streamController.stream,
                       initialData: false,
                       builder: (context, snapshot) {
-                        print('Изменения');
+                        // print('Изменения');
                         if (snapshot.data!) {
                           return Stack(
                             children: [

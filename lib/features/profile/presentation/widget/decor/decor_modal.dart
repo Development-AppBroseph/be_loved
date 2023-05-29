@@ -1,4 +1,3 @@
-import 'package:be_loved/features/home/presentation/views/events/widgets/add_events_bottomsheet.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/decor_bottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -14,7 +13,6 @@ showModalDecor(BuildContext context, Function() onTap) {
     //   ),
     // ),
     backgroundColor: Colors.transparent,
-    builder: (context) =>
-        const DecorBottomsheet(),
+    builder: (context) => const DecorBottomsheet(),
   );
 }

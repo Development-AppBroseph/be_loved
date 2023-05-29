@@ -49,7 +49,11 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
     if (controller.text.contains(RegExp(r'[А-Яа-яЁё]'))) {
       return false;
     }
-    return controller.text.isNotEmpty && controller.text.contains('@');
+    return controller.text.isNotEmpty &&
+        controller.text.contains('@') &&
+        controller.text.split('@').last.contains('.') &&
+        controller.text.split('@').last.split('.').last.length > 1 &&
+        !controller.text.contains('@.');
   }
 
   @override

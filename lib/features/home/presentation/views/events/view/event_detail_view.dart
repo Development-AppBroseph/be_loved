@@ -5,6 +5,7 @@ import 'package:be_loved/core/utils/helpers/text_size.dart';
 import 'package:be_loved/core/utils/helpers/widget_position_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
+import 'package:be_loved/core/widgets/alerts/event_alert.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/core/widgets/texts/important_text_widget.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
@@ -27,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -70,13 +72,16 @@ class _EventDetailViewState extends State<EventDetailView> {
           editPhoto, () {
         Navigator.pop(context);
         context.read<EventsBloc>().add(EventEditEvent(
-            eventEntity: event!, isDeletePhoto: true, ));
+              eventEntity: event!,
+              isDeletePhoto: true,
+            ));
       }, (f) {
         Navigator.pop(context);
         showLoaderWrapper(context);
-        context
-            .read<EventsBloc>()
-            .add(EventEditEvent(eventEntity: event!, photo: f, ));
+        context.read<EventsBloc>().add(EventEditEvent(
+              eventEntity: event!,
+              photo: f,
+            ));
       });
     });
   }
@@ -98,8 +103,24 @@ class _EventDetailViewState extends State<EventDetailView> {
         // NotificationService().cancelPushNotification(event!.id);
         widget.prevPage();
       },
-      () {
+      () async {
         Navigator.pop(context);
+        if (context
+            .read<EventsBloc>()
+            .eventsInHome
+            .any((element) => element.id == event!.id)) {
+          await SmartDialog.show(
+            animationType: SmartAnimationType.fade,
+            maskColor: Colors.transparent,
+            displayTime: const Duration(seconds: 5),
+            clickMaskDismiss: false,
+            usePenetrate: true,
+            builder: (context) => const SafeArea(
+              child: Align(alignment: Alignment.topCenter, child: EventAlert()),
+            ),
+          );
+          return;
+        }
         if (context.read<EventsBloc>().eventsInHome.length != 3 &&
             !context
                 .read<EventsBloc>()

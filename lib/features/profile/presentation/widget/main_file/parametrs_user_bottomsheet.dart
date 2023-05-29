@@ -171,7 +171,7 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                                           radius: BorderRadius.circular(20),
                                           margin: EdgeInsets.zero,
                                           padding: EdgeInsets.zero,
-                                          child:  Align(
+                                          child: Align(
                                             alignment: Alignment.center,
                                             child: Text(
                                               'Приобрести',
@@ -224,15 +224,32 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                   SizedBox(
                     height: 40.h,
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: CustomAnimationButton(
-                      red: true,
-                      text: 'Выйти из аккаунта',
-                      onPressed: () async {
-                        Navigator.pop(context);
-                        context.read<AuthBloc>().add(LogOut(context));
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.read<AuthBloc>().add(LogOut(context));
+                    },
+                    child: Stack(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 25.w),
+                          color: Colors.transparent,
+                          child: CustomAnimationButton(
+                            red: true,
+                            text: 'Выйти из аккаунта',
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              context.read<AuthBloc>().add(LogOut(context));
+                            },
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 25.w),
+                          color: Colors.transparent,
+                          height: 50.h,
+                          width: double.infinity,
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(

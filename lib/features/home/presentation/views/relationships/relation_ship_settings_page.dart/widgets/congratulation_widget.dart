@@ -5,6 +5,7 @@ import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class CongratulationWidget extends StatefulWidget {
   final int yaer;
@@ -33,9 +34,8 @@ class _CongratulationWidgetState extends State<CongratulationWidget> {
       child: CupertinoCard(
         margin: EdgeInsets.zero,
         padding: EdgeInsets.zero,
-        radius: const BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
+        radius: BorderRadius.vertical(
+          top: Radius.circular(80.r),
         ),
         child: BlocBuilder<LevelsCubit, LevelState>(
           builder: (context, state) {
@@ -45,15 +45,15 @@ class _CongratulationWidgetState extends State<CongratulationWidget> {
             return Column(
               children: [
                 const BottomSheetGreyLine(),
-                Text(
-                  'С годовщиной!',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    color: const Color(0xff969696),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15.sp,
-                  ),
-                ),
+                // Text(
+                //   'С годовщиной!',
+                //   style: TextStyle(
+                //     fontFamily: 'Inter',
+                //     color: const Color(0xff969696),
+                //     fontWeight: FontWeight.bold,
+                //     fontSize: 15.sp,
+                //   ),
+                // ),
                 SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 13),
@@ -61,10 +61,11 @@ class _CongratulationWidgetState extends State<CongratulationWidget> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(height: 10.h),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 25.w),
                           child: Text(
-                            'От команды BeLoved ->',
+                            'Поздравляем с годовщиной!',
                             style: TextStyle(
                               fontFamily: 'Inter',
                               foreground: Paint()..shader = linearGradient,
@@ -76,7 +77,7 @@ class _CongratulationWidgetState extends State<CongratulationWidget> {
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 25.w),
                           child: Text(
-                            'Поздравляем с годовщиной от команды BeLoved!...',
+                            'От BeLoved',
                             style: TextStyle(
                               fontFamily: 'Inter',
                               color: const Color(0xff969696),
@@ -85,8 +86,11 @@ class _CongratulationWidgetState extends State<CongratulationWidget> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 287,
+                        SizedBox(
+                          height: 307.h,
+                          child: Center(
+                              child:
+                                  Lottie.asset('assets/animations/love.json')),
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 25.w),

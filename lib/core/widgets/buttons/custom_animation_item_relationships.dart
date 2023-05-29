@@ -235,17 +235,25 @@ class _CustomAnimationItemRelationshipsState
                                                           4.h)
                                               : 0.h,
                                         ),
-                                        Text(
-                                          widget.events.title,
-                                          style: TextStyle(
+                                        if (widget.events.title != 'Годовщина')
+                                          Text(
+                                            widget.events.title,
+                                            style: TextStyle(
                                               color: ClrStyle.black17ToWhite[
                                                   sl<AuthConfig>().idx],
                                               fontSize: homeWidgetTextSize(
                                                       widget.events.title)
                                                   .sp,
                                               fontWeight: FontWeight.w800,
-                                              height: 1),
-                                        ),
+                                              height: 1,
+                                            ),
+                                          )
+                                        else
+                                          SizedBox(
+                                            width: 290.w,
+                                            child: Image.asset(
+                                                'assets/images/Годовщина.png'),
+                                          ),
                                         AnimatedContainer(
                                           curve: Curves.easeInOutQuint,
                                           duration:

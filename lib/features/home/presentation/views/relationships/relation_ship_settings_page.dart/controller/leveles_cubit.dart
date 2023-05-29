@@ -12,7 +12,6 @@ class LevelsCubit extends Cubit<LevelState> {
   LevelsCubit({required this.getLevels}) : super(LevelEmptyState());
   int previoseDay = 0;
 
-  
   Future<void> fetchLevels() async {
     try {
       emit(LevelLoadingState());
@@ -31,6 +30,7 @@ class LevelsCubit extends Cubit<LevelState> {
   Future<void> anniversary(int days, BuildContext context) async {
     final result = await getLevels.call(NoParams());
     int year = days ~/ 365;
+    print("YEAR:" + year.toString());
     previoseDay = await MySharedPrefs().year ?? 0;
     result.fold((l) {
       return;

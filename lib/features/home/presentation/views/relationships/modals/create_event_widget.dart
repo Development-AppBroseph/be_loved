@@ -59,9 +59,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   TextStyle styleBtn = TextStyle(
       color: Colors.white, fontSize: 20.sp, fontWeight: FontWeight.w700);
 
-  bool allDays = false;
+  bool allDays = true;
   bool repeat = false;
-  bool notification = false;
+  bool notification = true;
   List<Map<String, dynamic>> repeats = [
     {
       'repeat': 'Каждый день',
@@ -190,7 +190,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                   married: widget.editingEvent!.married,
                   relationId: sl<AuthConfig>().user!.relationId!,
                   notification: notification,
-                  repeat: notification,  
+                  repeat: notification,
                   allDays: allDays,
                   eventCreator: sl<AuthConfig>().user!.me,
                   mainPosition: widget.editingEvent!.mainPosition,
@@ -234,7 +234,6 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                   notification: notification,
                   repeat: notification,
                   allDays: allDays,
-                  
                   eventCreator: sl<AuthConfig>().user!.me,
                   mainPosition: 0,
                   cycle: repeats[snapshot.data!]['interval'],
