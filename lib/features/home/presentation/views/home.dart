@@ -1,6 +1,7 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
@@ -16,6 +17,8 @@ import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cu
 import 'package:be_loved/features/profile/presentation/views/parting_second_view.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
+import 'package:be_loved/my_app/presentation/controller/my_app_cubit.dart';
+import 'package:be_loved/my_app/presentation/controller/my_app_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,16 +39,15 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> pages = [
     const MainPage(),
-    const MainEventPage(), //(nextPage: (int id) {  },),//MainEventPage
+    const MainEventPage(),
     const PurposesPage(),
     const ArchivePage(),
   ];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
+    context.read<MyAppCubit>().getImage();
     context.read<EventsBloc>().add(GetEventsEvent());
 
     context.read<DecorBloc>().add(GetBackgroundEvent());
@@ -72,84 +74,134 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     MainScreenBloc mainScreenBloc = context.read<MainScreenBloc>();
-    return BlocListener<EventsBloc, EventsState>(
+    return BlocListener<WebSocketBloc, WebSocketState>(
       listener: (context, state) {
-        if (state is GotSuccessEventsState) {
-          context.read<MainWidgetsBloc>().add(GetMainWidgetsEvent());
-        }
-      },
-      child: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          // var loader = showLoaderWrapper(context);
-          if (state is GetUserSuccess ||
-              state is GetUserError ||
-              state is RefreshUser) {
-            if (state is GetUserSuccess) {
-              if (state.user.love == null) {
-                Future.delayed(const Duration(milliseconds: 400), () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (BuildContext context) => PartingSecondView(),
-                    ),
-                  );
-                });
-              }
-              // if(context.read<ThemeBloc>().state is ThemeInitialState){
-              //   context.read<ThemeBloc>().add(SetThemeEvent(index: state.user.theme == 'dark' ? 1 : 0));
-              // }
-            }
-            // Loader.hide();
-            return BlocConsumer<MainScreenBloc, MainScreenState>(
-                listener: (context, state) {
-              if (state is MainScreenChangedState) {
-                if (state.currentView == 2 &&
-                    context.read<PurposeBloc>().state is PurposeInitialState) {
-                  context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
-                }
-                pageController.jumpToPage(state.currentView);
-              }
-              if (state is MainScreenSetStateState) {
-                setState(() {});
-              }
-            }, builder: (context, state) {
-              return Scaffold(
-                bottomNavigationBar: BottomNavigation(),
-                // mainScreenBloc.currentView == 1 ? Colors.white : null
-                backgroundColor: mainScreenBloc.currentView == 1
-                    ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx]
-                    : mainScreenBloc.currentView == 3
-                        ? ClrStyle.whiteTo17[sl<AuthConfig>().idx]
-                        : sl<AuthConfig>().idx == 1
-                            ? ColorStyles.blackColor
-                            : null,
-                body: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    if (mainScreenBloc.currentWidget != null)
-                      mainScreenBloc.currentWidget!
-                    else
-                      PageView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        controller: pageController,
-                        children: pages,
-                      ),
-                  ],
-                ),
-              );
-            });
-          } else {
-            return Container(
-              color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
-              alignment: Alignment.center,
-              child: SvgPicture.asset(
-                'assets/icons/heart.svg',
-                color: ColorStyles.redColor,
+        if (state is WebSocketInviteCloseState) {
+          Future.delayed(const Duration(milliseconds: 400), () {
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (BuildContext context) => const PartingSecondView(),
               ),
             );
-          }
-        },
-      ),
+          });
+        }
+      },
+      child: BlocBuilder<MyAppCubit, MyAppState>(builder: (context, state) {
+        if (state is MyAppLoadedState) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Stack(
+              children: [
+                Container(
+                  color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    'assets/icons/heart.svg',
+                    color: ColorStyles.redColor,
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    image: DecorationImage(
+                        image: NetworkImage(
+                            "${Config.url.url}${state.image.image}"),
+                        fit: BoxFit.cover),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else if (state is MyAppGotoState || state is MyAppErrorState) {
+          return BlocListener<EventsBloc, EventsState>(
+            listener: (context, state) {
+              if (state is GotSuccessEventsState) {
+                context.read<MainWidgetsBloc>().add(GetMainWidgetsEvent());
+              }
+            },
+            child: BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state is GetUserSuccess ||
+                    state is GetUserError ||
+                    state is RefreshUser) {
+                  if (state is GetUserSuccess) {
+                    if (state.user.love == null) {
+                      Future.delayed(const Duration(milliseconds: 400), () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (BuildContext context) =>
+                                const PartingSecondView(),
+                          ),
+                        );
+                      });
+                    }
+                  }
+                  return BlocConsumer<MainScreenBloc, MainScreenState>(
+                    listener: (context, state) {
+                      if (state is MainScreenChangedState) {
+                        if (state.currentView == 2 &&
+                            context.read<PurposeBloc>().state
+                                is PurposeInitialState) {
+                          context
+                              .read<PurposeBloc>()
+                              .add(GetAllPurposeDataEvent());
+                        }
+                        pageController.jumpToPage(state.currentView);
+                      }
+                      if (state is MainScreenSetStateState) {
+                        setState(() {});
+                      }
+                    },
+                    builder: (context, state) {
+                      return Scaffold(
+                        bottomNavigationBar: BottomNavigation(),
+                        backgroundColor: mainScreenBloc.currentView == 1
+                            ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx]
+                            : mainScreenBloc.currentView == 3
+                                ? ClrStyle.whiteTo17[sl<AuthConfig>().idx]
+                                : sl<AuthConfig>().idx == 1
+                                    ? ColorStyles.blackColor
+                                    : null,
+                        body: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            if (mainScreenBloc.currentWidget != null)
+                              mainScreenBloc.currentWidget!
+                            else
+                              PageView(
+                                physics: const NeverScrollableScrollPhysics(),
+                                controller: pageController,
+                                children: pages,
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+                return Container(
+                  color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    'assets/icons/heart.svg',
+                    color: ColorStyles.redColor,
+                  ),
+                );
+              },
+            ),
+          );
+        }
+        return Container(
+          color: ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx],
+          alignment: Alignment.center,
+          child: SvgPicture.asset(
+            'assets/icons/heart.svg',
+            color: ColorStyles.redColor,
+          ),
+        );
+      }),
     );
   }
 }

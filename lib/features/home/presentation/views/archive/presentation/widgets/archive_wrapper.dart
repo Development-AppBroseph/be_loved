@@ -179,7 +179,6 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
                         children: [
                           MemoryMiniInfoCard(),
                           _buildAddBtn(context, () {
-                            print('add');
                             if (context.read<ArchiveBloc>().memoryEntity !=
                                     null &&
                                 !context

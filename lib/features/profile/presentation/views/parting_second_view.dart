@@ -5,6 +5,7 @@ import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_partner.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/modals/send_file/send_file_modal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 class PartingSecondView extends StatelessWidget {
+  const PartingSecondView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +46,7 @@ class PartingSecondView extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: 117.h,
+                    height: 42.h,
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -66,6 +69,20 @@ class PartingSecondView extends StatelessWidget {
                             (s) => false);
                       },
                     ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    child: CustomButton(
+                        color: ColorStyles.white,
+                        text: 'Выгрузить данные',
+                        textColor: ColorStyles.blackColor,
+                        validate: true,
+                        onPressed: () {
+                          showModalSendFile(context);
+                        }),
                   ),
                   SizedBox(
                     height: 15.h,

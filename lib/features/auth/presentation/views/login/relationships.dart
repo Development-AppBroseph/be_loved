@@ -171,7 +171,11 @@ class RelationShips extends StatelessWidget {
                           ),
                           Padding(
                             padding: EdgeInsets.all(10.w),
-                            child: SvgPicture.asset('assets/icons/logov2.svg'),
+                            child: SvgPicture.asset(
+                              'assets/icons/logov2.svg',
+                              height: 56.h,
+                              width: 66.w,
+                            ),
                           ),
                           Column(
                             children: [

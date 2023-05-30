@@ -1,12 +1,9 @@
 import 'dart:io';
 
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
-import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
-import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
-import 'package:be_loved/features/auth/presentation/views/login/auth_page.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
@@ -17,7 +14,6 @@ import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.da
 import 'package:be_loved/features/home/presentation/bloc/purpose/purpose_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/stats/stats_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/tags/tags_bloc.dart';
-import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_ship_settings_page.dart/controller/leveles_cubit.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_first/controller/home_info_first_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
@@ -25,21 +21,17 @@ import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cu
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:be_loved/locator.dart';
+import 'package:be_loved/my_app/presentation/controller/my_app_cubit.dart';
+import 'package:be_loved/my_app/presentation/view/my_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:get/route_manager.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import 'features/auth/data/models/auth/user.dart';
 
 Future<void> check() async {
   var status = await Permission.notification.status;
@@ -53,7 +45,9 @@ void main() async {
     AppMetrica.activate(
         const AppMetricaConfig("416e2567-76ea-42d1-adce-c786faf3ada5"));
     WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    
     check();
+    
     // NotificationService().initTimeZone();
     // AwesomeNotifications().initialize(null, [
     //   NotificationChannel(
@@ -87,7 +81,7 @@ void main() async {
       );
 
       FirebaseMessaging.onBackgroundMessage((message) async {
-        print('messageIs: ' + message.data.toString());
+        print('messageIs: ${message.data}');
       });
     }
     // MySharedPrefs().setUser(
@@ -102,6 +96,7 @@ void main() async {
     //     date: '2022-05-05 21:30:00',
     //   ),
     // );
+    
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) {
       runApp(MultiBlocProvider(
@@ -112,9 +107,6 @@ void main() async {
           BlocProvider<WebSocketBloc>(
             create: (context) => WebSocketBloc(),
           ),
-          // BlocProvider<AccountCubit>(
-          //   create: (context) => sl<AccountCubit>(),
-          // ),
           BlocProvider<EventsBloc>(
             create: (context) => sl<EventsBloc>(),
           ),
@@ -163,76 +155,17 @@ void main() async {
           BlocProvider<LevelsCubit>(
             create: (context) => sl<LevelsCubit>(),
           ),
+          BlocProvider<MyAppCubit>(
+            create: (context) => MyAppCubit(),
+          ),
+          BlocProvider<MyAppStatusCubit>(create: (context) => MyAppStatusCubit())
         ],
         child: OverlaySupport.global(
-          child: MyApp(user: user),
+          child:MyApp(user: user,),
         ),
       ));
     });
   });
-}
-
-class MyApp extends StatefulWidget {
-  final UserAnswer? user;
-  const MyApp({Key? key, required this.user}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // MySharedPrefs().logOut(context);
-    // if(context.read<ThemeBloc>().state is ThemeInitialState){
-    //   context.read<ThemeBloc>().add(GetThemeLocalEvent());
-    // }
-    FlutterNativeSplash.remove();
-    return ScreenUtilInit(
-      designSize: const Size(428, 926),
-      builder: (context, child) {
-        return BlocConsumer<ThemeBloc, ThemeState>(listener: (context, state) {
-          if (state is ThemeEditedSuccessState &&
-              sl<AuthConfig>().user != null) {
-            if (state.isChanges) {
-              print('UPDATE THEME -------');
-              context.read<ProfileBloc>().add(EditRelationNameEvent(
-                    name: sl<AuthConfig>().user!.name ?? '',
-                  ));
-            }
-          }
-        }, builder: (context, state) {
-          return GetMaterialApp(
-              navigatorObservers: [FlutterSmartDialog.observer],
-              builder: FlutterSmartDialog.init(),
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: const [Locale('ru')],
-              theme: ThemeData(
-                  scaffoldBackgroundColor: sl<AuthConfig>().idx == 1
-                      ? ColorStyles.blackColor
-                      : const Color.fromRGBO(240, 240, 240, 1.0),
-                  fontFamily: 'Inter'),
-              home: widget.user != null
-                  ? widget.user?.date != null
-                      ? HomePage()
-                      : const AuthPage()
-                  : const AuthPage()
-              // home: HomePage(),
-              );
-        });
-      },
-    );
-  }
 }
 
 // Анекдот ;)
@@ -260,3 +193,5 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
+
+
