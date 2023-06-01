@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -64,12 +62,12 @@ class _MyAppState extends State<MyApp> {
           builder: (context, state) {
             return BlocBuilder<MyAppStatusCubit, MyAppStatusState>(
               builder: (context, state) {
-                if (state is MyAppHaveUpdateState) {
-                  return GetMaterialApp(
-                    debugShowCheckedModeBanner: false,
-                    home: UpdatePage(url: Platform.isIOS ? state.apple! : state.android!),
-                  );
-                }
+                // if (state is MyAppHaveUpdateState) {
+                //   return GetMaterialApp(
+                //     debugShowCheckedModeBanner: false,
+                //     home: UpdatePage(url: Platform.isIOS ? state.apple! : state.android!),
+                //   );
+                // }
                 return GetMaterialApp(
                     navigatorObservers: [FlutterSmartDialog.observer],
                     builder: FlutterSmartDialog.init(),

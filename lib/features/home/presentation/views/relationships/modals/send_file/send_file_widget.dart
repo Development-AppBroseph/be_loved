@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
@@ -38,8 +39,9 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
         email: _controller.text.trim(), isParting: widget.isParting));
   }
 
-  justParting() {
+  justParting() async{
     showLoaderWrapper(context);
+    await MySharedPrefs().setBoolYears(false);
     context
         .read<ProfileBloc>()
         .add(PartingOrSendFilesEvent(email: '', isParting: widget.isParting));

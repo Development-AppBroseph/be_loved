@@ -274,7 +274,7 @@ class _CodePageState extends State<CodePage> {
                                 height: 80.sp,
                                 decoration: BoxDecoration(
                                     color:
-                                        textEditingControllerUp.text.length == 4
+                                        textEditingControllerUp.text.length == 4 || textEditingControllerUp.text.isEmpty
                                             ? Colors.white
                                             : ColorStyles.validateColor,
                                     borderRadius: BorderRadius.circular(10)),

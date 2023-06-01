@@ -5,6 +5,7 @@ import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/events_helper.dart';
 import 'package:be_loved/core/utils/helpers/sync_helper.dart';
@@ -76,14 +77,16 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
               .parse(sl<AuthConfig>().user!.date!, true)
               .toLocal();
 
-  setNewRelationDate() {
+  setNewRelationDate() async {
     showLoaderWrapper(context);
+
     print('OLD DATE: ${sl<AuthConfig>().user!.date}');
     sl<AuthConfig>().user!.date = DateFormat('yyyy-MM-dd').format(datetime);
     print('NEW DATE: ${sl<AuthConfig>().user!.date}');
     context.read<ProfileBloc>().add(EditRelationNameEvent(
         name: sl<AuthConfig>().user!.name ?? '',
         date: sl<AuthConfig>().user!.date));
+    await MySharedPrefs().setBoolYears(false);
   }
 
   @override

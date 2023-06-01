@@ -10,19 +10,26 @@ import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
 
-class RelationShips extends StatelessWidget {
-  RelationShips({Key? key, required this.previewPage, required this.prevPage})
+class RelationShips extends StatefulWidget {
+  const RelationShips(
+      {Key? key, required this.previewPage, required this.prevPage})
       : super(key: key);
 
   final VoidCallback previewPage;
   final VoidCallback prevPage;
+
+  @override
+  State<RelationShips> createState() => _RelationShipsState();
+}
+
+class _RelationShipsState extends State<RelationShips> {
   final _streamController = StreamController<DateTime>();
 
   String date = '';
@@ -230,16 +237,27 @@ class RelationShips extends StatelessWidget {
                       builder: (context, snapshot) {
                         return SizedBox(
                           height: 206.h,
-                          child: ScrollDatePicker(
-                            maximumDate: DateTime.now(),
-                            locale: const Locale('ru', 'RU'),
+                          child: CupertinoDatePicker(
+                            initialDateTime: DateTime.now().toLocal(),
+                            mode: CupertinoDatePickerMode.date,
+                            use24hFormat: true,
+                            maximumYear: DateTime.now().year,
                             onDateTimeChanged: (DateTime value) {
                               bloc.add(TextFieldFilled(true));
                               date = value.toString().substring(0, 10);
                               _streamController.sink.add(value);
                             },
-                            selectedDate: snapshot.data!,
                           ),
+                          // child: ScrollDatePicker(
+                          //   maximumDate: DateTime.now(),
+                          //   locale: const Locale('ru', 'RU'),
+                          //   onDateTimeChanged: (DateTime value) {
+                          //   bloc.add(TextFieldFilled(true));
+                          //   date = value.toString().substring(0, 10);
+                          //   _streamController.sink.add(value);
+                          // },
+                          //   selectedDate: snapshot.data!,
+                          // ),
                         );
                       },
                     ),

@@ -58,8 +58,8 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
     super.initState();
     if (sl<AuthConfig>().user != null) {
       startTimer();
-      context.read<LevelsCubit>().anniversary(days, context);
     }
+    context.read<LevelsCubit>().anniversary(days, context);
   }
 
   @override
@@ -109,8 +109,8 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
       years = difference.inDays ~/ 365;
       month = (difference.inDays % 365) ~/ 30.4;
       double a = (difference.inDays % 365) % 30.4;
-      daysInYears = ((difference.inDays % 365) % 30.44).toInt() - countOfYears;
-      days = difference.inDays - countOfYears;
+      daysInYears = ((difference.inDays % 365) % 30.44).toInt();
+      days = difference.inDays ;
       hour = difference.inHours - difference.inDays * 24;
       minute = difference.inMinutes - difference.inHours * 60;
       context.read<HomeInfoFirstCubit>().getTime(

@@ -613,7 +613,7 @@ class _InvitePartnerState extends State<InvitePartner> {
                                           validate:
                                               (_phoneController.text.length ==
                                                       13) &&
-                                                  inviteUser,
+                                                  isValidate,
                                           code: false,
                                           textColor: Colors.white,
                                           onPressed: () async {
