@@ -12,6 +12,7 @@ import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/login/create_account_info.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_relation.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
+import 'package:be_loved/features/profile/presentation/views/parting_second_view.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:check_vpn_connection/check_vpn_connection.dart';
@@ -73,11 +74,10 @@ class _CodePageState extends State<CodePage> {
     super.initState();
   }
 
-  void _checkCode(BuildContext context) =>
-      BlocProvider.of<AuthBloc>(context).add(CheckUser(
-          phone ?? '',
-          textEditingControllerUp.text,
-          int.parse(textEditingControllerUp.text)));
+  void _checkCode(BuildContext context) {
+    BlocProvider.of<AuthBloc>(context).add(CheckUser(phone ?? '',
+        textEditingControllerUp.text, int.parse(textEditingControllerUp.text)));
+  }
 
   void startTimer() {
     start = 60;
@@ -129,29 +129,37 @@ class _CodePageState extends State<CodePage> {
           Future.delayed(const Duration(milliseconds: 500), () {
             BlocProvider.of<WebSocketBloc>(context)
                 .add(WebSocketEvent(current.token));
-            if (BlocProvider.of<AuthBloc>(context).user?.date == null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => InviteRelation(previousPage: () {}),
-                ),
-              ).then((value) {
-                if (textEditingControllerUp.text.length == 4) {
-                  BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
-                }
-              });
+            if (sl<AuthConfig>().user!.previousReletionId == null) {
+              if (BlocProvider.of<AuthBloc>(context).user?.date == null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InviteRelation(previousPage: () {}),
+                  ),
+                ).then((value) {
+                  if (textEditingControllerUp.text.length == 4) {
+                    BlocProvider.of<AuthBloc>(context)
+                        .add(TextFieldFilled(true));
+                  }
+                });
+              } else if (BlocProvider.of<AuthBloc>(context).user?.love ==
+                  null) {
+              } else {
+                // BlocProvider.of<WebSocketBloc>(context)
+                //     .add(WebSocketEvent(current.token));
+                MySharedPrefs().setUser(current.token,
+                    BlocProvider.of<AuthBloc>(context, listen: false).user!);
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ),
+                  (route) => false,
+                );
+              }
             } else {
-              // BlocProvider.of<WebSocketBloc>(context)
-              //     .add(WebSocketEvent(current.token));
-              MySharedPrefs().setUser(current.token,
-                  BlocProvider.of<AuthBloc>(context, listen: false).user!);
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-                (route) => false,
-              );
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const PartingSecondView()));
             }
           });
         }
@@ -273,10 +281,12 @@ class _CodePageState extends State<CodePage> {
                                 width: 60.sp,
                                 height: 80.sp,
                                 decoration: BoxDecoration(
-                                    color:
-                                        textEditingControllerUp.text.length == 4 || textEditingControllerUp.text.isEmpty
-                                            ? Colors.white
-                                            : ColorStyles.validateColor,
+                                    color: textEditingControllerUp
+                                                    .text.length ==
+                                                4 ||
+                                            textEditingControllerUp.text.isEmpty
+                                        ? Colors.white
+                                        : ColorStyles.validateColor,
                                     borderRadius: BorderRadius.circular(10)),
                                 textStyle: GoogleFonts.inter(
                                   fontSize: 35.sp,

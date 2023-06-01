@@ -99,7 +99,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   @override
   void initState() {
     super.initState();
-
     animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 600));
     animationController.addStatusListener((status) {
@@ -634,7 +633,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                             ],
                           );
                         } else {
-                          return SizedBox(
+                          return const SizedBox(
                             width: 0,
                             height: 0,
                           );
@@ -714,9 +713,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                 showAlertToast('Проверьте соединение с интернетом!');
               }
             }, builder: (context, state) {
-              if (state is EventLoadingState) {
-                return Container();
-              }
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25.w),
                 child: ReorderableListView.builder(
@@ -743,6 +739,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                         widget.toDetailPage(id);
                       },
                     );
+
+                    return const SizedBox();
                   }),
                   proxyDecorator: (child, index, animation) {
                     return Container(

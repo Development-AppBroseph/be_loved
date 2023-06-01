@@ -71,12 +71,12 @@ class _SuccesAuthAlertState extends State<SuccesAuthAlert> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   'Приглашение отправлено',
                   style: TextStyle(
-                    fontSize: 15,
-                    color: Color(0xff20CB83),
+                    fontSize: 15.sp,
+                    color: const Color(0xff20CB83),
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Inter',
                   ),
@@ -86,7 +86,7 @@ class _SuccesAuthAlertState extends State<SuccesAuthAlert> {
                   'Партнёр совсем скоро примет твоё\nприглашение',
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                   ),

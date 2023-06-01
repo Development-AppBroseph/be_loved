@@ -71,12 +71,12 @@ class _NumberAlertState extends State<NumberAlert> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children:  [
                 Text(
                   'Номер успешно изменен',
                   style: TextStyle(
-                    fontSize: 15,
-                    color: Color(0xff20CB83),
+                    fontSize: 15.sp,
+                    color: const Color(0xff20CB83),
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Inter',
                   ),
@@ -86,7 +86,7 @@ class _NumberAlertState extends State<NumberAlert> {
                   'Следующий вход в аккаунт будет\nпроизводиться по новому номеру',
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                   ),

@@ -69,12 +69,12 @@ class _EventAlertState extends State<EventAlert> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children:  [
                 Text(
                   'Событие уже добавлено',
                   style: TextStyle(
-                    fontSize: 15,
-                    color: Color(0xff20CB83),
+                    fontSize: 15.sp,
+                    color: const Color(0xff20CB83),
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Inter',
                   ),
@@ -84,7 +84,7 @@ class _EventAlertState extends State<EventAlert> {
                   'Выбранное событие уже добавлено\nна главный экран',
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                   ),

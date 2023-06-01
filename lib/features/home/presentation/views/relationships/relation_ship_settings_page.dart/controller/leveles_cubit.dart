@@ -37,7 +37,7 @@ class LevelsCubit extends Cubit<LevelState> {
     result.fold((l) {
       return;
     }, (data) async {
-      DateTime date = DateTime.parse(sl<AuthConfig>().user!.date!);
+      DateTime date = DateTime.parse(sl<AuthConfig>().user!.date ?? '');
       int day = date.day;
       int month = date.month;
       isShwon = await MySharedPrefs().getBoolYears() ?? false;
@@ -46,7 +46,7 @@ class LevelsCubit extends Cubit<LevelState> {
         await MySharedPrefs().setBoolYears(isShwon);
       } else if (day == DateTime.now().day &&
           month == DateTime.now().month &&
-          !isShwon) {
+          !isShwon && year != 0) {
         isShwon = true;
         showMaterialModalBottomSheet(
           context: context,

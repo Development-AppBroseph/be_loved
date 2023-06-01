@@ -20,6 +20,7 @@ class UserAnswer {
     required this.vkPID,
     required this.date,
     required this.noti,
+    required this.previousReletionId,
   });
 
   User me;
@@ -32,6 +33,7 @@ class UserAnswer {
   bool? fromYou;
   String? date;
   bool noti;
+  int? previousReletionId;
 
   factory UserAnswer.fromJson(Map<String, dynamic> json) => UserAnswer(
         me: User.fromJson(json["me"]),
@@ -44,6 +46,8 @@ class UserAnswer {
         date: json["date"],
         vkPID: json["vk_pid"],
         noti: json["notification_on"] ?? true,
+        previousReletionId: json['previous_relation_id'] 
+
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,6 +58,7 @@ class UserAnswer {
         "date": date,
         "name": name,
         "notification_on": noti,
+        'previous_relation_id': previousReletionId,
       };
 }
 

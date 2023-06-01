@@ -65,12 +65,12 @@ class _VpnState extends State<Vpn> {
             fit: FlexFit.tight,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children:  [
                 Text(
                   'Возможно у вас включен VPN',
                   style: TextStyle(
-                    fontSize: 15,
-                    color: Color(0xff20CB83),
+                    fontSize: 15.sp,
+                    color: const Color(0xff20CB83),
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Inter',
                   ),
@@ -80,7 +80,7 @@ class _VpnState extends State<Vpn> {
                   'Для корректной работы приложения\n его необходимо отключить',
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                   ),

@@ -71,11 +71,11 @@ class _AuthAlertState extends State<AuthAlert> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   'Приглашение не отправлено',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     color: ColorStyles.redColor,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Inter',
@@ -86,7 +86,7 @@ class _AuthAlertState extends State<AuthAlert> {
                   'Партнёр должен скачать приложение\nи зайти на этот экран',
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                   ),

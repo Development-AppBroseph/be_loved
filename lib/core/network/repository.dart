@@ -291,7 +291,7 @@ class Repository {
         );
         return UserAnswer.fromJson(response.data);
       }
-      if (response.statusCode == 409) {
+      if (response.statusCode! >= 400) {
         SmartDialog.show(
           animationType: SmartAnimationType.fade,
           maskColor: Colors.transparent,
