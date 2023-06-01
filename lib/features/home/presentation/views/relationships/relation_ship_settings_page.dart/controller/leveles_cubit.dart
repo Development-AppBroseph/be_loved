@@ -41,7 +41,10 @@ class LevelsCubit extends Cubit<LevelState> {
       int day = date.day;
       int month = date.month;
       isShwon = await MySharedPrefs().getBoolYears() ?? false;
-      if (day == DateTime.now().day &&
+      if (day != DateTime.now().day && month != DateTime.now().month) {
+        isShwon = false;
+        await MySharedPrefs().setBoolYears(isShwon);
+      } else if (day == DateTime.now().day &&
           month == DateTime.now().month &&
           !isShwon) {
         isShwon = true;
