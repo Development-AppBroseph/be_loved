@@ -76,12 +76,14 @@ class _HomePageState extends State<HomePage> {
     MainScreenBloc mainScreenBloc = context.read<MainScreenBloc>();
     return BlocListener<WebSocketBloc, WebSocketState>(
       listener: (context, state) {
-        if (state is WebSocketInviteCloseState) {
+        print(sl<AuthConfig>().user!.love!.username);
+        if (state is WebSocketInviteCloseState &&
+            sl<AuthConfig>().user!.love!.username.isNotEmpty) {
           Future.delayed(const Duration(milliseconds: 400), () {
             Navigator.push(
               context,
               CupertinoPageRoute(
-                builder: (BuildContext context) =>  PartingSecondView(pageController: pageController,),
+                builder: (BuildContext context) => const PartingSecondView(),
               ),
             );
           });
@@ -132,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                           context,
                           CupertinoPageRoute(
                             builder: (BuildContext context) =>
-                                 const PartingSecondView(),
+                                const PartingSecondView(),
                           ),
                         );
                       });

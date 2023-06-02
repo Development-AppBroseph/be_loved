@@ -43,6 +43,8 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
   justParting() async {
     showLoaderWrapper(context);
     await MySharedPrefs().setBoolYears(false);
+    sl<AuthConfig>().user!.love!.username = '';
+    sl<AuthConfig>().user!.fromYou = false;
     context
         .read<ProfileBloc>()
         .add(PartingOrSendFilesEvent(email: '', isParting: widget.isParting));

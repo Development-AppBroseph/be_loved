@@ -16,7 +16,8 @@ class InviteRelation extends StatefulWidget {
   @override
   State<InviteRelation> createState() => _InviteRelationState();
 }
-
+final pageController =
+      PageController(initialPage: 1, viewportFraction: 1.0, keepPage: false);
 class _InviteRelationState extends State<InviteRelation> {
   @override
   void initState() {
@@ -27,8 +28,7 @@ class _InviteRelationState extends State<InviteRelation> {
 
   final streamController = StreamController<int>();
 
-  final pageController =
-      PageController(initialPage: 1, viewportFraction: 1.0, keepPage: false);
+  
 
   @override
   Widget build(BuildContext context) {

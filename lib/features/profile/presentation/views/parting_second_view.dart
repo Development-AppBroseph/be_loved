@@ -19,6 +19,11 @@ class PartingSecondView extends StatefulWidget {
 }
 
 class _PartingSecondViewState extends State<PartingSecondView> {
+  void previousPage(BuildContext context) {
+    pageController.previousPage(
+        duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+    BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
+  }
   void nextPage() {
     widget.pageController?.previousPage(
         duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
@@ -66,11 +71,11 @@ class _PartingSecondViewState extends State<PartingSecondView> {
                       validate: true,
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (BuildContext context) =>
-                                    InviteRelation(previousPage: () {  },)),
-                          );
+                          context,
+                          CupertinoPageRoute(
+                            builder: (BuildContext context) => InviteRelation(previousPage: () {},),
+                          ),
+                        );
                       },
                     ),
                   ),
