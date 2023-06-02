@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
               context,
               CupertinoPageRoute(
-                builder: (BuildContext context) => const PartingSecondView(),
+                builder: (BuildContext context) =>  PartingSecondView(pageController: pageController,),
               ),
             );
           });
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                           context,
                           CupertinoPageRoute(
                             builder: (BuildContext context) =>
-                                const PartingSecondView(),
+                                 const PartingSecondView(),
                           ),
                         );
                       });

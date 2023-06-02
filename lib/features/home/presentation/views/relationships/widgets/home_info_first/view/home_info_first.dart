@@ -88,8 +88,8 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
 
   void setTime() async {
     UserAnswer? user = sl<AuthConfig>().user;
-    print(
-        'SET TIME: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
+    // print(
+    //     'SET TIME: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
     if (user!.date != null) {
       final startTime = user.date as String;
 

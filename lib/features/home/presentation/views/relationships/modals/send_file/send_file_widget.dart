@@ -40,7 +40,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
         email: _controller.text.trim(), isParting: widget.isParting));
   }
 
-  justParting() async{
+  justParting() async {
     showLoaderWrapper(context);
     await MySharedPrefs().setBoolYears(false);
     context
@@ -139,9 +139,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                         hideCounter: true,
                         isEmail: true,
                       ),
-                      SizedBox(
-                        height:  20.h 
-                      ),
+                      SizedBox(height: 20.h),
                       CustomButton(
                         color: ColorStyles.primarySwath,
                         text: 'Готово',
@@ -160,24 +158,9 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                                     _controller.text.contains('@'),
                       ),
                       SizedBox(
-                          height: 10.h,
-                        ),
-                       CustomButton(
-                          color: ColorStyles.blackColor,
-                          text: 'Не выгружать данные',
-                          border: sl<AuthConfig>().idx == 0
-                              ? null
-                              : Border.all(
-                                  width: 2.w, color: ColorStyles.blackColor),
-                          textColor: Colors.white,
-                          validate: true,
-                          onPressed: ()=> Navigator.of(context).pop(),
-                        ),
-                      // if (widget.isParting) ...[
-                      //   SizedBox(
-                      //     height: 10.h,
-                      //   ),
-                      //   CustomButton(
+                        height: 10.h,
+                      ),
+                      //  CustomButton(
                       //     color: ColorStyles.blackColor,
                       //     text: 'Не выгружать данные',
                       //     border: sl<AuthConfig>().idx == 0
@@ -186,9 +169,24 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                       //             width: 2.w, color: ColorStyles.blackColor),
                       //     textColor: Colors.white,
                       //     validate: true,
-                      //     onPressed: justParting,
+                      //     onPressed: ()=> Navigator.of(context).pop(),
                       //   ),
-                      // ]
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      CustomButton(
+                        color: ColorStyles.blackColor,
+                        text: 'Не выгружать данные',
+                        border: sl<AuthConfig>().idx == 0
+                            ? null
+                            : Border.all(
+                                width: 2.w, color: ColorStyles.blackColor),
+                        textColor: Colors.white,
+                        validate: true,
+                        onPressed: widget.isParting == true
+                            ? justParting
+                            : () => Navigator.pop(context),
+                      ),
                     ],
                   ),
                 ),

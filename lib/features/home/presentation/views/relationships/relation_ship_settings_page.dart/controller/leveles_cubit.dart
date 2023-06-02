@@ -37,43 +37,37 @@ class LevelsCubit extends Cubit<LevelState> {
     result.fold((l) {
       return;
     }, (data) async {
-      DateTime date = DateTime.parse(sl<AuthConfig>().user!.date ?? '');
-      int day = date.day;
-      int month = date.month;
-      isShwon = await MySharedPrefs().getBoolYears() ?? false;
-      if (day != DateTime.now().day && month != DateTime.now().month) {
-        isShwon = false;
+      if (sl<AuthConfig>().user!.date == null) {
+        return;
+      } else {
+        DateTime date = DateTime.parse(sl<AuthConfig>().user!.date ?? '');
+        int day = date.day;
+        int month = date.month;
+        isShwon = await MySharedPrefs().getBoolYears() ?? false;
+        if (day != DateTime.now().day && month != DateTime.now().month) {
+          isShwon = false;
+          await MySharedPrefs().setBoolYears(isShwon);
+        } else if (day == DateTime.now().day &&
+            month == DateTime.now().month &&
+            !isShwon &&
+            year != 0) {
+          isShwon = true;
+          showMaterialModalBottomSheet(
+            context: context,
+            animationCurve: Curves.easeInOutQuint,
+            duration: const Duration(
+              milliseconds: 600,
+            ),
+            backgroundColor: Colors.transparent,
+            builder: (context) {
+              return CongratulationWidget(
+                yaer: year,
+              );
+            },
+          );
+        }
         await MySharedPrefs().setBoolYears(isShwon);
-      } else if (day == DateTime.now().day &&
-          month == DateTime.now().month &&
-          !isShwon && year != 0) {
-        isShwon = true;
-        showMaterialModalBottomSheet(
-          context: context,
-          animationCurve: Curves.easeInOutQuint,
-          duration: const Duration(
-            milliseconds: 600,
-          ),
-          backgroundColor: Colors.transparent,
-          builder: (context) {
-            return CongratulationWidget(
-              yaer: year,
-            );
-          },
-        );
       }
-      await MySharedPrefs().setBoolYears(isShwon);
-      // if (previoseDay == 0 || year == 0) {
-      //   previoseDay = year;
-      //   await MySharedPrefs().setYears(previoseDay);
-      //   return;
-      // } else if (year == previoseDay) {
-      //   return;
-      // } else {
-      //   previoseDay = year;
-
-      //   await MySharedPrefs().setYears(previoseDay);
-      // }
     });
   }
 }
