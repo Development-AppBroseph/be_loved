@@ -80,18 +80,18 @@ class _LovePushGetAlertState extends State<LovePushGetAlert> {
                 Text(
                   '${sl<AuthConfig>().user!.love!.username} любит тебя',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Inter',
                     foreground: Paint()..shader = linearGradient,
                   ),
                   textAlign: TextAlign.start,
                 ),
-                const Text(
+                 Text(
                   'Партнёр отправил уведомление о том, как сильно тебя любит',
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                   ),

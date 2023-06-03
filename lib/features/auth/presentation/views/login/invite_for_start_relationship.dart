@@ -1,16 +1,11 @@
-import 'dart:math';
-
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_for.dart';
 import 'package:be_loved/features/auth/presentation/views/login/relationships.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class InviteForStartRelationship extends StatelessWidget {
-  InviteForStartRelationship({
+    InviteForStartRelationship({
     Key? key,
     required this.nextPage,
     required this.streamController,

@@ -104,9 +104,7 @@ class InputNamePage extends StatelessWidget {
                             height: 70.sp,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: validate(_nicknameController)
-                                  ? Colors.white
-                                  : ColorStyles.validateColor,
+                              color: Colors.white,
                             ),
                             alignment: Alignment.center,
                             child: Row(
@@ -287,8 +285,5 @@ class InputNamePage extends StatelessWidget {
     );
   }
 
-  bool validate(TextEditingController nicknameController) {
-    return nicknameController.text.isNotEmpty &&
-        nicknameController.text.trim() != '';
-  }
+  
 }

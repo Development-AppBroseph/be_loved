@@ -1,17 +1,34 @@
-import 'dart:async';
-
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
-import 'package:be_loved/features/auth/presentation/views/login/invite_partner.dart';
+import 'package:be_loved/features/auth/presentation/views/login/invite_relation.dart';
+import 'package:be_loved/features/home/presentation/views/relationships/modals/send_file/send_file_modal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-class PartingSecondView extends StatelessWidget {
+class PartingSecondView extends StatefulWidget {
+  final PageController? pageController;
+  const PartingSecondView({super.key, this.pageController});
+
+  @override
+  State<PartingSecondView> createState() => _PartingSecondViewState();
+}
+
+class _PartingSecondViewState extends State<PartingSecondView> {
+  void previousPage(BuildContext context) {
+    pageController.previousPage(
+        duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+    BlocProvider.of<AuthBloc>(context).add(TextFieldFilled(true));
+  }
+  void nextPage() {
+    widget.pageController?.previousPage(
+        duration: const Duration(milliseconds: 1200), curve: Curves.easeInOut);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +60,7 @@ class PartingSecondView extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: 117.h,
+                    height: 42.h,
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -53,19 +70,28 @@ class PartingSecondView extends StatelessWidget {
                       textColor: ColorStyles.blackColor,
                       validate: true,
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (BuildContext context) =>
-                                    InvitePartner(
-                                      nextPage: () {},
-                                      isParting: true,
-                                      previousPage: () {},
-                                      streamController: StreamController<int>(),
-                                    )),
-                            (s) => false);
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (BuildContext context) => InviteRelation(previousPage: () {},),
+                          ),
+                        );
                       },
                     ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    child: CustomButton(
+                        color: ColorStyles.white,
+                        text: 'Выгрузить данные',
+                        textColor: ColorStyles.blackColor,
+                        validate: true,
+                        onPressed: () {
+                          showModalSendFile(context, isParting: false);
+                        }),
                   ),
                   SizedBox(
                     height: 15.h,

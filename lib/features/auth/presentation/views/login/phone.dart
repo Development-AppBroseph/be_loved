@@ -43,10 +43,10 @@ class _PhonePageState extends State<PhonePage> {
   }
 
   bool isValidate(TextEditingController controller) {
-    if (controller.text.length > 12 && controller.text.substring(0, 1) == '9') {
+    if (controller.text.length > 12 && controller.text.substring(0, 1) == '9' ) {
       return true;
     }
-    return false;
+    return controller.text.isEmpty;
   }
 
   void _sendCode() =>

@@ -144,7 +144,7 @@ class _AccountPageState extends State<AccountPage>
     if (controller.text.length > 12 && controller.text.substring(0, 1) == '9') {
       return true;
     }
-    return false;
+    return controller.text.isEmpty;
   }
 
   _confirmCode() {
@@ -881,7 +881,7 @@ class _AccountPageState extends State<AccountPage>
                                                             decoration:
                                                                 BoxDecoration(
                                                                     color: textEditingControllerUp.text.length ==
-                                                                            4
+                                                                            4 || textEditingControllerUp.text.isEmpty
                                                                         ? Colors
                                                                             .white
                                                                         : ColorStyles

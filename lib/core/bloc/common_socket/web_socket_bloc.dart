@@ -64,7 +64,7 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
           try {
             print('websocket message ${jsonDecode(event)}');
             print(
-                'object sokect statetyeteyte ${jsonDecode(event)['message']}');
+                'object sokect state ${jsonDecode(event)['message']}');
             // Приглашение в авторизации
             if (jsonDecode(event)['type'] == 'notification') {
               if (jsonDecode(event)['message'] == 'Вам пришло приглашение') {

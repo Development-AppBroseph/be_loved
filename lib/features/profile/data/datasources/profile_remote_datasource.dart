@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
+
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/data/models/statics/statics_model.dart';
@@ -10,6 +10,7 @@ import 'package:be_loved/features/profile/data/models/subscription_model.dart';
 import 'package:be_loved/features/profile/domain/entities/back_entity.dart';
 import 'package:be_loved/features/profile/domain/entities/subscription_entiti.dart';
 import 'package:dio/dio.dart';
+
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/services/database/auth_params.dart';
 import '../../../../../core/services/network/endpoints.dart';
@@ -79,7 +80,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
             validateStatus: (status) => status! < 599,
             headers: headers));
     printRes(response);
-    print('dATA: ${date}');
+    print('dATA: $date');
     if (response.statusCode == 200) {
       return relationName;
     } else {
@@ -154,6 +155,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     Response response = await dio.post(Endpoints.sendFilesToMail.getPath(),
         data: FormData.fromMap({
           'email': email,
+          'previous_id': sl<AuthConfig>().user!.relationId,
         }),
         options: Options(
             followRedirects: false,

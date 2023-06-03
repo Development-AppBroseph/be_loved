@@ -91,5 +91,6 @@ abstract class SvgImg {
   static const String galleryWithLine = 'assets/icons/GallaryWithLine.svg';
   static const String alertVpn = 'assets/icons/alertVpn.svg';
   static const String redHeart = 'assets/icons/red_heart.svg';
+  static const String succesAuth = 'assets/icons/success.svg';
   
 }

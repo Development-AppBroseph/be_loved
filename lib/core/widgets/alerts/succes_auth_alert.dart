@@ -1,20 +1,19 @@
 import 'dart:async';
 
+import 'package:be_loved/constants/colors/color_styles.dart';
+import 'package:be_loved/core/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../constants/colors/color_styles.dart';
-import '../../utils/images.dart';
-
-class NumberAlert extends StatefulWidget {
-  const NumberAlert({Key? key}) : super(key: key);
+class SuccesAuthAlert extends StatefulWidget {
+  const SuccesAuthAlert({Key? key}) : super(key: key);
 
   @override
-  State<NumberAlert> createState() => _NumberAlertState();
+  State<SuccesAuthAlert> createState() => _SuccesAuthAlertState();
 }
 
-class _NumberAlertState extends State<NumberAlert> {
+class _SuccesAuthAlertState extends State<SuccesAuthAlert> {
   late Timer _timer;
   int _start = 5;
 
@@ -60,7 +59,8 @@ class _NumberAlertState extends State<NumberAlert> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            SvgImg.alertVpn,
+            SvgImg.succesAuth,
+            color: const Color(0xff20CB83),
           ),
           const SizedBox(
             width: 10,
@@ -71,9 +71,9 @@ class _NumberAlertState extends State<NumberAlert> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
+              children: [
                 Text(
-                  'Номер успешно изменен',
+                  'Приглашение отправлено',
                   style: TextStyle(
                     fontSize: 15.sp,
                     color: const Color(0xff20CB83),
@@ -83,7 +83,7 @@ class _NumberAlertState extends State<NumberAlert> {
                   textAlign: TextAlign.start,
                 ),
                 Text(
-                  'Следующий вход в аккаунт будет\nпроизводиться по новому номеру',
+                  'Партнёр совсем скоро примет твоё\nприглашение',
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 12.sp,

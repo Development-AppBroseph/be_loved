@@ -84,18 +84,18 @@ class _LovePushSentAlertState extends State<LovePushSentAlert> {
                 Text(
                   'Уведомление отправлено',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Inter',
                     foreground: Paint()..shader = linearGradient,
                   ),
                   textAlign: TextAlign.start,
                 ),
-                const Text(
+                 Text(
                   'Партнёр получил уведомление о том, как ты его любишь!',
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                   ),

@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/core/widgets/text_fields/default_text_form_field.dart';
+import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/memory_info_card.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
@@ -38,8 +40,11 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
         email: _controller.text.trim(), isParting: widget.isParting));
   }
 
-  justParting() {
+  justParting() async {
     showLoaderWrapper(context);
+    await MySharedPrefs().setBoolYears(false);
+    sl<AuthConfig>().user!.love!.username = '';
+    sl<AuthConfig>().user!.fromYou = false;
     context
         .read<ProfileBloc>()
         .add(PartingOrSendFilesEvent(email: '', isParting: widget.isParting));
@@ -60,6 +65,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    context.read<ArchiveBloc>().add(GetMemoryInfoEvent());
     keyboardSub = KeyboardVisibilityController().onChange.listen((event) {
       setState(() {
         keyboardOpened = event;
@@ -135,9 +141,7 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                         hideCounter: true,
                         isEmail: true,
                       ),
-                      SizedBox(
-                        height: widget.isParting ? 20.h : 77.h,
-                      ),
+                      SizedBox(height: 20.h),
                       CustomButton(
                         color: ColorStyles.primarySwath,
                         text: 'Готово',
@@ -155,22 +159,36 @@ class _SendFilesWidgetState extends State<SendFilesWidget> {
                                 : _controller.text.isNotEmpty &&
                                     _controller.text.contains('@'),
                       ),
-                      if (widget.isParting) ...[
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        CustomButton(
-                          color: ColorStyles.blackColor,
-                          text: 'Не выгружать данные',
-                          border: sl<AuthConfig>().idx == 0
-                              ? null
-                              : Border.all(
-                                  width: 2.w, color: ColorStyles.blackColor),
-                          textColor: Colors.white,
-                          validate: true,
-                          onPressed: justParting,
-                        ),
-                      ]
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      //  CustomButton(
+                      //     color: ColorStyles.blackColor,
+                      //     text: 'Не выгружать данные',
+                      //     border: sl<AuthConfig>().idx == 0
+                      //         ? null
+                      //         : Border.all(
+                      //             width: 2.w, color: ColorStyles.blackColor),
+                      //     textColor: Colors.white,
+                      //     validate: true,
+                      //     onPressed: ()=> Navigator.of(context).pop(),
+                      //   ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      CustomButton(
+                        color: ColorStyles.blackColor,
+                        text: 'Не выгружать данные',
+                        border: sl<AuthConfig>().idx == 0
+                            ? null
+                            : Border.all(
+                                width: 2.w, color: ColorStyles.blackColor),
+                        textColor: Colors.white,
+                        validate: true,
+                        onPressed: widget.isParting == true
+                            ? justParting
+                            : () => Navigator.pop(context),
+                      ),
                     ],
                   ),
                 ),

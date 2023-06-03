@@ -60,9 +60,19 @@ class MySharedPrefs {
       jsonEncode(user.toJson()),
     );
   }
-  Future<void> setYears(int year) async {
-    (await _sharedPreferences).setInt('year',  year);
+
+  Future<void> setBoolYears(bool isShwon) async {
+    (await _sharedPreferences).setBool('year', isShwon);
   }
+
+  Future<void> deleteBoolYears() async {
+    (await _sharedPreferences).remove('year');
+  }
+
+  Future<bool?> getBoolYears() async {
+    return (await _sharedPreferences).getBool('year');
+  }
+
   Future<int?> get year async => (await _sharedPreferences).getInt('year');
 
   void changeName(String newName) async {

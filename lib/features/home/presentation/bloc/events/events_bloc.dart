@@ -113,7 +113,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
         events = data;
         eventsSorted = data;
         eventsInHome = getInHomeEvents(data);
-        return GotSuccessEventsState();
+        return GotSuccessEventsState(eventsInHome: eventsInHome);
       },
     );
     emit(state);
@@ -236,7 +236,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
           event.eventEntity!);
     }
     print('DELETE LIST: $eventsDeleted');
-    emit(GotSuccessEventsState());
+    emit(GotSuccessEventsState(eventsInHome: eventsInHome));
 
     Map<String, int> items = {};
     for (var deletedItem in eventsDeleted) {
@@ -252,7 +252,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
       (error) => errorCheck(error),
       (data) {
         eventsDeleted = [];
-        return GotSuccessEventsState();
+        return GotSuccessEventsState(eventsInHome: eventsInHome);
       },
     );
     emit(state);
@@ -272,14 +272,14 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
         }
       }
     }
-    emit(GotSuccessEventsState());
+    emit(GotSuccessEventsState(eventsInHome: eventsInHome));
   }
 
   void _resetEvents(ResetSortEvent event, Emitter<EventsState> emit) async {
     emit(EventBlankState());
     eventsSorted = events;
     selectedTag = null;
-    emit(GotSuccessEventsState());
+    emit(GotSuccessEventsState(eventsInHome: eventsInHome));
   }
 
   void _deleteEvent(EventDeleteEvent event, Emitter<EventsState> emit) async {
@@ -331,14 +331,12 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     List<EventEntity> result = [];
 
     for (EventEntity item in list) {
-      if (item.mainPosition != 0) {
-        if (item.mainPosition == 1) {
-          firstItem = item;
-        } else if (item.mainPosition == 2) {
-          secondItem = item;
-        } else if (item.mainPosition == 3) {
-          thirdItem = item;
-        }
+      if (item.mainPosition == 0) {
+        firstItem = item;
+      } else if (item.mainPosition == 1) {
+        firstItem = item;
+      } else if (item.mainPosition == 2) {
+        secondItem = item;
       }
     }
     if (firstItem != null) {

@@ -1,20 +1,34 @@
 import 'dart:async';
+
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
+import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_for_start_relationship.dart';
 import 'package:be_loved/features/auth/presentation/views/login/invite_partner.dart';
+import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class InviteRelation extends StatelessWidget {
-  InviteRelation({Key? key, required this.previousPage}) : super(key: key);
+class InviteRelation extends StatefulWidget {
+  const InviteRelation({Key? key, required this.previousPage}) : super(key: key);
 
   final VoidCallback previousPage;
+
+  @override
+  State<InviteRelation> createState() => _InviteRelationState();
+}
+final pageController =
+      PageController(initialPage: 1, viewportFraction: 1.0, keepPage: false);
+class _InviteRelationState extends State<InviteRelation> {
+  @override
+  void initState() {
+    context.read<WebSocketBloc>().add(WebSocketEvent(sl<AuthConfig>().token!));
+    super.initState();
+  }
   bool isSwipe = false;
 
   final streamController = StreamController<int>();
-  final pageController =
-      PageController(initialPage: 1, viewportFraction: 1.0, keepPage: false);
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +105,7 @@ class InviteRelation extends StatelessWidget {
                     ),
                     InvitePartner(
                       nextPage: nextPage,
-                      previousPage: previousPage,
+                      previousPage: widget.previousPage,
                       streamController: streamController,
                     ),
                   ],
