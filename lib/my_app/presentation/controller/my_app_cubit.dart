@@ -27,21 +27,21 @@ class MyAppStatusCubit extends Cubit<MyAppStatusState> {
   Future<void> getStatus() async {
     try {
       emit(MyAppEmptyStatusState());
-     
+
       if (Platform.isIOS) {
-         final newVersion = NewVersion();
-      final status = await newVersion.getVersionStatus();
+        final newVersion = NewVersion();
+        final status = await newVersion.getVersionStatus();
         if (status != null) {
           emit(MyAppHaveUpdateState(apple: status.appStoreLink));
-        } else {
-          InAppUpdate.checkForUpdate().then((info) {
-            if (info.updateAvailability == UpdateAvailability.updateAvailable) {
-              emit(MyAppHaveUpdateState());
-            }
-          }).catchError((e) {
-            emit(MyAppEmptyStatusState());
-          });
         }
+      } else {
+        InAppUpdate.checkForUpdate().then((info) {
+          if (info.updateAvailability == UpdateAvailability.updateAvailable) {
+            emit(MyAppHaveUpdateState());
+          }
+        }).catchError((e) {
+          emit(MyAppEmptyStatusState());
+        });
       }
     } catch (e) {
       emit(MyAppEmptyStatusState());
