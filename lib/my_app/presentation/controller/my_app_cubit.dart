@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:be_loved/my_app/data/datasource.dart';
 import 'package:be_loved/my_app/presentation/controller/my_app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:in_app_update/in_app_update.dart';
-import 'package:new_version/new_version.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class MyAppCubit extends Cubit<MyAppState> {
   final Datasource datasource = Datasource();
@@ -14,7 +13,7 @@ class MyAppCubit extends Cubit<MyAppState> {
       emit(MyAppLaodingState());
       final image = await datasource.initialPhoto();
       emit(MyAppLoadedState(image: image));
-      Future.delayed(const Duration(seconds: 3))
+      Future.delayed(const Duration(seconds: 5))
           .then((value) => emit(MyAppGotoState()));
     } catch (error) {
       emit(MyAppErrorState(error: error.toString()));
@@ -23,25 +22,35 @@ class MyAppCubit extends Cubit<MyAppState> {
 }
 
 class MyAppStatusCubit extends Cubit<MyAppStatusState> {
+  final Datasource datasource = Datasource();
+
   MyAppStatusCubit() : super(MyAppEmptyStatusState());
   Future<void> getStatus() async {
     try {
       emit(MyAppEmptyStatusState());
-
+      final info = await PackageInfo.fromPlatform();
+      final status = await datasource.getVersion();
       if (Platform.isIOS) {
-        final newVersion = NewVersion();
-        final status = await newVersion.getVersionStatus();
-        if (status != null) {
-          emit(MyAppHaveUpdateState(apple: status.appStoreLink));
+        if (status.version != null) {
+          if (status.version != info.version) {
+            emit(
+              MyAppHaveUpdateState(
+                apple: 'https://apps.apple.com/us/app/beloved/id6443919068',
+              ),
+            );
+          }
         }
       } else {
-        InAppUpdate.checkForUpdate().then((info) {
-          if (info.updateAvailability == UpdateAvailability.updateAvailable) {
-            emit(MyAppHaveUpdateState());
+        if (status.version != null) {
+          if (status.version != info.version) {
+            emit(
+              MyAppHaveUpdateState(
+                android:
+                    'https://play.google.com/store/apps/details?id=dev.broseph.belovedapp',
+              ),
+            );
           }
-        }).catchError((e) {
-          emit(MyAppEmptyStatusState());
-        });
+        }
       }
     } catch (e) {
       emit(MyAppEmptyStatusState());

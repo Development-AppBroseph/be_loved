@@ -41,10 +41,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // MySharedPrefs().logOut(context);
-    // if(context.read<ThemeBloc>().state is ThemeInitialState){
-    //   context.read<ThemeBloc>().add(GetThemeLocalEvent());
-    // }
     FlutterNativeSplash.remove();
     return ScreenUtilInit(
       designSize: const Size(428, 926),
@@ -55,9 +51,11 @@ class _MyAppState extends State<MyApp> {
                 sl<AuthConfig>().user != null) {
               if (state.isChanges) {
                 print('UPDATE THEME -------');
-                context.read<ProfileBloc>().add(EditRelationNameEvent(
-                      name: sl<AuthConfig>().user!.name ?? '',
-                    ));
+                context.read<ProfileBloc>().add(
+                      EditRelationNameEvent(
+                        name: sl<AuthConfig>().user!.name ?? '',
+                      ),
+                    );
               }
             }
           },
@@ -68,31 +66,31 @@ class _MyAppState extends State<MyApp> {
                   return GetMaterialApp(
                     debugShowCheckedModeBanner: false,
                     home: UpdatePage(
-                        url: Platform.isIOS ? state.apple! : state.android!),
+                      url: Platform.isIOS ? state.apple! : state.android!,
+                    ),
                   );
                 }
                 return GetMaterialApp(
-                    navigatorObservers: [FlutterSmartDialog.observer],
-                    builder: FlutterSmartDialog.init(),
-                    debugShowCheckedModeBanner: false,
-                    localizationsDelegates: const [
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                    ],
-                    supportedLocales: const [Locale('ru')],
-                    theme: ThemeData(
-                        scaffoldBackgroundColor: sl<AuthConfig>().idx == 1
-                            ? ColorStyles.blackColor
-                            : const Color.fromRGBO(240, 240, 240, 1.0),
-                        fontFamily: 'Inter'),
-                    home: widget.user != null
-                        ? widget.user?.date != null
-                            ? const HomePage()
-                            : const AuthPage()
-                        : const AuthPage()
-                    // home: HomePage(),
-                    );
+                  navigatorObservers: [FlutterSmartDialog.observer],
+                  builder: FlutterSmartDialog.init(),
+                  debugShowCheckedModeBanner: false,
+                  localizationsDelegates: const [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: const [Locale('ru')],
+                  theme: ThemeData(
+                      scaffoldBackgroundColor: sl<AuthConfig>().idx == 1
+                          ? ColorStyles.blackColor
+                          : const Color.fromRGBO(240, 240, 240, 1.0),
+                      fontFamily: 'Inter'),
+                  home: widget.user != null
+                      ? widget.user?.date != null
+                          ? const HomePage()
+                          : const AuthPage()
+                      : const AuthPage(),
+                );
               },
             );
           },
