@@ -207,6 +207,7 @@ class _PhonePageState extends State<PhonePage> {
                                 SizedBox(
                                   width: 12.w,
                                 ),
+
                                 Container(
                                   width: 0.6.sw,
                                   alignment: Alignment.center,
