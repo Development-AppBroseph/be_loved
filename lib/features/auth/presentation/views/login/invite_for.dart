@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/images.dart';
-import 'package:be_loved/features/auth/data/models/auth/user.dart';
-import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
-import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
+import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
@@ -97,9 +97,9 @@ class _InviteForState extends State<InviteFor> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WebSocketBloc, WebSocketState>(
-        buildWhen: (previous, current) {
-      print('object sokect state ${current}');
+    return BlocConsumer<WebSocketBloc, WebSocketState>(
+        listener: (context, current) {
+      print('object sokect state $current');
       if (current is WebSocketInviteCloseState) {
         BlocProvider.of<AuthBloc>(context).user?.love = null;
         widget.previewPage();
@@ -109,20 +109,21 @@ class _InviteForState extends State<InviteFor> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => const HomePage(),
           ),
           (route) => false,
         );
-        return true;
+        // return true;
       }
       if (current is WebSocketInviteAcceptState) {
         _timer?.cancel();
         _timer = null;
         _accepted = true;
-        return true;
+        // return true;
       }
-      return false;
-    }, builder: (context, snapshot) {
+      // return false;
+    }, 
+    builder: (context, snapshot) {
       return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
         // if (current is ReletionshipsError) {
         //   if (!widget.isSwiping) {

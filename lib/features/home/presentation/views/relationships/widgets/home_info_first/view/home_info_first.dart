@@ -106,13 +106,15 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
       }
 
       print('countOfYears: $countOfYears');
+      print(user.date);
       years = difference.inDays ~/ 365;
       month = (difference.inDays % 365) ~/ 30.4;
-      double a = (difference.inDays % 365) % 30.4;
       daysInYears = ((difference.inDays % 365) % 30.44).toInt();
-      days = difference.inDays ;
+      days = difference.inDays;
       hour = difference.inHours - difference.inDays * 24;
       minute = difference.inMinutes - difference.inHours * 60;
+
+      streamController.add(true);
       context.read<HomeInfoFirstCubit>().getTime(
             days,
             hour,
@@ -121,8 +123,6 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
             month,
             daysInYears,
           );
-
-      streamController.add(true);
     }
   }
 
@@ -186,7 +186,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${state.minutes}',
+                              '$minute',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -211,7 +211,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${state.hours}',
+                              '$hour',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -232,7 +232,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.minutes}',
+                              '$minute',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -257,7 +257,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${state.days}',
+                              '$days',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -278,7 +278,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.hours}',
+                              '$hour',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -299,7 +299,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.minutes}',
+                              '$minute',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -323,7 +323,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${state.month}',
+                              '$month',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -344,7 +344,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.days}',
+                              '$daysInYears',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -365,7 +365,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.hours}',
+                              '$hour',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -390,7 +390,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${state.month}',
+                              '$month',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -411,7 +411,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.days}',
+                              '$daysInYears',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -432,7 +432,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.hours}',
+                              '$hour',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -453,7 +453,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.minutes}',
+                              '$minute',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -477,7 +477,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '${state.years}',
+                              '$years',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -498,7 +498,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.months}',
+                              '$month',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
@@ -519,7 +519,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
                               width: 10.w,
                             ),
                             Text(
-                              '${state.days}',
+                              '$daysInYears',
                               style: TextStyle(
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],

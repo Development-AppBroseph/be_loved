@@ -63,8 +63,7 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
           print(event);
           try {
             print('websocket message ${jsonDecode(event)}');
-            print(
-                'object sokect state ${jsonDecode(event)['message']}');
+            print('object sokect state ${jsonDecode(event)['message']}');
             // Приглашение в авторизации
             if (jsonDecode(event)['type'] == 'notification') {
               if (jsonDecode(event)['message'] == 'Вам пришло приглашение') {
@@ -80,6 +79,7 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
                 add(WebSocketAcceptInviteMessage());
               } else if (jsonDecode(event)['message'] ==
                   'Дата отношений изменена!') {
+                    sl<AuthConfig>().user!.date = jsonDecode(event)['date'];
                 add(WebSocketStartRelationshipsMessage());
               } else if (jsonDecode(event)['message'] ==
                   'Проверка связи от второй половинки') {
