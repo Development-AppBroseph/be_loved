@@ -7,7 +7,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 class MyAppCubit extends Cubit<MyAppState> {
   final Datasource datasource = Datasource();
+
   MyAppCubit() : super(MyAppEmptyState());
+
   Future<void> getImage() async {
     try {
       emit(MyAppLaodingState());
@@ -25,30 +27,35 @@ class MyAppStatusCubit extends Cubit<MyAppStatusState> {
   final Datasource datasource = Datasource();
 
   MyAppStatusCubit() : super(MyAppEmptyStatusState());
+
   Future<void> getStatus() async {
     try {
       emit(MyAppEmptyStatusState());
       final info = await PackageInfo.fromPlatform();
       final status = await datasource.getVersion();
-      if (Platform.isIOS) {
-        if (status.version != null) {
-          if (status.version != info.version) {
-            emit(
-              MyAppHaveUpdateState(
-                apple: 'https://apps.apple.com/us/app/beloved/id6443919068',
-              ),
-            );
-          }
-        }
+      if (status.isOnCheck) {
+        return;
       } else {
-        if (status.version != null) {
-          if (status.version != info.version) {
-            emit(
-              MyAppHaveUpdateState(
-                android:
-                    'https://play.google.com/store/apps/details?id=dev.broseph.belovedapp',
-              ),
-            );
+        if (Platform.isAndroid) {
+          if (status.version != null) {
+            if (status.version != info.version) {
+              emit(
+                MyAppHaveUpdateState(
+                  apple: 'https://apps.apple.com/us/app/beloved/id6443919068',
+                ),
+              );
+            }
+          }
+        } else {
+          if (status.version != null) {
+            if (status.version != info.version) {
+              emit(
+                MyAppHaveUpdateState(
+                  android:
+                      'https://play.google.com/store/apps/details?id=dev.broseph.belovedapp',
+                ),
+              );
+            }
           }
         }
       }
