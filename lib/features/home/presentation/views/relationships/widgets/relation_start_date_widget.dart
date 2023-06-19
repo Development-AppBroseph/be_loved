@@ -21,7 +21,7 @@ class RelationStartDateWidget extends StatelessWidget {
   final Function(DateTime date) onChangeDate;
   DateTime datetime;
   RelationStartDateWidget(
-      {required this.datetime,
+      {super.key, required this.datetime,
       required this.onTapEditDate,
       required this.onChangeDate,
       required this.onTapStats});
@@ -31,7 +31,7 @@ class RelationStartDateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 243.h,
       child: CupertinoCard(
@@ -48,7 +48,7 @@ class RelationStartDateWidget extends StatelessWidget {
             Text(
               'Вы начали встречаться:',
               style: TextStyle(
-                  color: Color(0xFF969696),
+                  color: const Color(0xFF969696),
                   fontSize: 15.sp,
                   fontWeight: FontWeight.w700),
             ),
@@ -82,7 +82,7 @@ class RelationStartDateWidget extends StatelessWidget {
             Container(
               width: 328.w,
               height: 1.h,
-              color: Color(0xFF969696),
+              color: const Color(0xFF969696),
             ),
             SizedBox(
               height: 24.h,
@@ -122,7 +122,7 @@ class RelationStartDateWidget extends StatelessWidget {
                           Text(
                             'Посмотреть',
                             style: TextStyle(
-                                color: Color(0xFF969696),
+                                color: const Color(0xFF969696),
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -167,6 +167,7 @@ class RelationStartDateWidget extends StatelessWidget {
                     //   toDate = date;
                     // });
                     // onChangeDate(date);
+                    sl<AuthConfig>().user?.date = date.toString();
                     datetime = date;
                   },
                   datetime,
@@ -210,7 +211,7 @@ class RelationStartDateWidget extends StatelessWidget {
                           Text(
                             'Редактировать',
                             style: TextStyle(
-                                color: Color(0xFF969696),
+                                color: const Color(0xFF969696),
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -244,12 +245,12 @@ Widget _buildDatePicker(BuildContext context,
   TextStyle style1 = TextStyle(
       color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.w800);
 
-  DateTime _focusedDay = DateTime(selectedDay.year, selectedDay.month, 1);
-  DateTime _calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
+  DateTime focusedDay = DateTime(selectedDay.year, selectedDay.month, 1);
+  DateTime calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
   Widget _buildJustDay(context, DateTime date, events) {
     return CalendarJustItem(
         text: date.day.toString(),
-        disabled: _focusedDay.month != date.month ||
+        disabled: focusedDay.month != date.month ||
             (fromDate != null &&
                 date.millisecondsSinceEpoch <
                     startDate.millisecondsSinceEpoch) ||
@@ -263,9 +264,9 @@ Widget _buildDatePicker(BuildContext context,
     return CalendarSelectedItem(text: date.day.toString());
   }
 
-  PageController _pageController = PageController();
+  PageController pageController = PageController();
 
-  CalendarType _calendarType = CalendarType.days;
+  CalendarType calendarType = CalendarType.days;
 
   return StatefulBuilder(builder: (context, setState) {
     return Container(
@@ -294,8 +295,8 @@ Widget _buildDatePicker(BuildContext context,
                   children: [
                     GestureDetector(
                         onTap: () {
-                          if (_calendarType == CalendarType.days) {
-                            _pageController.previousPage(
+                          if (calendarType == CalendarType.days) {
+                            pageController.previousPage(
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOutQuint);
                           }
@@ -308,28 +309,28 @@ Widget _buildDatePicker(BuildContext context,
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          if (_calendarType == CalendarType.days) {
-                            _calendarType = CalendarType.month;
-                          } else if (_calendarType == CalendarType.month) {
-                            _calendarType = CalendarType.years;
+                          if (calendarType == CalendarType.days) {
+                            calendarType = CalendarType.month;
+                          } else if (calendarType == CalendarType.month) {
+                            calendarType = CalendarType.years;
                           }
                         });
                       },
                       child: Text(
                         DateFormat(
-                                _calendarType == CalendarType.days
+                                calendarType == CalendarType.days
                                     ? 'MMMM yyyy'
                                     : 'yyyy',
                                 'RU')
-                            .format(_focusedDay)
+                            .format(focusedDay)
                             .capitalize(),
                         style: style1,
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (_calendarType == CalendarType.days) {
-                          _pageController.nextPage(
+                        if (calendarType == CalendarType.days) {
+                          pageController.nextPage(
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOutQuint);
                         }
@@ -346,64 +347,64 @@ Widget _buildDatePicker(BuildContext context,
               SizedBox(
                 height: 11.h,
               ),
-              if (_calendarType != CalendarType.days)
+              if (calendarType != CalendarType.days)
                 SizedBox(
                   width: 279.w,
                   child: YearsMonthSelectOldWidget(
                     onTap: (i) {
                       setState(() {
-                        if (_calendarType == CalendarType.years) {
-                          _focusedDay =
+                        if (calendarType == CalendarType.years) {
+                          focusedDay =
                               DateTime(i, selectedDay.month, selectedDay.day);
-                          _calendarType = CalendarType.month;
-                          if (_focusedDay.millisecondsSinceEpoch >
+                          calendarType = CalendarType.month;
+                          if (focusedDay.millisecondsSinceEpoch >
                               now.millisecondsSinceEpoch) {
-                            _focusedDay = now;
+                            focusedDay = now;
                           }
                         } else {
                           if (!((i + 1) < startDate.month &&
                               selectedDay.year == startDate.year)) {
-                            _focusedDay = DateTime(
+                            focusedDay = DateTime(
                                 selectedDay.year, i + 1, selectedDay.day);
-                            _calendarType = CalendarType.days;
+                            calendarType = CalendarType.days;
 
-                            if (_focusedDay.millisecondsSinceEpoch >
+                            if (focusedDay.millisecondsSinceEpoch >
                                 now.millisecondsSinceEpoch) {
-                              _focusedDay = now;
+                              focusedDay = now;
                             }
                           }
                         }
-                        if (_focusedDay.millisecondsSinceEpoch >
+                        if (focusedDay.millisecondsSinceEpoch >
                             startDate.millisecondsSinceEpoch) {
-                          selectedDay = _focusedDay;
-                          onTap(_focusedDay, false);
+                          selectedDay = focusedDay;
+                          onTap(focusedDay, false);
                         } else {
                           selectedDay = startDate.add(const Duration(days: 1));
                           onTap(selectedDay, false);
                         }
-                        _calendarStartDay = _focusedDay;
+                        calendarStartDay = focusedDay;
                       });
                     },
-                    calendarType: _calendarType,
-                    focusedDay: _focusedDay,
+                    calendarType: calendarType,
+                    focusedDay: focusedDay,
                   ),
                 ),
-              if (_calendarType == CalendarType.days)
+              if (calendarType == CalendarType.days)
                 TableCalendar(
                   onCalendarCreated: (con) {
-                    _pageController = con;
+                    pageController = con;
                   },
                   onPageChanged: (dt) {
                     setState(() {
-                      _focusedDay = dt;
+                      focusedDay = dt;
                     });
                     Future.delayed(const Duration(milliseconds: 300), () {
                       setState(() {
-                        _calendarStartDay = dt;
+                        calendarStartDay = dt;
                       });
                     });
                   },
-                  focusedDay: _focusedDay,
+                  focusedDay: focusedDay,
                   calendarFormat: CalendarFormat.month,
                   firstDay: kFirstDay,
                   lastDay: kLastDay,
