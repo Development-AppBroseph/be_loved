@@ -45,24 +45,10 @@ void main() async {
     AppMetrica.activate(
         const AppMetricaConfig("416e2567-76ea-42d1-adce-c786faf3ada5"));
     WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-    
-    check();
-    
-    // NotificationService().initTimeZone();
-    // AwesomeNotifications().initialize(null, [
-    //   NotificationChannel(
-    //     channelKey: 'key1',
-    //     channelName: 'Be loved',
-    //     channelDescription: 'Test notification',
-    //     playSound: true,
-    //     enableVibration: true,
-    //     criticalAlerts: false,
-    //   )
-    // ]);
+    // check();
     setupInjections();
     HttpOverrides.global = MyHttpOverrides();
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-    // NotificationService().initNotification();
     var user = await MySharedPrefs().user;
     GooglePlayServicesAvailability availability = await GoogleApiAvailability
         .instance
@@ -79,24 +65,7 @@ void main() async {
         provisional: false,
         sound: true,
       );
-
-      FirebaseMessaging.onBackgroundMessage((message) async {
-        print('messageIs: ${message.data}');
-      });
     }
-    // MySharedPrefs().setUser(
-    //   '123123123123123213',
-    //   UserAnswer(
-    //     me: User(username: 'Максим', phoneNumber: '+79035749646', photo: null),
-    //     love:
-    //         User(username: 'Ананстасия', phoneNumber: '+79939009646', photo: ''),
-    //     relationId: 16,
-    //     status: 'Принято',
-    //     fromYou: true,
-    //     date: '2022-05-05 21:30:00',
-    //   ),
-    // );
-    
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((value) {
       runApp(MultiBlocProvider(
@@ -158,10 +127,13 @@ void main() async {
           BlocProvider<MyAppCubit>(
             create: (context) => MyAppCubit(),
           ),
-          BlocProvider<MyAppStatusCubit>(create: (context) => MyAppStatusCubit())
+          BlocProvider<MyAppStatusCubit>(
+              create: (context) => MyAppStatusCubit())
         ],
         child: OverlaySupport.global(
-          child:MyApp(user: user,),
+          child: MyApp(
+            user: user,
+          ),
         ),
       ));
     });
@@ -193,5 +165,3 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
-
-
