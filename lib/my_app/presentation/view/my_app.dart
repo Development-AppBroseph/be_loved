@@ -64,7 +64,15 @@ class _MyAppState extends State<MyApp> {
               builder: (context, state) {
                 if (state is MyAppHaveUpdateState) {
                   return GetMaterialApp(
+                    navigatorObservers: [FlutterSmartDialog.observer],
+                    builder: FlutterSmartDialog.init(),
                     debugShowCheckedModeBanner: false,
+                    localizationsDelegates: const [
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: const [Locale('ru')],
                     home: UpdatePage(
                       url: Platform.isIOS ? state.apple! : state.android!,
                     ),
