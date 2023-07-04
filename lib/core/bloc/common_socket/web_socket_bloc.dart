@@ -74,12 +74,14 @@ class WebSocketBloc extends Bloc<WebSocketInitEvents, WebSocketState> {
               } else if (jsonDecode(event)['message'] ==
                   'Отношения разрушены (может даже не начавшись') {
                 add(WebSocketCloseInviteMessage());
+              } else if (jsonDecode(event)['message'] == 'Отношения отменены') {
+                add(WebSocketCloseInviteMessage());
               } else if (jsonDecode(event)['message'] ==
                   'Поздравляю с началом отношений!') {
                 add(WebSocketAcceptInviteMessage());
               } else if (jsonDecode(event)['message'] ==
                   'Дата отношений изменена!') {
-                    sl<AuthConfig>().user!.date = jsonDecode(event)['date'];
+                sl<AuthConfig>().user!.date = jsonDecode(event)['date'];
                 add(WebSocketStartRelationshipsMessage());
               } else if (jsonDecode(event)['message'] ==
                   'Проверка связи от второй половинки') {
