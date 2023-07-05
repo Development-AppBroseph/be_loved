@@ -144,6 +144,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
         padding: EdgeInsets.only(top: 11.h, left: 20.w, right: 25.w),
         child: StreamBuilder<bool>(
             stream: streamController.stream,
+            initialData: false,
             builder: (context, snapshot) {
               return Column(
                 children: [
