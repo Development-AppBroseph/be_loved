@@ -62,6 +62,10 @@ class _MyAppState extends State<MyApp> {
           builder: (context, state) {
             return BlocBuilder<MyAppStatusCubit, MyAppStatusState>(
               builder: (context, state) {
+                var apple =
+                    'https://apps.apple.com/us/app/beloved/id6443919068';
+                var android =
+                    'https://play.google.com/store/apps/details?id=dev.broseph.belovedapp';
                 if (state is MyAppHaveUpdateState) {
                   return GetMaterialApp(
                     navigatorObservers: [FlutterSmartDialog.observer],
@@ -74,7 +78,9 @@ class _MyAppState extends State<MyApp> {
                     ],
                     supportedLocales: const [Locale('ru')],
                     home: UpdatePage(
-                      url: Platform.isIOS ? state.apple! : state.android!,
+                      url: Platform.isIOS
+                          ? state.apple ?? apple
+                          : state.android ?? android,
                     ),
                   );
                 }

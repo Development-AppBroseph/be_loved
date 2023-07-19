@@ -9,26 +9,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InviteRelation extends StatefulWidget {
-  const InviteRelation({Key? key, required this.previousPage}) : super(key: key);
+  const InviteRelation({Key? key, required this.previousPage})
+      : super(key: key);
 
   final VoidCallback previousPage;
 
   @override
   State<InviteRelation> createState() => _InviteRelationState();
 }
+
 final pageController =
-      PageController(initialPage: 1, viewportFraction: 1.0, keepPage: false);
+    PageController(initialPage: 1, viewportFraction: 1.0, keepPage: false);
+
 class _InviteRelationState extends State<InviteRelation> {
   @override
   void initState() {
-    context.read<WebSocketBloc>().add(WebSocketEvent(sl<AuthConfig>().token!));
+    context
+        .read<WebSocketBloc>()
+        .add(WebSocketEvent(sl<AuthConfig>().token ?? ''));
     super.initState();
   }
+
   bool isSwipe = false;
 
   final streamController = StreamController<int>();
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +80,7 @@ class _InviteRelationState extends State<InviteRelation> {
                 //     pageController.position.userScrollDirection ==
                 //         ScrollDirection.reverse);
                 // });
-                if(state is WebSocketInviteGetState) {
+                if (state is WebSocketInviteGetState) {
                   isSwipe = true;
                 } else {
                   isSwipe = false;
