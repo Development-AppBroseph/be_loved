@@ -54,7 +54,7 @@ dependencies:
   carousel_slider: ^4.0.0
   table_calendar: ^3.0.8
   custom_pop_up_menu: ^1.2.4
-  intl: ^0.17.0
+  intl: ^0.18.0
   mask_text_input_formatter: ^2.4.0
   time_picker_sheet: ^0.0.2+1
   flutter_keyboard_visibility: 
@@ -85,8 +85,9 @@ dependencies:
 
   flutter_inappwebview: ^5.7.2+3
   comparer: ^2.0.1
-  appmetrica_plugin: ^1.1.0
+  # appmetrica_plugin: ^1.4.0
   sberbank_acquiring: ^2.0.1
+  yookassa_payments_flutter: ^1.1.1
   check_vpn_connection: ^0.0.2
   flutter_smart_dialog: ^4.9.0+3
   dotted_border: ^2.0.0+3

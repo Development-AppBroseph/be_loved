@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:be_loved/core/network/repository.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/secure_storage.dart';
+import 'package:be_loved/core/usecases/usecase.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/features/profile/domain/usecases/get_status_sub.dart';
 import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +27,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   String? nickname;
   String? phone;
   File? image;
+  // final GetStatusSub getStatusSub;
   UserAnswer? user;
-  
 
   //VK
   String? vkCode;
+
+  bool? paymentEnabled;
 
   AuthBloc() : super(AuthStated()) {
     on<SendPhone>((event, emit) => _sendPhone(event, emit));
@@ -47,7 +51,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogOut>((event, emit) => _logOut(event, emit));
     on<EditUserInfo>((event, emit) => _editUserInfo(event, emit));
     on<TextFieldFilled>((event, emit) => _textFieldChangeState(event, emit));
-    // on<TryAuthVK>((event, emit) => _tryAuthVK(event, emit));
+    on<GetStatusUser>((event, emit) => getStatus());
+  }
+
+  Future<void> getStatus() async {
+    // GetStatusSub getStatusSub = sl();
+    try {
+      final result = await Repository().getStatusSub();
+
+      if (result != null) {
+        paymentEnabled = result.haveSub;
+      }
+      // result.fold((error) => paymentEnabled = false, (done) {
+      //   if (done.haveSub) {
+      //     paymentEnabled = true;
+      //   } else {
+      //     paymentEnabled = false;
+      //   }
+      // });
+      print('payment is: $paymentEnabled');
+    } catch (e) {
+      paymentEnabled = false;
+    }
   }
 
   void _sendPhone(SendPhone event, Emitter<AuthState> emit) async {
@@ -234,7 +259,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await MySharedPrefs().updateUser(result);
       sl<AuthConfig>().user = result;
       user = result;
-      emit(GetUserSuccess(result));
+
+      if (paymentEnabled != null && user != null) {
+        if (paymentEnabled! == false) {
+          if (user!.isSub == false) {
+            await Repository().sendTestSub();
+          }
+          emit(GetUserSuccess(result));
+          return;
+        }
+      }
+
+      if (result.isTest || result.isSub || event.isFirst) {
+        emit(GetUserSuccess(result));
+      } else {
+        if (result.isTest == false) {
+          emit(UserNeedSubscription());
+        } else {
+          emit(GetUserSuccess(result));
+        }
+      }
     } else {
       sl<AuthConfig>().user = await MySharedPrefs().user;
 

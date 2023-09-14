@@ -106,21 +106,24 @@ void photoSettingsModal(
                           text: 'Из галереи',
                           iconSize: Size(20.w, 20.h),
                           icon: SvgImg.gallery,
-                          borderRadius: BorderRadius.zero,
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        SettingsItem(
-                          onTap: () {},
-                          text: 'Из архива',
-                          iconSize: Size(20.w, 22.h),
-                          icon: SvgImg.archive,
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(34.r),
                             bottomRight: Radius.circular(34.r),
                           ),
                         ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        // SettingsItem(
+                        //   onTap: () {},
+                        //   text: 'Из архива',
+                        //   iconSize: Size(20.w, 22.h),
+                        //   icon: SvgImg.archive,
+                        //   borderRadius: BorderRadius.only(
+                        //     bottomLeft: Radius.circular(34.r),
+                        //     bottomRight: Radius.circular(34.r),
+                        //   ),
+                        // ),
                       ]
                     : [
                         SettingsItem(

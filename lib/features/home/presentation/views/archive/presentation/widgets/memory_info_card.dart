@@ -10,9 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class MemoryInfoCard extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
@@ -30,61 +28,57 @@ class MemoryInfoCard extends StatelessWidget {
         width: 378.w,
         height: 38.h,
         child: archiveBloc.memoryEntity == null
-        ? Container(color: ColorStyles.blackColor,) 
-        : archiveBloc.memoryEntity!.fullFilled()
-        ? _buildFullFilled(context)
-        : ClipPath.shape(
-            shape: SquircleBorder(
-                radius: BorderRadius.circular(20.r)),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Container(
-                    color: ColorStyles.blackColor,
-                  ),
-                ),
-                Positioned.fill(
-                  right: 378.w-(378.w/100 * double.parse(archiveBloc.memoryEntity!.getFilledMemoryInPercent())),
-                  child: Container(
-                    color: ColorStyles.primarySwath,
-                  ),
-                ),
-                Positioned.fill(
-                  left: 20.w,
-                  right: 20.w,
-                  child: Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment:
-                        CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Хранилище:',
-                        style: TextStyles(context)
-                            .white_15_w800,
-                      ),
-                      Text(
-                        sl<AuthConfig>().memoryEntity ==
-                              null
-                          ? '0/2 ГБ'
-                          : '${sl<AuthConfig>().memoryEntity!.getInGigabytesCurrentSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
-                        style: TextStyles(context)
-                            .white_15_w800,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            )),
-        );
-      }
-    );
+            ? Container(
+                color: ColorStyles.blackColor,
+              )
+            : archiveBloc.memoryEntity!.fullFilled()
+                ? _buildFullFilled(context)
+                : ClipPath.shape(
+                    shape: SquircleBorder(radius: BorderRadius.circular(20.r)),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Container(
+                            color: ColorStyles.blackColor,
+                          ),
+                        ),
+                        Positioned.fill(
+                          right: 378.w -
+                              (378.w /
+                                  100 *
+                                  double.parse(archiveBloc.memoryEntity!
+                                      .getFilledMemoryInPercent())),
+                          child: Container(
+                            color: ColorStyles.primarySwath,
+                          ),
+                        ),
+                        Positioned.fill(
+                          left: 20.w,
+                          right: 20.w,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Хранилище:',
+                                style: TextStyles(context).white_15_w800,
+                              ),
+                              Text(
+                                sl<AuthConfig>().memoryEntity == null
+                                    ? '0/2 ГБ'
+                                    : '0/2 ГБ',
+                                style: TextStyles(context).white_15_w800,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    )),
+      );
+    });
   }
 
-
-
-
-  Widget _buildFullFilled(BuildContext context){
+  Widget _buildFullFilled(BuildContext context) {
     return CupertinoCard(
       margin: EdgeInsets.zero,
       elevation: 0,
@@ -104,23 +98,18 @@ class MemoryInfoCard extends StatelessWidget {
             left: 20.w,
             right: 20.w,
             child: Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceBetween,
-              crossAxisAlignment:
-                  CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   'Хранилище:',
-                  style: TextStyles(context)
-                      .black_15_w800,
+                  style: TextStyles(context).black_15_w800,
                 ),
                 Text(
-                  sl<AuthConfig>().memoryEntity ==
-                        null
-                    ? '0/2 ГБ'
-                    : '${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
-                  style: TextStyles(context)
-                      .black_15_w800,
+                  sl<AuthConfig>().memoryEntity == null
+                      ? '0/2 ГБ'
+                      : '${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
+                  style: TextStyles(context).black_15_w800,
                 ),
               ],
             ),

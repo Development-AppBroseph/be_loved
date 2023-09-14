@@ -14,7 +14,10 @@ import 'package:be_loved/features/home/presentation/views/purposes/purposes_page
 import 'package:be_loved/features/home/presentation/views/relationships/main_page.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
+import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_state.dart';
 import 'package:be_loved/features/profile/presentation/views/parting_second_view.dart';
+import 'package:be_loved/features/profile/presentation/views/second_subcription.dart';
+import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:be_loved/my_app/presentation/controller/my_app_cubit.dart';
@@ -28,7 +31,8 @@ import '../../../../constants/colors/color_styles.dart';
 import '../bloc/tags/tags_bloc.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  bool isFirst;
+  HomePage({Key? key, this.isFirst = false}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -36,6 +40,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final pageController = PageController();
+
+  bool isSubOpen = false;
 
   List<Widget> pages = [
     const MainPage(),
@@ -47,12 +53,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    context.read<AuthBloc>().add(GetStatusUser());
     context.read<MyAppCubit>().getImage();
     context.read<EventsBloc>().add(GetEventsEvent());
 
     context.read<DecorBloc>().add(GetBackgroundEvent());
-
-    context.read<AuthBloc>().add(GetUser());
+    context.read<AuthBloc>().add(GetUser(isFirst: widget.isFirst));
     context.read<TagsBloc>().add(GetTagsEvent());
     context.read<PurposeBloc>().add(GetAllPurposeDataEvent());
     context.read<PurposeBloc>().add(GetPromosEvent());
@@ -123,7 +129,69 @@ class _HomePageState extends State<HomePage> {
               }
             },
             child: BlocBuilder<AuthBloc, AuthState>(
+              buildWhen: (previous, current) {
+                print('state is: ' + current.toString());
+                if (current is UserNeedSubscription) {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SecondSubscriptionView(),
+                    ),
+                    (route) => false,
+                  );
+                }
+                return true;
+              },
               builder: (context, state) {
+                if (!isSubOpen) {
+                  if (state is UserNeedSubscription) {
+                    isSubOpen = true;
+                    Future.delayed(const Duration(milliseconds: 200), () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SecondSubscriptionView(),
+                        ),
+                        (route) => false,
+                      );
+                    });
+                  }
+                  if (widget.isFirst &&
+                      BlocProvider.of<AuthBloc>(context).paymentEnabled! &&
+                      context.read<AuthBloc>().user!.isSub == false &&
+                      context.read<AuthBloc>().user?.testEnd == null) {
+                    print('payment is: 123132');
+                    isSubOpen = true;
+                    Future.delayed(const Duration(milliseconds: 200), () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SubscriptionView(),
+                        ),
+                      );
+                    }).then((value) {
+                      setState(() {
+                        if (value is bool) {
+                          widget.isFirst = false;
+                          isSubOpen = false;
+                        }
+                        widget.isFirst = false;
+                        // isSubOpen = false;
+                      });
+                    });
+                  } else if (context.read<AuthBloc>().user?.testEnd == null) {
+                    isSubOpen = true;
+                    Future.delayed(const Duration(milliseconds: 200), () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SecondSubscriptionView(),
+                        ),
+                        (route) => false,
+                      );
+                    });
+                  }
+                }
                 if (state is GetUserSuccess ||
                     state is GetUserError ||
                     state is RefreshUser) {
@@ -139,6 +207,17 @@ class _HomePageState extends State<HomePage> {
                         );
                       });
                     }
+                    // if (!state.user.isSub && widget.isFirst) {
+                    //   Future.delayed(const Duration(milliseconds: 400), () {
+                    //     Navigator.push(
+                    //       context,
+                    //       CupertinoPageRoute(
+                    //         builder: (BuildContext context) =>
+                    //             SubscriptionView(),
+                    //       ),
+                    //     );
+                    //   });
+                    // }
                   }
                   return BlocConsumer<MainScreenBloc, MainScreenState>(
                     listener: (context, state) {

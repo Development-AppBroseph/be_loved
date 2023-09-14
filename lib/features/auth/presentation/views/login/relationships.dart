@@ -50,7 +50,7 @@ class _RelationShipsState extends State<RelationShips> {
       if (current is ReletionshipsStarted) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage(isFirst: true)),
           (route) => false,
         );
         return true;

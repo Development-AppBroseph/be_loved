@@ -101,7 +101,7 @@ class _MyAppState extends State<MyApp> {
                       fontFamily: 'Inter'),
                   home: widget.user != null
                       ? widget.user?.date != null
-                          ? const HomePage()
+                          ? HomePage()
                           : const AuthPage()
                       : const AuthPage(),
                 );

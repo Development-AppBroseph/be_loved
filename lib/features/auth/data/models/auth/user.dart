@@ -20,6 +20,10 @@ class UserAnswer {
     required this.vkPID,
     required this.date,
     required this.noti,
+    required this.isSub,
+    required this.isTest,
+    this.testEnd,
+    this.subEnd,
     required this.previousReletionId,
   });
 
@@ -33,22 +37,36 @@ class UserAnswer {
   bool? fromYou;
   String? date;
   bool noti;
+  DateTime? testEnd;
+  DateTime? subEnd;
+  bool isSub;
+  bool isTest;
   int? previousReletionId;
 
   factory UserAnswer.fromJson(Map<String, dynamic> json) => UserAnswer(
-        me: User.fromJson(json["me"]),
-        love: json["love"] != null ? User.fromJson(json["love"]) : null,
-        relationId: json["relation_id"],
-        status: json["status"],
-        name: json["name"],
-        theme: json["theme"],
-        fromYou: json["from_you"],
-        date: json["date"],
-        vkPID: json["vk_pid"],
-        noti: json["notification_on"] ?? true,
-        previousReletionId: json['previous_relation_id'] 
-
-      );
+      me: User.fromJson(json["me"]),
+      love: json["love"] != null ? User.fromJson(json["love"]) : null,
+      relationId: json["relation_id"],
+      status: json["status"],
+      name: json["name"],
+      theme: json["theme"],
+      fromYou: json["from_you"],
+      date: json["date"],
+      vkPID: json["vk_pid"],
+      isSub: json["is_sub"],
+      testEnd: json["test_end"] != null
+          ? DateTime.tryParse(
+              json["test_end"],
+            )
+          : null,
+      subEnd: json["sub_end"] != null
+          ? DateTime.parse(
+              json["sub_end"],
+            ).toLocal()
+          : null,
+      isTest: json["is_test"],
+      noti: json["notification_on"] ?? true,
+      previousReletionId: json['previous_relation_id']);
 
   Map<String, dynamic> toJson() => {
         "me": me.toJson(),
@@ -57,6 +75,8 @@ class UserAnswer {
         "status": status,
         "date": date,
         "name": name,
+        "is_sub": isSub,
+        "is_test": isTest,
         "notification_on": noti,
         'previous_relation_id': previousReletionId,
       };

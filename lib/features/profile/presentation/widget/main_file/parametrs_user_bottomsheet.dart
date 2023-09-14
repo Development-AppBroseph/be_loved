@@ -1,9 +1,11 @@
+import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_button.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_state.dart';
+import 'package:be_loved/features/profile/presentation/views/second_subcription.dart';
 import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/decor_modal.dart';
 import 'package:be_loved/features/profile/presentation/widget/devides_settings.dart';
@@ -97,19 +99,20 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                     haveToggleSwitch: true,
                     icon: SvgImg.notification,
                   ),
+                  //   Container(
+                  //       // height: 275,
+                  //       )
+                  // else
                   if (state is SubHaveState)
-                    Container(
-                        // height: 275,
-                        )
-                  else
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Подписка',
+                    if (context.read<AuthBloc>().user!.testEnd != null &&
+                        context.read<AuthBloc>().user!.isTest)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: Column(
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                text: 'Пробный период активен до ',
                                 style: TextStyle(
                                   fontFamily: "Inter",
                                   fontSize: 25.sp,
@@ -117,108 +120,272 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                                   color: ClrStyle
                                       .black17ToWhite[sl<AuthConfig>().idx],
                                 ),
-                              ),
-                              Text(
-                                ' BeLoved+',
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontSize: 25.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xffFF3347),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SubscriptionView(),
-                                ),
-                              );
-                            },
-                            child: SizedBox(
-                              height: 160,
-                              width: double.infinity,
-                              child: CupertinoCard(
-                                elevation: 0,
-                                margin: EdgeInsets.zero,
-                                padding: EdgeInsets.zero,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                      Img.back,
+                                children: [
+                                  TextSpan(
+                                    text: getDate(context
+                                        .read<AuthBloc>()
+                                        .user!
+                                        .testEnd!),
+                                    style: TextStyle(
+                                      fontFamily: "Inter",
+                                      fontSize: 25.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorStyles.accentColor,
                                     ),
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.topCenter,
                                   ),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      bottom: 15,
-                                      left: 20,
-                                      child: SizedBox(
-                                        height: 36.h,
-                                        width: 144.w,
-                                        child: CupertinoCard(
-                                          elevation: 0,
-                                          radius: BorderRadius.circular(20),
-                                          margin: EdgeInsets.zero,
-                                          padding: EdgeInsets.zero,
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              'Приобрести',
-                                              style: TextStyle(
-                                                fontFamily: 'Inter',
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w800,
+                                ],
+                              ),
+                            ),
+                            // Row(
+                            //   children: [
+                            //     Text(
+                            //       'Подписка',
+                            //       style: TextStyle(
+                            //         fontFamily: "Inter",
+                            //         fontSize: 25.sp,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: ClrStyle
+                            //             .black17ToWhite[sl<AuthConfig>().idx],
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       ' BeLoved+',
+                            //       style: TextStyle(
+                            //         fontFamily: "Inter",
+                            //         fontSize: 25.sp,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: const Color(0xffFF3347),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    // builder: (context) => SubscriptionView(),
+                                    builder: (context) =>
+                                        SecondSubscriptionView(),
+                                  ),
+                                );
+                              },
+                              child: SizedBox(
+                                height: 160,
+                                width: double.infinity,
+                                child: CupertinoCard(
+                                  elevation: 0,
+                                  margin: EdgeInsets.zero,
+                                  padding: EdgeInsets.zero,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                        Img.back,
+                                      ),
+                                      fit: BoxFit.cover,
+                                      alignment: Alignment.topCenter,
+                                    ),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                        bottom: 15,
+                                        left: 20,
+                                        child: SizedBox(
+                                          height: 36.h,
+                                          width: 144.w,
+                                          child: CupertinoCard(
+                                            elevation: 0,
+                                            radius: BorderRadius.circular(20),
+                                            margin: EdgeInsets.zero,
+                                            padding: EdgeInsets.zero,
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                'Приобрести',
+                                                style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  fontSize: 18.sp,
+                                                  fontWeight: FontWeight.w800,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Positioned(
-                                      left: 184,
-                                      bottom: 23,
-                                      child: Text(
-                                        '199₽ в месяц',
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: 18.sp,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w800,
+                                      Positioned(
+                                        left: 184,
+                                        bottom: 23,
+                                        child: Text(
+                                          '199₽ в год',
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontSize: 18.sp,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w800,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  // : DevideSettings(
+                  if (state is SubHaveState)
+                    if (context.read<AuthBloc>().user!.subEnd != null &&
+                        context.read<AuthBloc>().user!.isTest == false)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: Column(
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                text: 'Подписка активна до ',
+                                style: TextStyle(
+                                  fontFamily: "Inter",
+                                  fontSize: 25.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: ClrStyle
+                                      .black17ToWhite[sl<AuthConfig>().idx],
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: getDate(
+                                        context.read<AuthBloc>().user!.subEnd!),
+                                    style: TextStyle(
+                                      fontFamily: "Inter",
+                                      fontSize: 25.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorStyles.accentColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Row(
+                            //   children: [
+                            //     Text(
+                            //       'Подписка',
+                            //       style: TextStyle(
+                            //         fontFamily: "Inter",
+                            //         fontSize: 25.sp,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: ClrStyle
+                            //             .black17ToWhite[sl<AuthConfig>().idx],
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       ' BeLoved+',
+                            //       style: TextStyle(
+                            //         fontFamily: "Inter",
+                            //         fontSize: 25.sp,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: const Color(0xffFF3347),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // Navigator.of(context).pop();
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     // builder: (context) => SubscriptionView(),
+                                //     builder: (context) =>
+                                //         SecondSubscriptionView(),
+                                //   ),
+                                // );
+                              },
+                              child: SizedBox(
+                                height: 160,
+                                width: double.infinity,
+                                child: CupertinoCard(
+                                  elevation: 0,
+                                  margin: EdgeInsets.zero,
+                                  padding: EdgeInsets.zero,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                        Img.back,
+                                      ),
+                                      fit: BoxFit.cover,
+                                      alignment: Alignment.topCenter,
+                                    ),
+                                  ),
+                                  // child: Stack(
+                                  //   children: [
+                                  //     Positioned(
+                                  //       bottom: 15,
+                                  //       left: 20,
+                                  //       child: SizedBox(
+                                  //         height: 36.h,
+                                  //         width: 144.w,
+                                  //         child: CupertinoCard(
+                                  //           elevation: 0,
+                                  //           radius: BorderRadius.circular(20),
+                                  //           margin: EdgeInsets.zero,
+                                  //           padding: EdgeInsets.zero,
+                                  //           child: Align(
+                                  //             alignment: Alignment.center,
+                                  //             child: Text(
+                                  //               'Приобрести',
+                                  //               style: TextStyle(
+                                  //                 fontFamily: 'Inter',
+                                  //                 fontSize: 18.sp,
+                                  //                 fontWeight: FontWeight.w800,
+                                  //               ),
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //     Positioned(
+                                  //       left: 184,
+                                  //       bottom: 23,
+                                  //       child: Text(
+                                  //         '199₽ в месяц',
+                                  //         style: TextStyle(
+                                  //           fontFamily: 'Inter',
+                                  //           fontSize: 18.sp,
+                                  //           color: Colors.white,
+                                  //           fontWeight: FontWeight.w800,
+                                  //         ),
+                                  //       ),
+                                  //     )
+                                  //   ],
+                                  // ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  // else
+                  //   DevideSettings(
                   //     title: "Подписка BeLoved+",
                   //     subtitle: "Подробнее",
                   //     haveToggleSwitch: false,
                   //     icon: SvgImg.person,
                   //     onPressed: () {
                   //       Navigator.pop(context);
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => SubscriptionView(),
-                  //   ),
-                  // );
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           // builder: (context) => SubscriptionView(),
+                  //           builder: (context) => SecondSubscriptionView(),
+                  //         ),
+                  //       );
                   //     },
                   //   ),
                   SizedBox(
@@ -262,5 +429,21 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
         );
       },
     );
+  }
+
+  String getDate(DateTime dateTime) {
+    String date = '';
+    if (dateTime.day < 10) {
+      date = '0${dateTime.day}';
+    } else {
+      date = dateTime.day.toString();
+    }
+    if (dateTime.month < 10) {
+      date = '$date.0${dateTime.month}';
+    } else {
+      date = '$date.${dateTime.month}';
+    }
+    date = date = '$date.${dateTime.year}';
+    return date;
   }
 }

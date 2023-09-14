@@ -18,6 +18,13 @@ abstract class Img {
   static const String onboardingThird = 'assets/images/onboarding_third.png';
   static const String redHeart = 'assets/images/red_heart.png';
   static const String gredientHeart = 'assets/images/gradient_heart.png';
+  static const String subButtonFirst = 'assets/images/sub_button_first.png';
+  static const String subButtonSecond = 'assets/images/sub_button_second.png';
+  static const String subButtonThird = 'assets/images/sub_button_third.png';
+  static const String subButtonFourth = 'assets/images/sub_button_fourth.png';
+  static const String subButtonFifth = 'assets/images/sub_button_fifth.png';
+  static const String buyButton = 'assets/images/buy_button.png';
+  static const String partnerPays = 'assets/images/parnter_pays.png';
 }
 
 abstract class SvgImg {
@@ -92,5 +99,4 @@ abstract class SvgImg {
   static const String alertVpn = 'assets/icons/alertVpn.svg';
   static const String redHeart = 'assets/icons/red_heart.svg';
   static const String succesAuth = 'assets/icons/success.svg';
-  
 }

@@ -11,16 +11,13 @@ class SubCubit extends Cubit<SubState> {
   Future<void> getStatus() async {
     try {
       final result = await getStatusSub.call(NoParams());
-      result.fold(
-        (error) => emit(SubNotHaveState()),
-        (done){
-          if (done.haveSub) {
-            emit(SubHaveState());
-          }else{
-            emit(SubNotHaveState());
-          }
-        } 
-      );
+      result.fold((error) => emit(SubNotHaveState()), (done) {
+        if (done.haveSub) {
+          emit(SubHaveState());
+        } else {
+          emit(SubNotHaveState());
+        }
+      });
     } catch (e) {
       emit(SubNotHaveState());
     }

@@ -151,6 +151,7 @@ class _SelectingGalleryPageState extends State<SelectingGalleryPage> {
                 isForSelecting: true,
                 isDeleting: gallerySelectedIds.isNotEmpty,
                 onTap: () {
+                  print(enitityPos);
                   if (enitityPos != null && gallerySelectedIds.isEmpty) {
                     gallerySelectedIds.add(enitityPos!.mainPhoto.id);
                   } else {

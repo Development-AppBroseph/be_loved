@@ -164,7 +164,7 @@ class PurposeCard extends StatelessWidget {
             Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 63.h, left: 20.w),
+                padding: EdgeInsets.only(bottom: 63.h, left: 20.w, right: 20.w),
                 child: Text(
                   (purposeEntity.name),
                   style: TextStyles(context).white_25_w800,

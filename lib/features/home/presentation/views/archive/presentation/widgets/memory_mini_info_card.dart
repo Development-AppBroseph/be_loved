@@ -11,9 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class MemoryMiniInfoCard extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
@@ -28,51 +26,53 @@ class MemoryMiniInfoCard extends StatelessWidget {
       }
     }, builder: (context, state) {
       return GestureDetector(
-          onTap: () {},
-          child: SizedBox(
+        onTap: () {},
+        child: SizedBox(
             width: 119.w,
             height: 38.h,
             child: archiveBloc.memoryEntity == null
-            ? SizedBox()
-            : archiveBloc.memoryEntity!.fullFilled()
-            ? _buildFullFilled(context)
-            : ClipPath.shape(
-            shape: SquircleBorder(
-                radius: BorderRadius.circular(20.r)),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Container(
-                      color: sl<AuthConfig>().idx == 1 ? ColorStyles.accentColor :ColorStyles.blackColor,
-                    ),
-                  ),
-                  Positioned.fill(
-                    left: 119.w-(119.w/100 * double.parse(archiveBloc.memoryEntity!.getFilledMemoryInPercent())),
-                    child: Container(
-                      color: sl<AuthConfig>().idx == 1 ? ColorStyles.white :ColorStyles.primarySwath,
-                    ),
-                  ),
-
-
-                  Center(
-                    child: Text(
-                        sl<AuthConfig>().memoryEntity ==
-                                null
-                            ? '0/2 ГБ'
-                            : '${sl<AuthConfig>().memoryEntity!.getInGigabytesCurrentSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
-                        style: TextStyles(context)
-                            .white_15_w800.copyWith(color: ClrStyle.whiteTo17[sl<AuthConfig>().idx]))),
-                ]
-              )
-            )
-          ),
-        );
-      }
-    );
+                ? SizedBox()
+                : archiveBloc.memoryEntity!.fullFilled()
+                    ? _buildFullFilled(context)
+                    : ClipPath.shape(
+                        shape:
+                            SquircleBorder(radius: BorderRadius.circular(20.r)),
+                        child: Stack(children: [
+                          Positioned.fill(
+                            child: Container(
+                              color: sl<AuthConfig>().idx == 1
+                                  ? ColorStyles.accentColor
+                                  : ColorStyles.blackColor,
+                            ),
+                          ),
+                          Positioned.fill(
+                            left: 119.w -
+                                (119.w /
+                                    100 *
+                                    double.parse(archiveBloc.memoryEntity!
+                                        .getFilledMemoryInPercent())),
+                            child: Container(
+                              color: sl<AuthConfig>().idx == 1
+                                  ? ColorStyles.white
+                                  : ColorStyles.primarySwath,
+                            ),
+                          ),
+                          Center(
+                              child: Text(
+                                  sl<AuthConfig>().memoryEntity == null
+                                      ? '0/2 ГБ'
+                                      : '0/2 ГБ',
+                                  style: TextStyles(context)
+                                      .white_15_w800
+                                      .copyWith(
+                                          color: ClrStyle.whiteTo17[
+                                              sl<AuthConfig>().idx]))),
+                        ]))),
+      );
+    });
   }
 
-
-  Widget _buildFullFilled(BuildContext context){
+  Widget _buildFullFilled(BuildContext context) {
     return CupertinoCard(
       margin: EdgeInsets.zero,
       elevation: 0,
@@ -88,16 +88,13 @@ class MemoryMiniInfoCard extends StatelessWidget {
                 color: ColorStyles.backgroundColorGrey),
           ),
           Center(
-            child: Text(
-                sl<AuthConfig>().memoryEntity ==
-                        null
-                    ? '0/2 ГБ'
-                    : '${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
-                style: TextStyles(context)
-                    .white_18_w800
-                    .copyWith(
-                        color: ColorStyles
-                            .blackColor))),
+              child: Text(
+                  sl<AuthConfig>().memoryEntity == null
+                      ? '0/2 ГБ'
+                      : '${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()}/${sl<AuthConfig>().memoryEntity!.getInGigabytesMaxSize()} ГБ',
+                  style: TextStyles(context)
+                      .white_18_w800
+                      .copyWith(color: ColorStyles.blackColor))),
         ],
       ),
     );

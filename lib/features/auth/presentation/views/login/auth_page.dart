@@ -60,7 +60,9 @@ class _AuthPageState extends State<AuthPage> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomePage(),
+              builder: (context) => HomePage(
+                isFirst: true,
+              ),
             ),
             (route) => false,
           );

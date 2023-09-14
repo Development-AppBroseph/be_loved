@@ -109,7 +109,7 @@ class _InviteForState extends State<InviteFor> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomePage(),
+            builder: (context) => HomePage(isFirst: true),
           ),
           (route) => false,
         );
@@ -122,8 +122,7 @@ class _InviteForState extends State<InviteFor> {
         // return true;
       }
       // return false;
-    }, 
-    builder: (context, snapshot) {
+    }, builder: (context, snapshot) {
       return BlocBuilder<AuthBloc, AuthState>(buildWhen: (previous, current) {
         // if (current is ReletionshipsError) {
         //   if (!widget.isSwiping) {

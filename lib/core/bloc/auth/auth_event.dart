@@ -24,7 +24,10 @@ class SetNickname extends AuthEvent {
 
 class GetUser extends AuthEvent {
   final bool isJustRefresh;
-  GetUser({this.isJustRefresh = false});
+  final bool isFirst;
+  final bool isSub;
+  GetUser(
+      {this.isJustRefresh = false, this.isFirst = false, this.isSub = false});
 }
 
 class EditUserInfo extends AuthEvent {}
@@ -51,6 +54,8 @@ class InviteUser extends AuthEvent {
 }
 
 class DeleteInviteUser extends AuthEvent {}
+
+class GetStatusUser extends AuthEvent {}
 
 class StartRelationships extends AuthEvent {
   String date;

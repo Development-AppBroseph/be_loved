@@ -1,12 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
+import 'package:be_loved/core/error/exceptions.dart';
+import 'package:be_loved/core/models/payment/payment_model.dart';
 import 'package:be_loved/core/models/subscriptions/subscription_variant.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/core/services/network/endpoints.dart';
 import 'package:be_loved/core/utils/helpers/events.dart';
 import 'package:be_loved/core/widgets/alerts/auth_alert.dart';
 import 'package:be_loved/core/widgets/alerts/succes_auth_alert.dart';
+import 'package:be_loved/features/profile/data/models/subscription_model.dart';
+import 'package:be_loved/features/profile/domain/entities/subscription_entiti.dart';
 import 'package:be_loved/locator.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -26,6 +33,123 @@ class Repository {
         baseUrl: Config.url.url, validateStatus: (status) => status! <= 400),
   );
 
+  Future<PaymentModel?> createPayment(
+      String paymentToken, String userPhone) async {
+    String username = Config.url.shopId;
+    String password = Config.url.secretKey;
+    var newDio = Dio(
+      BaseOptions(
+        baseUrl: 'https://api.yookassa.ru/v3/',
+        validateStatus: (status) => status! <= 400,
+      ),
+    );
+    String basicAuth =
+        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+    var options = Options(
+      headers: {
+        'Authorization': basicAuth,
+        HttpHeaders.contentTypeHeader: "application/json",
+        "Idempotence-Key": Random().nextInt(1000000)
+      },
+      validateStatus: (status) => status! <= 500,
+    );
+
+    try {
+      var response = await newDio.post(
+        'payments',
+        options: options,
+        data: {
+          "payment_token": paymentToken,
+          "amount": {"value": "2.00", "currency": "RUB"},
+          "capture": false,
+          "description": "Заказ №${Random().nextInt(1000)}",
+          "receipt": {
+            // "id": "rt-1da5c87d-0984-50e8-a7f3-8de646dd9ec9",
+            // "type": "payment",
+            // "payment_id": "215d8da0-000f-50be-b000-0003308c89be",
+            // "status": "succeeded",
+            // "fiscal_document_number": "3986",
+            // "fiscal_storage_number": "9288000100115785",
+            // "fiscal_attribute": "2617603921",
+            // "registered_at": "2019-05-13T17:56:00.000+03:00",
+            // "fiscal_provider_id": "fd9e9404-eaca-4000-8ec9-dc228ead2345",
+            "tax_system_code": 2,
+            "customer": {
+              // "full_name": "Ivanov Ivan Ivanovich",
+              // "email": "email@email.ru",
+              "phone": userPhone,
+              // "inn": "6321341814"
+            },
+            "items": [
+              {
+                "description": "Подписка BeLoved",
+                "quantity": 1.000,
+                "amount": {"value": "2.00", "currency": "RUB"},
+                "vat_code": 2,
+                "payment_mode": "full_payment",
+                "payment_subject": "commodity"
+              }
+            ]
+          }
+        },
+      );
+      print('RES: ${response.statusCode} ${response.data}');
+      if (response.statusCode == 200) {
+        print(123);
+        return PaymentModel.fromJson(response.data);
+      }
+      if (response.statusCode == 400) {
+        return null;
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<PaymentModel?> confirmPayment(String paymentId) async {
+    String username = Config.url.shopId;
+    String password = Config.url.secretKey;
+    var newDio = Dio(
+      BaseOptions(
+        baseUrl: 'https://api.yookassa.ru/v3/',
+        validateStatus: (status) => status! <= 400,
+      ),
+    );
+    String basicAuth =
+        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+    var options = Options(
+      headers: {
+        'Authorization': basicAuth,
+        HttpHeaders.contentTypeHeader: "application/json",
+        "Idempotence-Key": Random().nextInt(1000000)
+      },
+      validateStatus: (status) => status! <= 500,
+    );
+
+    // try {
+    var response = await newDio.post(
+      'payments/$paymentId/capture',
+      options: options,
+      data: {
+        "amount": {"value": "2.00", "currency": "RUB"}
+      },
+    );
+    print('RES: ${response.statusCode} ${response.data}');
+    if (response.statusCode == 200) {
+      return PaymentModel.fromJson(response.data);
+    }
+    if (response.statusCode == 400) {
+      return null;
+    }
+    //   return null;
+    // } catch (e) {
+    //   print(e);
+    //   return null;
+    // }
+  }
+
   Future<bool?> sendPaymentSubscription(String orderId, int id) async {
     var options = Options(headers: {
       'Authorization': 'Token ${await MySharedPrefs().token}',
@@ -39,6 +163,27 @@ class Repository {
           "payment_id": orderId,
           "sub_id": id,
         },
+      );
+      print('RES: ${response.statusCode} ${response.data}');
+      if (response.statusCode == 200) {
+        return true;
+      }
+      if (response.statusCode == 400) {}
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool?> sendTestSub() async {
+    var options = Options(headers: {
+      'Authorization': 'Token ${await MySharedPrefs().token}',
+    }, validateStatus: (status) => status! <= 500);
+
+    try {
+      var response = await dio.post(
+        '/auth/test',
+        options: options,
       );
       print('RES: ${response.statusCode} ${response.data}');
       if (response.statusCode == 200) {
@@ -110,6 +255,24 @@ class Repository {
       if (response.statusCode == 400) {}
       return null;
     } catch (e) {
+      return null;
+    }
+  }
+
+  Future<SubEntiti?> getStatusSub() async {
+    Response response = await dio.get(
+      Endpoints.statusSub.getPath(),
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => status! < 599,
+        headers: {"Authorization": "Token ${sl<AuthConfig>().token}"},
+      ),
+    );
+    print('ResStatusCode: ${response.statusCode}\tResData: ${response.data}');
+    if (response.statusCode == 200) {
+      return SubModel.fromJson(response.data);
+    } else {
+      // throw ServerException(message: 'Ошибка с сервером');
       return null;
     }
   }

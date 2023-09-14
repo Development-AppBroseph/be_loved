@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+// import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
@@ -42,103 +42,102 @@ Future<void> check() async {
 }
 
 void main() async {
-  AppMetrica.runZoneGuarded(() async {
-    AppMetrica.activate(
-        const AppMetricaConfig("416e2567-76ea-42d1-adce-c786faf3ada5"));
-    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-    // check();
-    setupInjections();
-    HttpOverrides.global = MyHttpOverrides();
-    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-    var user = await MySharedPrefs().user;
-    GooglePlayServicesAvailability availability = await GoogleApiAvailability
-        .instance
-        .checkGooglePlayServicesAvailability();
+  // AppMetrica.runZoneGuarded(() async {
+  //   AppMetrica.activate(
+  //       const AppMetricaConfig("416e2567-76ea-42d1-adce-c786faf3ada5"));
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // check();
+  setupInjections();
+  HttpOverrides.global = MyHttpOverrides();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  var user = await MySharedPrefs().user;
+  GooglePlayServicesAvailability availability = await GoogleApiAvailability
+      .instance
+      .checkGooglePlayServicesAvailability();
 
-    if (availability.value == 0 || Platform.isIOS) {
-      await Firebase.initializeApp();
-      await FirebaseMessaging.instance.requestPermission(
-        alert: true,
-        announcement: true,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true,
-      );
-    }
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-        .then((value) {
-      runApp(MultiBlocProvider(
-        providers: [
-          BlocProvider<AuthBloc>(
-            create: (context) => AuthBloc(),
-          ),
-          BlocProvider<WebSocketBloc>(
-            create: (context) => WebSocketBloc(),
-          ),
-          BlocProvider<EventsBloc>(
-            create: (context) => sl<EventsBloc>(),
-          ),
-          BlocProvider<ProfileBloc>(
-            create: (context) => sl<ProfileBloc>(),
-          ),
-          BlocProvider<TagsBloc>(
-            create: (context) => sl<TagsBloc>(),
-          ),
-          BlocProvider<MainScreenBloc>(
-            create: (context) => sl<MainScreenBloc>(),
-          ),
-          BlocProvider<GalleryBloc>(
-            create: (context) => sl<GalleryBloc>(),
-          ),
-          BlocProvider<ArchiveBloc>(
-            create: (context) => sl<ArchiveBloc>(),
-          ),
-          BlocProvider<PurposeBloc>(
-            create: (context) => sl<PurposeBloc>(),
-          ),
-          BlocProvider<DecorBloc>(
-            create: (context) => sl<DecorBloc>(),
-          ),
-          BlocProvider<AlbumsBloc>(
-            create: (context) => sl<AlbumsBloc>(),
-          ),
-          BlocProvider<MomentsBloc>(
-            create: (context) => sl<MomentsBloc>(),
-          ),
-          BlocProvider<ThemeBloc>(
-            create: (context) => sl<ThemeBloc>()..add(GetThemeLocalEvent()),
-          ),
-          BlocProvider<HomeInfoFirstCubit>(
-            create: (context) => sl<HomeInfoFirstCubit>(),
-          ),
-          BlocProvider<StaticsBloc>(
-            create: (context) => sl<StaticsBloc>(),
-          ),
-          BlocProvider<MainWidgetsBloc>(
-            create: (context) => sl<MainWidgetsBloc>(),
-          ),
-          BlocProvider<SubCubit>(
-            create: (context) => sl<SubCubit>(),
-          ),
-          BlocProvider<LevelsCubit>(
-            create: (context) => sl<LevelsCubit>(),
-          ),
-          BlocProvider<MyAppCubit>(
-            create: (context) => MyAppCubit(),
-          ),
-          BlocProvider<MyAppStatusCubit>(
-              create: (context) => MyAppStatusCubit())
-        ],
-        child: OverlaySupport.global(
-          child: MyApp(
-            user: user,
-          ),
+  if (availability.value == 0 || Platform.isIOS) {
+    await Firebase.initializeApp();
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+  }
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) {
+    runApp(MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc()..add(GetStatusUser()),
         ),
-      ));
-    });
+        BlocProvider<WebSocketBloc>(
+          create: (context) => WebSocketBloc(),
+        ),
+        BlocProvider<EventsBloc>(
+          create: (context) => sl<EventsBloc>(),
+        ),
+        BlocProvider<ProfileBloc>(
+          create: (context) => sl<ProfileBloc>(),
+        ),
+        BlocProvider<TagsBloc>(
+          create: (context) => sl<TagsBloc>(),
+        ),
+        BlocProvider<MainScreenBloc>(
+          create: (context) => sl<MainScreenBloc>(),
+        ),
+        BlocProvider<GalleryBloc>(
+          create: (context) => sl<GalleryBloc>(),
+        ),
+        BlocProvider<ArchiveBloc>(
+          create: (context) => sl<ArchiveBloc>(),
+        ),
+        BlocProvider<PurposeBloc>(
+          create: (context) => sl<PurposeBloc>(),
+        ),
+        BlocProvider<DecorBloc>(
+          create: (context) => sl<DecorBloc>(),
+        ),
+        BlocProvider<AlbumsBloc>(
+          create: (context) => sl<AlbumsBloc>(),
+        ),
+        BlocProvider<MomentsBloc>(
+          create: (context) => sl<MomentsBloc>(),
+        ),
+        BlocProvider<ThemeBloc>(
+          create: (context) => sl<ThemeBloc>()..add(GetThemeLocalEvent()),
+        ),
+        BlocProvider<HomeInfoFirstCubit>(
+          create: (context) => sl<HomeInfoFirstCubit>(),
+        ),
+        BlocProvider<StaticsBloc>(
+          create: (context) => sl<StaticsBloc>(),
+        ),
+        BlocProvider<MainWidgetsBloc>(
+          create: (context) => sl<MainWidgetsBloc>(),
+        ),
+        BlocProvider<SubCubit>(
+          create: (context) => sl<SubCubit>(),
+        ),
+        BlocProvider<LevelsCubit>(
+          create: (context) => sl<LevelsCubit>(),
+        ),
+        BlocProvider<MyAppCubit>(
+          create: (context) => MyAppCubit(),
+        ),
+        BlocProvider<MyAppStatusCubit>(create: (context) => MyAppStatusCubit())
+      ],
+      child: OverlaySupport.global(
+        child: MyApp(
+          user: user,
+        ),
+      ),
+    ));
   });
+  // });
 }
 
 // Анекдот ;)

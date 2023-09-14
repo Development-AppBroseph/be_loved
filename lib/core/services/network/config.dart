@@ -39,4 +39,16 @@ extension ConfigExtension on Config {
   String get urlWithoutApi {
     return Config.baseScheme.value + "://" + Config.baseUrl.value;
   }
+
+  String get shopId {
+    return '928400';
+  }
+
+  String get secretKey {
+    return 'live_GVAJSDH6SaI3lJ51_ZJj0IyoY0bx9S4lTVUtiU6i_PE';
+  }
+
+  String get applicationKey {
+    return 'live_OTI4NDAw8ttALVIt1VXrCwQMffW9HleBw1GPZ7Cu5eU';
+  }
 }

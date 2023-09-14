@@ -66,8 +66,12 @@ class DefaultTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.r),
               borderSide: BorderSide.none,
             ),
-            fillColor: isValidate! ? ClrStyle
-                .backToBlack2C[isEmail == true ? 0 : sl<AuthConfig>().idx] : ColorStyles.validateColor,
+            fillColor: isValidate!
+                ? ClrStyle
+                    .backToBlack2C[isEmail == true ? 0 : sl<AuthConfig>().idx]
+                : sl<AuthConfig>().idx == 1
+                    ? ClrStyle.backToBlack2C[1]
+                    : ColorStyles.validateColor,
             hintStyle: TextStyles(context).grey_18_w800.copyWith(
                   color: sl<AuthConfig>().idx == 1 && isEmail == true
                       ? ColorStyles.greyColor

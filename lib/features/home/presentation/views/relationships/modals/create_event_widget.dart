@@ -409,10 +409,11 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15.r),
-                                          color: ClrStyle.backToBlack2C[
-                                              sl<AuthConfig>().idx]),
+                                        borderRadius:
+                                            BorderRadius.circular(15.r),
+                                        color: ClrStyle.backToBlack2C[
+                                            sl<AuthConfig>().idx],
+                                      ),
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 20.w),
                                       child: Column(

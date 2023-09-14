@@ -90,62 +90,12 @@ class MainMediaCard extends StatelessWidget {
             if (showTopBar &&
                 file.id == group.mainPhoto.id &&
                 !isForSelecting) //&& !file.isVideo)
-              Positioned(
-                  top: 25.h,
-                  left: 30.w,
-                  right: 40.w,
-                  // child: AnimatedOpacity(
-                  // opacity: file.id != hideGalleryFileID ? 1 : 0,
-                  // duration: const Duration(milliseconds: 800),
-                  // curve: Curves.easeInOutQuint,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            convertToRangeDates(group),
-                            style: TextStyles(context).white_35_w800.copyWith(
-                                  color: Colors.white.withOpacity(0.7),
-                                ),
-                          ),
-                          if (!file.isVideo)
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: onDotsTap,
-                              child: SizedBox(
-                                height: 40.h,
-                                width: 50.w,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    SvgPicture.asset(
-                                      SvgImg.dots,
-                                      height: 7.h,
-                                      color: Colors.white,
-                                      key: dotsKey,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                      // Text(file.place ?? '',
-                      //     style: TextStyles(context).white_15_w800.copyWith(
-                      //           color: Colors.white.withOpacity(0.7),
-                      //         )),
-                    ],
-                    // ),
-                  )),
-            if (file.isVideo)
-              Positioned.fill(
-                  child: Center(
-                      child: SvgPicture.asset(
-                SvgImg.play,
-              ))),
+              if (file.isVideo)
+                Positioned.fill(
+                    child: Center(
+                        child: SvgPicture.asset(
+                  SvgImg.play,
+                ))),
             if (file.isVideo && file.duration != null)
               Positioned(
                   top: 30.h,
@@ -170,6 +120,57 @@ class MainMediaCard extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
               ),
             ),
+            Positioned(
+                top: 25.h,
+                left: 30.w,
+                right: 40.w,
+                // child: AnimatedOpacity(
+                // opacity: file.id != hideGalleryFileID ? 1 : 0,
+                // duration: const Duration(milliseconds: 800),
+                // curve: Curves.easeInOutQuint,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          convertToRangeDates(group),
+                          style: TextStyles(context).white_35_w800.copyWith(
+                                color: Colors.white.withOpacity(0.7),
+                              ),
+                        ),
+                        if (!file.isVideo)
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () => onDotsTap(),
+                            child: Container(
+                              color: Colors.transparent,
+                              height: 40.h,
+                              width: 50.w,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SvgPicture.asset(
+                                    SvgImg.dots,
+                                    height: 7.h,
+                                    color: Colors.white,
+                                    key: dotsKey,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    // Text(file.place ?? '',
+                    //     style: TextStyles(context).white_15_w800.copyWith(
+                    //           color: Colors.white.withOpacity(0.7),
+                    //         )),
+                  ],
+                  // ),
+                )),
           ],
         ),
       ),

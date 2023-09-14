@@ -243,6 +243,7 @@ class _GalleryPageState extends State<GalleryPage> {
         }
       },
       onDotsTap: () {
+        print(123123123);
         showGallerySettingsModal(getWidgetPosition(dotsKey), file.id);
       },
       onTapTop: () {

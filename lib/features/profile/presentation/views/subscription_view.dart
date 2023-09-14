@@ -3,13 +3,18 @@ import 'dart:math';
 
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
+import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 // import 'package:be_loved/core/models/get_order_status_extended/get_order_status_extended_request.dart';
 // import 'package:be_loved/core/models/get_order_status_extended/get_order_status_extended_response.dart';
 // import 'package:be_loved/core/models/register/register_request.dart';
 // import 'package:be_loved/core/models/register/register_response.dart';
 import 'package:be_loved/core/models/subscriptions/subscription_variant.dart';
 import 'package:be_loved/core/network/repository.dart';
+import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 // import 'package:be_loved/core/sberbank_acquiring.dart';
 // import 'package:be_loved/core/sberbank_acquiring_config.dart';
 import 'package:sberbank_acquiring/sberbank_acquiring_core.dart';
@@ -20,6 +25,7 @@ import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yookassa_payments_flutter/yookassa_payments_flutter.dart';
 
 class SubscriptionView extends material.StatefulWidget {
   @override
@@ -29,90 +35,102 @@ class SubscriptionView extends material.StatefulWidget {
 class _SubscriptionViewState extends State<SubscriptionView> {
   final StreamController<int> _streamController = StreamController<int>();
 
+  // var clientApplicationKey = "<Ключ для клиентских приложений>";
+  // Amount amount = Amount(value: 999.9, currency: Currency.rub);
+  // var shopId = "<Идентификатор магазина в ЮKassa)>";
+  // TokenizationModuleInputData tokenizationModuleInputData =
+  //     TokenizationModuleInputData(
+  //   clientApplicationKey: "ouugfon7gfat57qjn7ae97fp1t",
+  //   title: "Космические объекты",
+  //   subtitle: "Комета повышенной яркости, период обращения — 112 лет",
+  //   amount: Amount(value: 999.9, currency: Currency.rub),
+  //   shopId: '12',
+  //   savePaymentMethod: SavePaymentMethod.on,
+  // );
+
+  int currentIndex = 0;
+  bool isPayment = false;
+
   final PageController _pageController = PageController(initialPage: 0);
 
-  final SberbankAcquiring acquiring = SberbankAcquiring(
-    SberbankAcquiringConfig.token(
-      token: 'ouugfon7gfat57qjn7ae97fp1t',
-      isDebugMode: false,
-    ),
-  );
+  // final SberbankAcquiring acquiring = SberbankAcquiring(
+  //   SberbankAcquiringConfig.token(
+  //     token: 'ouugfon7gfat57qjn7ae97fp1t',
+  //     isDebugMode: false,
+  //   ),
+  // );
 
-  Future<void> webviewPayment(int index, BuildContext context) async {
-    if (subscriptionVariant.isEmpty) return;
-    final RegisterResponse register = await acquiring.register(
-      RegisterRequest(
-        amount: subscriptionVariant[index].price! * 100,
-        returnUrl: 'https://3dsec.sberbank.ru/payment/rest/register.do',
-        failUrl: 'https://www.yandex.ru/',
-        orderNumber: subscriptionVariant[index].id.toString() +
-            Random().nextInt(10000).toString(),
-        pageView: 'MOBILE',
-      ),
-    );
-    // final RegisterResponse register = await acquiring.register(
-    //   RegisterRequest(
-    //     amount: subscriptionVariant[index].price! * 100,
-    //     returnUrl:
-    //         'https://3dsec.sberbank.ru/sbersafe/anonymous/order/finishTds',
-    //     failUrl: 'https://www.yandex.ru/',
-    //     orderNumber: subscriptionVariant[index].id.toString() + Random().nextInt(10000).toString(),
-    //     pageView: 'MOBILE',
-    //   ),
-    // );
-    final String? formUrl =
-        register.formUrl?.replaceFirst('/www.3dsec.sberbank.ru', '');
-    if (!register.hasError && formUrl != null) {
-      // ignore: use_build_context_synchronously
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.black,
-              title: Text('Оплата подписки'),
-            ),
-            body: ui.WebViewPayment(
-              logger: acquiring.logger,
-              formUrl: formUrl,
-              returnUrl:
-                  'https://3dsec.sberbank.ru/sbersafe/anonymous/order/finishTds',
-              failUrl: 'https://www.yandex.ru/',
-              onLoad: (bool v) {
-                print('WebView load: $v');
-              },
-              onError: () {
-                print('WebView Error');
-              },
-              onFinished: (String? v) async {
-                print('finished!!! !$v');
-                subscriptionVariant[index].id; // sub_id
-                v; // payment_id
-                final GetOrderStatusExtendedResponse status =
-                    await acquiring.getOrderStatusExtended(
-                  GetOrderStatusExtendedRequest(orderId: v),
-                );
+  // Future<void> webviewPayment(int index, BuildContext context) async {
+  //   if (subscriptionVariant.isEmpty) return;
+  //   final RegisterResponse register = await acquiring.register(
+  //     RegisterRequest(
+  //       amount: 99 * 100,
+  //       returnUrl: 'https://3dsec.sberbank.ru/payment/rest/register.do',
+  //       failUrl: 'https://belovedapp.ru/error/',
+  //       orderNumber: subscriptionVariant[index].id.toString() +
+  //           Random().nextInt(10000).toString(),
+  //       pageView: 'MOBILE',
+  //     ),
+  //   );
+  //   final String? formUrl =
+  //       register.formUrl?.replaceFirst('/www.3dsec.sberbank.ru', '');
+  //   if (!register.hasError && formUrl != null) {
+  //     // ignore: use_build_context_synchronously
+  //     showMaterialModalBottomSheet(
+  //       context: context,
+  //       backgroundColor: Colors.transparent,
+  //       barrierColor: Color.fromRGBO(0, 0, 0, 0.2),
+  //       // isDismissible: false,
+  //       enableDrag: false,
+  //       animationCurve: Curves.easeInOutQuint,
+  //       builder: (context) => Container(
+  //         height: 800.h,
+  //         child: ClipRRect(
+  //           borderRadius: BorderRadius.only(
+  //             topRight: Radius.circular(20.r),
+  //             topLeft: Radius.circular(20.r),
+  //           ),
+  //           child: ui.WebViewPayment(
+  //             logger: acquiring.logger,
+  //             formUrl: register.formUrl!,
+  //             returnUrl:
+  //                 'https://3dsec.sberbank.ru/sbersafe/anonymous/order/finishTds',
+  //             failUrl: 'https://belovedapp.ru/error/',
+  //             onLoad: (bool v) {
+  //               print('WebView load: $v');
+  //             },
+  //             onError: () {
+  //               print('WebView Error');
+  //             },
+  //             onFinished: (String? v) async {
+  //               print('finished!!! !$v');
+  //               subscriptionVariant[index].id; // sub_id
+  //               v; // payment_id
+  //               final GetOrderStatusExtendedResponse status =
+  //                   await acquiring.getOrderStatusExtended(
+  //                 GetOrderStatusExtendedRequest(orderId: v),
+  //               );
 
-                print('object ${status}');
-                // _successPaid();
+  //               print('object ${status}');
+  //               // _successPaid();
 
-                // orderStatus = status.orderStatus;
-                // setState(() {});
-                if (status.errorMessage == 'Успешно') {
-                  showAlertToast('${status.actionCodeDescription}');
-                } else {
-                  showSuccessAlertToast('Подписка оформлена');
-                  await Repository().sendPaymentSubscription(
-                      v!, subscriptionVariant[index].id!);
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-        ),
-      );
-    }
-  }
+  //               // orderStatus = status.orderStatus;
+  //               // setState(() {});
+  //               if (status.errorMessage == 'Успешно') {
+  //                 showAlertToast('${status.actionCodeDescription}');
+  //               } else {
+  //                 showSuccessAlertToast('Подписка оформлена');
+  //                 await Repository().sendPaymentSubscription(
+  //                     v!, subscriptionVariant[index].id!);
+  //               }
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 
   List<SubscriptionVariant> subscriptionVariant = [];
 
@@ -131,199 +149,344 @@ class _SubscriptionViewState extends State<SubscriptionView> {
 
   @override
   Widget build(BuildContext context) {
+    UserAnswer? user = BlocProvider.of<AuthBloc>(context).user;
     return StreamBuilder<int>(
       stream: _streamController.stream,
       initialData: 0,
       builder: (context, snapshot) {
         int index = snapshot.data!;
-        print('object $index');
+
         return Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: ColorStyles.mainBackgroundColor,
           body: Stack(
             children: [
-              Padding(
-                padding: EdgeInsets.only(top: 30.h),
-                child: Image.asset(
-                  'assets/images/back_text.png',
-                  width: MediaQuery.of(
-                    context,
-                  ).size.width,
-                  height: 780.h,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SafeArea(
-                child: Image.asset(
-                  'assets/images/back_love.png',
-                  width: MediaQuery.of(
-                    context,
-                  ).size.width,
-                  height: 737.h,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-              ),
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  height: 530.h,
-                  width: MediaQuery.of(
-                    context,
-                  ).size.width,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.black,
-                        Colors.black,
-                        Colors.black.withOpacity(0),
-                      ],
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.w, top: 59.h),
+                    child: GestureDetector(
+                      onTap: () async {
+                        BlocProvider.of<AuthBloc>(context).add(GetUser());
+                        if (user != null) {
+                          if (user.fromYou!) {
+                            await Repository().sendTestSub();
+                          }
+                        }
+                        if (Navigator.of(context).canPop()) {
+                          Navigator.of(context).pop(true);
+                        }
+                      },
+                      behavior: HitTestBehavior.opaque,
+                      child: Container(
+                        width: 55.w,
+                        height: 55.h,
+                        color: Colors.transparent,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              SvgImg.back,
+                              height: 26.32.h,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Positioned.fill(
-                top: 500.h,
-                child: material.PageView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _pageController,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 115.h,
+                          height: 24.h,
                         ),
                         Text(
-                          'Поддержи проект',
-                          style: TextStyles(context).white_35_w800,
+                          'Пробный период',
+                          style: TextStyles(context).black_35_w800,
                         ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
+                        SizedBox(height: 15.h),
                         Text(
-                          'И получи 5 ГБ совместного архива и доступ к\nуникальным купонам от партнёров',
-                          style: TextStyles(context).grey_15_w800,
-                          textAlign: TextAlign.center,
+                          'Приложение с полным функционалом. Первые 7 дней бесплатно, далее 199 р в год',
+                          style: TextStyles(context).grey_15_w800.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                          textAlign: TextAlign.start,
                         ),
                         SizedBox(
                           height: 40.h,
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: CustomButton(
-                            color: ColorStyles.white,
-                            text: 'Приобрести за 199₽',
-                            textColor: ColorStyles.blackColor,
-                            validate: true,
-                            onPressed: () {
-                              _pageController.animateToPage(
-                                1,
-                                duration: const Duration(milliseconds: 600),
-                                curve: Curves.easeInOutQuint,
-                              );
+                        if (currentIndex == 0)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() => currentIndex = 0);
                             },
+                            child: Image.asset(
+                              Img.subButtonFirst,
+                              width: double.infinity,
+                            ),
+                          ),
+                        if (currentIndex == 1)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() => currentIndex = 0);
+                            },
+                            child: Image.asset(
+                              Img.subButtonFifth,
+                              width: double.infinity,
+                            ),
+                          ),
+                        SizedBox(height: 8.h),
+                        // if (currentIndex == 0)
+                        //   GestureDetector(
+                        //     onTap: () {
+                        //       setState(() => currentIndex = 1);
+                        //     },
+                        //     child: Image.asset(
+                        //       Img.subButtonSecond,
+                        //       width: double.infinity,
+                        //     ),
+                        //   ),
+                        // if (currentIndex == 1)
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 600),
+                          curve: Curves.easeInOutQuint,
+                          height: currentIndex == 0 ? 84.h : 102.h,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() => currentIndex = 1);
+                            },
+                            child: currentIndex == 1
+                                ? Image.asset(
+                                    Img.subButtonThird,
+                                    width: double.infinity,
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      setState(() => currentIndex = 1);
+                                    },
+                                    child: Image.asset(
+                                      Img.subButtonSecond,
+                                      width: double.infinity,
+                                    ),
+                                  ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        Text(
-                          'Пользовательское соглашение',
-                          style: TextStyles(context).grey_15_w800,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Тариф',
-                          style: TextStyles(context).white_35_w800,
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-
-                        Builder(
-                          builder: ((context) {
-                            List<Widget> list = [];
-                            for (int i = 0;
-                                i < subscriptionVariant.length;
-                                i++) {
-                              list.add(itemSubscription(
-                                  subscriptionVariant[i], i, index));
-                            }
-                            return Column(children: list);
-                          }),
-                        ),
-                        // Text(
-                        //   'И получи N ГБ совместного архива, доступ к\nвыполнению уникальных целей и получению\nинтересных призов :) ',
-                        //   style: TextStyles(context).grey_15_w800,
-                        //   textAlign: TextAlign.center,
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(horizontal: 25.w),
+                        //   child: CustomButton(
+                        //     color: ColorStyles.white,
+                        //     text: 'Приобрести за 199₽',
+                        //     textColor: ColorStyles.blackColor,
+                        //     validate: true,
+                        //     onPressed: () {
+                        //       _pageController.animateToPage(
+                        //         1,
+                        //         duration: const Duration(milliseconds: 600),
+                        //         curve: Curves.easeInOutQuint,
+                        //       );
+                        //     },
+                        //   ),
                         // ),
-                        SizedBox(height: 40.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 25.w),
-                          child: CustomButton(
-                            color: ColorStyles.white,
-                            text: 'К оформлению',
-                            textColor: ColorStyles.blackColor,
-                            validate: true,
-                            onPressed: () => webviewPayment(index, context),
-                          ),
-                        ),
                         SizedBox(
-                          height: 15.h,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 38.h + MediaQuery.of(context).padding.top,
-                left: 35.w,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          SvgImg.back,
-                          height: 26.32.h,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 20.w,
+                          height: 24.h,
                         ),
                         Text(
-                          'Назад',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 20.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                          ),
+                          'Никаких обязательств. Подписку можно отменить в любой момент.',
+                          style: TextStyles(context).grey_15_w800,
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
                   ),
+                ],
+              ),
+              if (user != null)
+                AnimatedOpacity(
+                  opacity: !isPayment ? 1 : 0,
+                  duration: const Duration(milliseconds: 600),
+                  curve: Curves.easeInOutQuint,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          bottom: 56.h, left: 25.w, right: 25.w),
+                      child: user.fromYou!
+                          ? currentIndex == 0
+                              ? CustomButton(
+                                  color: ColorStyles.accentColor,
+                                  text: 'Продолжить бесплатно',
+                                  validate: true,
+                                  textColor: ColorStyles.white,
+                                  onPressed: () async {
+                                    BlocProvider.of<AuthBloc>(context)
+                                        .add(GetUser());
+                                    if (user.fromYou!) {
+                                      await Repository().sendTestSub();
+                                    }
+                                    if (Navigator.of(context).canPop()) {
+                                      Navigator.of(context).pop(true);
+                                    }
+                                  },
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    payment();
+                                  },
+                                  child: Container(
+                                    width: 378.w,
+                                    height: 60.h,
+                                    child: Image.asset(Img.buyButton),
+                                  ),
+                                )
+                          : SizedBox(
+                              height: 108.h,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 378.w,
+                                    height: 60.h,
+                                    child: Image.asset(Img.partnerPays),
+                                  ),
+                                  SizedBox(height: 12.h),
+                                  Text(
+                                    'Подписку оплачивает второй партнер, после оплаты перезайдите в приложение',
+                                    style: TextStyles(context).grey_15_w800,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ),
+                  ),
                 ),
-              )
             ],
           ),
         );
       },
     );
+  }
+
+  void payment() async {
+    TokenizationModuleInputData tokenizationModuleInputData =
+        TokenizationModuleInputData(
+      clientApplicationKey: Config.url.applicationKey,
+      title: "BeLoved",
+      returnUrl: 'https://belovedapp.ru/processing',
+      tokenizationSettings: const TokenizationSettings(
+        PaymentMethodTypes(
+          [
+            PaymentMethod.sberbank,
+            PaymentMethod.sbp,
+            PaymentMethod.bankCard,
+          ],
+        ),
+      ),
+      subtitle: "Подписка BeLoved",
+      customerId:
+          context.read<AuthBloc>().user!.me.phoneNumber.replaceAll('+', ''),
+      isLoggingEnabled: true,
+      amount: Amount(value: 2, currency: Currency.rub),
+      shopId: Config.url.shopId,
+      savePaymentMethod: SavePaymentMethod.userSelects,
+    );
+    var result = await YookassaPaymentsFlutter.tokenization(
+      tokenizationModuleInputData,
+    );
+    if (result is SuccessTokenizationResult) {
+      print('alarm');
+      // subscriptionVariant[index].id;
+      print('token is: ' + result.token);
+      var response = await Repository().createPayment(
+        result.token,
+        context.read<AuthBloc>().user!.me.phoneNumber,
+      );
+      print(context.read<AuthBloc>().user!.me.phoneNumber);
+      if (response != null) {
+        if (response.confirmation != null) {
+          // if (response.status != 'pending') {
+          await YookassaPaymentsFlutter.confirmation(
+            response.confirmation!.confirmationUrl,
+            getPaymentMethod(response.paymentMethod.type),
+            Config.url.applicationKey,
+          ).then(
+            (value) async {
+              var response2 = await Repository().confirmPayment(response.id);
+
+              if (response2 != null) {
+                if (response2.status == 'succeeded') {
+                  bool? isAccepted = await Repository().sendPaymentSubscription(
+                    '123123123',
+                    subscriptionVariant[0].id!,
+                  );
+                  if (isAccepted != null) {
+                    if (isAccepted) {
+                      // showSuccessAlertToast('Подписка оформлена');
+                      // ignore: use_build_context_synchronously
+                      if (Navigator.of(context).canPop()) {
+                        Navigator.of(context).pop(true);
+                      }
+                      return;
+                    }
+                    return;
+                  }
+                  return;
+                } else {
+                  // Navigator.pop(context);
+                  showAlertToast('Оплата не прошла.');
+                }
+                return;
+              } else {
+                showAlertToast('Оплата не прошла.');
+              }
+              return;
+            },
+          );
+          // } else {
+          //   showAlertToast('Оплата не прошла.');
+          // }
+          // showAlertToast('Оплата не прошла.');
+        } else {
+          var response2 = await Repository().confirmPayment(response.id);
+
+          if (response2 != null) {
+            if (response2.status == 'succeeded') {
+              bool? isAccepted = await Repository().sendPaymentSubscription(
+                '123123123',
+                subscriptionVariant[0].id!,
+              );
+              if (isAccepted != null) {
+                if (isAccepted) {
+                  // showSuccessAlertToast('Подписка оформлена');
+                  // ignore: use_build_context_synchronously
+                  if (Navigator.of(context).canPop()) {
+                    Navigator.of(context).pop(true);
+                  }
+                  return;
+                }
+                return;
+              }
+              return;
+            } else {
+              showAlertToast('Оплата не прошла.');
+            }
+            return;
+          } else {
+            showAlertToast('Оплата не прошла.');
+          }
+          return;
+        }
+        return;
+      } else {
+        showAlertToast('Оплата не прошла.');
+      }
+      // showAlertToast('Оплата не прошла.');
+    } else {
+      // showAlertToast('Оплата не прошла.');
+    }
   }
 
   Widget itemSubscription(
@@ -413,5 +576,18 @@ class _SubscriptionViewState extends State<SubscriptionView> {
         ),
       ),
     );
+  }
+
+  PaymentMethod getPaymentMethod(String result) {
+    if (result == 'bank_card') {
+      return PaymentMethod.bankCard;
+    }
+    if (result == 'sberbank') {
+      return PaymentMethod.sberbank;
+    }
+    if (result == 'sbp') {
+      return PaymentMethod.sbp;
+    }
+    return PaymentMethod.bankCard;
   }
 }

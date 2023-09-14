@@ -105,7 +105,7 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
         }
       }
 
-      print('countOfYears: $countOfYears');
+      // print('countOfYears: $countOfYears');
       print(user.date);
       years = difference.inDays ~/ 365;
       month = (difference.inDays % 365) ~/ 30.4;
