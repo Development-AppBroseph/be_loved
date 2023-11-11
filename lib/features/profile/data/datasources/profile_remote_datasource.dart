@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/data/models/statics/statics_model.dart';
@@ -44,7 +45,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<User> editProfile(User user, File? file) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     headers["Content-Type"] = "multipart/form-data";
     Map<String, dynamic> map = user.toJson();
     map['photo'] =
@@ -68,7 +69,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<String> editRelation(int id, String relationName, String date) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.put(Endpoints.editRelations.getPath(),
         data: FormData.fromMap({
           'relation_id': id,
@@ -90,7 +91,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<StaticsEntity> getStats() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(Endpoints.getStats.getPath(),
         options: Options(
             followRedirects: false,
@@ -108,7 +109,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   //VK
   @override
   Future<String> connectVK(String code) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.post(Endpoints.vkAuth.getPath(),
         data: FormData.fromMap({'code': code}),
         options: Options(
@@ -131,7 +132,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   //Send files to email
   @override
   Future<void> sendFilesToMail(String email, bool isParting) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     if (isParting) {
       Response response = await dio.put(Endpoints.editRelations.getPath(),
           data: FormData.fromMap({
@@ -173,7 +174,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<BackEntity> getBackgroundInfo() async {
     print(sl<AuthConfig>().token);
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(Endpoints.getBacks.getPath(),
         options: Options(
             followRedirects: false,
@@ -198,7 +199,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<void> editBackgroundInfo(BackEntity back, File? file) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.put(Endpoints.setBacks.getPath(),
         data: file != null
             ? FormData.fromMap({
@@ -226,7 +227,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<SubEntiti> getStatusSub() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(
       Endpoints.statusSub.getPath(),
       options: Options(

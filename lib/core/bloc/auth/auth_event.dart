@@ -55,7 +55,11 @@ class InviteUser extends AuthEvent {
 
 class DeleteInviteUser extends AuthEvent {}
 
-class GetStatusUser extends AuthEvent {}
+class GetStatusUser extends AuthEvent {
+  BuildContext context;
+
+  GetStatusUser({required this.context});
+}
 
 class StartRelationships extends AuthEvent {
   String date;

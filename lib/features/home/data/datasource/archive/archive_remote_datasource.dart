@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/home/data/models/archive/album_model.dart';
 import 'package:be_loved/features/home/data/models/archive/gallery_file_model.dart';
@@ -49,7 +50,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   @override
   Future<List<GalleryFileEntity>> getGalleryFiles(int page) async {
     headers["Content-Type"] = "application/json";
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(Endpoints.getGalleryFiles.getPath(),
         queryParameters: {'page': page},
         options: Options(
@@ -71,7 +72,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   @override
   Future<AlbumFullEntity> getAlbums() async {
     headers["Content-Type"] = "application/json";
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(
       Endpoints.getAlbums.getPath(),
       queryParameters: {'page': 1},
@@ -101,7 +102,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   Future<void> deleteGalleryFiles(List<int> ids) async {
     print('DELETE IDS: ${ids}');
     headers["Content-Type"] = "application/json";
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.delete(Endpoints.deleteGalleryFiles.getPath(),
         data: jsonEncode({'file_list': ids}),
         options: Options(
@@ -121,7 +122,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   @override
   Future<void> createAlbum(AlbumEntity albumEntity) async {
     headers["Content-Type"] = "application/json";
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.post(Endpoints.createAlbum.getPath(),
         data: FormData.fromMap(albumEntity.toMap()),
         options: Options(
@@ -139,7 +140,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   @override
   Future<void> deleteAlbum(AlbumEntity albumEntity) async {
     headers["Content-Type"] = "application/json";
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.delete(
         Endpoints.deleteAlbum.getPath(params: [albumEntity.id]),
         data: FormData.fromMap(albumEntity.toMap()),
@@ -159,7 +160,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   Future<void> addGalleryFile(List<GalleryFileEntity> list) async {
     print('DATA: ${list.length}');
     headers["Content-Type"] = "multipart/form-data";
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     // Map<String, Map<String, dynamic>> mapDataList = {};
     // for(int i = 0; i < list.length; i++){
     //   mapDataList.addAll({i.toString(): await list[i].toMap()});
@@ -171,13 +172,16 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
     List<int> durations = [];
     final String path = (await getApplicationDocumentsDirectory()).path;
     for (int i = 0; i < list.length; i++) {
-      files.add(await MultipartFile.fromFile(list[i].urlToFile));
+      var videoType = list[i].urlToFile.split('.').last;
+      files.add(await MultipartFile.fromFile(list[i].urlToFile,
+          filename: '${DateTime.now()}.$videoType'));
       places.add(list[i].place);
       times.add(list[i].dateTime);
       durations.add(list[i].duration ?? 0);
       File? newFile;
       if (list[i].memoryFilePhotoForVideo != null) {
         final int epoch = DateTime.now().millisecondsSinceEpoch;
+
         newFile = await File('$path/image_$epoch.jpeg').create();
         newFile.writeAsBytesSync(list[i].memoryFilePhotoForVideo!);
       }
@@ -219,7 +223,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
 
   @override
   Future<MemoryEntity> getMemoryInfo() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(Endpoints.getSizeOfMemory.getPath(),
         options: Options(
             followRedirects: false,
@@ -240,7 +244,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   @override
   Future<MomentEntity> getMoments(int page) async {
     headers["Content-Type"] = "application/json";
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(
       Endpoints.getMoments.getPath(),
       queryParameters: {'page': page},
@@ -279,7 +283,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
   @override
   Future<void> addFavorites(int id, bool isFavorite) async {
     headers["Content-Type"] = "application/json";
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.patch(
       Endpoints.addFavorites.getPath(params: [id]),
       data: FormData.fromMap({'if_favor': isFavorite}),
@@ -299,7 +303,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
 
   @override
   Future<List<EventEntity>> getOldEvents(int page) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(Endpoints.oldEvents.getPath(),
         queryParameters: {'page': page},
         options: Options(

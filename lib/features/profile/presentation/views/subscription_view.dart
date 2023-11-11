@@ -375,6 +375,8 @@ class _SubscriptionViewState extends State<SubscriptionView> {
         TokenizationModuleInputData(
       clientApplicationKey: Config.url.applicationKey,
       title: "BeLoved",
+      // testModeSettings: TestModeSettings(
+      //     false, 10, Amount(value: 199, currency: Currency.rub), true),
       returnUrl: 'https://belovedapp.ru/processing',
       tokenizationSettings: const TokenizationSettings(
         PaymentMethodTypes(

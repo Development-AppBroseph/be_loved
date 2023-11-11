@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
+import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
@@ -51,6 +52,7 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   var user = await MySharedPrefs().user;
+  // print('user: ${(user as UserAnswer).}');
   GooglePlayServicesAvailability availability = await GoogleApiAvailability
       .instance
       .checkGooglePlayServicesAvailability();
@@ -67,12 +69,13 @@ void main() async {
       sound: true,
     );
   }
+  print('token: ${await FirebaseMessaging.instance.getToken()}');
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) {
     runApp(MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (context) => AuthBloc()..add(GetStatusUser()),
+          create: (context) => AuthBloc()..add(GetStatusUser(context: context)),
         ),
         BlocProvider<WebSocketBloc>(
           create: (context) => WebSocketBloc(),

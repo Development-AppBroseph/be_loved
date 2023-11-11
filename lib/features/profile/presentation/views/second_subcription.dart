@@ -15,20 +15,11 @@ import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 // import 'package:be_loved/core/sberbank_acquiring.dart';
 // import 'package:be_loved/core/sberbank_acquiring_config.dart';
-import 'package:sberbank_acquiring/sberbank_acquiring_core.dart';
-import 'package:sberbank_acquiring/sberbank_acquiring_ui.dart' as ui;
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
-import 'package:be_loved/core/widgets/buttons/custom_button.dart';
-import 'package:flutter/material.dart' as material;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:yookassa_payments_flutter/input_data/tokenization_module_input_data.dart';
-import 'package:yookassa_payments_flutter/models/amount.dart';
-import 'package:yookassa_payments_flutter/models/test_mode_settings.dart';
 import 'package:yookassa_payments_flutter/yookassa_payments_flutter.dart';
 
 class SecondSubscriptionView extends StatefulWidget {
@@ -148,13 +139,14 @@ class _SecondSubscriptionViewState extends State<SecondSubscriptionView> {
       customerId:
           context.read<AuthBloc>().user!.me.phoneNumber.replaceAll('+', ''),
       isLoggingEnabled: true,
-      amount: Amount(value: 2, currency: Currency.rub),
+      amount: Amount(value: 199, currency: Currency.rub),
       shopId: Config.url.shopId,
       savePaymentMethod: SavePaymentMethod.userSelects,
     );
     var result = await YookassaPaymentsFlutter.tokenization(
       tokenizationModuleInputData,
     );
+    print(result);
     if (result is SuccessTokenizationResult) {
       print('alarm');
       // subscriptionVariant[index].id;

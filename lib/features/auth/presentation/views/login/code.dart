@@ -126,43 +126,60 @@ class _CodePageState extends State<CodePage> {
           });
         } else {
           BlocProvider.of<AuthBloc>(context).add(GetUser());
-          Future.delayed(const Duration(milliseconds: 500), () {
+          Future.delayed(const Duration(milliseconds: 1000), () {
             BlocProvider.of<WebSocketBloc>(context)
                 .add(WebSocketEvent(current.token));
-            if (sl<AuthConfig>().user!.previousReletionId == null) {
-              if (BlocProvider.of<AuthBloc>(context).user?.date == null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => InviteRelation(previousPage: () {}),
+            var bloc = BlocProvider.of<AuthBloc>(context);
+            // if (bloc.user?.previousReletionId == null) {
+            // if (bloc.user?.date == null) {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => InviteRelation(previousPage: () {}),
+            //     ),
+            //   ).then((value) {
+            //     if (textEditingControllerUp.text.length == 4) {
+            //       bloc.add(TextFieldFilled(true));
+            //     }
+            //   });
+            // } else
+            if (bloc.user?.love != null) {
+              // BlocProvider.of<WebSocketBloc>(context)
+              //     .add(WebSocketEvent(current.token));
+              MySharedPrefs().setUser(current.token,
+                  BlocProvider.of<AuthBloc>(context, listen: false).user!);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(
+                    isFirst: true,
                   ),
-                ).then((value) {
-                  if (textEditingControllerUp.text.length == 4) {
-                    BlocProvider.of<AuthBloc>(context)
-                        .add(TextFieldFilled(true));
-                  }
-                });
-              } else if (BlocProvider.of<AuthBloc>(context).user?.love ==
-                  null) {
-              } else {
-                // BlocProvider.of<WebSocketBloc>(context)
-                //     .add(WebSocketEvent(current.token));
-                MySharedPrefs().setUser(current.token,
-                    BlocProvider.of<AuthBloc>(context, listen: false).user!);
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(
-                      isFirst: true,
-                    ),
-                  ),
-                  (route) => false,
-                );
-              }
+                ),
+                (route) => false,
+              );
             } else {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const PartingSecondView()));
+              if (bloc.user?.previousReletionId != null) {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const PartingSecondView()));
+              } else {
+                if (bloc.user?.date == null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InviteRelation(previousPage: () {}),
+                    ),
+                  ).then((value) {
+                    if (textEditingControllerUp.text.length == 4) {
+                      bloc.add(TextFieldFilled(true));
+                    }
+                  });
+                }
+              }
             }
+            // } else {
+            //   Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (context) => const PartingSecondView()));
+            // }
           });
         }
       }

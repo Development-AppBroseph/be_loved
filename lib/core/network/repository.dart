@@ -60,8 +60,8 @@ class Repository {
         options: options,
         data: {
           "payment_token": paymentToken,
-          "amount": {"value": "2.00", "currency": "RUB"},
-          "capture": false,
+          "amount": {"value": "199.00", "currency": "RUB"},
+          // "capture": true,
           "description": "Заказ №${Random().nextInt(1000)}",
           "receipt": {
             // "id": "rt-1da5c87d-0984-50e8-a7f3-8de646dd9ec9",
@@ -84,7 +84,7 @@ class Repository {
               {
                 "description": "Подписка BeLoved",
                 "quantity": 1.000,
-                "amount": {"value": "2.00", "currency": "RUB"},
+                "amount": {"value": "199.00", "currency": "RUB"},
                 "vat_code": 2,
                 "payment_mode": "full_payment",
                 "payment_subject": "commodity"
@@ -133,7 +133,7 @@ class Repository {
       'payments/$paymentId/capture',
       options: options,
       data: {
-        "amount": {"value": "2.00", "currency": "RUB"}
+        "amount": {"value": "199.00", "currency": "RUB"}
       },
     );
     print('RES: ${response.statusCode} ${response.data}');
@@ -265,12 +265,13 @@ class Repository {
       options: Options(
         followRedirects: false,
         validateStatus: (status) => status! < 599,
-        headers: {"Authorization": "Token ${sl<AuthConfig>().token}"},
+        headers: {"Authorization": "Token ${await MySharedPrefs().token}"},
       ),
     );
     print('ResStatusCode: ${response.statusCode}\tResData: ${response.data}');
     if (response.statusCode == 200) {
       return SubModel.fromJson(response.data);
+    } else if (response.statusCode == 401) {
     } else {
       // throw ServerException(message: 'Ошибка с сервером');
       return null;
@@ -477,8 +478,9 @@ class Repository {
   }
 
   Future<UserAnswer?> deleteInviteUser(int relationId) async {
+    String? token = await MySharedPrefs().token;
     var options = Options(headers: {
-      'Authorization': 'Token ${await MySharedPrefs().token}',
+      'Authorization': 'Token $token',
     }, validateStatus: (status) => status! <= 500);
 
     try {
@@ -503,6 +505,7 @@ class Repository {
 
   Future<UserAnswer?> getUser() async {
     String? token = await MySharedPrefs().token;
+    print('token user is: $token');
     var options = Options(headers: {
       'Authorization': 'Token $token',
     });

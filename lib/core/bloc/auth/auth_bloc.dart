@@ -51,10 +51,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogOut>((event, emit) => _logOut(event, emit));
     on<EditUserInfo>((event, emit) => _editUserInfo(event, emit));
     on<TextFieldFilled>((event, emit) => _textFieldChangeState(event, emit));
-    on<GetStatusUser>((event, emit) => getStatus());
+    on<GetStatusUser>((event, emit) => getStatus(event, emit));
   }
 
-  Future<void> getStatus() async {
+  Future<void> getStatus(GetStatusUser event, Emitter<AuthState> emit) async {
     // GetStatusSub getStatusSub = sl();
     try {
       final result = await Repository().getStatusSub();
@@ -71,6 +71,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // });
       print('payment is: $paymentEnabled');
     } catch (e) {
+      emit(AuthLoading());
+      // await Repository().deleteInviteUser(
+      //     ((await MySharedPrefs().user) as UserAnswer).relationId!);
+      // ignore: use_build_context_synchronously
+      MySharedPrefs().logOut(event.context);
+      emit(AuthStated());
       paymentEnabled = false;
     }
   }

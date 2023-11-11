@@ -110,32 +110,42 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                         padding: const EdgeInsets.symmetric(horizontal: 25),
                         child: Column(
                           children: [
-                            RichText(
-                              text: TextSpan(
-                                text: 'Пробный период активен до ',
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontSize: 25.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: ClrStyle
-                                      .black17ToWhite[sl<AuthConfig>().idx],
-                                ),
-                                children: [
-                                  TextSpan(
-                                    text: getDate(context
-                                        .read<AuthBloc>()
-                                        .user!
-                                        .testEnd!),
-                                    style: TextStyle(
-                                      fontFamily: "Inter",
-                                      fontSize: 25.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: ColorStyles.accentColor,
-                                    ),
-                                  ),
-                                ],
+                            Text(
+                              'Пробный период активен до ${getDate(context.read<AuthBloc>().user!.testEnd!)}',
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                                color: ClrStyle
+                                    .greyToBlack17[sl<AuthConfig>().idx],
                               ),
                             ),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     text: 'Пробный период активен до ',
+                            //     style: TextStyle(
+                            //       fontFamily: "Inter",
+                            //       fontSize: 25.sp,
+                            //       fontWeight: FontWeight.bold,
+                            //       color: ClrStyle
+                            //           .black17ToWhite[sl<AuthConfig>().idx],
+                            //     ),
+                            //     children: [
+                            //       TextSpan(
+                            //         text: getDate(context
+                            //             .read<AuthBloc>()
+                            //             .user!
+                            //             .testEnd!),
+                            //         style: TextStyle(
+                            //           fontFamily: "Inter",
+                            //           fontSize: 25.sp,
+                            //           fontWeight: FontWeight.bold,
+                            //           color: ColorStyles.accentColor,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                             // Row(
                             //   children: [
                             //     Text(
@@ -245,28 +255,14 @@ class _ParametrsUserBottomsheetState extends State<ParametrsUserBottomsheet> {
                         padding: const EdgeInsets.symmetric(horizontal: 25),
                         child: Column(
                           children: [
-                            RichText(
-                              text: TextSpan(
-                                text: 'Подписка активна до ',
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontSize: 25.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: ClrStyle
-                                      .black17ToWhite[sl<AuthConfig>().idx],
-                                ),
-                                children: [
-                                  TextSpan(
-                                    text: getDate(
-                                        context.read<AuthBloc>().user!.subEnd!),
-                                    style: TextStyle(
-                                      fontFamily: "Inter",
-                                      fontSize: 25.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: ColorStyles.accentColor,
-                                    ),
-                                  ),
-                                ],
+                            Text(
+                              'Подписка активна до ${getDate(context.read<AuthBloc>().user!.subEnd!)}',
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                                color: ClrStyle
+                                    .greyToBlack17[sl<AuthConfig>().idx],
                               ),
                             ),
                             // Row(

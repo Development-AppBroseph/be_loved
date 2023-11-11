@@ -1,3 +1,4 @@
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/home/data/models/purposes/actual_model.dart';
 import 'package:be_loved/features/home/data/models/purposes/full_purpose_model.dart';
@@ -55,7 +56,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
   //Get season main purpose
   @override
   Future<PurposeEntity> getSeasonPurpose() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(Endpoints.getSeasonPurpose.getPath(),
         options: Options(
             followRedirects: false,
@@ -75,7 +76,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
   @override
   Future<List<PurposeEntity>> getAvailablePurposes(
       double lat, double long) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(
       Endpoints.getAvailablePurposes.getPath(),
       queryParameters: {'lat': lat, 'lon': long},
@@ -99,7 +100,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
 
   @override
   Future<List<FullPurposeEntity>> getInProcessPurposes() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     // headers["Authorization"] = "Token d232dfc78ec938eacc832b0b23aa20c63eaab7ae7c544a63658cb0e2cbed2c7d";
     Response response = await dio.get(Endpoints.getInProcessPurposes.getPath(),
         options: Options(
@@ -122,7 +123,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
   //Complete purpose
   @override
   Future<void> completePurpose(int target) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.post(Endpoints.sendPurpose.getPath(),
         data: FormData.fromMap({'target': target}),
         options: Options(
@@ -143,7 +144,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
   //History purposes
   @override
   Future<List<FullPurposeEntity>> getHistoryPurposes() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     // headers["Authorization"] = "Token d232dfc78ec938eacc832b0b23aa20c63eaab7ae7c544a63658cb0e2cbed2c7d";
     Response response = await dio.get(Endpoints.getHistoryPurposes.getPath(),
         options: Options(
@@ -165,7 +166,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
   //Send photo purpose
   @override
   Future<void> sendPhotoPurpose(String path, int target) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     // headers["Authorization"] = "Token d232dfc78ec938eacc832b0b23aa20c63eaab7ae7c544a63658cb0e2cbed2c7d";
     Response response = await dio.patch(
         Endpoints.sendPhotoPurpose.getPath(params: [target]),
@@ -187,7 +188,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
   //Cancel purpose
   @override
   Future<void> cancelPurpose(int target) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.delete(
         Endpoints.sendPhotoPurpose.getPath(params: [target]),
         options: Options(
@@ -206,7 +207,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
 
   @override
   Future<List<PromosEntiti>> getPromos() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(
       Endpoints.getPromos.getPath(),
       options: Options(
@@ -229,7 +230,7 @@ class PurposeRemoteDataSourceImpl implements PurposeRemoteDataSource {
 
   @override
   Future<List<ActualEntiti>> getActual() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(
       Endpoints.getActual.getPath(),
       options: Options(

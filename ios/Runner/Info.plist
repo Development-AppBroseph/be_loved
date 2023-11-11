@@ -18,6 +18,8 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>be_loved</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Предоставьте доступ к контактам для быстрого поиска партнёра</string>
 	<key>CFBundleURLTypes</key>
 <array>
     <dict>

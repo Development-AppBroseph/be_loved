@@ -1,3 +1,4 @@
+import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/utils/helpers/dio_helper.dart';
 import 'package:be_loved/features/home/data/models/archive/gallery_file_model.dart';
 import 'package:be_loved/features/home/data/models/home/levels_model.dart';
@@ -32,7 +33,7 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
 
   @override
   Future<MainWidgetsEntity> getMainWidgets() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(Endpoints.getMainWidgets.getPath(),
         options: Options(
             followRedirects: false,
@@ -59,7 +60,7 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
 
   @override
   Future<void> addFileWidget(int id) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.post(
         Endpoints.addFileWidget.getPath(params: [id]),
         data: FormData.fromMap({'file': id}),
@@ -77,7 +78,7 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
 
   @override
   Future<void> addPurposeWidget(int id) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.post(
         Endpoints.addPurposeWidget.getPath(params: [id]),
         data: FormData.fromMap({'target': id}),
@@ -95,7 +96,7 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
 
   @override
   Future<void> deleteFileWidget(int id) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.delete(
         Endpoints.deleteFileWidget.getPath(params: [id]),
         options: Options(
@@ -112,7 +113,7 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
 
   @override
   Future<void> deletePurposeWidget(int id) async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.delete(
         Endpoints.deletePurposeWidget.getPath(params: [id]),
         options: Options(
@@ -130,7 +131,7 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
   @override
   Future<void> sendNotification() async {
     final token = await FirebaseMessaging.instance.getToken();
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.post(
       Endpoints.sendNoti.getPath(),
       data: {"fcm_token": token},
@@ -149,16 +150,18 @@ class MainWidgetsRemoteDataSourceImpl implements MainWidgetsRemoteDataSource {
 
   @override
   Future<List<LevelModel>> getLevels() async {
-    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.get(
       Endpoints.levels.getPath(),
       options: Options(
         headers: headers,
       ),
     );
-    if (response.statusCode! >= 200 ) {
-      return List.from((response.data as List<dynamic>).map((e) => LevelModel.fromJson(e)).toList());
-    }else{
+    if (response.statusCode! >= 200) {
+      return List.from((response.data as List<dynamic>)
+          .map((e) => LevelModel.fromJson(e))
+          .toList());
+    } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
   }

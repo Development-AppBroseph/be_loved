@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    context.read<AuthBloc>().add(GetStatusUser());
+    context.read<AuthBloc>().add(GetStatusUser(context: context));
     context.read<MyAppCubit>().getImage();
     context.read<EventsBloc>().add(GetEventsEvent());
 
@@ -179,7 +179,8 @@ class _HomePageState extends State<HomePage> {
                         // isSubOpen = false;
                       });
                     });
-                  } else if (context.read<AuthBloc>().user?.testEnd == null) {
+                  } else if (context.read<AuthBloc>().user?.testEnd == null &&
+                      context.read<AuthBloc>().user?.isSub == false) {
                     isSubOpen = true;
                     Future.delayed(const Duration(milliseconds: 200), () {
                       Navigator.pushAndRemoveUntil(
