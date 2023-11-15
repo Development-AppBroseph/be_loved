@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
@@ -11,9 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../../core/utils/images.dart';
-
-
-
 
 class AddPhotoCard extends StatelessWidget {
   final Function() onTap;
@@ -45,8 +40,13 @@ class AddPhotoCard extends StatelessWidget {
                   width: 26.w,
                   color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
                 ),
-                SizedBox(width: 19.w,),
-                Text(text ?? 'Добавить фото', style: TextStyles(context).black_20_w800,)
+                SizedBox(
+                  width: 19.w,
+                ),
+                Text(
+                  text ?? 'Добавить фото',
+                  style: TextStyles(context).black_20_w800,
+                )
               ],
             ),
             Opacity(
@@ -58,8 +58,7 @@ class AddPhotoCard extends StatelessWidget {
                     key: keyAdd,
                     width: 19.w,
                     color: ClrStyle.black2CToWhite[sl<AuthConfig>().idx],
-                  )
-              ),
+                  )),
             )
           ],
         ),

@@ -16,7 +16,6 @@ import 'package:be_loved/features/home/presentation/views/relationships/account/
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/mirror_image.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/policy_view.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/modals/send_file/send_file_modal.dart';
-import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:be_loved/features/profile/presentation/widget/decor/sliding_background_card.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
@@ -189,7 +188,6 @@ class _AccountPageState extends State<AccountPage>
 
   @override
   Widget build(BuildContext context) {
-    DecorBloc decorBloc = context.read<DecorBloc>();
     // LinearGradient gradientText = const LinearGradient(
     //   colors: [
     //     Color.fromRGBO(255, 255, 255, 1),
@@ -707,7 +705,8 @@ class _AccountPageState extends State<AccountPage>
                                                                             .me
                                                                             .phoneNumber ==
                                                                         phoneNumber) {
-                                                                      showAlertToast('Вы ввели тот же номер');
+                                                                      showAlertToast(
+                                                                          'Вы ввели тот же номер');
                                                                     }
                                                                     _streamController
                                                                         .sink
@@ -771,8 +770,8 @@ class _AccountPageState extends State<AccountPage>
                                                                       .phoneNumber !=
                                                                   phoneNumber,
                                                           color: const Color
-                                                                  .fromRGBO(32,
-                                                              203, 131, 1.0),
+                                                              .fromRGBO(32, 203,
+                                                              131, 1.0),
                                                           text: 'Продолжить',
                                                           // validate: state is TextFieldSuccess ? true : false,
                                                           textColor: ClrStyle
@@ -881,7 +880,9 @@ class _AccountPageState extends State<AccountPage>
                                                             decoration:
                                                                 BoxDecoration(
                                                                     color: textEditingControllerUp.text.length ==
-                                                                            4 || textEditingControllerUp.text.isEmpty
+                                                                                4 ||
+                                                                            textEditingControllerUp
+                                                                                .text.isEmpty
                                                                         ? Colors
                                                                             .white
                                                                         : ColorStyles
@@ -916,8 +917,8 @@ class _AccountPageState extends State<AccountPage>
                                                       CustomButton(
                                                           validate: true,
                                                           color: const Color
-                                                                  .fromRGBO(32,
-                                                              203, 131, 1.0),
+                                                              .fromRGBO(32, 203,
+                                                              131, 1.0),
                                                           text: 'Готово',
                                                           textColor:
                                                               Colors.white,

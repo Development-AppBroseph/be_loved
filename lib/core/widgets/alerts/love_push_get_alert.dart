@@ -24,12 +24,12 @@ class _LovePushGetAlertState extends State<LovePushGetAlert> {
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 360.0, 70.0));
-  late Timer _timer;
+  late Timer timer;
   int _start = 5;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
+    timer = Timer.periodic(
       oneSec,
       (Timer timer) {
         if (_start == 0) {
@@ -44,17 +44,23 @@ class _LovePushGetAlertState extends State<LovePushGetAlert> {
       },
     );
   }
-   @override
+
+  @override
   void initState() {
     startTimer();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 78.h,
-      margin: const EdgeInsets.only(right: 25, left: 25, bottom: 111,),
-       padding: const EdgeInsets.only(top: 0, bottom: 0, left: 26, right: 20),  
+      margin: const EdgeInsets.only(
+        right: 25,
+        left: 25,
+        bottom: 111,
+      ),
+      padding: const EdgeInsets.only(top: 0, bottom: 0, left: 26, right: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
         color: ColorStyles.white.withOpacity(0.9),
@@ -76,7 +82,7 @@ class _LovePushGetAlertState extends State<LovePushGetAlert> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
+              children: [
                 Text(
                   '${sl<AuthConfig>().user!.love!.username} любит тебя',
                   style: TextStyle(
@@ -87,7 +93,7 @@ class _LovePushGetAlertState extends State<LovePushGetAlert> {
                   ),
                   textAlign: TextAlign.start,
                 ),
-                 Text(
+                Text(
                   'Партнёр отправил уведомление о том, как сильно тебя любит',
                   style: TextStyle(
                     fontFamily: 'Inter',

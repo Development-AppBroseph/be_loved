@@ -16,7 +16,6 @@ import 'package:be_loved/features/profile/domain/usecases/send_files_to_mail.dar
 import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart';
 
 import '../../../domain/usecases/get_status_sub.dart';
 part 'profile_event.dart';

@@ -1,6 +1,7 @@
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class GalleryGroupFilesEntity extends Equatable {
   GalleryFileEntity mainPhoto;
   GalleryFileEntity? mainVideo;
@@ -9,19 +10,14 @@ class GalleryGroupFilesEntity extends Equatable {
   List<GalleryFileEntity> additionalFiles;
   double topPosition;
 
-  GalleryGroupFilesEntity({
-    required this.mainPhoto,
-    required this.mainVideo,
-    required this.additionalFiles,
-    required this.startDate,
-    required this.toDate,
-    this.topPosition = 0
-  });
-
+  GalleryGroupFilesEntity(
+      {required this.mainPhoto,
+      required this.mainVideo,
+      required this.additionalFiles,
+      required this.startDate,
+      required this.toDate,
+      this.topPosition = 0});
 
   @override
-  List<Object> get props => [
-    mainPhoto,
-    additionalFiles
-  ];
+  List<Object> get props => [mainPhoto, additionalFiles];
 }

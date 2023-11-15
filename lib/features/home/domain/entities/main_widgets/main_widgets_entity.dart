@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
 
+// ignore: must_be_immutable
 class MainWidgetsEntity extends Equatable {
   GalleryFileEntity? file;
   List<PurposeEntity> purposes;
@@ -12,16 +13,5 @@ class MainWidgetsEntity extends Equatable {
   });
 
   @override
-  List<Object> get props => [
-  ];
+  List<Object> get props => [];
 }
-      
-       
-        
-         
-          
-           
-            
-             
-              
-               

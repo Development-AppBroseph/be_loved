@@ -88,24 +88,14 @@ class _HomeInfoFirstState extends State<HomeInfoFirst> {
 
   void setTime() async {
     UserAnswer? user = sl<AuthConfig>().user;
-    // print(
-    //     'SET TIME: ${sl<AuthConfig>().token} : ${sl<AuthConfig>().user?.date}');
     if (user!.date != null) {
       final startTime = user.date as String;
 
       DateTime berlinWallFell = DateTime.now();
       DateTime moonLanding = DateTime.parse(startTime);
-      int countOfYears = 0;
 
       final difference = berlinWallFell.difference(moonLanding);
 
-      for (var element in leapYears) {
-        if (moonLanding.year < element) {
-          countOfYears++;
-        }
-      }
-
-      // print('countOfYears: $countOfYears');
       print(user.date);
       years = difference.inDays ~/ 365;
       month = (difference.inDays % 365) ~/ 30.4;

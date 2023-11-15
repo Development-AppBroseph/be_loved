@@ -1,13 +1,7 @@
-import 'dart:async';
 import 'dart:math';
-
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-// import 'package:be_loved/core/models/get_order_status_extended/get_order_status_extended_request.dart';
-// import 'package:be_loved/core/models/get_order_status_extended/get_order_status_extended_response.dart';
-// import 'package:be_loved/core/models/register/register_request.dart';
-// import 'package:be_loved/core/models/register/register_response.dart';
 import 'package:be_loved/core/models/subscriptions/subscription_variant.dart';
 import 'package:be_loved/core/network/repository.dart';
 import 'package:be_loved/core/services/network/config.dart';
@@ -15,8 +9,6 @@ import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:be_loved/core/sberbank_acquiring.dart';
-// import 'package:be_loved/core/sberbank_acquiring_config.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

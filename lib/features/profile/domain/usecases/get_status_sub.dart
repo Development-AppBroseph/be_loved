@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:be_loved/core/error/failures.dart';
 
 import '../../../../core/usecases/usecase.dart';
-import '../../data/datasources/profile_remote_datasource.dart';
 import '../entities/subscription_entiti.dart';
 
 class GetStatusSub implements UseCase<SubEntiti, NoParams> {

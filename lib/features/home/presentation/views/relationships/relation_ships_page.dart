@@ -81,11 +81,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   bool isLoading = false;
   bool isOpacity = false;
 
-  static const _indicatorSize = 30.0;
   static const _imageSize = 30.0;
 
-  late AnimationController _spoonController;
-  static final _spoonTween = CurveTween(curve: Curves.easeInOutQuint);
   late final AnimationController animationController;
 
   final _borderRadius = BorderRadius.all(
@@ -117,8 +114,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
       }
       // print('offset: ' + scrollController.offset.toString());
     });
-    _spoonController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _controller.addListener(() {
       setState(() {});
     });
@@ -187,6 +182,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return content(context);
   }
 
@@ -757,8 +753,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                         widget.toDetailPage(id);
                       },
                     );
-
-                    return const SizedBox();
                   }),
                   proxyDecorator: (child, index, animation) {
                     return Container(

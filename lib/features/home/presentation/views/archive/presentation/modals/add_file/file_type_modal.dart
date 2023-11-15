@@ -14,11 +14,9 @@ Future<void> FileTypeModal(
       barrierColor: Colors.transparent,
       context: context,
       builder: (context) {
-        bool isEditing = false;
         return AlertDialog(
           insetPadding: EdgeInsets.only(
-              top: offset.dy + (25.h),
-              left: offset.dx - (202.h)),
+              top: offset.dy + (25.h), left: offset.dx - (202.h)),
           alignment: Alignment.topLeft,
           contentPadding: EdgeInsets.zero,
           backgroundColor: Colors.transparent,

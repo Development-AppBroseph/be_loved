@@ -39,7 +39,6 @@ class _PurposesPageState extends State<PurposesPage> {
   List<String> data = ['Цели', 'В процессе', 'История'];
 
   int selectedType = 0;
-  static const _indicatorSize = 30.0;
   static const _imageSize = 30.0;
   bool isLoading = false;
   bool isOpacity = false;
@@ -168,10 +167,10 @@ class _PurposesPageState extends State<PurposesPage> {
                   //Available purposes
                   // } else if (selectedType == 1) {
                   // listPromos = bloc.promos;
-                } 
+                }
                 // else if (selectedType == 1) {
                 //   // listPurposes = bloc.availablePurposes;
-                // } 
+                // }
                 else if (selectedType == 1) {
                   listPurposes =
                       bloc.getPurposeListFromFullData(bloc.inProcessPurposes);
@@ -297,21 +296,21 @@ class _PurposesPageState extends State<PurposesPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 56.h, bottom: 10.h),
-                            height: 28.h,
-                            width: 154.w,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: const Color(0xffD9D9D9)),
-                          ),
-                          Container(
-                            height: 189.h,
-                            width: 358.w,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: const Color(0xffD9D9D9)),
-                          ),
+                          // Container(
+                          //   margin: EdgeInsets.only(top: 56.h, bottom: 10.h),
+                          //   height: 28.h,
+                          //   width: 154.w,
+                          //   decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(10),
+                          //       color: const Color(0xffD9D9D9)),
+                          // ),
+                          // Container(
+                          //   height: 189.h,
+                          //   width: 358.w,
+                          //   decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(10),
+                          //       color: const Color(0xffD9D9D9)),
+                          // ),
                           Container(
                             margin: EdgeInsets.only(top: 38.h, bottom: 19.h),
                             child: Row(

@@ -2,6 +2,7 @@ import 'package:be_loved/features/home/presentation/views/events/widgets/all_eve
 import 'package:be_loved/features/home/presentation/views/relationships/relation_and_stats_page.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class MainAndAllPage extends StatefulWidget {
   Function(int id) toDetail;
   MainAndAllPage({Key? key, required this.toDetail}) : super(key: key);
@@ -33,16 +34,22 @@ class _MainAndAllPageState extends State<MainAndAllPage> {
         setState(() {});
       },
       children: [
-        RelationAndStatsPage(nextPage: widget.toDetail, toAllEvents: nextPage,),
-        AllEeventsPage(prevPage: prevPage, toDetailPage: widget.toDetail,),
+        RelationAndStatsPage(
+          nextPage: widget.toDetail,
+          toAllEvents: nextPage,
+        ),
+        AllEeventsPage(
+          prevPage: prevPage,
+          toDetailPage: widget.toDetail,
+        ),
       ],
     );
   }
 
   void nextPage() {
     controller.nextPage(
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.easeInOutQuint);
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOutQuint);
   }
 
   void prevPage() => controller.previousPage(

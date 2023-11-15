@@ -1,4 +1,3 @@
-import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
 import 'package:be_loved/features/home/domain/repositories/purpose_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';

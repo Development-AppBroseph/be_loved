@@ -1,24 +1,13 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
-// import 'package:be_loved/core/models/get_order_status_extended/get_order_status_extended_request.dart';
-// import 'package:be_loved/core/models/get_order_status_extended/get_order_status_extended_response.dart';
-// import 'package:be_loved/core/models/register/register_request.dart';
-// import 'package:be_loved/core/models/register/register_response.dart';
 import 'package:be_loved/core/models/subscriptions/subscription_variant.dart';
 import 'package:be_loved/core/network/repository.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-// import 'package:be_loved/core/sberbank_acquiring.dart';
-// import 'package:be_loved/core/sberbank_acquiring_config.dart';
-import 'package:sberbank_acquiring/sberbank_acquiring_core.dart';
-import 'package:sberbank_acquiring/sberbank_acquiring_ui.dart' as ui;
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -50,8 +39,6 @@ class _SubscriptionViewState extends State<SubscriptionView> {
 
   int currentIndex = 0;
   bool isPayment = false;
-
-  final PageController _pageController = PageController(initialPage: 0);
 
   // final SberbankAcquiring acquiring = SberbankAcquiring(
   //   SberbankAcquiringConfig.token(
@@ -154,8 +141,6 @@ class _SubscriptionViewState extends State<SubscriptionView> {
       stream: _streamController.stream,
       initialData: 0,
       builder: (context, snapshot) {
-        int index = snapshot.data!;
-
         return Scaffold(
           backgroundColor: ColorStyles.mainBackgroundColor,
           body: Stack(
@@ -391,7 +376,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
       customerId:
           context.read<AuthBloc>().user!.me.phoneNumber.replaceAll('+', ''),
       isLoggingEnabled: true,
-      amount: Amount(value: 2, currency: Currency.rub),
+      amount: Amount(value: 199, currency: Currency.rub),
       shopId: Config.url.shopId,
       savePaymentMethod: SavePaymentMethod.userSelects,
     );

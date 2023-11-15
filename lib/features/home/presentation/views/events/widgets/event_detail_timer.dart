@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:be_loved/core/services/database/auth_params.dart';
-import 'package:be_loved/core/services/notification/notification_service.dart';
 import 'package:be_loved/features/home/domain/entities/events/event_entity.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';

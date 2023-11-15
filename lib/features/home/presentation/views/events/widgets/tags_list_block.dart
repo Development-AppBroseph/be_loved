@@ -17,6 +17,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../bloc/tags/tags_bloc.dart';
 
+// ignore: must_be_immutable
 class TagsListBlock extends StatelessWidget {
   bool isLeftPadding;
   bool isBlack2C;
@@ -64,7 +65,7 @@ class TagsListBlock extends StatelessWidget {
                 }
               },
               onLongPress: () {
-                if(!tagsBloc.tags[index].important){
+                if (!tagsBloc.tags[index].important) {
                   showModalCreateTag(context, isLast, tagsBloc.tags[index]);
                 }
               },
@@ -83,11 +84,11 @@ class TagsListBlock extends StatelessWidget {
                     duration: const Duration(milliseconds: 400),
                     curve: Curves.easeInOutQuint,
                     opacity: isLast
-                    ? 1
-                    : context.read<EventsBloc>().selectedTag != null &&
-                            !isSelected
-                        ? 0.5
-                        : 1,
+                        ? 1
+                        : context.read<EventsBloc>().selectedTag != null &&
+                                !isSelected
+                            ? 0.5
+                            : 1,
                     child: CupertinoCard(
                       color: isLast
                           ? ColorStyles.greyColor
@@ -103,7 +104,10 @@ class TagsListBlock extends StatelessWidget {
                                 elevation: 0,
                                 margin: EdgeInsets.all(1.w),
                                 radius: BorderRadius.circular(17.r),
-                                color: isBlack2C ? ClrStyle.whiteToBlack2C[sl<AuthConfig>().idx] : ClrStyle.whiteTo17[sl<AuthConfig>().idx],
+                                color: isBlack2C
+                                    ? ClrStyle
+                                        .whiteToBlack2C[sl<AuthConfig>().idx]
+                                    : ClrStyle.whiteTo17[sl<AuthConfig>().idx],
                               ),
                             ),
                           Container(

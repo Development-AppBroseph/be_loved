@@ -1,17 +1,12 @@
 import 'dart:io';
-
-import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/helpers/image_helper.dart';
-import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/presentation/views/image/avatar.dart';
-import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/dialog_card.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/widgets/image_change_popup.dart';
-import 'package:be_loved/features/profile/presentation/widget/grey_line_for_bottomsheet.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
@@ -32,7 +27,8 @@ class AvatarModalWidget extends StatefulWidget {
 
 class _AvatarModalWidgetState extends State<AvatarModalWidget> {
   File? _image;
-  final CustomPopupMenuController _customPopupMenuController = CustomPopupMenuController();
+  final CustomPopupMenuController _customPopupMenuController =
+      CustomPopupMenuController();
 
   Future _pickImage(ImageSource source) async {
     try {
@@ -52,20 +48,19 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
 
   Future<void> mirror() async {
     _customPopupMenuController.hideMenu();
-    if(_image != null){
+    if (_image != null) {
       _image = await flipHorizontalImage(_image!);
     }
     setState(() {});
   }
 
-
-  setImage() async{
-    if(sl<AuthConfig>().user?.me.photo != null){
-      _image = await downloadFile(Config.url.url + sl<AuthConfig>().user!.me.photo!);
+  setImage() async {
+    if (sl<AuthConfig>().user?.me.photo != null) {
+      _image =
+          await downloadFile(Config.url.url + sl<AuthConfig>().user!.me.photo!);
       setState(() {});
     }
   }
-
 
   @override
   void initState() {
@@ -76,7 +71,7 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double height = (38.h-MediaQuery.of(context).padding.top);
+    double height = (38.h - MediaQuery.of(context).padding.top);
     return CupertinoCard(
       color: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
       radius: BorderRadius.vertical(
@@ -103,14 +98,14 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                 'Редактировать аватарку',
                 style: TextStyles(context).grey_15_w800,
               ),
-              
-              SizedBox(height: 27.h,),
+              SizedBox(
+                height: 27.h,
+              ),
               CustomPopupMenu(
                 position: PreferredPosition.bottom,
                 barrierColor: Colors.transparent,
                 showArrow: false,
-                controller:
-                    _customPopupMenuController,
+                controller: _customPopupMenuController,
                 pressType: PressType.singleClick,
                 child: MirrorImage(
                   path: _image,
@@ -119,12 +114,9 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                 verticalMargin: 14.h,
                 menuBuilder: () {
                   return ImageChangePopup(
-                    mirror: mirror, 
-                    pickImage: _pickImage
-                  );
+                      mirror: mirror, pickImage: _pickImage);
                 },
               ),
-              
               SizedBox(height: height.isNegative ? 0 : height),
               SafeArea(
                 bottom: false,
@@ -154,7 +146,7 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                   validate: true,
                   code: false,
                   textColor: ClrStyle.whiteTo17[sl<AuthConfig>().idx],
-                  onPressed: (){
+                  onPressed: () {
                     widget.onTap(
                       _image,
                     );
@@ -162,7 +154,9 @@ class _AvatarModalWidgetState extends State<AvatarModalWidget> {
                   },
                 ),
               ),
-              SizedBox(height: 30.h,),
+              SizedBox(
+                height: 30.h,
+              ),
             ],
           ),
         ),

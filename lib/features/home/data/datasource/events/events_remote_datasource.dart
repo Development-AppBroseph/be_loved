@@ -8,9 +8,7 @@ import 'package:be_loved/features/home/domain/entities/events/event_entity.dart'
 import 'package:dio/dio.dart';
 
 import '../../../../../core/error/exceptions.dart';
-import '../../../../../core/services/database/auth_params.dart';
 import '../../../../../core/services/network/endpoints.dart';
-import '../../../../../locator.dart';
 
 abstract class EventsRemoteDataSource {
   Future<List<EventEntity>> getEvents();

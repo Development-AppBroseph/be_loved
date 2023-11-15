@@ -912,12 +912,12 @@ Widget _buildDatePicker(BuildContext context,
       color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
       fontSize: 20.sp,
       fontWeight: FontWeight.w800);
-  TextStyle style2 = TextStyle(
-      color: ColorStyles.blackColor,
-      fontSize: 18.sp,
-      fontWeight: FontWeight.w700);
+  // TextStyle style2 = TextStyle(
+  //     color: ColorStyles.blackColor,
+  //     fontSize: 18.sp,
+  //     fontWeight: FontWeight.w700);
   DateTime focusedDay = DateTime(selectedDay.year, selectedDay.month, 1);
-  DateTime calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
+  // DateTime calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
   Widget _buildJustDay(context, DateTime date, events) {
     return CalendarJustItem(
         text: date.day.toString(),
@@ -1045,7 +1045,7 @@ Widget _buildDatePicker(BuildContext context,
                               currentDate.add(const Duration(days: 1));
                           onTap(selectedDay, false);
                         }
-                        calendarStartDay = focusedDay;
+                        // calendarStartDay = focusedDay;
                       });
                     },
                     calendarType: calendarType,
@@ -1061,11 +1061,11 @@ Widget _buildDatePicker(BuildContext context,
                     setState(() {
                       focusedDay = dt;
                     });
-                    Future.delayed(const Duration(milliseconds: 300), () {
-                      setState(() {
-                        calendarStartDay = dt;
-                      });
-                    });
+                    // Future.delayed(const Duration(milliseconds: 300), () {
+                    //   setState(() {
+                    //     calendarStartDay = dt;
+                    //   });
+                    // });
                   },
                   focusedDay: focusedDay,
                   calendarFormat: CalendarFormat.month,

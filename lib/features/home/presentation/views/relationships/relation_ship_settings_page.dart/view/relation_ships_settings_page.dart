@@ -58,7 +58,6 @@ class RelationShipsSettingsPage extends StatefulWidget {
 class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
     with AutomaticKeepAliveClientMixin {
   final int maxLength = 18;
-  static const _indicatorSize = 30.0;
   static const _imageSize = 30.0;
   String text = '';
   final _streamController = StreamController<int>();
@@ -108,6 +107,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Stack(
       children: [
         content(context),
@@ -239,8 +239,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                         Loader.hide();
                                         showAlertToast(state.message);
                                       }
-                                      if (state
-                                          is ProfileInternetErrorState) {
+                                      if (state is ProfileInternetErrorState) {
                                         Loader.hide();
                                         showAlertToast(
                                             'Проверьте соединение с интернетом!');
@@ -249,8 +248,9 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                           is ProfileRelationNameChangedState) {
                                         // Loader.hide();
                                         // showLoaderWrapper(context);
-                                        context.read<AuthBloc>().add(
-                                            GetUser(isJustRefresh: true));
+                                        context
+                                            .read<AuthBloc>()
+                                            .add(GetUser(isJustRefresh: true));
                                       }
                                     },
                                     builder: (context, state) {
@@ -272,8 +272,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                         showLoaderWrapper(
                                                             context);
                                                         context
-                                                            .read<
-                                                                ProfileBloc>()
+                                                            .read<ProfileBloc>()
                                                             .add(EditRelationNameEvent(
                                                                 name: _controller
                                                                     .text
@@ -303,8 +302,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                             isDirectional:
                                                                 false,
                                                           ),
-                                                          composing:
-                                                              TextRange(
+                                                          composing: TextRange(
                                                             start: 0,
                                                             end: maxLength,
                                                           ),
@@ -326,13 +324,11 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                     focusNode: f1,
                                                     scrollPadding:
                                                         EdgeInsets.zero,
-                                                    decoration:
-                                                        InputDecoration(
+                                                    decoration: InputDecoration(
                                                       contentPadding:
-                                                          const EdgeInsets
-                                                              .only(top: 20),
-                                                      border:
-                                                          InputBorder.none,
+                                                          const EdgeInsets.only(
+                                                              top: 20),
+                                                      border: InputBorder.none,
                                                       hintText: f1.hasFocus
                                                           ? " "
                                                           : 'Назовите отношения',
@@ -353,8 +349,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                     // MySharedPrefs().setNameRelationShips(
                                                     //     _controller.text);
                                                     // getNameRelationShips();
-                                                    showLoaderWrapper(
-                                                        context);
+                                                    showLoaderWrapper(context);
                                                     context
                                                         .read<ProfileBloc>()
                                                         .add(EditRelationNameEvent(
@@ -366,8 +361,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                         .requestFocus(f1);
                                                   }
                                                 },
-                                                child: _controller.text
-                                                            .isNotEmpty &&
+                                                child: _controller
+                                                            .text.isNotEmpty &&
                                                         f1.hasFocus
                                                     ? const Icon(
                                                         Icons.check_rounded,
@@ -377,10 +372,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                         ? SvgPicture.asset(
                                                             SvgImg.edit)
                                                         : const Icon(
-                                                            Icons
-                                                                .check_rounded,
-                                                            color:
-                                                                Colors.white,
+                                                            Icons.check_rounded,
+                                                            color: Colors.white,
                                                           ),
                                               )
                                             ],
@@ -391,8 +384,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                   ),
                                   SizedBox(height: 25.h),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 25.w),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 25.w),
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -457,8 +450,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                             duration: const Duration(
                                               milliseconds: 600,
                                             ),
-                                            backgroundColor:
-                                                Colors.transparent,
+                                            backgroundColor: Colors.transparent,
                                             builder: (context) {
                                               return LevelsWidget(
                                                 dateTime: datetime,
@@ -484,8 +476,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                 children: [
                                                   SvgPicture.asset(
                                                     SvgImg.heart,
-                                                    color:
-                                                        ColorStyles.redColor,
+                                                    color: ColorStyles.redColor,
                                                     width: 27.w,
                                                   ),
                                                   SizedBox(
@@ -513,8 +504,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                         SizedBox(
                                           width: double.infinity,
                                           child: CupertinoCard(
-                                            radius:
-                                                BorderRadius.circular(40.r),
+                                            radius: BorderRadius.circular(40.r),
                                             color: ClrStyle.whiteTo17[
                                                 sl<AuthConfig>().idx],
                                             elevation: 0,
@@ -526,9 +516,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                 TagsListBlock(),
                                                 SizedBox(height: 25.h),
                                                 Padding(
-                                                  padding:
-                                                      EdgeInsets.symmetric(
-                                                          horizontal: 25.w),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 25.w),
                                                   child: GestureDetector(
                                                     onTap: widget.toAllEvents,
                                                     behavior: HitTestBehavior
@@ -567,9 +556,10 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                                     .rotate(
                                                                         angle:
                                                                             pi,
-                                                                        child:
-                                                                            SvgPicture.asset(
-                                                                          SvgImg.back,
+                                                                        child: SvgPicture
+                                                                            .asset(
+                                                                          SvgImg
+                                                                              .back,
                                                                           height:
                                                                               20.41.h,
                                                                           width:
@@ -588,8 +578,7 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                                 SizedBox(height: 17.h),
                                                 BlocConsumer<EventsBloc,
                                                         EventsState>(
-                                                    listener:
-                                                        (context, state) {
+                                                    listener: (context, state) {
                                                   if (state
                                                       is EventErrorState) {
                                                     showAlertToast(

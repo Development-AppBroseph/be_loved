@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:be_loved/core/widgets/alerts/vpn.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/account/view/account_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';

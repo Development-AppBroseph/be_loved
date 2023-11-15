@@ -14,7 +14,6 @@ import 'package:be_loved/features/home/presentation/views/purposes/purposes_page
 import 'package:be_loved/features/home/presentation/views/relationships/main_page.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
-import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_state.dart';
 import 'package:be_loved/features/profile/presentation/views/parting_second_view.dart';
 import 'package:be_loved/features/profile/presentation/views/second_subcription.dart';
 import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
@@ -30,6 +29,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../constants/colors/color_styles.dart';
 import '../bloc/tags/tags_bloc.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
   bool isFirst;
   HomePage({Key? key, this.isFirst = false}) : super(key: key);

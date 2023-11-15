@@ -142,7 +142,6 @@ class _AlbumsPageState extends State<AlbumsPage> {
 
   Widget _buildAlbum(BuildContext context, AlbumEntity albumEntity,
       {bool isFavor = false}) {
-    AlbumsBloc bloc = context.read<AlbumsBloc>();
     ScrollController scrollController = ScrollController();
     print(
         'ALBUM "${albumEntity.name}" files length is: ${albumEntity.files.length}');
@@ -188,7 +187,7 @@ class _AlbumsPageState extends State<AlbumsPage> {
                               duration: const Duration(seconds: 0),
                             )
                           : PhotoFullScreenView(
-                            file: albumEntity.files,
+                              file: albumEntity.files,
                               urlToImage: albumEntity.files[index].urlToFile,
                               index: index,
                             ),

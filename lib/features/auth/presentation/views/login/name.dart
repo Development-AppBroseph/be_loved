@@ -14,6 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class InputNamePage extends StatelessWidget {
   InputNamePage({Key? key, required this.nextPage}) : super(key: key);
   String? error;
@@ -284,6 +285,4 @@ class InputNamePage extends StatelessWidget {
       automaticallyImplyLeading: false,
     );
   }
-
-  
 }

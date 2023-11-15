@@ -49,7 +49,6 @@ class _MainEventsPageState extends State<MainEventsPage>
     HashTagData(type: TypeHashTag.add),
   ];
 
-  static const _indicatorSize = 30.0;
   static const _imageSize = 30.0;
 
   final ScrollController scrollController = ScrollController();
@@ -58,13 +57,8 @@ class _MainEventsPageState extends State<MainEventsPage>
   bool isLoading = false;
   bool isOpacity = false;
 
-  late AnimationController _spoonController;
-  static final _spoonTween = CurveTween(curve: Curves.easeInOutQuint);
   @override
   void initState() {
-    _spoonController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
-
     scrollController.addListener(() {
       if (scrollController.offset.toInt() < -40 && !isLoading) {
         _showLoader();
@@ -214,8 +208,8 @@ class _MainEventsPageState extends State<MainEventsPage>
   }
 
   Widget content() {
-    TextStyle style1 = TextStyle(
-        color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
+    // TextStyle style1 = TextStyle(
+    //     color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15.sp);
 
     TextStyle style2 = TextStyle(
         color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],

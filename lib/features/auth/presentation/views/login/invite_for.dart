@@ -21,6 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
+// ignore: must_be_immutable
 class InviteFor extends StatefulWidget {
   InviteFor({
     Key? key,

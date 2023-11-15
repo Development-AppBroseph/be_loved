@@ -11,9 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../../../../core/error/exceptions.dart';
-import '../../../../../core/services/database/auth_params.dart';
 import '../../../../../core/services/network/endpoints.dart';
-import '../../../../../locator.dart';
 import '../../../domain/entities/purposes/promos_entiti.dart';
 
 abstract class PurposeRemoteDataSource {

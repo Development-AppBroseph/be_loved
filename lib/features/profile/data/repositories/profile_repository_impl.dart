@@ -8,7 +8,6 @@ import 'package:be_loved/features/profile/domain/entities/back_entity.dart';
 import 'package:be_loved/features/profile/domain/entities/subscription_entiti.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:dartz/dartz.dart';
-import 'package:get/get_navigation/src/routes/default_transitions.dart';
 import '../../../../core/error/failures.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {

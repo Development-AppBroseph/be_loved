@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class CustomAnimationButton extends StatefulWidget {
   final Border? border;
   final String text;
@@ -41,13 +42,16 @@ class CustomButtonState extends State<CustomAnimationButton>
   @override
   void initState() {
     super.initState();
-    if(widget.red){
+    if (widget.red) {
       color = ColorStyles.redColor;
     }
     controller = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
     _colorAnim = ColorTween(
-            begin: widget.red ? ColorStyles.redColor : Color.fromRGBO(23, 23, 23, 1.0), end: Colors.white)
+            begin: widget.red
+                ? ColorStyles.redColor
+                : Color.fromRGBO(23, 23, 23, 1.0),
+            end: Colors.white)
         .animate(controller);
     _colorAnim.addListener(() {
       setState(() {
@@ -72,14 +76,14 @@ class CustomButtonState extends State<CustomAnimationButton>
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: widget.red
-                  ? ColorStyles.redColor
-                  : snapshot.data! < 0.1
-                      ? animation
-                          ? const Color.fromRGBO(23, 23, 23, 1.0)
-                          : widget.black
+                      ? ColorStyles.redColor
+                      : snapshot.data! < 0.1
+                          ? animation
                               ? const Color.fromRGBO(23, 23, 23, 1.0)
-                              : const Color.fromRGBO(32, 203, 131, 1.0)
-                      : const Color.fromRGBO(32, 203, 131, 1.0),  
+                              : widget.black
+                                  ? const Color.fromRGBO(23, 23, 23, 1.0)
+                                  : const Color.fromRGBO(32, 203, 131, 1.0)
+                          : const Color.fromRGBO(32, 203, 131, 1.0),
                   width: 1.sp,
                 ),
               ),
@@ -98,10 +102,10 @@ class CustomButtonState extends State<CustomAnimationButton>
                         width: snapshot.data! > 0 ? 378.w : 0,
                         decoration: BoxDecoration(
                           color: widget.red
-                          ? ColorStyles.redColor
-                          : widget.black
-                              ? const Color.fromRGBO(23, 23, 23, 1.0)
-                              : const Color.fromRGBO(32, 203, 131, 1.0),
+                              ? ColorStyles.redColor
+                              : widget.black
+                                  ? const Color.fromRGBO(23, 23, 23, 1.0)
+                                  : const Color.fromRGBO(32, 203, 131, 1.0),
                         ),
                       ),
                     ),

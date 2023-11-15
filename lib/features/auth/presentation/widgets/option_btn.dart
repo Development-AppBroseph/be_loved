@@ -1,5 +1,4 @@
 import 'package:be_loved/constants/colors/color_styles.dart';
-import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/material.dart';

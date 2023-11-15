@@ -1,6 +1,7 @@
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/presentation/views/archive/helpers/video_helper.dart';
 
+// ignore: must_be_immutable
 class GalleryFileModel extends GalleryFileEntity {
   GalleryFileModel({
     required int id,

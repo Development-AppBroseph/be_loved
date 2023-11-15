@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +5,8 @@ part 'main_screen_event.dart';
 part 'main_screen_state.dart';
 
 class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
-  
-  MainScreenBloc() : super(MainScreenChangedState(currentView: 0, currentWidget: null)) {
+  MainScreenBloc()
+      : super(MainScreenChangedState(currentView: 0, currentWidget: null)) {
     on<ChangeViewEvent>(_changeView);
     on<SetStateEvent>(_setState);
   }
@@ -17,14 +16,16 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
 
   void _changeView(ChangeViewEvent event, Emitter<MainScreenState> emit) async {
     emit(MainScreenBlankState());
-    if(event.view != null){
+    if (event.view != null) {
       currentView = event.view!;
       currentWidget = null;
-    }else{
+    } else {
       currentWidget = event.widget;
     }
-    emit(MainScreenChangedState(currentView: currentView, currentWidget: currentWidget));
+    emit(MainScreenChangedState(
+        currentView: currentView, currentWidget: currentWidget));
   }
+
   void _setState(SetStateEvent event, Emitter<MainScreenState> emit) async {
     emit(MainScreenBlankState());
 

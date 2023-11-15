@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
@@ -16,7 +15,8 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   final AddGalleryFile addGalleryFile;
   final DeleteGalleryFiles deleteGalleryFiles;
 
-  GalleryBloc(this.addGalleryFile, this.getGalleryFiles, this.deleteGalleryFiles)
+  GalleryBloc(
+      this.addGalleryFile, this.getGalleryFiles, this.deleteGalleryFiles)
       : super(GalleryFilesInitialState()) {
     on<GetGalleryFilesEvent>(_getGallery);
     on<GalleryFileAddEvent>(_addGallery);
@@ -39,7 +39,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
       page = 0;
       isEnd = false;
       files = [];
-    }else{
+    } else {
       emit(GalleryFilesBlankState());
     }
     page++;
@@ -48,9 +48,9 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
       (error) => errorCheck(error),
       (data) {
         print('DATA GOT: ${data}');
-        if(data.any((element) => files.any((file) => file.id == element.id))){
+        if (data.any((element) => files.any((file) => file.id == element.id))) {
           isEnd = true;
-        }else{
+        } else {
           if (event.isReset) {
             files = data;
           } else {
@@ -69,7 +69,8 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
       GalleryFileAddEvent event, Emitter<GalleryState> emit) async {
     emit(GalleryFilesLoadingState());
     final data = await addGalleryFile.call(AddGalleryFileParams(
-        galleryFileEntity: event.galleryFileEntity, ));
+      galleryFileEntity: event.galleryFileEntity,
+    ));
     GalleryState state = data.fold(
       (error) => errorCheck(error),
       (data) {
@@ -79,14 +80,14 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     emit(state);
   }
 
-
-  void _deleteGalleryFile(GalleryFileDeleteEvent event, Emitter<GalleryState> emit) async {
+  void _deleteGalleryFile(
+      GalleryFileDeleteEvent event, Emitter<GalleryState> emit) async {
     emit(GalleryFilesBlankState());
     final data = await deleteGalleryFiles.call(event.ids);
     GalleryState state = data.fold(
       (error) => errorCheck(error),
       (data) {
-        for(int i = 0; i < groupedFiles.length; i++){
+        for (int i = 0; i < groupedFiles.length; i++) {
           groupedFiles[i].topPosition = 0;
         }
         return GalleryFilesDeletedState();

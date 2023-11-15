@@ -1,17 +1,13 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/main_config_app.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/core/utils/functions.dart';
-import 'package:be_loved/core/utils/helpers/date_time_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
-import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
-import 'package:be_loved/features/home/presentation/views/archive/presentation/modals/add_file/add_file_modal.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
 import 'package:be_loved/locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';

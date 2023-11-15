@@ -1,8 +1,8 @@
-import 'package:be_loved/features/home/domain/entities/purposes/promos_entiti.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/purpose_entity.dart';
 
 import 'promos_model.dart';
 
+// ignore: must_be_immutable
 class PurposeModel extends PurposeEntity {
   PurposeModel({
     required int id,

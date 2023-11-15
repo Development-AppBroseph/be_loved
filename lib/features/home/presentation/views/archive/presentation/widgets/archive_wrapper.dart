@@ -9,9 +9,7 @@ import 'package:be_loved/core/utils/helpers/sync_helper.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/features/home/presentation/bloc/albums/albums_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
-import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
-import 'package:be_loved/features/home/presentation/bloc/moments/moments_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/memory_mini_info_card.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/relation_ships_page.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
@@ -53,11 +51,8 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
     'События',
   ];
 
-  static const _indicatorSize = 30.0;
   static const _imageSize = 30.0;
 
-  late AnimationController _spoonController;
-  static final _spoonTween = CurveTween(curve: Curves.easeInOutQuint);
   bool isLoading = false;
   bool isOpacity = false;
   final StreamController<bool> streamController = StreamController();
@@ -68,8 +63,6 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
     GalleryBloc bloc = context.read<GalleryBloc>();
     ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
     AlbumsBloc albumsBloc = context.read<AlbumsBloc>();
-    MomentsBloc momentsBloc = context.read<MomentsBloc>();
-    EventsBloc eventsBloc = context.read<EventsBloc>();
     context.read<AlbumsBloc>().add(GetAlbumsEvent());
     context.read<GalleryBloc>().add(GetGalleryFilesEvent(isReset: true));
     if (bloc.state is GalleryFilesInitialState) {
@@ -109,8 +102,6 @@ class _ArchiveWrapperState extends State<ArchiveWrapper>
 
   @override
   void initState() {
-    _spoonController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
     widget.scrollController.addListener(() {
       if (widget.scrollController.offset.toInt() < -40 && !isLoading) {
         _showLoader();

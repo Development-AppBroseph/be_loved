@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
+// ignore: must_be_immutable
 class GalleryFileEntity extends Equatable {
   final int id;
   final String urlToFile;
@@ -31,16 +32,16 @@ class GalleryFileEntity extends Equatable {
     this.targetName,
   });
 
-
-  Future<Map<String, dynamic>> toMap() async{
+  Future<Map<String, dynamic>> toMap() async {
     return {
       'place': place,
       'file': await MultipartFile.fromFile(urlToFile),
       'date': dateTime.toString(),
     };
   }
+
   @override
   List<Object> get props => [
-    id,
-  ];
+        id,
+      ];
 }

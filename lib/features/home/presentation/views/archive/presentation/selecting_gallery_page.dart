@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../theme/data/entities/clr_style.dart';
 
+// ignore: must_be_immutable
 class SelectingGalleryPage extends StatefulWidget {
   List<int> files;
   final bool isOneItemSelecting;
@@ -99,7 +100,6 @@ class _SelectingGalleryPageState extends State<SelectingGalleryPage> {
 
   @override
   Widget build(BuildContext context) {
-    GalleryBloc galleryBloc = context.read<GalleryBloc>();
     return Scaffold(
       backgroundColor: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
       bottomNavigationBar: BottomNavigation(

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:be_loved/core/error/exceptions.dart';
 import 'package:be_loved/core/services/database/shared_prefs.dart';
 import 'package:be_loved/core/services/network/endpoints.dart';
-import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -56,7 +55,8 @@ class BeLovedRemoteDatasourceImpl implements BeLovedRemoteDatasource {
     if (response.statusCode! >= 200 && response.statusCode! < 400) {
       print(true);
     } else if (response.statusCode == 400) {
-      if(response.data['phone_number'] != null && response.data['phone_number'] == 'Телефон занят'){
+      if (response.data['phone_number'] != null &&
+          response.data['phone_number'] == 'Телефон занят') {
         throw ServerException(message: 'Телефон занят');
       }
       throw ServerException(message: 'Попробуйте через 1 минуту');

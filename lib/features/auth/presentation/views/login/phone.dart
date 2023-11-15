@@ -43,7 +43,7 @@ class _PhonePageState extends State<PhonePage> {
   }
 
   bool isValidate(TextEditingController controller) {
-    if (controller.text.length > 12 && controller.text.substring(0, 1) == '9' ) {
+    if (controller.text.length > 12 && controller.text.substring(0, 1) == '9') {
       return true;
     }
     return controller.text.isEmpty;
@@ -74,7 +74,6 @@ class _PhonePageState extends State<PhonePage> {
       focusNode.addListener(() {
         _streamController.sink.add(focusNode.hasFocus);
       });
-      var bloc = BlocProvider.of<AuthBloc>(context);
 
       return Scaffold(
         appBar: AppBar(
@@ -207,7 +206,6 @@ class _PhonePageState extends State<PhonePage> {
                                 SizedBox(
                                   width: 12.w,
                                 ),
-
                                 Container(
                                   width: 0.6.sw,
                                   alignment: Alignment.center,

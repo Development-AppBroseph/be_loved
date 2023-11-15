@@ -102,7 +102,7 @@ class MomentsBloc extends Bloc<MomentsEvent, MomentsState> {
     emit(MomentBlankState());
     final data = await addFavorites.call(AddFavoritesParams(
         fileId: event.id, isFavor: setNewFavorite(event.id, event.target)));
-    MomentsState state = data.fold(
+    data.fold(
       (error) => errorCheck(error),
       (data) {
         return MomentFavoriteChangeState();

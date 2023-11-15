@@ -1,7 +1,7 @@
-import 'package:be_loved/features/home/data/models/purposes/promos_model.dart';
 import 'package:be_loved/features/home/domain/entities/purposes/promos_entiti.dart';
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class PurposeEntity extends Equatable {
   final int id;
   final int? widgetId;

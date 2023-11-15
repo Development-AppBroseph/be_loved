@@ -29,7 +29,6 @@ dependencies:
   flutter_native_splash: ^2.2.9
   scroll_date_picker: ^3.6.0
   shared_preferences: ^2.0.15
-  provider: ^6.0.3
   dio: ^4.0.6
   lottie: ^1.4.2
   get: ^4.3.8
@@ -86,7 +85,6 @@ dependencies:
   flutter_inappwebview: ^5.8.0
   comparer: ^2.0.1
   # appmetrica_plugin: ^1.4.0
-  sberbank_acquiring: ^2.0.1
   yookassa_payments_flutter: ^1.1.1
   check_vpn_connection: ^0.0.2
   flutter_smart_dialog: ^4.9.0+3
@@ -97,6 +95,7 @@ dependencies:
   permission_handler: ^10.2.0
   firebase_messaging: ^14.6.4
   package_info_plus: ^1.4.3+1
+  appmetrica_plugin: ^1.4.0
           
   # webview_flutter: ^4.0.2
 
@@ -104,6 +103,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  dart_code_metrics: ^5.6.0
 
 flutter:
   assets:

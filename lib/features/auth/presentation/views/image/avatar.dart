@@ -6,7 +6,6 @@ import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/helpers/image_helper.dart';
-import 'package:be_loved/core/utils/helpers/small_image.dart';
 import 'package:be_loved/core/utils/images.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
 import 'package:be_loved/features/auth/data/models/auth/select_image.dart';
@@ -20,6 +19,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 
+// ignore: must_be_immutable
 class AvatarPage extends StatelessWidget {
   AvatarPage({Key? key, required this.nextPage, required this.previousPage})
       : super(key: key);
@@ -256,11 +256,11 @@ class _AvatarMenuState extends State<AvatarMenu> {
   final pageController = PageController(viewportFraction: 1.0, keepPage: false);
 
   SelectImage selectImage = SelectImage();
-  String _selectedImageAsset = '';
+  String selectedImageAsset = '';
 
   onTapAvatar(String asset) async {
     widget.onSelectAvatar(await getImageFileFromAssets(asset));
-    _selectedImageAsset = asset;
+    selectedImageAsset = asset;
   }
 
   @override
@@ -440,6 +440,7 @@ class SelectedImage {
   SelectedImage({required this.image, required this.page});
 }
 
+// ignore: must_be_immutable
 class PageTest extends StatefulWidget {
   final AvatarsGridModel avatarsGridModel;
   final Function(String asset) onAvatarTap;

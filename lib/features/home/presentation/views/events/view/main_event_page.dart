@@ -1,8 +1,6 @@
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/event_detail_view.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/event_page.dart';
-import 'package:be_loved/features/home/presentation/views/events/widgets/all_events.dart';
-import 'package:be_loved/features/home/presentation/views/events/widgets/main_page/events_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,7 +34,9 @@ class _MainEventPageState extends State<MainEventPage> {
         setState(() {});
       },
       children: [
-        EventPage(nextPage: nextPage,),
+        EventPage(
+          nextPage: nextPage,
+        ),
         EventDetailView(prevPage: prevPage),
       ],
     );
@@ -45,8 +45,8 @@ class _MainEventPageState extends State<MainEventPage> {
   void nextPage(int id) {
     context.read<EventsBloc>().eventDetailSelectedId = id;
     controller.nextPage(
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.easeInOutQuint);
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOutQuint);
   }
 
   void prevPage() => controller.previousPage(

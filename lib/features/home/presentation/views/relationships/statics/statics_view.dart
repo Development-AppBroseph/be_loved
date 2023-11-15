@@ -1,4 +1,3 @@
-import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/constants/texts/text_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/utils/images.dart';

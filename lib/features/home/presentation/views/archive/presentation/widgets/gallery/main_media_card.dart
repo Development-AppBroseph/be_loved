@@ -4,7 +4,6 @@ import 'package:be_loved/features/home/domain/entities/archive/gallery_file_enti
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/helpers/gallery_helper.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/selected_check.dart';
-import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/video_file_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -15,13 +15,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+// ignore: must_be_immutable
 class RelationStartDateWidget extends StatelessWidget {
   final Function() onTapStats;
   final Function() onTapEditDate;
   final Function(DateTime date) onChangeDate;
   DateTime datetime;
   RelationStartDateWidget(
-      {super.key, required this.datetime,
+      {super.key,
+      required this.datetime,
       required this.onTapEditDate,
       required this.onChangeDate,
       required this.onTapStats});
@@ -246,7 +248,7 @@ Widget _buildDatePicker(BuildContext context,
       color: Colors.black, fontSize: 20.sp, fontWeight: FontWeight.w800);
 
   DateTime focusedDay = DateTime(selectedDay.year, selectedDay.month, 1);
-  DateTime calendarStartDay = DateTime(selectedDay.year, selectedDay.month, 1);
+
   Widget _buildJustDay(context, DateTime date, events) {
     return CalendarJustItem(
         text: date.day.toString(),
@@ -382,7 +384,6 @@ Widget _buildDatePicker(BuildContext context,
                           selectedDay = startDate.add(const Duration(days: 1));
                           onTap(selectedDay, false);
                         }
-                        calendarStartDay = focusedDay;
                       });
                     },
                     calendarType: calendarType,
@@ -397,11 +398,6 @@ Widget _buildDatePicker(BuildContext context,
                   onPageChanged: (dt) {
                     setState(() {
                       focusedDay = dt;
-                    });
-                    Future.delayed(const Duration(milliseconds: 300), () {
-                      setState(() {
-                        calendarStartDay = dt;
-                      });
                     });
                   },
                   focusedDay: focusedDay,

@@ -4,10 +4,8 @@ import 'package:be_loved/features/home/data/models/events/tag_model.dart';
 import 'package:be_loved/features/home/domain/entities/events/tag_entity.dart';
 import 'package:dio/dio.dart';
 import '../../../../../core/error/exceptions.dart';
-import '../../../../../core/services/database/auth_params.dart';
 import '../../../../../core/services/database/shared_prefs.dart';
 import '../../../../../core/services/network/endpoints.dart';
-import '../../../../../locator.dart';
 
 abstract class TagsRemoteDataSource {
   Future<List<TagEntity>> getTags();

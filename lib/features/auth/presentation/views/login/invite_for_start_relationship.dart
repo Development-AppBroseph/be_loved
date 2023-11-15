@@ -4,6 +4,7 @@ import 'package:be_loved/features/auth/presentation/views/login/relationships.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class InviteForStartRelationship extends StatelessWidget {
   InviteForStartRelationship({
     Key? key,

@@ -1,5 +1,3 @@
-
-
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_group_files_entity.dart';
@@ -30,7 +28,6 @@ class ArchivePage extends StatefulWidget {
 }
 
 class _ArchivePageState extends State<ArchivePage> {
-  
   ScrollController scrollController = ScrollController();
   PageController pageController = PageController();
   bool showTop = false;
@@ -81,12 +78,10 @@ class _ArchivePageState extends State<ArchivePage> {
   //     'newHideGalleryFileID': newHideGalleryFileID
   //   };
   // }
-   
 
   @override
   void initState() {
     super.initState();
-    
 
     GalleryBloc bloc = context.read<GalleryBloc>();
     ArchiveBloc archiveBloc = context.read<ArchiveBloc>();
@@ -245,7 +240,6 @@ class _ArchivePageState extends State<ArchivePage> {
 
   @override
   Widget build(BuildContext context) {
-    GalleryBloc galleryBloc = context.read<GalleryBloc>();
     return Stack(
       children: [
         BlocListener<GalleryBloc, GalleryState>(
@@ -309,7 +303,8 @@ class _ArchivePageState extends State<ArchivePage> {
                           dateTime: dateTime,
                           isDeleting: galleryDeleteIds.isNotEmpty,
                           onTap: () {
-                            if (enitityPos != null && galleryDeleteIds.isEmpty) {
+                            if (enitityPos != null &&
+                                galleryDeleteIds.isEmpty) {
                               galleryDeleteIds.add(enitityPos!.mainPhoto.id);
                             } else {
                               galleryDeleteIds = [];
@@ -327,9 +322,7 @@ class _ArchivePageState extends State<ArchivePage> {
             ],
           ),
         ),
-        
       ],
     );
   }
-  
 }

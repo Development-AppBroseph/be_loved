@@ -10,8 +10,8 @@ import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class UserEventItem extends StatelessWidget {
   final EditorState editorState;
   final EventEntity eventEntity;
@@ -21,27 +21,24 @@ class UserEventItem extends StatelessWidget {
   final Function() onLongPress;
   final Function() onTap;
 
-  UserEventItem({
-    required this.editorState, 
-    required this.isSelected,
-    required this.onLongPress,
-    required this.onTap,
-    required this.onTapDelete,
-    required this.onSelect,
-    required this.eventEntity
-  });
+  UserEventItem(
+      {required this.editorState,
+      required this.isSelected,
+      required this.onLongPress,
+      required this.onTap,
+      required this.onTapDelete,
+      required this.onSelect,
+      required this.eventEntity});
 
   ScrollController scrollController = ScrollController();
 
   void scrollToBottom() {
-    if(editorState == EditorState.just){
+    if (editorState == EditorState.just) {
       scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.linear
-      );
+          duration: const Duration(milliseconds: 300), curve: Curves.linear);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => scrollToBottom());
@@ -50,87 +47,90 @@ class UserEventItem extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.h),
-        height: 45.h,
-        child: ListView(
-          reverse: true,
-          controller: scrollController,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          scrollDirection: Axis.horizontal,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: editorState != EditorState.oneItemDelete ? 378.w : 311.w,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        truncateWithEllipsis(22, eventEntity.title),
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                          color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
-                        ),
-                      ),
-                      eventEntity.important
-                      ? ImportantTextWidget()
-                      : Text(
-                        'Добавил(а): ${eventEntity.eventCreator.username}',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xff969696),
-                        ),
-                      ),
-                    ],
-                  ),
-                  editorState == EditorState.groupSelect
-                    ? GestureDetector(
-                      onTap: (){
-                        onSelect(!isSelected);
-                      },
-                      child: SvgPicture.asset(
-                        isSelected
-                        ? 'assets/icons/checked_event.svg' 
-                        : 'assets/icons/unchecked_event.svg', 
-                      ),
-                    )
-                    : Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          getTextFromDate(eventEntity.datetimeString, null, editorState != EditorState.just),
+          margin: EdgeInsets.symmetric(vertical: 8.h),
+          height: 45.h,
+          child: ListView(
+            reverse: true,
+            controller: scrollController,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            scrollDirection: Axis.horizontal,
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: editorState != EditorState.oneItemDelete ? 378.w : 311.w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          truncateWithEllipsis(22, eventEntity.title),
                           style: TextStyle(
                             fontFamily: 'Inter',
-                            fontSize: 15.sp,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
-                            color: getColorFromDays(eventEntity.datetimeString, eventEntity.important),
+                            color:
+                                ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
                           ),
                         ),
-                      ),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: onTapDelete,
-              child: Padding(
-                padding: EdgeInsets.only(right: 32.w),
-                child: SvgPicture.asset(
-                  SvgImg.minus,
-                  height: 24.h,
-                  width: 24.w,
+                        eventEntity.important
+                            ? ImportantTextWidget()
+                            : Text(
+                                'Добавил(а): ${eventEntity.eventCreator.username}',
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xff969696),
+                                ),
+                              ),
+                      ],
+                    ),
+                    editorState == EditorState.groupSelect
+                        ? GestureDetector(
+                            onTap: () {
+                              onSelect(!isSelected);
+                            },
+                            child: SvgPicture.asset(
+                              isSelected
+                                  ? 'assets/icons/checked_event.svg'
+                                  : 'assets/icons/unchecked_event.svg',
+                            ),
+                          )
+                        : Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              getTextFromDate(eventEntity.datetimeString, null,
+                                  editorState != EditorState.just),
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.bold,
+                                color: getColorFromDays(
+                                    eventEntity.datetimeString,
+                                    eventEntity.important),
+                              ),
+                            ),
+                          ),
+                  ],
                 ),
               ),
-            ),
-          ],
-        )
-      ),
+              GestureDetector(
+                onTap: onTapDelete,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 32.w),
+                  child: SvgPicture.asset(
+                    SvgImg.minus,
+                    height: 24.h,
+                    width: 24.w,
+                  ),
+                ),
+              ),
+            ],
+          )),
     );
   }
 }

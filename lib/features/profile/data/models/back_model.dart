@@ -1,6 +1,7 @@
 import 'package:be_loved/features/profile/data/models/back_file_model.dart';
 import 'package:be_loved/features/profile/domain/entities/back_entity.dart';
 
+// ignore: must_be_immutable
 class BackModel extends BackEntity {
   BackModel({
     required int? relationId,

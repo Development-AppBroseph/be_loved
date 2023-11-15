@@ -2,6 +2,7 @@ import 'package:be_loved/features/home/domain/entities/archive/album_entity.dart
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class MomentEntity extends Equatable {
   final List<GalleryFileEntity> forYou;
   final List<GalleryFileEntity> otherFiles;

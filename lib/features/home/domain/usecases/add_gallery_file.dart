@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:be_loved/features/home/domain/entities/archive/gallery_file_entity.dart';
 import 'package:be_loved/features/home/domain/repositories/archive_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -19,7 +18,9 @@ class AddGalleryFile implements UseCase<void, AddGalleryFileParams> {
 
 class AddGalleryFileParams extends Equatable {
   final List<GalleryFileEntity> galleryFileEntity;
-  const AddGalleryFileParams({required this.galleryFileEntity, });
+  const AddGalleryFileParams({
+    required this.galleryFileEntity,
+  });
 
   @override
   List<Object> get props => [galleryFileEntity];

@@ -4,9 +4,7 @@ import 'dart:io';
 import 'package:be_loved/core/network/repository.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/database/secure_storage.dart';
-import 'package:be_loved/core/usecases/usecase.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
-import 'package:be_loved/features/profile/domain/usecases/get_status_sub.dart';
 import 'package:be_loved/locator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -62,18 +60,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (result != null) {
         paymentEnabled = result.haveSub;
       }
-      // result.fold((error) => paymentEnabled = false, (done) {
-      //   if (done.haveSub) {
-      //     paymentEnabled = true;
-      //   } else {
-      //     paymentEnabled = false;
-      //   }
-      // });
-      print('payment is: $paymentEnabled');
     } catch (e) {
       emit(AuthLoading());
-      // await Repository().deleteInviteUser(
-      //     ((await MySharedPrefs().user) as UserAnswer).relationId!);
       // ignore: use_build_context_synchronously
       MySharedPrefs().logOut(event.context);
       emit(AuthStated());
@@ -139,7 +127,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         quality: 30,
       );
       image = compressedImage;
-      var res = await Repository().editUser(image);
+      await Repository().editUser(image);
     } else {
       emit(ImageError());
     }
@@ -153,9 +141,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // if (event.codeUser == code.toString()) {
       var result = await Repository().checkIsUserExist(event.phone, event.code);
       if (result != null) {
-        print('SETTTING TOKEN ${result.token}');
         if (result.token != null) {
-          print('SETTTING TOKEN ${result.token}');
           await SharedPreferences.getInstance()
             ..setString('token', result.token!);
           MySecureStorage().setToken(result.token!);
@@ -204,7 +190,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _pickImage(PickImage event, Emitter<AuthState> emit) async {
-    var result;
+    XFile? result;
     if (event.file == null) {
       result = await ImagePicker().pickImage(
         source: ImageSource.gallery,
@@ -212,7 +198,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     //print(result);
     if (result != null || event.file != null) {
-      var file = event.file ?? File(result.path);
+      var file = event.file ?? File(result!.path);
       final filePath = file.absolute.path;
 
       final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
@@ -234,7 +220,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _initUser(InitUser event, Emitter<AuthState> emit) async {
     try {
-      print('INIT USER and VK CODE: ${vkCode} ----');
       //VK
       var result = await Repository().initUser(secretKey ?? '', nickname ?? '',
           image == null ? null : File(image!.path), vkCode);
@@ -330,7 +315,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       var result = await Repository().inviteUser(event.phone);
       //print(result);
 
-      print('${result?.date} -дата');
       if (result?.date == null) {
         emit(InviteError400('Нет такого номера'));
       }

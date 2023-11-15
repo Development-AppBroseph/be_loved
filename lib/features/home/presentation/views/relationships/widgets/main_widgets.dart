@@ -16,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// ignore: must_be_immutable
 class MainWidgets extends StatelessWidget {
   MainWidgets({Key? key}) : super(key: key);
 
@@ -35,7 +36,6 @@ class MainWidgets extends StatelessWidget {
     context
         .read<PurposeBloc>()
         .add(SendPhotoPurposeEvent(path: file.path, target: id));
-   
   }
 
   GlobalKey fileKey = GlobalKey();

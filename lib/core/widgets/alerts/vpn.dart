@@ -16,12 +16,12 @@ class Vpn extends StatefulWidget {
 }
 
 class _VpnState extends State<Vpn> {
-  late Timer _timer;
+  late Timer timer;
   int _start = 5;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
+    timer = Timer.periodic(
       oneSec,
       (Timer timer) {
         if (_start == 0) {
@@ -47,7 +47,11 @@ class _VpnState extends State<Vpn> {
   Widget build(BuildContext context) {
     return Container(
       height: 100.h,
-      margin: const EdgeInsets.only(right: 25, left: 25, bottom: 111,),
+      margin: const EdgeInsets.only(
+        right: 25,
+        left: 25,
+        bottom: 111,
+      ),
       padding: const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
@@ -65,7 +69,7 @@ class _VpnState extends State<Vpn> {
             fit: FlexFit.tight,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children:  [
+              children: [
                 Text(
                   'Возможно у вас включен VPN',
                   style: TextStyle(

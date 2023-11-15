@@ -173,7 +173,6 @@ class _EventDetailViewState extends State<EventDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    EventsBloc eventsBloc = context.read<EventsBloc>();
     return Scaffold(
       backgroundColor: ClrStyle.backToBlack2C[sl<AuthConfig>().idx],
       body: BlocConsumer<EventsBloc, EventsState>(

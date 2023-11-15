@@ -14,12 +14,12 @@ class SuccesAuthAlert extends StatefulWidget {
 }
 
 class _SuccesAuthAlertState extends State<SuccesAuthAlert> {
-  late Timer _timer;
+  late Timer timer;
   int _start = 5;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
+    timer = Timer.periodic(
       oneSec,
       (Timer timer) {
         if (_start == 0) {

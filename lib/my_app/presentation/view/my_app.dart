@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:be_loved/constants/colors/color_styles.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/widgets/buttons/custom_button.dart';
@@ -7,8 +6,6 @@ import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/auth/presentation/views/login/auth_page.dart';
 import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
-import 'package:be_loved/features/profile/presentation/views/second_subcription.dart';
-import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
 import 'package:be_loved/features/theme/bloc/theme_bloc.dart';
 import 'package:be_loved/locator.dart';
 import 'package:be_loved/my_app/presentation/controller/my_app_cubit.dart';

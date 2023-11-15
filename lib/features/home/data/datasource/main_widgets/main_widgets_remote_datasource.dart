@@ -8,9 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../../../../core/error/exceptions.dart';
-import '../../../../../core/services/database/auth_params.dart';
 import '../../../../../core/services/network/endpoints.dart';
-import '../../../../../locator.dart';
 
 abstract class MainWidgetsRemoteDataSource {
   Future<MainWidgetsEntity> getMainWidgets();

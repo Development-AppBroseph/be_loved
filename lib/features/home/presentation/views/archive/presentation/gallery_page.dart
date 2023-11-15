@@ -15,7 +15,6 @@ import 'package:be_loved/features/home/presentation/views/archive/presentation/w
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery/mini_media_card.dart';
 import 'package:be_loved/features/home/presentation/views/archive/presentation/widgets/gallery_settings_modal.dart';
 import 'package:be_loved/features/home/presentation/views/events/view/photo_view.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cupertino_rounded_corners/cupertino_rounded_corners.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +22,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// ignore: must_be_immutable
 class GalleryPage extends StatefulWidget {
   final int hideGalleryFileID;
   final List<int> deletingIds;

@@ -327,7 +327,7 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
   List<EventEntity> getInHomeEvents(List<EventEntity> list) {
     EventEntity? firstItem;
     EventEntity? secondItem;
-    EventEntity? thirdItem;
+    // EventEntity? thirdItem;
     List<EventEntity> result = [];
 
     for (EventEntity item in list) {
@@ -345,9 +345,9 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
     if (secondItem != null) {
       result.add(secondItem);
     }
-    if (thirdItem != null) {
-      result.add(thirdItem);
-    }
+    // if (thirdItem != null) {
+    //   result.add(thirdItem);
+    // }
     return result;
   }
 

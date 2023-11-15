@@ -15,12 +15,12 @@ class NumberAlert extends StatefulWidget {
 }
 
 class _NumberAlertState extends State<NumberAlert> {
-  late Timer _timer;
+  late Timer timer;
   int _start = 5;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
+    timer = Timer.periodic(
       oneSec,
       (Timer timer) {
         if (_start == 0) {
@@ -71,7 +71,7 @@ class _NumberAlertState extends State<NumberAlert> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
+              children: [
                 Text(
                   'Номер успешно изменен',
                   style: TextStyle(

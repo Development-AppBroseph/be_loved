@@ -43,8 +43,6 @@ class DecorBloc extends Bloc<DecorEvent, DecorState> {
     back!.assetPhoto = event.assetPhoto;
     back!.backPhoto = event.backFileEntity?.id;
     emit(DecorEditedSuccessState());
-    final gotBack = await editBackgroundInfo
-        .call(EditBackgroundsInfoParams(back: back!, filePath: null));
     // DecorState state = gotBack.fold(
     //   (error) => errorCheck(error),
     //   (data) {

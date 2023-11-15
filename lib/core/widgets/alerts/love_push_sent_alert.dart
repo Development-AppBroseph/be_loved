@@ -22,12 +22,12 @@ class _LovePushSentAlertState extends State<LovePushSentAlert> {
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   ).createShader(const Rect.fromLTWH(0.0, 0.0, 360.0, 70.0));
-  late Timer _timer;
+  late Timer timer;
   int _start = 5;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
+    timer = Timer.periodic(
       oneSec,
       (Timer timer) {
         if (_start == 0) {
@@ -91,7 +91,7 @@ class _LovePushSentAlertState extends State<LovePushSentAlert> {
                   ),
                   textAlign: TextAlign.start,
                 ),
-                 Text(
+                Text(
                   'Партнёр получил уведомление о том, как ты его любишь!',
                   style: TextStyle(
                     fontFamily: 'Inter',

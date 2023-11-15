@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:be_loved/core/error/exceptions.dart';
 import 'package:be_loved/core/models/payment/payment_model.dart';
 import 'package:be_loved/core/models/subscriptions/subscription_variant.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
@@ -93,9 +92,7 @@ class Repository {
           }
         },
       );
-      print('RES: ${response.statusCode} ${response.data}');
       if (response.statusCode == 200) {
-        print(123);
         return PaymentModel.fromJson(response.data);
       }
       if (response.statusCode == 400) {
@@ -103,7 +100,6 @@ class Repository {
       }
       return null;
     } catch (e) {
-      print(e);
       return null;
     }
   }
@@ -136,13 +132,13 @@ class Repository {
         "amount": {"value": "199.00", "currency": "RUB"}
       },
     );
-    print('RES: ${response.statusCode} ${response.data}');
     if (response.statusCode == 200) {
       return PaymentModel.fromJson(response.data);
     }
     if (response.statusCode == 400) {
       return null;
     }
+    return null;
     //   return null;
     // } catch (e) {
     //   print(e);
@@ -164,7 +160,7 @@ class Repository {
           "sub_id": id,
         },
       );
-      print('RES: ${response.statusCode} ${response.data}');
+
       if (response.statusCode == 200) {
         return true;
       }
@@ -185,7 +181,7 @@ class Repository {
         '/auth/test',
         options: options,
       );
-      print('RES: ${response.statusCode} ${response.data}');
+
       if (response.statusCode == 200) {
         return true;
       }
@@ -203,7 +199,7 @@ class Repository {
 
     try {
       var response = await dio.get('/sub/', options: options);
-      print('RES: ${response.statusCode} ${response.data}');
+
       if (response.statusCode == 200) {
         List<SubscriptionVariant> list = [];
         if (response.data != '' || response.data != []) {
@@ -231,8 +227,7 @@ class Repository {
           data: FormData.fromMap({
             'photo': MultipartFile.fromFileSync(file!.path, filename: file.path)
           }));
-      print(
-          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+
       if (response.statusCode == 200) {
         return true;
       }
@@ -247,8 +242,6 @@ class Repository {
     try {
       var response =
           await dio.post('auth/code_phone', data: {'phone_number': number});
-      print(
-          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 204) {
         return 1234;
       }
@@ -268,7 +261,6 @@ class Repository {
         headers: {"Authorization": "Token ${await MySharedPrefs().token}"},
       ),
     );
-    print('ResStatusCode: ${response.statusCode}\tResData: ${response.data}');
     if (response.statusCode == 200) {
       return SubModel.fromJson(response.data);
     } else if (response.statusCode == 401) {
@@ -276,13 +268,14 @@ class Repository {
       // throw ServerException(message: 'Ошибка с сервером');
       return null;
     }
+    return null;
   }
 
   Future<CheckIsUserExist?> checkIsUserExist(String number, int code) async {
     GooglePlayServicesAvailability availability = await GoogleApiAvailability
         .instance
         .checkGooglePlayServicesAvailability();
-    print(code);
+
     try {
       var response = await dio.put('auth/code_phone', data: {
         'phone_number': number,
@@ -291,8 +284,6 @@ class Repository {
             ? await FirebaseMessaging.instance.getToken()
             : '',
       });
-      print(
-          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return CheckIsUserExist.fromJson(response.data);
       }
@@ -316,8 +307,6 @@ class Repository {
           'username': name,
         },
       );
-      print(
-          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
       if (response.statusCode == 200) {
         return CheckNickName.fromJson(response.data).exists;
       }
@@ -336,8 +325,7 @@ class Repository {
           'phone_number': phone,
         },
       );
-      print(
-          'RES: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+
       if (response.statusCode == 200) {
         final bool res = response.data['exists'];
         return res;
@@ -357,8 +345,7 @@ class Repository {
           'code': code,
         }),
       );
-      print(
-          'RES VK: ${response.statusCode} ||| ${response.requestOptions.uri} ||| ${response.data}');
+
       //Уже акк есть и сразу вход
       if (response.statusCode == 200 && response.data['token'] != null) {
         return response.data['token'];

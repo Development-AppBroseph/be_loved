@@ -9,7 +9,7 @@ import 'package:be_loved/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
+// ignore: must_be_immutable
 class EventsListWidget extends StatelessWidget {
   List<EventEntity> events;
   final Function(int i) onTap;
@@ -19,6 +19,7 @@ class EventsListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return _events(events);
   }
+
   Widget _events(List<EventEntity> events) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -36,16 +37,16 @@ class EventsListWidget extends StatelessWidget {
 
   Widget itemEvent(EventEntity eventEntity) {
     TextStyle style1 = TextStyle(
-        color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx], fontWeight: FontWeight.w700, fontSize: 20.sp);
+        color: ClrStyle.black17ToWhite[sl<AuthConfig>().idx],
+        fontWeight: FontWeight.w700,
+        fontSize: 20.sp);
     TextStyle style2 = TextStyle(
         color: ColorStyles.greyColor,
         fontWeight: FontWeight.w700,
         fontSize: 15.sp);
 
-    Color? colorDays = checkColor(eventEntity.datetimeString);
-
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         onTap(eventEntity.id);
       },
       behavior: HitTestBehavior.translucent,
@@ -57,20 +58,21 @@ class EventsListWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  truncateWithEllipsis(22, eventEntity.title), 
+                  truncateWithEllipsis(22, eventEntity.title),
                   style: style1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 5.h),
                 eventEntity.important
-                ? ImportantTextWidget()
-                : RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: 'Добавил(а): ${eventEntity.eventCreator.username}',
-                        style: style2),
-                  ]),
-                )
+                    ? ImportantTextWidget()
+                    : RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text:
+                                  'Добавил(а): ${eventEntity.eventCreator.username}',
+                              style: style2),
+                        ]),
+                      )
               ],
             ),
             const Spacer(),
@@ -80,9 +82,6 @@ class EventsListWidget extends StatelessWidget {
       ),
     );
   }
-
-
-
 
   Color checkColor(String value) {
     Color? colorDays;

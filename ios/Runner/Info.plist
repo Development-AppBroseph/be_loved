@@ -1,9 +1,7 @@
-<?xml version="1.3.5" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.3.5">
+<plist version="1.0">
 <dict>
-	<key>FirebaseScreenReportingEnabled</key>
-	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -18,40 +16,32 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>be_loved</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Предоставьте доступ к контактам для быстрого поиска партнёра</string>
-	<key>CFBundleURLTypes</key>
-<array>
-    <dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-            <string>yookassapaymentsflutter</string>
-        </array>
-    </dict>
-</array>
-
-<key>LSApplicationQueriesSchemes</key>
-<array>
-    <string>yoomoneyauth</string>
-    <string>sberpay</string>
-</array>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>yookassapaymentsflutter</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>UIApplicationSceneManifest</key>
-	<dict>
-		<key>UIApplicationSupportsMultipleScenes</key>
-		<false/>
-		<key>UISceneConfigurations</key>
-		<dict/>
-	</dict>
+	<key>FirebaseScreenReportingEnabled</key>
+	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>yoomoneyauth</string>
+		<string>sberpay</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -62,12 +52,10 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>158.160.43.61</key>
+			<key>beloved-app.ru</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
 				<key>NSIncludesSubdomains</key>
 				<true/>
 			</dict>
@@ -77,8 +65,17 @@
 	<string>In order to take a audio or media, this app requires permission to access the media.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Разрешите доступ к камере, чтобы добавить или изменить фото профиля.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Предоставьте доступ к контактам для быстрого поиска партнёра</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Разрешите доступ к галерее, чтобы добавить или изменить фото профиля.</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict/>
+	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

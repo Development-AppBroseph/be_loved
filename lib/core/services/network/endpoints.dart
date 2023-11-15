@@ -192,10 +192,8 @@ extension EndpointsExtension on Endpoints {
   Map<String, String> getHeaders(
       {String token = '', required Map<String, String> defaultHeaders}) {
     return {
-      if (defaultHeaders != null) ...defaultHeaders,
-      if (defaultHeaders == null) ...{
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
+      ...defaultHeaders,
+      ...{'Content-Type': 'application/json; charset=UTF-8'},
       if (token != '') ...{'Authorization': 'Token $token'}
     };
   }

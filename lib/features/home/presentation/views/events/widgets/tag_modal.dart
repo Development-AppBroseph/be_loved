@@ -119,7 +119,6 @@ class _TagModalState extends State<TagModal> {
   final TextEditingController titleController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    TagsBloc tagsBloc = context.read<TagsBloc>();
     EventsBloc eventsBloc = context.read<EventsBloc>();
     return BlocListener<TagsBloc, TagsState>(
         listener: (context, state) {

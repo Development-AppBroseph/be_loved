@@ -14,12 +14,12 @@ class EventAlert extends StatefulWidget {
 }
 
 class _EventAlertState extends State<EventAlert> {
-  late Timer _timer;
+  late Timer timer;
   int _start = 5;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
+    timer = Timer.periodic(
       oneSec,
       (Timer timer) {
         if (_start == 0) {
@@ -40,6 +40,7 @@ class _EventAlertState extends State<EventAlert> {
     startTimer();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,7 +70,7 @@ class _EventAlertState extends State<EventAlert> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
+              children: [
                 Text(
                   'Событие уже добавлено',
                   style: TextStyle(
