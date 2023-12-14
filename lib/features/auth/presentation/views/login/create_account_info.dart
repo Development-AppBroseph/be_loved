@@ -1,7 +1,7 @@
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/features/auth/presentation/views/image/avatar.dart';
-import 'package:be_loved/features/auth/presentation/views/login/invite_relation.dart';
 import 'package:be_loved/features/auth/presentation/views/login/name.dart';
+import 'package:be_loved/features/home/presentation/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,9 +24,10 @@ class CreateAccountInfo extends StatelessWidget {
               nextPage: nextPage,
               previousPage: () => previousPage(context),
             ),
-            InviteRelation(
-              previousPage: () => previousPage(context),
-            )
+            HomePage(),
+            // InviteRelation(
+            //   previousPage: () => previousPage(context),
+            // )
           ],
         ),
       ),

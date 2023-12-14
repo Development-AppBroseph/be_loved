@@ -92,6 +92,8 @@ class GetUserSuccess extends AuthState {
 
 class UserNeedSubscription extends AuthState {}
 
+class FirstShowInviteLover extends AuthState {}
+
 class UserCheckSubscription extends AuthState {}
 
 class UserTestIsNotValid extends AuthState {}

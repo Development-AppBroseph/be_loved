@@ -11,6 +11,7 @@ import 'package:be_loved/core/utils/toasts.dart';
 import 'package:be_loved/core/widgets/buttons/custom_add_animation_button.dart';
 import 'package:be_loved/core/widgets/buttons/custom_animation_item_relationships.dart';
 import 'package:be_loved/core/widgets/loaders/overlay_loader.dart';
+import 'package:be_loved/features/auth/presentation/views/login/invite_relation.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/gallery/gallery_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_widgets/main_widgets_bloc.dart';
@@ -956,7 +957,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
     if (path != null && path.trim() != '') {
       return NetworkImage(Config.url.url + path);
     }
-    return const AssetImage('assets/images/avatar_none.png');
+    return const AssetImage(
+        'assets/images/avatar_plus.png'); //'assets/images/avatar_none.png'
   }
 
   @override
@@ -981,20 +983,30 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   }
 
   Widget _buildLoveUser() {
-    return Column(
-      children: [
-        photo(
-            sl<AuthConfig>().user == null || sl<AuthConfig>().user!.love == null
-                ? null
-                : sl<AuthConfig>().user!.love!.photo),
-        SizedBox(height: 10.h),
-        TextWidget(
-          text: sl<AuthConfig>().user == null ||
-                  sl<AuthConfig>().user?.love == null
-              ? ''
-              : sl<AuthConfig>().user!.love!.username,
-        )
-      ],
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => InviteRelation(
+            previousPage: () {},
+          ),
+        ),
+      ),
+      child: Column(
+        children: [
+          photo(sl<AuthConfig>().user == null ||
+                  sl<AuthConfig>().user!.love == null
+              ? null
+              : sl<AuthConfig>().user!.love!.photo),
+          SizedBox(height: 10.h),
+          TextWidget(
+            text: sl<AuthConfig>().user == null ||
+                    sl<AuthConfig>().user?.love == null
+                ? 'Настроить'
+                : sl<AuthConfig>().user!.love!.username,
+          )
+        ],
+      ),
     );
   }
 

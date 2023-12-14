@@ -56,7 +56,7 @@ class _SecondSubscriptionViewState extends State<SecondSubscriptionView> {
             Image.asset(Img.subButtonFourth),
             SizedBox(height: 66.h),
             if (user != null)
-              if (user.fromYou!)
+              if (user.fromYou != null)
                 AnimatedOpacity(
                   opacity: !isPayment ? 1 : 0,
                   duration: const Duration(milliseconds: 600),
@@ -67,7 +67,7 @@ class _SecondSubscriptionViewState extends State<SecondSubscriptionView> {
                         onTap: () {
                           payment();
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: 378.w,
                           height: 60.h,
                           child: Image.asset(
@@ -90,7 +90,7 @@ class _SecondSubscriptionViewState extends State<SecondSubscriptionView> {
               else
                 Column(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 378.w,
                       height: 60.h,
                       child: Image.asset(
@@ -142,7 +142,7 @@ class _SecondSubscriptionViewState extends State<SecondSubscriptionView> {
     if (result is SuccessTokenizationResult) {
       print('alarm');
       // subscriptionVariant[index].id;
-      print('token is: ' + result.token);
+      print('token is: ${result.token}');
       var response = await Repository().createPayment(
         result.token,
         context.read<AuthBloc>().user!.me.phoneNumber.replaceAll('+', ''),

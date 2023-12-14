@@ -266,6 +266,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else {
         if (result.isTest == false) {
           emit(UserNeedSubscription());
+        } else if (event.isFirst) {
+          emit(FirstShowInviteLover());
         } else {
           emit(GetUserSuccess(result));
         }

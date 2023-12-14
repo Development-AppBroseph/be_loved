@@ -6,6 +6,8 @@ import 'package:be_loved/core/models/subscriptions/subscription_variant.dart';
 import 'package:be_loved/core/network/repository.dart';
 import 'package:be_loved/core/services/network/config.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
+import 'package:be_loved/features/home/presentation/views/home.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:be_loved/core/utils/images.dart';
@@ -17,6 +19,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yookassa_payments_flutter/yookassa_payments_flutter.dart';
 
 class SubscriptionView extends material.StatefulWidget {
+  const SubscriptionView({super.key});
+
   @override
   State<SubscriptionView> createState() => _SubscriptionViewState();
 }
@@ -150,36 +154,36 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 15.w, top: 59.h),
-                    child: GestureDetector(
-                      onTap: () async {
-                        BlocProvider.of<AuthBloc>(context).add(GetUser());
-                        if (user != null) {
-                          if (user.fromYou!) {
-                            await Repository().sendTestSub();
-                          }
-                        }
-                        if (Navigator.of(context).canPop()) {
-                          Navigator.of(context).pop(true);
-                        }
-                      },
-                      behavior: HitTestBehavior.opaque,
-                      child: Container(
-                        width: 55.w,
-                        height: 55.h,
-                        color: Colors.transparent,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              SvgImg.back,
-                              height: 26.32.h,
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // child: GestureDetector(
+                    //   onTap: () async {
+                    //     BlocProvider.of<AuthBloc>(context).add(GetUser());
+                    //     if (user != null) {
+                    //       if (user.fromYou!) {
+                    //         await Repository().sendTestSub();
+                    //       }
+                    //     }
+                    //     if (Navigator.of(context).canPop()) {
+                    //       Navigator.of(context).pop(true);
+                    //     }
+                    //   },
+                    //   behavior: HitTestBehavior.opaque,
+                    //   child: Container(
+                    //     width: 55.w,
+                    //     height: 55.h,
+                    //     color: Colors.transparent,
+                    //     child: Row(
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         SvgPicture.asset(
+                    //           SvgImg.back,
+                    //           height: 26.32.h,
+                    //           color: Colors.black,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -299,7 +303,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                     child: Padding(
                       padding: EdgeInsets.only(
                           bottom: 56.h, left: 25.w, right: 25.w),
-                      child: user.fromYou!
+                      child: user.fromYou == null
                           ? currentIndex == 0
                               ? CustomButton(
                                   color: ColorStyles.accentColor,
@@ -309,19 +313,28 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                                   onPressed: () async {
                                     BlocProvider.of<AuthBloc>(context)
                                         .add(GetUser());
-                                    if (user.fromYou!) {
+                                    if (user.fromYou == null) {
                                       await Repository().sendTestSub();
                                     }
-                                    if (Navigator.of(context).canPop()) {
-                                      Navigator.of(context).pop(true);
+                                    if (mounted) {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => HomePage(),
+                                        ),
+                                        (route) => false,
+                                      );
                                     }
+                                    // if (Navigator.of(context).canPop()) {
+                                    //   Navigator.of(context).pop(true);
+                                    // }
                                   },
                                 )
                               : GestureDetector(
                                   onTap: () {
                                     payment();
                                   },
-                                  child: Container(
+                                  child: SizedBox(
                                     width: 378.w,
                                     height: 60.h,
                                     child: Image.asset(Img.buyButton),
@@ -331,7 +344,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                               height: 108.h,
                               child: Column(
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: 378.w,
                                     height: 60.h,
                                     child: Image.asset(Img.partnerPays),
@@ -386,7 +399,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
     if (result is SuccessTokenizationResult) {
       print('alarm');
       // subscriptionVariant[index].id;
-      print('token is: ' + result.token);
+      print('token is: ${result.token}');
       var response = await Repository().createPayment(
         result.token,
         context.read<AuthBloc>().user!.me.phoneNumber,

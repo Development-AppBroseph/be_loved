@@ -163,16 +163,13 @@ class _CodePageState extends State<CodePage> {
                     builder: (context) => const PartingSecondView()));
               } else {
                 if (bloc.user?.date == null) {
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => InviteRelation(previousPage: () {}),
+                      builder: (context) => HomePage(),
                     ),
-                  ).then((value) {
-                    if (textEditingControllerUp.text.length == 4) {
-                      bloc.add(TextFieldFilled(true));
-                    }
-                  });
+                    (route) => false,
+                  );
                 }
               }
             }

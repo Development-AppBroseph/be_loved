@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:be_loved/core/bloc/auth/auth_bloc.dart';
 import 'package:be_loved/core/bloc/common_socket/web_socket_bloc.dart';
 import 'package:be_loved/core/services/database/auth_params.dart';
 import 'package:be_loved/core/services/network/config.dart';
+import 'package:be_loved/features/auth/presentation/views/login/invite_partner.dart';
+import 'package:be_loved/features/auth/presentation/views/login/invite_relation.dart';
 import 'package:be_loved/features/home/presentation/bloc/archive/archive_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/events/events_bloc.dart';
 import 'package:be_loved/features/home/presentation/bloc/main_screen/main_screen_bloc.dart';
@@ -14,7 +18,6 @@ import 'package:be_loved/features/home/presentation/views/purposes/purposes_page
 import 'package:be_loved/features/home/presentation/views/relationships/main_page.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
-import 'package:be_loved/features/profile/presentation/views/parting_second_view.dart';
 import 'package:be_loved/features/profile/presentation/views/second_subcription.dart';
 import 'package:be_loved/features/profile/presentation/views/subscription_view.dart';
 import 'package:be_loved/features/theme/data/entities/clr_style.dart';
@@ -86,12 +89,12 @@ class _HomePageState extends State<HomePage> {
         if (state is WebSocketInviteCloseState &&
             sl<AuthConfig>().user!.love!.username.isNotEmpty) {
           Future.delayed(const Duration(milliseconds: 400), () {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (BuildContext context) => const PartingSecondView(),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   CupertinoPageRoute(
+            //     builder: (BuildContext context) => const PartingSecondView(),
+            //   ),
+            // );
           });
         }
       },
@@ -130,16 +133,17 @@ class _HomePageState extends State<HomePage> {
             },
             child: BlocBuilder<AuthBloc, AuthState>(
               buildWhen: (previous, current) {
-                print('state is: ' + current.toString());
+                print('state is: $current');
                 if (current is UserNeedSubscription) {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SecondSubscriptionView(),
+                      builder: (context) => const SecondSubscriptionView(),
                     ),
                     (route) => false,
                   );
                 }
+
                 return true;
               },
               builder: (context, state) {
@@ -150,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SecondSubscriptionView(),
+                          builder: (context) => const SecondSubscriptionView(),
                         ),
                         (route) => false,
                       );
@@ -166,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SubscriptionView(),
+                          builder: (context) => const SubscriptionView(),
                         ),
                       );
                     }).then((value) {
@@ -186,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SecondSubscriptionView(),
+                          builder: (context) => const SubscriptionView(),
                         ),
                         (route) => false,
                       );
@@ -195,17 +199,27 @@ class _HomePageState extends State<HomePage> {
                 }
                 if (state is GetUserSuccess ||
                     state is GetUserError ||
-                    state is RefreshUser) {
+                    state is RefreshUser ||
+                    state is FirstShowInviteLover) {
                   if (state is GetUserSuccess) {
                     if (state.user.love == null) {
-                      Future.delayed(const Duration(milliseconds: 400), () {
+                      Future.delayed(const Duration(seconds: 10), () {
                         Navigator.push(
                           context,
-                          CupertinoPageRoute(
-                            builder: (BuildContext context) =>
-                                const PartingSecondView(),
+                          MaterialPageRoute(
+                            builder: (context) => InviteRelation(
+                              previousPage: () {},
+                            ),
                           ),
                         );
+
+                        // Navigator.push(
+                        //   context,
+                        //   CupertinoPageRoute(
+                        //     builder: (BuildContext context) =>
+                        //         const PartingSecondView(),
+                        //   ),
+                        // );
                       });
                     }
                     // if (!state.user.isSub && widget.isFirst) {
