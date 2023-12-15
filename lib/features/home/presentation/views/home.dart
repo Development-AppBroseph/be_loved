@@ -16,6 +16,7 @@ import 'package:be_loved/features/home/presentation/views/bottom_navigation.dart
 import 'package:be_loved/features/home/presentation/views/events/view/main_event_page.dart';
 import 'package:be_loved/features/home/presentation/views/purposes/purposes_page.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/main_page.dart';
+import 'package:be_loved/features/invite/presentation/invite_now_or_later/invite_now_screen.dart';
 import 'package:be_loved/features/profile/presentation/bloc/decor/decor_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/profile/presentation/views/second_subcription.dart';
@@ -202,14 +203,13 @@ class _HomePageState extends State<HomePage> {
                     state is RefreshUser ||
                     state is FirstShowInviteLover) {
                   if (state is GetUserSuccess) {
-                    if (state.user.love == null) {
+                    if (state.user.love == null && widget.isFirst) {
                       Future.delayed(const Duration(seconds: 10), () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => InviteRelation(
-                              previousPage: () {},
-                            ),
+                            builder: (context) =>
+                                const InviteNowOrLaterScreen(),
                           ),
                         );
 

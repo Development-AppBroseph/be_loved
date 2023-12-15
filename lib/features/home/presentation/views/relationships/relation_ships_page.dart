@@ -21,6 +21,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/widgets/
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/home_info_second.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/main_widgets.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
+import 'package:be_loved/features/invite/presentation/invite_now_or_later/invite_now_screen.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_state.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
@@ -984,14 +985,14 @@ class _RelationShipsPageState extends State<RelationShipsPage>
 
   Widget _buildLoveUser() {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => InviteRelation(
-            previousPage: () {},
-          ),
-        ),
-      ),
+      onTap: () => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.white,
+          isDismissible: true,
+          builder: (BuildContext context) {
+            return const InviteNowOrLaterScreen();
+          }),
       child: Column(
         children: [
           photo(sl<AuthConfig>().user == null ||
