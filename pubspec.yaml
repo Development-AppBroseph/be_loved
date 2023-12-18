@@ -29,7 +29,8 @@ dependencies:
   flutter_native_splash: ^2.2.9
   scroll_date_picker: ^3.6.0
   shared_preferences: ^2.0.15
-  dio: ^4.0.6
+  dio: ^5.0.0
+  logger: ^2.0.2+1
   lottie: ^1.4.2
   get: ^4.3.8
   google_api_availability: ^3.0.1
@@ -96,6 +97,10 @@ dependencies:
   firebase_messaging: ^14.6.4
   package_info_plus: ^1.4.3+1
   appmetrica_plugin: ^1.4.0
+
+  data_source:
+    version: ^0.1.1
+    git: https://github.com/dronn1k-org/data_source.git
           
   # webview_flutter: ^4.0.2
 
@@ -104,6 +109,9 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.0
   dart_code_metrics: ^5.6.0
+  json_serializable: ^6.6.1
+  retrofit_generator: ^7.0.0
+  build_runner: ^2.3.3
 
 flutter:
   assets:

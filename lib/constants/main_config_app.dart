@@ -9,7 +9,7 @@ class MainConfigApp {
   static String fontFamily1 = 'Inter';
 
   static List<String> decorBackgrounds = [
-    'assets/backgrounds/main_bg.png',
+    'assets/backgrounds/main_bg.png', //'assets/backgrounds/gif.gif',
     'assets/backgrounds/1_bg.png',
     'assets/backgrounds/2_bg.png',
     'assets/backgrounds/blue_bg.png',

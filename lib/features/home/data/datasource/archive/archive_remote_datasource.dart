@@ -100,7 +100,7 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
 
   @override
   Future<void> deleteGalleryFiles(List<int> ids) async {
-    print('DELETE IDS: ${ids}');
+    print('DELETE IDS: $ids');
     headers["Content-Type"] = "application/json";
     headers["Authorization"] = "Token ${await MySharedPrefs().token}";
     Response response = await dio.delete(Endpoints.deleteGalleryFiles.getPath(),
@@ -190,9 +190,9 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
           : (await MultipartFile.fromFile(newFile!.path)));
     }
     var newPlaces = [];
-    files.forEach((element) {
+    for (var element in files) {
       newPlaces.add('undefiend');
-    });
+    }
     Map<String, dynamic> mapDataList = {
       'files': files,
       'places': places.isEmpty ? 'undefiend' : newPlaces,
@@ -205,11 +205,11 @@ class ArchiveRemoteDataSourceImpl implements ArchiveRemoteDataSource {
         'image_$i': [images[i] ?? '0']
       });
     }
-    print('mapDATA: ${mapDataList}');
+    print('mapDATA: $mapDataList');
     Response response = await dio.post(Endpoints.addGalleryFile.getPath(),
         data: FormData.fromMap(mapDataList),
         options: Options(
-            sendTimeout: 240000,
+            sendTimeout: const Duration(milliseconds: 240000),
             followRedirects: false,
             validateStatus: (status) => status! < 699,
             headers: headers));
