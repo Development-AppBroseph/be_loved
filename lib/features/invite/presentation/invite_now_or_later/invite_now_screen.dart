@@ -23,6 +23,9 @@ class _InviteNowOrLaterScreenState extends InviteNowBloc {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            const SizedBox(
+              height: 5,
+            ),
             const BangDialog(text: "Пригласить партнера"),
             const HeaderDialog(
               headerDescription:

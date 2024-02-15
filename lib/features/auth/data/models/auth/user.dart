@@ -22,11 +22,11 @@ class UserAnswer {
     required this.noti,
     required this.isSub,
     required this.isTest,
+    required this.joker,
     this.testEnd,
     this.subEnd,
     required this.previousReletionId,
   });
-
   User me;
   User? love;
   int? relationId;
@@ -38,6 +38,7 @@ class UserAnswer {
   String? date;
   bool noti;
   DateTime? testEnd;
+  JokerModel? joker;
   DateTime? subEnd;
   bool isSub;
   bool isTest;
@@ -50,21 +51,22 @@ class UserAnswer {
       status: json["status"],
       name: json["name"],
       theme: json["theme"],
-      fromYou: json["from_you"],
+      fromYou: json["from_you"] ?? false,
       date: json["date"],
       vkPID: json["vk_pid"],
-      isSub: json["is_sub"],
+      isSub: json["is_sub"] ?? false,
       testEnd: json["test_end"] != null
           ? DateTime.tryParse(
               json["test_end"],
             )
           : null,
+      joker: json["joker"] != null ? JokerModel.fromJson(json["joker"]) : null,
       subEnd: json["sub_end"] != null
           ? DateTime.parse(
               json["sub_end"],
             ).toLocal()
           : null,
-      isTest: json["is_test"],
+      isTest: json["is_test"] ?? false,
       noti: json["notification_on"] ?? true,
       previousReletionId: json['previous_relation_id']);
 
@@ -105,3 +107,26 @@ class User {
         "photo": photo,
       };
 }
+
+class JokerModel {
+  final String? userName;
+  final String? photo;
+
+  JokerModel({required this.userName, required this.photo});
+
+  factory JokerModel.fromJson(Map<String, dynamic> json) {
+    return JokerModel(
+      userName: json["username"],
+      photo: json["photo"],
+    );
+  }
+}
+
+// class VirtualJokerModel {
+//   final JokerModel? joker;
+
+//   VirtualJokerModel({required this.joker});
+
+//   factory VirtualJokerModel.fromJson(Map<String, dynamic> json) {
+//     return VirtualJokerModel(joker: json['joker']);
+//   }

@@ -391,8 +391,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                           CrossAxisAlignment.start,
                                       children: [
                                         sl<AuthConfig>().user!.fromYou ?? true
-                                            ? _buildCurrentUser()
-                                            : _buildLoveUser(),
+                                            ? _buildLoveUser()
+                                            : _buildCurrentUser(),
                                         const Spacer(),
                                         Padding(
                                           padding: EdgeInsets.only(top: 13.h),
@@ -413,8 +413,8 @@ class _RelationShipsSettingsPageState extends State<RelationShipsSettingsPage>
                                         ),
                                         const Spacer(),
                                         sl<AuthConfig>().user!.fromYou ?? true
-                                            ? _buildLoveUser()
-                                            : _buildCurrentUser()
+                                            ? _buildCurrentUser()
+                                            : _buildLoveUser()
                                       ],
                                     ),
                                   ),

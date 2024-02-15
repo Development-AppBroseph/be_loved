@@ -13,6 +13,7 @@ import '../../../../core/error/failures.dart';
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
+
   ProfileRepositoryImpl(this.remoteDataSource, this.networkInfo);
 
   @override
@@ -165,5 +166,23 @@ class ProfileRepositoryImpl implements ProfileRepository {
     } else {
       return Left(NetworkFailure());
     }
+  }
+
+  @override
+  Future<UserAnswer> editVirtualPartner(String name, File? photo) async {
+    // if (await networkInfo.isConnected) {
+    return await remoteDataSource.editVirtualPartnerRemote(name, photo);
+    // } else {
+    //   throw NetworkFailure();
+    // }
+  }
+
+  @override
+  Future<UserAnswer> createVirtualPartner(String name, File? photo) async {
+    // if (await networkInfo.isConnected) {
+    return await remoteDataSource.createVirtualPartner(name, photo);
+    // } else {
+    //   throw NetworkFailure();
+    // }
   }
 }

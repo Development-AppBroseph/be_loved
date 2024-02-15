@@ -1,3 +1,4 @@
+import 'package:be_loved/core/dio_settings.dart';
 import 'package:be_loved/features/home/data/datasource/archive/archive_remote_datasource.dart';
 import 'package:be_loved/features/home/data/datasource/be_loved_remote_datasource.dart';
 import 'package:be_loved/features/home/data/datasource/be_loved_remote_datasource_impl.dart';
@@ -67,6 +68,7 @@ import 'package:be_loved/features/home/presentation/views/relationships/widgets/
 import 'package:be_loved/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:be_loved/features/profile/domain/repositories/profile_repository.dart';
 import 'package:be_loved/features/profile/domain/usecases/connect_vk.dart';
+import 'package:be_loved/features/profile/domain/usecases/create_virtual_partner_use_case.dart';
 import 'package:be_loved/features/profile/domain/usecases/delete_account.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_backgrounds_info.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
@@ -102,7 +104,9 @@ void setupInjections() {
   //! External
   sl.registerLazySingleton(() => InternetConnectionChecker());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
-
+  sl.registerSingleton<DioSettings>(
+    DioSettings(),
+  );
   sl.registerFactory<Dio>(
     () => Dio(
       BaseOptions(
@@ -326,6 +330,9 @@ void setupInjections() {
   sl.registerLazySingleton(() => AddPurposeWidget(sl()));
   sl.registerLazySingleton(() => DeleteFileWidget(sl()));
   sl.registerLazySingleton(() => DeletePurposeWidget(sl()));
+  sl.registerLazySingleton<CreateVirtualPartnerUseCase>(
+    () => CreateVirtualPartnerUseCase(repository: sl<ProfileRepository>()),
+  );
 
   //Blocs
   sl.registerFactory<MainWidgetsBloc>(

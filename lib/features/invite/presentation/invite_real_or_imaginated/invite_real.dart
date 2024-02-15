@@ -23,6 +23,9 @@ class _InviteRealOrImaginatedState extends InviteRealBloc {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            const SizedBox(
+              height: 5,
+            ),
             const BangDialog(text: "Партнер"),
             const HeaderDialog(
               headerDescription:

@@ -94,40 +94,11 @@ class AvatarPage extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 15.h, bottom: 30.h),
-                        width: 135.h,
-                        height: 135.h,
-                        child: GestureDetector(
-                          onTap: () async {
-                            bloc.add(PickImage());
-                          },
-                          child: Material(
-                            color: const Color.fromRGBO(150, 150, 150, 1),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(40.r),
-                              ),
-                            ),
-                            clipBehavior: Clip.hardEdge,
-                            child: xFile != null
-                                ? Image.file(
-                                    File(xFile!.path),
-                                    width: 135,
-                                    height: 135,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Padding(
-                                    padding: EdgeInsets.all(43.h),
-                                    child: SvgPicture.asset(
-                                      SvgImg.camera,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ),
+                    PickImageContainer(
+                      xFile: xFile,
+                      onTap: () {
+                        BlocProvider.of<AuthBloc>(context).add(PickImage());
+                      },
                     ),
                     Container(
                       clipBehavior: Clip.hardEdge,
@@ -238,6 +209,53 @@ class AvatarPage extends StatelessWidget {
         ),
       ),
       automaticallyImplyLeading: false,
+    );
+  }
+}
+
+class PickImageContainer extends StatelessWidget {
+  const PickImageContainer({
+    super.key,
+    this.xFile,
+    required this.onTap,
+  });
+  final Function() onTap;
+  final XFile? xFile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        margin: EdgeInsets.only(top: 15.h, bottom: 30.h),
+        width: 135.h,
+        height: 135.h,
+        child: GestureDetector(
+          onTap: onTap,
+          child: Material(
+            color: const Color.fromRGBO(150, 150, 150, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(40.r),
+              ),
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: xFile != null
+                ? Image.file(
+                    File(xFile!.path),
+                    width: 135,
+                    height: 135,
+                    fit: BoxFit.cover,
+                  )
+                : Padding(
+                    padding: EdgeInsets.all(43.h),
+                    child: SvgPicture.asset(
+                      SvgImg.camera,
+                    ),
+                  ),
+          ),
+        ),
+      ),
     );
   }
 }
