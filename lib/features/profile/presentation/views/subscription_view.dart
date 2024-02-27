@@ -350,10 +350,12 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                                     child: Image.asset(Img.partnerPays),
                                   ),
                                   SizedBox(height: 12.h),
-                                  Text(
-                                    'Подписку оплачивает второй партнер, после оплаты перезайдите в приложение',
-                                    style: TextStyles(context).grey_15_w800,
-                                    textAlign: TextAlign.center,
+                                  Flexible(
+                                    child: Text(
+                                      'Подписку оплачивает второй партнер, после оплаты перезайдите в приложение',
+                                      style: TextStyles(context).grey_15_w800,
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ],
                               ),

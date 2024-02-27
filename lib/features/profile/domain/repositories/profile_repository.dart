@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:be_loved/core/error/failures.dart';
 import 'package:be_loved/features/auth/data/models/auth/user.dart';
 import 'package:be_loved/features/home/domain/entities/statics/statics_entity.dart';
 import 'package:be_loved/features/profile/domain/entities/back_entity.dart';
+import 'package:be_loved/features/profile/domain/entities/virtual_joker_entity.dart';
 import 'package:be_loved/features/profile/domain/usecases/connect_vk.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_backgrounds_info.dart';
 import 'package:be_loved/features/profile/domain/usecases/edit_profile.dart';
@@ -23,4 +26,6 @@ abstract class ProfileRepository {
   Future<Either<Failure, SubEntiti>> getStatus();
   Future<Either<Failure, UserAnswer>> notification();
   Future<Either<Failure, void>> deleteAccount();
+  Future<UserAnswer> createVirtualPartner(String name, File? photo);
+  Future<UserAnswer> editVirtualPartner(String name, File? photo);
 }

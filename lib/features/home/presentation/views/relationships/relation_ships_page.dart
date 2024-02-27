@@ -21,6 +21,8 @@ import 'package:be_loved/features/home/presentation/views/relationships/widgets/
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/main_widgets.dart';
 import 'package:be_loved/features/home/presentation/views/relationships/widgets/text_widget.dart';
 import 'package:be_loved/features/invite/presentation/invite_now_or_later/invite_now_screen.dart';
+import 'package:be_loved/features/invite/presentation/invite_real_or_imaginated/edit_virtual_joker.dart';
+import 'package:be_loved/features/profile/presentation/bloc/create_virtual_partner/create_virtual_partner_bloc.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_cubit.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/cubit/sub_state.dart';
 import 'package:be_loved/features/profile/presentation/bloc/profile/profile_bloc.dart';
@@ -95,6 +97,8 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   FocusNode f1 = FocusNode();
   bool heartPressed = false;
   bool? subStatus;
+  String? path;
+  bool? result;
 
   @override
   void initState() {
@@ -107,7 +111,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
         animationController.reverse();
       }
     });
-
     scrollController.addListener(() {
       if (scrollController.offset.toInt() < -40 && !isLoading) {
         _showLoader();
@@ -541,9 +544,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        sl<AuthConfig>().user!.fromYou ?? true
-                                            ? _buildCurrentUser()
-                                            : _buildLoveUser(),
+                                        _buildCurrentUser(),
                                         const Spacer(),
                                         Padding(
                                           padding: EdgeInsets.only(top: 13.h),
@@ -580,9 +581,16 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                           ),
                                         ),
                                         const Spacer(),
-                                        sl<AuthConfig>().user!.fromYou ?? true
-                                            ? _buildLoveUser()
-                                            : _buildCurrentUser()
+                                        BlocBuilder<CreateVirtualPartnerBloc,
+                                            CreateVirtualPartnerState>(
+                                          builder: (context, state) {
+                                            if (state
+                                                is CreateVirtualPartnerLoaded) {
+                                              return _buildLoveUser();
+                                            }
+                                            return _buildLoveUser();
+                                          },
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -607,7 +615,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                         stream: streamController.stream,
                         initialData: false,
                         builder: (context, snapshot) {
-                          // print('Изменения');
                           if (snapshot.data!) {
                             return Stack(
                               children: [
@@ -616,7 +623,6 @@ class _RelationShipsPageState extends State<RelationShipsPage>
                                   SizedBox(
                                     width: double.infinity,
                                     height: MediaQuery.of(context).size.height,
-                                    // color: Colors.black,
                                   ),
                                 ),
                                 AnimatedPositioned(
@@ -971,7 +977,7 @@ class _RelationShipsPageState extends State<RelationShipsPage>
       children: [
         photo(sl<AuthConfig>().user == null
             ? null
-            : sl<AuthConfig>().user!.me.photo),
+            : sl<AuthConfig>().user?.me.photo),
         SizedBox(height: 10.h),
         TextWidget(
           text: sl<AuthConfig>().user == null
@@ -983,32 +989,85 @@ class _RelationShipsPageState extends State<RelationShipsPage>
   }
 
   Widget _buildLoveUser() {
+    final user = sl<AuthConfig>().user;
+    final hasLove = user?.love != null;
+    final hasJokerPhoto = sl<AuthConfig>().user?.joker?.photo != null;
+    final hasJokerText = sl<AuthConfig>().user?.joker?.userName != null;
+
+    Widget buildPhoto() {
+      if (hasJokerPhoto) {
+        return photo(sl<AuthConfig>().user?.joker?.photo);
+      } else if (hasLove) {
+        return photo(user?.love!.photo);
+      } else {
+        return photo(null);
+      }
+    }
+
+    Widget buildTextWidget() {
+      String text;
+      if (hasJokerText) {
+        text = sl<AuthConfig>().user?.joker?.userName ?? 'Настроить';
+      } else if (hasLove) {
+        text = user!.love!.username;
+      } else {
+        text = 'Настроить';
+      }
+      return TextWidget(text: text);
+    }
+
     return GestureDetector(
-      onTap: () => showModalBottomSheet(
+      onTap: () {
+        final jokerUsername = sl<AuthConfig>().user?.joker?.userName;
+        showModalBottomSheet(
           context: context,
           isScrollControlled: true,
           backgroundColor: Colors.white,
           isDismissible: true,
           builder: (BuildContext context) {
-            return const InviteNowOrLaterScreen();
-          }),
+            return jokerUsername == null
+                ? const InviteNowOrLaterScreen()
+                : const EditVirtualJoker();
+          },
+        );
+      },
       child: Column(
         children: [
-          photo(sl<AuthConfig>().user == null ||
-                  sl<AuthConfig>().user!.love == null
-              ? null
-              : sl<AuthConfig>().user!.love!.photo),
-          SizedBox(height: 10.h),
-          TextWidget(
-            text: sl<AuthConfig>().user == null ||
-                    sl<AuthConfig>().user?.love == null
-                ? 'Настроить'
-                : sl<AuthConfig>().user!.love!.username,
-          )
+          buildPhoto(),
+          const SizedBox(height: 10),
+          buildTextWidget(),
         ],
       ),
     );
   }
+
+  // Widget _buildLoveUser() {
+  //   return GestureDetector(
+  //     onTap: () => showModalBottomSheet(
+  //         context: context,
+  //         isScrollControlled: true,
+  //         backgroundColor: Colors.white,
+  //         isDismissible: true,
+  //         builder: (BuildContext context) {
+  //           return const InviteNowOrLaterScreen();
+  //         }),
+  //     child: Column(
+  //       children: [
+  //         photo(sl<AuthConfig>().user == null ||
+  //                 sl<AuthConfig>().user!.love == null
+  //             ? null
+  //             : sl<AuthConfig>().user!.love!.photo),
+  //         SizedBox(height: 10.h),
+  //         TextWidget(
+  //           text: sl<AuthConfig>().user == null ||
+  //                   sl<AuthConfig>().user?.love == null
+  //               ? 'Настроить'
+  //               : sl<AuthConfig>().user!.love!.username,
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget backdropFilterExample(BuildContext context, Widget child) {
     return Stack(

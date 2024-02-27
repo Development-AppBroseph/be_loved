@@ -63,218 +63,238 @@ class _RelationShipsState extends State<RelationShips> {
         backgroundColor: sl<AuthConfig>().idx == 1
             ? ColorStyles.blackColor
             : const Color.fromRGBO(240, 240, 240, 1.0),
-        body: SafeArea(
-            bottom: true,
-            child: Padding(
-              padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
-              child: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.only(top: 0.sh),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 78.w,
-                      child: RichText(
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'Когда начались\n',
-                              style: GoogleFonts.inter(
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w800,
-                                color: ClrStyle
-                                    .black2CToWhite[sl<AuthConfig>().idx],
+        body: _buildBody(bloc, context),
+      );
+    });
+  }
+
+  SafeArea _buildBody(AuthBloc bloc, BuildContext context) {
+    return SafeArea(
+          bottom: true,
+          child: Padding(
+            padding: EdgeInsets.only(left: 24.sp, right: 24.sp, top: 0.1.sw),
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.only(top: 0.sh),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 78.w,
+                    child: _buildTitle(),
+                  ),
+                  SizedBox(height: 41.h),
+                  _buildAvatarsRow(bloc),
+                  SizedBox(height: 20.h),
+                  _buildStreamBuilder(bloc),
+                  SizedBox(height: 20.h),
+                  _buildButton(context),
+                ],
+              ),
+            ),
+          ));
+  }
+
+  StreamBuilder<DateTime> _buildStreamBuilder(AuthBloc bloc) {
+    return StreamBuilder<DateTime>(
+                    stream: _streamController.stream,
+                    initialData: DateTime.now(),
+                    builder: (context, snapshot) {
+                      return SizedBox(
+                        height: 206.h,
+                        child: CupertinoDatePicker(
+                          initialDateTime: DateTime.now().toLocal(),
+                          mode: CupertinoDatePickerMode.date,
+                          use24hFormat: true,
+                          maximumYear: DateTime.now().year,
+                          onDateTimeChanged: (DateTime value) {
+                            bloc.add(TextFieldFilled(true));
+                            date = value.toString().substring(0, 10);
+                            _streamController.sink.add(value);
+                          },
+                        ),
+                        // child: ScrollDatePicker(
+                        //   maximumDate: DateTime.now(),
+                        //   locale: const Locale('ru', 'RU'),
+                        //   onDateTimeChanged: (DateTime value) {
+                        //   bloc.add(TextFieldFilled(true));
+                        //   date = value.toString().substring(0, 10);
+                        //   _streamController.sink.add(value);
+                        // },
+                        //   selectedDate: snapshot.data!,
+                        // ),
+                      );
+                    },
+                  );
+  }
+
+  CustomButton _buildButton(BuildContext context) {
+    return CustomButton(
+                    color: ColorStyles.accentColor,
+                    text: 'Готово',
+                    validate: true,
+                    textColor: Colors.white,
+                    onPressed: () => _relationShips(context),
+                  );
+  }
+
+  SizedBox _buildAvatarsRow(AuthBloc bloc) {
+    return SizedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.only(top: 20.h, bottom: 10.h),
+                                child: Material(
+                                  color:
+                                      const Color.fromRGBO(150, 150, 150, 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(40.r),
+                                    ),
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: bloc.user == null
+                                      ? bloc.image != null
+                                          ? Image.file(
+                                              File(bloc.image!.path),
+                                              width: 135.h,
+                                              height: 135.h,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Container(
+                                              margin: EdgeInsets.all(43.h),
+                                              width: 135.h,
+                                              height: 135.h,
+                                              child: SvgPicture.asset(
+                                                  SvgImg.camera),
+                                            )
+                                      : bloc.user?.me.photo != null
+                                          ? Image.network(
+                                              Config.url.url +
+                                                  bloc.user!.me.photo!,
+                                              width: 135.h,
+                                              height: 135.h,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Container(
+                                              padding: EdgeInsets.all(43.h),
+                                              width: 135.h,
+                                              height: 135.h,
+                                              child: SvgPicture.asset(
+                                                SvgImg.camera,
+                                              ),
+                                            ),
+                                ),
                               ),
                             ),
-                            TextSpan(
-                              text: 'ваши ',
+                            Text(
+                              bloc.user != null
+                                  ? bloc.user!.me.username
+                                  : bloc.nickname.toString(),
                               style: GoogleFonts.inter(
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w800,
-                                color: ClrStyle
-                                    .black2CToWhite[sl<AuthConfig>().idx],
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                color: const Color.fromRGBO(23, 23, 23, 1.0),
                               ),
-                            ),
-                            TextSpan(
-                              text: 'отношения?',
-                              style: GoogleFonts.inter(
-                                fontSize: 35.sp,
-                                fontWeight: FontWeight.w800,
-                                color: const Color.fromRGBO(255, 29, 29, 1.0),
-                              ),
-                            ),
+                            )
                           ],
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 41.h),
-                    SizedBox(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 20.h, bottom: 10.h),
-                                  child: Material(
-                                    color:
-                                        const Color.fromRGBO(150, 150, 150, 1),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(40.r),
-                                      ),
+                        Padding(
+                          padding: EdgeInsets.all(10.w),
+                          child: SvgPicture.asset(
+                            'assets/icons/logov2.svg',
+                            height: 56.h,
+                            width: 66.w,
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.only(top: 20.h, bottom: 10.h),
+                                child: Material(
+                                  color:
+                                      const Color.fromRGBO(150, 150, 150, 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(40.r),
                                     ),
-                                    clipBehavior: Clip.hardEdge,
-                                    child: bloc.user == null
-                                        ? bloc.image != null
-                                            ? Image.file(
-                                                File(bloc.image!.path),
-                                                width: 135.h,
-                                                height: 135.h,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Container(
-                                                margin: EdgeInsets.all(43.h),
-                                                width: 135.h,
-                                                height: 135.h,
-                                                child: SvgPicture.asset(
-                                                    SvgImg.camera),
-                                              )
-                                        : bloc.user?.me.photo != null
-                                            ? Image.network(
-                                                Config.url.url +
-                                                    bloc.user!.me.photo!,
-                                                width: 135.h,
-                                                height: 135.h,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Container(
-                                                padding: EdgeInsets.all(43.h),
-                                                width: 135.h,
-                                                height: 135.h,
-                                                child: SvgPicture.asset(
-                                                  SvgImg.camera,
-                                                ),
-                                              ),
                                   ),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: bloc.user?.love?.photo != null
+                                      ? Image.network(
+                                          Config.url.url +
+                                              bloc.user!.love!.photo!,
+                                          width: 135.h,
+                                          height: 135.h,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Padding(
+                                          padding: EdgeInsets.all(43.h),
+                                          child: SvgPicture.asset(
+                                            SvgImg.camera,
+                                          ),
+                                        ),
                                 ),
                               ),
-                              Text(
-                                bloc.user != null
-                                    ? bloc.user!.me.username
-                                    : bloc.nickname.toString(),
-                                style: GoogleFonts.inter(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(23, 23, 23, 1.0),
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(10.w),
-                            child: SvgPicture.asset(
-                              'assets/icons/logov2.svg',
-                              height: 56.h,
-                              width: 66.w,
+                            ),
+                            Text(
+                              bloc.user?.love?.username ?? '',
+                              style: GoogleFonts.inter(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                color: const Color.fromRGBO(23, 23, 23, 1.0),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+  }
+
+  RichText _buildTitle() {
+    return RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Когда начались\n',
+                            style: GoogleFonts.inter(
+                              fontSize: 35.sp,
+                              fontWeight: FontWeight.w800,
+                              color: ClrStyle
+                                  .black2CToWhite[sl<AuthConfig>().idx],
                             ),
                           ),
-                          Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 20.h, bottom: 10.h),
-                                  child: Material(
-                                    color:
-                                        const Color.fromRGBO(150, 150, 150, 1),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(40.r),
-                                      ),
-                                    ),
-                                    clipBehavior: Clip.hardEdge,
-                                    child: bloc.user?.love?.photo != null
-                                        ? Image.network(
-                                            Config.url.url +
-                                                bloc.user!.love!.photo!,
-                                            width: 135.h,
-                                            height: 135.h,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Padding(
-                                            padding: EdgeInsets.all(43.h),
-                                            child: SvgPicture.asset(
-                                              SvgImg.camera,
-                                            ),
-                                          ),
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                bloc.user?.love?.username ?? '',
-                                style: GoogleFonts.inter(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(23, 23, 23, 1.0),
-                                ),
-                              )
-                            ],
+                          TextSpan(
+                            text: 'ваши ',
+                            style: GoogleFonts.inter(
+                              fontSize: 35.sp,
+                              fontWeight: FontWeight.w800,
+                              color: ClrStyle
+                                  .black2CToWhite[sl<AuthConfig>().idx],
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'отношения?',
+                            style: GoogleFonts.inter(
+                              fontSize: 35.sp,
+                              fontWeight: FontWeight.w800,
+                              color: const Color.fromRGBO(255, 29, 29, 1.0),
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 20.h),
-                    StreamBuilder<DateTime>(
-                      stream: _streamController.stream,
-                      initialData: DateTime.now(),
-                      builder: (context, snapshot) {
-                        return SizedBox(
-                          height: 206.h,
-                          child: CupertinoDatePicker(
-                            initialDateTime: DateTime.now().toLocal(),
-                            mode: CupertinoDatePickerMode.date,
-                            use24hFormat: true,
-                            maximumYear: DateTime.now().year,
-                            onDateTimeChanged: (DateTime value) {
-                              bloc.add(TextFieldFilled(true));
-                              date = value.toString().substring(0, 10);
-                              _streamController.sink.add(value);
-                            },
-                          ),
-                          // child: ScrollDatePicker(
-                          //   maximumDate: DateTime.now(),
-                          //   locale: const Locale('ru', 'RU'),
-                          //   onDateTimeChanged: (DateTime value) {
-                          //   bloc.add(TextFieldFilled(true));
-                          //   date = value.toString().substring(0, 10);
-                          //   _streamController.sink.add(value);
-                          // },
-                          //   selectedDate: snapshot.data!,
-                          // ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 20.h),
-                    CustomButton(
-                      color: ColorStyles.accentColor,
-                      text: 'Готово',
-                      validate: true,
-                      textColor: Colors.white,
-                      onPressed: () => _relationShips(context),
-                    ),
-                  ],
-                ),
-              ),
-            )),
-      );
-    });
+                    );
   }
 
   AppBar appBar(BuildContext context) {

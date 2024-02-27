@@ -32,6 +32,8 @@ abstract class ProfileRemoteDataSource {
   Future<SubEntiti> getStatusSub();
   Future<UserAnswer> notification();
   Future<void> deleteAccount();
+  Future<UserAnswer> createVirtualPartner(String name, File? photo);
+  Future<UserAnswer> editVirtualPartnerRemote(String name, File? photo);
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -283,5 +285,36 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     } else {
       throw ServerException(message: 'Ошибка с сервером');
     }
+  }
+
+  @override
+  Future<UserAnswer> createVirtualPartner(String name, File? photo) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    var formData = FormData.fromMap({
+      "username": name,
+      if (photo != null) "photo": await MultipartFile.fromFile(photo.path),
+    });
+
+    final response = await dio.post(
+      '/relations/joker',
+      data: formData,
+      options: Options(headers: headers),
+    );
+    return UserAnswer.fromJson(response.data);
+  }
+
+  @override
+  Future<UserAnswer> editVirtualPartnerRemote(String name, File? photo) async {
+    headers["Authorization"] = "Token ${sl<AuthConfig>().token}";
+    var formData = FormData.fromMap({
+      "username": name,
+      if (photo != null) "photo": await MultipartFile.fromFile(photo.path),
+    });
+    final response = await dio.put(
+      '/relations/joker',
+      data: formData,
+      options: Options(headers: headers),
+    );
+    return UserAnswer.fromJson(response.data);
   }
 }

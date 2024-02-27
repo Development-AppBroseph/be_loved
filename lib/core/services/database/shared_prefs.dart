@@ -53,7 +53,7 @@ class MySharedPrefs {
       jsonEncode(user.toJson()),
     );
   }
-
+  
   Future<void> updateUser(UserAnswer user) async {
     (await _sharedPreferences).setString(
       'user',
